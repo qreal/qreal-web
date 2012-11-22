@@ -1,0 +1,6 @@
+C:\Users\eliriand\documents\visual studio 2010\Projects\WebsharperDemo\WebsharperDemo\Website\bin\Debug\Website.dll
+C:\Users\eliriand\documents\visual studio 2010\Projects\WebsharperDemo\WebsharperDemo\Website\bin\Debug\Website.pdb
+C:\Users\eliriand\documents\visual studio 2010\Projects\WebsharperDemo\WebsharperDemo\Website\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\eliriand\documents\visual studio 2010\Projects\WebsharperDemo\WebsharperDemo\Website\obj\Debug\Website.dll
+C:\Users\eliriand\documents\visual studio 2010\Projects\WebsharperDemo\WebsharperDemo\Website\obj\Debug\Website.pdb
+C:\Users\eliriand\Documents\Visual Studio 2010\Projects\WebsharperDemo\WebsharperDemo\Website\bin\Debug\IntelliFactory.WebSharper.JQueryUI.dll
