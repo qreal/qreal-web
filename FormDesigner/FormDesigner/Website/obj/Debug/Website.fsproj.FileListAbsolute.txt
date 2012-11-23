@@ -1,0 +1,9 @@
+c:\users\eliriand\documents\visual studio 2010\Projects\FormDesigner\FormDesigner\Website\obj\Debug\ResolveAssemblyReference.cache
+c:\users\eliriand\documents\visual studio 2010\Projects\FormDesigner\FormDesigner\Website\bin\Debug\Website.dll
+c:\users\eliriand\documents\visual studio 2010\Projects\FormDesigner\FormDesigner\Website\bin\Debug\Website.pdb
+c:\users\eliriand\documents\visual studio 2010\Projects\FormDesigner\FormDesigner\Website\bin\Debug\IntelliFactory.WebSharper.Formlets.JQueryMobile.dll
+c:\users\eliriand\documents\visual studio 2010\Projects\FormDesigner\FormDesigner\Website\bin\Debug\IntelliFactory.WebSharper.JQuery.Mobile.dll
+c:\users\eliriand\documents\visual studio 2010\Projects\FormDesigner\FormDesigner\Website\bin\Debug\IntelliFactory.WebSharper.JQueryUI.dll
+c:\users\eliriand\documents\visual studio 2010\Projects\FormDesigner\FormDesigner\Website\obj\Debug\Website.dll
+c:\users\eliriand\documents\visual studio 2010\Projects\FormDesigner\FormDesigner\Website\obj\Debug\Website.pdb
+c:\users\eliriand\documents\visual studio 2010\Projects\FormDesigner\FormDesigner\Website\bin\Debug\IntelliFactory.WebSharper.Formlet.JQueryUI.dll
