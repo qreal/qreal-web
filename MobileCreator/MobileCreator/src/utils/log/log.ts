@@ -6,7 +6,7 @@ module Log {
             this.tag = tag;
         }
 
-        log(message: string): void {
+        public log(message: string): void {
             console.log("(" + this.tag + ") " + message);
         }
     }

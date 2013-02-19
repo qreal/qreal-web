@@ -25,10 +25,15 @@
     <Content Include="css\jquery.mobile-1.2.0.min.css" />
     <Content Include="default.htm" />
     <Content Include="lib\jquery-1.8.2.min.js" />
+    <Content Include="lib\jquery.d.ts" />
     <Content Include="lib\jquery.mobile-1.2.0.min.js" />
     <TypeScriptCompile Include="src\app.ts" />
     <Content Include="src\App.js">
       <DependentUpon>app.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\statecontroller.ts" />
+    <Content Include="src\StateController.js">
+      <DependentUpon>statecontroller.ts</DependentUpon>
     </Content>
     <Content Include="src\utils\log\Log.js">
       <DependentUpon>log.ts</DependentUpon>
