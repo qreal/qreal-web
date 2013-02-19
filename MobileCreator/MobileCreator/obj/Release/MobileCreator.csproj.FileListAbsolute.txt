@@ -1,0 +1,4 @@
+C:\Users\Nikita\Workspace\TypeScript\MobileCreator\MobileCreator\bin\MobileCreator.dll
+C:\Users\Nikita\Workspace\TypeScript\MobileCreator\MobileCreator\bin\MobileCreator.pdb
+C:\Users\Nikita\Workspace\TypeScript\MobileCreator\MobileCreator\obj\Release\MobileCreator.dll
+C:\Users\Nikita\Workspace\TypeScript\MobileCreator\MobileCreator\obj\Release\MobileCreator.pdb
