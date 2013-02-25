@@ -1,4 +1,4 @@
-define(["require", "exports", "utils/log/log", "statecontroller"], function(require, exports, __Log__, __StateController__) {
+define(["require", "exports", "utils/log/log", "Statecontroller"], function(require, exports, __Log__, __StateController__) {
     var Log = __Log__;
 
     var StateController = __StateController__;
