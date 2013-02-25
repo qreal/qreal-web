@@ -22,9 +22,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="css\designer.css" />
+    <Content Include="css\jquery-ui.css" />
     <Content Include="css\jquery.mobile-1.2.0.min.css" />
     <Content Include="default.htm" />
     <Content Include="lib\jquery-1.8.2.min.js" />
+    <Content Include="lib\jquery-ui.js" />
     <Content Include="lib\jquery.d.ts" />
     <Content Include="lib\jquery.mobile-1.2.0.min.js" />
     <TypeScriptCompile Include="src\AppConfig.ts" />
