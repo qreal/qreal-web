@@ -40,6 +40,7 @@
     <Content Include="lib\jquerymobile.d.js">
       <DependentUpon>jquerymobile.d.ts</DependentUpon>
     </Content>
+    <Content Include="lib\jqueryui.d.ts" />
     <Content Include="lib\require.d.js">
       <DependentUpon>require.d.ts</DependentUpon>
     </Content>
