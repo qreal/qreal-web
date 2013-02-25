@@ -50,7 +50,10 @@
     </Content>
     <TypeScriptCompile Include="src\Application.ts" />
     <TypeScriptCompile Include="src\emulator\model\Emulator.ts" />
-    <Content Include="src\designer\DesignerView.ts" />
+    <TypeScriptCompile Include="src\designer\view\DesignerView.ts" />
+    <Content Include="src\designer\view\DesignerView.js">
+      <DependentUpon>DesignerView.ts</DependentUpon>
+    </Content>
     <Content Include="src\emulator\model\Emulator.js">
       <DependentUpon>Emulator.ts</DependentUpon>
     </Content>
@@ -88,7 +91,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>63916</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:61082/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

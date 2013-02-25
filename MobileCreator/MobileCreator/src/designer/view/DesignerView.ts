@@ -1,6 +1,6 @@
-import Log = module("../utils/log/Log");
-/// <reference path="../../lib/jquery.d.ts" />
-/// <reference path="../../lib/jqueryui.d.ts" />
+import Log = module("../../utils/log/Log");
+/// <reference path="../../../lib/jquery.d.ts" />
+/// <reference path="../../../lib/jqueryui.d.ts" />
 
 export class DesignerView {
     private baseDiv: JQuery;

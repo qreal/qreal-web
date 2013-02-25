@@ -1,4 +1,5 @@
 import Log = module("utils/log/Log");
+import DesignerView = module("designer/view/DesignerView");
 /// <reference path="../lib/jquery.d.ts" />
 /// <reference path="../lib/jquerymobile.d.ts" />
 
@@ -19,6 +20,7 @@ export class Application {
                 $("#btChange").text("Designer");
                 $("#emulator").hide();
                 $("#designer").show();
+                
             } else {
                 $("#btChange").text("Emulator");
                 $("#emulator").show();
