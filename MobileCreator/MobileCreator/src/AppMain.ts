@@ -1,5 +1,5 @@
 import Log = module("utils/log/log");
-import StateController = module("statecontroller");
+import StateController = module("Statecontroller");
 /// <reference path="../lib/jquery.d.ts" />
 
 export class Application {
