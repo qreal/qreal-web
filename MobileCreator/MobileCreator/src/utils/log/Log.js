@@ -1,5 +1,4 @@
-var Log;
-(function (Log) {
+define(["require", "exports"], function(require, exports) {
     var LogManager = (function () {
         function LogManager(tag) {
             this.tag = tag;
@@ -9,5 +8,5 @@ var Log;
         };
         return LogManager;
     })();
-    Log.LogManager = LogManager;    
-})(Log || (Log = {}));
+    exports.LogManager = LogManager;    
+})

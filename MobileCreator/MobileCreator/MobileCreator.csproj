@@ -27,18 +27,27 @@
     <Content Include="lib\jquery-1.8.2.min.js" />
     <Content Include="lib\jquery.d.ts" />
     <Content Include="lib\jquery.mobile-1.2.0.min.js" />
-    <TypeScriptCompile Include="src\app.ts" />
-    <Content Include="src\App.js">
-      <DependentUpon>app.ts</DependentUpon>
+    <TypeScriptCompile Include="src\AppConfig.ts" />
+    <TypeScriptCompile Include="lib\require.d.ts" />
+    <Content Include="lib\require.d.js">
+      <DependentUpon>require.d.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="src\statecontroller.ts" />
+    <Content Include="lib\require.js" />
+    <Content Include="src\App.js">
+      <DependentUpon>AppConfig.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\Statecontroller.ts" />
+    <TypeScriptCompile Include="src\AppMain.ts" />
+    <Content Include="src\AppMain.js">
+      <DependentUpon>AppMain.ts</DependentUpon>
+    </Content>
     <Content Include="src\StateController.js">
-      <DependentUpon>statecontroller.ts</DependentUpon>
+      <DependentUpon>Statecontroller.ts</DependentUpon>
     </Content>
     <Content Include="src\utils\log\Log.js">
-      <DependentUpon>log.ts</DependentUpon>
+      <DependentUpon>Log.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="src\utils\log\log.ts" />
+    <TypeScriptCompile Include="src\utils\log\Log.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\designer\" />
@@ -84,14 +93,11 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TypeScriptTarget>ES3</TypeScriptTarget>
-    <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
-    <TypeScriptSourceMap>true</TypeScriptSourceMap>
+    <TypeScriptSourceMap> --module AMD</TypeScriptSourceMap>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <TypeScriptTarget>ES3</TypeScriptTarget>
-    <TypeScriptIncludeComments>false</TypeScriptIncludeComments>
-    <TypeScriptSourceMap>false</TypeScriptSourceMap>
-  </PropertyGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
+  <Target Name="BeforeBuild">
+    <Message Text="Compiling TypeScript files" />
+    <Message Text="Executing tsc$(TypeScriptSourceMap) @(TypeScriptCompile ->'&quot;%(fullpath)&quot;', ' ')" />
+    <Exec Command="tsc$(TypeScriptSourceMap) @(TypeScriptCompile ->'&quot;%(fullpath)&quot;', ' ')" />
+  </Target>
 </Project>

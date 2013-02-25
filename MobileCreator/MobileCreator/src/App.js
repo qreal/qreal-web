@@ -1,7 +1,7 @@
+var Log = require("./utils/log/log")
+alert("test1");
 window.onload = function () {
     var logger = new Log.LogManager("App");
     logger.log("loaded");
-    $("#btChange").click(function () {
-        Controller.StateController.changeState();
-    });
+    alert("test2");
 };

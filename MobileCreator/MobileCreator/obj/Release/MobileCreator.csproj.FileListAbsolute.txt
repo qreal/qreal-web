@@ -2,3 +2,8 @@ C:\Users\Nikita\Workspace\TypeScript\MobileCreator\MobileCreator\bin\MobileCreat
 C:\Users\Nikita\Workspace\TypeScript\MobileCreator\MobileCreator\bin\MobileCreator.pdb
 C:\Users\Nikita\Workspace\TypeScript\MobileCreator\MobileCreator\obj\Release\MobileCreator.dll
 C:\Users\Nikita\Workspace\TypeScript\MobileCreator\MobileCreator\obj\Release\MobileCreator.pdb
+C:\Users\Nikita\Workspace\TypeScript\qreal-web\MobileCreator\MobileCreator\obj\Release\MobileCreator.csprojResolveAssemblyReference.cache
+C:\Users\Nikita\Workspace\TypeScript\qreal-web\MobileCreator\MobileCreator\obj\Release\MobileCreator.dll
+C:\Users\Nikita\Workspace\TypeScript\qreal-web\MobileCreator\MobileCreator\obj\Release\MobileCreator.pdb
+C:\Users\Nikita\Workspace\TypeScript\qreal-web\MobileCreator\MobileCreator\bin\MobileCreator.dll
+C:\Users\Nikita\Workspace\TypeScript\qreal-web\MobileCreator\MobileCreator\bin\MobileCreator.pdb
