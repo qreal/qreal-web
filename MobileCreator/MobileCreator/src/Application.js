@@ -24,6 +24,14 @@ define(["require", "exports", "utils/log/Log"], function(require, exports, __Log
                     $("#designer").hide();
                 }
             });
+            var layout = $(" <div data-layout='{\"type\": \"flexGrid\", \"columns\": 1, \"hgap\": 5, \"vgap\": 5}' class=\"vertical\"></div>");
+            var button = $("<a>Button</a>");
+            layout.append(button);
+            $('#emulator').append(layout);
+            button.button();
+            jQuery(function ($) {
+                $('.vertical').layout();
+            });
         };
         return Application;
     })();

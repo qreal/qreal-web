@@ -1,5 +1,6 @@
 import Log = module("utils/log/Log");
 /// <reference path="../lib/jquery.d.ts" />
+/// <reference path="../lib/jquerymobile.d.ts" />
 
 export class Application {
     private logger = new Log.Logger("Application");
@@ -23,6 +24,6 @@ export class Application {
                 $("#emulator").show();
                 $("#designer").hide();
             }
-        });
+        });                    
     }
 }
