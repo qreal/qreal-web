@@ -47,9 +47,6 @@
       <DependentUpon>AppConfig.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\Application.ts" />
-    <Content Include="src\AppMain.js">
-      <DependentUpon>Application.ts</DependentUpon>
-    </Content>
     <TypeScriptCompile Include="src\emulator\model\Emulator.ts" />
     <Content Include="src\designer\DesignerView.ts" />
     <Content Include="src\emulator\model\Emulator.js">
