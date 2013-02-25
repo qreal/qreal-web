@@ -11,3 +11,15 @@
     margin-left: 30px;
     margin-top: 10px;
 }
+
+#designerMenu {
+    width: 150px;
+    float: left;
+    height: 100%;
+}
+
+#designerScene {
+    float: right;
+    width: 350px;
+    height: 100%;
+    }

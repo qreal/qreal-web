@@ -41,6 +41,10 @@
     <Content Include="src\AppMain.js">
       <DependentUpon>AppMain.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="src\designer\view\DesignerView.ts" />
+    <Content Include="src\designer\view\DesignerView.js">
+      <DependentUpon>DesignerView.ts</DependentUpon>
+    </Content>
     <Content Include="src\StateController.js">
       <DependentUpon>Statecontroller.ts</DependentUpon>
     </Content>
@@ -50,7 +54,8 @@
     <TypeScriptCompile Include="src\utils\log\Log.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="src\designer\" />
+    <Folder Include="src\designer\controller\" />
+    <Folder Include="src\designer\model\" />
     <Folder Include="src\emulator\model\" />
     <Folder Include="src\emulator\viewmodel\" />
     <Folder Include="src\emulator\view\" />
