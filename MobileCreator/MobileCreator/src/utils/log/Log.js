@@ -1,12 +1,12 @@
 define(["require", "exports"], function(require, exports) {
-    var LogManager = (function () {
-        function LogManager(tag) {
+    var Logger = (function () {
+        function Logger(tag) {
             this.tag = tag;
         }
-        LogManager.prototype.log = function (message) {
+        Logger.prototype.log = function (message) {
             console.log("(" + this.tag + ") " + message);
         };
-        return LogManager;
+        return Logger;
     })();
-    exports.LogManager = LogManager;    
+    exports.Logger = Logger;    
 })

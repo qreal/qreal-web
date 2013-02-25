@@ -1,4 +1,4 @@
-define(["require", "exports", "./AppMain"], function(require, exports, __main__) {
+define(["require", "exports", "./Application"], function(require, exports, __main__) {
     var main = __main__;
 
     require([

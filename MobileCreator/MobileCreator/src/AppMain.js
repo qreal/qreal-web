@@ -5,7 +5,7 @@ define(["require", "exports", "utils/log/log", "statecontroller"], function(requ
 
     var Application = (function () {
         function Application() {
-            this.logger = new Log.LogManager("Application");
+            this.logger = new Log.Logger("Application");
         }
         Application.prototype.onCreate = function () {
             this.logger.log("onCreate");

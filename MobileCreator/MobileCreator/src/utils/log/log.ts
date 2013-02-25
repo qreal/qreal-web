@@ -1,4 +1,4 @@
-export class LogManager {
+export class Logger {
     private tag: string;
 
     constructor(tag: string) {
