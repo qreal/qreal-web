@@ -51,6 +51,7 @@
       <DependentUpon>Application.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\emulator\model\Emulator.ts" />
+    <Content Include="src\designer\DesignerView.ts" />
     <Content Include="src\emulator\model\Emulator.js">
       <DependentUpon>Emulator.ts</DependentUpon>
     </Content>
@@ -60,7 +61,6 @@
     <TypeScriptCompile Include="src\utils\log\Log.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="src\designer\" />
     <Folder Include="src\emulator\viewmodel\" />
     <Folder Include="src\emulator\view\" />
   </ItemGroup>
