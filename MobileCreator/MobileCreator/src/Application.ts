@@ -1,4 +1,4 @@
-import Log = module("utils/log/log");
+import Log = module("utils/log/Log");
 /// <reference path="../lib/jquery.d.ts" />
 
 export class Application {

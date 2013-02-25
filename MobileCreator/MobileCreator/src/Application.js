@@ -1,4 +1,4 @@
-define(["require", "exports", "utils/log/log"], function(require, exports, __Log__) {
+define(["require", "exports", "utils/log/Log"], function(require, exports, __Log__) {
     var Log = __Log__;
 
     var Application = (function () {
