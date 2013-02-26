@@ -1,6 +1,5 @@
-import Log = module("../../utils/log/Log");
 /// <reference path="../../../lib/jquery.d.ts" />
-/// <reference path="../../../lib/jqueryui.d.ts" />
+import Log = module("utils/log/Log");
 
 export class DesignerView {
     private baseDiv: JQuery;
@@ -31,7 +30,7 @@ export class DesignerView {
             $(div).append(content);
         }
         $(designerMenuDiv).append(formsAccordion);
-        $(formsAccordion).accordion();
+        //$(formsAccordion).accordion();
         //END STUB
     }
 }

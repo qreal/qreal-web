@@ -1,11 +1,11 @@
-import Log = module("utils/log/Log");
-import DesignerView = module("designer/view/DesignerView");
 /// <reference path="../lib/jquery.d.ts" />
-/// <reference path="../lib/jquerymobile.d.ts" />
+import mLog = module("utils/log/Log");
+import mEmulator = module("emulator/model/Emulator")
+
 
 export class Application {
-    private logger = new Log.Logger("Application");
-    
+    private logger = new mLog.Logger("Application");
+
     private static Designer: number = 1;
     private static Emulator: number = 2;
     private static state: number = Application.Designer;
@@ -20,12 +20,15 @@ export class Application {
                 $("#btChange").text("Designer");
                 $("#emulator").hide();
                 $("#designer").show();
-                
+
             } else {
                 $("#btChange").text("Emulator");
                 $("#emulator").show();
                 $("#designer").hide();
             }
-        });                    
+        });
+
+        var emulator = mEmulator.Emulator.instance;
+        emulator.createView();
     }
 }

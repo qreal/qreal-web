@@ -48,14 +48,33 @@
     <Content Include="src\App.js">
       <DependentUpon>AppConfig.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="src\Application.ts" />
     <TypeScriptCompile Include="src\emulator\model\Emulator.ts" />
     <TypeScriptCompile Include="src\designer\view\DesignerView.ts" />
+    <TypeScriptCompile Include="src\Application.ts" />
+    <Content Include="src\Application.js">
+      <DependentUpon>Application.ts</DependentUpon>
+    </Content>
     <Content Include="src\designer\view\DesignerView.js">
       <DependentUpon>DesignerView.ts</DependentUpon>
     </Content>
     <Content Include="src\emulator\model\Emulator.js">
       <DependentUpon>Emulator.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\emulator\model\ui\Control.ts" />
+    <TypeScriptCompile Include="src\emulator\model\ui\Button.ts" />
+    <Content Include="src\emulator\model\ui\Button.js">
+      <DependentUpon>Button.ts</DependentUpon>
+    </Content>
+    <Content Include="src\emulator\model\ui\Control.js">
+      <DependentUpon>Control.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\emulator\model\ui\ControlPanel.ts" />
+    <Content Include="src\emulator\model\ui\ControlPanel.js">
+      <DependentUpon>ControlPanel.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\emulator\model\ui\LinearLayout.ts" />
+    <Content Include="src\emulator\model\ui\LinearLayout.js">
+      <DependentUpon>LinearLayout.ts</DependentUpon>
     </Content>
     <Content Include="src\utils\log\Log.js">
       <DependentUpon>Log.ts</DependentUpon>
@@ -91,7 +110,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>63916</DevelopmentServerPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:61082/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

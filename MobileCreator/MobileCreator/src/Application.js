@@ -1,9 +1,11 @@
-define(["require", "exports", "utils/log/Log"], function(require, exports, __Log__) {
-    var Log = __Log__;
+define(["require", "exports", "utils/log/Log", "emulator/model/Emulator"], function(require, exports, __mLog__, __mEmulator__) {
+    var mLog = __mLog__;
+
+    var mEmulator = __mEmulator__;
 
     var Application = (function () {
         function Application() {
-            this.logger = new Log.Logger("Application");
+            this.logger = new mLog.Logger("Application");
         }
         Application.Designer = 1;
         Application.Emulator = 2;
@@ -24,14 +26,8 @@ define(["require", "exports", "utils/log/Log"], function(require, exports, __Log
                     $("#designer").hide();
                 }
             });
-            var layout = $(" <div data-layout='{\"type\": \"flexGrid\", \"columns\": 1, \"hgap\": 5, \"vgap\": 5}' class=\"vertical\"></div>");
-            var button = $("<a>Button</a>");
-            layout.append(button);
-            $('#emulator').append(layout);
-            button.button();
-            jQuery(function ($) {
-                $('.vertical').layout();
-            });
+            var emulator = mEmulator.Emulator.instance;
+            emulator.createView();
         };
         return Application;
     })();
