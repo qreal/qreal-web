@@ -3,13 +3,14 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "emulator/model/ui/Control"], function(require, exports, __control__) {
-    var control = __control__;
+define(["require", "exports", "emulator/model/ui/Control"], function(require, exports, __mControl__) {
+    var mControl = __mControl__;
 
+    
     var ControlPanel = (function (_super) {
         __extends(ControlPanel, _super);
-        function ControlPanel(id) {
-                _super.call(this, id);
+        function ControlPanel(tag) {
+                _super.call(this, tag);
             this.childrens = new Array();
         }
         ControlPanel.prototype.addChild = function (child) {
@@ -19,6 +20,6 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
             return this.childrens;
         };
         return ControlPanel;
-    })(control.Control);
+    })(mControl.Control);
     exports.ControlPanel = ControlPanel;    
 })

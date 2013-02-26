@@ -57,6 +57,22 @@
     <Content Include="src\designer\view\DesignerView.js">
       <DependentUpon>DesignerView.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="src\emulator\model\attributes\ControlTag.ts" />
+    <Content Include="src\emulator\model\attributes\Atributes.js">
+      <DependentUpon>ControlTag.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\emulator\model\attributes\ControlPanelTag.ts" />
+    <TypeScriptCompile Include="src\emulator\model\attributes\ButtonTag.ts" />
+    <Content Include="src\emulator\model\attributes\ButtonTag.js">
+      <DependentUpon>ButtonTag.ts</DependentUpon>
+    </Content>
+    <Content Include="src\emulator\model\attributes\ControlPanelTag.js">
+      <DependentUpon>ControlPanelTag.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\emulator\model\attributes\LinearLayoutTag.ts" />
+    <Content Include="src\emulator\model\attributes\LinearLayoutTag.js">
+      <DependentUpon>LinearLayoutTag.ts</DependentUpon>
+    </Content>
     <Content Include="src\emulator\model\Emulator.js">
       <DependentUpon>Emulator.ts</DependentUpon>
     </Content>
@@ -128,6 +144,6 @@
   <Target Name="BeforeBuild">
     <Message Text="Compiling TypeScript files" />
     <Message Text="Executing tsc$(TypeScriptSourceMap) @(TypeScriptCompile ->'&quot;%(fullpath)&quot;', ' ')" />
-    <Exec Command="tsc$(TypeScriptSourceMap) @(TypeScriptCompile ->'&quot;%(fullpath)&quot;', ' ')" />
+    <Exec Command="tsc --target ES5 $(TypeScriptSourceMap) @(TypeScriptCompile ->'&quot;%(fullpath)&quot;', ' ')" />
   </Target>
 </Project>

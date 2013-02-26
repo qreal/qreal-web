@@ -1,13 +1,18 @@
 /// <reference path="../../../../lib/jquery.d.ts" />
 /// <reference path="../../../../lib/jquerymobile.d.ts" />
+import mControlTag = module("emulator/model/attributes/ControlTag");
 
 export class Control {
 
-    public id: string;
     public element: JQuery;
 
-    constructor(id: string) {
-        this.id = id;
+    // Tag with control data
+    private tag: mControlTag.ControlTag;
+    get Tag() { return this.tag; }
+    set Tag(value: mControlTag.ControlTag) { this.tag = value; }
+
+    constructor(tag: mControlTag.ControlTag) {
+        this.Tag = tag;
     }
 
     public getElement() {

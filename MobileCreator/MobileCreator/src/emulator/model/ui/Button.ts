@@ -1,13 +1,14 @@
 import control = module("emulator/model/ui/Control");
+import mButtonTag = module("emulator/model/attributes/ButtonTag");
 
 export class Button extends control.Control {
 
-    constructor(id: string) {
-        super(id);
+    constructor(tag: mButtonTag.ButtonTag) {
+        super(tag);
     }
 
     public getElement() {
-        this.element = $("<a id='" + this.id + "'>Button</a>");
+        this.element = $("<a id='" + this.Tag.Id + "'>Button</a>");
         return this.element;
     }
 

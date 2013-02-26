@@ -1,14 +1,15 @@
-import control = module("emulator/model/ui/Control");
+import mControl = module("emulator/model/ui/Control");
+import mControlPanelTag = module("emulator/model/attributes/ControlPanelTag");
 
-export class ControlPanel extends control.Control {
-    public childrens: control.Control[];
+export class ControlPanel extends mControl.Control {
+    public childrens: mControl.Control[];
 
-    constructor(id: string) {
-        super(id);
+    constructor(tag: mControlPanelTag.ControlPanelTag) {
+        super(tag);
         this.childrens = new Array();
     }
 
-    public addChild(child: control.Control) {
+    public addChild(child: mControl.Control) {
         this.childrens.push(child);
     }
 

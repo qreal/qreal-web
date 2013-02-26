@@ -2,6 +2,8 @@
 import mLog = module("utils/log/Log");
 import mButton = module("emulator/model/ui/Button");
 import mLinearLayout = module("emulator/model/ui/LinearLayout");
+import mButtonTag = module("emulator/model/attributes/ButtonTag");
+import mLinearLayoutTag = module("emulator/model/attributes/LinearLayoutTag");
 
 
 export class Emulator {
@@ -13,12 +15,27 @@ export class Emulator {
     }
 
     public createView() {
-        this.logger.log("createView")
+        this.logger.log("createView");
+
+        //TODO: staff
         var content = $("#emulator");
-        var button1 = new mButton.Button("button1");
-        var button2 = new mButton.Button("button2");
-        var button3 = new mButton.Button("button3");
-        var layout = new mLinearLayout.LinearLayout("linear1");
+
+        var tag1 = new mButtonTag.ButtonTag();
+        tag1.Id = "button1";
+        var button1 = new mButton.Button(tag1);
+
+        var tag2 = new mButtonTag.ButtonTag();
+        tag2.Id = "button2";
+        var button2 = new mButton.Button(tag2);
+
+        var tag3 = new mButtonTag.ButtonTag();
+        tag3.Id = "button3";
+        var button3 = new mButton.Button(tag3);
+
+        var tag4 = new mLinearLayoutTag.LinearLayoutTag();
+        tag4.Id = "linear1";
+        var layout = new mLinearLayout.LinearLayout(tag4);
+
         layout.addChild(button1);
         layout.addChild(button2);
         layout.addChild(button3);

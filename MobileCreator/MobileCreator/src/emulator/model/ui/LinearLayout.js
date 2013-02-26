@@ -3,16 +3,17 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "emulator/model/ui/ControlPanel"], function(require, exports, __controlPanel__) {
-    var controlPanel = __controlPanel__;
+define(["require", "exports", "emulator/model/ui/ControlPanel"], function(require, exports, __mControlPanel__) {
+    var mControlPanel = __mControlPanel__;
 
+    
     var LinearLayout = (function (_super) {
         __extends(LinearLayout, _super);
-        function LinearLayout(id) {
-                _super.call(this, id);
+        function LinearLayout(tag) {
+                _super.call(this, tag);
         }
         LinearLayout.prototype.getElement = function () {
-            this.element = $("<div id='" + this.id + "'></div>");
+            this.element = $("<div id='" + this.Tag.Id + "'></div>");
             var childrens = this.getChildrens();
             for(var i in childrens) {
                 this.element.append(childrens[i].getElement());
@@ -35,6 +36,6 @@ define(["require", "exports", "emulator/model/ui/ControlPanel"], function(requir
             });
         };
         return LinearLayout;
-    })(controlPanel.ControlPanel);
+    })(mControlPanel.ControlPanel);
     exports.LinearLayout = LinearLayout;    
 })
