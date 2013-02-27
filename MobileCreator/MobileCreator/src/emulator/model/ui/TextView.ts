@@ -10,7 +10,6 @@ export class TextView extends mControl.Control {
         this.ElementJQuery.text(tag.Text);        
     }
 
-    public create() {
-        this.ElementJQuery.button();
+    public create() {      
     }
 }

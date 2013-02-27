@@ -15,7 +15,6 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
             this.ElementJQuery.text(tag.Text);
         }
         TextView.prototype.create = function () {
-            this.ElementJQuery.button();
         };
         return TextView;
     })(mControl.Control);
