@@ -4,6 +4,16 @@ define(["require", "exports"], function(require, exports) {
         function Control(tag) {
             this.Tag = tag;
         }
+        Object.defineProperty(Control.prototype, "ElementJQuery", {
+            get: function () {
+                return this.elementJQuery;
+            },
+            set: function (value) {
+                this.elementJQuery = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(Control.prototype, "Tag", {
             get: function () {
                 return this.tag;
@@ -14,9 +24,6 @@ define(["require", "exports"], function(require, exports) {
             enumerable: true,
             configurable: true
         });
-        Control.prototype.getElement = function () {
-            return $("Control");
-        };
         Control.prototype.create = function () {
         };
         return Control;

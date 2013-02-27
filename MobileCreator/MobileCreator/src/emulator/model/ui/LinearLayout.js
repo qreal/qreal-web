@@ -4,6 +4,7 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 define(["require", "exports", "emulator/model/ui/ControlPanel"], function(require, exports, __mControlPanel__) {
+    
     var mControlPanel = __mControlPanel__;
 
     
@@ -11,14 +12,11 @@ define(["require", "exports", "emulator/model/ui/ControlPanel"], function(requir
         __extends(LinearLayout, _super);
         function LinearLayout(tag) {
                 _super.call(this, tag);
+            this.ElementJQuery = $("<div id='" + this.Tag.Id + "'></div>");
         }
-        LinearLayout.prototype.getElement = function () {
-            this.element = $("<div id='" + this.Tag.Id + "'></div>");
-            var childrens = this.getChildrens();
-            for(var i in childrens) {
-                this.element.append(childrens[i].getElement());
-            }
-            return this.element;
+        LinearLayout.prototype.addChild = function (child) {
+            _super.prototype.addChild.call(this, child);
+            this.ElementJQuery.append(child.ElementJQuery);
         };
         LinearLayout.prototype.create = function () {
             var childrenElements = new Array();

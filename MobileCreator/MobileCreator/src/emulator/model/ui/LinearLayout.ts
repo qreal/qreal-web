@@ -1,3 +1,4 @@
+import mControl = module("emulator/model/ui/Control");
 import mControlPanel = module("emulator/model/ui/ControlPanel");
 import mLinearLayoutTag = module("emulator/model/attributes/LinearLayoutTag");
 
@@ -5,15 +6,12 @@ export class LinearLayout extends mControlPanel.ControlPanel {
 
     constructor(tag: mLinearLayoutTag.LinearLayoutTag) {
         super(tag);
+        this.ElementJQuery = $("<div id='" + this.Tag.Id + "'></div>");
     }
 
-    public getElement() {
-        this.element = $("<div id='" + this.Tag.Id + "'></div>");
-        var childrens = this.getChildrens();
-        for (var i in childrens) {
-            this.element.append(childrens[i].getElement());
-        }
-        return this.element;
+    public addChild(child: mControl.Control) {
+        super.addChild(child);
+        this.ElementJQuery.append(child.ElementJQuery);
     }
 
     public create() {

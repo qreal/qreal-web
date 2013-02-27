@@ -32,7 +32,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             layout.addChild(button1);
             layout.addChild(button2);
             layout.addChild(button3);
-            var layoutElement = layout.getElement();
+            var layoutElement = layout.ElementJQuery;
             content.append(layoutElement);
             layout.create();
         };

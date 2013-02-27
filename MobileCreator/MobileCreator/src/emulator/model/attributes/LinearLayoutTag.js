@@ -10,7 +10,20 @@ define(["require", "exports", "emulator/model/attributes/ControlPanelTag"], func
         __extends(LinearLayoutTag, _super);
         function LinearLayoutTag() {
                 _super.call(this);
+            this.orientation = LinearLayoutTag.Horizontal;
         }
+        LinearLayoutTag.Horizontal = 1;
+        LinearLayoutTag.Vertical = 2;
+        Object.defineProperty(LinearLayoutTag.prototype, "Orientation", {
+            get: function () {
+                return this.orientation;
+            },
+            set: function (value) {
+                this.orientation = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
         return LinearLayoutTag;
     })(mControlPanelTag.ControlPanelTag);
     exports.LinearLayoutTag = LinearLayoutTag;    

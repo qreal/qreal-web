@@ -4,7 +4,9 @@ import mControlTag = module("emulator/model/attributes/ControlTag");
 
 export class Control {
 
-    public element: JQuery;
+    private elementJQuery: JQuery;
+    get ElementJQuery() { return this.elementJQuery; }
+    set ElementJQuery(value: JQuery) { this.elementJQuery = value; }
 
     // Tag with control data
     private tag: mControlTag.ControlTag;
@@ -13,10 +15,6 @@ export class Control {
 
     constructor(tag: mControlTag.ControlTag) {
         this.Tag = tag;
-    }
-
-    public getElement() {
-        return $("Control");
     }
 
     public create() {
