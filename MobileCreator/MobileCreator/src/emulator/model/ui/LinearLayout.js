@@ -12,25 +12,24 @@ define(["require", "exports", "emulator/model/ui/ControlPanel"], function(requir
         __extends(LinearLayout, _super);
         function LinearLayout(tag) {
                 _super.call(this, tag);
-            this.ElementJQuery = $("<div id='" + this.Tag.Id + "'></div>");
+            this.ElementJQuery = $("<div></div>");
+            this.ElementJQuery.attr('id', tag.Id);
         }
         LinearLayout.prototype.addChild = function (child) {
             _super.prototype.addChild.call(this, child);
             this.ElementJQuery.append(child.ElementJQuery);
         };
         LinearLayout.prototype.create = function () {
-            var childrenElements = new Array();
+            var childrenElements = this.ElementJQuery.children();
+            ;
             var childrens = this.getChildrens();
-            for(var i in childrens) {
-                childrenElements.push($("#" + childrens[i].id));
-                childrens[i].create();
-            }
-            jQuery(function ($) {
-                $('#code').layout({
-                    type: 'flexGrid',
-                    columns: 1,
-                    items: childrenElements
-                });
+            childrens.map(function (child) {
+                return child.create();
+            });
+            $('#' + this.Tag.Id).layout({
+                type: 'flexGrid',
+                columns: 1,
+                items: childrenElements
             });
         };
         return LinearLayout;

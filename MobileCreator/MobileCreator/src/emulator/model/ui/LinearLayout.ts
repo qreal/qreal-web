@@ -6,7 +6,8 @@ export class LinearLayout extends mControlPanel.ControlPanel {
 
     constructor(tag: mLinearLayoutTag.LinearLayoutTag) {
         super(tag);
-        this.ElementJQuery = $("<div id='" + this.Tag.Id + "'></div>");
+        this.ElementJQuery = $("<div></div>");
+        this.ElementJQuery.attr('id', tag.Id);
     }
 
     public addChild(child: mControl.Control) {
@@ -15,19 +16,14 @@ export class LinearLayout extends mControlPanel.ControlPanel {
     }
 
     public create() {
-        var childrenElements: JQuery[] = new Array();
+        var childrenElements = this.ElementJQuery.children();;
         var childrens = this.getChildrens();
-        for (var i in childrens) {
-            childrenElements.push($("#" + childrens[i].id));
-            childrens[i].create();
-        }
+        childrens.map(child => child.create());
 
-        jQuery(function ($) {
-            $('#code').layout({
-                type: 'flexGrid',
-                columns: 1,
-                items: childrenElements
-            });
+        $('#' + this.Tag.Id).layout({
+            type: 'flexGrid',
+            columns: 1,
+            items: childrenElements
         });
     }
 }

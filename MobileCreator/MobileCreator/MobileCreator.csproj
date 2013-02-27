@@ -26,6 +26,10 @@
     <Content Include="css\emulator.css" />
     <Content Include="css\jquery.mobile-1.2.0.min.css" />
     <Content Include="default.htm" />
+    <TypeScriptCompile Include="lib\jlayout.d.ts" />
+    <Content Include="lib\jlayout.d.js">
+      <DependentUpon>jlayout.d.ts</DependentUpon>
+    </Content>
     <Content Include="lib\jlayout\jlayout.border.js" />
     <Content Include="lib\jlayout\jlayout.flexgrid.js" />
     <Content Include="lib\jlayout\jlayout.flow.js" />

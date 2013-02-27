@@ -1,4 +1,5 @@
 /// <reference path="../../../lib/jquery.d.ts" />
+/// <reference path="../../../lib/jlayout.d.ts" />
 import mLog = module("utils/log/Log");
 import mButton = module("emulator/model/ui/Button");
 import mLinearLayout = module("emulator/model/ui/LinearLayout");

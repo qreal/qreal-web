@@ -25,10 +25,11 @@ export class Application {
                 $("#btChange").text("Emulator");
                 $("#emulator").show();
                 $("#designer").hide();
+                var emulator = mEmulator.Emulator.instance;
+                emulator.createView();
             }
         });
 
-        var emulator = mEmulator.Emulator.instance;
-        emulator.createView();
+      
     }
 }
