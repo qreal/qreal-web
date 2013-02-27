@@ -17,6 +17,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
         Emulator.prototype.createView = function () {
             this.logger.log("createView");
             var content = $("#emulator");
+            content.children().remove();
             var tag1 = new mButtonTag.ButtonTag();
             tag1.Id = "button1";
             tag1.Text = "button1";
@@ -32,6 +33,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             var tag4 = new mLinearLayoutTag.LinearLayoutTag();
             tag4.Id = "linear1";
             tag4.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
+            tag4.Background = "#0f0";
             var layout = new mLinearLayout.LinearLayout(tag4);
             layout.addChild(button1);
             layout.addChild(button2);

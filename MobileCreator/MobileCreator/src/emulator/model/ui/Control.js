@@ -1,8 +1,10 @@
 define(["require", "exports"], function(require, exports) {
     
     var Control = (function () {
-        function Control(tag) {
+        function Control(tag, elementJQuery) {
+            this.ElementJQuery = elementJQuery;
             this.Tag = tag;
+            this.ElementJQuery.attr('id', tag.Id);
         }
         Object.defineProperty(Control.prototype, "ElementJQuery", {
             get: function () {

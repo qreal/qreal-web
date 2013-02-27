@@ -13,8 +13,10 @@ export class Control {
     get Tag() { return this.tag; }
     set Tag(value: mControlTag.ControlTag) { this.tag = value; }
 
-    constructor(tag: mControlTag.ControlTag) {
+    constructor(tag: mControlTag.ControlTag, elementJQuery: JQuery) {
+        this.ElementJQuery = elementJQuery;
         this.Tag = tag;
+        this.ElementJQuery.attr('id', tag.Id);
     }
 
     public create() {

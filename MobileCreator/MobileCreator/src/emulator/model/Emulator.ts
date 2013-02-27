@@ -20,6 +20,7 @@ export class Emulator {
 
         //TODO: stuff
         var content = $("#emulator");
+        content.children().remove();
 
         var tag1 = new mButtonTag.ButtonTag();
         tag1.Id = "button1";
@@ -39,6 +40,7 @@ export class Emulator {
         var tag4 = new mLinearLayoutTag.LinearLayoutTag();
         tag4.Id = "linear1";
         tag4.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
+        tag4.Background = "#0f0"
         var layout = new mLinearLayout.LinearLayout(tag4);
 
         layout.addChild(button1);

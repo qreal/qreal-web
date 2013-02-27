@@ -11,10 +11,9 @@ define(["require", "exports", "emulator/model/ui/ControlPanel", "emulator/model/
 
     var LinearLayout = (function (_super) {
         __extends(LinearLayout, _super);
-        function LinearLayout(tag) {
-                _super.call(this, tag);
-            this.ElementJQuery = $("<div></div>");
-            this.ElementJQuery.attr('id', tag.Id);
+        function LinearLayout(tag, elementJQuery) {
+            if (typeof elementJQuery === "undefined") { elementJQuery = $("<div></div>"); }
+                _super.call(this, tag, elementJQuery);
         }
         LinearLayout.prototype.addChild = function (child) {
             _super.prototype.addChild.call(this, child);
@@ -23,9 +22,7 @@ define(["require", "exports", "emulator/model/ui/ControlPanel", "emulator/model/
         LinearLayout.prototype.create = function () {
             var tag = this.Tag;
             var childrenElements = this.ElementJQuery.children();
-            ;
-            var childrens = this.getChildrens();
-            childrens.map(function (child) {
+            this.Childrens.map(function (child) {
                 return child.create();
             });
             var columns, rows;

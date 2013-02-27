@@ -12,7 +12,6 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator"], funct
         Application.state = Application.Designer;
         Application.prototype.onCreate = function () {
             this.logger.log("onCreate");
-            $("#btChange").text("Designer");
             $("#designer").show();
             $("#btChange").click(function () {
                 Application.state = Application.state == Application.Designer ? Application.Emulator : Application.Designer;

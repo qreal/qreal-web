@@ -102,6 +102,10 @@
     <Content Include="src\emulator\model\ui\LinearLayout.js">
       <DependentUpon>LinearLayout.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="src\emulator\model\ui\TextView.ts" />
+    <Content Include="src\emulator\model\ui\TextView.js">
+      <DependentUpon>TextView.ts</DependentUpon>
+    </Content>
     <Content Include="src\utils\log\Log.js">
       <DependentUpon>Log.ts</DependentUpon>
     </Content>

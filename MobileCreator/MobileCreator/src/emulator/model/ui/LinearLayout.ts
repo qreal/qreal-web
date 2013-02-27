@@ -4,10 +4,10 @@ import mLinearLayoutTag = module("emulator/model/attributes/LinearLayoutTag");
 
 export class LinearLayout extends mControlPanel.ControlPanel {
 
-    constructor(tag: mLinearLayoutTag.LinearLayoutTag) {
-        super(tag);
-        this.ElementJQuery = $("<div></div>");
-        this.ElementJQuery.attr('id', tag.Id);
+    constructor(tag: mLinearLayoutTag.LinearLayoutTag);
+    constructor(tag: mLinearLayoutTag.LinearLayoutTag, elementJQuery: JQuery);
+    constructor(tag: mLinearLayoutTag.LinearLayoutTag, elementJQuery?: JQuery = $("<div></div>")) {
+        super(tag, elementJQuery);
     }
 
     public addChild(child: mControl.Control) {
@@ -17,9 +17,8 @@ export class LinearLayout extends mControlPanel.ControlPanel {
 
     public create() {
         var tag = <mLinearLayoutTag.LinearLayoutTag> this.Tag;
-        var childrenElements = this.ElementJQuery.children();;
-        var childrens = this.getChildrens();
-        childrens.map(child => child.create());
+        var childrenElements = this.ElementJQuery.children();
+        this.Childrens.map(child => child.create());
 
         var columns, rows;
         switch (tag.Orientation) {
@@ -32,7 +31,7 @@ export class LinearLayout extends mControlPanel.ControlPanel {
                 rows = 0;
                 break;
         }
-        
+
         $('#' + tag.Id).layout({
             type: 'flexGrid',
             columns: columns,

@@ -1,14 +1,11 @@
-import control = module("emulator/model/ui/Control");
+import mTextView = module("emulator/model/ui/TextView");
 import mButtonTag = module("emulator/model/attributes/ButtonTag");
 
-export class Button extends control.Control {
+export class Button extends mTextView.TextView {
 
-    constructor(tag: mButtonTag.ButtonTag) {
-        super(tag);
-        this.ElementJQuery = $("<a></a>");
-        this.ElementJQuery.text(tag.Text);
-        this.ElementJQuery.attr('id', tag.Id);
-        //this.ElementJQuery.css('background', tag.Background);
+    constructor(tag: mButtonTag.ButtonTag, elementJQuery?: JQuery = $("<a></a>")) {
+        super(tag, elementJQuery);
+       
     }
 
     public create() {
