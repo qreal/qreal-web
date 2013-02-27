@@ -1,6 +1,6 @@
-import mControlTag = module("emulator/model/attributes/ControlTag");
+import mTextViewTag = module("emulator/model/attributes/TextViewTag");
 
-export class ButtonTag extends mControlTag.ControlTag {
+export class ButtonTag extends mTextViewTag.TextViewTag {
     constructor() {
         super();
     }

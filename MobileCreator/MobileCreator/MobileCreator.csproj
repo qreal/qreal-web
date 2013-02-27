@@ -75,6 +75,10 @@
     <Content Include="src\emulator\model\attributes\LinearLayoutTag.js">
       <DependentUpon>LinearLayoutTag.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="src\emulator\model\attributes\TextViewTag.ts" />
+    <Content Include="src\emulator\model\attributes\TextViewTag.js">
+      <DependentUpon>TextViewTag.ts</DependentUpon>
+    </Content>
     <Content Include="src\emulator\model\Emulator.js">
       <DependentUpon>Emulator.ts</DependentUpon>
     </Content>

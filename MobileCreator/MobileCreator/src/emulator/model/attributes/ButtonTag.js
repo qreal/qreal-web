@@ -3,8 +3,8 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "emulator/model/attributes/ControlTag"], function(require, exports, __mControlTag__) {
-    var mControlTag = __mControlTag__;
+define(["require", "exports", "emulator/model/attributes/TextViewTag"], function(require, exports, __mTextViewTag__) {
+    var mTextViewTag = __mTextViewTag__;
 
     var ButtonTag = (function (_super) {
         __extends(ButtonTag, _super);
@@ -12,6 +12,6 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
                 _super.call(this);
         }
         return ButtonTag;
-    })(mControlTag.ControlTag);
+    })(mTextViewTag.TextViewTag);
     exports.ButtonTag = ButtonTag;    
 })

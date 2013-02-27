@@ -11,8 +11,9 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
         __extends(Button, _super);
         function Button(tag) {
                 _super.call(this, tag);
-            this.ElementJQuery = $("<a id='" + this.Tag.Id + "'>Button</a>");
-            this.ElementJQuery.css('background-color', 'red');
+            this.ElementJQuery = $("<a></a>");
+            this.ElementJQuery.text(tag.Text);
+            this.ElementJQuery.attr('id', tag.Id);
         }
         Button.prototype.create = function () {
             this.ElementJQuery.button();

@@ -22,14 +22,17 @@ export class Emulator {
 
         var tag1 = new mButtonTag.ButtonTag();
         tag1.Id = "button1";
+        tag1.Text = "button1";
         var button1 = new mButton.Button(tag1);
 
         var tag2 = new mButtonTag.ButtonTag();
         tag2.Id = "button2";
+        tag2.Text = "button2";
         var button2 = new mButton.Button(tag2);
 
         var tag3 = new mButtonTag.ButtonTag();
         tag3.Id = "button3";
+        tag3.Text = "button3";
         var button3 = new mButton.Button(tag3);
 
         var tag4 = new mLinearLayoutTag.LinearLayoutTag();

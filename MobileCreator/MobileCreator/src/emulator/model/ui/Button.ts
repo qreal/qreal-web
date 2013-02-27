@@ -5,10 +5,13 @@ export class Button extends control.Control {
 
     constructor(tag: mButtonTag.ButtonTag) {
         super(tag);
-        this.ElementJQuery = $("<a id='" + this.Tag.Id + "'>Button</a>");
+        this.ElementJQuery = $("<a></a>");
+        this.ElementJQuery.text(tag.Text);
+        this.ElementJQuery.attr('id', tag.Id);
+        //this.ElementJQuery.css('background', tag.Background);
     }
 
     public create() {
-        this.ElementJQuery.button();
+        this.ElementJQuery.button();        
     }
 }
