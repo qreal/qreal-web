@@ -21,7 +21,9 @@
     <UpgradeBackupLocation />
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="css\application.css" />
     <Content Include="css\designer.css" />
+    <Content Include="css\emulator.css" />
     <Content Include="css\jquery.mobile-1.2.0.min.css" />
     <Content Include="default.htm" />
     <Content Include="lib\jlayout\jlayout.border.js" />
