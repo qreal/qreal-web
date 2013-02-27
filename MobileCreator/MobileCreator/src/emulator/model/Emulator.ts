@@ -18,7 +18,7 @@ export class Emulator {
     public createView() {
         this.logger.log("createView");
 
-        //TODO: staff
+        //TODO: stuff
         var content = $("#emulator");
 
         var tag1 = new mButtonTag.ButtonTag();
@@ -38,6 +38,7 @@ export class Emulator {
 
         var tag4 = new mLinearLayoutTag.LinearLayoutTag();
         tag4.Id = "linear1";
+        tag4.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
         var layout = new mLinearLayout.LinearLayout(tag4);
 
         layout.addChild(button1);
@@ -46,5 +47,6 @@ export class Emulator {
         var layoutElement = layout.ElementJQuery;
         content.append(layoutElement);
         layout.create();
+        //end stuff
     }
 }

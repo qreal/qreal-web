@@ -3,11 +3,12 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "emulator/model/ui/ControlPanel"], function(require, exports, __mControlPanel__) {
+define(["require", "exports", "emulator/model/ui/ControlPanel", "emulator/model/attributes/LinearLayoutTag"], function(require, exports, __mControlPanel__, __mLinearLayoutTag__) {
     
     var mControlPanel = __mControlPanel__;
 
-    
+    var mLinearLayoutTag = __mLinearLayoutTag__;
+
     var LinearLayout = (function (_super) {
         __extends(LinearLayout, _super);
         function LinearLayout(tag) {
@@ -20,15 +21,28 @@ define(["require", "exports", "emulator/model/ui/ControlPanel"], function(requir
             this.ElementJQuery.append(child.ElementJQuery);
         };
         LinearLayout.prototype.create = function () {
+            var tag = this.Tag;
             var childrenElements = this.ElementJQuery.children();
             ;
             var childrens = this.getChildrens();
             childrens.map(function (child) {
                 return child.create();
             });
-            $('#' + this.Tag.Id).layout({
+            var columns, rows;
+            switch(tag.Orientation) {
+                case mLinearLayoutTag.LinearLayoutTag.Horizontal:
+                    columns = 0;
+                    rows = 1;
+                    break;
+                case mLinearLayoutTag.LinearLayoutTag.Vertical:
+                    columns = 1;
+                    rows = 0;
+                    break;
+            }
+            $('#' + tag.Id).layout({
                 type: 'flexGrid',
-                columns: 1,
+                columns: columns,
+                rows: rows,
                 items: childrenElements
             });
         };

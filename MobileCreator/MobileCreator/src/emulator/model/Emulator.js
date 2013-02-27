@@ -31,6 +31,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             var button3 = new mButton.Button(tag3);
             var tag4 = new mLinearLayoutTag.LinearLayoutTag();
             tag4.Id = "linear1";
+            tag4.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
             var layout = new mLinearLayout.LinearLayout(tag4);
             layout.addChild(button1);
             layout.addChild(button2);

@@ -16,13 +16,27 @@ export class LinearLayout extends mControlPanel.ControlPanel {
     }
 
     public create() {
+        var tag = <mLinearLayoutTag.LinearLayoutTag> this.Tag;
         var childrenElements = this.ElementJQuery.children();;
         var childrens = this.getChildrens();
         childrens.map(child => child.create());
 
-        $('#' + this.Tag.Id).layout({
+        var columns, rows;
+        switch (tag.Orientation) {
+            case mLinearLayoutTag.LinearLayoutTag.Horizontal:
+                columns = 0;
+                rows = 1;
+                break;
+            case mLinearLayoutTag.LinearLayoutTag.Vertical:
+                columns = 1;
+                rows = 0;
+                break;
+        }
+        
+        $('#' + tag.Id).layout({
             type: 'flexGrid',
-            columns: 1,
+            columns: columns,
+            rows: rows,
             items: childrenElements
         });
     }
