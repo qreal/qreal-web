@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AndroidGenerator", "AndroidGenerator\AndroidGenerator.fsproj", "{AE9A1324-7DC2-4EF8-9244-417468BDBB67}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE9A1324-7DC2-4EF8-9244-417468BDBB67}.Debug|x86.ActiveCfg = Debug|x86
+		{AE9A1324-7DC2-4EF8-9244-417468BDBB67}.Debug|x86.Build.0 = Debug|x86
+		{AE9A1324-7DC2-4EF8-9244-417468BDBB67}.Release|x86.ActiveCfg = Release|x86
+		{AE9A1324-7DC2-4EF8-9244-417468BDBB67}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
