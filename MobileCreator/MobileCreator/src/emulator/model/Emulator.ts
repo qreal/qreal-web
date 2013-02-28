@@ -24,28 +24,42 @@ export class Emulator {
         var content = $("#emulator");
         content.children().remove();
 
-        var tag1 = new mButtonTag.ButtonTag();
-        tag1.Id = "button1";
-        tag1.Text = "button1";
-        var button1 = new mButton.Button(tag1);
+        var bttag1 = new mButtonTag.ButtonTag();
+        bttag1.Id = "button1";
+        bttag1.Text = "button1";
+        var button1 = new mButton.Button(bttag1);
 
-        var tag2 = new mButtonTag.ButtonTag();
-        tag2.Id = "button2";
-        tag2.Text = "button2";
-        var button2 = new mButton.Button(tag2);
+        var bttag2 = new mButtonTag.ButtonTag();
+        bttag2.Id = "button2";
+        bttag2.Text = "button2";
+        var button2 = new mButton.Button(bttag2);
 
-        var tag3 = new mButtonTag.ButtonTag();
-        tag3.Id = "button3";
-        tag3.Text = "button3";
-        var button3 = new mButton.Button(tag3);
+        var bttag3 = new mButtonTag.ButtonTag();
+        bttag3.Id = "button3";
+        bttag3.Text = "button3";
+        var button3 = new mButton.Button(bttag3);
+
+        var bttag4 = new mButtonTag.ButtonTag();
+        bttag4.Id = "button4";
+        bttag4.Text = "button4";
+        var button4 = new mButton.Button(bttag4);
+
+        var bttag5 = new mButtonTag.ButtonTag();
+        bttag5.Id = "button5";
+        bttag5.Text = "button5";
+        var button5 = new mButton.Button(bttag5);
+
+        var bttag6 = new mButtonTag.ButtonTag();
+        bttag6.Id = "button6";
+        bttag6.Text = "button6";
+        var button6 = new mButton.Button(bttag6);
 
         var tag4 = new mLinearLayoutTag.LinearLayoutTag();
         tag4.Id = "linear1";
-        tag4.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
+        tag4.Orientation = mLinearLayoutTag.LinearLayoutTag.Horizontal;
         tag4.Background = "#0f0"
         var layout = new mLinearLayout.LinearLayout(tag4);
 
-        /*
         var tag5 = new mTextViewTag.TextViewTag();
         tag5.Id = "text1";
         tag5.Text = "text1";
@@ -81,16 +95,20 @@ export class Emulator {
         layout2.addChild(label3);
         layout2.addChild(label4);
         layout2.addChild(label5);
-        */
+      
 
         layout.addChild(button1);
         layout.addChild(button2);
-        //layout.addChild(label1);
-        //layout.addChild(layout2);
         layout.addChild(button3);
+        layout.addChild(button4);
+        layout.addChild(button5);
+        layout.addChild(button6);
         var $layout = layout.$Control;
         content.append($layout);
         layout.create();
+
+        content.append($('<button>hehe</button>'));
+        content.trigger('create');
         //end stuff
     }
 }

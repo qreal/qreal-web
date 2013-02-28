@@ -9,7 +9,9 @@ export class ControlPanel extends mControl.Control {
     constructor(tag: mControlPanelTag.ControlPanelTag, $control: JQuery) {
         super(tag, $control);
         this.childrens = new Array();
-        this.$Control.css("background", tag.Background);
+        this.$Control.css({
+            background: tag.Background           
+        });
     }
 
     public addChild(child: mControl.Control) {

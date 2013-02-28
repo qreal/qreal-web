@@ -12,7 +12,9 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
         function ControlPanel(tag, $control) {
                 _super.call(this, tag, $control);
             this.childrens = new Array();
-            this.$Control.css("background", tag.Background);
+            this.$Control.css({
+                background: tag.Background
+            });
         }
         Object.defineProperty(ControlPanel.prototype, "Childrens", {
             get: function () {

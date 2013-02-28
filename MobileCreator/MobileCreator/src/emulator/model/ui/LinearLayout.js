@@ -22,6 +22,9 @@ define(["require", "exports", "emulator/model/ui/ControlPanel", "emulator/model/
         LinearLayout.prototype.create = function () {
             var tag = this.Tag;
             var childrenElements = this.$Control.children();
+            this.Childrens.map(function (child) {
+                return child.create();
+            });
             var columns, rows;
             switch(tag.Orientation) {
                 case mLinearLayoutTag.LinearLayoutTag.Horizontal:
@@ -33,13 +36,15 @@ define(["require", "exports", "emulator/model/ui/ControlPanel", "emulator/model/
                     rows = 0;
                     break;
             }
-            $('#' + tag.Id).layout({
+            this.$Control.trigger('create');
+            this.$Control.layout({
                 type: 'flexGrid',
                 columns: columns,
                 rows: rows,
                 items: childrenElements
             });
-            $('#' + tag.Id).css("width", "400px");
+            this.$Control.css('width', "inherit");
+            this.$Control.css('display', "inline-block");
         };
         return LinearLayout;
     })(mControlPanel.ControlPanel);

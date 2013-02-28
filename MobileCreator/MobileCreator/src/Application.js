@@ -27,6 +27,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator"], funct
                     emulator.createView();
                 }
             });
+            $("#btChange").click();
         };
         return Application;
     })();
