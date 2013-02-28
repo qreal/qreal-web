@@ -9,10 +9,10 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
     
     var ControlPanel = (function (_super) {
         __extends(ControlPanel, _super);
-        function ControlPanel(tag, elementJQuery) {
-                _super.call(this, tag, elementJQuery);
+        function ControlPanel(tag, $control) {
+                _super.call(this, tag, $control);
             this.childrens = new Array();
-            this.ElementJQuery.css("background", tag.Background);
+            this.$Control.css("background", tag.Background);
         }
         Object.defineProperty(ControlPanel.prototype, "Childrens", {
             get: function () {

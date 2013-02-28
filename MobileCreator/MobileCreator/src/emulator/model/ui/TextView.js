@@ -9,10 +9,10 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
     
     var TextView = (function (_super) {
         __extends(TextView, _super);
-        function TextView(tag, elementJQuery) {
-            if (typeof elementJQuery === "undefined") { elementJQuery = $("<label></label>"); }
-                _super.call(this, tag, elementJQuery);
-            this.ElementJQuery.text(tag.Text);
+        function TextView(tag, $control) {
+            if (typeof $control === "undefined") { $control = $("<label></label>"); }
+                _super.call(this, tag, $control);
+            this.$Control.text(tag.Text);
         }
         TextView.prototype.create = function () {
         };

@@ -9,12 +9,12 @@ define(["require", "exports", "emulator/model/ui/TextView"], function(require, e
     
     var Button = (function (_super) {
         __extends(Button, _super);
-        function Button(tag, elementJQuery) {
-            if (typeof elementJQuery === "undefined") { elementJQuery = $("<a></a>"); }
-                _super.call(this, tag, elementJQuery);
+        function Button(tag, $control) {
+            if (typeof $control === "undefined") { $control = $("<a></a>"); }
+                _super.call(this, tag, $control);
         }
         Button.prototype.create = function () {
-            this.ElementJQuery.button();
+            this.$Control.button();
         };
         return Button;
     })(mTextView.TextView);

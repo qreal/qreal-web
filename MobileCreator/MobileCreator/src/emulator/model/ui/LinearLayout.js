@@ -11,20 +11,17 @@ define(["require", "exports", "emulator/model/ui/ControlPanel", "emulator/model/
 
     var LinearLayout = (function (_super) {
         __extends(LinearLayout, _super);
-        function LinearLayout(tag, elementJQuery) {
-            if (typeof elementJQuery === "undefined") { elementJQuery = $("<div></div>"); }
-                _super.call(this, tag, elementJQuery);
+        function LinearLayout(tag, $control) {
+            if (typeof $control === "undefined") { $control = $("<div></div>"); }
+                _super.call(this, tag, $control);
         }
         LinearLayout.prototype.addChild = function (child) {
             _super.prototype.addChild.call(this, child);
-            this.ElementJQuery.append(child.ElementJQuery);
+            this.$Control.append(child.$Control);
         };
         LinearLayout.prototype.create = function () {
             var tag = this.Tag;
-            var childrenElements = this.ElementJQuery.children();
-            this.Childrens.map(function (child) {
-                return child.create();
-            });
+            var childrenElements = this.$Control.children();
             var columns, rows;
             switch(tag.Orientation) {
                 case mLinearLayoutTag.LinearLayoutTag.Horizontal:
@@ -42,6 +39,7 @@ define(["require", "exports", "emulator/model/ui/ControlPanel", "emulator/model/
                 rows: rows,
                 items: childrenElements
             });
+            $('#' + tag.Id).css("width", "400px");
         };
         return LinearLayout;
     })(mControlPanel.ControlPanel);

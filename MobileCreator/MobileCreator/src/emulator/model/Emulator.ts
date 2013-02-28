@@ -45,6 +45,7 @@ export class Emulator {
         tag4.Background = "#0f0"
         var layout = new mLinearLayout.LinearLayout(tag4);
 
+        /*
         var tag5 = new mTextViewTag.TextViewTag();
         tag5.Id = "text1";
         tag5.Text = "text1";
@@ -66,16 +67,29 @@ export class Emulator {
         tag8.Text = "text2";
         var label3 = new mTextView.TextView(tag8);
 
+        var tag9 = new mTextViewTag.TextViewTag();
+        tag9.Id = "text3";
+        tag9.Text = "text3";
+        var label4 = new mTextView.TextView(tag9);
+
+        var tag10 = new mTextViewTag.TextViewTag();
+        tag10.Id = "text4";
+        tag10.Text = "text4";
+        var label5 = new mTextView.TextView(tag10);
+
         layout2.addChild(label2);
         layout2.addChild(label3);
+        layout2.addChild(label4);
+        layout2.addChild(label5);
+        */
 
         layout.addChild(button1);
         layout.addChild(button2);
-        layout.addChild(label1);
-        layout.addChild(layout2);
+        //layout.addChild(label1);
+        //layout.addChild(layout2);
         layout.addChild(button3);
-        var layoutElement = layout.ElementJQuery;
-        content.append(layoutElement);
+        var $layout = layout.$Control;
+        content.append($layout);
         layout.create();
         //end stuff
     }

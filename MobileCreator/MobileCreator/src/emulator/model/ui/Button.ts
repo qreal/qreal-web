@@ -3,12 +3,12 @@ import mButtonTag = module("emulator/model/attributes/ButtonTag");
 
 export class Button extends mTextView.TextView {
 
-    constructor(tag: mButtonTag.ButtonTag, elementJQuery?: JQuery = $("<a></a>")) {
-        super(tag, elementJQuery);
+    constructor(tag: mButtonTag.ButtonTag, $control?: JQuery = $("<a></a>")) {
+        super(tag, $control);
        
     }
 
     public create() {
-        this.ElementJQuery.button();        
+        this.$Control.button();
     }
 }

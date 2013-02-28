@@ -5,20 +5,20 @@ import mLinearLayoutTag = module("emulator/model/attributes/LinearLayoutTag");
 export class LinearLayout extends mControlPanel.ControlPanel {
 
     constructor(tag: mLinearLayoutTag.LinearLayoutTag);
-    constructor(tag: mLinearLayoutTag.LinearLayoutTag, elementJQuery: JQuery);
-    constructor(tag: mLinearLayoutTag.LinearLayoutTag, elementJQuery?: JQuery = $("<div></div>")) {
-        super(tag, elementJQuery);
+    constructor(tag: mLinearLayoutTag.LinearLayoutTag, $control: JQuery);
+    constructor(tag: mLinearLayoutTag.LinearLayoutTag, $control?: JQuery = $("<div></div>")) {
+        super(tag, $control);
     }
 
     public addChild(child: mControl.Control) {
         super.addChild(child);
-        this.ElementJQuery.append(child.ElementJQuery);
+        this.$Control.append(child.$Control);
     }
 
     public create() {
         var tag = <mLinearLayoutTag.LinearLayoutTag> this.Tag;
-        var childrenElements = this.ElementJQuery.children();
-        this.Childrens.map(child => child.create());
+        var childrenElements = this.$Control.children();
+
 
         var columns, rows;
         switch (tag.Orientation) {
@@ -38,5 +38,7 @@ export class LinearLayout extends mControlPanel.ControlPanel {
             rows: rows,
             items: childrenElements
         });
+        $('#' + tag.Id).css("width", "400px");
+        //this.Childrens.map(child => child.create());
     }
 }
