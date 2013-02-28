@@ -24,7 +24,8 @@
     <Content Include="css\application.css" />
     <Content Include="css\designer.css" />
     <Content Include="css\emulator.css" />
-    <Content Include="css\jquery.mobile-1.2.0.min.css" />
+    <Content Include="css\jqueryui.css" />
+    <Content Include="css\jquerymobile.css" />
     <Content Include="default.htm" />
     <TypeScriptCompile Include="lib\jlayout.d.ts" />
     <Content Include="lib\jlayout.d.js">
@@ -36,10 +37,10 @@
     <Content Include="lib\jlayout\jlayout.grid.js" />
     <Content Include="lib\jlayout\jquery.jlayout.js" />
     <Content Include="lib\jlayout\jquery.sizes.js" />
-    <Content Include="lib\jquery-1.8.2.min.js" />
-    <Content Include="lib\jquery-ui.js" />
+    <Content Include="lib\jquery.js" />
+    <Content Include="lib\jqueryui.js" />
     <Content Include="lib\jquery.d.ts" />
-    <Content Include="lib\jquery.mobile-1.2.0.min.js" />
+    <Content Include="lib\jquerymobile.js" />
     <TypeScriptCompile Include="src\AppConfig.ts" />
     <TypeScriptCompile Include="lib\require.d.ts" />
     <TypeScriptCompile Include="lib\jquerymobile.d.ts" />

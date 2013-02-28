@@ -23,11 +23,9 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator"], funct
                     $("#btChange").text("Emulator");
                     $("#emulator").show();
                     $("#designer").hide();
-                    var emulator = mEmulator.Emulator.instance;
-                    emulator.createView();
+                    mEmulator.Emulator.instance.createView();
                 }
             });
-            $("#btChange").click();
         };
         return Application;
     })();

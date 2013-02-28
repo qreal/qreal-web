@@ -19,13 +19,11 @@ export class Application {
                 $("#btChange").text("Designer");
                 $("#emulator").hide();
                 $("#designer").show();
-
             } else {
                 $("#btChange").text("Emulator");
                 $("#emulator").show();
                 $("#designer").hide();
-                var emulator = mEmulator.Emulator.instance;
-                emulator.createView();
+                mEmulator.Emulator.instance.createView();
             }
         });
     }

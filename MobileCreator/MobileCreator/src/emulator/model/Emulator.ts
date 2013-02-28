@@ -20,7 +20,7 @@ export class Emulator {
     public createView() {
         this.logger.log("createView");
 
-        //TODO: stuff
+        //TODO: stub
         var content = $("#emulator");
         content.children().remove();
 
@@ -58,6 +58,7 @@ export class Emulator {
         tag4.Id = "linear1";
         tag4.Orientation = mLinearLayoutTag.LinearLayoutTag.Horizontal;
         tag4.Background = "#0f0"
+        tag4.Width = -1;
         var layout = new mLinearLayout.LinearLayout(tag4);
 
         var tag5 = new mTextViewTag.TextViewTag();
@@ -68,7 +69,7 @@ export class Emulator {
         var tag6 = new mLinearLayoutTag.LinearLayoutTag();
         tag6.Id = "linear2";
         tag6.Orientation = mLinearLayoutTag.LinearLayoutTag.Horizontal;
-        tag6.Background = "#00f"
+        tag6.Background = "#00f"    
         var layout2 = new mLinearLayout.LinearLayout(tag6);
 
         var tag7 = new mTextViewTag.TextViewTag();
@@ -95,7 +96,6 @@ export class Emulator {
         layout2.addChild(label3);
         layout2.addChild(label4);
         layout2.addChild(label5);
-      
 
         layout.addChild(button1);
         layout.addChild(button2);
@@ -106,9 +106,6 @@ export class Emulator {
         var $layout = layout.$Control;
         content.append($layout);
         layout.create();
-
-        content.append($('<button>hehe</button>'));
-        content.trigger('create');
-        //end stuff
+        //end stub
     }
 }

@@ -50,6 +50,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             tag4.Id = "linear1";
             tag4.Orientation = mLinearLayoutTag.LinearLayoutTag.Horizontal;
             tag4.Background = "#0f0";
+            tag4.Width = -1;
             var layout = new mLinearLayout.LinearLayout(tag4);
             var tag5 = new mTextViewTag.TextViewTag();
             tag5.Id = "text1";
@@ -89,8 +90,6 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             var $layout = layout.$Control;
             content.append($layout);
             layout.create();
-            content.append($('<button>hehe</button>'));
-            content.trigger('create');
         };
         return Emulator;
     })();

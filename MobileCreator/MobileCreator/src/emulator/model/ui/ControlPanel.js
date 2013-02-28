@@ -7,6 +7,7 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
     var mControl = __mControl__;
 
     
+    
     var ControlPanel = (function (_super) {
         __extends(ControlPanel, _super);
         function ControlPanel(tag, $control) {

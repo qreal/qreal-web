@@ -1,5 +1,7 @@
 import mControl = module("emulator/model/ui/Control");
+import mControlTag = module("emulator/model/attributes/ControlTag");
 import mControlPanelTag = module("emulator/model/attributes/ControlPanelTag");
+
 
 export class ControlPanel extends mControl.Control {
 
@@ -11,7 +13,7 @@ export class ControlPanel extends mControl.Control {
         this.childrens = new Array();
         this.$Control.css({
             background: tag.Background           
-        });
+        });  
     }
 
     public addChild(child: mControl.Control) {

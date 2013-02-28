@@ -4,7 +4,7 @@ define(["require", "exports"], function(require, exports) {
             this.tag = tag;
         }
         Logger.prototype.log = function (message) {
-            console.log("(" + this.tag + ") " + message);
+            console.log("(" + this.tag + "): " + message);
         };
         return Logger;
     })();

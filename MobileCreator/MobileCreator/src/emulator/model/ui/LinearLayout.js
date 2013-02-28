@@ -3,8 +3,10 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "emulator/model/ui/ControlPanel", "emulator/model/attributes/LinearLayoutTag"], function(require, exports, __mControlPanel__, __mLinearLayoutTag__) {
+define(["require", "exports", "emulator/model/attributes/ControlTag", "emulator/model/ui/ControlPanel", "emulator/model/attributes/LinearLayoutTag"], function(require, exports, __mControlTag__, __mControlPanel__, __mLinearLayoutTag__) {
     
+    var mControlTag = __mControlTag__;
+
     var mControlPanel = __mControlPanel__;
 
     var mLinearLayoutTag = __mLinearLayoutTag__;
@@ -14,6 +16,9 @@ define(["require", "exports", "emulator/model/ui/ControlPanel", "emulator/model/
         function LinearLayout(tag, $control) {
             if (typeof $control === "undefined") { $control = $("<div></div>"); }
                 _super.call(this, tag, $control);
+            if(tag.Width == mControlTag.ControlTag.MatchParrent) {
+                this.$Control.css('width', 'inherit');
+            }
         }
         LinearLayout.prototype.addChild = function (child) {
             _super.prototype.addChild.call(this, child);
@@ -43,8 +48,6 @@ define(["require", "exports", "emulator/model/ui/ControlPanel", "emulator/model/
                 rows: rows,
                 items: childrenElements
             });
-            this.$Control.css('width', "inherit");
-            this.$Control.css('display', "inline-block");
         };
         return LinearLayout;
     })(mControlPanel.ControlPanel);
