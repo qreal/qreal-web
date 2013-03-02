@@ -2,7 +2,9 @@
 /// <reference path="../../lib/knockout.d.ts" />
 /// <reference path="../../lib/jquerymobile.d.ts" />
 import mLog = module("utils/log/Log");
-import mLinearLayout = module("designer/model/LinearLayout")
+import mDesignerModel = module("designer/model/DesignerModel")
+import mDesignerController = module("designer/controller/DesignerController");
+import mDesignerView = module("designer/view/DesignerView");
 
 export class Designer {
     private logger = new mLog.Logger("Designer");
@@ -63,5 +65,10 @@ export class Designer {
         $(buttonElement).button();
         $(textViewElement).button();
         $(imageViewElement).button();
+
+        var model = new mDesignerModel.DesignerModel();
+        var controller = new mDesignerController.DesignerController(model);
+        var view = new mDesignerView.DesignerView(controller);
+        controller.View = view;
     }
 }
