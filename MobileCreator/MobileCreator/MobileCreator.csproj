@@ -40,7 +40,6 @@
     <Content Include="lib\jquery.dynatree.d.ts" />
     <Content Include="lib\jquery.dynatree.js" />
     <Content Include="lib\jquery.js" />
-    <Content Include="lib\jqueryui.js" />
     <Content Include="lib\jquery.d.ts" />
     <Content Include="lib\jquerymobile.js" />
     <TypeScriptCompile Include="src\AppConfig.ts" />
@@ -50,6 +49,7 @@
       <DependentUpon>jquerymobile.d.ts</DependentUpon>
     </Content>
     <Content Include="lib\jqueryui.d.ts" />
+    <Content Include="lib\jqueryui.js" />
     <Content Include="lib\knockout.d.ts" />
     <Content Include="lib\knockout.js" />
     <Content Include="lib\require.d.js">
