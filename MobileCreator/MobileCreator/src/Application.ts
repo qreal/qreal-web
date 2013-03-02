@@ -11,8 +11,7 @@ export class Application {
     private static state: number = Application.Designer;
 
     public onCreate() {
-        this.logger.log("onCreate");
-        $("#btChange").text("Designer");
+        this.logger.log("onCreate");       
         $("#designer").show();
         $("#btChange").click(function () {
             Application.state = Application.state == Application.Designer ? Application.Emulator : Application.Designer;
@@ -20,15 +19,12 @@ export class Application {
                 $("#btChange").text("Designer");
                 $("#emulator").hide();
                 $("#designer").show();
-
             } else {
                 $("#btChange").text("Emulator");
                 $("#emulator").show();
                 $("#designer").hide();
+                mEmulator.Emulator.instance.createView();
             }
         });
-
-        var emulator = mEmulator.Emulator.instance;
-        emulator.createView();
     }
 }

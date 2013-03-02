@@ -6,6 +6,6 @@ export class Logger {
     }
 
     public log(message: string): void {
-        console.log("(" + this.tag + ") " + message);
+        console.log("(" + this.tag + "): " + message);
     }
 }

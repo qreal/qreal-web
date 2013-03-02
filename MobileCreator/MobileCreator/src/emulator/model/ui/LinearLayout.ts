@@ -1,33 +1,47 @@
 import mControl = module("emulator/model/ui/Control");
+import mControlTag = module("emulator/model/attributes/ControlTag");
 import mControlPanel = module("emulator/model/ui/ControlPanel");
 import mLinearLayoutTag = module("emulator/model/attributes/LinearLayoutTag");
 
 export class LinearLayout extends mControlPanel.ControlPanel {
 
-    constructor(tag: mLinearLayoutTag.LinearLayoutTag) {
-        super(tag);
-        this.ElementJQuery = $("<div id='" + this.Tag.Id + "'></div>");
+    constructor(tag: mLinearLayoutTag.LinearLayoutTag);
+    constructor(tag: mLinearLayoutTag.LinearLayoutTag, $control: JQuery);
+    constructor(tag: mLinearLayoutTag.LinearLayoutTag, $control?: JQuery = $("<div></div>")) {
+        super(tag, $control);    
     }
 
     public addChild(child: mControl.Control) {
         super.addChild(child);
-        this.ElementJQuery.append(child.ElementJQuery);
+        this.$Control.append(child.$Control);
     }
 
     public create() {
-        var childrenElements: JQuery[] = new Array();
-        var childrens = this.getChildrens();
-        for (var i in childrens) {
-            childrenElements.push($("#" + childrens[i].id));
-            childrens[i].create();
-        }
+        var tag = <mLinearLayoutTag.LinearLayoutTag> this.Tag;
+        var childrenElements = this.$Control.children();
+        this.Childrens.map(child => child.create());
 
-        jQuery(function ($) {
-            $('#code').layout({
-                type: 'flexGrid',
-                columns: 1,
-                items: childrenElements
-            });
+        var columns, rows;
+        switch (tag.Orientation) {
+            case mLinearLayoutTag.LinearLayoutTag.Horizontal:
+                columns = 0;
+                rows = 1;
+                break;
+            case mLinearLayoutTag.LinearLayoutTag.Vertical:
+                columns = 1;
+                rows = 0;
+                break;
+        }
+        
+        this.$Control.trigger('create');
+        this.$Control.layout({
+            type: 'flexGrid',
+            columns: columns,
+            rows: rows,
+            items: childrenElements
         });
+        if (tag.Width == mControlTag.ControlTag.MatchParrent) {
+            this.$Control.css('width', 'inherit');
+        }    
     }
 }

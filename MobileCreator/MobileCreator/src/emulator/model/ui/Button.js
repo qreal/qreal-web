@@ -3,22 +3,25 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "emulator/model/ui/Control"], function(require, exports, __control__) {
-    var control = __control__;
+define(["require", "exports", "emulator/model/ui/TextView", "emulator/model/attributes/ControlTag"], function(require, exports, __mTextView__, __mControlTag__) {
+    var mTextView = __mTextView__;
 
     
+    var mControlTag = __mControlTag__;
+
     var Button = (function (_super) {
         __extends(Button, _super);
-        function Button(tag) {
-                _super.call(this, tag);
-            this.ElementJQuery = $("<a></a>");
-            this.ElementJQuery.text(tag.Text);
-            this.ElementJQuery.attr('id', tag.Id);
+        function Button(tag, $control) {
+            if (typeof $control === "undefined") { $control = $("<button></button>"); }
+                _super.call(this, tag, $control);
+            if(tag.Width == mControlTag.ControlTag.WrapContent) {
+                this.$Control.attr("data-inline", true);
+            }
         }
         Button.prototype.create = function () {
-            this.ElementJQuery.button();
+            this.$Control.button();
         };
         return Button;
-    })(control.Control);
+    })(mTextView.TextView);
     exports.Button = Button;    
 })

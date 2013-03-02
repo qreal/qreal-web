@@ -1,15 +1,17 @@
 define(["require", "exports"], function(require, exports) {
     
     var Control = (function () {
-        function Control(tag) {
+        function Control(tag, $control) {
+            this.$Control = $control;
             this.Tag = tag;
+            this.$Control.attr('id', tag.Id);
         }
-        Object.defineProperty(Control.prototype, "ElementJQuery", {
+        Object.defineProperty(Control.prototype, "$Control", {
             get: function () {
-                return this.elementJQuery;
+                return this.$control;
             },
             set: function (value) {
-                this.elementJQuery = value;
+                this.$control = value;
             },
             enumerable: true,
             configurable: true

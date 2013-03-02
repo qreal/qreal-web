@@ -1,1 +1,5 @@
-﻿
+﻿#emulator {
+    width: inherit;
+    height: inherit;
+    background: #f00
+}

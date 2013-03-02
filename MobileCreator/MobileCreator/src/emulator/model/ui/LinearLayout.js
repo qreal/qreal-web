@@ -3,34 +3,50 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "emulator/model/ui/ControlPanel"], function(require, exports, __mControlPanel__) {
+define(["require", "exports", "emulator/model/attributes/ControlTag", "emulator/model/ui/ControlPanel", "emulator/model/attributes/LinearLayoutTag"], function(require, exports, __mControlTag__, __mControlPanel__, __mLinearLayoutTag__) {
     
+    var mControlTag = __mControlTag__;
+
     var mControlPanel = __mControlPanel__;
 
-    
+    var mLinearLayoutTag = __mLinearLayoutTag__;
+
     var LinearLayout = (function (_super) {
         __extends(LinearLayout, _super);
-        function LinearLayout(tag) {
-                _super.call(this, tag);
-            this.ElementJQuery = $("<div id='" + this.Tag.Id + "'></div>");
+        function LinearLayout(tag, $control) {
+            if (typeof $control === "undefined") { $control = $("<div></div>"); }
+                _super.call(this, tag, $control);
+            if(tag.Width == mControlTag.ControlTag.MatchParrent) {
+                this.$Control.css('width', 'inherit');
+            }
         }
         LinearLayout.prototype.addChild = function (child) {
             _super.prototype.addChild.call(this, child);
-            this.ElementJQuery.append(child.ElementJQuery);
+            this.$Control.append(child.$Control);
         };
         LinearLayout.prototype.create = function () {
-            var childrenElements = new Array();
-            var childrens = this.getChildrens();
-            for(var i in childrens) {
-                childrenElements.push($("#" + childrens[i].id));
-                childrens[i].create();
+            var tag = this.Tag;
+            var childrenElements = this.$Control.children();
+            this.Childrens.map(function (child) {
+                return child.create();
+            });
+            var columns, rows;
+            switch(tag.Orientation) {
+                case mLinearLayoutTag.LinearLayoutTag.Horizontal:
+                    columns = 0;
+                    rows = 1;
+                    break;
+                case mLinearLayoutTag.LinearLayoutTag.Vertical:
+                    columns = 1;
+                    rows = 0;
+                    break;
             }
-            jQuery(function ($) {
-                $('#code').layout({
-                    type: 'flexGrid',
-                    columns: 1,
-                    items: childrenElements
-                });
+            this.$Control.trigger('create');
+            this.$Control.layout({
+                type: 'flexGrid',
+                columns: columns,
+                rows: rows,
+                items: childrenElements
             });
         };
         return LinearLayout;
