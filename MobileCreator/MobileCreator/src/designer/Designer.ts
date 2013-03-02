@@ -18,27 +18,41 @@ export class Designer {
         $(designerMenuDiv).attr("data-role", "listview");
         $(designerMenuDiv).attr("data-inset", "true");
         $(designerMenuDiv).attr("data-divider-theme", "d");
-        var formsTree = document.createElement("li");
-        $(formsTree).attr("data-role", "list-divider");
-        $(formsTree).text("Forms");
-        $(designerMenuDiv).append($(formsTree));
-        var elementsPallete = document.createElement("li");
-        $(elementsPallete).attr("data-role", "list-divider");
-        $(elementsPallete).text("Widgets");
-        $(designerMenuDiv).append($(elementsPallete));
+
+        var formsTreeHeader = document.createElement("li");
+        $(formsTreeHeader).attr("data-role", "list-divider");
+        $(formsTreeHeader).text("Forms");
+        $(designerMenuDiv).append($(formsTreeHeader));
+
+        var elementsPalleteHeader = document.createElement("li");
+        $(elementsPalleteHeader).attr("data-role", "list-divider");
+        $(elementsPalleteHeader).text("Widgets");
+        $(designerMenuDiv).append($(elementsPalleteHeader));
+
+        var elementsPalleteContainer = document.createElement("li");
+        $(designerMenuDiv).append($(elementsPalleteContainer));
+
+        var elementsPallete = document.createElement("div");
+        $(elementsPallete).addClass("ui-grid-c");
+        $(elementsPalleteContainer).append($(elementsPallete));
+
+        var buttonElementField = document.createElement("div");
+        $(buttonElementField).addClass("ui-block-a");
+        var buttonElement = document.createElement("a");
+        $(buttonElement).attr("data-role", "button");
+        $(buttonElement).text("Button");
+        $(buttonElementField).append($(buttonElement));
+        $(elementsPallete).append($(buttonElementField));
+
+        var buttonElementField2 = document.createElement("div");
+        $(buttonElementField2).addClass("ui-block-b");
+        var buttonElement2 = document.createElement("a");
+        $(buttonElement2).attr("data-role", "button");
+        $(buttonElement2).text("Button");
+        $(buttonElementField2).append($(buttonElement2));
+        $(elementsPallete).append($(buttonElementField2));
+
         $(parentDiv).prepend($(designerMenuDiv));
         $(designerMenuDiv).listview();
     }
 }
-/*
-<ul data - role = "listview" data - inset = "true" data - divider - theme = "d" >
-            <li data - role = "list-divider" > Forms < / li >
-            <li data - role = "list-divider" > Widgets < / li >
-            <li>
-                <div class ="ui-grid-d">
-                    <div class = "ui-block-a" > <button type="submit" data-theme = "c" > Button < /button></div >
-                </div >
-            </li >
-        </ul >
-
-*/
