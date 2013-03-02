@@ -22,7 +22,7 @@ export class DesignerModel {
     public deleteForm(formId : number) {
         var formToDel = -1;
         for (var i = 0; this.forms.length; i++) {
-            if (formId == this.forms[i].getId()) {
+            if (formId == this.forms[i].Id) {
                 formToDel = i;
             }
         }
