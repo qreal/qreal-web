@@ -37,6 +37,8 @@
     <Content Include="lib\jlayout\jlayout.grid.js" />
     <Content Include="lib\jlayout\jquery.jlayout.js" />
     <Content Include="lib\jlayout\jquery.sizes.js" />
+    <Content Include="lib\jquery.dynatree.d.ts" />
+    <Content Include="lib\jquery.dynatree.js" />
     <Content Include="lib\jquery.js" />
     <Content Include="lib\jqueryui.js" />
     <Content Include="lib\jquery.d.ts" />
