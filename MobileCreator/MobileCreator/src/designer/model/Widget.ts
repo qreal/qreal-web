@@ -1,14 +1,20 @@
-/// <reference path="../../../lib/jquery.d.ts" />
+import mWidgetTypes = module("designer/model/WidgetTypes");
 
 export class Widget {
     private layoutWidth;
     private layoutHeight;
     private id;
+    private widgetType;
 
-    constructor(id: number, layoutWidth, layoutHeight) {
+    constructor(id: number, layoutWidth, layoutHeight, widgetType?) {
         this.layoutWidth = layoutWidth;
         this.layoutHeight = layoutHeight;
         this.id = id;
+        this.widgetType = widgetType || mWidgetTypes.WidgetType.Unknown;
+    }
+
+    get WidgetType() {
+        return this.widgetType;
     }
 
     get Id() {
