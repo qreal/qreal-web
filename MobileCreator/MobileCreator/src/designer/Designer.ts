@@ -33,26 +33,34 @@ export class Designer {
         $(designerMenuDiv).append($(elementsPalleteContainer));
 
         var elementsPallete = document.createElement("div");
-        $(elementsPallete).addClass("ui-grid-c");
+        $(elementsPallete).addClass("ui-grid-b");
         $(elementsPalleteContainer).append($(elementsPallete));
 
         var buttonElementField = document.createElement("div");
         $(buttonElementField).addClass("ui-block-a");
-        var buttonElement = document.createElement("a");
-        $(buttonElement).attr("data-role", "button");
+        var buttonElement = document.createElement("button");
         $(buttonElement).text("Button");
         $(buttonElementField).append($(buttonElement));
         $(elementsPallete).append($(buttonElementField));
 
-        var buttonElementField2 = document.createElement("div");
-        $(buttonElementField2).addClass("ui-block-b");
-        var buttonElement2 = document.createElement("a");
-        $(buttonElement2).attr("data-role", "button");
-        $(buttonElement2).text("Button");
-        $(buttonElementField2).append($(buttonElement2));
-        $(elementsPallete).append($(buttonElementField2));
+        var textViewElementField = document.createElement("div");
+        $(textViewElementField).addClass("ui-block-b");
+        var textViewElement = document.createElement("button");
+        $(textViewElement).text("TextView");
+        $(textViewElementField).append($(textViewElement));
+        $(elementsPallete).append($(textViewElementField));
+
+        var imageViewElementField = document.createElement("div");
+        $(imageViewElementField).addClass("ui-block-c");
+        var imageViewElement = document.createElement("button");
+        $(imageViewElement).text("ImageView");
+        $(imageViewElementField).append($(imageViewElement));
+        $(elementsPallete).append($(imageViewElementField));
 
         $(parentDiv).prepend($(designerMenuDiv));
         $(designerMenuDiv).listview();
+        $(buttonElement).button();
+        $(textViewElement).button();
+        $(imageViewElement).button();
     }
 }
