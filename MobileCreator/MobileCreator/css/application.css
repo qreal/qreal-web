@@ -6,6 +6,13 @@
     margin-top: 10px;
 }
 
+#menu {
+    width: 500px;
+    border: 0px;
+    margin-left: 30px;
+    margin-top: 10px;
+}
+
 #btChange {
     width: 200px;
     margin-left: 30px;
