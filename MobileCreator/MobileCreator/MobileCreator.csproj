@@ -48,6 +48,8 @@
       <DependentUpon>jquerymobile.d.ts</DependentUpon>
     </Content>
     <Content Include="lib\jqueryui.d.ts" />
+    <Content Include="lib\knockout.d.ts" />
+    <Content Include="lib\knockout.js" />
     <Content Include="lib\require.d.js">
       <DependentUpon>require.d.ts</DependentUpon>
     </Content>
