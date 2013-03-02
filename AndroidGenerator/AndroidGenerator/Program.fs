@@ -69,6 +69,23 @@ let transformXml (path : string) =
 
     reader.Close()
     writeToFile path (newXml.ToString())
+
+let getTransitions = 
+    let transitions = new Hashtable()
+    let readerTrans = XmlReader.Create(path + @"\Transition2.xml")
+    while readerTrans.Read() do 
+        match readerTrans.Name with
+        | "Button" | "WebView" ->
+        let attributes = (readerTrans.GetAttribute("name_to"), readerTrans.GetAttribute("name_from"), readerTrans.GetAttribute("action"))
+        transitions.Add(readerTrans.GetAttribute("id"), attributes)
+        | _ -> ()
+    transitions
+
+let first (a, _, _) = a
+let second (_, b, _) = b
+let third (_, _, c) = c
+    
+let transitions = getTransitions
     
 // permissions register
 let permissions = new Hashtable()
@@ -122,24 +139,20 @@ import android.view.View;\n"
         match reader.Name with
         | "Button" ->
             let onClickName = reader.GetAttribute "android:onClick"
-
-            if not (imports.ContainsKey("android.content.Intent")) then 
-                insert activity "\nimport android.content.Intent;"
-                imports.Add("android.content.Intent", "android.content.Intent")
-
+            let id = reader.GetAttribute "android:id"
             append activity <| "\n\n    public void " + onClickName + "(View v) {"
 
-            let readerTrans = XmlReader.Create(path + @"\Transition2.xml")
-            let id = reader.GetAttribute "android:id"
+            if (transitions.ContainsKey id) then     
+                if not (imports.ContainsKey("android.content.Intent")) then 
+                    insert activity "\nimport android.content.Intent;"
+                    imports.Add("android.content.Intent", "android.content.Intent")
 
-            while ((readerTrans.Read()) && not (readerTrans.GetAttribute("id") = id )) do
-                ignore()
+                let nextForm = first ((transitions.Item id) :?> string * string * string)
 
-            let nextForm = readerTrans.GetAttribute "name_to"
-
-            append activity <| "
-        Intent intent = new Intent(this, " + nextForm + ".class);
-        startActivity(intent);"
+                append activity <| "
+            Intent intent = new Intent(this, " + nextForm + ".class);
+            startActivity(intent);"
+            else ()
             append activity "\n    }"
 
         | "WebView" ->
@@ -188,8 +201,7 @@ let createApk =
     System.Threading.Thread.Sleep(1000);
     let pathToAndroidSdk = @"D:\android-sdk\sdk\tools\" //для работы на другом компе нужно заменть путь до android sdk
     System.Diagnostics.Process.Start("cmd.exe", "/C " + pathToAndroidSdk + createBuildXml) |> ignore
-    System.Threading.Thread.Sleep(1000);
+    System.Threading.Thread.Sleep(3000);
     System.Diagnostics.Process.Start("cmd.exe", "/C " + "cd /d " + path + " & ant debug") |> ignore
 
 createApk
-
