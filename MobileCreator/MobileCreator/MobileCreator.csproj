@@ -63,6 +63,14 @@
     <Content Include="src\Application.js">
       <DependentUpon>Application.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="src\designer\model\Widget.ts" />
+    <TypeScriptCompile Include="src\designer\Designer.ts" />
+    <Content Include="src\designer\designer.js">
+      <DependentUpon>Designer.ts</DependentUpon>
+    </Content>
+    <Content Include="src\designer\model\Widget.js">
+      <DependentUpon>Widget.ts</DependentUpon>
+    </Content>
     <Content Include="src\designer\view\DesignerView.js">
       <DependentUpon>DesignerView.ts</DependentUpon>
     </Content>

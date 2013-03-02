@@ -1,6 +1,7 @@
 /// <reference path="../lib/jquery.d.ts" />
 import mLog = module("utils/log/Log");
-import mEmulator = module("emulator/model/Emulator")
+import mEmulator = module("emulator/model/Emulator");
+import mDesigner = module("designer/Designer");
 
 
 export class Application {
@@ -13,6 +14,7 @@ export class Application {
     public onCreate() {
         this.logger.log("onCreate");       
         $("#designer").show();
+        mDesigner.Designer.instance.initDesigner();
         $("#btChange").click(function () {
             Application.state = Application.state == Application.Designer ? Application.Emulator : Application.Designer;
             if (Application.state == Application.Designer) {
