@@ -2,6 +2,7 @@
 /// <reference path="../../lib/knockout.d.ts" />
 /// <reference path="../../lib/jquerymobile.d.ts" />
 import mLog = module("utils/log/Log");
+import mLinearLayout = module("designer/model/LinearLayout")
 
 export class Designer {
     private logger = new mLog.Logger("Designer");

@@ -3,11 +3,16 @@
 export class Widget {
     private layoutWidth;
     private layoutHeight;
+    private id;
 
-
-    constructor(layoutWidth, layoutHeight, control: JQuery, controlType) {
+    constructor(id: number, layoutWidth, layoutHeight) {
         this.layoutWidth = layoutWidth;
         this.layoutHeight = layoutHeight;
+        this.id = id;
+    }
+
+    get Id() {
+        return this.id;
     }
 
     get LayoutWidth() {
