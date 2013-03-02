@@ -3,7 +3,6 @@ import mSpecialValues = module("designer/model/SpecialValues")
 import mWidgetTypes = module("designer/model/WidgetTypes");
 
 export class LinearLayout extends mWidget.Widget {
-    private id: number;
     private orientation = mSpecialValues.SpecialLinearLayoutOrientation.Horizontal;
     private backGroundColor: string = "#ffffff";
     private children: mWidget.Widget[] = [];
