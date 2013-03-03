@@ -46,8 +46,8 @@ export class LinearLayoutView extends mWidgetView.WidgetView{
         this.control.css("background-color", this.backGroundColor);
         var _this = this;
         this.children.forEach(function (child) {
-            _this.control.append(child);
             child.draw();
+            _this.control.append(child.Control);
         });
     }
 

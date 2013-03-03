@@ -3,8 +3,14 @@
 /// <reference path="../../lib/jquerymobile.d.ts" />
 import mLog = module("utils/log/Log");
 import mDesignerModel = module("designer/model/DesignerModel")
+import mSpecialValues = module("designer/model/SpecialValues")
+import mForm = module("designer/model/Form")
+import mWidget = module("designer/model/Widget")
+import mWidgetTypes = module("designer/model/WidgetTypes")
 import mDesignerController = module("designer/controller/DesignerController");
 import mDesignerView = module("designer/view/DesignerView");
+import mLinearLayoutView = module("designer/view/LinearLayoutView");
+import mLinearLayout = module("designer/model/LinearLayout");
 
 export class Designer {
     private logger = new mLog.Logger("Designer");
@@ -70,5 +76,15 @@ export class Designer {
         var controller = new mDesignerController.DesignerController(model);
         var view = new mDesignerView.DesignerView(controller, $("#form"));
         controller.View = view;
+        var defaultForm = new mForm.Form(0, "default-form");
+        model.addForm(defaultForm);
+        var baseLayout = new mLinearLayout.LinearLayout(0, mSpecialValues.SpecialSizeValue.FillParent, mSpecialValues.SpecialSizeValue.FillParent);
+        baseLayout.BackGroundColor = "#ff00ff";
+        baseLayout.Orientation = mSpecialValues.SpecialLinearLayoutOrientation.Vertical;
+        var baseLayoutWidget = new mLinearLayoutView.LinearLayoutView(baseLayout.Id, baseLayout.LayoutWidth, baseLayout.LayoutHeight);
+        baseLayoutWidget.BackGroundColor = baseLayout.BackGroundColor;
+        baseLayoutWidget.Orientation = baseLayout.Orientation;
+        view.BaseLayout = baseLayoutWidget;
+        view.draw();
     }
 }
