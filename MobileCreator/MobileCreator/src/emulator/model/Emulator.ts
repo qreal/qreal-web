@@ -165,7 +165,7 @@ export class Emulator {
         var buttonTag = new mButtonTag.ButtonTag();
         buttonTag.Id = "button";
         buttonTag.Text = "Show more";
-        buttonTag.MarginTop = 350;
+        buttonTag.MarginTop = 320;
         var button = new mButton.Button(buttonTag);
 
         innerLayout.addChild(logo);
