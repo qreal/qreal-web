@@ -4,6 +4,7 @@ define(["require", "exports"], function(require, exports) {
             this.width = ControlTag.WrapContent;
             this.height = ControlTag.WrapContent;
             this.background = "#ffffff";
+            this.gravity = "left";
         }
         Object.defineProperty(ControlTag.prototype, "Id", {
             get: function () {
@@ -43,6 +44,56 @@ define(["require", "exports"], function(require, exports) {
             },
             set: function (value) {
                 this.background = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(ControlTag.prototype, "MarginLeft", {
+            get: function () {
+                return this.marginLeft;
+            },
+            set: function (value) {
+                this.marginLeft = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(ControlTag.prototype, "MarginRight", {
+            get: function () {
+                return this.marginRight;
+            },
+            set: function (value) {
+                this.marginRight = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(ControlTag.prototype, "MarginTop", {
+            get: function () {
+                return this.marginTop;
+            },
+            set: function (value) {
+                this.marginTop = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(ControlTag.prototype, "MarginBottom", {
+            get: function () {
+                return this.marginBottom;
+            },
+            set: function (value) {
+                this.marginBottom = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(ControlTag.prototype, "Gravity", {
+            get: function () {
+                return this.gravity;
+            },
+            set: function (value) {
+                this.gravity = value;
             },
             enumerable: true,
             configurable: true

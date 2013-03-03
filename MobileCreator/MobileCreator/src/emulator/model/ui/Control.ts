@@ -17,7 +17,9 @@ export class Control {
         this.$Control = $control;
         this.Tag = tag;
         this.$Control.attr('id', tag.Id);
-        this.setDimensions();
+        this.$Control.css({
+            'text-align':tag.Gravity
+        });
     }
 
     public create() {        

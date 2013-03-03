@@ -15,7 +15,7 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
                 _super.call(this, tag, $control);
         }
         Button.prototype.create = function () {
-            var $button = $("<button></button>");
+            var $button = $("<a data-role='button'></a>");
             this.$Control.append($button);
             var tag = this.Tag;
             if(tag.TextSize != 0) {

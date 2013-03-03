@@ -75,6 +75,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             imgTag1.ImageUrl = "https://dl.dropbox.com/u/10802739/ubiq-qr.png";
             imgTag1.Width = 100;
             imgTag1.Height = 100;
+            imgTag1.Gravity = "center";
             var img1 = new mImageView.ImageView(imgTag1);
             var tagLinear1 = new mLinearLayoutTag.LinearLayoutTag();
             tagLinear1.Id = "linear1";

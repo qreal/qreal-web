@@ -6,7 +6,9 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
             this.$Control = $control;
             this.Tag = tag;
             this.$Control.attr('id', tag.Id);
-            this.setDimensions();
+            this.$Control.css({
+                'text-align': tag.Gravity
+            });
         }
         Object.defineProperty(Control.prototype, "$Control", {
             get: function () {

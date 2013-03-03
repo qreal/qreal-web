@@ -9,7 +9,7 @@ export class Button extends mControl.Control {
     }
 
     public create() {
-        var $button = $("<button></button>");
+        var $button = $("<a data-role='button'></a>");
         this.$Control.append($button);
         var tag = <mButtonTag.ButtonTag> this.Tag;
         if (tag.TextSize != 0) {
