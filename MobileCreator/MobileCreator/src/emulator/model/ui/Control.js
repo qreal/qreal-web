@@ -28,6 +28,7 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
             configurable: true
         });
         Control.prototype.create = function () {
+            this.setDimensions();
         };
         Control.prototype.setDimensions = function () {
             switch(this.Tag.Width) {

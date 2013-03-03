@@ -20,6 +20,7 @@ export class Control {
     }
 
     public create() {
+        this.setDimensions();
     }
 
     public setDimensions() {

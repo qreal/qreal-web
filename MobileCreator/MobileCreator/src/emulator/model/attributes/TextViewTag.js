@@ -10,6 +10,7 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
         __extends(TextViewTag, _super);
         function TextViewTag() {
                 _super.call(this);
+            this.textSize = 0;
         }
         Object.defineProperty(TextViewTag.prototype, "Text", {
             get: function () {
@@ -17,6 +18,16 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
             },
             set: function (value) {
                 this.text = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(TextViewTag.prototype, "TextSize", {
+            get: function () {
+                return this.textSize;
+            },
+            set: function (value) {
+                this.textSize = value;
             },
             enumerable: true,
             configurable: true

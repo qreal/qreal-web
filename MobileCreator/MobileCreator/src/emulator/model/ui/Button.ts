@@ -14,6 +14,9 @@ export class Button extends mTextView.TextView {
     public create() {
         var $newControl = this.$Control.button();
         this.$Control = $newControl.parent("div");
-        this.setDimensions();
+        var tag = <mButtonTag.ButtonTag> this.Tag;
+        if(tag.TextSize != 0)
+            this.$Control.children('span').children('span').css('font-size', tag.TextSize);
+        super.create();
     }
 }
