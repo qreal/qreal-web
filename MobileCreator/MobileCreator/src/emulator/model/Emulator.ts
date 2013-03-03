@@ -153,7 +153,7 @@ export class Emulator {
         logoTag.Width = 300;
         logoTag.Height = 120;
         logoTag.Gravity = "center";
-        //logoTag.MarginTop = 30;    wtf???
+        logoTag.MarginTop = 30;
         var logo = new mImageView.ImageView(logoTag);
 
         var infoLabelTag = new mTextViewTag.TextViewTag();

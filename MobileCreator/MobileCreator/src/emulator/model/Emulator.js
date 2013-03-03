@@ -129,6 +129,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             logoTag.Width = 300;
             logoTag.Height = 120;
             logoTag.Gravity = "center";
+            logoTag.MarginTop = 30;
             var logo = new mImageView.ImageView(logoTag);
             var infoLabelTag = new mTextViewTag.TextViewTag();
             infoLabelTag.Id = "info";
@@ -138,7 +139,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             var buttonTag = new mButtonTag.ButtonTag();
             buttonTag.Id = "button";
             buttonTag.Text = "Show more";
-            buttonTag.MarginTop = 350;
+            buttonTag.MarginTop = 450;
             var button = new mButton.Button(buttonTag);
             innerLayout.addChild(logo);
             innerLayout.addChild(label1);
