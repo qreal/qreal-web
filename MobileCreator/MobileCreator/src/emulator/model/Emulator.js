@@ -26,6 +26,11 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             this.logger.log("createView");
             var $screen = $("#screen");
             $screen.children().remove();
+            this.showVisitCard();
+        };
+        Emulator.prototype.showTestStub = function () {
+            var $screen = $("#screen");
+            $screen.children().remove();
             var bttag1 = new mButtonTag.ButtonTag();
             bttag1.Id = "button1";
             bttag1.Text = "button1";
@@ -99,6 +104,32 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             layout.addChild(button5);
             layout.addChild(button6);
             layout.addChild(img1);
+            var $layout = layout.$Control;
+            $screen.append($layout);
+            layout.create();
+        };
+        Emulator.prototype.showVisitCard = function () {
+            var layoutTag = new mLinearLayoutTag.LinearLayoutTag();
+            layoutTag.Id = "linear1";
+            layoutTag.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
+            layoutTag.Background = "#e3e3e3";
+            layoutTag.Width = -1;
+            layoutTag.Height = -1;
+            var layout = new mLinearLayout.LinearLayout(layoutTag);
+            var logoTag = new mImageViewTag.ImageViewTag();
+            logoTag.Id = "logo";
+            logoTag.ImageUrl = "https://dl.dropbox.com/u/10802739/lt_logo.jpg";
+            logoTag.Width = 300;
+            logoTag.Height = 120;
+            logoTag.Gravity = "center";
+            var logo = new mImageView.ImageView(logoTag);
+            var infoLabelTag = new mTextViewTag.TextViewTag();
+            infoLabelTag.Id = "info";
+            infoLabelTag.Text = "LANIT-TERCOM is one of the few Russian IT companies which are able not only to fulfil industrial contracts, but also to carry out challenging science-intensive programming projects.";
+            var label1 = new mTextView.TextView(infoLabelTag);
+            layout.addChild(logo);
+            layout.addChild(label1);
+            var $screen = $("#screen");
             var $layout = layout.$Control;
             $screen.append($layout);
             layout.create();

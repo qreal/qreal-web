@@ -13,9 +13,9 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
             if (typeof $control === "undefined") { $control = $("<label></label>"); }
                 _super.call(this, tag, $control);
             this.$Control.text(tag.Text);
-            this.$Control.css({
-                'font-size': tag.TextSize
-            });
+            if(tag.TextSize > 0) {
+                this.$Control.css('font-size', tag.TextSize);
+            }
         }
         TextView.prototype.create = function () {
             _super.prototype.create.call(this);
