@@ -27,6 +27,7 @@
     <Content Include="css\jqueryui.css" />
     <Content Include="css\jquerymobile.css" />
     <Content Include="default.htm" />
+    <Content Include="test_iframe.html" />
     <Content Include="lib\jquery.dynatree.d.ts" />
     <Content Include="lib\jquery.dynatree.js" />
     <Content Include="lib\jquery.js" />
