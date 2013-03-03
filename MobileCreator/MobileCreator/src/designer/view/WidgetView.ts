@@ -2,11 +2,14 @@ export class WidgetView {
     private modelWidgetId;
     private layoutWidth;
     private layoutHeight;
-
+    
     constructor(id: number, layoutWidth, layoutHeight) {
         this.layoutWidth = layoutWidth;
         this.layoutHeight = layoutHeight;
         this.modelWidgetId = id;
+    }
+
+    public draw() {
     }
 
     get ModelWidgetId() {
@@ -28,4 +31,5 @@ export class WidgetView {
     set LayoutHeight(layoutHeight) {
         this.layoutWidth = LayoutHeight;
     }
+    
 }
