@@ -24,8 +24,8 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
         Emulator.instance = new Emulator();
         Emulator.prototype.createView = function () {
             this.logger.log("createView");
-            var content = $("#emulator");
-            content.children().remove();
+            var $screen = $("#screen");
+            $screen.children().remove();
             var bttag1 = new mButtonTag.ButtonTag();
             bttag1.Id = "button1";
             bttag1.Text = "button1";
@@ -100,7 +100,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             layout.addChild(button6);
             layout.addChild(img1);
             var $layout = layout.$Control;
-            content.append($layout);
+            $screen.append($layout);
             layout.create();
         };
         return Emulator;

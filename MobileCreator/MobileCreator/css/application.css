@@ -1,9 +1,5 @@
-﻿#content {
-    width: 500px;
-    height: 800px;
-    border: 2px solid black;
-    margin-left: 30px;
-    margin-top: 10px;
+﻿body {
+    background: #e4e3e3;
 }
 
 #menu {

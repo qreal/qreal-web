@@ -22,8 +22,8 @@ export class Emulator {
         this.logger.log("createView");
 
         //TODO: stub
-        var content = $("#emulator");
-        content.children().remove();
+        var $screen = $("#screen");
+        $screen.children().remove();
 
         var bttag1 = new mButtonTag.ButtonTag();
         bttag1.Id = "button1";
@@ -114,7 +114,7 @@ export class Emulator {
         layout.addChild(button6);
         layout.addChild(img1);
         var $layout = layout.$Control;
-        content.append($layout);
+        $screen.append($layout);
         layout.create();
         //end stub
     }
