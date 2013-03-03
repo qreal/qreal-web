@@ -68,7 +68,7 @@ export class Designer {
 
         var model = new mDesignerModel.DesignerModel();
         var controller = new mDesignerController.DesignerController(model);
-        var view = new mDesignerView.DesignerView(controller);
+        var view = new mDesignerView.DesignerView(controller, $("#form"));
         controller.View = view;
     }
 }

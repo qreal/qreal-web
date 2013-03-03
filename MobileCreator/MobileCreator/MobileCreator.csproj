@@ -27,6 +27,14 @@
     <Content Include="css\jqueryui.css" />
     <Content Include="css\jquerymobile.css" />
     <Content Include="default.htm" />
+    <TypeScriptCompile Include="src\designer\view\LinearLayoutView.ts" />
+    <Content Include="src\designer\view\LinearLayoutView.js">
+      <DependentUpon>LinearLayoutView.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\designer\view\WidgetView.ts" />
+    <Content Include="src\designer\view\WidgetView.js">
+      <DependentUpon>WidgetView.ts</DependentUpon>
+    </Content>
     <Content Include="test_iframe.html" />
     <Content Include="lib\jquery.dynatree.d.ts" />
     <Content Include="lib\jquery.dynatree.js" />
