@@ -25,7 +25,6 @@ define(["require", "exports", "emulator/model/ui/ControlPanel"], function(requir
             this.Childrens.map(function (child) {
                 return child.create();
             });
-            var childrenElements = this.$Control.children();
         };
         return LinearLayout;
     })(mControlPanel.ControlPanel);

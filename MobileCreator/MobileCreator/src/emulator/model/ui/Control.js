@@ -9,6 +9,7 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
             this.$Control.css({
                 'text-align': tag.Gravity
             });
+            this.setMargins();
         }
         Object.defineProperty(Control.prototype, "$Control", {
             get: function () {
@@ -38,7 +39,7 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
                 case mControlTag.ControlTag.WrapContent:
                     break;
                 case mControlTag.ControlTag.MatchParrent:
-                    $element.css("width", "inherit");
+                    $element.css("width", "100%");
                     break;
                 default:
                     $element.css("width", this.Tag.Width + "px");
@@ -48,12 +49,21 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
                 case mControlTag.ControlTag.WrapContent:
                     break;
                 case mControlTag.ControlTag.MatchParrent:
-                    $element.css("height", "inherit");
+                    $element.css("height", "100%");
                     break;
                 default:
                     $element.css("height", this.Tag.Height + "px");
                     break;
             }
+        };
+        Control.prototype.setMargins = function ($element) {
+            if (typeof $element === "undefined") { $element = this.$Control; }
+            $element.css({
+                'margin-left': this.Tag.MarginLeft + 'px',
+                'margin-right': this.Tag.MarginRight + 'px',
+                'margin-top': this.Tag.MarginTop + 'px',
+                'margin-bottom': this.Tag.MarginBottom + 'px'
+            });
         };
         return Control;
     })();

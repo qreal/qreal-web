@@ -18,11 +18,12 @@ export class Control {
         this.Tag = tag;
         this.$Control.attr('id', tag.Id);
         this.$Control.css({
-            'text-align':tag.Gravity
+            'text-align': tag.Gravity
         });
+        this.setMargins();
     }
 
-    public create() {        
+    public create() {
     }
 
     public setDimensions();
@@ -32,7 +33,7 @@ export class Control {
             case mControlTag.ControlTag.WrapContent:
                 break;
             case mControlTag.ControlTag.MatchParrent:
-                $element.css("width", "inherit");
+                $element.css("width", "100%");
                 break;
             default:
                 $element.css("width", this.Tag.Width + "px");
@@ -42,11 +43,23 @@ export class Control {
             case mControlTag.ControlTag.WrapContent:
                 break;
             case mControlTag.ControlTag.MatchParrent:
-                $element.css("height", "inherit");
+                $element.css("height", "100%");
                 break;
             default:
                 $element.css("height", this.Tag.Height + "px");
                 break;
         }
-    }    
+    }
+
+    public setMargins();
+    public setMargins($element: JQuery);
+    public setMargins($element?: JQuery = this.$Control) {
+
+        $element.css({
+            'margin-left': this.Tag.MarginLeft + 'px',
+            'margin-right': this.Tag.MarginRight + 'px',
+            'margin-top': this.Tag.MarginTop + 'px',
+            'margin-bottom': this.Tag.MarginBottom + 'px'
+        });
+    }
 }

@@ -131,12 +131,21 @@ export class Emulator {
     private showVisitCard() {
 
         var layoutTag = new mLinearLayoutTag.LinearLayoutTag();
-        layoutTag.Id = "linear1";
+        layoutTag.Id = "linear";
         layoutTag.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
         layoutTag.Background = "#e3e3e3"
         layoutTag.Width = -1;
         layoutTag.Height = -1;
         var layout = new mLinearLayout.LinearLayout(layoutTag);
+
+        var innerLayoutTag = new mLinearLayoutTag.LinearLayoutTag();
+        innerLayoutTag.Id = "innerLinear";
+        innerLayoutTag.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
+        innerLayoutTag.Background = "#e3e3e3"
+        innerLayoutTag.MarginLeft = 20;
+        innerLayoutTag.MarginRight = 20;
+        //innerLayoutTag.MarginTop = 20;
+        var innerLayout = new mLinearLayout.LinearLayout(innerLayoutTag);
 
         var logoTag = new mImageViewTag.ImageViewTag();
         logoTag.Id = "logo";
@@ -144,15 +153,25 @@ export class Emulator {
         logoTag.Width = 300;
         logoTag.Height = 120;
         logoTag.Gravity = "center";
+        //logoTag.MarginTop = 30;    wtf???
         var logo = new mImageView.ImageView(logoTag);
 
         var infoLabelTag = new mTextViewTag.TextViewTag();
         infoLabelTag.Id = "info";
         infoLabelTag.Text = "LANIT-TERCOM is one of the few Russian IT companies which are able not only to fulfil industrial contracts, but also to carry out challenging science-intensive programming projects.";
+        infoLabelTag.MarginTop = 20;
         var label1 = new mTextView.TextView(infoLabelTag);
 
-        layout.addChild(logo);
-        layout.addChild(label1);
+        var buttonTag = new mButtonTag.ButtonTag();
+        buttonTag.Id = "button";
+        buttonTag.Text = "Show more";
+        buttonTag.MarginTop = 350;
+        var button = new mButton.Button(buttonTag);
+
+        innerLayout.addChild(logo);
+        innerLayout.addChild(label1);
+        innerLayout.addChild(button);
+        layout.addChild(innerLayout);
 
         var $screen = $("#screen");
         var $layout = layout.$Control;

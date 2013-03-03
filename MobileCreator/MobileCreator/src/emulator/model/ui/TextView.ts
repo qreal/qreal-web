@@ -5,12 +5,14 @@ export class TextView extends mControl.Control {
 
     constructor(tag: mTextViewTag.TextViewTag);
     constructor(tag: mTextViewTag.TextViewTag, $control: JQuery);
-    constructor(tag: mTextViewTag.TextViewTag, $control?: JQuery = $("<label></label>")) {
+    constructor(tag: mTextViewTag.TextViewTag, $control?: JQuery = $("<div></div>")) {
         super(tag, $control);
-        this.$Control.text(tag.Text);
+        var $label = $("<label></label>")
+        $label.text(tag.Text);
         if (tag.TextSize > 0) {
-            this.$Control.css('font-size', tag.TextSize);
+            $label.css('font-size', tag.TextSize);
         }
+        this.$Control.append($label);
     }
 
     public create() {
