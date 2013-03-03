@@ -27,6 +27,8 @@ export class Emulator {
         var bttag1 = new mButtonTag.ButtonTag();
         bttag1.Id = "button1";
         bttag1.Text = "button1";
+        bttag1.Width = -1;
+        bttag1.Height = 200;
         var button1 = new mButton.Button(bttag1);
 
         var bttag2 = new mButtonTag.ButtonTag();
@@ -54,23 +56,10 @@ export class Emulator {
         bttag6.Text = "button6";
         var button6 = new mButton.Button(bttag6);
 
-        var tag4 = new mLinearLayoutTag.LinearLayoutTag();
-        tag4.Id = "linear1";
-        tag4.Orientation = mLinearLayoutTag.LinearLayoutTag.Horizontal;
-        tag4.Background = "#0f0"
-        tag4.Width = -1;
-        var layout = new mLinearLayout.LinearLayout(tag4);
-
         var tag5 = new mTextViewTag.TextViewTag();
         tag5.Id = "text1";
         tag5.Text = "text1";
         var label1 = new mTextView.TextView(tag5);
-
-        var tag6 = new mLinearLayoutTag.LinearLayoutTag();
-        tag6.Id = "linear2";
-        tag6.Orientation = mLinearLayoutTag.LinearLayoutTag.Horizontal;
-        tag6.Background = "#00f"    
-        var layout2 = new mLinearLayout.LinearLayout(tag6);
 
         var tag7 = new mTextViewTag.TextViewTag();
         tag7.Id = "text2";
@@ -91,6 +80,19 @@ export class Emulator {
         tag10.Id = "text4";
         tag10.Text = "text4";
         var label5 = new mTextView.TextView(tag10);
+
+        var tagLinear1 = new mLinearLayoutTag.LinearLayoutTag();
+        tagLinear1.Id = "linear1";
+        tagLinear1.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
+        tagLinear1.Background = "#0f0"
+        tagLinear1.Width = 200;
+        var layout = new mLinearLayout.LinearLayout(tagLinear1);
+
+        var tag6 = new mLinearLayoutTag.LinearLayoutTag();
+        tag6.Id = "linear2";
+        tag6.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
+        tag6.Background = "#00f"
+        var layout2 = new mLinearLayout.LinearLayout(tag6);  
 
         layout2.addChild(label2);
         layout2.addChild(label3);

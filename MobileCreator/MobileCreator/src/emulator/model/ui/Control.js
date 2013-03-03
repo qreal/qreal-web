@@ -1,5 +1,6 @@
-define(["require", "exports"], function(require, exports) {
-    
+define(["require", "exports", "emulator/model/attributes/ControlTag"], function(require, exports, __mControlTag__) {
+    var mControlTag = __mControlTag__;
+
     var Control = (function () {
         function Control(tag, $control) {
             this.$Control = $control;
@@ -27,6 +28,28 @@ define(["require", "exports"], function(require, exports) {
             configurable: true
         });
         Control.prototype.create = function () {
+        };
+        Control.prototype.setDimensions = function () {
+            switch(this.Tag.Width) {
+                case mControlTag.ControlTag.WrapContent:
+                    break;
+                case mControlTag.ControlTag.MatchParrent:
+                    this.$Control.css("width", "inherit");
+                    break;
+                default:
+                    this.$Control.css("width", this.Tag.Width + "px");
+                    break;
+            }
+            switch(this.Tag.Height) {
+                case mControlTag.ControlTag.WrapContent:
+                    break;
+                case mControlTag.ControlTag.MatchParrent:
+                    this.$Control.css("height", "inherit");
+                    break;
+                default:
+                    this.$Control.css("height", this.Tag.Height + "px");
+                    break;
+            }
         };
         return Control;
     })();

@@ -21,4 +21,27 @@ export class Control {
 
     public create() {
     }
+
+    public setDimensions() {
+        switch (this.Tag.Width) {
+            case mControlTag.ControlTag.WrapContent:
+                break;
+            case mControlTag.ControlTag.MatchParrent:
+                this.$Control.css("width", "inherit");
+                break;
+            default:
+                this.$Control.css("width", this.Tag.Width + "px");
+                break;
+        }
+        switch (this.Tag.Height) {
+            case mControlTag.ControlTag.WrapContent:
+                break;
+            case mControlTag.ControlTag.MatchParrent:
+                this.$Control.css("height", "inherit");
+                break;
+            default:
+                this.$Control.css("height", this.Tag.Height + "px");
+                break;
+        }
+    }
 }

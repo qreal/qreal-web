@@ -12,6 +12,8 @@ export class Button extends mTextView.TextView {
     }
 
     public create() {
-        this.$Control.button();
+        var $newControl = this.$Control.button();
+        this.$Control = $newControl.parent("div");
+        this.setDimensions();
     }
 }

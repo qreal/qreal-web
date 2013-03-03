@@ -8,7 +8,8 @@ export class LinearLayout extends mControlPanel.ControlPanel {
     constructor(tag: mLinearLayoutTag.LinearLayoutTag);
     constructor(tag: mLinearLayoutTag.LinearLayoutTag, $control: JQuery);
     constructor(tag: mLinearLayoutTag.LinearLayoutTag, $control?: JQuery = $("<div></div>")) {
-        super(tag, $control);    
+        super(tag, $control);
+        this.setDimensions();
     }
 
     public addChild(child: mControl.Control) {
@@ -40,8 +41,6 @@ export class LinearLayout extends mControlPanel.ControlPanel {
             rows: rows,
             items: childrenElements
         });
-        if (tag.Width == mControlTag.ControlTag.MatchParrent) {
-            this.$Control.css('width', 'inherit');
-        }    
+        this.setDimensions();
     }
 }

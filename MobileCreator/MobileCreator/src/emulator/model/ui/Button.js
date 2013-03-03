@@ -19,7 +19,9 @@ define(["require", "exports", "emulator/model/ui/TextView", "emulator/model/attr
             }
         }
         Button.prototype.create = function () {
-            this.$Control.button();
+            var $newControl = this.$Control.button();
+            this.$Control = $newControl.parent("div");
+            this.setDimensions();
         };
         return Button;
     })(mTextView.TextView);
