@@ -1,11 +1,21 @@
-define(["require", "exports", "utils/log/Log", "designer/model/DesignerModel", "designer/controller/DesignerController", "designer/view/DesignerView"], function(require, exports, __mLog__, __mDesignerModel__, __mDesignerController__, __mDesignerView__) {
+define(["require", "exports", "utils/log/Log", "designer/model/DesignerModel", "designer/model/SpecialValues", "designer/model/Form", "designer/controller/DesignerController", "designer/view/DesignerView", "designer/view/LinearLayoutView", "designer/model/LinearLayout"], function(require, exports, __mLog__, __mDesignerModel__, __mSpecialValues__, __mForm__, __mDesignerController__, __mDesignerView__, __mLinearLayoutView__, __mLinearLayout__) {
     var mLog = __mLog__;
 
     var mDesignerModel = __mDesignerModel__;
 
+    var mSpecialValues = __mSpecialValues__;
+
+    var mForm = __mForm__;
+
+    
+    
     var mDesignerController = __mDesignerController__;
 
     var mDesignerView = __mDesignerView__;
+
+    var mLinearLayoutView = __mLinearLayoutView__;
+
+    var mLinearLayout = __mLinearLayout__;
 
     var Designer = (function () {
         function Designer() {
@@ -57,8 +67,18 @@ define(["require", "exports", "utils/log/Log", "designer/model/DesignerModel", "
             $(imageViewElement).button();
             var model = new mDesignerModel.DesignerModel();
             var controller = new mDesignerController.DesignerController(model);
-            var view = new mDesignerView.DesignerView(controller);
+            var view = new mDesignerView.DesignerView(controller, $("#form"));
             controller.View = view;
+            var defaultForm = new mForm.Form(0, "default-form");
+            model.addForm(defaultForm);
+            var baseLayout = new mLinearLayout.LinearLayout(0, mSpecialValues.SpecialSizeValue.FillParent, mSpecialValues.SpecialSizeValue.FillParent);
+            baseLayout.BackGroundColor = "#ff00ff";
+            baseLayout.Orientation = mSpecialValues.SpecialLinearLayoutOrientation.Vertical;
+            var baseLayoutWidget = new mLinearLayoutView.LinearLayoutView(baseLayout.Id, baseLayout.LayoutWidth, baseLayout.LayoutHeight);
+            baseLayoutWidget.BackGroundColor = baseLayout.BackGroundColor;
+            baseLayoutWidget.Orientation = baseLayout.Orientation;
+            view.BaseLayout = baseLayoutWidget;
+            view.draw();
         };
         return Designer;
     })();

@@ -28,6 +28,7 @@
     <Content Include="css\jquerymobile.css" />
     <Content Include="default.htm" />
     <TypeScriptCompile Include="src\designer\view\LinearLayoutView.ts" />
+    <Content Include="margin_bug.html" />
     <Content Include="src\designer\view\LinearLayoutView.js">
       <DependentUpon>LinearLayoutView.ts</DependentUpon>
     </Content>
