@@ -7,6 +7,8 @@ import mLinearLayout = module("emulator/model/ui/LinearLayout");
 import mButtonTag = module("emulator/model/attributes/ButtonTag");
 import mLinearLayoutTag = module("emulator/model/attributes/LinearLayoutTag");
 import mTextViewTag = module("emulator/model/attributes/TextViewTag");
+import mImageViewTag = module("emulator/model/attributes/ImageViewTag");
+import mImageView = module("emulator/model/ui/ImageView");
 
 
 export class Emulator {
@@ -82,11 +84,18 @@ export class Emulator {
         tag10.Text = "text4";
         var label5 = new mTextView.TextView(tag10);
 
+        var imgTag1 = new mImageViewTag.ImageViewTag();
+        imgTag1.Id = "image1";
+        imgTag1.ImageUrl = "https://dl.dropbox.com/u/10802739/ubiq-qr.png";
+        imgTag1.Width = 100;
+        imgTag1.Height = 100;
+        var img1 = new mImageView.ImageView(imgTag1);
+
         var tagLinear1 = new mLinearLayoutTag.LinearLayoutTag();
         tagLinear1.Id = "linear1";
         tagLinear1.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
         tagLinear1.Background = "#0f0"
-        tagLinear1.Width = 200;
+        tagLinear1.Width = -1;
         var layout = new mLinearLayout.LinearLayout(tagLinear1);
 
         var tag6 = new mLinearLayoutTag.LinearLayoutTag();
@@ -106,6 +115,7 @@ export class Emulator {
         layout.addChild(button4);
         layout.addChild(button5);
         layout.addChild(button6);
+        layout.addChild(img1);
         var $layout = layout.$Control;
         content.append($layout);
         layout.create();

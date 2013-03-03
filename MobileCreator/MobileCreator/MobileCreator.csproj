@@ -117,6 +117,10 @@
       <DependentUpon>ControlPanelTag.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\emulator\model\attributes\LinearLayoutTag.ts" />
+    <TypeScriptCompile Include="src\emulator\model\attributes\ImageViewTag.ts" />
+    <Content Include="src\emulator\model\attributes\ImageViewTag.js">
+      <DependentUpon>ImageViewTag.ts</DependentUpon>
+    </Content>
     <Content Include="src\emulator\model\attributes\LinearLayoutTag.js">
       <DependentUpon>LinearLayoutTag.ts</DependentUpon>
     </Content>
@@ -140,6 +144,10 @@
       <DependentUpon>ControlPanel.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\emulator\model\ui\LinearLayout.ts" />
+    <TypeScriptCompile Include="src\emulator\model\ui\ImageView.ts" />
+    <Content Include="src\emulator\model\ui\ImageView.js">
+      <DependentUpon>ImageView.ts</DependentUpon>
+    </Content>
     <Content Include="src\emulator\model\ui\LinearLayout.js">
       <DependentUpon>LinearLayout.ts</DependentUpon>
     </Content>

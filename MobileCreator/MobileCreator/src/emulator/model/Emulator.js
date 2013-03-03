@@ -1,4 +1,4 @@
-define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emulator/model/ui/TextView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/TextViewTag"], function(require, exports, __mLog__, __mButton__, __mTextView__, __mLinearLayout__, __mButtonTag__, __mLinearLayoutTag__, __mTextViewTag__) {
+define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emulator/model/ui/TextView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ImageViewTag", "emulator/model/ui/ImageView"], function(require, exports, __mLog__, __mButton__, __mTextView__, __mLinearLayout__, __mButtonTag__, __mLinearLayoutTag__, __mTextViewTag__, __mImageViewTag__, __mImageView__) {
     var mLog = __mLog__;
 
     var mButton = __mButton__;
@@ -12,6 +12,10 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
     var mLinearLayoutTag = __mLinearLayoutTag__;
 
     var mTextViewTag = __mTextViewTag__;
+
+    var mImageViewTag = __mImageViewTag__;
+
+    var mImageView = __mImageView__;
 
     var Emulator = (function () {
         function Emulator() {
@@ -69,11 +73,17 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             tag10.Id = "text4";
             tag10.Text = "text4";
             var label5 = new mTextView.TextView(tag10);
+            var imgTag1 = new mImageViewTag.ImageViewTag();
+            imgTag1.Id = "image1";
+            imgTag1.ImageUrl = "https://dl.dropbox.com/u/10802739/ubiq-qr.png";
+            imgTag1.Width = 100;
+            imgTag1.Height = 100;
+            var img1 = new mImageView.ImageView(imgTag1);
             var tagLinear1 = new mLinearLayoutTag.LinearLayoutTag();
             tagLinear1.Id = "linear1";
             tagLinear1.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
             tagLinear1.Background = "#0f0";
-            tagLinear1.Width = 200;
+            tagLinear1.Width = -1;
             var layout = new mLinearLayout.LinearLayout(tagLinear1);
             var tag6 = new mLinearLayoutTag.LinearLayoutTag();
             tag6.Id = "linear2";
@@ -90,6 +100,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             layout.addChild(button4);
             layout.addChild(button5);
             layout.addChild(button6);
+            layout.addChild(img1);
             var $layout = layout.$Control;
             content.append($layout);
             layout.create();

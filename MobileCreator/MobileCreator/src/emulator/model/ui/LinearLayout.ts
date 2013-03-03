@@ -19,8 +19,8 @@ export class LinearLayout extends mControlPanel.ControlPanel {
 
     public create() {
         var tag = <mLinearLayoutTag.LinearLayoutTag> this.Tag;
-        var childrenElements = this.$Control.children();
         this.Childrens.map(child => child.create());
+        var childrenElements = this.$Control.children();
 
         var columns, rows;
         switch (tag.Orientation) {
@@ -34,13 +34,13 @@ export class LinearLayout extends mControlPanel.ControlPanel {
                 break;
         }
         
-        this.$Control.trigger('create');
+   
         this.$Control.layout({
             type: 'flexGrid',
             columns: columns,
             rows: rows,
             items: childrenElements
         });
-        this.setDimensions();
+       // this.setDimensions();
     }
 }
