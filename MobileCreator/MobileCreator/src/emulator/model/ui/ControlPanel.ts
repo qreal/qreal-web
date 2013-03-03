@@ -12,7 +12,8 @@ export class ControlPanel extends mControl.Control {
         super(tag, $control);
         this.childrens = new Array();
         this.$Control.css({
-            background: tag.Background           
+            background: tag.Background,        
+            'overflow-y': 'auto'        
         });  
     }
 

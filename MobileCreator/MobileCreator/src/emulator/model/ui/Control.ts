@@ -19,7 +19,6 @@ export class Control {
         this.$Control.attr('id', tag.Id);
         this.$Control.css({
             'text-align': tag.Gravity,
-            'overflow-y': 'auto'
         });
         this.setMargins();
     }

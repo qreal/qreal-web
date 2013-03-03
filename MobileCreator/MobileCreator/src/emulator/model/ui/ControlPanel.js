@@ -14,7 +14,8 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
                 _super.call(this, tag, $control);
             this.childrens = new Array();
             this.$Control.css({
-                background: tag.Background
+                background: tag.Background,
+                'overflow-y': 'auto'
             });
         }
         Object.defineProperty(ControlPanel.prototype, "Childrens", {
