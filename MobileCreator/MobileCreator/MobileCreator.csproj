@@ -27,16 +27,6 @@
     <Content Include="css\jqueryui.css" />
     <Content Include="css\jquerymobile.css" />
     <Content Include="default.htm" />
-    <TypeScriptCompile Include="lib\jlayout.d.ts" />
-    <Content Include="lib\jlayout.d.js">
-      <DependentUpon>jlayout.d.ts</DependentUpon>
-    </Content>
-    <Content Include="lib\jlayout\jlayout.border.js" />
-    <Content Include="lib\jlayout\jlayout.flexgrid.js" />
-    <Content Include="lib\jlayout\jlayout.flow.js" />
-    <Content Include="lib\jlayout\jlayout.grid.js" />
-    <Content Include="lib\jlayout\jquery.jlayout.js" />
-    <Content Include="lib\jlayout\jquery.sizes.js" />
     <Content Include="lib\jquery.dynatree.d.ts" />
     <Content Include="lib\jquery.dynatree.js" />
     <Content Include="lib\jquery.js" />

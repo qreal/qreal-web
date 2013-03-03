@@ -29,13 +29,10 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             var bttag1 = new mButtonTag.ButtonTag();
             bttag1.Id = "button1";
             bttag1.Text = "button1";
-            bttag1.Width = 150;
-            bttag1.Height = 100;
             var button1 = new mButton.Button(bttag1);
             var bttag2 = new mButtonTag.ButtonTag();
             bttag2.Id = "button2";
             bttag2.Text = "button2";
-            bttag2.TextSize = 30;
             var button2 = new mButton.Button(bttag2);
             var bttag3 = new mButtonTag.ButtonTag();
             bttag3.Id = "button3";

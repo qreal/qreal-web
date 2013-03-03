@@ -1,22 +1,23 @@
-import mTextView = module("emulator/model/ui/TextView");
+import mControl = module("emulator/model/ui/Control");
 import mButtonTag = module("emulator/model/attributes/ButtonTag");
 import mControlTag = module("emulator/model/attributes/ControlTag");
 
-export class Button extends mTextView.TextView {
+export class Button extends mControl.Control {
 
-    constructor(tag: mButtonTag.ButtonTag, $control?: JQuery = $("<button></button>")) {
+    constructor(tag: mButtonTag.ButtonTag, $control?: JQuery = $("<div></div>")) {
         super(tag, $control);
-        if (tag.Width == mControlTag.ControlTag.WrapContent) {
-            this.$Control.attr("data-inline", true)
-        }
     }
 
     public create() {
-        var $newControl = this.$Control.button();
-        this.$Control = $newControl.parent("div");
+        var $button = $("<button></button>");
+        this.$Control.append($button);
         var tag = <mButtonTag.ButtonTag> this.Tag;
-        if(tag.TextSize != 0)
-            this.$Control.children('span').children('span').css('font-size', tag.TextSize);
+        if (tag.TextSize != 0) {
+            //this.$Control.children('a').children('span').children('span').css('font-size', tag.TextSize);
+            $button.css('font-size', tag.TextSize);
+        }
+        $button.text(tag.Text);
+        this.$Control.trigger('create');
         super.create();
     }
 }

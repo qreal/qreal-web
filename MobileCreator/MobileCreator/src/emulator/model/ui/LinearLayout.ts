@@ -21,26 +21,4 @@ export class LinearLayout extends mControlPanel.ControlPanel {
         var tag = <mLinearLayoutTag.LinearLayoutTag> this.Tag;
         this.Childrens.map(child => child.create());
         var childrenElements = this.$Control.children();
-
-        var columns, rows;
-        switch (tag.Orientation) {
-            case mLinearLayoutTag.LinearLayoutTag.Horizontal:
-                columns = 0;
-                rows = 1;
-                break;
-            case mLinearLayoutTag.LinearLayoutTag.Vertical:
-                columns = 1;
-                rows = 0;
-                break;
-        }
-        
-   
-        this.$Control.layout({
-            type: 'flexGrid',
-            columns: columns,
-            rows: rows,
-            items: childrenElements
-        });
-       // this.setDimensions();
-    }
 }

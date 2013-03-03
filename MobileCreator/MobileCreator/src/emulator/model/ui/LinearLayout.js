@@ -3,13 +3,12 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "emulator/model/ui/ControlPanel", "emulator/model/attributes/LinearLayoutTag"], function(require, exports, __mControlPanel__, __mLinearLayoutTag__) {
+define(["require", "exports", "emulator/model/ui/ControlPanel"], function(require, exports, __mControlPanel__) {
     
     
     var mControlPanel = __mControlPanel__;
 
-    var mLinearLayoutTag = __mLinearLayoutTag__;
-
+    
     var LinearLayout = (function (_super) {
         __extends(LinearLayout, _super);
         function LinearLayout(tag, $control) {
@@ -27,23 +26,6 @@ define(["require", "exports", "emulator/model/ui/ControlPanel", "emulator/model/
                 return child.create();
             });
             var childrenElements = this.$Control.children();
-            var columns, rows;
-            switch(tag.Orientation) {
-                case mLinearLayoutTag.LinearLayoutTag.Horizontal:
-                    columns = 0;
-                    rows = 1;
-                    break;
-                case mLinearLayoutTag.LinearLayoutTag.Vertical:
-                    columns = 1;
-                    rows = 0;
-                    break;
-            }
-            this.$Control.layout({
-                type: 'flexGrid',
-                columns: columns,
-                rows: rows,
-                items: childrenElements
-            });
         };
         return LinearLayout;
     })(mControlPanel.ControlPanel);

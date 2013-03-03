@@ -1,5 +1,4 @@
 /// <reference path="../../../lib/jquery.d.ts" />
-/// <reference path="../../../lib/jlayout.d.ts" />
 import mLog = module("utils/log/Log");
 import mButton = module("emulator/model/ui/Button");
 import mTextView = module("emulator/model/ui/TextView");
@@ -29,14 +28,11 @@ export class Emulator {
         var bttag1 = new mButtonTag.ButtonTag();
         bttag1.Id = "button1";
         bttag1.Text = "button1";
-        bttag1.Width = 150;
-        bttag1.Height = 100;
         var button1 = new mButton.Button(bttag1);
 
         var bttag2 = new mButtonTag.ButtonTag();
         bttag2.Id = "button2";
         bttag2.Text = "button2";
-        bttag2.TextSize = 30;
         var button2 = new mButton.Button(bttag2);
 
         var bttag3 = new mButtonTag.ButtonTag();

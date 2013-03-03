@@ -6,6 +6,7 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
             this.$Control = $control;
             this.Tag = tag;
             this.$Control.attr('id', tag.Id);
+            this.setDimensions();
         }
         Object.defineProperty(Control.prototype, "$Control", {
             get: function () {
@@ -28,27 +29,27 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
             configurable: true
         });
         Control.prototype.create = function () {
-            this.setDimensions();
         };
-        Control.prototype.setDimensions = function () {
+        Control.prototype.setDimensions = function ($element) {
+            if (typeof $element === "undefined") { $element = this.$Control; }
             switch(this.Tag.Width) {
                 case mControlTag.ControlTag.WrapContent:
                     break;
                 case mControlTag.ControlTag.MatchParrent:
-                    this.$Control.css("width", "inherit");
+                    $element.css("width", "inherit");
                     break;
                 default:
-                    this.$Control.css("width", this.Tag.Width + "px");
+                    $element.css("width", this.Tag.Width + "px");
                     break;
             }
             switch(this.Tag.Height) {
                 case mControlTag.ControlTag.WrapContent:
                     break;
                 case mControlTag.ControlTag.MatchParrent:
-                    this.$Control.css("height", "inherit");
+                    $element.css("height", "inherit");
                     break;
                 default:
-                    this.$Control.css("height", this.Tag.Height + "px");
+                    $element.css("height", this.Tag.Height + "px");
                     break;
             }
         };
