@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Taxi App</string>
+	<string name="Map">Map</string>
+	<string name="Orders">Orders</string>
+	<string name="List">List of orders</string>
+	<string name="Back">Back</string>
+</resources>
