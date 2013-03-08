@@ -1,4 +1,4 @@
-define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emulator/model/ui/TextView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/TextViewTag"], function(require, exports, __mLog__, __mButton__, __mTextView__, __mLinearLayout__, __mButtonTag__, __mLinearLayoutTag__, __mTextViewTag__) {
+define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emulator/model/ui/TextView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ImageViewTag", "emulator/model/ui/ImageView"], function(require, exports, __mLog__, __mButton__, __mTextView__, __mLinearLayout__, __mButtonTag__, __mLinearLayoutTag__, __mTextViewTag__, __mImageViewTag__, __mImageView__) {
     var mLog = __mLog__;
 
     var mButton = __mButton__;
@@ -13,6 +13,10 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
 
     var mTextViewTag = __mTextViewTag__;
 
+    var mImageViewTag = __mImageViewTag__;
+
+    var mImageView = __mImageView__;
+
     var Emulator = (function () {
         function Emulator() {
             this.logger = new mLog.Logger("Emulator");
@@ -20,8 +24,13 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
         Emulator.instance = new Emulator();
         Emulator.prototype.createView = function () {
             this.logger.log("createView");
-            var content = $("#emulator");
-            content.children().remove();
+            var $screen = $("#screen");
+            $screen.children().remove();
+            this.showVisitCard();
+        };
+        Emulator.prototype.showTestStub = function () {
+            var $screen = $("#screen");
+            $screen.children().remove();
             var bttag1 = new mButtonTag.ButtonTag();
             bttag1.Id = "button1";
             bttag1.Text = "button1";
@@ -46,21 +55,10 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             bttag6.Id = "button6";
             bttag6.Text = "button6";
             var button6 = new mButton.Button(bttag6);
-            var tag4 = new mLinearLayoutTag.LinearLayoutTag();
-            tag4.Id = "linear1";
-            tag4.Orientation = mLinearLayoutTag.LinearLayoutTag.Horizontal;
-            tag4.Background = "#0f0";
-            tag4.Width = -1;
-            var layout = new mLinearLayout.LinearLayout(tag4);
             var tag5 = new mTextViewTag.TextViewTag();
             tag5.Id = "text1";
             tag5.Text = "text1";
             var label1 = new mTextView.TextView(tag5);
-            var tag6 = new mLinearLayoutTag.LinearLayoutTag();
-            tag6.Id = "linear2";
-            tag6.Orientation = mLinearLayoutTag.LinearLayoutTag.Horizontal;
-            tag6.Background = "#00f";
-            var layout2 = new mLinearLayout.LinearLayout(tag6);
             var tag7 = new mTextViewTag.TextViewTag();
             tag7.Id = "text2";
             tag7.Text = "text2";
@@ -77,6 +75,24 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             tag10.Id = "text4";
             tag10.Text = "text4";
             var label5 = new mTextView.TextView(tag10);
+            var imgTag1 = new mImageViewTag.ImageViewTag();
+            imgTag1.Id = "image1";
+            imgTag1.ImageUrl = "https://dl.dropbox.com/u/10802739/ubiq-qr.png";
+            imgTag1.Width = 100;
+            imgTag1.Height = 100;
+            imgTag1.Gravity = "center";
+            var img1 = new mImageView.ImageView(imgTag1);
+            var tagLinear1 = new mLinearLayoutTag.LinearLayoutTag();
+            tagLinear1.Id = "linear1";
+            tagLinear1.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
+            tagLinear1.Background = "#0f0";
+            tagLinear1.Width = -1;
+            var layout = new mLinearLayout.LinearLayout(tagLinear1);
+            var tag6 = new mLinearLayoutTag.LinearLayoutTag();
+            tag6.Id = "linear2";
+            tag6.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
+            tag6.Background = "#00f";
+            var layout2 = new mLinearLayout.LinearLayout(tag6);
             layout2.addChild(label2);
             layout2.addChild(label3);
             layout2.addChild(label4);
@@ -87,8 +103,51 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             layout.addChild(button4);
             layout.addChild(button5);
             layout.addChild(button6);
+            layout.addChild(img1);
             var $layout = layout.$Control;
-            content.append($layout);
+            $screen.append($layout);
+            layout.create();
+        };
+        Emulator.prototype.showVisitCard = function () {
+            var layoutTag = new mLinearLayoutTag.LinearLayoutTag();
+            layoutTag.Id = "linear";
+            layoutTag.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
+            layoutTag.Background = "#e3e3e3";
+            layoutTag.Width = -1;
+            layoutTag.Height = -1;
+            var layout = new mLinearLayout.LinearLayout(layoutTag);
+            var innerLayoutTag = new mLinearLayoutTag.LinearLayoutTag();
+            innerLayoutTag.Id = "innerLinear";
+            innerLayoutTag.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
+            innerLayoutTag.Background = "#e3e3e3";
+            innerLayoutTag.MarginLeft = 20;
+            innerLayoutTag.MarginRight = 20;
+            var innerLayout = new mLinearLayout.LinearLayout(innerLayoutTag);
+            var logoTag = new mImageViewTag.ImageViewTag();
+            logoTag.Id = "logo";
+            logoTag.ImageUrl = "https://dl.dropbox.com/u/10802739/lt_logo.jpg";
+            logoTag.Width = 300;
+            logoTag.Height = 120;
+            logoTag.Gravity = "center";
+            logoTag.MarginTop = 30;
+            var logo = new mImageView.ImageView(logoTag);
+            var infoLabelTag = new mTextViewTag.TextViewTag();
+            infoLabelTag.Id = "info";
+            infoLabelTag.Text = "LANIT-TERCOM is one of the few Russian IT companies which are able not only to fulfil industrial contracts, but also to carry out challenging science-intensive programming projects.";
+            infoLabelTag.MarginTop = 20;
+            var label1 = new mTextView.TextView(infoLabelTag);
+            var buttonTag = new mButtonTag.ButtonTag();
+            buttonTag.Id = "button";
+            buttonTag.Text = "Show more";
+            buttonTag.MarginTop = 320;
+            var button = new mButton.Button(buttonTag);
+            innerLayout.addChild(logo);
+            innerLayout.addChild(label1);
+            innerLayout.addChild(button);
+            layout.addChild(innerLayout);
+            var $screen = $("#screen");
+            var $layout = layout.$Control;
+            $screen.append($layout);
             layout.create();
         };
         return Emulator;

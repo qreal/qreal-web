@@ -1,10 +1,15 @@
-define(["require", "exports"], function(require, exports) {
-    
+define(["require", "exports", "emulator/model/attributes/ControlTag"], function(require, exports, __mControlTag__) {
+    var mControlTag = __mControlTag__;
+
     var Control = (function () {
         function Control(tag, $control) {
             this.$Control = $control;
             this.Tag = tag;
             this.$Control.attr('id', tag.Id);
+            this.$Control.css({
+                'text-align': tag.Gravity
+            });
+            this.setMargins();
         }
         Object.defineProperty(Control.prototype, "$Control", {
             get: function () {
@@ -27,6 +32,38 @@ define(["require", "exports"], function(require, exports) {
             configurable: true
         });
         Control.prototype.create = function () {
+        };
+        Control.prototype.setDimensions = function ($element) {
+            if (typeof $element === "undefined") { $element = this.$Control; }
+            switch(this.Tag.Width) {
+                case mControlTag.ControlTag.WrapContent:
+                    break;
+                case mControlTag.ControlTag.MatchParrent:
+                    $element.css("width", "100%");
+                    break;
+                default:
+                    $element.css("width", this.Tag.Width + "px");
+                    break;
+            }
+            switch(this.Tag.Height) {
+                case mControlTag.ControlTag.WrapContent:
+                    break;
+                case mControlTag.ControlTag.MatchParrent:
+                    $element.css("height", "100%");
+                    break;
+                default:
+                    $element.css("height", this.Tag.Height + "px");
+                    break;
+            }
+        };
+        Control.prototype.setMargins = function ($element) {
+            if (typeof $element === "undefined") { $element = this.$Control; }
+            $element.css({
+                'margin-left': this.Tag.MarginLeft + 'px',
+                'margin-right': this.Tag.MarginRight + 'px',
+                'margin-top': this.Tag.MarginTop + 'px',
+                'margin-bottom': this.Tag.MarginBottom + 'px'
+            });
         };
         return Control;
     })();

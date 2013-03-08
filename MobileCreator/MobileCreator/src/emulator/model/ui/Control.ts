@@ -17,8 +17,49 @@ export class Control {
         this.$Control = $control;
         this.Tag = tag;
         this.$Control.attr('id', tag.Id);
+        this.$Control.css({
+            'text-align': tag.Gravity,
+        });
+        this.setMargins();
     }
 
     public create() {
+    }
+
+    public setDimensions();
+    public setDimensions($element: JQuery);
+    public setDimensions($element?: JQuery = this.$Control) {
+        switch (this.Tag.Width) {
+            case mControlTag.ControlTag.WrapContent:
+                break;
+            case mControlTag.ControlTag.MatchParrent:
+                $element.css("width", "100%");
+                break;
+            default:
+                $element.css("width", this.Tag.Width + "px");
+                break;
+        }
+        switch (this.Tag.Height) {
+            case mControlTag.ControlTag.WrapContent:
+                break;
+            case mControlTag.ControlTag.MatchParrent:
+                $element.css("height", "100%");
+                break;
+            default:
+                $element.css("height", this.Tag.Height + "px");
+                break;
+        }
+    }
+
+    public setMargins();
+    public setMargins($element: JQuery);
+    public setMargins($element?: JQuery = this.$Control) {
+
+        $element.css({
+            'margin-left': this.Tag.MarginLeft + 'px',
+            'margin-right': this.Tag.MarginRight + 'px',
+            'margin-top': this.Tag.MarginTop + 'px',
+            'margin-bottom': this.Tag.MarginBottom + 'px'
+        });
     }
 }

@@ -24,7 +24,19 @@ export class ControlTag {
     private marginTop: number;
     private marginRight: number;
     private marginBottom: number;
-    //get MarginLeft() { return this.marginLeft }
+    get MarginLeft() { return this.marginLeft }
+    get MarginRight() { return this.marginRight }
+    get MarginTop() { return this.marginTop }
+    get MarginBottom() { return this.marginBottom }
+    set MarginLeft(value: number) { this.marginLeft = value; }
+    set MarginRight(value: number) { this.marginRight = value; }
+    set MarginTop(value: number) { this.marginTop = value; }
+    set MarginBottom(value: number) { this.marginBottom = value; }
+
+    // gravity
+    private gravity: string = "left";
+    get Gravity() { return this.gravity }
+    set Gravity(value: string) { this.gravity = value }
 
     constructor() {
     }

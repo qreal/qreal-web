@@ -1,5 +1,23 @@
 ﻿#emulator {
-    width: inherit;
-    height: inherit;
-    background: #f00
+    width: 500px;
+    height: 700px;
+}
+
+#emulatorSkin {
+    border: 1px solid #000;
+    border-radius: 11px;
+    background-color: #232323;
+    box-shadow: 0 0 15px rgba(0,0,0,.28), inset 0 1px 1px rgba(255,255,255,.45), inset 0 0 2px rgba(255,255,255,.2);
+    padding: 15px;
+    margin-top: 20px;
+    margin-left: 50px;
+    width: 480px;
+    height: 700px;
+}
+
+#screen {
+    width: 480px;
+    height: 640px;
+    background: #fff;
+    overflow-y: auto;
 }

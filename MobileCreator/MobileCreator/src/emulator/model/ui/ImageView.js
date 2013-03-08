@@ -4,25 +4,24 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 define(["require", "exports", "emulator/model/ui/Control"], function(require, exports, __mControl__) {
+    
+    
     var mControl = __mControl__;
 
-    
-    var TextView = (function (_super) {
-        __extends(TextView, _super);
-        function TextView(tag, $control) {
+    var ImageView = (function (_super) {
+        __extends(ImageView, _super);
+        function ImageView(tag, $control) {
             if (typeof $control === "undefined") { $control = $("<div></div>"); }
                 _super.call(this, tag, $control);
-            var $label = $("<label></label>");
-            $label.text(tag.Text);
-            if(tag.TextSize > 0) {
-                $label.css('font-size', tag.TextSize);
-            }
-            this.$Control.append($label);
+            var $img = $("<img></img>");
+            $img.attr('src', tag.ImageUrl);
+            this.$Control.append($img);
+            this.setDimensions($img);
         }
-        TextView.prototype.create = function () {
+        ImageView.prototype.create = function () {
             _super.prototype.create.call(this);
         };
-        return TextView;
+        return ImageView;
     })(mControl.Control);
-    exports.TextView = TextView;    
+    exports.ImageView = ImageView;    
 })

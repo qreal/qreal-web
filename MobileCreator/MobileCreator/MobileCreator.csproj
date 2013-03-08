@@ -27,18 +27,19 @@
     <Content Include="css\jqueryui.css" />
     <Content Include="css\jquerymobile.css" />
     <Content Include="default.htm" />
-    <TypeScriptCompile Include="lib\jlayout.d.ts" />
-    <Content Include="lib\jlayout.d.js">
-      <DependentUpon>jlayout.d.ts</DependentUpon>
+    <TypeScriptCompile Include="src\designer\view\LinearLayoutView.ts" />
+    <Content Include="margin_bug.html" />
+    <Content Include="src\designer\view\LinearLayoutView.js">
+      <DependentUpon>LinearLayoutView.ts</DependentUpon>
     </Content>
-    <Content Include="lib\jlayout\jlayout.border.js" />
-    <Content Include="lib\jlayout\jlayout.flexgrid.js" />
-    <Content Include="lib\jlayout\jlayout.flow.js" />
-    <Content Include="lib\jlayout\jlayout.grid.js" />
-    <Content Include="lib\jlayout\jquery.jlayout.js" />
-    <Content Include="lib\jlayout\jquery.sizes.js" />
+    <TypeScriptCompile Include="src\designer\view\WidgetView.ts" />
+    <Content Include="src\designer\view\WidgetView.js">
+      <DependentUpon>WidgetView.ts</DependentUpon>
+    </Content>
+    <Content Include="test_iframe.html" />
+    <Content Include="lib\jquery.dynatree.d.ts" />
+    <Content Include="lib\jquery.dynatree.js" />
     <Content Include="lib\jquery.js" />
-    <Content Include="lib\jqueryui.js" />
     <Content Include="lib\jquery.d.ts" />
     <Content Include="lib\jquerymobile.js" />
     <TypeScriptCompile Include="src\AppConfig.ts" />
@@ -48,6 +49,9 @@
       <DependentUpon>jquerymobile.d.ts</DependentUpon>
     </Content>
     <Content Include="lib\jqueryui.d.ts" />
+    <Content Include="lib\jqueryui.js" />
+    <Content Include="lib\knockout.d.ts" />
+    <Content Include="lib\knockout.js" />
     <Content Include="lib\require.d.js">
       <DependentUpon>require.d.ts</DependentUpon>
     </Content>
@@ -60,6 +64,42 @@
     <TypeScriptCompile Include="src\Application.ts" />
     <Content Include="src\Application.js">
       <DependentUpon>Application.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\designer\model\Widget.ts" />
+    <TypeScriptCompile Include="src\designer\Designer.ts" />
+    <TypeScriptCompile Include="src\designer\controller\DesignerController.ts" />
+    <Content Include="src\designer\controller\DesignerController.js">
+      <DependentUpon>DesignerController.ts</DependentUpon>
+    </Content>
+    <Content Include="src\designer\designer.js">
+      <DependentUpon>Designer.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\designer\model\DesignerModel.ts" />
+    <TypeScriptCompile Include="src\designer\model\Button.ts" />
+    <Content Include="src\designer\model\Button.js">
+      <DependentUpon>Button.ts</DependentUpon>
+    </Content>
+    <Content Include="src\designer\model\DesignerModel.js">
+      <DependentUpon>DesignerModel.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\designer\model\Form.ts" />
+    <Content Include="src\designer\model\Form.js">
+      <DependentUpon>Form.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\designer\model\LinearLayout.ts" />
+    <Content Include="src\designer\model\LinearLayout.js">
+      <DependentUpon>LinearLayout.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\designer\model\SpecialValues.ts" />
+    <Content Include="src\designer\model\SpecialValues.js">
+      <DependentUpon>SpecialValues.ts</DependentUpon>
+    </Content>
+    <Content Include="src\designer\model\Widget.js">
+      <DependentUpon>Widget.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\designer\model\WidgetTypes.ts" />
+    <Content Include="src\designer\model\WidgetTypes.js">
+      <DependentUpon>WidgetTypes.ts</DependentUpon>
     </Content>
     <Content Include="src\designer\view\DesignerView.js">
       <DependentUpon>DesignerView.ts</DependentUpon>
@@ -77,6 +117,10 @@
       <DependentUpon>ControlPanelTag.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\emulator\model\attributes\LinearLayoutTag.ts" />
+    <TypeScriptCompile Include="src\emulator\model\attributes\ImageViewTag.ts" />
+    <Content Include="src\emulator\model\attributes\ImageViewTag.js">
+      <DependentUpon>ImageViewTag.ts</DependentUpon>
+    </Content>
     <Content Include="src\emulator\model\attributes\LinearLayoutTag.js">
       <DependentUpon>LinearLayoutTag.ts</DependentUpon>
     </Content>
@@ -100,6 +144,10 @@
       <DependentUpon>ControlPanel.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\emulator\model\ui\LinearLayout.ts" />
+    <TypeScriptCompile Include="src\emulator\model\ui\ImageView.ts" />
+    <Content Include="src\emulator\model\ui\ImageView.js">
+      <DependentUpon>ImageView.ts</DependentUpon>
+    </Content>
     <Content Include="src\emulator\model\ui\LinearLayout.js">
       <DependentUpon>LinearLayout.ts</DependentUpon>
     </Content>
@@ -141,7 +189,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>54270</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:61082/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

@@ -1,36 +1,28 @@
 /// <reference path="../../../lib/jquery.d.ts" />
-import Log = module("utils/log/Log");
+import mLog = module("utils/log/Log");
+import mDesignerController = module("designer/controller/DesignerController");
+import mWidgetView = module("designer/view/WidgetView");
 
 export class DesignerView {
-    private baseDiv: JQuery;
+    private controller: mDesignerController.DesignerController;
+    private form: JQuery;
+    private baseLayout: mWidgetView.WidgetView;
 
-    constructor(baseDiv: JQuery) {
-        this.baseDiv = baseDiv;
+    constructor(controller: mDesignerController.DesignerController, form: JQuery) {
+        this.controller = controller;
+        this.form = form;
     }
 
-    public initDesigner() {
-        var designerMenuDiv = document.createElement("div");
-        designerMenuDiv.setAttribute("id", "designerMenu");
-        var designerSceneDiv = document.createElement("div");
-        designerSceneDiv.setAttribute("id", "designerScene");
-        this.baseDiv.prepend(designerSceneDiv);
-        this.baseDiv.prepend(designerMenuDiv);
-        var formsAccordion = document.createElement("div");
-        formsAccordion.setAttribute("id", "formsAccordion");
+    get BaseLayout() {
+        return this.baseLayout;
+    }
 
-        //STUB. Real forms loading will be here
-        for (var i = 0; i < 4; i++) {
-            var heading = document.createElement("h3");
-            $(heading).text("Some form");
-            var div = document.createElement("div");
-            var content = document.createElement("p");
-            $(content).text("STUB :(");
-            $(formsAccordion).append(heading);
-            $(formsAccordion).append(div);
-            $(div).append(content);
-        }
-        $(designerMenuDiv).append(formsAccordion);
-        //$(formsAccordion).accordion();
-        //END STUB
+    set BaseLayout(widgetView: mWidgetView.WidgetView) {
+        this.baseLayout = widgetView;
+    }
+
+    public draw() {
+        this.baseLayout.draw();
+        this.form.append(this.baseLayout.Control);
     }
 }

@@ -1,5 +1,4 @@
 /// <reference path="../../../lib/jquery.d.ts" />
-/// <reference path="../../../lib/jlayout.d.ts" />
 import mLog = module("utils/log/Log");
 import mButton = module("emulator/model/ui/Button");
 import mTextView = module("emulator/model/ui/TextView");
@@ -7,6 +6,8 @@ import mLinearLayout = module("emulator/model/ui/LinearLayout");
 import mButtonTag = module("emulator/model/attributes/ButtonTag");
 import mLinearLayoutTag = module("emulator/model/attributes/LinearLayoutTag");
 import mTextViewTag = module("emulator/model/attributes/TextViewTag");
+import mImageViewTag = module("emulator/model/attributes/ImageViewTag");
+import mImageView = module("emulator/model/ui/ImageView");
 
 
 export class Emulator {
@@ -21,8 +22,17 @@ export class Emulator {
         this.logger.log("createView");
 
         //TODO: stub
-        var content = $("#emulator");
-        content.children().remove();
+        var $screen = $("#screen");
+        $screen.children().remove();
+        this.showVisitCard();
+        //end stub
+      
+    }
+
+    private showTestStub() {
+        //TODO: stub
+        var $screen = $("#screen");
+        $screen.children().remove();
 
         var bttag1 = new mButtonTag.ButtonTag();
         bttag1.Id = "button1";
@@ -54,23 +64,10 @@ export class Emulator {
         bttag6.Text = "button6";
         var button6 = new mButton.Button(bttag6);
 
-        var tag4 = new mLinearLayoutTag.LinearLayoutTag();
-        tag4.Id = "linear1";
-        tag4.Orientation = mLinearLayoutTag.LinearLayoutTag.Horizontal;
-        tag4.Background = "#0f0"
-        tag4.Width = -1;
-        var layout = new mLinearLayout.LinearLayout(tag4);
-
         var tag5 = new mTextViewTag.TextViewTag();
         tag5.Id = "text1";
         tag5.Text = "text1";
         var label1 = new mTextView.TextView(tag5);
-
-        var tag6 = new mLinearLayoutTag.LinearLayoutTag();
-        tag6.Id = "linear2";
-        tag6.Orientation = mLinearLayoutTag.LinearLayoutTag.Horizontal;
-        tag6.Background = "#00f"    
-        var layout2 = new mLinearLayout.LinearLayout(tag6);
 
         var tag7 = new mTextViewTag.TextViewTag();
         tag7.Id = "text2";
@@ -92,6 +89,27 @@ export class Emulator {
         tag10.Text = "text4";
         var label5 = new mTextView.TextView(tag10);
 
+        var imgTag1 = new mImageViewTag.ImageViewTag();
+        imgTag1.Id = "image1";
+        imgTag1.ImageUrl = "https://dl.dropbox.com/u/10802739/ubiq-qr.png";
+        imgTag1.Width = 100;
+        imgTag1.Height = 100;
+        imgTag1.Gravity = "center";
+        var img1 = new mImageView.ImageView(imgTag1);
+
+        var tagLinear1 = new mLinearLayoutTag.LinearLayoutTag();
+        tagLinear1.Id = "linear1";
+        tagLinear1.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
+        tagLinear1.Background = "#0f0"
+        tagLinear1.Width = -1;
+        var layout = new mLinearLayout.LinearLayout(tagLinear1);
+
+        var tag6 = new mLinearLayoutTag.LinearLayoutTag();
+        tag6.Id = "linear2";
+        tag6.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
+        tag6.Background = "#00f"
+        var layout2 = new mLinearLayout.LinearLayout(tag6);
+
         layout2.addChild(label2);
         layout2.addChild(label3);
         layout2.addChild(label4);
@@ -103,9 +121,61 @@ export class Emulator {
         layout.addChild(button4);
         layout.addChild(button5);
         layout.addChild(button6);
+        layout.addChild(img1);
         var $layout = layout.$Control;
-        content.append($layout);
+        $screen.append($layout);
         layout.create();
         //end stub
+    }
+
+    private showVisitCard() {
+
+        var layoutTag = new mLinearLayoutTag.LinearLayoutTag();
+        layoutTag.Id = "linear";
+        layoutTag.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
+        layoutTag.Background = "#e3e3e3"
+        layoutTag.Width = -1;
+        layoutTag.Height = -1;
+        var layout = new mLinearLayout.LinearLayout(layoutTag);
+
+        var innerLayoutTag = new mLinearLayoutTag.LinearLayoutTag();
+        innerLayoutTag.Id = "innerLinear";
+        innerLayoutTag.Orientation = mLinearLayoutTag.LinearLayoutTag.Vertical;
+        innerLayoutTag.Background = "#e3e3e3"
+        innerLayoutTag.MarginLeft = 20;
+        innerLayoutTag.MarginRight = 20;
+        //innerLayoutTag.MarginTop = 20;
+        var innerLayout = new mLinearLayout.LinearLayout(innerLayoutTag);
+
+        var logoTag = new mImageViewTag.ImageViewTag();
+        logoTag.Id = "logo";
+        logoTag.ImageUrl = "https://dl.dropbox.com/u/10802739/lt_logo.jpg";
+        logoTag.Width = 300;
+        logoTag.Height = 120;
+        logoTag.Gravity = "center";
+        logoTag.MarginTop = 30;
+        var logo = new mImageView.ImageView(logoTag);
+
+        var infoLabelTag = new mTextViewTag.TextViewTag();
+        infoLabelTag.Id = "info";
+        infoLabelTag.Text = "LANIT-TERCOM is one of the few Russian IT companies which are able not only to fulfil industrial contracts, but also to carry out challenging science-intensive programming projects.";
+        infoLabelTag.MarginTop = 20;
+        var label1 = new mTextView.TextView(infoLabelTag);
+
+        var buttonTag = new mButtonTag.ButtonTag();
+        buttonTag.Id = "button";
+        buttonTag.Text = "Show more";
+        buttonTag.MarginTop = 320;
+        var button = new mButton.Button(buttonTag);
+
+        innerLayout.addChild(logo);
+        innerLayout.addChild(label1);
+        innerLayout.addChild(button);
+        layout.addChild(innerLayout);
+
+        var $screen = $("#screen");
+        var $layout = layout.$Control;
+        $screen.append($layout);
+        layout.create();
     }
 }
