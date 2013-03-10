@@ -21,12 +21,10 @@ export class Application {
                 $("#btChange").children('span').children('span').text("Designer");
                 $("#emulator").hide();
                 $("#designer").show();
-                $("#menu").show();
             } else {
                 $("#btChange").children('span').children('span').text("Emulator");
                 $("#emulator").show();
                 $("#designer").hide();
-                $("#menu").hide();
                 mEmulator.Emulator.instance.createView();
             }
         });
