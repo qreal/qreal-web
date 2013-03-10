@@ -2,34 +2,34 @@
 /// <reference path="../../lib/jquerymobile.d.ts" />
 import mElement = module("designer/Element");
 import mElementPreferences = module("designer/ElementPreferences")
-import mImageViewPreferences = module("designer/ImageViewPreferences")
+import mTextViewPreferences = module("designer/TextViewPreferences")
 
-export class ImageView extends mElement.Element {
-    private preferences: mImageViewPreferences.ImageViewPreferences;
+export class TextView extends mElement.Element {
+    private preferences: mTextViewPreferences.TextViewPreferences;
     get Preferences() {
         return this.preferences;
     }
-    set Preferences(preferences: mImageViewPreferences.ImageViewPreferences) {
+    set Preferences(preferences: mTextViewPreferences.TextViewPreferences) {
         this.preferences = preferences;
     }
-    constructor(preferences: mImageViewPreferences.ImageViewPreferences);
-    constructor(preferences: mImageViewPreferences.ImageViewPreferences, domElement: JQuery);
-    constructor(preferences: mImageViewPreferences.ImageViewPreferences, domElement?: JQuery = $("<div></div>")) {
+    constructor(preferences: mTextViewPreferences.TextViewPreferences);
+    constructor(preferences: mTextViewPreferences.TextViewPreferences, domElement: JQuery);
+    constructor(preferences: mTextViewPreferences.TextViewPreferences, domElement?: JQuery = $("<div></div>")) {
         super(domElement);
         this.Preferences = preferences;
         this.init();
     }
     public init() {
         this.DomElement.empty();
-        var image = $("<img></img>");
-        image.attr('src', this.preferences.ImageURL);
-        this.DomElement.append(image);
+        var text = $("<label></label>");
+        text.text(this.preferences.Text);
+        this.DomElement.append(text);
         this.applyHeight();
         this.applyWidth();
     }
     public toXML() {
         var xmlString = "";
-        xmlString += "<ImageView \n";
+        xmlString += "<TextView \n";
         if (this.preferences.Width == mElementPreferences.ElementPreferences.FillParent) {
             xmlString += "layout_width=\"fill_parent\" ";
         } else if (this.preferences.Width == mElementPreferences.ElementPreferences.WrapContent) {
@@ -44,9 +44,10 @@ export class ImageView extends mElement.Element {
         } else {
             xmlString += "layout_height=\"" + this.preferences.Width + "px\" ";
         }
-        xmlString += "src=\"" + this.preferences.Src + "\" ";
-        xmlString += "layout_gravity=\"" + this.preferences.LayoutGravity + "\" ";
         xmlString += "layout_marginTop=\"" + this.preferences.LayoutMarginTop + "px\" ";
-        xmlString += "</ImageView>\n"
+        xmlString += "padding=\"" + this.preferences.Padding + "px\" ";
+        xmlString += "text=\"" + this.preferences.Text + "\" ";
+        xmlString += "textSize=\"" + this.preferences.TextSize + "px\" ";
+        xmlString += "</TextView>\n"
     }
 }
