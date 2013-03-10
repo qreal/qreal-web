@@ -38,9 +38,9 @@
     <TypeScriptCompile Include="src\designer\widgets\TextView.ts" />
     <TypeScriptCompile Include="src\designer\preferences\TextViewPreferences.ts" />
     <TypeScriptCompile Include="src\emulator\model\attributes\WebViewTag.ts" />
-    <TypeScriptCompile Include="src\designer\Properties.ts" />
-    <Content Include="src\designer\Properties.js">
-      <DependentUpon>Properties.ts</DependentUpon>
+    <TypeScriptCompile Include="src\designer\widgets\WidgetTypes.ts" />
+    <Content Include="src\designer\widgets\WidgetTypes.js">
+      <DependentUpon>WidgetTypes.ts</DependentUpon>
     </Content>
     <Content Include="src\emulator\model\attributes\WebViewTag.js">
       <DependentUpon>WebViewTag.ts</DependentUpon>

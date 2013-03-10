@@ -11,7 +11,7 @@ import mImageViewPreferences = module("designer/preferences/ImageViewPreferences
 import mImageView = module("designer/widgets/ImageView");
 import mButtonPreferences = module("designer/preferences/ButtonPreferences");
 import mButton = module("designer/widgets/Button");
-import mProperties = module("designer/Properties")
+
 
 export class Designer {
     private logger = new mLog.Logger("Designer");
