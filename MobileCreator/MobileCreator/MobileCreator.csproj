@@ -36,6 +36,14 @@
     <Content Include="src\designer\view\WidgetView.js">
       <DependentUpon>WidgetView.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="src\emulator\model\attributes\WebViewTag.ts" />
+    <Content Include="src\emulator\model\attributes\WebViewTag.js">
+      <DependentUpon>WebViewTag.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\emulator\model\ui\WebView.ts" />
+    <Content Include="src\emulator\model\ui\WebView.js">
+      <DependentUpon>WebView.ts</DependentUpon>
+    </Content>
     <Content Include="test_iframe.html" />
     <Content Include="lib\jquery.dynatree.d.ts" />
     <Content Include="lib\jquery.dynatree.js" />
