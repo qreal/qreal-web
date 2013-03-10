@@ -11,28 +11,36 @@ import mImageView = module("emulator/model/ui/ImageView");
 import mWebView = module("emulator/model/ui/WebView");
 import mWebViewTag = module("emulator/model/attributes/WebViewTag");
 
+//ViewModels
 import mEmulatorViewModel = module("emulator/viewmodel/EmulatorViewModel");
+
+//Managers
+import mNavigationManager = module("emulator/model/managers/NavigationManager");
 
 
 export class Emulator {
     private logger = new mLog.Logger("Emulator");
     private emulatorViewModel: mEmulatorViewModel.EmulatorViewModel;
+    private navigationManager: mNavigationManager.NavigationManager;
 
     public static instance = new Emulator();
 
     constructor() {
         this.logger.log("constructor");
         this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
+        this.navigationManager = new mNavigationManager.NavigationManager();
     }
 
     public createView() {
         this.logger.log("createView");
 
         //TODO: stub
+        var page1 = this.showVisitCard();
+        var page2 = this.showTestStub();
 
-        //var content = this.showTestStub();
-        var content = this.showVisitCard();
-        this.emulatorViewModel.showView(content);
+        this.navigationManager.addPage("page1", page1);
+        this.navigationManager.addPage("page2", page2);
+        this.emulatorViewModel.showView(this.navigationManager.getPage("page1"));
         //end stub      
     }
 
