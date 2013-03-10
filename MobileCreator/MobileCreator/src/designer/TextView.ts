@@ -48,5 +48,6 @@ export class TextView extends mElement.Element {
         xmlString += "padding=\"" + this.preferences.Padding + "px\" ";
         xmlString += "text=\"" + this.preferences.Text + "\" ";
         xmlString += "textSize=\"" + this.preferences.TextSize + "px\" />\n";
+        return xmlString;
     }
 }

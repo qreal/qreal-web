@@ -50,5 +50,6 @@ export class Button extends mElement.Element {
         xmlString += "textSize=\"" + this.preferences.TextSize + "px\" ";
         xmlString += "id=\"@+id/" + this.preferences.ButtonId + "\" ";
         xmlString += "onClick=\"" + this.preferences.OnClickHandler + "\" />\n";
+        return xmlString;
     }
 }

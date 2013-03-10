@@ -12,7 +12,7 @@ export class LinearLayout extends mElement.Element {
     set Preferences(preferences: mLinearLayoutPreferences.LinearLayoutPreferences) {
         this.preferences = preferences;
     }
-    private children: mElement.Element[];
+    private children: mElement.Element[] = [];
     get Children() {
         return this.children;
     }
@@ -21,6 +21,7 @@ export class LinearLayout extends mElement.Element {
     }
     public addChild(child: mElement.Element) {
         this.children.push(child);
+        this.DomElement.append(child.DomElement);
     }
     public removeChild(child: mElement.Element) {
         var indexToDel = -1;
@@ -37,11 +38,12 @@ export class LinearLayout extends mElement.Element {
     constructor(preferences: mLinearLayoutPreferences.LinearLayoutPreferences, domElement?: JQuery = $("<div></div>")) {
         super(domElement);
         this.Preferences = preferences;
-        this.applyHeight();
-        this.applyWidth();
+        this.init();
     }
     public init() {
         this.children.map(function (child) { child.init(); });
+        this.applyHeight();
+        this.applyWidth();
     }
     public toXML() {
         var xmlString = "";
@@ -71,5 +73,6 @@ export class LinearLayout extends mElement.Element {
             xmlString += this.children[i].toXML();
         }
         xmlString += "</LinearLayout>\n"
+        return xmlString;
     }
 }

@@ -47,5 +47,6 @@ export class ImageView extends mElement.Element {
         xmlString += "src=\"" + this.preferences.Src + "\" ";
         xmlString += "layout_gravity=\"" + this.preferences.LayoutGravity + "\" ";
         xmlString += "layout_marginTop=\"" + this.preferences.LayoutMarginTop + "px\" />\n";
+        return xmlString;
     }
 }
