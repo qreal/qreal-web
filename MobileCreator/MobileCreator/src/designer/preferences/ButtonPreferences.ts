@@ -1,4 +1,4 @@
-import mElementPreferences = module("designer/ElementPreferences");
+import mElementPreferences = module("designer/preferences/ElementPreferences");
 
 export class ButtonPreferences extends mElementPreferences.ElementPreferences {
     private layoutMarginTop: number;

@@ -17,10 +17,12 @@ export class Control {
         this.$Control = $control;
         this.Tag = tag;
         this.$Control.attr('id', tag.Id);
+        this.setMargins();
+
+        //TODO: test
         this.$Control.css({
             'text-align': tag.Gravity,
-        });
-        this.setMargins();
+        });       
     }
 
     public create() {

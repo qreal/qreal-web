@@ -1,8 +1,8 @@
-/// <reference path="../../lib/jquery.d.ts" />
-/// <reference path="../../lib/jquerymobile.d.ts" />
-import mElement = module("designer/Element");
-import mElementPreferences = module("designer/ElementPreferences")
-import mTextViewPreferences = module("designer/TextViewPreferences")
+/// <reference path="../../../lib/jquery.d.ts" />
+/// <reference path="../../../lib/jquerymobile.d.ts" />
+import mElement = module("designer/widgets/Element");
+import mElementPreferences = module("designer/preferences/ElementPreferences")
+import mTextViewPreferences = module("designer/preferences/TextViewPreferences")
 
 export class TextView extends mElement.Element {
     private preferences: mTextViewPreferences.TextViewPreferences;
@@ -48,5 +48,6 @@ export class TextView extends mElement.Element {
         xmlString += "padding=\"" + this.preferences.Padding + "px\" ";
         xmlString += "text=\"" + this.preferences.Text + "\" ";
         xmlString += "textSize=\"" + this.preferences.TextSize + "px\" />\n";
+        return xmlString;
     }
 }

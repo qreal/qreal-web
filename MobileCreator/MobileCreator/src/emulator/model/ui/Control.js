@@ -6,10 +6,10 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
             this.$Control = $control;
             this.Tag = tag;
             this.$Control.attr('id', tag.Id);
+            this.setMargins();
             this.$Control.css({
                 'text-align': tag.Gravity
             });
-            this.setMargins();
         }
         Object.defineProperty(Control.prototype, "$Control", {
             get: function () {
@@ -37,6 +37,7 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
             if (typeof $element === "undefined") { $element = this.$Control; }
             switch(this.Tag.Width) {
                 case mControlTag.ControlTag.WrapContent:
+                    $element.css("width", "auto");
                     break;
                 case mControlTag.ControlTag.MatchParrent:
                     $element.css("width", "100%");
@@ -47,6 +48,7 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
             }
             switch(this.Tag.Height) {
                 case mControlTag.ControlTag.WrapContent:
+                    $element.css("height", "auto");
                     break;
                 case mControlTag.ControlTag.MatchParrent:
                     $element.css("height", "100%");

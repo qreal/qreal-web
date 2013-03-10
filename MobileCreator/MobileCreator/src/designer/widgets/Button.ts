@@ -1,8 +1,8 @@
-/// <reference path="../../lib/jquery.d.ts" />
-/// <reference path="../../lib/jquerymobile.d.ts" />
-import mElement = module("designer/Element");
-import mElementPreferences = module("designer/ElementPreferences")
-import mButtonPreferences = module("designer/ButtonPreferences")
+/// <reference path="../../../lib/jquery.d.ts" />
+/// <reference path="../../../lib/jquerymobile.d.ts" />
+import mElement = module("designer/widgets/Element");
+import mElementPreferences = module("designer/preferences/ElementPreferences")
+import mButtonPreferences = module("designer/preferences/ButtonPreferences")
 
 export class Button extends mElement.Element {
     private preferences: mButtonPreferences.ButtonPreferences;
@@ -50,5 +50,6 @@ export class Button extends mElement.Element {
         xmlString += "textSize=\"" + this.preferences.TextSize + "px\" ";
         xmlString += "id=\"@+id/" + this.preferences.ButtonId + "\" ";
         xmlString += "onClick=\"" + this.preferences.OnClickHandler + "\" />\n";
+        return xmlString;
     }
 }

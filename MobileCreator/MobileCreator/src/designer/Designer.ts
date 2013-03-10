@@ -2,15 +2,15 @@
 /// <reference path="../../lib/knockout.d.ts" />
 /// <reference path="../../lib/jquerymobile.d.ts" />
 import mLog = module("utils/log/Log");
-import mDesignerModel = module("designer/model/DesignerModel")
-import mSpecialValues = module("designer/model/SpecialValues")
-import mForm = module("designer/model/Form")
-import mWidget = module("designer/model/Widget")
-import mWidgetTypes = module("designer/model/WidgetTypes")
-import mDesignerController = module("designer/controller/DesignerController");
-import mDesignerView = module("designer/view/DesignerView");
-import mLinearLayoutView = module("designer/view/LinearLayoutView");
-import mLinearLayout = module("designer/model/LinearLayout");
+import mElementPreferences = module("designer/preferences/ElementPreferences");
+import mLinearLayoutPreferences = module("designer/preferences/LinearLayoutPreferences");
+import mLinearLayout = module("designer/widgets/LinearLayout");
+import mTextViewPreferences = module("designer/preferences/TextViewPreferences");
+import mTextView = module("designer/widgets/TextView");
+import mImageViewPreferences = module("designer/preferences/ImageViewPreferences");
+import mImageView = module("designer/widgets/ImageView");
+import mButtonPreferences = module("designer/preferences/ButtonPreferences");
+import mButton = module("designer/widgets/Button");
 
 export class Designer {
     private logger = new mLog.Logger("Designer");
@@ -75,19 +75,57 @@ export class Designer {
             alert("lol");
         });
 
-        var model = new mDesignerModel.DesignerModel();
-        var controller = new mDesignerController.DesignerController(model);
-        var view = new mDesignerView.DesignerView(controller, $("#form"));
-        controller.View = view;
-        var defaultForm = new mForm.Form(0, "default-form");
-        model.addForm(defaultForm);
-        var baseLayout = new mLinearLayout.LinearLayout(0, mSpecialValues.SpecialSizeValue.FillParent, mSpecialValues.SpecialSizeValue.FillParent);
-        baseLayout.BackGroundColor = "#ff00ff";
-        baseLayout.Orientation = mSpecialValues.SpecialLinearLayoutOrientation.Vertical;
-        var baseLayoutWidget = new mLinearLayoutView.LinearLayoutView(baseLayout.Id, baseLayout.LayoutWidth, baseLayout.LayoutHeight);
-        baseLayoutWidget.BackGroundColor = baseLayout.BackGroundColor;
-        baseLayoutWidget.Orientation = baseLayout.Orientation;
-        view.BaseLayout = baseLayoutWidget;
-        view.draw();
-    }
+        var form = $("#form");
+        var layoputPreferences = new mLinearLayoutPreferences.LinearLayoutPreferences();
+        layoputPreferences.Orientation = mLinearLayoutPreferences.LinearLayoutPreferences.Vertical;
+        layoputPreferences.Background = "#ffffff";
+        layoputPreferences.Height = mElementPreferences.ElementPreferences.FillParent;
+        layoputPreferences.Id = 0;
+        layoputPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
+        var layout = new mLinearLayout.LinearLayout(layoputPreferences);
+        var imageViewPreferences = new mImageViewPreferences.ImageViewPreferences();
+        imageViewPreferences.Height = mElementPreferences.ElementPreferences.WrapContent;
+        imageViewPreferences.Id = 1;
+        imageViewPreferences.LayoutGravity = "center_horizontal";
+        imageViewPreferences.LayoutMarginTop = 10;
+        imageViewPreferences.Src = "#0000ff";
+        imageViewPreferences.Width = mElementPreferences.ElementPreferences.WrapContent;
+        imageViewPreferences.ImageURL = "https://dl.dropbox.com/u/10802739/lt_logo.jpg";
+        var imageView = new mImageView.ImageView(imageViewPreferences);
+        layout.addChild(imageView);
+        var textViewPreferences = new mTextViewPreferences.TextViewPreferences();
+        textViewPreferences.Height = mElementPreferences.ElementPreferences.WrapContent;
+        textViewPreferences.Id = 2;
+        textViewPreferences.LayoutMarginTop = 10;
+        textViewPreferences.Padding = 20;
+        textViewPreferences.Text = "TROLOLO!";
+        textViewPreferences.TextSize = 20;
+        textViewPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
+        var textView = new mTextView.TextView(textViewPreferences);
+        layout.addChild(textView);
+        var buttonPreferences = new mButtonPreferences.ButtonPreferences();
+        buttonPreferences.ButtonId = "buttoned";
+        buttonPreferences.Height = mElementPreferences.ElementPreferences.WrapContent;
+        buttonPreferences.Id = 3;
+        buttonPreferences.LayoutMarginTop = 20;
+        buttonPreferences.OnClickHandler = "onFullInfoClick";
+        buttonPreferences.Text = "Full info";
+        buttonPreferences.TextSize = 20;
+        buttonPreferences.Width = mElementPreferences.ElementPreferences.WrapContent;
+        var button = new mButton.Button(buttonPreferences);
+        layout.addChild(button);
+        form.append(layout.DomElement);
+        layout.init();
+        var xml = layout.toXML();
+        $.ajax("default.htm", {
+            type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
+                var servResp = eval(data);
+                if (!servResp.success) {
+                    alert("Error sending XML: " + servResp.msg);
+                }
+                else {
+                    alert("Fuck yeah!");
+                }
+            }
+    });
 }

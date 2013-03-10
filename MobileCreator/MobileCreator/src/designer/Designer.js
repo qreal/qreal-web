@@ -1,21 +1,23 @@
-define(["require", "exports", "utils/log/Log", "designer/model/DesignerModel", "designer/model/SpecialValues", "designer/model/Form", "designer/controller/DesignerController", "designer/view/DesignerView", "designer/view/LinearLayoutView", "designer/model/LinearLayout"], function(require, exports, __mLog__, __mDesignerModel__, __mSpecialValues__, __mForm__, __mDesignerController__, __mDesignerView__, __mLinearLayoutView__, __mLinearLayout__) {
+define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPreferences", "designer/preferences/LinearLayoutPreferences", "designer/widgets/LinearLayout", "designer/preferences/TextViewPreferences", "designer/widgets/TextView", "designer/preferences/ImageViewPreferences", "designer/widgets/ImageView", "designer/preferences/ButtonPreferences", "designer/widgets/Button"], function(require, exports, __mLog__, __mElementPreferences__, __mLinearLayoutPreferences__, __mLinearLayout__, __mTextViewPreferences__, __mTextView__, __mImageViewPreferences__, __mImageView__, __mButtonPreferences__, __mButton__) {
     var mLog = __mLog__;
 
-    var mDesignerModel = __mDesignerModel__;
+    var mElementPreferences = __mElementPreferences__;
 
-    var mSpecialValues = __mSpecialValues__;
-
-    var mForm = __mForm__;
-
-    
-    
-    var mDesignerController = __mDesignerController__;
-
-    var mDesignerView = __mDesignerView__;
-
-    var mLinearLayoutView = __mLinearLayoutView__;
+    var mLinearLayoutPreferences = __mLinearLayoutPreferences__;
 
     var mLinearLayout = __mLinearLayout__;
+
+    var mTextViewPreferences = __mTextViewPreferences__;
+
+    var mTextView = __mTextView__;
+
+    var mImageViewPreferences = __mImageViewPreferences__;
+
+    var mImageView = __mImageView__;
+
+    var mButtonPreferences = __mButtonPreferences__;
+
+    var mButton = __mButton__;
 
     var Designer = (function () {
         function Designer() {
@@ -68,20 +70,62 @@ define(["require", "exports", "utils/log/Log", "designer/model/DesignerModel", "
             $(buttonElement).click(function () {
                 alert("lol");
             });
-            var model = new mDesignerModel.DesignerModel();
-            var controller = new mDesignerController.DesignerController(model);
-            var view = new mDesignerView.DesignerView(controller, $("#form"));
-            controller.View = view;
-            var defaultForm = new mForm.Form(0, "default-form");
-            model.addForm(defaultForm);
-            var baseLayout = new mLinearLayout.LinearLayout(0, mSpecialValues.SpecialSizeValue.FillParent, mSpecialValues.SpecialSizeValue.FillParent);
-            baseLayout.BackGroundColor = "#ff00ff";
-            baseLayout.Orientation = mSpecialValues.SpecialLinearLayoutOrientation.Vertical;
-            var baseLayoutWidget = new mLinearLayoutView.LinearLayoutView(baseLayout.Id, baseLayout.LayoutWidth, baseLayout.LayoutHeight);
-            baseLayoutWidget.BackGroundColor = baseLayout.BackGroundColor;
-            baseLayoutWidget.Orientation = baseLayout.Orientation;
-            view.BaseLayout = baseLayoutWidget;
-            view.draw();
+            var form = $("#form");
+            var layoputPreferences = new mLinearLayoutPreferences.LinearLayoutPreferences();
+            layoputPreferences.Orientation = mLinearLayoutPreferences.LinearLayoutPreferences.Vertical;
+            layoputPreferences.Background = "#ffffff";
+            layoputPreferences.Height = mElementPreferences.ElementPreferences.FillParent;
+            layoputPreferences.Id = 0;
+            layoputPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
+            var layout = new mLinearLayout.LinearLayout(layoputPreferences);
+            var imageViewPreferences = new mImageViewPreferences.ImageViewPreferences();
+            imageViewPreferences.Height = mElementPreferences.ElementPreferences.WrapContent;
+            imageViewPreferences.Id = 1;
+            imageViewPreferences.LayoutGravity = "center_horizontal";
+            imageViewPreferences.LayoutMarginTop = 10;
+            imageViewPreferences.Src = "#0000ff";
+            imageViewPreferences.Width = mElementPreferences.ElementPreferences.WrapContent;
+            imageViewPreferences.ImageURL = "https://dl.dropbox.com/u/10802739/lt_logo.jpg";
+            var imageView = new mImageView.ImageView(imageViewPreferences);
+            layout.addChild(imageView);
+            var textViewPreferences = new mTextViewPreferences.TextViewPreferences();
+            textViewPreferences.Height = mElementPreferences.ElementPreferences.WrapContent;
+            textViewPreferences.Id = 2;
+            textViewPreferences.LayoutMarginTop = 10;
+            textViewPreferences.Padding = 20;
+            textViewPreferences.Text = "TROLOLO!";
+            textViewPreferences.TextSize = 20;
+            textViewPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
+            var textView = new mTextView.TextView(textViewPreferences);
+            layout.addChild(textView);
+            var buttonPreferences = new mButtonPreferences.ButtonPreferences();
+            buttonPreferences.ButtonId = "buttoned";
+            buttonPreferences.Height = mElementPreferences.ElementPreferences.WrapContent;
+            buttonPreferences.Id = 3;
+            buttonPreferences.LayoutMarginTop = 20;
+            buttonPreferences.OnClickHandler = "onFullInfoClick";
+            buttonPreferences.Text = "Full info";
+            buttonPreferences.TextSize = 20;
+            buttonPreferences.Width = mElementPreferences.ElementPreferences.WrapContent;
+            var button = new mButton.Button(buttonPreferences);
+            layout.addChild(button);
+            form.append(layout.DomElement);
+            layout.init();
+            var xml = layout.toXML();
+            $.ajax("default.htm", {
+                type: "POST",
+                contentType: "text/XML",
+                processData: false,
+                data: xml,
+                success: function (data) {
+                    var servResp = eval(data);
+                    if(!servResp.success) {
+                        alert("Error sending XML: " + servResp.msg);
+                    } else {
+                        alert("Fuck yeah!");
+                    }
+                }
+            });
         };
         return Designer;
     })();
