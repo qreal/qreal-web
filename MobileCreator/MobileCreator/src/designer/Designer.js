@@ -19,6 +19,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
 
     var mButton = __mButton__;
 
+    
     var Designer = (function () {
         function Designer() {
             this.logger = new mLog.Logger("Designer");
@@ -62,6 +63,15 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             $(imageViewElement).text("ImageView");
             $(imageViewElementField).append($(imageViewElement));
             $(elementsPallete).append($(imageViewElementField));
+            var propertiesEditorHeader = document.createElement("li");
+            $(propertiesEditorHeader).attr("data-role", "list-divider");
+            $(propertiesEditorHeader).text("Properties");
+            $(designerMenuDiv).append($(propertiesEditorHeader));
+            var propertiesEditorContainer = document.createElement("li");
+            $(designerMenuDiv).append($(propertiesEditorContainer));
+            var propertiesEditorDiv = document.createElement("div");
+            propertiesEditorDiv.id = "propertiesEditor";
+            $(propertiesEditorContainer).append($(propertiesEditorDiv));
             $(parentDiv).prepend($(designerMenuDiv));
             $(designerMenuDiv).listview();
             $(buttonElement).button();

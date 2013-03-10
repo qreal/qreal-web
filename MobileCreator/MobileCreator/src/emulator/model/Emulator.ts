@@ -16,12 +16,14 @@ import mEmulatorViewModel = module("emulator/viewmodel/EmulatorViewModel");
 
 //Managers
 import mNavigationManager = module("emulator/model/managers/NavigationManager");
+import mXmlManager = module("emulator/model/managers/XmlManager");
 
 
 export class Emulator {
     private logger = new mLog.Logger("Emulator");
     private emulatorViewModel: mEmulatorViewModel.EmulatorViewModel;
     private navigationManager: mNavigationManager.NavigationManager;
+    private xmlManager: mXmlManager.XmlManager;
 
     public static instance = new Emulator();
 
@@ -29,6 +31,7 @@ export class Emulator {
         this.logger.log("constructor");
         this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
         this.navigationManager = new mNavigationManager.NavigationManager();
+        this.xmlManager = new mXmlManager.XmlManager();
     }
 
     public createView() {
@@ -41,6 +44,9 @@ export class Emulator {
         this.navigationManager.addPage("page1", page1);
         this.navigationManager.addPage("page2", page2);
         this.emulatorViewModel.showView(this.navigationManager.getPage("page1"));
+
+
+        this.xmlManager.parsePage();
         //end stub      
     }
 

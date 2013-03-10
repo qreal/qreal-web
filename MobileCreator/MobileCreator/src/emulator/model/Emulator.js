@@ -1,4 +1,4 @@
-define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emulator/model/ui/TextView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ImageViewTag", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/attributes/WebViewTag", "emulator/viewmodel/EmulatorViewModel", "emulator/model/managers/NavigationManager"], function(require, exports, __mLog__, __mButton__, __mTextView__, __mLinearLayout__, __mButtonTag__, __mLinearLayoutTag__, __mTextViewTag__, __mImageViewTag__, __mImageView__, __mWebView__, __mWebViewTag__, __mEmulatorViewModel__, __mNavigationManager__) {
+define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emulator/model/ui/TextView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ImageViewTag", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/attributes/WebViewTag", "emulator/viewmodel/EmulatorViewModel", "emulator/model/managers/NavigationManager", "emulator/model/managers/XmlManager"], function(require, exports, __mLog__, __mButton__, __mTextView__, __mLinearLayout__, __mButtonTag__, __mLinearLayoutTag__, __mTextViewTag__, __mImageViewTag__, __mImageView__, __mWebView__, __mWebViewTag__, __mEmulatorViewModel__, __mNavigationManager__, __mXmlManager__) {
     var mLog = __mLog__;
 
     var mButton = __mButton__;
@@ -25,12 +25,15 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
 
     var mNavigationManager = __mNavigationManager__;
 
+    var mXmlManager = __mXmlManager__;
+
     var Emulator = (function () {
         function Emulator() {
             this.logger = new mLog.Logger("Emulator");
             this.logger.log("constructor");
             this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
             this.navigationManager = new mNavigationManager.NavigationManager();
+            this.xmlManager = new mXmlManager.XmlManager();
         }
         Emulator.instance = new Emulator();
         Emulator.prototype.createView = function () {
@@ -40,6 +43,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             this.navigationManager.addPage("page1", page1);
             this.navigationManager.addPage("page2", page2);
             this.emulatorViewModel.showView(this.navigationManager.getPage("page1"));
+            this.xmlManager.parsePage();
         };
         Emulator.prototype.showTestStub = function () {
             var layoutTag = new mLinearLayoutTag.LinearLayoutTag();
