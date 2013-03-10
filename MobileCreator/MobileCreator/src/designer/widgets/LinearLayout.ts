@@ -1,8 +1,8 @@
-/// <reference path="../../lib/jquery.d.ts" />
-/// <reference path="../../lib/jquerymobile.d.ts" />
-import mElement = module("designer/Element");
-import mElementPreferences = module("designer/ElementPreferences")
-import mLinearLayoutPreferences = module("designer/LinearLayoutPreferences")
+/// <reference path="../../../lib/jquery.d.ts" />
+/// <reference path="../../../lib/jquerymobile.d.ts" />
+import mElement = module("designer/widgets/Element");
+import mElementPreferences = module("designer/preferences/ElementPreferences")
+import mLinearLayoutPreferences = module("designer/preferences/LinearLayoutPreferences")
 
 export class LinearLayout extends mElement.Element {
     private preferences: mLinearLayoutPreferences.LinearLayoutPreferences;

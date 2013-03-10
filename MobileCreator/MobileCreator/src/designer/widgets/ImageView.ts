@@ -1,8 +1,8 @@
-/// <reference path="../../lib/jquery.d.ts" />
-/// <reference path="../../lib/jquerymobile.d.ts" />
-import mElement = module("designer/Element");
-import mElementPreferences = module("designer/ElementPreferences")
-import mImageViewPreferences = module("designer/ImageViewPreferences")
+/// <reference path="../../../lib/jquery.d.ts" />
+/// <reference path="../../../lib/jquerymobile.d.ts" />
+import mElement = module("designer/widgets/Element");
+import mElementPreferences = module("designer/preferences/ElementPreferences")
+import mImageViewPreferences = module("designer/preferences/ImageViewPreferences")
 
 export class ImageView extends mElement.Element {
     private preferences: mImageViewPreferences.ImageViewPreferences;

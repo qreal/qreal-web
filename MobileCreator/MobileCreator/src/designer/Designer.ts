@@ -2,15 +2,15 @@
 /// <reference path="../../lib/knockout.d.ts" />
 /// <reference path="../../lib/jquerymobile.d.ts" />
 import mLog = module("utils/log/Log");
-import mElementPreferences = module("designer/ElementPreferences");
-import mLinearLayoutPreferences = module("designer/LinearLayoutPreferences");
-import mLinearLayout = module("designer/LinearLayout");
-import mTextViewPreferences = module("designer/TextViewPreferences");
-import mTextView = module("designer/TextView");
-import mImageViewPreferences = module("designer/ImageViewPreferences");
-import mImageView = module("designer/ImageView");
-import mButtonPreferences = module("designer/ButtonPreferences");
-import mButton = module("designer/Button");
+import mElementPreferences = module("designer/preferences/ElementPreferences");
+import mLinearLayoutPreferences = module("designer/preferences/LinearLayoutPreferences");
+import mLinearLayout = module("designer/widgets/LinearLayout");
+import mTextViewPreferences = module("designer/preferences/TextViewPreferences");
+import mTextView = module("designer/widgets/TextView");
+import mImageViewPreferences = module("designer/preferences/ImageViewPreferences");
+import mImageView = module("designer/widgets/ImageView");
+import mButtonPreferences = module("designer/preferences/ButtonPreferences");
+import mButton = module("designer/widgets/Button");
 
 export class Designer {
     private logger = new mLog.Logger("Designer");

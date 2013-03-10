@@ -1,6 +1,6 @@
-/// <reference path="../../lib/jquery.d.ts" />
-/// <reference path="../../lib/jquerymobile.d.ts" />
-import mElementPreferences = module("designer/ElementPreferences")
+/// <reference path="../../../lib/jquery.d.ts" />
+/// <reference path="../../../lib/jquerymobile.d.ts" />
+import mElementPreferences = module("designer/preferences/ElementPreferences")
 
 export class Element {
     private domElement: JQuery;
