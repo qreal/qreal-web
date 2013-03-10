@@ -13,7 +13,9 @@ export class PropertiesEditor {
     constructor(domElement: JQuery);
     constructor(domElement?: JQuery = $("<div></div>")) {
         this.domElement = domElement;
+        this.init();
     }
     public init() {
+        var header = $("<div data-role='header'></div>");   
     }
 }

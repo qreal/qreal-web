@@ -11,6 +11,7 @@ import mImageViewPreferences = module("designer/preferences/ImageViewPreferences
 import mImageView = module("designer/widgets/ImageView");
 import mButtonPreferences = module("designer/preferences/ButtonPreferences");
 import mButton = module("designer/widgets/Button");
+import mProperties = module("designer/Properties")
 
 export class Designer {
     private logger = new mLog.Logger("Designer");
@@ -66,7 +67,21 @@ export class Designer {
         $(imageViewElementField).append($(imageViewElement));
         $(elementsPallete).append($(imageViewElementField));
 
+        var propertiesEditorHeader = document.createElement("li");
+        $(propertiesEditorHeader).attr("data-role", "list-divider");
+        $(propertiesEditorHeader).text("Properties");
+        $(designerMenuDiv).append($(propertiesEditorHeader));
+
+        var propertiesEditorContainer = document.createElement("li");
+        $(designerMenuDiv).append($(propertiesEditorContainer));
+
+        var propertiesEditorDiv = document.createElement("div");
+        propertiesEditorDiv.id = "propertiesEditor";
+        $(propertiesEditorContainer).append($(propertiesEditorDiv));
+
         $(parentDiv).prepend($(designerMenuDiv));
+
+
         $(designerMenuDiv).listview();
         $(buttonElement).button();
         $(textViewElement).button();
@@ -120,8 +135,10 @@ export class Designer {
             layout.addChild(imageView);
             imageView.init();
         });
-             
+
+                     
         form.append(layout.DomElement);
+       
         
         var xml = layout.toXML();
         $.ajax("default.htm", {
