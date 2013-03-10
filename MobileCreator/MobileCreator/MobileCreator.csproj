@@ -27,7 +27,6 @@
     <Content Include="css\jqueryui.css" />
     <Content Include="css\jquerymobile.css" />
     <Content Include="default.htm" />
-    <Content Include="margin_bug.html" />
     <TypeScriptCompile Include="src\designer\preferences\ElementPreferences.ts" />
     <TypeScriptCompile Include="src\designer\preferences\ButtonPreferences.ts" />
     <TypeScriptCompile Include="src\designer\widgets\Button.ts" />
@@ -43,10 +42,13 @@
       <DependentUpon>WebViewTag.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\emulator\model\ui\WebView.ts" />
+    <TypeScriptCompile Include="src\emulator\model\managers\NavigationManager.ts" />
+    <Content Include="src\emulator\model\managers\NavigationManager.js">
+      <DependentUpon>NavigationManager.ts</DependentUpon>
+    </Content>
     <Content Include="src\emulator\model\ui\WebView.js">
       <DependentUpon>WebView.ts</DependentUpon>
     </Content>
-    <Content Include="test_iframe.html" />
     <Content Include="lib\jquery.dynatree.d.ts" />
     <Content Include="lib\jquery.dynatree.js" />
     <Content Include="lib\jquery.js" />
@@ -129,13 +131,16 @@
     <Content Include="src\emulator\model\ui\TextView.js">
       <DependentUpon>TextView.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="src\emulator\viewmodel\EmulatorViewModel.ts" />
+    <Content Include="src\emulator\viewmodel\EmulatorViewModel.js">
+      <DependentUpon>EmulatorViewModel.ts</DependentUpon>
+    </Content>
     <Content Include="src\utils\log\Log.js">
       <DependentUpon>Log.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\utils\log\Log.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="src\emulator\viewmodel\" />
     <Folder Include="src\emulator\view\" />
   </ItemGroup>
   <ItemGroup>

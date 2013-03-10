@@ -1,4 +1,4 @@
-define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emulator/model/ui/TextView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ImageViewTag", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/attributes/WebViewTag"], function(require, exports, __mLog__, __mButton__, __mTextView__, __mLinearLayout__, __mButtonTag__, __mLinearLayoutTag__, __mTextViewTag__, __mImageViewTag__, __mImageView__, __mWebView__, __mWebViewTag__) {
+define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emulator/model/ui/TextView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ImageViewTag", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/attributes/WebViewTag", "emulator/viewmodel/EmulatorViewModel"], function(require, exports, __mLog__, __mButton__, __mTextView__, __mLinearLayout__, __mButtonTag__, __mLinearLayoutTag__, __mTextViewTag__, __mImageViewTag__, __mImageView__, __mWebView__, __mWebViewTag__, __mEmulatorViewModel__) {
     var mLog = __mLog__;
 
     var mButton = __mButton__;
@@ -21,16 +21,19 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
 
     var mWebViewTag = __mWebViewTag__;
 
+    var mEmulatorViewModel = __mEmulatorViewModel__;
+
     var Emulator = (function () {
         function Emulator() {
             this.logger = new mLog.Logger("Emulator");
+            this.logger.log("constructor");
+            this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
         }
         Emulator.instance = new Emulator();
         Emulator.prototype.createView = function () {
             this.logger.log("createView");
-            var $screen = $("#screen");
-            $screen.children().remove();
-            this.showVisitCard();
+            var content = this.showVisitCard();
+            this.emulatorViewModel.showView(content);
         };
         Emulator.prototype.showTestStub = function () {
             var layoutTag = new mLinearLayoutTag.LinearLayoutTag();
@@ -47,10 +50,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             webViewTag.Height = -1;
             var webView = new mWebView.WebView(webViewTag);
             layout.addChild(webView);
-            var $screen = $("#screen");
-            var $layout = layout.$Control;
-            $screen.append($layout);
-            layout.create();
+            return layout;
         };
         Emulator.prototype.showVisitCard = function () {
             var layoutTag = new mLinearLayoutTag.LinearLayoutTag();
@@ -89,10 +89,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             innerLayout.addChild(label1);
             innerLayout.addChild(button);
             layout.addChild(innerLayout);
-            var $screen = $("#screen");
-            var $layout = layout.$Control;
-            $screen.append($layout);
-            layout.create();
+            return layout;
         };
         return Emulator;
     })();

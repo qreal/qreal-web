@@ -11,25 +11,29 @@ import mImageView = module("emulator/model/ui/ImageView");
 import mWebView = module("emulator/model/ui/WebView");
 import mWebViewTag = module("emulator/model/attributes/WebViewTag");
 
+import mEmulatorViewModel = module("emulator/viewmodel/EmulatorViewModel");
+
 
 export class Emulator {
     private logger = new mLog.Logger("Emulator");
+    private emulatorViewModel: mEmulatorViewModel.EmulatorViewModel;
 
     public static instance = new Emulator();
 
     constructor() {
+        this.logger.log("constructor");
+        this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
     }
 
     public createView() {
         this.logger.log("createView");
 
         //TODO: stub
-        var $screen = $("#screen");
-        $screen.children().remove();
-        this.showVisitCard();
-        //this.showTestStub();
-        //end stub
-      
+
+        //var content = this.showTestStub();
+        var content = this.showVisitCard();
+        this.emulatorViewModel.showView(content);
+        //end stub      
     }
 
     private showTestStub() {
@@ -50,11 +54,7 @@ export class Emulator {
         var webView = new mWebView.WebView(webViewTag);
 
         layout.addChild(webView);
-        var $screen = $("#screen");
-        var $layout = layout.$Control;
-        $screen.append($layout);
-        layout.create();
-
+        return layout;
         //end stub
     }
 
@@ -103,9 +103,6 @@ export class Emulator {
         innerLayout.addChild(button);
         layout.addChild(innerLayout);
 
-        var $screen = $("#screen");
-        var $layout = layout.$Control;
-        $screen.append($layout);
-        layout.create();
+        return layout;
     }
 }
