@@ -38,15 +38,15 @@
     <TypeScriptCompile Include="src\designer\widgets\TextView.ts" />
     <TypeScriptCompile Include="src\designer\preferences\TextViewPreferences.ts" />
     <TypeScriptCompile Include="src\emulator\model\attributes\WebViewTag.ts" />
-    <TypeScriptCompile Include="src\designer\Properties.ts" />
+    <TypeScriptCompile Include="src\designer\widgets\WidgetTypes.ts" />
+    <Content Include="src\designer\widgets\WidgetTypes.js">
+      <DependentUpon>WidgetTypes.ts</DependentUpon>
+    </Content>
+    <Content Include="res\Transition.xml" />
     <Content Include="res\info_activity.xml" />
     <Content Include="res\main.xml" />
     <Content Include="res\Transition.xml" />
-    <Content Include="src\designer\Properties.js">
-      <DependentUpon>Properties.ts</DependentUpon>
-    </Content>
-    <Content Include="src\emulator\model\attributes\WebViewTag.js">
-      <DependentUpon>WebViewTag.ts</DependentUpon>
+    <Content Include="src\emulator\model\attributes\WebViewTag.js">      <DependentUpon>WebViewTag.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\emulator\model\ui\WebView.ts" />
     <TypeScriptCompile Include="src\emulator\model\managers\NavigationManager.ts" />

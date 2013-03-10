@@ -19,7 +19,6 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
 
     var mButton = __mButton__;
 
-    
     var Designer = (function () {
         function Designer() {
             this.logger = new mLog.Logger("Designer");
