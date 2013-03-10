@@ -26,8 +26,8 @@ export class Emulator {
         //TODO: stub
         var $screen = $("#screen");
         $screen.children().remove();
-        //this.showVisitCard();
-        this.showTestStub();
+        this.showVisitCard();
+        //this.showTestStub();
         //end stub
       
     }
@@ -44,9 +44,9 @@ export class Emulator {
 
         var webViewTag = new mWebViewTag.WebViewTag();
         webViewTag.Id = "webView";
-        webViewTag.Url = "https://www.google.com";
-        layoutTag.Width = -1;
-        layoutTag.Height = -1;
+        webViewTag.Url = "http://www.lanit-tercom.ru/";
+        webViewTag.Width = -1;
+        webViewTag.Height = -1;
         var webView = new mWebView.WebView(webViewTag);
 
         layout.addChild(webView);

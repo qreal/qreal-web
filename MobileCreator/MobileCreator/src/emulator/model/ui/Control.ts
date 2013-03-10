@@ -31,6 +31,7 @@ export class Control {
     public setDimensions($element?: JQuery = this.$Control) {
         switch (this.Tag.Width) {
             case mControlTag.ControlTag.WrapContent:
+                $element.css("width", "auto");
                 break;
             case mControlTag.ControlTag.MatchParrent:
                 $element.css("width", "100%");
@@ -41,6 +42,7 @@ export class Control {
         }
         switch (this.Tag.Height) {
             case mControlTag.ControlTag.WrapContent:
+                $element.css("height", "auto");
                 break;
             case mControlTag.ControlTag.MatchParrent:
                 $element.css("height", "100%");

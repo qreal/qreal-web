@@ -71,6 +71,9 @@ export class Designer {
         $(buttonElement).button();
         $(textViewElement).button();
         $(imageViewElement).button();
+        $(buttonElement).click(function () {
+            alert("lol");
+        });
 
         var model = new mDesignerModel.DesignerModel();
         var controller = new mDesignerController.DesignerController(model);

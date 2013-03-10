@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns="http://schemas.android.com/apk/res/android"
+    orientation="vertical"
+    layout_width="fill_parent"
+    layout_height="fill_parent"
+    gravity="center" >
+    
+    <Button
+        id="@+id/toMap"
+        layout_width="wrap_content"
+        layout_height="wrap_content"
+        text="@string/Map"
+        textSize="20sp"
+        onClick="onMapClick"
+        layout_gravity="center" />
+
+    <Button
+        id="@+id/toList"
+        layout_width="wrap_content"
+        layout_height="wrap_content"
+        text="@string/Orders"
+        textSize="20sp"
+        onClick="onOrdersClick"
+        layout_gravity="center" />
+    
+</LinearLayout>
+
+

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns="http://schemas.android.com/apk/res/android"
+    orientation="vertical"
+    layout_width="fill_parent"
+    layout_height="fill_parent"
+    gravity="center" >
+
+    <TextView
+        layout_width="fill_parent"
+        layout_height="wrap_content"
+        text="@string/List"
+        textSize="40sp"
+        layout_gravity="center" />
+    
+    <Button
+        id="@+id/backFromOrders"
+        layout_width="wrap_content"
+        layout_height="wrap_content"
+        text="@string/Back"
+        textSize="20sp"
+        onClick="onBackClick"
+        layout_gravity="center" />
+    
+</LinearLayout>
+
+

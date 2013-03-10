@@ -65,6 +65,9 @@ define(["require", "exports", "utils/log/Log", "designer/model/DesignerModel", "
             $(buttonElement).button();
             $(textViewElement).button();
             $(imageViewElement).button();
+            $(buttonElement).click(function () {
+                alert("lol");
+            });
             var model = new mDesignerModel.DesignerModel();
             var controller = new mDesignerController.DesignerController(model);
             var view = new mDesignerView.DesignerView(controller, $("#form"));

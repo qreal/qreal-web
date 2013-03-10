@@ -30,7 +30,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             this.logger.log("createView");
             var $screen = $("#screen");
             $screen.children().remove();
-            this.showTestStub();
+            this.showVisitCard();
         };
         Emulator.prototype.showTestStub = function () {
             var layoutTag = new mLinearLayoutTag.LinearLayoutTag();
@@ -42,9 +42,9 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             var layout = new mLinearLayout.LinearLayout(layoutTag);
             var webViewTag = new mWebViewTag.WebViewTag();
             webViewTag.Id = "webView";
-            webViewTag.Url = "https://www.google.com";
-            layoutTag.Width = -1;
-            layoutTag.Height = -1;
+            webViewTag.Url = "http://www.lanit-tercom.ru/";
+            webViewTag.Width = -1;
+            webViewTag.Height = -1;
             var webView = new mWebView.WebView(webViewTag);
             layout.addChild(webView);
             var $screen = $("#screen");

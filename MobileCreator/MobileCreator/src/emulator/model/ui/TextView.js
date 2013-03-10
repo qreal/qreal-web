@@ -10,14 +10,13 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
     var TextView = (function (_super) {
         __extends(TextView, _super);
         function TextView(tag, $control) {
-            if (typeof $control === "undefined") { $control = $("<div></div>"); }
+            if (typeof $control === "undefined") { $control = $("<label></label>"); }
                 _super.call(this, tag, $control);
-            var $label = $("<label></label>");
-            $label.text(tag.Text);
+            $control.text(tag.Text);
             if(tag.TextSize > 0) {
-                $label.css('font-size', tag.TextSize);
+                $control.css('font-size', tag.TextSize);
             }
-            this.$Control.append($label);
+            this.setDimensions();
         }
         TextView.prototype.create = function () {
             _super.prototype.create.call(this);
