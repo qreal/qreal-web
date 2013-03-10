@@ -41,10 +41,18 @@ export class Button extends mElement.Element {
         editorLayer.append(idLabel);
         editorLayer.append(idField);
         idField.change(function () {
-            alert(idField.val());
             _this.preferences.ButtonId = idField.val();
         });
         idField.textinput();
+        var textLabel = $("<label for='text-text' > Text: </label>");
+        var textField = $("<input type = 'text' name = 'text-text' id = 'text-text' value = '" + this.Preferences.Text + "' >");
+        editorLayer.append(textLabel);
+        editorLayer.append(textField);
+        textField.change(function () {
+            _this.preferences.Text = textField.val();
+            _this.init();
+        });
+        textField.textinput();
     }
 
     public toXML() {
