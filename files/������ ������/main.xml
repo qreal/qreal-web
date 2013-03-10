@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns="http://schemas.android.com/apk/res/android"
+        orientation="vertical"
+        layout_width="fill_parent"
+        layout_height="fill_parent"
+        background="#ffffff">
+
+    <ImageView
+            layout_width="wrap_content"
+            layout_height="wrap_content"
+            src="#0000ff "
+            layout_gravity="center_horizontal"
+            layout_marginTop="10dp"/>
+
+    <TextView
+            layout_width="fill_parent"
+            layout_height="wrap_content"
+            layout_marginTop="10dp"
+            padding="20dp"
+           text=" Information "
+           textSize="20dp"/>
+
+    <Button
+            layout_width="wrap_content"
+           layout_height="wrap_content"
+            text  = "full_information "
+            textSize="20dp"
+            layout_marginTop="20dp"
+            onClick="onFullInfoClick"
+            ayout_gravity="center_horizontal"/>
+</LinearLayout>
+
+
