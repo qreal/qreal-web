@@ -47,7 +47,6 @@ export class TextView extends mElement.Element {
         xmlString += "layout_marginTop=\"" + this.preferences.LayoutMarginTop + "px\" ";
         xmlString += "padding=\"" + this.preferences.Padding + "px\" ";
         xmlString += "text=\"" + this.preferences.Text + "\" ";
-        xmlString += "textSize=\"" + this.preferences.TextSize + "px\" ";
-        xmlString += "</TextView>\n"
+        xmlString += "textSize=\"" + this.preferences.TextSize + "px\" />\n";
     }
 }

@@ -2,34 +2,35 @@
 /// <reference path="../../lib/jquerymobile.d.ts" />
 import mElement = module("designer/Element");
 import mElementPreferences = module("designer/ElementPreferences")
-import mImageViewPreferences = module("designer/ImageViewPreferences")
+import mButtonPreferences = module("designer/ButtonPreferences")
 
-export class ImageView extends mElement.Element {
-    private preferences: mImageViewPreferences.ImageViewPreferences;
+export class Button extends mElement.Element {
+    private preferences: mButtonPreferences.ButtonPreferences;
     get Preferences() {
         return this.preferences;
     }
-    set Preferences(preferences: mImageViewPreferences.ImageViewPreferences) {
+    set Preferences(preferences: mButtonPreferences.ButtonPreferences) {
         this.preferences = preferences;
     }
-    constructor(preferences: mImageViewPreferences.ImageViewPreferences);
-    constructor(preferences: mImageViewPreferences.ImageViewPreferences, domElement: JQuery);
-    constructor(preferences: mImageViewPreferences.ImageViewPreferences, domElement?: JQuery = $("<div></div>")) {
+    constructor(preferences: mButtonPreferences.ButtonPreferences);
+    constructor(preferences: mButtonPreferences.ButtonPreferences, domElement: JQuery);
+    constructor(preferences: mButtonPreferences.ButtonPreferences, domElement?: JQuery = $("<div></div>")) {
         super(domElement);
         this.Preferences = preferences;
         this.init();
     }
     public init() {
         this.DomElement.empty();
-        var image = $("<img></img>");
-        image.attr('src', this.preferences.ImageURL);
-        this.DomElement.append(image);
+        var button = $("<a data-role='button'></a>");
+        button.text(this.preferences.Text);
+        this.DomElement.append(button);
+        this.DomElement.trigger('create');
         this.applyHeight();
         this.applyWidth();
     }
     public toXML() {
         var xmlString = "";
-        xmlString += "<ImageView \n";
+        xmlString += "<Button \n";
         if (this.preferences.Width == mElementPreferences.ElementPreferences.FillParent) {
             xmlString += "layout_width=\"fill_parent\" ";
         } else if (this.preferences.Width == mElementPreferences.ElementPreferences.WrapContent) {
@@ -44,8 +45,10 @@ export class ImageView extends mElement.Element {
         } else {
             xmlString += "layout_height=\"" + this.preferences.Width + "px\" ";
         }
-        xmlString += "src=\"" + this.preferences.Src + "\" ";
-        xmlString += "layout_gravity=\"" + this.preferences.LayoutGravity + "\" ";
-        xmlString += "layout_marginTop=\"" + this.preferences.LayoutMarginTop + "px\" />\n";
+        xmlString += "layout_marginTop=\"" + this.preferences.LayoutMarginTop + "px\" ";
+        xmlString += "text=\"" + this.preferences.Text + "\" ";
+        xmlString += "textSize=\"" + this.preferences.TextSize + "px\" ";
+        xmlString += "id=\"@+id/" + this.preferences.ButtonId + "\" ";
+        xmlString += "onClick=\"" + this.preferences.OnClickHandler + "\" />\n";
     }
 }

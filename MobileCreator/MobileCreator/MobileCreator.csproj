@@ -31,6 +31,10 @@
     <Content Include="margin_bug.html" />
     <TypeScriptCompile Include="src\designer\ElementPreferences.ts" />
     <TypeScriptCompile Include="src\designer\ButtonPreferences.ts" />
+    <TypeScriptCompile Include="src\designer\Button.ts" />
+    <Content Include="src\designer\Button.js">
+      <DependentUpon>Button.ts</DependentUpon>
+    </Content>
     <Content Include="src\designer\ButtonPreferences.js">
       <DependentUpon>ButtonPreferences.ts</DependentUpon>
     </Content>
@@ -39,6 +43,10 @@
     </Content>
     <TypeScriptCompile Include="src\designer\LinearLayoutPreferences.ts" />
     <TypeScriptCompile Include="src\designer\ImageViewPreferences.ts" />
+    <TypeScriptCompile Include="src\designer\ImageView.ts" />
+    <Content Include="src\designer\ImageView.js">
+      <DependentUpon>ImageView.ts</DependentUpon>
+    </Content>
     <Content Include="src\designer\ImageViewPreferences.js">
       <DependentUpon>ImageViewPreferences.ts</DependentUpon>
     </Content>
@@ -52,6 +60,10 @@
     <TypeScriptCompile Include="src\designer\Element.ts" />
     <Content Include="src\designer\Element.js">
       <DependentUpon>Element.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\designer\TextView.ts" />
+    <Content Include="src\designer\TextView.js">
+      <DependentUpon>TextView.ts</DependentUpon>
     </Content>
     <Content Include="src\designer\view\LinearLayoutView.js">
       <DependentUpon>LinearLayoutView.ts</DependentUpon>
