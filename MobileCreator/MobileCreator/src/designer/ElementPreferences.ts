@@ -15,5 +15,11 @@ export class ElementPreferences {
     set Height(height: number) {
         this.height = height;
     }
-
+    private id: number;
+    get Id() {
+        return this.id;
+    }
+    set Id(id: number) {
+        this.id = id;
+    }
 }
