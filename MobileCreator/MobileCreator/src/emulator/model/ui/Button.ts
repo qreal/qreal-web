@@ -17,6 +17,9 @@ export class Button extends mControl.Control {
             $button.css('font-size', tag.TextSize);
         }
         $button.text(tag.Text);
+        if (tag.Width == mControlTag.ControlTag.WrapContent) {
+            $button.attr('data-inline', 'true');
+        }
         this.$Control.trigger('create');
         super.create();
     }

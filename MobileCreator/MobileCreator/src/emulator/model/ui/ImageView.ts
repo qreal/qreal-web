@@ -10,6 +10,7 @@ export class ImageView extends mControl.Control {
         $img.attr('src', tag.ImageUrl);
         this.$Control.append($img);
         this.setDimensions($img);
+        this.setDimensions();
     }
 
     public create() {

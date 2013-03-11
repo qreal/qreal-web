@@ -137,13 +137,13 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "em
         };
         XmlManager.prototype.fillControlPanelData = function (node, tag) {
             this.fillControlTagData(node, tag);
-            var background = node.attributes['background'];
-            if(background) {
-                this.logger.log("background: " + background.value);
-                tag.Background = background.value;
-            }
         };
         XmlManager.prototype.fillControlTagData = function (node, tag) {
+            var id = node.attributes['id'];
+            if(id) {
+                this.logger.log("id: " + id.value);
+                tag.Id = id.value;
+            }
             var layout_width = node.attributes['layout_width'];
             if(layout_width) {
                 this.logger.log("layout_width: " + layout_width.value);
@@ -173,6 +173,36 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "em
                         tag.Height = parseInt(layout_height.value);
                         break;
                 }
+            }
+            var background = node.attributes['background'];
+            if(background) {
+                this.logger.log("background: " + background.value);
+                tag.Background = background.value;
+            }
+            var gravity = node.attributes['gravity'];
+            if(gravity) {
+                this.logger.log("gravity: " + gravity.value);
+                tag.Gravity = gravity.value;
+            }
+            var layout_marginTop = node.attributes['layout_marginTop'];
+            if(layout_marginTop) {
+                this.logger.log("layout_marginTop: " + layout_marginTop.value);
+                tag.MarginTop = parseInt(layout_marginTop.value);
+            }
+            var layout_marginBottom = node.attributes['layout_marginBottom'];
+            if(layout_marginBottom) {
+                this.logger.log("layout_marginBottom: " + layout_marginBottom.value);
+                tag.MarginBottom = parseInt(layout_marginBottom.value);
+            }
+            var layout_marginLeft = node.attributes['layout_marginLeft'];
+            if(layout_marginLeft) {
+                this.logger.log("layout_marginLeft: " + layout_marginLeft.value);
+                tag.MarginLeft = parseInt(layout_marginLeft.value);
+            }
+            var layout_marginRight = node.attributes['layout_marginRight'];
+            if(layout_marginRight) {
+                this.logger.log("layout_marginRight: " + layout_marginRight.value);
+                tag.MarginRight = parseInt(layout_marginRight.value);
             }
         };
         return XmlManager;

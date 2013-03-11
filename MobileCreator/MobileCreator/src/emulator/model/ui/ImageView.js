@@ -17,6 +17,7 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
             $img.attr('src', tag.ImageUrl);
             this.$Control.append($img);
             this.setDimensions($img);
+            this.setDimensions();
         }
         ImageView.prototype.create = function () {
             _super.prototype.create.call(this);

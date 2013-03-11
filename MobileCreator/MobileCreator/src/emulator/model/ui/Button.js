@@ -3,11 +3,12 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "emulator/model/ui/Control"], function(require, exports, __mControl__) {
+define(["require", "exports", "emulator/model/ui/Control", "emulator/model/attributes/ControlTag"], function(require, exports, __mControl__, __mControlTag__) {
     var mControl = __mControl__;
 
     
-    
+    var mControlTag = __mControlTag__;
+
     var Button = (function (_super) {
         __extends(Button, _super);
         function Button(tag, $control) {
@@ -22,6 +23,9 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
                 $button.css('font-size', tag.TextSize);
             }
             $button.text(tag.Text);
+            if(tag.Width == mControlTag.ControlTag.WrapContent) {
+                $button.attr('data-inline', 'true');
+            }
             this.$Control.trigger('create');
             _super.prototype.create.call(this);
         };
