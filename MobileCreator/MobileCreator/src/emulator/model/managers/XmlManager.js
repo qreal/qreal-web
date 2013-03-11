@@ -7,6 +7,7 @@ define(["require", "exports", "utils/log/Log"], function(require, exports, __mLo
             this.logger = new mLog.Logger("XmlManager");
             this.logger.log("in constructor");
         }
+        XmlManager.LinearLayout = "LinearLayout";
         XmlManager.prototype.parsePage = function () {
             var xmlHTTP = new XMLHttpRequest();
             var xmlDoc;
@@ -18,7 +19,7 @@ define(["require", "exports", "utils/log/Log"], function(require, exports, __mLo
                 window.alert("Unable to load the requested file.");
                 return;
             }
-            this.logger.log(xmlDoc);
+            this.logger.log(xmlDoc.firstChild.nodeName);
         };
         return XmlManager;
     })();
