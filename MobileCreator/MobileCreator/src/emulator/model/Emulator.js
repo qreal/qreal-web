@@ -40,10 +40,11 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             this.logger.log("createView");
             var page1 = this.showVisitCard();
             var page2 = this.showTestStub();
+            var xmlPage = this.xmlManager.parsePage();
             this.navigationManager.addPage("page1", page1);
             this.navigationManager.addPage("page2", page2);
-            this.emulatorViewModel.showView(this.navigationManager.getPage("page1"));
-            this.xmlManager.parsePage();
+            this.navigationManager.addPage("xmlPage", xmlPage);
+            this.emulatorViewModel.showView(this.navigationManager.getPage("xmlPage"));
         };
         Emulator.prototype.showTestStub = function () {
             var layoutTag = new mLinearLayoutTag.LinearLayoutTag();
