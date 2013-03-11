@@ -51,6 +51,13 @@ export class Emulator {
         //end stub      
     }
 
+    public showView(xmlString:string) {
+        this.logger.log("showView: \n" + xmlString);
+        var xmlPage = this.xmlManager.parseXmlString(xmlString);
+        this.navigationManager.addPage("page1", xmlPage);
+        this.emulatorViewModel.showView(this.navigationManager.getPage("page1"));  
+    }
+
     private showTestStub() {
         //TODO: stub
         var layoutTag = new mLinearLayoutTag.LinearLayoutTag();

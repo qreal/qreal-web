@@ -46,6 +46,12 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             this.navigationManager.addPage("xmlPage", xmlPage);
             this.emulatorViewModel.showView(this.navigationManager.getPage("xmlPage"));
         };
+        Emulator.prototype.showView = function (xmlString) {
+            this.logger.log("showView: \n" + xmlString);
+            var xmlPage = this.xmlManager.parseXmlString(xmlString);
+            this.navigationManager.addPage("page1", xmlPage);
+            this.emulatorViewModel.showView(this.navigationManager.getPage("page1"));
+        };
         Emulator.prototype.showTestStub = function () {
             var layoutTag = new mLinearLayoutTag.LinearLayoutTag();
             layoutTag.Id = "linear";

@@ -26,7 +26,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "desig
                     $("#btChange").children('span').children('span').text("Emulator");
                     $("#emulator").show();
                     $("#designer").hide();
-                    mEmulator.Emulator.instance.createView();
+                    mEmulator.Emulator.instance.showView(mDesigner.Designer.instance.Xml);
                 }
             });
         };

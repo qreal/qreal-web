@@ -50,6 +50,14 @@ export class XmlManager {
         return this.root;
     }
 
+    public parseXmlString(xmlString:string) {
+        this.logger.log("parse page");       
+        var parser = new DOMParser();
+        var xmlDoc: Document = parser.parseFromString(xmlString, "text/xml");
+        this.parse(xmlDoc.firstChild);
+        return this.root;
+    }
+
     private parse(node: Node) {
         this.root = this.parseNode(node);
     }

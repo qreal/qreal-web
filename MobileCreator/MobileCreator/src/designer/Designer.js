@@ -24,6 +24,13 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             this.logger = new mLog.Logger("Designer");
         }
         Designer.instance = new Designer();
+        Object.defineProperty(Designer.prototype, "Xml", {
+            get: function () {
+                return this.xml;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Designer.prototype.initDesigner = function () {
             this.logger.log("Init designer");
             var parentDiv = $("#menu");
@@ -126,6 +133,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             });
             form.append(layout.DomElement);
             var xml = layout.toXML();
+            this.xml = xml;
             $.ajax("default.htm", {
                 type: "POST",
                 contentType: "text/XML",

@@ -18,6 +18,11 @@ export class Designer {
 
     public static instance = new Designer();
 
+    private xml:string;
+    get Xml() {
+        return this.xml;
+    }
+
     constructor() {
     }
 
@@ -141,6 +146,7 @@ export class Designer {
        
         
         var xml = layout.toXML();
+        this.xml = xml;
         $.ajax("default.htm", {
             type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
                 var servResp = eval(data);

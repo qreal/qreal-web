@@ -46,6 +46,13 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "em
             this.parse(xmlDoc.firstChild);
             return this.root;
         };
+        XmlManager.prototype.parseXmlString = function (xmlString) {
+            this.logger.log("parse page");
+            var parser = new DOMParser();
+            var xmlDoc = parser.parseFromString(xmlString, "text/xml");
+            this.parse(xmlDoc.firstChild);
+            return this.root;
+        };
         XmlManager.prototype.parse = function (node) {
             this.root = this.parseNode(node);
         };
