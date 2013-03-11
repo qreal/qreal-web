@@ -4,14 +4,29 @@
     background-color: #232323;
     box-shadow: 0 0 15px rgba(0,0,0,.28), inset 0 1px 1px rgba(255,255,255,.45), inset 0 0 2px rgba(255,255,255,.2);
     padding: 15px;
-    margin-top: 20px;
-    margin-left: 50px;
+/*    margin-top: 20px;
+    margin-left: 50px;*/
     width: 480px;
     height: 700px;
+    float: left;
+}
+
+#menu {
+    
+    width: 100%;
+}
+
+#left {
+    width: 400px;
+    height: 700px;
+    float: left;
+    border: 0;
+    border-radius: 11px;
+    padding: 16px;
 }
 
 #designer {
-    width: 700px;
+    width: auto;
     height: 800px;
 }
 

@@ -13,7 +13,7 @@ export class ControlPanel extends mControl.Control {
         this.childrens = new Array();
         this.$Control.css({
             background: tag.Background,        
-            'overflow-y': 'auto'        
+            'overflow': 'hidden'        
         });  
     }
 

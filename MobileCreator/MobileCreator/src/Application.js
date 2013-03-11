@@ -22,12 +22,10 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "desig
                     $("#btChange").children('span').children('span').text("Designer");
                     $("#emulator").hide();
                     $("#designer").show();
-                    $("#menu").show();
                 } else {
                     $("#btChange").children('span').children('span').text("Emulator");
                     $("#emulator").show();
                     $("#designer").hide();
-                    $("#menu").hide();
                     mEmulator.Emulator.instance.createView();
                 }
             });

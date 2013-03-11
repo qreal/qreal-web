@@ -27,32 +27,39 @@
     <Content Include="css\jqueryui.css" />
     <Content Include="css\jquerymobile.css" />
     <Content Include="default.htm" />
-    <TypeScriptCompile Include="src\designer\view\LinearLayoutView.ts" />
-    <Content Include="margin_bug.html" />
-    <TypeScriptCompile Include="src\designer\ElementPreferences.ts" />
-    <Content Include="src\designer\ElementPreferences.js">
-      <DependentUpon>ElementPreferences.ts</DependentUpon>
+    <TypeScriptCompile Include="src\designer\preferences\ElementPreferences.ts" />
+    <TypeScriptCompile Include="src\designer\preferences\ButtonPreferences.ts" />
+    <TypeScriptCompile Include="src\designer\widgets\Button.ts" />
+    <TypeScriptCompile Include="src\designer\preferences\LinearLayoutPreferences.ts" />
+    <TypeScriptCompile Include="src\designer\preferences\ImageViewPreferences.ts" />
+    <TypeScriptCompile Include="src\designer\widgets\ImageView.ts" />
+    <TypeScriptCompile Include="src\designer\widgets\LinearLayout.ts" />
+    <TypeScriptCompile Include="src\designer\widgets\Element.ts" />
+    <TypeScriptCompile Include="src\designer\widgets\TextView.ts" />
+    <TypeScriptCompile Include="src\designer\preferences\TextViewPreferences.ts" />
+    <TypeScriptCompile Include="src\emulator\model\attributes\WebViewTag.ts" />
+    <TypeScriptCompile Include="src\designer\widgets\WidgetTypes.ts" />
+    <Content Include="src\designer\widgets\WidgetTypes.js">
+      <DependentUpon>WidgetTypes.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="src\designer\LinearLayoutPreferences.ts" />
-    <TypeScriptCompile Include="src\designer\ImageViewPreferences.ts" />
-    <Content Include="src\designer\ImageViewPreferences.js">
-      <DependentUpon>ImageViewPreferences.ts</DependentUpon>
+    <Content Include="res\Transition.xml" />
+    <Content Include="res\info_activity.xml" />
+    <Content Include="res\main.xml" />
+    <Content Include="res\Transition.xml" />
+    <Content Include="src\emulator\model\attributes\WebViewTag.js">      <DependentUpon>WebViewTag.ts</DependentUpon>
     </Content>
-    <Content Include="src\designer\LinearLayoutPreferences.js">
-      <DependentUpon>LinearLayoutPreferences.ts</DependentUpon>
+    <TypeScriptCompile Include="src\emulator\model\ui\WebView.ts" />
+    <TypeScriptCompile Include="src\emulator\model\managers\NavigationManager.ts" />
+    <Content Include="src\emulator\model\managers\NavigationManager.js">
+      <DependentUpon>NavigationManager.ts</DependentUpon>
     </Content>
-    <Content Include="src\designer\view\LinearLayoutView.js">
-      <DependentUpon>LinearLayoutView.ts</DependentUpon>
+    <TypeScriptCompile Include="src\emulator\model\managers\XmlManager.ts" />
+    <Content Include="src\emulator\model\managers\XmlManager.js">
+      <DependentUpon>XmlManager.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="src\designer\view\WidgetView.ts" />
-    <Content Include="src\designer\view\WidgetView.js">
-      <DependentUpon>WidgetView.ts</DependentUpon>
+    <Content Include="src\emulator\model\ui\WebView.js">
+      <DependentUpon>WebView.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="src\designer\TextViewPreferences.ts" />
-    <Content Include="src\designer\TextViewPreferences.js">
-      <DependentUpon>TextViewPreferences.ts</DependentUpon>
-    </Content>
-    <Content Include="test_iframe.html" />
     <Content Include="lib\jquery.dynatree.d.ts" />
     <Content Include="lib\jquery.dynatree.js" />
     <Content Include="lib\jquery.js" />
@@ -76,49 +83,13 @@
       <DependentUpon>AppConfig.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\emulator\model\Emulator.ts" />
-    <TypeScriptCompile Include="src\designer\view\DesignerView.ts" />
     <TypeScriptCompile Include="src\Application.ts" />
     <Content Include="src\Application.js">
       <DependentUpon>Application.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="src\designer\model\Widget.ts" />
     <TypeScriptCompile Include="src\designer\Designer.ts" />
-    <TypeScriptCompile Include="src\designer\controller\DesignerController.ts" />
-    <Content Include="src\designer\controller\DesignerController.js">
-      <DependentUpon>DesignerController.ts</DependentUpon>
-    </Content>
     <Content Include="src\designer\designer.js">
       <DependentUpon>Designer.ts</DependentUpon>
-    </Content>
-    <TypeScriptCompile Include="src\designer\model\DesignerModel.ts" />
-    <TypeScriptCompile Include="src\designer\model\Button.ts" />
-    <Content Include="src\designer\model\Button.js">
-      <DependentUpon>Button.ts</DependentUpon>
-    </Content>
-    <Content Include="src\designer\model\DesignerModel.js">
-      <DependentUpon>DesignerModel.ts</DependentUpon>
-    </Content>
-    <TypeScriptCompile Include="src\designer\model\Form.ts" />
-    <Content Include="src\designer\model\Form.js">
-      <DependentUpon>Form.ts</DependentUpon>
-    </Content>
-    <TypeScriptCompile Include="src\designer\model\LinearLayout.ts" />
-    <Content Include="src\designer\model\LinearLayout.js">
-      <DependentUpon>LinearLayout.ts</DependentUpon>
-    </Content>
-    <TypeScriptCompile Include="src\designer\model\SpecialValues.ts" />
-    <Content Include="src\designer\model\SpecialValues.js">
-      <DependentUpon>SpecialValues.ts</DependentUpon>
-    </Content>
-    <Content Include="src\designer\model\Widget.js">
-      <DependentUpon>Widget.ts</DependentUpon>
-    </Content>
-    <TypeScriptCompile Include="src\designer\model\WidgetTypes.ts" />
-    <Content Include="src\designer\model\WidgetTypes.js">
-      <DependentUpon>WidgetTypes.ts</DependentUpon>
-    </Content>
-    <Content Include="src\designer\view\DesignerView.js">
-      <DependentUpon>DesignerView.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\emulator\model\attributes\ControlTag.ts" />
     <Content Include="src\emulator\model\attributes\Atributes.js">
@@ -171,15 +142,16 @@
     <Content Include="src\emulator\model\ui\TextView.js">
       <DependentUpon>TextView.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="src\emulator\viewmodel\EmulatorViewModel.ts" />
+    <Content Include="src\emulator\viewmodel\EmulatorViewModel.js">
+      <DependentUpon>EmulatorViewModel.ts</DependentUpon>
+    </Content>
     <Content Include="src\utils\log\Log.js">
       <DependentUpon>Log.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\utils\log\Log.ts" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\emulator\viewmodel\" />
-    <Folder Include="src\emulator\view\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="web.config" />
     <None Include="web.Debug.config">

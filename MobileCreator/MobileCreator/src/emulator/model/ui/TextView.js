@@ -17,6 +17,7 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
             if(tag.TextSize > 0) {
                 $label.css('font-size', tag.TextSize);
             }
+            this.setDimensions();
             this.$Control.append($label);
         }
         TextView.prototype.create = function () {
