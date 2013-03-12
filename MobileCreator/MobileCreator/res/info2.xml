@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+            layout_width="fill_parent"
+            layout_height="fill_parent">
+
+  <WebView
+          id="webViewInfo"
+          layout_width="fill_parent"
+          layout_height="fill_parent"
+          url="http://www.lanit-tercom.ru/"/>
+</LinearLayout>
+

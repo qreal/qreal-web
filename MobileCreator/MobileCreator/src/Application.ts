@@ -25,8 +25,8 @@ export class Application {
                 $("#btChange").children('span').children('span').text("Emulator");
                 $("#emulator").show();
                 $("#designer").hide();
-                //mEmulator.Emulator.instance.createView();
-                mEmulator.Emulator.instance.showView(mDesigner.Designer.instance.Xml);
+                mEmulator.Emulator.instance.createView();
+                //mEmulator.Emulator.instance.showXmlStringView(mDesigner.Designer.instance.Xml);
             }
         });
     }

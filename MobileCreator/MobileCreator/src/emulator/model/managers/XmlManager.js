@@ -1,4 +1,4 @@
-define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "emulator/model/ui/Button", "emulator/model/ui/ImageView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/ControlTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/ImageViewTag"], function(require, exports, __mLog__, __mTextView__, __mButton__, __mImageView__, __mLinearLayout__, __mLinearLayoutTag__, __mControlTag__, __mTextViewTag__, __mButtonTag__, __mImageViewTag__) {
+define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "emulator/model/ui/Button", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/ControlTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/ImageViewTag", "emulator/model/attributes/WebViewTag"], function(require, exports, __mLog__, __mTextView__, __mButton__, __mImageView__, __mWebView__, __mLinearLayout__, __mLinearLayoutTag__, __mControlTag__, __mTextViewTag__, __mButtonTag__, __mImageViewTag__, __mWebViewTag__) {
     var mLog = __mLog__;
 
     
@@ -7,6 +7,8 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "em
     var mButton = __mButton__;
 
     var mImageView = __mImageView__;
+
+    var mWebView = __mWebView__;
 
     
     var mLinearLayout = __mLinearLayout__;
@@ -22,6 +24,8 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "em
 
     var mImageViewTag = __mImageViewTag__;
 
+    var mWebViewTag = __mWebViewTag__;
+
     var XmlManager = (function () {
         function XmlManager() {
             this.logger = new mLog.Logger("XmlManager");
@@ -31,30 +35,26 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "em
         XmlManager.TextView = "TextView";
         XmlManager.Button = "Button";
         XmlManager.ImageView = "ImageView";
-        XmlManager.prototype.parsePage = function () {
-            this.logger.log("parse page");
+        XmlManager.WebView = "WebView";
+        XmlManager.prototype.parsePage = function (page) {
+            this.logger.log("parse page: " + page);
             var xmlHTTP = new XMLHttpRequest();
             var xmlDoc;
             try  {
-                xmlHTTP.open("GET", "res/main2.xml", false);
+                xmlHTTP.open("GET", page, false);
                 xmlHTTP.send(null);
                 xmlDoc = xmlHTTP.responseXML;
             } catch (e) {
                 window.alert("Unable to load the requested file.");
-                return;
+                return undefined;
             }
-            this.parse(xmlDoc.firstChild);
-            return this.root;
+            return this.parseNode(xmlDoc.firstChild);
         };
         XmlManager.prototype.parseXmlString = function (xmlString) {
-            this.logger.log("parse page");
+            this.logger.log("parseXmlString");
             var parser = new DOMParser();
             var xmlDoc = parser.parseFromString(xmlString, "text/xml");
-            this.parse(xmlDoc.firstChild);
-            return this.root;
-        };
-        XmlManager.prototype.parse = function (node) {
-            this.root = this.parseNode(node);
+            return this.parseNode(xmlDoc.firstChild);
         };
         XmlManager.prototype.parseNode = function (node) {
             this.logger.log("parse node: " + node.nodeName);
@@ -71,6 +71,9 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "em
                     break;
                 case XmlManager.ImageView:
                     control = this.parseImageView(node);
+                    break;
+                case XmlManager.WebView:
+                    control = this.parseWebView(node);
                     break;
             }
             return control;
@@ -99,7 +102,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "em
         XmlManager.prototype.parseButton = function (node) {
             this.logger.log("parseButton");
             var tag = new mButtonTag.ButtonTag();
-            this.fillTextViewData(node, tag);
+            this.fillButtonData(node, tag);
             var button = new mButton.Button(tag);
             return button;
         };
@@ -109,6 +112,13 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "em
             this.fillImageViewData(node, tag);
             var imageView = new mImageView.ImageView(tag);
             return imageView;
+        };
+        XmlManager.prototype.parseWebView = function (node) {
+            this.logger.log("parseWebView");
+            var tag = new mWebViewTag.WebViewTag();
+            this.fillWebViewData(node, tag);
+            var webView = new mWebView.WebView(tag);
+            return webView;
         };
         XmlManager.prototype.fillLinearLayoutData = function (node, tag) {
             this.fillControlPanelData(node, tag);
@@ -133,6 +143,11 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "em
         };
         XmlManager.prototype.fillButtonData = function (node, tag) {
             this.fillTextViewData(node, tag);
+            var onClick = node.attributes['onClick'];
+            if(onClick) {
+                this.logger.log("onClick: " + onClick.value);
+                tag.OnClick = onClick.value;
+            }
         };
         XmlManager.prototype.fillImageViewData = function (node, tag) {
             this.fillControlTagData(node, tag);
@@ -140,6 +155,14 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "em
             if(src) {
                 this.logger.log("src: " + src.value);
                 tag.ImageUrl = src.value;
+            }
+        };
+        XmlManager.prototype.fillWebViewData = function (node, tag) {
+            this.fillControlTagData(node, tag);
+            var url = node.attributes['url'];
+            if(url) {
+                this.logger.log("url: " + url.value);
+                tag.Url = url.value;
             }
         };
         XmlManager.prototype.fillControlPanelData = function (node, tag) {
@@ -211,6 +234,11 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "em
                 this.logger.log("layout_marginRight: " + layout_marginRight.value);
                 tag.MarginRight = parseInt(layout_marginRight.value);
             }
+        };
+        XmlManager.prototype.parseTransitionString = function (xmlString) {
+            this.logger.log("parseTransitionString");
+            var parser = new DOMParser();
+            var xmlDoc = parser.parseFromString(xmlString, "text/xml");
         };
         return XmlManager;
     })();

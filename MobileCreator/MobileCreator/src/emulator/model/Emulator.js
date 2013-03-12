@@ -40,17 +40,22 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             this.logger.log("createView");
             var page1 = this.showVisitCard();
             var page2 = this.showTestStub();
-            var xmlPage = this.xmlManager.parsePage();
+            var main2 = this.xmlManager.parsePage("res/main2.xml");
+            var info2 = this.xmlManager.parsePage("res/info2.xml");
             this.navigationManager.addPage("page1", page1);
             this.navigationManager.addPage("page2", page2);
-            this.navigationManager.addPage("xmlPage", xmlPage);
-            this.emulatorViewModel.showView(this.navigationManager.getPage("xmlPage"));
+            this.navigationManager.addPage("main2", main2);
+            this.navigationManager.addPage("info2", info2);
+            this.emulatorViewModel.showView(this.navigationManager.getPage("main2"));
         };
-        Emulator.prototype.showView = function (xmlString) {
+        Emulator.prototype.showXmlStringView = function (xmlString) {
             this.logger.log("showView: \n" + xmlString);
             var xmlPage = this.xmlManager.parseXmlString(xmlString);
             this.navigationManager.addPage("page1", xmlPage);
-            this.emulatorViewModel.showView(this.navigationManager.getPage("page1"));
+            this.showPage("page1");
+        };
+        Emulator.prototype.showPage = function (pageName) {
+            this.emulatorViewModel.showView(this.navigationManager.getPage(pageName));
         };
         Emulator.prototype.showTestStub = function () {
             var layoutTag = new mLinearLayoutTag.LinearLayoutTag();
@@ -108,6 +113,13 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             layout.addChild(innerLayout);
             return layout;
         };
+        Object.defineProperty(Emulator.prototype, "NavigationManager", {
+            get: function () {
+                return this.navigationManager;
+            },
+            enumerable: true,
+            configurable: true
+        });
         return Emulator;
     })();
     exports.Emulator = Emulator;    

@@ -29,7 +29,7 @@
           text="Full Info"
           textSize="20dp"
           layout_marginTop="300dp"
-          onClick="onFullInfoClick"
+          onClick="info2"
           layout_gravity="center_horizontal"/>
 </LinearLayout>
 

@@ -5,6 +5,7 @@ import mControl = module("emulator/model/ui/Control");
 import mTextView = module("emulator/model/ui/TextView");
 import mButton = module("emulator/model/ui/Button");
 import mImageView = module("emulator/model/ui/ImageView");
+import mWebView = module("emulator/model/ui/WebView");
 import mControlPanel = module("emulator/model/ui/ControlPanel");
 import mLinearLayout = module("emulator/model/ui/LinearLayout");
 import mLinearLayoutTag = module("emulator/model/attributes/LinearLayoutTag");
@@ -13,6 +14,7 @@ import mControlPanelTag = module("emulator/model/attributes/ControlPanelTag");
 import mTextViewTag = module("emulator/model/attributes/TextViewTag");
 import mButtonTag = module("emulator/model/attributes/ButtonTag");
 import mImageViewTag = module("emulator/model/attributes/ImageViewTag");
+import mWebViewTag = module("emulator/model/attributes/WebViewTag");
 //#endregion
 
 export class XmlManager {
@@ -23,43 +25,35 @@ export class XmlManager {
     private static TextView = "TextView";
     private static Button = "Button";
     private static ImageView = "ImageView";
+    private static WebView = "WebView";
 
     //#endregion
-
-    private root: mControlPanel.ControlPanel;
 
     constructor() {
         this.logger.log("in constructor");
     }
 
-    public parsePage() {
-        this.logger.log("parse page");
+    public parsePage(page:string) {
+        this.logger.log("parse page: "+page);
         var xmlHTTP = new XMLHttpRequest();
         var xmlDoc: Document;
         try {
-            xmlHTTP.open("GET", "res/main2.xml", false);
+            xmlHTTP.open("GET", page, false);
             xmlHTTP.send(null);
             xmlDoc = xmlHTTP.responseXML;
         }
         catch (e) {
             window.alert("Unable to load the requested file.");
-            return;
-        }
-
-        this.parse(xmlDoc.firstChild);
-        return this.root;
+            return undefined;
+        }                
+        return this.parseNode(xmlDoc.firstChild);
     }
 
     public parseXmlString(xmlString:string) {
-        this.logger.log("parse page");       
+        this.logger.log("parseXmlString");
         var parser = new DOMParser();
         var xmlDoc: Document = parser.parseFromString(xmlString, "text/xml");
-        this.parse(xmlDoc.firstChild);
-        return this.root;
-    }
-
-    private parse(node: Node) {
-        this.root = this.parseNode(node);
+        return this.parseNode(xmlDoc.firstChild);
     }
 
     private parseNode(node: Node) {
@@ -77,6 +71,9 @@ export class XmlManager {
                 break;
             case XmlManager.ImageView:
                 control = this.parseImageView(node);
+                break;
+            case XmlManager.WebView:
+                control = this.parseWebView(node);
                 break;
         }
         return control;
@@ -110,7 +107,7 @@ export class XmlManager {
     private parseButton(node: Node) {
         this.logger.log("parseButton");
         var tag = new mButtonTag.ButtonTag();
-        this.fillTextViewData(node, tag);
+        this.fillButtonData(node, tag);
         var button = new mButton.Button(tag);
         return button;
     }
@@ -121,6 +118,14 @@ export class XmlManager {
         this.fillImageViewData(node, tag);
         var imageView = new mImageView.ImageView(tag);
         return imageView;
+    }
+
+    private parseWebView(node: Node) {
+        this.logger.log("parseWebView");
+        var tag = new mWebViewTag.WebViewTag();
+        this.fillWebViewData(node, tag);
+        var webView = new mWebView.WebView(tag);
+        return webView;
     }
 
     private fillLinearLayoutData(node: Node, tag: mLinearLayoutTag.LinearLayoutTag) {
@@ -153,6 +158,12 @@ export class XmlManager {
 
     private fillButtonData(node: Node, tag: mButtonTag.ButtonTag) {
         this.fillTextViewData(node, tag);
+
+        var onClick: Attr = node.attributes['onClick'];
+        if (onClick) {
+            this.logger.log("onClick: " + onClick.value);
+            tag.OnClick = onClick.value;
+        }
     }
 
     private fillImageViewData(node: Node, tag: mImageViewTag.ImageViewTag) {
@@ -161,6 +172,15 @@ export class XmlManager {
         if (src) {
             this.logger.log("src: " + src.value);
             tag.ImageUrl = src.value;
+        }
+    }
+
+    private fillWebViewData(node: Node, tag: mWebViewTag.WebViewTag) {
+        this.fillControlTagData(node, tag);
+        var url: Attr = node.attributes['url'];
+        if (url) {
+            this.logger.log("url: " + url.value);
+            tag.Url = url.value;
         }
     }
 
@@ -243,5 +263,16 @@ export class XmlManager {
             tag.MarginRight = parseInt(layout_marginRight.value);
         }
     }
+
+    //#region Transition
+    public parseTransitionString(xmlString: string) {
+        this.logger.log("parseTransitionString");
+        var parser = new DOMParser();
+        var xmlDoc: Document = parser.parseFromString(xmlString, "text/xml");
+        //this.parse(xmlDoc.firstChild);
+        //return this.root;
+    }
+
+    //#endregion
 
 }
