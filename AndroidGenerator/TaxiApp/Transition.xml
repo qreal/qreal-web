@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Transition>
+        <Button
+        	id="@+id/toMap"
+        	name_from="main"
+        	name_to="map"
+        	action = "pushButton" />
+        <Button
+        	id="@+id/toList"
+        	name_from="main"
+        	name_to="orders"
+        	action = "pushButton" />
+        <Button
+        	id="@+id/backFromMap"
+        	name_from="map"
+        	name_to="main"
+        	action = "pushButton" />
+        <Button
+        	id="@+id/backFromOrders"
+        	name_from="orders"
+        	name_to="main"
+        	action = "pushButton" />
+</Transition>
+
+

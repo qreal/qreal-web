@@ -1,94 +1,92 @@
 ﻿open System.Xml
 open System.Xml.Linq
 open System.IO
-open System.Collections
+open System.Collections.Generic
 
-System.Console.WriteLine "insert project folder, please"
-
-let path = System.Console.ReadLine()
-
-System.Console.WriteLine "insert project's package, please"
-
-let package = System.Console.ReadLine()
+let path, package =
+    let args = System.Environment.GetCommandLineArgs()
+    if args.Length <> 3 then
+        failwith "Specify project folder and package as command line arguments"
+    args.[1], args.[2]
 
 let writeToFile fn (str : string) =
    let conv = System.Text.Encoding.UTF8
    use f = File.CreateText fn
-   f.WriteLine(str)
+   f.WriteLine str
 
-let append (stringBuilder : System.Text.StringBuilder) (str : string) = stringBuilder.Append(str) |> ignore
+let append (stringBuilder : System.Text.StringBuilder) (str : string) = stringBuilder.Append str |> ignore
 let insert (stringBuilder : System.Text.StringBuilder) (str : string) = stringBuilder.Insert(0, str) |> ignore
 
 let transformXml (path : string) = 
     let newXml = new System.Text.StringBuilder()
 
     let reader = XmlReader.Create path
-    append newXml "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" 
-    reader.Read() |> ignore
+    let appendXml = append newXml
+    appendXml "<?xml version=\"1.0\" encoding=\"utf-8\"?>" 
     let mutable currentDepth = 0
     let mutable hasAttr = false
-    while reader.Read() do
-        let depth = reader.Depth
-
-        if hasAttr then
-            if (currentDepth < depth) then
-                append newXml " >\n"
-            else
-                append newXml " />\n"
-
-        currentDepth <- depth
-
-        let tab = "    "
-
-        append newXml <| String.replicate depth tab
-        let name = reader.Name
-        let amount = reader.AttributeCount
-
-        match amount with
-        | 0 -> hasAttr <- false
-        | _ -> hasAttr <- true
-
-        if name <> "" then 
-            if not hasAttr then 
-                append newXml <| "</" + name + ">" + "\n"
-            else
-                append newXml <| "<" + name + "\n"
-        else
-            append newXml <| name + "\n"
-
-        for i in 0..amount - 1 do
-            append newXml <| String.replicate (depth + 1) tab
-            reader.MoveToAttribute i
+    try
+        while reader.Read() do
             let name = reader.Name
-            let app pref = append newXml <| pref + "=" + "\"" + reader.Value + "\""
             match name with
-            | "xmlns" -> app <| name + ":android"
-            | _ -> app <| "android:" + reader.Name
+            | "" | "xml" -> appendXml "\n"
+            | _ -> 
+                let depth = reader.Depth
 
-            if i <> amount - 1 then append newXml "\n"
+                if hasAttr then
+                    if currentDepth < depth then " >\n"
+                    elif (reader.NodeType = XmlNodeType.EndElement) && (currentDepth = depth) then " >\n"
+                    else " />\n"
+                    |> appendXml
+
+                currentDepth <- depth
+
+                let tab = "    "
+
+                appendXml <| String.replicate depth tab
+                let amount = reader.AttributeCount
+
+                match amount with
+                | 0 -> hasAttr <- false
+                | _ -> hasAttr <- true
+
+                appendXml <|
+                if not hasAttr then "</" + name + ">" + "\n"
+                else "<" + name + "\n"
+
+                for i in 0..amount - 1 do
+                    appendXml <| String.replicate (depth + 1) tab
+                    reader.MoveToAttribute i
+
+                    match reader.Name with
+                    | "xmlns" -> reader.Name + ":android"
+                    | _ -> "android:" + reader.Name
+                    |> fun pref -> appendXml <| pref + "=" + "\"" + reader.Value + "\""
+
+                    if i <> amount - 1 then appendXml "\n"
+        with | :? System.Xml.XmlException as e ->
+            failwithf "Error while parsing %s: %s" path e.Message
 
     reader.Close()
-    writeToFile path (newXml.ToString())
+    writeToFile path <| newXml.ToString()
 
-let getTransitions = 
-    let transitions = new Hashtable()
-    let readerTrans = XmlReader.Create(path + @"\Transition2.xml")
-    while readerTrans.Read() do 
-        match readerTrans.Name with
-        | "Button" | "WebView" ->
-        let attributes = (readerTrans.GetAttribute("name_to"), readerTrans.GetAttribute("name_from"), readerTrans.GetAttribute("action"))
-        transitions.Add(readerTrans.GetAttribute("id"), attributes)
-        | _ -> ()
+let transitions = 
+    let transitions = new Dictionary<_,_>()
+    if System.IO.File.Exists(path + @"\Transition.xml") then 
+        let readerTrans = XmlReader.Create(path + @"\Transition.xml")
+        while readerTrans.Read() do 
+            match readerTrans.Name with
+            | "Button" | "WebView" ->
+                let attributes =
+                    readerTrans.GetAttribute("name_to")
+                    , readerTrans.GetAttribute("name_from")
+                    , readerTrans.GetAttribute("action")
+                transitions.Add (readerTrans.GetAttribute("id"), attributes)
+            | _ -> ()
     transitions
 
-let first (a, _, _) = a
-let second (_, b, _) = b
-let third (_, _, c) = c
-    
-let transitions = getTransitions
-    
 // permissions register
-let permissions = new Hashtable()
+let permissions = new Dictionary<_,_>()
 
 let activities = new System.Text.StringBuilder()
 
@@ -114,7 +112,7 @@ let createImplementation form =
         append activities <| "\n        <activity android:name=\"." + form + "\"></activity>"
 
     // imports register
-    let imports = new Hashtable()
+    let imports = new Dictionary<_,_>()
 
     let currentImports = new System.Text.StringBuilder()
     append currentImports <| "\nimport android.app.Activity;
@@ -131,77 +129,98 @@ import android.view.View;\n"
         setContentView(R.layout." + form + ");"
             
     let activity = System.Text.StringBuilder()
-    append activity <| currentImports.ToString()
-    append activity <| "\npublic class " + form + " extends Activity {"
+    let appendAct = append activity
+    let insertAct = insert activity
+    appendAct <| currentImports.ToString()
+    appendAct <| "\npublic class " + form + " extends Activity {"
 
     let reader = XmlReader.Create(path + @"\res\layout\" + form + ".xml")
-    while reader.Read() do 
-        match reader.Name with
-        | "Button" ->
-            let onClickName = reader.GetAttribute "android:onClick"
-            let id = reader.GetAttribute "android:id"
-            append activity <| "\n\n    public void " + onClickName + "(View v) {"
+    try
+        while reader.Read() do 
+            match reader.Name with
+            | "Button" ->
+                let onClickName = reader.GetAttribute "android:onClick"
+                let id = reader.GetAttribute "android:id"
+                appendAct <| "\n\n    public void " + onClickName + "(View v) {"
 
-            if (transitions.ContainsKey id) then     
-                if not (imports.ContainsKey("android.content.Intent")) then 
-                    insert activity "\nimport android.content.Intent;"
-                    imports.Add("android.content.Intent", "android.content.Intent")
+                if transitions.ContainsKey id then
+                    if not <| imports.ContainsKey "android.content.Intent" then
+                        insertAct "\nimport android.content.Intent;"
+                        imports.Add ("android.content.Intent", "android.content.Intent")
 
-                let nextForm = first ((transitions.Item id) :?> string * string * string)
+                    let nextForm,_,_ = transitions.[id]
 
-                append activity <| "
-            Intent intent = new Intent(this, " + nextForm + ".class);
-            startActivity(intent);"
-            else ()
-            append activity "\n    }"
+                    appendAct <| "
+                Intent intent = new Intent(this, " + nextForm + ".class);
+                startActivity(intent);"
 
-        | "WebView" ->
-            if not (permissions.ContainsKey("Internet")) then 
-                append manifest "    <uses-permission android:name=\"android.permission.INTERNET\" />\n"
-                permissions.Add("Internet", "Internet")
+                appendAct "\n    }"
 
-            if not (imports.ContainsKey("android.webkit.WebView")) then 
-                insert activity "\nimport android.webkit.WebView;"
-                imports.Add("android.webkit.WebView", "android.webkit.WebView")
+            | "WebView" ->
+                if not <| permissions.ContainsKey "Internet" then
+                    append manifest "    <uses-permission android:name=\"android.permission.INTERNET\" />\n"
+                    permissions.Add ("Internet", "Internet")
 
-            append onCreate <| "\n        WebView webView = (WebView) findViewById(R.id.webViewInfo);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(\"http://www.lanit-tercom.ru\");" // сайт зашит в код (было необходимо для теста)
-        | _ -> ()
+                if not <| imports.ContainsKey "android.webkit.WebView" then
+                    insertAct "\nimport android.webkit.WebView;"
+                    imports.Add ("android.webkit.WebView", "android.webkit.WebView")
+
+                append onCreate <| "\n        WebView webView = (WebView) findViewById(R.id.webViewInfo);
+            webView.getSettings().setJavaScriptEnabled(true);
+            webView.loadUrl(\"http://www.lanit-tercom.ru\");" // сайт зашит в код (было необходимо для теста)
+            | _ -> ()
+    with | :? System.Xml.XmlException as e ->
+        failwithf "Error while parsing %s: %s" form e.Message
     append onCreate "\n    }"
-    append activity <| onCreate.ToString()
+    appendAct <| onCreate.ToString()
 
-    append activity "\n}"
+    appendAct "\n}"
 
-    insert activity <| "package com.qrealclouds." + package + ";\n"
+    insertAct <| "package com.qrealclouds." + package + ";\n"
 
-    writeToFile (path + @"\src\com\qrealclouds\" + package + "\\" + form + ".java") (activity.ToString())
+    activity.ToString()
+    |> writeToFile (path + @"\src\com\qrealclouds\" + package + "\\" + form + ".java")
 
 System.IO.Directory.CreateDirectory(path + @"\src\com\qrealclouds\" + package) |> ignore
 
-let listOffiles = (new DirectoryInfo(path + @"\res\layout")).GetFiles()
-
-let createSource (file : FileInfo) =
+for file in (new DirectoryInfo(path + @"\res\layout")).GetFiles() do
     let currentName = file.Name
     transformXml file.FullName
     let length = currentName.Length
-    createImplementation(currentName.Substring(0, length - 4))
-
-Array.iter(createSource) listOffiles
+    createImplementation <| currentName.Substring(0, length - 4)
 
 append manifest <| "\n    <application android:label=\"@string/app_name\"
         android:theme=\"@android:style/Theme.Light.NoTitleBar\">\n"
 append manifest <| activities.ToString()
 append manifest <| "\n    </application>
 </manifest>"
-writeToFile (path + "\AndroidManifest.xml") (manifest.ToString())
+writeToFile (path + "\AndroidManifest.xml") <| manifest.ToString()
 
-let createApk =
+let createApk () =
+    let start exe name =
+        let proc = new System.Diagnostics.Process()
+        let startInfo = proc.StartInfo
+        startInfo.FileName <- "cmd.exe"
+        startInfo.Arguments <- "/C " + exe
+        startInfo.UseShellExecute <- false
+        //startInfo.CreateNoWindow <- true
+        startInfo.RedirectStandardInput <- true
+        startInfo.RedirectStandardOutput <- true
+        startInfo.RedirectStandardError <- true
+        proc.Start() |> ignore
+        let so = proc.StandardOutput
+        proc.WaitForExit()
+        printfn "%s" <| so.ReadToEnd()
+        match proc.ExitCode with
+        | 0 -> ()
+        | x -> failwithf "%s exited with code %d" name x
+
+    System.Threading.Thread.Sleep 1000
+    // Путь до android должен быть прописан в перменную среды PATH
     let createBuildXml = "android update project --target 1 -p " + path
-    System.Threading.Thread.Sleep(1000);
-    let pathToAndroidSdk = @"D:\android-sdk\sdk\tools\" //для работы на другом компе нужно заменть путь до android sdk
-    System.Diagnostics.Process.Start("cmd.exe", "/C " + pathToAndroidSdk + createBuildXml) |> ignore
-    System.Threading.Thread.Sleep(3000);
-    System.Diagnostics.Process.Start("cmd.exe", "/C " + "cd /d " + path + " & ant debug") |> ignore
+    start createBuildXml "android"
+    System.Threading.Thread.Sleep 3000
+    // Путь до ant должен быть прописан в перменную среды PATH
+    start ("cd /d " + path + " & ant debug") "cd..ant"
 
-createApk
+createApk ()
