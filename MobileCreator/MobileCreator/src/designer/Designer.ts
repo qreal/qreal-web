@@ -41,6 +41,7 @@ export class Designer {
         var layout = new mLinearLayout.LinearLayout(layoputPreferences);
         Designer.activeForm.addElement(layout);
         Designer.activeForm.show();
+        $("#formNameField").val(Designer.activeForm.FormName);
     }
 
     public changeActiveForm(formName: string) {
@@ -56,6 +57,7 @@ export class Designer {
     }
 
     public initDesigner() {
+        var _this = this;
         this.logger.log("Init designer");
         var parentDiv = $("#menu");
         var designerMenuDiv = document.createElement("ul");
@@ -71,6 +73,9 @@ export class Designer {
         var addFormButton = $("<a id=\"addFormButton\" data-role=\"button\" draggable=\"false\">New form</a>");
         $(designerMenuDiv).append(addFormButton);
         addFormButton.button();
+        $(addFormButton).click(function () {
+            _this.addForm("New form");
+        });
         var formNameLabel = $("<label for='formNameField' >Form name: </label>");
         var formNameField = $("<input type = 'text' name = 'formNameField' id = 'formNameField' value = '' >");
         $(designerMenuDiv).append(formNameLabel);
