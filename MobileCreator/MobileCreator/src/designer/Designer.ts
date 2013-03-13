@@ -44,6 +44,21 @@ export class Designer {
         Designer.activeForm.show();
         $("#formNameField").val(Designer.activeForm.FormName);
         Designer.formNames.push(formName);
+        this.updateFormsSelect();
+    }
+
+    public updateFormsSelect() {
+        var select = $("#formsSelect");
+        select.empty();
+        for (var i = 0; i < Designer.forms.length; i++) {
+            var currentName = Designer.forms[i].FormName;
+            var newOption = $("<option value=\"" + currentName + "\">" + currentName + "</option>");
+            if (currentName == Designer.activeForm.FormName) {
+                newOption.attr("selected", "selected");
+            }
+            select.append(newOption);
+        }
+        select.selectmenu("refresh", true);
     }
 
     public changeActiveForm(formName: string) {
@@ -56,6 +71,7 @@ export class Designer {
             }
         }
         $("#formNameField").val(Designer.activeForm.FormName);
+        this.updateFormsSelect();
     }
 
     public initDesigner() {
@@ -72,6 +88,13 @@ export class Designer {
         $(formsTreeHeader).text("Forms");
         $(designerMenuDiv).append($(formsTreeHeader));
 
+        var formsSelect = $("<select id=\"formsSelect\"></select>");
+        $(designerMenuDiv).append($(formsSelect));
+        formsSelect.selectmenu();
+        formsSelect.change(function () {
+            _this.changeActiveForm(formsSelect.val());
+        });
+
         var addFormButton = $("<a id=\"addFormButton\" data-role=\"button\" draggable=\"false\">New form</a>");
         $(designerMenuDiv).append(addFormButton);
         addFormButton.button();
@@ -86,7 +109,9 @@ export class Designer {
             var newVal = $(formNameField).val();
             var index = Designer.formNames.indexOf(Designer.activeForm.FormName);
             Designer.formNames[index] = newVal;
+            
             Designer.activeForm.FormName = newVal;
+            _this.updateFormsSelect();
         });
         formNameField.textinput();
         
@@ -177,6 +202,7 @@ export class Designer {
         
         Designer.activeForm = new mForm.Form("main", Designer.formsDomElement);
         Designer.forms.push(Designer.activeForm);
+        Designer.formNames.push("main");
         var layoputPreferences = new mLinearLayoutPreferences.LinearLayoutPreferences();
         layoputPreferences.Orientation = mLinearLayoutPreferences.LinearLayoutPreferences.Vertical;
         layoputPreferences.Background = "#ffffff";
