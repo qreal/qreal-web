@@ -14,7 +14,7 @@
 			        layout_height="wrap_content"
         			text="@string/first"
         			textSize="20sp"
-			        onClick="onFirstClick"
+			        onClick="second"
 			        layout_gravity="center" />
     
 	</LinearLayout>
@@ -34,7 +34,7 @@
 	        layout_height="wrap_content"
 	        text="@string/second"
 	        textSize="20sp"
-	        onClick="onSecondClick"
+	        onClick="third"
 	        layout_gravity="center" />
     
 	</LinearLayout>

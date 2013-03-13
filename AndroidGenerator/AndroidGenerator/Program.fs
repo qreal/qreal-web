@@ -2,6 +2,7 @@
 open System.Xml.Linq
 open System.IO
 open System.Collections.Generic
+open System.Collections
 
 let path, package =
     let args = System.Environment.GetCommandLineArgs()
@@ -16,6 +17,8 @@ let writeToFile fn (str : string) =
 
 let append (stringBuilder : System.Text.StringBuilder) (str : string) = stringBuilder.Append str |> ignore
 let insert (stringBuilder : System.Text.StringBuilder) (str : string) = stringBuilder.Insert(0, str) |> ignore
+
+let transitions = new Hashtable()
 
 let transformXml = 
     System.IO.Directory.CreateDirectory(path + @"\res\layout") |> ignore
@@ -38,6 +41,7 @@ let transformXml =
                     appendXml "<?xml version=\"1.0\" encoding=\"utf-8\"?>" 
             |  "" | "xml" | "forms" -> ()
             | _ -> 
+                if name = "Button" then transitions.Add(reader.GetAttribute "id", reader.GetAttribute "onClick")
                 let depth = reader.Depth
 
                 if hasAttr then
@@ -73,25 +77,11 @@ let transformXml =
                     |> fun pref -> appendXml <| pref + "=" + "\"" + reader.Value + "\""
 
                     if i <> amount - 1 then appendXml "\n"
+
         with | :? System.Xml.XmlException as e ->
             failwithf "Error while parsing %s: %s" path e.Message
 
     reader.Close()
-
-let transitions = 
-    let transitions = new Dictionary<_,_>()
-    if System.IO.File.Exists(path + @"\Transition.xml") then 
-        let readerTrans = XmlReader.Create(path + @"\Transition.xml")
-        while readerTrans.Read() do 
-            match readerTrans.Name with
-            | "Button" | "WebView" ->
-                let attributes =
-                    readerTrans.GetAttribute("name_to")
-                    , readerTrans.GetAttribute("name_from")
-                    , readerTrans.GetAttribute("action")
-                transitions.Add (readerTrans.GetAttribute("id"), attributes)
-            | _ -> ()
-    transitions
 
 // permissions register
 let permissions = new Dictionary<_,_>()
@@ -156,7 +146,7 @@ import android.view.View;\n"
                         insertAct "\nimport android.content.Intent;"
                         imports.Add ("android.content.Intent", "android.content.Intent")
 
-                    let nextForm,_,_ = transitions.[id]
+                    let nextForm = transitions.Item id :?> string
 
                     appendAct <| "
                 Intent intent = new Intent(this, " + nextForm + ".class);
@@ -229,6 +219,7 @@ let createApk () =
     let createBuildXml = "android update project --target 1 -p " + path
     start createBuildXml "android"
     System.Threading.Thread.Sleep 3000
+    // Путь до ant должен быть прописан в перменную среды PATH
     start ("cd /d " + path + " & ant debug") "cd..ant"
 
 createApk ()
