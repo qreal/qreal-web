@@ -15,6 +15,7 @@ export class Form {
 
     set FormName(formName: string) {
         this.formName = formName;
+        this.formDomElement.attr("id", this.formName);
     }
 
     get Content() {

@@ -20,6 +20,7 @@ export class Designer {
     public static instance = new Designer();
 
     private static forms: mForm.Form[] = [];
+    private static formNames: string[] = [];
 
     private static formsDomElement = $("#form");
 
@@ -30,7 +31,7 @@ export class Designer {
 
     public addForm(formName: string) {
         Designer.activeForm.hide()
-        Designer.activeForm = new mForm.Form("main", Designer.formsDomElement);
+        Designer.activeForm = new mForm.Form(formName, Designer.formsDomElement);
         Designer.forms.push(Designer.activeForm);
         var layoputPreferences = new mLinearLayoutPreferences.LinearLayoutPreferences();
         layoputPreferences.Orientation = mLinearLayoutPreferences.LinearLayoutPreferences.Vertical;
@@ -42,6 +43,7 @@ export class Designer {
         Designer.activeForm.addElement(layout);
         Designer.activeForm.show();
         $("#formNameField").val(Designer.activeForm.FormName);
+        Designer.formNames.push(formName);
     }
 
     public changeActiveForm(formName: string) {
@@ -80,6 +82,12 @@ export class Designer {
         var formNameField = $("<input type = 'text' name = 'formNameField' id = 'formNameField' value = '' >");
         $(designerMenuDiv).append(formNameLabel);
         $(designerMenuDiv).append(formNameField);
+        $(formNameField).change(function () {
+            var newVal = $(formNameField).val();
+            var index = Designer.formNames.indexOf(Designer.activeForm.FormName);
+            Designer.formNames[index] = newVal;
+            Designer.activeForm.FormName = newVal;
+        });
         formNameField.textinput();
         
 
