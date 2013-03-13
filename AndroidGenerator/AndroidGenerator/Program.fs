@@ -17,19 +17,26 @@ let writeToFile fn (str : string) =
 let append (stringBuilder : System.Text.StringBuilder) (str : string) = stringBuilder.Append str |> ignore
 let insert (stringBuilder : System.Text.StringBuilder) (str : string) = stringBuilder.Insert(0, str) |> ignore
 
-let transformXml (path : string) = 
+let transformXml = 
+    System.IO.Directory.CreateDirectory(path + @"\res\layout") |> ignore
     let newXml = new System.Text.StringBuilder()
-
-    let reader = XmlReader.Create path
+    let reader = XmlReader.Create(path + @"\forms.xml")
     let appendXml = append newXml
-    appendXml "<?xml version=\"1.0\" encoding=\"utf-8\"?>" 
     let mutable currentDepth = 0
     let mutable hasAttr = false
+    let mutable fileName = ""
     try
         while reader.Read() do
             let name = reader.Name
             match name with
-            | "" | "xml" -> appendXml "\n"
+            | "form" ->
+                if reader.NodeType = XmlNodeType.EndElement then
+                    writeToFile (path + @"\res\layout\" + fileName + ".xml") <| newXml.ToString()
+                    newXml.Clear() |> ignore
+                else
+                    fileName <- reader.GetAttribute("form_name")
+                    appendXml "<?xml version=\"1.0\" encoding=\"utf-8\"?>" 
+            |  "" | "xml" | "forms" -> ()
             | _ -> 
                 let depth = reader.Depth
 
@@ -43,19 +50,21 @@ let transformXml (path : string) =
 
                 let tab = "    "
 
-                appendXml <| String.replicate depth tab
+                appendXml <| String.replicate (depth - 2) tab
                 let amount = reader.AttributeCount
 
                 match amount with
                 | 0 -> hasAttr <- false
                 | _ -> hasAttr <- true
 
+                appendXml "\n"
+
                 appendXml <|
                 if not hasAttr then "</" + name + ">" + "\n"
                 else "<" + name + "\n"
 
                 for i in 0..amount - 1 do
-                    appendXml <| String.replicate (depth + 1) tab
+                    appendXml <| String.replicate (depth - 1) tab
                     reader.MoveToAttribute i
 
                     match reader.Name with
@@ -68,7 +77,6 @@ let transformXml (path : string) =
             failwithf "Error while parsing %s: %s" path e.Message
 
     reader.Close()
-    writeToFile path <| newXml.ToString()
 
 let transitions = 
     let transitions = new Dictionary<_,_>()
@@ -183,9 +191,10 @@ import android.view.View;\n"
 
 System.IO.Directory.CreateDirectory(path + @"\src\com\qrealclouds\" + package) |> ignore
 
+transformXml
+
 for file in (new DirectoryInfo(path + @"\res\layout")).GetFiles() do
     let currentName = file.Name
-    transformXml file.FullName
     let length = currentName.Length
     createImplementation <| currentName.Substring(0, length - 4)
 
@@ -220,7 +229,6 @@ let createApk () =
     let createBuildXml = "android update project --target 1 -p " + path
     start createBuildXml "android"
     System.Threading.Thread.Sleep 3000
-    // Путь до ant должен быть прописан в перменную среды PATH
     start ("cd /d " + path + " & ant debug") "cd..ant"
 
 createApk ()

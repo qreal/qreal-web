@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Test transition</string>
+	<string name="first">To second</string>
+	<string name="second">To third</string>
+</resources>

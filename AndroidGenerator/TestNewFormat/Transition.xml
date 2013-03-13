@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Transition>
+        <Button
+        	id="@+id/first"
+        	name_from="main"
+        	name_to="second"
+        	action = "pushButton" />
+        <Button
+        	id="@+id/second"
+        	name_from="second"
+        	name_to="third"
+        	action = "pushButton" />
+</Transition>
+
+

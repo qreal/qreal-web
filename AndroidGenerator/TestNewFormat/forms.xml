@@ -1,0 +1,53 @@
+<forms>
+<form
+	form_name="main">
+	<LinearLayout
+    		xmlns="http://schemas.android.com/apk/res/android"
+    		orientation="vertical"
+    		layout_width="fill_parent"
+		    layout_height="fill_parent"
+		    gravity="center" >
+    
+		    <Button
+				id="@+id/first"
+			        layout_width="wrap_content"
+			        layout_height="wrap_content"
+        			text="@string/first"
+        			textSize="20sp"
+			        onClick="onFirstClick"
+			        layout_gravity="center" />
+    
+	</LinearLayout>
+</form>
+<form
+	form_name="second">
+	<LinearLayout
+    		xmlns="http://schemas.android.com/apk/res/android"
+   		orientation="vertical"
+   		layout_width="fill_parent"
+   		layout_height="fill_parent"
+   		gravity="center" >
+    
+    	<Button
+        	id="@+id/second"
+        	layout_width="wrap_content"
+	        layout_height="wrap_content"
+	        text="@string/second"
+	        textSize="20sp"
+	        onClick="onSecondClick"
+	        layout_gravity="center" />
+    
+	</LinearLayout>
+</form>
+<form
+	form_name="third">
+	<LinearLayout
+    		xmlns="http://schemas.android.com/apk/res/android"
+   		orientation="vertical"
+   		layout_width="fill_parent"
+   		layout_height="fill_parent"
+   		gravity="center" >
+	</LinearLayout>
+</form>
+</forms>
+
