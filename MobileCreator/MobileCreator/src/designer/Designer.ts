@@ -11,6 +11,7 @@ import mImageViewPreferences = module("designer/preferences/ImageViewPreferences
 import mImageView = module("designer/widgets/ImageView");
 import mButtonPreferences = module("designer/preferences/ButtonPreferences");
 import mButton = module("designer/widgets/Button");
+import mForm = module("designer/Form")
 
 
 export class Designer {
@@ -18,12 +19,40 @@ export class Designer {
 
     public static instance = new Designer();
 
-    private xml:string;
-    get Xml() {
-        return this.xml;
-    }
+    private static forms: mForm.Form[] = [];
+
+    private static formsDomElement = $("#form");
+
+    private static activeForm: mForm.Form;
 
     constructor() {
+    }
+
+    public addForm(formName: string) {
+        Designer.activeForm.hide()
+        Designer.activeForm = new mForm.Form("main", Designer.formsDomElement);
+        Designer.forms.push(Designer.activeForm);
+        var layoputPreferences = new mLinearLayoutPreferences.LinearLayoutPreferences();
+        layoputPreferences.Orientation = mLinearLayoutPreferences.LinearLayoutPreferences.Vertical;
+        layoputPreferences.Background = "#ffffff";
+        layoputPreferences.Height = mElementPreferences.ElementPreferences.FillParent;
+        layoputPreferences.Id = 0;
+        layoputPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
+        var layout = new mLinearLayout.LinearLayout(layoputPreferences);
+        Designer.activeForm.addElement(layout);
+        Designer.activeForm.show();
+    }
+
+    public changeActiveForm(formName: string) {
+        Designer.activeForm.hide();
+        for (var i = 0; i < Designer.forms.length; i++) {
+            if (Designer.forms[i].FormName == formName) {
+                Designer.activeForm = Designer.forms[i];
+                Designer.activeForm.show();
+                break;
+            }
+        }
+        $("#formNameField").val(Designer.activeForm.FormName);
     }
 
     public initDesigner() {
@@ -39,6 +68,16 @@ export class Designer {
         $(formsTreeHeader).text("Forms");
         $(designerMenuDiv).append($(formsTreeHeader));
 
+        var addFormButton = $("<a id=\"addFormButton\" data-role=\"button\" draggable=\"false\">New form</a>");
+        $(designerMenuDiv).append(addFormButton);
+        addFormButton.button();
+        var formNameLabel = $("<label for='formNameField' >Form name: </label>");
+        var formNameField = $("<input type = 'text' name = 'formNameField' id = 'formNameField' value = '' >");
+        $(designerMenuDiv).append(formNameLabel);
+        $(designerMenuDiv).append(formNameField);
+        formNameField.textinput();
+        
+
         var elementsPalleteHeader = document.createElement("li");
         $(elementsPalleteHeader).attr("data-role", "list-divider");
         $(elementsPalleteHeader).text("Widgets");
@@ -51,26 +90,20 @@ export class Designer {
         $(elementsPallete).addClass("ui-grid-b");
         $(elementsPalleteContainer).append($(elementsPallete));
 
-        var buttonElementField = document.createElement("div");
-        $(buttonElementField).addClass("ui-block-a");
-        var buttonElement = document.createElement("button");
-        $(buttonElement).text("Button");
-        $(buttonElementField).append($(buttonElement));
-        $(elementsPallete).append($(buttonElementField));
+        var buttonElement = $("<a id=\"button\" data-role=\"button\" draggable=\"true\">Button</a>");
+        $(elementsPallete).append(buttonElement);
+        buttonElement.addClass("ui-block-a");
+        buttonElement.button();
 
-        var textViewElementField = document.createElement("div");
-        $(textViewElementField).addClass("ui-block-b");
-        var textViewElement = document.createElement("button");
-        $(textViewElement).text("TextView");
-        $(textViewElementField).append($(textViewElement));
-        $(elementsPallete).append($(textViewElementField));
+        var textViewElement = $("<a id=\"textView\" data-role=\"button\" draggable=\"true\">TextView</a>");
+        $(elementsPallete).append(textViewElement);
+        textViewElement.addClass("ui-block-b");
+        textViewElement.button();
 
-        var imageViewElementField = document.createElement("div");
-        $(imageViewElementField).addClass("ui-block-c");
-        var imageViewElement = document.createElement("button");
-        $(imageViewElement).text("ImageView");
-        $(imageViewElementField).append($(imageViewElement));
-        $(elementsPallete).append($(imageViewElementField));
+        var imageViewElement = $("<a id=\"textView\" data-role=\"button\" draggable=\"true\">ImageView</a>");
+        $(elementsPallete).append(imageViewElement);
+        imageViewElement.addClass("ui-block-c");
+        imageViewElement.button();
 
         var propertiesEditorHeader = document.createElement("li");
         $(propertiesEditorHeader).attr("data-role", "list-divider");
@@ -85,21 +118,8 @@ export class Designer {
         $(propertiesEditorContainer).append($(propertiesEditorDiv));
 
         $(parentDiv).prepend($(designerMenuDiv));
-
-
         $(designerMenuDiv).listview();
-        $(buttonElement).button();
-        $(textViewElement).button();
-        $(imageViewElement).button();
 
-        var form = $("#form");
-        var layoputPreferences = new mLinearLayoutPreferences.LinearLayoutPreferences();
-        layoputPreferences.Orientation = mLinearLayoutPreferences.LinearLayoutPreferences.Vertical;
-        layoputPreferences.Background = "#ffffff";
-        layoputPreferences.Height = mElementPreferences.ElementPreferences.FillParent;
-        layoputPreferences.Id = 0;
-        layoputPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
-        var layout = new mLinearLayout.LinearLayout(layoputPreferences);
         $(buttonElement).click(function () {
             var buttonPreferences = new mButtonPreferences.ButtonPreferences();
             buttonPreferences.ButtonId = "buttoned";
@@ -141,12 +161,24 @@ export class Designer {
             imageView.init();
         });
 
-                     
-        form.append(layout.DomElement);
+        
+        Designer.activeForm = new mForm.Form("main", Designer.formsDomElement);
+        Designer.forms.push(Designer.activeForm);
+        var layoputPreferences = new mLinearLayoutPreferences.LinearLayoutPreferences();
+        layoputPreferences.Orientation = mLinearLayoutPreferences.LinearLayoutPreferences.Vertical;
+        layoputPreferences.Background = "#ffffff";
+        layoputPreferences.Height = mElementPreferences.ElementPreferences.FillParent;
+        layoputPreferences.Id = 0;
+        layoputPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
+        var layout = new mLinearLayout.LinearLayout(layoputPreferences);
+        Designer.activeForm.addElement(layout);
+        Designer.activeForm.show();
+        this.changeActiveForm("main");
+        //form.append(layout.DomElement);
        
         
         var xml = layout.toXML();
-        this.xml = xml;
+        //this.xml = xml;
         $.ajax("default.htm", {
             type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
                 var servResp = eval(data);
