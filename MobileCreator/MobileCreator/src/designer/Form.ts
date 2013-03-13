@@ -57,6 +57,7 @@ export class Form {
         var xml = "<form form_name=\"" + this.formName + "\">\n";
         this.content.forEach(function (element: mElement.Element) { xml += element.toXML() } );
         xml += "</form>\n";
+        return xml;
     }
 
     constructor(formName: string, domElement: JQuery) {

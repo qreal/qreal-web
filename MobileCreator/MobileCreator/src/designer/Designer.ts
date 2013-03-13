@@ -47,6 +47,26 @@ export class Designer {
         this.updateFormsSelect();
     }
 
+    private getXml() {
+        var xml = "<forms>\n";
+        for (var i = 0; i < Designer.forms.length; i++) {
+            xml += Designer.forms[i].toXML();
+        }
+        xml += "</forms>\n";
+        alert(xml);
+        $.ajax("default.htm", {
+            type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
+                var servResp = eval(data);
+                if (!servResp.success) {
+                    alert("Error sending XML: " + servResp.msg);
+                }
+                else {
+                    alert("Success!");
+                }
+            }
+        });
+    }
+
     public updateFormsSelect() {
         var select = $("#formsSelect");
         select.empty();
@@ -83,6 +103,13 @@ export class Designer {
         $(designerMenuDiv).attr("data-inset", "true");
         $(designerMenuDiv).attr("data-divider-theme", "d");
 
+        var sendXMLButton = $("<a id=\"sendXMLButton\" data-role=\"button\" draggable=\"false\">Generate!</a>");
+        $(designerMenuDiv).append(sendXMLButton);
+        sendXMLButton.button();
+        $(sendXMLButton).click(function () {
+            _this.getXml();
+        });
+
         var formsTreeHeader = document.createElement("li");
         $(formsTreeHeader).attr("data-role", "list-divider");
         $(formsTreeHeader).text("Forms");
@@ -109,12 +136,12 @@ export class Designer {
             var newVal = $(formNameField).val();
             var index = Designer.formNames.indexOf(Designer.activeForm.FormName);
             Designer.formNames[index] = newVal;
-            
+
             Designer.activeForm.FormName = newVal;
             _this.updateFormsSelect();
         });
         formNameField.textinput();
-        
+
 
         var elementsPalleteHeader = document.createElement("li");
         $(elementsPalleteHeader).attr("data-role", "list-divider");
@@ -199,7 +226,7 @@ export class Designer {
             imageView.init();
         });
 
-        
+
         Designer.activeForm = new mForm.Form("main", Designer.formsDomElement);
         Designer.forms.push(Designer.activeForm);
         Designer.formNames.push("main");
@@ -214,19 +241,5 @@ export class Designer {
         Designer.activeForm.show();
         this.changeActiveForm("main");
         //form.append(layout.DomElement);
-       
-        
-        var xml = layout.toXML();
-        //this.xml = xml;
-        $.ajax("default.htm", {
-            type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
-                var servResp = eval(data);
-                if (!servResp.success) {
-                    alert("Error sending XML: " + servResp.msg);
-                }
-                else {
-                    alert("Fuck yeah!");
-                }
-            }
-    });
+    }
 }
