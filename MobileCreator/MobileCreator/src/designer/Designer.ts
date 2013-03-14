@@ -53,12 +53,8 @@ export class Designer {
         this.updateFormsSelect();
     }
 
-    private getXml() {
-        var xml = "<forms>\n";
-        for (var i = 0; i < Designer.forms.length; i++) {
-            xml += Designer.forms[i].toXML();
-        }
-        xml += "</forms>\n";
+    private sendXml() {
+        var xml = this.getXML();
         alert(xml);
         $.ajax("default.htm", {
             type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
@@ -71,6 +67,15 @@ export class Designer {
                 }
             }
         });
+    }
+
+    public  getXML() {
+        var xml = "<forms>\n";
+        for (var i = 0; i < Designer.forms.length; i++) {
+            xml += Designer.forms[i].toXML();
+        }
+        xml += "</forms>\n";
+        return xml;
     }
 
     public updateFormsSelect() {
@@ -114,7 +119,7 @@ export class Designer {
         $(designerMenuDiv).append(sendXMLButton);
         sendXMLButton.button();
         $(sendXMLButton).click(function () {
-            _this.getXml();
+            _this.sendXml();
         });
 
         var formsTreeHeader = document.createElement("li");
