@@ -3,6 +3,7 @@ open System.Xml.Linq
 open System.IO
 open System.Collections.Generic
 open System.Collections
+open System.Net
 
 let path, package =
     let args = System.Environment.GetCommandLineArgs()
@@ -21,14 +22,20 @@ let insert (stringBuilder : System.Text.StringBuilder) (str : string) = stringBu
 let transitions = new Hashtable()
 let webViews = new Hashtable()
 
+let download (fileLocation:string) (url:string) = 
+    let webClient = new WebClient()
+    webClient.DownloadFile(url, fileLocation)
+
 let transformXml = 
     System.IO.Directory.CreateDirectory(path + @"\res\layout") |> ignore
+    System.IO.Directory.CreateDirectory(path + @"\res\drawable") |> ignore
     let newXml = new System.Text.StringBuilder()
     let reader = XmlReader.Create(path + @"\forms.xml")
     let appendXml = append newXml
     let mutable currentDepth = 0
     let mutable hasAttr = false
     let mutable fileName = ""
+    let mutable imageCounter = 1
     try
         while reader.Read() do
             let name = reader.Name
@@ -44,6 +51,7 @@ let transformXml =
             | _ -> 
                 if name = "Button" then transitions.Add(reader.GetAttribute "id", reader.GetAttribute "onClick")
                 if name = "WebView" then webViews.Add(reader.GetAttribute "id", reader.GetAttribute "url")
+                    
                 let depth = reader.Depth
 
                 if hasAttr then
@@ -75,8 +83,15 @@ let transformXml =
 
                     match reader.Name with
                     | "url" when name = "WebView" -> ()
+                    | "src" as currentName when name = "ImageView" ->
+                        let url = reader.Value
+                        let fileName = "file" + string imageCounter
+                        let fullFileName = path + @"\res\drawable\" + fileName + url.Substring(url.Length - 4, 4)
+                        download fullFileName url
+                        appendXml <| "android:" + currentName + "=" + "\"@drawable/" + fileName + "\""
+                        imageCounter <- imageCounter + 1
                     | "xmlns" as currentName -> appendXml <| currentName + ":android" + "=" + "\"" + reader.Value + "\""
-                    | _ as currentName -> appendXml <| "android:" + reader.Name + "=" + "\"" + reader.Value + "\""
+                    | _ as currentName -> appendXml <| "android:" + currentName + "=" + "\"" + reader.Value + "\""
 
                     if i <> amount - 1 then appendXml "\n"
 
