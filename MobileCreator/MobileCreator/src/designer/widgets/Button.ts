@@ -3,6 +3,7 @@
 import mElement = module("designer/widgets/Element");
 import mElementPreferences = module("designer/preferences/ElementPreferences")
 import mButtonPreferences = module("designer/preferences/ButtonPreferences")
+import mDesigner = module("designer/Designer")
 
 export class Button extends mElement.Element {
     private preferences: mButtonPreferences.ButtonPreferences;
@@ -21,16 +22,19 @@ export class Button extends mElement.Element {
     }
     public init() {
         this.DomElement.empty();
+        this.applyHeight();
+        this.applyWidth();
         var button = $("<a data-role='button'></a>");
-        button.text(this.preferences.Text);
         this.DomElement.append(button);
-        this.DomElement.trigger('create');
+        button.text(this.preferences.Text);
+        button.css("font-size", this.preferences.TextSize + "px");
+        button.css("margin-top", this.preferences.LayoutMarginTop + "px");
+        
         var _this = this;
         this.DomElement.click(function () {
             _this.fillPropertiesEditor($("#propertiesEditor"));
         });
-        this.applyHeight();
-        this.applyWidth();
+        this.DomElement.trigger('create');
     }
 
     private fillPropertiesEditor(editorLayer: JQuery) {
@@ -53,6 +57,58 @@ export class Button extends mElement.Element {
             _this.init();
         });
         textField.textinput();
+        /*
+        var sizeLabel = $("<label for='text-size' > Font size: </label>");
+        var sizeField = $("<input type = 'number' name = 'text-size' id = 'text-size' value = '" + this.Preferences.TextSize + "' >");
+        editorLayer.append(sizeLabel);
+        editorLayer.append(sizeField);
+        sizeField.change(function () {
+            _this.preferences.TextSize = sizeField.val();
+            _this.init();
+        });
+        sizeField.textinput();*/
+        var marginTopLabel = $("<label for='text-margin-top' > Top margin: </label>");
+        var marginTopField = $("<input type = 'number' name = 'text-margin-top' id = 'text-margin-top' value = '" + this.Preferences.LayoutMarginTop + "' >");
+        editorLayer.append(marginTopLabel);
+        editorLayer.append(marginTopField);
+        marginTopField.change(function () {
+            _this.preferences.LayoutMarginTop = marginTopField.val();
+            _this.init();
+        });
+        marginTopField.textinput();
+        /*
+        var widthLabel = $("<label for='text-width' > Width (0 for fill_parent): </label>");
+        var widthField = $("<input type = 'number' name = 'text-width' id = 'text-width' value = '" + this.Preferences.Width + "' >");
+        editorLayer.append(widthLabel);
+        editorLayer.append(widthField);
+        widthField.change(function () {
+            _this.preferences.Width = widthField.val();
+            _this.init();
+        });
+        widthField.textinput();
+        var heightLabel = $("<label for='text-height' > Height (0 for fill_parent): </label>");
+        var heightField = $("<input type = 'number' name = 'text-height' id = 'text-height' value = '" + this.Preferences.Height + "' >");
+        editorLayer.append(heightLabel);
+        editorLayer.append(heightField);
+        heightField.change(function () {
+            _this.preferences.Height = heightField.val();
+            _this.init();
+        });
+        heightField.textinput();*/
+        var onclickSelect = $("<select id=\"onclickSelect\"></select>");
+        editorLayer.append($(onclickSelect));
+        onclickSelect.selectmenu();
+        onclickSelect.change(function () {
+            _this.preferences.OnClickHandler = onclickSelect.val();
+        });
+        var select = $("#onclickSelect");
+        select.empty();
+        for (var i = 0; i < mDesigner.Designer.forms.length; i++) {
+            var currentName = mDesigner.Designer.forms[i].FormName;
+            var newOption = $("<option value=\"" + currentName + "\">" + currentName + "</option>");
+            select.append(newOption);
+        }
+        select.selectmenu("refresh", true);
     }
 
     public toXML() {

@@ -1,6 +1,6 @@
 export class ElementPreferences {
-    public static FillParent = -1;
-    public static WrapContent = -2;
+    public static FillParent = 0;
+    public static WrapContent = -1;
     private width;
     get Width() {
         return this.width;

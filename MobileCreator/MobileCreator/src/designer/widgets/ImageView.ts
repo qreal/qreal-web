@@ -22,10 +22,38 @@ export class ImageView extends mElement.Element {
     public init() {
         this.DomElement.empty();
         var image = $("<img></img>");
-        image.attr('src', this.preferences.ImageURL);
+        image.attr('src', this.preferences.Src);
+        this.DomElement.css("text-align", "center");
+        this.DomElement.css("margin-top", this.preferences.LayoutMarginTop + "px");
         this.DomElement.append(image);
         this.applyHeight();
         this.applyWidth();
+        var _this = this;
+        this.DomElement.click(function () {
+            _this.fillPropertiesEditor($("#propertiesEditor"));
+        });
+    }
+    private fillPropertiesEditor(editorLayer: JQuery) {
+        editorLayer.empty();
+        var _this = this;
+        var srcLabel = $("<label for='text-src' > Source: </label>");
+        var srcField = $("<input type = 'text' name = 'text-src' id = 'text-src' value = '" + this.Preferences.Src + "' >");
+        editorLayer.append(srcLabel);
+        editorLayer.append(srcField);
+        srcField.change(function () {
+            _this.preferences.Src = srcField.val();
+            _this.init();
+        });
+        srcField.textinput();
+        var marginTopLabel = $("<label for='text-margin-top' > Top margin: </label>");
+        var marginTopField = $("<input type = 'number' name = 'text-margin-top' id = 'text-margin-top' value = '" + this.Preferences.LayoutMarginTop + "' >");
+        editorLayer.append(marginTopLabel);
+        editorLayer.append(marginTopField);
+        marginTopField.change(function () {
+            _this.preferences.LayoutMarginTop = marginTopField.val();
+            _this.init();
+        });
+        marginTopField.textinput();
     }
     public toXML() {
         var xmlString = "";

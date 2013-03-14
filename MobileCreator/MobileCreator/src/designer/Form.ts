@@ -47,6 +47,9 @@ export class Form {
 
     public show() {
         this.formDomElement.show();
+        for (var i = 0; i < this.content.length; i++) {
+            this.content[i].init();
+        }
     }
 
     public hide() {
