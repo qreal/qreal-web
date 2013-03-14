@@ -12,7 +12,7 @@
 				id="@+id/first"
 			        layout_width="wrap_content"
 			        layout_height="wrap_content"
-        			text="@string/first"
+        			text="first"
         			textSize="20sp"
 			        onClick="second"
 			        layout_gravity="center" />
@@ -32,7 +32,7 @@
         	id="@+id/second"
         	layout_width="wrap_content"
 	        layout_height="wrap_content"
-	        text="@string/second"
+	        text="second"
 	        textSize="20sp"
 	        onClick="third"
 	        layout_gravity="center" />

@@ -100,7 +100,7 @@ append manifest <| "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 let createImplementation form =
     if form = "main" then
         append activities <| "        <activity android:name=\".main\"
-            android:label=\"@string/app_name\">
+            android:label=\"Default\">
             <intent-filter>
                 <action android:name=\"android.intent.action.MAIN\"/>
                 <category android:name=\"android.intent.category.LAUNCHER\"/>
@@ -188,7 +188,7 @@ for file in (new DirectoryInfo(path + @"\res\layout")).GetFiles() do
     let length = currentName.Length
     createImplementation <| currentName.Substring(0, length - 4)
 
-append manifest <| "\n    <application android:label=\"@string/app_name\"
+append manifest <| "\n    <application android:label=\"Default\"
         android:theme=\"@android:style/Theme.Light.NoTitleBar\">\n"
 append manifest <| activities.ToString()
 append manifest <| "\n    </application>
