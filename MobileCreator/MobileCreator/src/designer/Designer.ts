@@ -20,6 +20,7 @@ export class Designer {
     public static instance = new Designer();
 
     private static forms: mForm.Form[] = [];
+    private static formNames: string[] = [];
 
     private static formsDomElement = $("#form");
 
@@ -30,7 +31,7 @@ export class Designer {
 
     public addForm(formName: string) {
         Designer.activeForm.hide()
-        Designer.activeForm = new mForm.Form("main", Designer.formsDomElement);
+        Designer.activeForm = new mForm.Form(formName, Designer.formsDomElement);
         Designer.forms.push(Designer.activeForm);
         var layoputPreferences = new mLinearLayoutPreferences.LinearLayoutPreferences();
         layoputPreferences.Orientation = mLinearLayoutPreferences.LinearLayoutPreferences.Vertical;
@@ -42,6 +43,42 @@ export class Designer {
         Designer.activeForm.addElement(layout);
         Designer.activeForm.show();
         $("#formNameField").val(Designer.activeForm.FormName);
+        Designer.formNames.push(formName);
+        this.updateFormsSelect();
+    }
+
+    private getXml() {
+        var xml = "<forms>\n";
+        for (var i = 0; i < Designer.forms.length; i++) {
+            xml += Designer.forms[i].toXML();
+        }
+        xml += "</forms>\n";
+        alert(xml);
+        $.ajax("default.htm", {
+            type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
+                var servResp = eval(data);
+                if (!servResp.success) {
+                    alert("Error sending XML: " + servResp.msg);
+                }
+                else {
+                    alert("Success!");
+                }
+            }
+        });
+    }
+
+    public updateFormsSelect() {
+        var select = $("#formsSelect");
+        select.empty();
+        for (var i = 0; i < Designer.forms.length; i++) {
+            var currentName = Designer.forms[i].FormName;
+            var newOption = $("<option value=\"" + currentName + "\">" + currentName + "</option>");
+            if (currentName == Designer.activeForm.FormName) {
+                newOption.attr("selected", "selected");
+            }
+            select.append(newOption);
+        }
+        select.selectmenu("refresh", true);
     }
 
     public changeActiveForm(formName: string) {
@@ -54,6 +91,7 @@ export class Designer {
             }
         }
         $("#formNameField").val(Designer.activeForm.FormName);
+        this.updateFormsSelect();
     }
 
     public initDesigner() {
@@ -65,10 +103,24 @@ export class Designer {
         $(designerMenuDiv).attr("data-inset", "true");
         $(designerMenuDiv).attr("data-divider-theme", "d");
 
+        var sendXMLButton = $("<a id=\"sendXMLButton\" data-role=\"button\" draggable=\"false\">Generate!</a>");
+        $(designerMenuDiv).append(sendXMLButton);
+        sendXMLButton.button();
+        $(sendXMLButton).click(function () {
+            _this.getXml();
+        });
+
         var formsTreeHeader = document.createElement("li");
         $(formsTreeHeader).attr("data-role", "list-divider");
         $(formsTreeHeader).text("Forms");
         $(designerMenuDiv).append($(formsTreeHeader));
+
+        var formsSelect = $("<select id=\"formsSelect\"></select>");
+        $(designerMenuDiv).append($(formsSelect));
+        formsSelect.selectmenu();
+        formsSelect.change(function () {
+            _this.changeActiveForm(formsSelect.val());
+        });
 
         var addFormButton = $("<a id=\"addFormButton\" data-role=\"button\" draggable=\"false\">New form</a>");
         $(designerMenuDiv).append(addFormButton);
@@ -80,8 +132,16 @@ export class Designer {
         var formNameField = $("<input type = 'text' name = 'formNameField' id = 'formNameField' value = '' >");
         $(designerMenuDiv).append(formNameLabel);
         $(designerMenuDiv).append(formNameField);
+        $(formNameField).change(function () {
+            var newVal = $(formNameField).val();
+            var index = Designer.formNames.indexOf(Designer.activeForm.FormName);
+            Designer.formNames[index] = newVal;
+
+            Designer.activeForm.FormName = newVal;
+            _this.updateFormsSelect();
+        });
         formNameField.textinput();
-        
+
 
         var elementsPalleteHeader = document.createElement("li");
         $(elementsPalleteHeader).attr("data-role", "list-divider");
@@ -166,9 +226,10 @@ export class Designer {
             imageView.init();
         });
 
-        
+
         Designer.activeForm = new mForm.Form("main", Designer.formsDomElement);
         Designer.forms.push(Designer.activeForm);
+        Designer.formNames.push("main");
         var layoputPreferences = new mLinearLayoutPreferences.LinearLayoutPreferences();
         layoputPreferences.Orientation = mLinearLayoutPreferences.LinearLayoutPreferences.Vertical;
         layoputPreferences.Background = "#ffffff";
@@ -180,19 +241,5 @@ export class Designer {
         Designer.activeForm.show();
         this.changeActiveForm("main");
         //form.append(layout.DomElement);
-       
-        
-        var xml = layout.toXML();
-        //this.xml = xml;
-        $.ajax("default.htm", {
-            type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
-                var servResp = eval(data);
-                if (!servResp.success) {
-                    alert("Error sending XML: " + servResp.msg);
-                }
-                else {
-                    alert("Fuck yeah!");
-                }
-            }
-    });
+    }
 }
