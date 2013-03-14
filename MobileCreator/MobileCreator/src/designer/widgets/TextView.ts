@@ -23,10 +23,61 @@ export class TextView extends mElement.Element {
         this.DomElement.empty();
         var text = $("<label></label>");
         text.text(this.preferences.Text);
+        this.DomElement.css("font-size", this.preferences.TextSize + "px");
+        this.DomElement.css("margin-top", this.preferences.LayoutMarginTop + "px");
+        this.DomElement.css("padding", this.preferences.Padding + "px");
+        this.DomElement.css("text-align", "center");
         this.DomElement.append(text);
         this.applyHeight();
         this.applyWidth();
+        this.DomElement.css("width", "auto");
+        var _this = this;
+        this.DomElement.click(function () {
+            _this.fillPropertiesEditor($("#propertiesEditor"));
+        });
     }
+
+    private fillPropertiesEditor(editorLayer: JQuery) {
+        editorLayer.empty();
+        var _this = this;
+        var textLabel = $("<label for='text-text' > Text: </label>");
+        var textField = $("<input type = 'text' name = 'text-text' id = 'text-text' value = '" + this.Preferences.Text + "' >");
+        editorLayer.append(textLabel);
+        editorLayer.append(textField);
+        textField.change(function () {
+            _this.preferences.Text = textField.val();
+            _this.init();
+        });
+        textField.textinput();
+        var marginTopLabel = $("<label for='text-margin-top' > Top margin: </label>");
+        var marginTopField = $("<input type = 'number' name = 'text-margin-top' id = 'text-margin-top' value = '" + this.Preferences.LayoutMarginTop + "' >");
+        editorLayer.append(marginTopLabel);
+        editorLayer.append(marginTopField);
+        marginTopField.change(function () {
+            _this.preferences.LayoutMarginTop = marginTopField.val();
+            _this.init();
+        });
+        marginTopField.textinput();
+        var sizeLabel = $("<label for='text-size' > Font size: </label>");
+        var sizeField = $("<input type = 'number' name = 'text-size' id = 'text-size' value = '" + this.Preferences.TextSize + "' >");
+        editorLayer.append(sizeLabel);
+        editorLayer.append(sizeField);
+        sizeField.change(function () {
+            _this.preferences.TextSize = sizeField.val();
+            _this.init();
+        });
+        sizeField.textinput();
+        var paddingLabel = $("<label for='text-padding' > Padding: </label>");
+        var paddingField = $("<input type = 'number' name = 'text-padding' id = 'text-padding' value = '" + this.Preferences.Padding + "' >");
+        editorLayer.append(paddingLabel);
+        editorLayer.append(paddingField);
+        paddingField.change(function () {
+            _this.preferences.Padding = paddingField.val();
+            _this.init();
+        });
+        paddingField.textinput();
+    }
+
     public toXML() {
         var xmlString = "";
         xmlString += "<TextView \n";
