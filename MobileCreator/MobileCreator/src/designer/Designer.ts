@@ -9,6 +9,8 @@ import mTextViewPreferences = module("designer/preferences/TextViewPreferences")
 import mTextView = module("designer/widgets/TextView");
 import mImageViewPreferences = module("designer/preferences/ImageViewPreferences");
 import mImageView = module("designer/widgets/ImageView");
+import mWebViewPreferences = module("designer/preferences/WebViewPreference");
+import mWebView = module("designer/widgets/WebView");
 import mButtonPreferences = module("designer/preferences/ButtonPreferences");
 import mButton = module("designer/widgets/Button");
 import mForm = module("designer/Form")
@@ -167,8 +169,13 @@ export class Designer {
 
         var imageViewElement = $("<a id=\"textView\" data-role=\"button\" draggable=\"true\">ImageView</a>");
         $(elementsPallete).append(imageViewElement);
-        imageViewElement.addClass("ui-block-c");
+        imageViewElement.addClass("ui-block-a");
         imageViewElement.button();
+
+        var webViewElement = $("<a id=\"webView\" data-role=\"button\" draggable=\"true\">WebView</a>");
+        $(elementsPallete).append(webViewElement);
+        webViewElement.addClass("ui-block-b");
+        webViewElement.button();
 
         var propertiesEditorHeader = document.createElement("li");
         $(propertiesEditorHeader).attr("data-role", "list-divider");
@@ -224,6 +231,16 @@ export class Designer {
             var imageView = new mImageView.ImageView(imageViewPreferences);
             layout.addChild(imageView);
             imageView.init();
+        });
+        $(webViewElement).click(function () {
+            var webViewPreferences = new mWebViewPreferences.WebViewPreferences();
+            webViewPreferences.Height = mElementPreferences.ElementPreferences.FillParent;
+            webViewPreferences.Id = 1;
+            webViewPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
+            webViewPreferences.Url = "https://maps.google.ru/maps?q=%D0%BD%D0%B0%D0%B1.+%D0%9E%D0%B1%D0%B2%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE+%D0%9A%D0%B0%D0%BD%D0%B0%D0%BB%D0%B0,+60,+%D0%A1%D0%B0%D0%BD%D0%BA%D1%82-%D0%9F%D0%B5%D1%82%D0%B5%D1%80%D0%B1%D1%83%D1%80%D0%B3&hl=ru&ie=UTF8&sll=55,103&sspn=77.822465,156.621094&oq=%D0%BD%D0%B0&hnear=%D0%BD%D0%B0%D0%B1.+%D0%9E%D0%B1%D0%B2%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE+%D0%9A%D0%B0%D0%BD%D0%B0%D0%BB%D0%B0,+60,+%D0%A1%D0%B0%D0%BD%D0%BA%D1%82-%D0%9F%D0%B5%D1%82%D0%B5%D1%80%D0%B1%D1%83%D1%80%D0%B3,+192007&t=m&z=16&output=embed";
+            var webView = new mWebView.WebView(webViewPreferences);
+            layout.addChild(webView);
+            webView.init();
         });
 
 
