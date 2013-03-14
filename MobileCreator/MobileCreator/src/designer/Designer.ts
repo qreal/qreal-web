@@ -227,9 +227,8 @@ export class Designer {
             imageViewPreferences.Id = 1;
             imageViewPreferences.LayoutGravity = "center_horizontal";
             imageViewPreferences.LayoutMarginTop = 10;
-            imageViewPreferences.Src = "#0000ff";
             imageViewPreferences.Width = mElementPreferences.ElementPreferences.WrapContent;
-            imageViewPreferences.ImageURL = "https://dl.dropbox.com/u/10802739/lt_logo.jpg";
+            imageViewPreferences.Src = "https://dl.dropbox.com/u/10802739/lt_logo.jpg";
             var imageView = new mImageView.ImageView(imageViewPreferences);
             layout.addChild(imageView);
             imageView.init();

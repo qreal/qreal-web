@@ -23,6 +23,7 @@ export class ImageView extends mElement.Element {
         this.DomElement.empty();
         var image = $("<img></img>");
         image.attr('src', this.preferences.Src);
+        this.DomElement.css("text-align", "center");
         this.DomElement.css("margin-top", this.preferences.LayoutMarginTop + "px");
         this.DomElement.append(image);
         this.applyHeight();
