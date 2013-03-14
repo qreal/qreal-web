@@ -19,6 +19,7 @@ let append (stringBuilder : System.Text.StringBuilder) (str : string) = stringBu
 let insert (stringBuilder : System.Text.StringBuilder) (str : string) = stringBuilder.Insert(0, str) |> ignore
 
 let transitions = new Hashtable()
+let webViews = new Hashtable()
 
 let transformXml = 
     System.IO.Directory.CreateDirectory(path + @"\res\layout") |> ignore
@@ -42,6 +43,7 @@ let transformXml =
             |  "" | "xml" | "forms" -> ()
             | _ -> 
                 if name = "Button" then transitions.Add(reader.GetAttribute "id", reader.GetAttribute "onClick")
+                if name = "WebView" then webViews.Add(reader.GetAttribute "id", reader.GetAttribute "url")
                 let depth = reader.Depth
 
                 if hasAttr then
@@ -72,9 +74,9 @@ let transformXml =
                     reader.MoveToAttribute i
 
                     match reader.Name with
-                    | "xmlns" -> reader.Name + ":android"
-                    | _ -> "android:" + reader.Name
-                    |> fun pref -> appendXml <| pref + "=" + "\"" + reader.Value + "\""
+                    | "url" when name = "WebView" -> ()
+                    | "xmlns" as currentName -> appendXml <| currentName + ":android" + "=" + "\"" + reader.Value + "\""
+                    | _ as currentName -> appendXml <| "android:" + reader.Name + "=" + "\"" + reader.Value + "\""
 
                     if i <> amount - 1 then appendXml "\n"
 
@@ -163,9 +165,12 @@ import android.view.View;\n"
                     insertAct "\nimport android.webkit.WebView;"
                     imports.Add ("android.webkit.WebView", "android.webkit.WebView")
 
-                append onCreate <| "\n        WebView webView = (WebView) findViewById(R.id.webViewInfo);
+                let id = reader.GetAttribute "android:id"
+                let url = webViews.Item id :?> string
+
+                append onCreate <| "\n        WebView webView = (WebView) findViewById(R.id." + id.Substring(5, id.Length - 5) + ");
             webView.getSettings().setJavaScriptEnabled(true);
-            webView.loadUrl(\"http://www.lanit-tercom.ru\");" // сайт зашит в код (было необходимо для теста)
+            webView.loadUrl(\"" + url + "\");"
             | _ -> ()
     with | :? System.Xml.XmlException as e ->
         failwithf "Error while parsing %s: %s" form e.Message
