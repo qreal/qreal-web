@@ -52,7 +52,12 @@ export class WebView extends mElement.Element {
         editorLayer.append(textLabel);
         editorLayer.append(textField);
         textField.change(function () {
-            _this.preferences.Url = textField.val();
+            var newValue: string = textField.val();
+            //Dirty hack to deal with GoogleMaps server settings
+            if (newValue.search("maps.google.") != -1) {
+                newValue += "&output=embed";
+            }
+            _this.preferences.Url = newValue;
             _this.init();
         });
         textField.textinput();

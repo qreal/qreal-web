@@ -32,6 +32,7 @@ export class Designer {
     }
 
     public addForm(formName: string) {
+        $("#propertiesEditor").empty();
         Designer.activeForm.hide()
         Designer.activeForm = new mForm.Form(formName, Designer.formsDomElement);
         Designer.forms.push(Designer.activeForm);
@@ -43,9 +44,9 @@ export class Designer {
         layoputPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
         var layout = new mLinearLayout.LinearLayout(layoputPreferences);
         Designer.activeForm.addElement(layout);
-        Designer.activeForm.show();
         $("#formNameField").val(Designer.activeForm.FormName);
         Designer.formNames.push(formName);
+        Designer.activeForm.show();
         this.updateFormsSelect();
     }
 
@@ -84,6 +85,7 @@ export class Designer {
     }
 
     public changeActiveForm(formName: string) {
+        $("#propertiesEditor").empty();
         Designer.activeForm.hide();
         for (var i = 0; i < Designer.forms.length; i++) {
             if (Designer.forms[i].FormName == formName) {
@@ -200,8 +202,8 @@ export class Designer {
             buttonPreferences.LayoutMarginTop = 20;
             buttonPreferences.OnClickHandler = "onFullInfoClick";
             buttonPreferences.Text = "Full info";
-            buttonPreferences.TextSize = 20;
-            buttonPreferences.Width = mElementPreferences.ElementPreferences.WrapContent;
+            buttonPreferences.TextSize = 15;
+            buttonPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
             var button = new mButton.Button(buttonPreferences);
             layout.addChild(button);
             button.init();

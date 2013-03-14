@@ -34,6 +34,8 @@
     width: 480px;
     height: 640px;
     background: #fff;
+    padding: 0px;
+    overflow: hidden;
 }
 
 .screen {
