@@ -33,6 +33,7 @@
     <Compile Include="Forms.fs" />
     <Compile Include="Primitives.fs" />
     <Compile Include="Canvas.fs" />
+    <Compile Include="NetExtensions.fs" />
     <Compile Include="SampleSite.fs" />
   </ItemGroup>
   <ItemGroup>

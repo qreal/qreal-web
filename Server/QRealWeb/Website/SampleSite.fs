@@ -3,12 +3,55 @@
 open System
 open System.IO
 open System.Web
+open System.Net
+open NetExtensions
 open IntelliFactory.WebSharper.Sitelets
 
 /// The website definition.
 module SampleSite =
     open IntelliFactory.Html
     open IntelliFactory.WebSharper
+
+    //let downloadLink = A [HRef @"http:\\localhost\main-debug.apk"] -< [Text "Page 2"]
+    
+    let walked = ref false
+    let asyncServer = HttpListener.Start("http://localhost:12345/", fun ctx -> async {
+        ctx.Response.Headers.Add("Access-Control-Allow-Origin", "*")
+        ctx.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+        use sw = new BinaryWriter(ctx.Response.OutputStream)
+        if !walked then
+            ctx.Response.SendChunked <- true
+            use inputStream = new StreamReader(ctx.Request.InputStream)
+            let input = inputStream.ReadToEnd()
+            let path = @"C:\Project\work"
+            let addPath str = Path.Combine(path, str)
+            System.IO.File.WriteAllText (addPath "forms.xml", input)
+            let cmd = addPath "AndroidGenerator.exe"  + " " + path + " aaa"
+            System.Diagnostics.Process.Start("cmd.exe", "/C " + cmd).WaitForExit()
+            //let client = new WebClient()
+            //client.DownloadStringAsync <| new System.Uri(@"C:\Projects\Movies\Test\a.txt")
+
+            let outputFile = Path.Combine(path, "bin", "main-debug.apk")
+            //let server = System.Web.HttpContext.Current.Server
+            //System.Web.HttpContext.Current <- ctx.Response
+            let response = ctx.Response//System.Web.HttpContext.Current.Response
+            //let stream = server.CreateObject "ADODB.Stream"
+            let resFile = @"C:\inetpub\wwwroot\main-debug.apk"
+            if System.IO.File.Exists resFile then
+                System.IO.File.Delete resFile
+            System.IO.File.Move(addPath @"bin\main-debug.apk", resFile)
+            (*
+            response.AddHeader("Content-Disposition", "attachment; filename=" + "main-debug.apk")//outputFile)
+            response.AddHeader("Content-Type", "application/octet-stream")
+            let output = System.IO.File.ReadAllBytes outputFile
+            let stream = response.OutputStream
+            stream.Write (output, 0, output.Length)
+            stream.Flush()
+            stream.Close()
+            response.Close()
+            *)
+        walked := not !walked
+    })
 
     /// Actions that corresponds to the different pages in the site.
     type Action =
@@ -82,8 +125,8 @@ module SampleSite =
                 let menu : list<Content.HtmlElement> =
                     let ( ! ) x = ctx.Link x
                     [
-                        "Home" => !Action.Home
-                        "Add movie" => !Action.AddMovie
+         //               "Home" => !Action.Home
+         //               "Add movie" => !Action.AddMovie
                         //"Protected" => (RandomizeUrl <| !Action.Protected)
                     ]
                     |> List.map (fun link ->
@@ -95,7 +138,7 @@ module SampleSite =
                     Menu = menu
                     Main = main ctx
                     //Sidebar = [Text "Put your side bar here"]
-                    Footer = [Text "Your website.  Copyright (c) 2011 YourCompany.com"]
+                    Footer = [Text " "]
                     Title = title
                 }
 
@@ -112,7 +155,12 @@ module SampleSite =
                 |> Table
                 |> fun x -> [x]
             *)
-            [IFrame [Src "http://localhost:61082/default.htm"; Width "1000"; Height "600"]]
+            [
+                //A [HRef @"C:\Projects\qreal\work\bin\main-debug.apk"] -< [Text "Page 2"]
+                //A [HRef @"http:\\localhost\main-debug.apk"] -< [Text "Page 2"]
+                //downloadLink
+                IFrame [Src "http://localhost:61082/default.htm"; Width "1040"; Height "800"]
+            ]
             //    [Div [new Canvas.RaphaelViewer()]]
 
         /// A simple page that echoes a parameter.
