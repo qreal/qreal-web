@@ -162,6 +162,7 @@ export class Designer {
 
 
         var elementsPalleteHeader = document.createElement("li");
+        $(elementsPalleteHeader).css("margin-top", "20px");
         $(elementsPalleteHeader).attr("data-role", "list-divider");
         $(elementsPalleteHeader).text("Widgets");
         $(designerMenuDiv).append($(elementsPalleteHeader));
