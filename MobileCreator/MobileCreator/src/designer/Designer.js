@@ -49,7 +49,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
         };
         Designer.prototype.sendXml = function () {
             var xml = this.getXML();
-            $.ajax("default.htm", {
+            $.ajax("http://localhost:12345", {
                 type: "POST",
                 contentType: "text/XML",
                 processData: false,
