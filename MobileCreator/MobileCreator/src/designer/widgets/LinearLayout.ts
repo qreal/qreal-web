@@ -68,7 +68,7 @@ export class LinearLayout extends mElement.Element {
                         buttonPreferences.Id = mDesigner.Designer.id;
                         mDesigner.Designer.id++;
                         buttonPreferences.LayoutMarginTop = 20;
-                        buttonPreferences.OnClickHandler = "";
+                        buttonPreferences.OnClickHandler = "main";
                         buttonPreferences.Text = "Button";
                         buttonPreferences.TextSize = 15;
                         buttonPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
