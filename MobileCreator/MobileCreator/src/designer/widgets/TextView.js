@@ -74,15 +74,6 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                 _this.init();
             });
             sizeField.textinput();
-            var paddingLabel = $("<label for='text-padding' > Padding: </label>");
-            var paddingField = $("<input type = 'number' name = 'text-padding' id = 'text-padding' value = '" + this.Preferences.Padding + "' >");
-            editorLayer.append(paddingLabel);
-            editorLayer.append(paddingField);
-            paddingField.change(function () {
-                _this.preferences.Padding = paddingField.val();
-                _this.init();
-            });
-            paddingField.textinput();
         };
         TextView.prototype.toXML = function () {
             var xmlString = "";

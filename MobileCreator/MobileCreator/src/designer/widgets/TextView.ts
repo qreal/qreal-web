@@ -67,6 +67,8 @@ export class TextView extends mElement.Element {
             _this.init();
         });
         sizeField.textinput();
+        /*
+        WAIT FOR BETTER TIMES!
         var paddingLabel = $("<label for='text-padding' > Padding: </label>");
         var paddingField = $("<input type = 'number' name = 'text-padding' id = 'text-padding' value = '" + this.Preferences.Padding + "' >");
         editorLayer.append(paddingLabel);
@@ -75,7 +77,7 @@ export class TextView extends mElement.Element {
             _this.preferences.Padding = paddingField.val();
             _this.init();
         });
-        paddingField.textinput();
+        paddingField.textinput();*/
     }
 
     public toXML() {
