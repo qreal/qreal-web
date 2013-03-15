@@ -3,12 +3,14 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences"], function(require, exports, __mElement__, __mElementPreferences__) {
+define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences", "designer/Designer"], function(require, exports, __mElement__, __mElementPreferences__, __mDesigner__) {
     var mElement = __mElement__;
 
     var mElementPreferences = __mElementPreferences__;
 
     
+    var mDesigner = __mDesigner__;
+
     var Button = (function (_super) {
         __extends(Button, _super);
         function Button(preferences, domElement) {
@@ -29,16 +31,18 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
         });
         Button.prototype.init = function () {
             this.DomElement.empty();
+            this.applyHeight();
+            this.applyWidth();
             var button = $("<a data-role='button'></a>");
-            button.text(this.preferences.Text);
             this.DomElement.append(button);
-            this.DomElement.trigger('create');
+            button.text(this.preferences.Text);
+            button.css("font-size", this.preferences.TextSize + "px");
+            button.css("margin-top", this.preferences.LayoutMarginTop + "px");
             var _this = this;
             this.DomElement.click(function () {
                 _this.fillPropertiesEditor($("#propertiesEditor"));
             });
-            this.applyHeight();
-            this.applyWidth();
+            this.DomElement.trigger('create');
         };
         Button.prototype.fillPropertiesEditor = function (editorLayer) {
             var _this = this;
@@ -60,6 +64,29 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                 _this.init();
             });
             textField.textinput();
+            var marginTopLabel = $("<label for='text-margin-top' > Top margin: </label>");
+            var marginTopField = $("<input type = 'number' name = 'text-margin-top' id = 'text-margin-top' value = '" + this.Preferences.LayoutMarginTop + "' >");
+            editorLayer.append(marginTopLabel);
+            editorLayer.append(marginTopField);
+            marginTopField.change(function () {
+                _this.preferences.LayoutMarginTop = marginTopField.val();
+                _this.init();
+            });
+            marginTopField.textinput();
+            var onclickSelect = $("<select id=\"onclickSelect\"></select>");
+            editorLayer.append($(onclickSelect));
+            onclickSelect.selectmenu();
+            onclickSelect.change(function () {
+                _this.preferences.OnClickHandler = onclickSelect.val();
+            });
+            var select = $("#onclickSelect");
+            select.empty();
+            for(var i = 0; i < mDesigner.Designer.forms.length; i++) {
+                var currentName = mDesigner.Designer.forms[i].FormName;
+                var newOption = $("<option value=\"" + currentName + "\">" + currentName + "</option>");
+                select.append(newOption);
+            }
+            select.selectmenu("refresh", true);
         };
         Button.prototype.toXML = function () {
             var xmlString = "";

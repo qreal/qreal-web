@@ -9,9 +9,7 @@ export class Button extends mControl.Control {
 
     constructor(tag: mButtonTag.ButtonTag, $control?: JQuery = $("<div></div>")) {
         super(tag, $control);
-    }
 
-    public create() {
         var $button = $("<a data-role='button'></a>");
         this.$Control.append($button);
         var tag = <mButtonTag.ButtonTag> this.Tag;
@@ -24,12 +22,14 @@ export class Button extends mControl.Control {
             $button.attr('data-inline', 'true');
         }
         if (tag.OnClick) {
-            $button.click(function () {
+            $button.bind('click', function () {
                 Button.logger.log("onClick: " + tag.OnClick);
                 mEmulator.Emulator.instance.showPage(tag.OnClick);
             });
         }
-        this.$Control.trigger('create');
+    }
+
+    public create() {       
         super.create();
     }
 }

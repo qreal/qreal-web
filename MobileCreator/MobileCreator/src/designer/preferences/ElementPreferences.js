@@ -1,8 +1,8 @@
 define(["require", "exports"], function(require, exports) {
     var ElementPreferences = (function () {
         function ElementPreferences() { }
-        ElementPreferences.FillParent = -1;
-        ElementPreferences.WrapContent = -2;
+        ElementPreferences.FillParent = 0;
+        ElementPreferences.WrapContent = -1;
         Object.defineProperty(ElementPreferences.prototype, "Width", {
             get: function () {
                 return this.width;

@@ -1,5 +1,7 @@
-define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "emulator/model/ui/Button", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/ControlTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/ImageViewTag", "emulator/model/attributes/WebViewTag"], function(require, exports, __mLog__, __mTextView__, __mButton__, __mImageView__, __mWebView__, __mLinearLayout__, __mLinearLayoutTag__, __mControlTag__, __mTextViewTag__, __mButtonTag__, __mImageViewTag__, __mWebViewTag__) {
+define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emulator/model/ui/TextView", "emulator/model/ui/Button", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/ControlTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/ImageViewTag", "emulator/model/attributes/WebViewTag"], function(require, exports, __mLog__, __mEmulator__, __mTextView__, __mButton__, __mImageView__, __mWebView__, __mLinearLayout__, __mLinearLayoutTag__, __mControlTag__, __mTextViewTag__, __mButtonTag__, __mImageViewTag__, __mWebViewTag__) {
     var mLog = __mLog__;
+
+    var mEmulator = __mEmulator__;
 
     
     var mTextView = __mTextView__;
@@ -31,6 +33,9 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "em
             this.logger = new mLog.Logger("XmlManager");
             this.logger.log("in constructor");
         }
+        XmlManager.Forms = "forms";
+        XmlManager.Form = "form";
+        XmlManager.FormName = "form_name";
         XmlManager.LinearLayout = "LinearLayout";
         XmlManager.TextView = "TextView";
         XmlManager.Button = "Button";
@@ -54,7 +59,26 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "em
             this.logger.log("parseXmlString");
             var parser = new DOMParser();
             var xmlDoc = parser.parseFromString(xmlString, "text/xml");
-            return this.parseNode(xmlDoc.firstChild);
+            return this.parseForms(xmlDoc.firstChild);
+        };
+        XmlManager.prototype.parseForms = function (node) {
+            this.logger.log("parseForms: " + node.nodeName);
+            for(var i = 0; i < node.childNodes.length; i++) {
+                if(node.childNodes.item(i).nodeName == XmlManager.Form) {
+                    this.parseForm(node.childNodes.item(i));
+                }
+            }
+            return this.firstPageName;
+        };
+        XmlManager.prototype.parseForm = function (node) {
+            this.logger.log("parseForm: " + node.nodeName);
+            var name = node.attributes['form_name'].value;
+            if(!this.firstPageName) {
+                this.firstPageName = name;
+                this.logger.log("firstPageName" + this.firstPageName);
+            }
+            var view = this.parseNode(node.childNodes.item(1));
+            mEmulator.Emulator.instance.NavigationManager.addPage(name, view);
         };
         XmlManager.prototype.parseNode = function (node) {
             this.logger.log("parse node: " + node.nodeName);
@@ -84,6 +108,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "em
             this.fillLinearLayoutData(node, tag);
             var linearLayout = new mLinearLayout.LinearLayout(tag);
             var length = node.childNodes.length;
+            this.logger.log("parseLinearLayout length: " + length);
             for(var i = 0; i < length; i++) {
                 var child = this.parseNode(node.childNodes.item(i));
                 if(child) {
