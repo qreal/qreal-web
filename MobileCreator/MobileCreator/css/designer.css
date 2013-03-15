@@ -6,8 +6,8 @@
     padding: 15px;
 /*    margin-top: 20px;
     margin-left: 50px;*/
-    width: 480px;
-    height: 700px;
+    width: 320px;
+    height: 540px;
     float: left;
 }
 
@@ -31,8 +31,8 @@
 }
 
 #form {
-    width: 480px;
-    height: 640px;
+    width: 320px;
+    height: 480px;
     background: #fff;
     padding: 0px;
     overflow: hidden;
