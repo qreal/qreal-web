@@ -115,7 +115,13 @@ export class Designer {
         $(designerMenuDiv).attr("data-inset", "true");
         $(designerMenuDiv).attr("data-divider-theme", "d");
 
+        var propertiesParentDiv = $("#properties");
+        var propertiesDiv = document.createElement("ul");
+        $(propertiesDiv).attr("data-role", "listview");
+        $(propertiesDiv).attr("data-inset", "true");
+        $(propertiesDiv).attr("data-divider-theme", "d");
         var sendXMLButton = $("#sendXMLButton");
+
         //$(designerMenuDiv).append(sendXMLButton);
         //sendXMLButton.button();
         $(sendXMLButton).click(function () {
@@ -190,17 +196,19 @@ export class Designer {
         var propertiesEditorHeader = document.createElement("li");
         $(propertiesEditorHeader).attr("data-role", "list-divider");
         $(propertiesEditorHeader).text("Properties");
-        $(designerMenuDiv).append($(propertiesEditorHeader));
+        $(propertiesDiv).append($(propertiesEditorHeader));
 
         var propertiesEditorContainer = document.createElement("li");
-        $(designerMenuDiv).append($(propertiesEditorContainer));
+        $(propertiesDiv).append($(propertiesEditorContainer));
 
         var propertiesEditorDiv = document.createElement("div");
         propertiesEditorDiv.id = "propertiesEditor";
         $(propertiesEditorContainer).append($(propertiesEditorDiv));
 
         $(parentDiv).prepend($(designerMenuDiv));
+        $(propertiesParentDiv).prepend($(propertiesDiv));
         $(designerMenuDiv).listview();
+        $(propertiesDiv).listview();
 
         document.getElementById("button").ondragstart = function (ev: DragEvent) {
             ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.Button.toString());
