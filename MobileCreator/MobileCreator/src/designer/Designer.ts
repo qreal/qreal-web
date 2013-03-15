@@ -55,7 +55,6 @@ export class Designer {
 
     private sendXml() {
         var xml = this.getXML();
-        alert(xml);
         $.ajax("default.htm", {
             type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
                 var servResp = eval(data);
