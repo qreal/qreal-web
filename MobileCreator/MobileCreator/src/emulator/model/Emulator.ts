@@ -58,6 +58,7 @@ export class Emulator {
     * test method 
     */
     public showXmlStringView(xmlString: string) {
+        xmlString = xmlString.replace(/&/g, "&amp;");
         this.logger.log("showView: \n" + xmlString);
         this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
         this.navigationManager = new mNavigationManager.NavigationManager();

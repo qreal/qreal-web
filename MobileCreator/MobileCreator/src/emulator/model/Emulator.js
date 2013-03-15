@@ -54,6 +54,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             this.emulatorViewModel.showView(this.navigationManager.getPage("main2"));
         };
         Emulator.prototype.showXmlStringView = function (xmlString) {
+            xmlString = xmlString.replace(/&/g, "&amp;");
             this.logger.log("showView: \n" + xmlString);
             this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
             this.navigationManager = new mNavigationManager.NavigationManager();
