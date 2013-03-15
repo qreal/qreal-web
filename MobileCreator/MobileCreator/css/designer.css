@@ -25,6 +25,12 @@
     padding: 16px;
 }
 
+#sendXMLButton {
+    width: 200px;
+    margin-left: 30px;
+    margin-top: 10px;
+}
+
 #designer {
     width: auto;
     height: 800px;

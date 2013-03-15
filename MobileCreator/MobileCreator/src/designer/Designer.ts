@@ -115,9 +115,9 @@ export class Designer {
         $(designerMenuDiv).attr("data-inset", "true");
         $(designerMenuDiv).attr("data-divider-theme", "d");
 
-        var sendXMLButton = $("<a id=\"sendXMLButton\" data-role=\"button\" draggable=\"false\">Generate!</a>");
-        $(designerMenuDiv).append(sendXMLButton);
-        sendXMLButton.button();
+        var sendXMLButton = $("#sendXMLButton");
+        //$(designerMenuDiv).append(sendXMLButton);
+        //sendXMLButton.button();
         $(sendXMLButton).click(function () {
             _this.sendXml();
         });
