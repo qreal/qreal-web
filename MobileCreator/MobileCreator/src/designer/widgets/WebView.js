@@ -59,9 +59,6 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             editorLayer.append(textField);
             textField.change(function () {
                 var newValue = textField.val();
-                if(newValue.search("maps.google.") != -1) {
-                    newValue += "&output=embed";
-                }
                 _this.preferences.Url = newValue;
                 _this.init();
             });
