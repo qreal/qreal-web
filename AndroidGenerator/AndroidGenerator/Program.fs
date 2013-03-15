@@ -4,6 +4,7 @@ open System.IO
 open System.Collections.Generic
 open System.Collections
 open System.Net
+open System.Text
 
 let path, package =
     let args = System.Environment.GetCommandLineArgs()
@@ -16,8 +17,8 @@ let writeToFile fn (str : string) =
    use f = File.CreateText fn
    f.WriteLine str
 
-let append (stringBuilder : System.Text.StringBuilder) (str : string) = stringBuilder.Append str |> ignore
-let insert (stringBuilder : System.Text.StringBuilder) (str : string) = stringBuilder.Insert(0, str) |> ignore
+let append (stringBuilder : StringBuilder) (str : string) = stringBuilder.Append str |> ignore
+let insert (stringBuilder : StringBuilder) (str : string) = stringBuilder.Insert(0, str) |> ignore
 
 let transitions = new Hashtable()
 let webViews = new Hashtable()
@@ -29,7 +30,7 @@ let download (fileLocation:string) (url:string) =
 let transformXml = 
     System.IO.Directory.CreateDirectory(path + @"\res\layout") |> ignore
     System.IO.Directory.CreateDirectory(path + @"\res\drawable") |> ignore
-    let newXml = new System.Text.StringBuilder()
+    let newXml = new StringBuilder()
     let reader = XmlReader.Create(path + @"\forms.xml")
     let appendXml = append newXml
     let mutable currentDepth = 0
@@ -49,7 +50,9 @@ let transformXml =
                     appendXml "<?xml version=\"1.0\" encoding=\"utf-8\"?>" 
             |  "" | "xml" | "forms" -> ()
             | _ -> 
-                if name = "Button" then transitions.Add(reader.GetAttribute "id", reader.GetAttribute "onClick")
+                if name = "Button" then 
+                    if reader.GetAttribute "onClick" = "" then ()
+                    else transitions.Add(reader.GetAttribute "id", reader.GetAttribute "onClick")
                 if name = "WebView" then webViews.Add(reader.GetAttribute "id", reader.GetAttribute "url")
                     
                 let depth = reader.Depth
@@ -83,6 +86,9 @@ let transformXml =
 
                     match reader.Name with
                     | "url" when name = "WebView" -> ()
+                    | "onClick" as currentName when name = "Button" ->
+                        if reader.Value = "" then ()
+                        else appendXml <| "android:" + currentName + "=" + "\"" + reader.Value + "\""
                     | "src" as currentName when name = "ImageView" ->
                         let url = reader.Value
                         let fileName = "file" + string imageCounter
@@ -103,9 +109,9 @@ let transformXml =
 // permissions register
 let permissions = new Dictionary<_,_>()
 
-let activities = new System.Text.StringBuilder()
+let activities = new StringBuilder()
 
-let manifest = new System.Text.StringBuilder()
+let manifest = new StringBuilder()
 append manifest <| "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"
     package=\"com.qrealclouds." + package + "\"
@@ -129,12 +135,12 @@ let createImplementation form =
     // imports register
     let imports = new Dictionary<_,_>()
 
-    let currentImports = new System.Text.StringBuilder()
+    let currentImports = new StringBuilder()
     append currentImports <| "\nimport android.app.Activity;
 import android.os.Bundle;
 import android.view.View;\n"
 
-    let onCreate = new System.Text.StringBuilder()
+    let onCreate = new StringBuilder()
     append onCreate <| "\n\n    /**
     * Called when the activity is first created.
     */
@@ -143,7 +149,7 @@ import android.view.View;\n"
         super.onCreate(savedInstanceState);
         setContentView(R.layout." + form + ");"
             
-    let activity = System.Text.StringBuilder()
+    let activity = StringBuilder()
     let appendAct = append activity
     let insertAct = insert activity
     appendAct <| currentImports.ToString()
@@ -154,11 +160,11 @@ import android.view.View;\n"
         while reader.Read() do 
             match reader.Name with
             | "Button" ->
-                let onClickName = reader.GetAttribute "android:onClick"
                 let id = reader.GetAttribute "android:id"
-                appendAct <| "\n\n    public void " + onClickName + "(View v) {"
-
                 if transitions.ContainsKey id then
+                    let onClickName = reader.GetAttribute "android:onClick"
+                    appendAct <| "\n\n    public void " + onClickName + "(View v) {"
+
                     if not <| imports.ContainsKey "android.content.Intent" then
                         insertAct "\nimport android.content.Intent;"
                         imports.Add ("android.content.Intent", "android.content.Intent")
@@ -166,10 +172,10 @@ import android.view.View;\n"
                     let nextForm = transitions.Item id :?> string
 
                     appendAct <| "
-                Intent intent = new Intent(this, " + nextForm + ".class);
-                startActivity(intent);"
+                    Intent intent = new Intent(this, " + nextForm + ".class);
+                    startActivity(intent);"
 
-                appendAct "\n    }"
+                    appendAct "\n    }"
 
             | "WebView" ->
                 if not <| permissions.ContainsKey "Internet" then

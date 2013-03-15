@@ -71,7 +71,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             textViewPreferences.Id = mDesigner.Designer.id;
                             mDesigner.Designer.id++;
                             textViewPreferences.LayoutMarginTop = 10;
-                            textViewPreferences.Padding = 10;
+                            textViewPreferences.Padding = 0;
                             textViewPreferences.Text = "TextView";
                             textViewPreferences.TextSize = 26;
                             textViewPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
