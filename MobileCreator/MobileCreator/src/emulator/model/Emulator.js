@@ -29,12 +29,16 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
 
     var Emulator = (function () {
         function Emulator() {
+            var _this = this;
             this.logger = new mLog.Logger("Emulator");
             this.usedPages = [];
             this.logger.log("constructor");
             this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
             this.navigationManager = new mNavigationManager.NavigationManager();
             this.xmlManager = new mXmlManager.XmlManager();
+            $("#back_button").click(function (e) {
+                return _this.back();
+            });
         }
         Emulator.instance = new Emulator();
         Emulator.prototype.createView = function () {
@@ -57,6 +61,15 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             this.usedPages = [];
             var pagename = this.xmlManager.parseXmlString(xmlString);
             this.showPage(pagename);
+            var _this = this;
+            var _navigationManager = this.navigationManager;
+        };
+        Emulator.prototype.back = function () {
+            var previousPage = this.navigationManager.back();
+            console.log("previousPage: " + previousPage);
+            if(previousPage) {
+                this.showPage(previousPage);
+            }
         };
         Emulator.prototype.showPage = function (pageName) {
             if(this.usedPages[pageName]) {

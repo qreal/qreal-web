@@ -14,11 +14,15 @@ define(["require", "exports", "utils/log/Log"], function(require, exports, __mLo
         };
         NavigationManager.prototype.getPage = function (pageId) {
             var page = this.pages[pageId];
-            this.pageStack.push(page);
+            this.pageStack.push(pageId);
             return page;
         };
         NavigationManager.prototype.back = function () {
-            return this.pageStack.pop();
+            if(this.pageStack.length > 1) {
+                this.pageStack.pop();
+                return this.pageStack[this.pageStack.length - 1];
+            }
+            return undefined;
         };
         return NavigationManager;
     })();

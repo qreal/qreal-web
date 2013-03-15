@@ -34,7 +34,7 @@ export class ControlTag {
     set MarginBottom(value: number) { this.marginBottom = value; }
 
     // gravity
-    private gravity: string = "left";
+    private gravity: string = "center";
     get Gravity() { return this.gravity }
     set Gravity(value: string) { this.gravity = value }
 

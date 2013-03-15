@@ -33,6 +33,7 @@ export class Emulator {
         this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
         this.navigationManager = new mNavigationManager.NavigationManager();
         this.xmlManager = new mXmlManager.XmlManager();
+        $("#back_button").click(e => this.back());
     }
 
     public createView() {
@@ -49,14 +50,14 @@ export class Emulator {
         this.navigationManager.addPage("page2", page2);
         this.navigationManager.addPage("main2", main2);
         this.navigationManager.addPage("info2", info2);
-        this.emulatorViewModel.showView(this.navigationManager.getPage("main2"));       
+        this.emulatorViewModel.showView(this.navigationManager.getPage("main2"));
         //end stub      
     }
 
     /**
     * test method 
     */
-    public showXmlStringView(xmlString:string) {
+    public showXmlStringView(xmlString: string) {
         this.logger.log("showView: \n" + xmlString);
         this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
         this.navigationManager = new mNavigationManager.NavigationManager();
@@ -64,6 +65,17 @@ export class Emulator {
         this.usedPages = [];
         var pagename = this.xmlManager.parseXmlString(xmlString);
         this.showPage(pagename);
+        var _this: Emulator = this;
+        var _navigationManager = this.navigationManager;
+       
+    }
+
+    private back() {
+        var previousPage = this.navigationManager.back();
+        console.log("previousPage: " + previousPage);
+        if (previousPage) {
+            this.showPage(previousPage);
+        }
     }
 
     private usedPages = [];
@@ -74,7 +86,7 @@ export class Emulator {
             this.usedPages[pageName] = true;
             this.emulatorViewModel.showViewAndCreate(this.navigationManager.getPage(pageName));
         }
-        
+
     }
 
     private showTestStub() {

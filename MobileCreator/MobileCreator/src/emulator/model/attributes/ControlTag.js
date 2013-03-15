@@ -4,7 +4,7 @@ define(["require", "exports"], function(require, exports) {
             this.width = ControlTag.WrapContent;
             this.height = ControlTag.WrapContent;
             this.background = "#ffffff";
-            this.gravity = "left";
+            this.gravity = "center";
         }
         Object.defineProperty(ControlTag.prototype, "Id", {
             get: function () {

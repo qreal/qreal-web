@@ -4,7 +4,7 @@ import mControl = module("emulator/model/ui/Control");
 export class NavigationManager {
     private logger = new mLog.Logger("NavigationManager");
 
-    private pageStack: mControl.Control[] = [];
+    private pageStack: string[] = [];
     private pages: mControl.Control[] = [];
 
     constructor() {
@@ -17,11 +17,15 @@ export class NavigationManager {
 
     public getPage(pageId: string) {
         var page = this.pages[pageId];
-        this.pageStack.push(page);
+        this.pageStack.push(pageId);
         return page;
     }
 
     public back() {
-        return this.pageStack.pop();
+        if (this.pageStack.length > 1) {
+            this.pageStack.pop();
+            return this.pageStack[this.pageStack.length - 1];
+        }
+        return undefined;
     }
 }
