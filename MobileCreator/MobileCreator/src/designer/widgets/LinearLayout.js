@@ -57,7 +57,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             buttonPreferences.Id = mDesigner.Designer.id;
                             mDesigner.Designer.id++;
                             buttonPreferences.LayoutMarginTop = 20;
-                            buttonPreferences.OnClickHandler = "";
+                            buttonPreferences.OnClickHandler = "main";
                             buttonPreferences.Text = "Button";
                             buttonPreferences.TextSize = 15;
                             buttonPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
@@ -73,7 +73,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             textViewPreferences.LayoutMarginTop = 10;
                             textViewPreferences.Padding = 10;
                             textViewPreferences.Text = "TextView";
-                            textViewPreferences.TextSize = 15;
+                            textViewPreferences.TextSize = 26;
                             textViewPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
                             var textView = new mTextView.TextView(textViewPreferences);
                             _this.addChild(textView);
@@ -87,7 +87,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             imageViewPreferences.LayoutGravity = "center_horizontal";
                             imageViewPreferences.LayoutMarginTop = 10;
                             imageViewPreferences.Width = mElementPreferences.ElementPreferences.WrapContent;
-                            imageViewPreferences.Src = "https://dl.dropbox.com/u/10802739/lt_logo.jpg";
+                            imageViewPreferences.Src = "res/imageview.png";
                             var imageView = new mImageView.ImageView(imageViewPreferences);
                             _this.addChild(imageView);
                             imageView.init();
@@ -98,7 +98,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             webViewPreferences.Id = mDesigner.Designer.id;
                             mDesigner.Designer.id++;
                             webViewPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
-                            webViewPreferences.Url = "https://maps.google.ru/maps?q=%D0%BD%D0%B0%D0%B1.+%D0%9E%D0%B1%D0%B2%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE+%D0%9A%D0%B0%D0%BD%D0%B0%D0%BB%D0%B0,+60,+%D0%A1%D0%B0%D0%BD%D0%BA%D1%82-%D0%9F%D0%B5%D1%82%D0%B5%D1%80%D0%B1%D1%83%D1%80%D0%B3&hl=ru&ie=UTF8&sll=55,103&sspn=77.822465,156.621094&oq=%D0%BD%D0%B0&hnear=%D0%BD%D0%B0%D0%B1.+%D0%9E%D0%B1%D0%B2%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE+%D0%9A%D0%B0%D0%BD%D0%B0%D0%BB%D0%B0,+60,+%D0%A1%D0%B0%D0%BD%D0%BA%D1%82-%D0%9F%D0%B5%D1%82%D0%B5%D1%80%D0%B1%D1%83%D1%80%D0%B3,+192007&t=m&z=16&output=embed";
+                            webViewPreferences.Url = "";
                             var webView = new mWebView.WebView(webViewPreferences);
                             _this.addChild(webView);
                             webView.init();

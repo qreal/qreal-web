@@ -75,7 +75,6 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             marginTopField.textinput();
             var onclickSelect = $("<select id=\"onclickSelect\"></select>");
             editorLayer.append($(onclickSelect));
-            onclickSelect.selectmenu();
             onclickSelect.change(function () {
                 _this.preferences.OnClickHandler = onclickSelect.val();
             });
@@ -84,9 +83,12 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             for(var i = 0; i < mDesigner.Designer.forms.length; i++) {
                 var currentName = mDesigner.Designer.forms[i].FormName;
                 var newOption = $("<option value=\"" + currentName + "\">" + currentName + "</option>");
+                if(currentName == _this.preferences.OnClickHandler) {
+                    newOption.attr("selected", "selected");
+                }
                 select.append(newOption);
             }
-            select.selectmenu("refresh", true);
+            onclickSelect.selectmenu();
         };
         Button.prototype.toXML = function () {
             var xmlString = "";
