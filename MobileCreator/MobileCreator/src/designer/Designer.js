@@ -1,4 +1,4 @@
-define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPreferences", "designer/preferences/LinearLayoutPreferences", "designer/widgets/LinearLayout", "designer/preferences/TextViewPreferences", "designer/widgets/TextView", "designer/preferences/ImageViewPreferences", "designer/widgets/ImageView", "designer/preferences/ButtonPreferences", "designer/widgets/Button"], function(require, exports, __mLog__, __mElementPreferences__, __mLinearLayoutPreferences__, __mLinearLayout__, __mTextViewPreferences__, __mTextView__, __mImageViewPreferences__, __mImageView__, __mButtonPreferences__, __mButton__) {
+define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPreferences", "designer/preferences/LinearLayoutPreferences", "designer/widgets/LinearLayout", "designer/Form", "designer/widgets/WidgetTypes"], function(require, exports, __mLog__, __mElementPreferences__, __mLinearLayoutPreferences__, __mLinearLayout__, __mForm__, __mWidgetTypes__) {
     var mLog = __mLog__;
 
     var mElementPreferences = __mElementPreferences__;
@@ -7,133 +7,49 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
 
     var mLinearLayout = __mLinearLayout__;
 
-    var mTextViewPreferences = __mTextViewPreferences__;
+    
+    
+    
+    
+    
+    
+    
+    
+    var mForm = __mForm__;
 
-    var mTextView = __mTextView__;
-
-    var mImageViewPreferences = __mImageViewPreferences__;
-
-    var mImageView = __mImageView__;
-
-    var mButtonPreferences = __mButtonPreferences__;
-
-    var mButton = __mButton__;
+    var mWidgetTypes = __mWidgetTypes__;
 
     var Designer = (function () {
         function Designer() {
             this.logger = new mLog.Logger("Designer");
         }
+        Designer.id = 0;
         Designer.instance = new Designer();
-        Object.defineProperty(Designer.prototype, "Xml", {
-            get: function () {
-                return this.xml;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Designer.prototype.initDesigner = function () {
-            this.logger.log("Init designer");
-            var parentDiv = $("#menu");
-            var designerMenuDiv = document.createElement("ul");
-            $(designerMenuDiv).attr("data-role", "listview");
-            $(designerMenuDiv).attr("data-inset", "true");
-            $(designerMenuDiv).attr("data-divider-theme", "d");
-            var formsTreeHeader = document.createElement("li");
-            $(formsTreeHeader).attr("data-role", "list-divider");
-            $(formsTreeHeader).text("Forms");
-            $(designerMenuDiv).append($(formsTreeHeader));
-            var elementsPalleteHeader = document.createElement("li");
-            $(elementsPalleteHeader).attr("data-role", "list-divider");
-            $(elementsPalleteHeader).text("Widgets");
-            $(designerMenuDiv).append($(elementsPalleteHeader));
-            var elementsPalleteContainer = document.createElement("li");
-            $(designerMenuDiv).append($(elementsPalleteContainer));
-            var elementsPallete = document.createElement("div");
-            $(elementsPallete).addClass("ui-grid-b");
-            $(elementsPalleteContainer).append($(elementsPallete));
-            var buttonElementField = document.createElement("div");
-            $(buttonElementField).addClass("ui-block-a");
-            var buttonElement = document.createElement("button");
-            $(buttonElement).text("Button");
-            $(buttonElementField).append($(buttonElement));
-            $(elementsPallete).append($(buttonElementField));
-            var textViewElementField = document.createElement("div");
-            $(textViewElementField).addClass("ui-block-b");
-            var textViewElement = document.createElement("button");
-            $(textViewElement).text("TextView");
-            $(textViewElementField).append($(textViewElement));
-            $(elementsPallete).append($(textViewElementField));
-            var imageViewElementField = document.createElement("div");
-            $(imageViewElementField).addClass("ui-block-c");
-            var imageViewElement = document.createElement("button");
-            $(imageViewElement).text("ImageView");
-            $(imageViewElementField).append($(imageViewElement));
-            $(elementsPallete).append($(imageViewElementField));
-            var propertiesEditorHeader = document.createElement("li");
-            $(propertiesEditorHeader).attr("data-role", "list-divider");
-            $(propertiesEditorHeader).text("Properties");
-            $(designerMenuDiv).append($(propertiesEditorHeader));
-            var propertiesEditorContainer = document.createElement("li");
-            $(designerMenuDiv).append($(propertiesEditorContainer));
-            var propertiesEditorDiv = document.createElement("div");
-            propertiesEditorDiv.id = "propertiesEditor";
-            $(propertiesEditorContainer).append($(propertiesEditorDiv));
-            $(parentDiv).prepend($(designerMenuDiv));
-            $(designerMenuDiv).listview();
-            $(buttonElement).button();
-            $(textViewElement).button();
-            $(imageViewElement).button();
-            var form = $("#form");
+        Designer.forms = [];
+        Designer.formNames = [];
+        Designer.formsDomElement = $("#form");
+        Designer.prototype.addForm = function (formName) {
+            $("#propertiesEditor").empty();
+            Designer.activeForm.hide();
+            Designer.activeForm = new mForm.Form(formName, Designer.formsDomElement);
+            Designer.forms.push(Designer.activeForm);
             var layoputPreferences = new mLinearLayoutPreferences.LinearLayoutPreferences();
             layoputPreferences.Orientation = mLinearLayoutPreferences.LinearLayoutPreferences.Vertical;
             layoputPreferences.Background = "#ffffff";
             layoputPreferences.Height = mElementPreferences.ElementPreferences.FillParent;
-            layoputPreferences.Id = 0;
+            layoputPreferences.Id = Designer.id;
+            Designer.id++;
             layoputPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
             var layout = new mLinearLayout.LinearLayout(layoputPreferences);
-            $(buttonElement).click(function () {
-                var buttonPreferences = new mButtonPreferences.ButtonPreferences();
-                buttonPreferences.ButtonId = "buttoned";
-                buttonPreferences.Height = mElementPreferences.ElementPreferences.WrapContent;
-                buttonPreferences.Id = 3;
-                buttonPreferences.LayoutMarginTop = 20;
-                buttonPreferences.OnClickHandler = "onFullInfoClick";
-                buttonPreferences.Text = "Full info";
-                buttonPreferences.TextSize = 20;
-                buttonPreferences.Width = mElementPreferences.ElementPreferences.WrapContent;
-                var button = new mButton.Button(buttonPreferences);
-                layout.addChild(button);
-                button.init();
-            });
-            $(textViewElement).click(function () {
-                var textViewPreferences = new mTextViewPreferences.TextViewPreferences();
-                textViewPreferences.Height = mElementPreferences.ElementPreferences.WrapContent;
-                textViewPreferences.Id = 2;
-                textViewPreferences.LayoutMarginTop = 10;
-                textViewPreferences.Padding = 20;
-                textViewPreferences.Text = "TROLOLO!";
-                textViewPreferences.TextSize = 20;
-                textViewPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
-                var textView = new mTextView.TextView(textViewPreferences);
-                layout.addChild(textView);
-                textView.init();
-            });
-            $(imageViewElement).click(function () {
-                var imageViewPreferences = new mImageViewPreferences.ImageViewPreferences();
-                imageViewPreferences.Height = mElementPreferences.ElementPreferences.WrapContent;
-                imageViewPreferences.Id = 1;
-                imageViewPreferences.LayoutGravity = "center_horizontal";
-                imageViewPreferences.LayoutMarginTop = 10;
-                imageViewPreferences.Src = "#0000ff";
-                imageViewPreferences.Width = mElementPreferences.ElementPreferences.WrapContent;
-                imageViewPreferences.ImageURL = "https://dl.dropbox.com/u/10802739/lt_logo.jpg";
-                var imageView = new mImageView.ImageView(imageViewPreferences);
-                layout.addChild(imageView);
-                imageView.init();
-            });
-            form.append(layout.DomElement);
-            var xml = layout.toXML();
-            this.xml = xml;
+            Designer.activeForm.addElement(layout);
+            $("#formNameField").val(Designer.activeForm.FormName);
+            Designer.formNames.push(formName);
+            Designer.activeForm.show();
+            this.updateFormsSelect();
+        };
+        Designer.prototype.sendXml = function () {
+            var xml = this.getXML();
+            alert(xml);
             $.ajax("default.htm", {
                 type: "POST",
                 contentType: "text/XML",
@@ -144,10 +60,154 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
                     if(!servResp.success) {
                         alert("Error sending XML: " + servResp.msg);
                     } else {
-                        alert("Fuck yeah!");
+                        alert("Success!");
                     }
                 }
             });
+        };
+        Designer.prototype.getXML = function () {
+            var xml = "<forms>\n";
+            for(var i = 0; i < Designer.forms.length; i++) {
+                xml += Designer.forms[i].toXML();
+            }
+            xml += "</forms>\n";
+            return xml;
+        };
+        Designer.prototype.updateFormsSelect = function () {
+            var select = $("#formsSelect");
+            select.empty();
+            for(var i = 0; i < Designer.forms.length; i++) {
+                var currentName = Designer.forms[i].FormName;
+                var newOption = $("<option value=\"" + currentName + "\">" + currentName + "</option>");
+                if(currentName == Designer.activeForm.FormName) {
+                    newOption.attr("selected", "selected");
+                }
+                select.append(newOption);
+            }
+            select.selectmenu("refresh", true);
+        };
+        Designer.prototype.changeActiveForm = function (formName) {
+            $("#propertiesEditor").empty();
+            Designer.activeForm.hide();
+            for(var i = 0; i < Designer.forms.length; i++) {
+                if(Designer.forms[i].FormName == formName) {
+                    Designer.activeForm = Designer.forms[i];
+                    Designer.activeForm.show();
+                    break;
+                }
+            }
+            $("#formNameField").val(Designer.activeForm.FormName);
+            this.updateFormsSelect();
+        };
+        Designer.prototype.initDesigner = function () {
+            var _this = this;
+            this.logger.log("Init designer");
+            var parentDiv = $("#menu");
+            var designerMenuDiv = document.createElement("ul");
+            $(designerMenuDiv).attr("data-role", "listview");
+            $(designerMenuDiv).attr("data-inset", "true");
+            $(designerMenuDiv).attr("data-divider-theme", "d");
+            var propertiesParentDiv = $("#properties");
+            var propertiesDiv = document.createElement("ul");
+            $(propertiesDiv).attr("data-role", "listview");
+            $(propertiesDiv).attr("data-inset", "true");
+            $(propertiesDiv).attr("data-divider-theme", "d");
+            var sendXMLButton = $("#sendXMLButton");
+            $(sendXMLButton).click(function () {
+                _this.sendXml();
+            });
+            var formsTreeHeader = document.createElement("li");
+            $(formsTreeHeader).attr("data-role", "list-divider");
+            $(formsTreeHeader).text("Forms");
+            $(designerMenuDiv).append($(formsTreeHeader));
+            var formsSelect = $("<select id=\"formsSelect\"></select>");
+            $(designerMenuDiv).append($(formsSelect));
+            formsSelect.selectmenu();
+            formsSelect.change(function () {
+                _this.changeActiveForm(formsSelect.val());
+            });
+            var addFormButton = $("<a id=\"addFormButton\" data-role=\"button\" draggable=\"false\">New form</a>");
+            $(designerMenuDiv).append(addFormButton);
+            addFormButton.button();
+            $(addFormButton).click(function () {
+                _this.addForm("New form");
+            });
+            var formNameLabel = $("<label for='formNameField' >Form name: </label>");
+            var formNameField = $("<input type = 'text' name = 'formNameField' id = 'formNameField' value = '' >");
+            $(designerMenuDiv).append(formNameLabel);
+            $(designerMenuDiv).append(formNameField);
+            $(formNameField).change(function () {
+                var newVal = $(formNameField).val();
+                var index = Designer.formNames.indexOf(Designer.activeForm.FormName);
+                Designer.formNames[index] = newVal;
+                Designer.activeForm.FormName = newVal;
+                _this.updateFormsSelect();
+            });
+            formNameField.textinput();
+            var elementsPalleteHeader = document.createElement("li");
+            $(elementsPalleteHeader).css("margin-top", "20px");
+            $(elementsPalleteHeader).attr("data-role", "list-divider");
+            $(elementsPalleteHeader).text("Widgets");
+            $(designerMenuDiv).append($(elementsPalleteHeader));
+            var elementsPalleteContainer = document.createElement("li");
+            $(designerMenuDiv).append($(elementsPalleteContainer));
+            var elementsPallete = document.createElement("div");
+            $(elementsPalleteContainer).append($(elementsPallete));
+            var buttonElement = $("<a id=\"button\" data-role=\"button\" draggable=\"true\">Button</a>");
+            $(elementsPallete).append(buttonElement);
+            buttonElement.button();
+            var textViewElement = $("<a id=\"textView\" data-role=\"button\" draggable=\"true\">TextView</a>");
+            $(elementsPallete).append(textViewElement);
+            textViewElement.button();
+            var imageViewElement = $("<a id=\"imageView\" data-role=\"button\" draggable=\"true\">ImageView</a>");
+            $(elementsPallete).append(imageViewElement);
+            imageViewElement.button();
+            var webViewElement = $("<a id=\"webView\" data-role=\"button\" draggable=\"true\">WebView</a>");
+            $(elementsPallete).append(webViewElement);
+            webViewElement.button();
+            var propertiesEditorHeader = document.createElement("li");
+            $(propertiesEditorHeader).attr("data-role", "list-divider");
+            $(propertiesEditorHeader).text("Properties");
+            $(propertiesDiv).append($(propertiesEditorHeader));
+            var propertiesEditorContainer = document.createElement("li");
+            $(propertiesDiv).append($(propertiesEditorContainer));
+            var propertiesEditorDiv = document.createElement("div");
+            propertiesEditorDiv.id = "propertiesEditor";
+            $(propertiesEditorContainer).append($(propertiesEditorDiv));
+            $(parentDiv).prepend($(designerMenuDiv));
+            $(propertiesParentDiv).prepend($(propertiesDiv));
+            $(designerMenuDiv).listview();
+            $(propertiesDiv).listview();
+            document.getElementById("button").ondragstart = function (ev) {
+                ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.Button.toString());
+                ev.dataTransfer.setData("IsNew", "yes");
+            };
+            document.getElementById("textView").ondragstart = function (ev) {
+                ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.TextView.toString());
+                ev.dataTransfer.setData("IsNew", "yes");
+            };
+            document.getElementById("imageView").ondragstart = function (ev) {
+                ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.ImageView.toString());
+                ev.dataTransfer.setData("IsNew", "yes");
+            };
+            document.getElementById("webView").ondragstart = function (ev) {
+                ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.WebView.toString());
+                ev.dataTransfer.setData("IsNew", "yes");
+            };
+            Designer.activeForm = new mForm.Form("main", Designer.formsDomElement);
+            Designer.forms.push(Designer.activeForm);
+            Designer.formNames.push("main");
+            var layoputPreferences = new mLinearLayoutPreferences.LinearLayoutPreferences();
+            layoputPreferences.Orientation = mLinearLayoutPreferences.LinearLayoutPreferences.Vertical;
+            layoputPreferences.Background = "#ffffff";
+            layoputPreferences.Height = mElementPreferences.ElementPreferences.FillParent;
+            layoputPreferences.Id = Designer.id;
+            Designer.id++;
+            layoputPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
+            var layout = new mLinearLayout.LinearLayout(layoputPreferences);
+            Designer.activeForm.addElement(layout);
+            Designer.activeForm.show();
+            this.changeActiveForm("main");
         };
         return Designer;
     })();

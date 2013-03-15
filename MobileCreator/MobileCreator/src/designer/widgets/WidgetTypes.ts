@@ -3,4 +3,5 @@ export class WidgetTypes {
     public static Button = 1;
     public static ImageView = 2;
     public static TextView = 3;
+    public static WebView = 4;
 }

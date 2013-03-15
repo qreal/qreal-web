@@ -8,13 +8,21 @@ export class EmulatorViewModel {
     private $screen: JQuery;
 
     constructor() {
-        this.logger.log("in constructor")
+        this.logger.log("in constructor");
         this.$screen = $("#screen");
     }
 
-    public showView(view: mControl.Control) {
-        this.$screen.children().remove();
+    public showViewAndCreate(view: mControl.Control) {
+        this.logger.log("showViewAndCreate");
+        this.$screen.children().hide();
         this.$screen.append(view.$Control);
-        view.create();
+        this.$screen.trigger('create');
+        //view.create();
+    }
+
+    public showView(view: mControl.Control) {
+        this.logger.log("showView");
+        this.$screen.children().hide();
+        view.$Control.show();
     }
 }

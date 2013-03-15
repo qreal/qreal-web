@@ -5,6 +5,7 @@ define(["require", "exports"], function(require, exports) {
         WidgetTypes.Button = 1;
         WidgetTypes.ImageView = 2;
         WidgetTypes.TextView = 3;
+        WidgetTypes.WebView = 4;
         return WidgetTypes;
     })();
     exports.WidgetTypes = WidgetTypes;    

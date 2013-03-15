@@ -18,9 +18,6 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emula
         function Button(tag, $control) {
             if (typeof $control === "undefined") { $control = $("<div></div>"); }
                 _super.call(this, tag, $control);
-        }
-        Button.logger = new mLog.Logger("Button");
-        Button.prototype.create = function () {
             var $button = $("<a data-role='button'></a>");
             this.$Control.append($button);
             var tag = this.Tag;
@@ -32,12 +29,14 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emula
                 $button.attr('data-inline', 'true');
             }
             if(tag.OnClick) {
-                $button.click(function () {
+                $button.bind('click', function () {
                     Button.logger.log("onClick: " + tag.OnClick);
                     mEmulator.Emulator.instance.showPage(tag.OnClick);
                 });
             }
-            this.$Control.trigger('create');
+        }
+        Button.logger = new mLog.Logger("Button");
+        Button.prototype.create = function () {
             _super.prototype.create.call(this);
         };
         return Button;

@@ -30,6 +30,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
     var Emulator = (function () {
         function Emulator() {
             this.logger = new mLog.Logger("Emulator");
+            this.usedPages = [];
             this.logger.log("constructor");
             this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
             this.navigationManager = new mNavigationManager.NavigationManager();
@@ -50,12 +51,20 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
         };
         Emulator.prototype.showXmlStringView = function (xmlString) {
             this.logger.log("showView: \n" + xmlString);
-            var xmlPage = this.xmlManager.parseXmlString(xmlString);
-            this.navigationManager.addPage("page1", xmlPage);
-            this.showPage("page1");
+            this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
+            this.navigationManager = new mNavigationManager.NavigationManager();
+            this.xmlManager = new mXmlManager.XmlManager();
+            this.usedPages = [];
+            var pagename = this.xmlManager.parseXmlString(xmlString);
+            this.showPage(pagename);
         };
         Emulator.prototype.showPage = function (pageName) {
-            this.emulatorViewModel.showView(this.navigationManager.getPage(pageName));
+            if(this.usedPages[pageName]) {
+                this.emulatorViewModel.showView(this.navigationManager.getPage(pageName));
+            } else {
+                this.usedPages[pageName] = true;
+                this.emulatorViewModel.showViewAndCreate(this.navigationManager.getPage(pageName));
+            }
         };
         Emulator.prototype.showTestStub = function () {
             var layoutTag = new mLinearLayoutTag.LinearLayoutTag();

@@ -1,6 +1,7 @@
 
 //#region Import
 import mLog = module("utils/log/Log");
+import mEmulator = module("emulator/model/Emulator");
 import mControl = module("emulator/model/ui/Control");
 import mTextView = module("emulator/model/ui/TextView");
 import mButton = module("emulator/model/ui/Button");
@@ -19,8 +20,12 @@ import mWebViewTag = module("emulator/model/attributes/WebViewTag");
 
 export class XmlManager {
     private logger = new mLog.Logger("XmlManager");
-    
+
     //#region Consts
+    private static Forms = "forms";
+    private static Form = "form";
+    private static FormName = "form_name";
+
     private static LinearLayout = "LinearLayout";
     private static TextView = "TextView";
     private static Button = "Button";
@@ -33,8 +38,8 @@ export class XmlManager {
         this.logger.log("in constructor");
     }
 
-    public parsePage(page:string) {
-        this.logger.log("parse page: "+page);
+    public parsePage(page: string) {
+        this.logger.log("parse page: " + page);
         var xmlHTTP = new XMLHttpRequest();
         var xmlDoc: Document;
         try {
@@ -45,19 +50,42 @@ export class XmlManager {
         catch (e) {
             window.alert("Unable to load the requested file.");
             return undefined;
-        }                
+        }
         return this.parseNode(xmlDoc.firstChild);
     }
 
-    public parseXmlString(xmlString:string) {
+    public parseXmlString(xmlString: string) {
         this.logger.log("parseXmlString");
         var parser = new DOMParser();
         var xmlDoc: Document = parser.parseFromString(xmlString, "text/xml");
-        return this.parseNode(xmlDoc.firstChild);
+        return this.parseForms(xmlDoc.firstChild);
+    }
+
+    private parseForms(node: Node) {
+        this.logger.log("parseForms: " + node.nodeName);
+        for (var i = 0; i < node.childNodes.length; i++) {
+            if (node.childNodes.item(i).nodeName == XmlManager.Form) {
+                this.parseForm(node.childNodes.item(i));
+            }
+        }
+        return this.firstPageName;
+    }
+
+    private firstPageName: string;
+
+    private parseForm(node: Node) {
+        this.logger.log("parseForm: " + node.nodeName);
+        var name: string = node.attributes['form_name'].value;
+        if (!this.firstPageName) {
+            this.firstPageName = name;
+            this.logger.log("firstPageName" + this.firstPageName);
+        }
+        var view: mControl.Control = this.parseNode(node.childNodes.item(1));
+        mEmulator.Emulator.instance.NavigationManager.addPage(name, view);
     }
 
     private parseNode(node: Node) {
-        this.logger.log("parse node: " + node.nodeName)
+        this.logger.log("parse node: " + node.nodeName);
         var control: mControl.Control;
         switch (node.nodeName) {
             case XmlManager.LinearLayout:
@@ -87,6 +115,7 @@ export class XmlManager {
         var linearLayout = new mLinearLayout.LinearLayout(tag);
 
         var length = node.childNodes.length;
+        this.logger.log("parseLinearLayout length: " + length);
         for (var i = 0; i < length; i++) {
             var child = this.parseNode(node.childNodes.item(i));
             if (child) {
@@ -137,7 +166,7 @@ export class XmlManager {
             tag.Orientation = orientation.value == 'vertical' ?
                 mLinearLayoutTag.LinearLayoutTag.Vertical :
                 mLinearLayoutTag.LinearLayoutTag.Horizontal
-        }     
+        }
     }
 
     private fillTextViewData(node: Node, tag: mTextViewTag.TextViewTag) {
@@ -185,7 +214,7 @@ export class XmlManager {
     }
 
     private fillControlPanelData(node: Node, tag: mControlPanelTag.ControlPanelTag) {
-        this.fillControlTagData(node, tag);      
+        this.fillControlTagData(node, tag);
     }
 
     private fillControlTagData(node: Node, tag: mControlTag.ControlTag) {

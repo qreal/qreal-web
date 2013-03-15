@@ -58,13 +58,23 @@ export class Emulator {
     */
     public showXmlStringView(xmlString:string) {
         this.logger.log("showView: \n" + xmlString);
-        var xmlPage = this.xmlManager.parseXmlString(xmlString);
-        this.navigationManager.addPage("page1", xmlPage);
-        this.showPage("page1");
+        this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
+        this.navigationManager = new mNavigationManager.NavigationManager();
+        this.xmlManager = new mXmlManager.XmlManager();
+        this.usedPages = [];
+        var pagename = this.xmlManager.parseXmlString(xmlString);
+        this.showPage(pagename);
     }
 
+    private usedPages = [];
     public showPage(pageName: string) {
-        this.emulatorViewModel.showView(this.navigationManager.getPage(pageName));
+        if (this.usedPages[pageName]) {
+            this.emulatorViewModel.showView(this.navigationManager.getPage(pageName));
+        } else {
+            this.usedPages[pageName] = true;
+            this.emulatorViewModel.showViewAndCreate(this.navigationManager.getPage(pageName));
+        }
+        
     }
 
     private showTestStub() {

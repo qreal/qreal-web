@@ -8,10 +8,16 @@ define(["require", "exports", "utils/log/Log"], function(require, exports, __mLo
             this.logger.log("in constructor");
             this.$screen = $("#screen");
         }
-        EmulatorViewModel.prototype.showView = function (view) {
-            this.$screen.children().remove();
+        EmulatorViewModel.prototype.showViewAndCreate = function (view) {
+            this.logger.log("showViewAndCreate");
+            this.$screen.children().hide();
             this.$screen.append(view.$Control);
-            view.create();
+            this.$screen.trigger('create');
+        };
+        EmulatorViewModel.prototype.showView = function (view) {
+            this.logger.log("showView");
+            this.$screen.children().hide();
+            view.$Control.show();
         };
         return EmulatorViewModel;
     })();

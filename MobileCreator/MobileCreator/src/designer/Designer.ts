@@ -14,9 +14,11 @@ import mWebView = module("designer/widgets/WebView");
 import mButtonPreferences = module("designer/preferences/ButtonPreferences");
 import mButton = module("designer/widgets/Button");
 import mForm = module("designer/Form")
+import mWidgetTypes = module("designer/widgets/WidgetTypes")
 
 
 export class Designer {
+    public static id: number = 0;
     private logger = new mLog.Logger("Designer");
 
     public static instance = new Designer();
@@ -40,7 +42,8 @@ export class Designer {
         layoputPreferences.Orientation = mLinearLayoutPreferences.LinearLayoutPreferences.Vertical;
         layoputPreferences.Background = "#ffffff";
         layoputPreferences.Height = mElementPreferences.ElementPreferences.FillParent;
-        layoputPreferences.Id = 0;
+        layoputPreferences.Id = Designer.id;
+        Designer.id++;
         layoputPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
         var layout = new mLinearLayout.LinearLayout(layoputPreferences);
         Designer.activeForm.addElement(layout);
@@ -50,12 +53,8 @@ export class Designer {
         this.updateFormsSelect();
     }
 
-    private getXml() {
-        var xml = "<forms>\n";
-        for (var i = 0; i < Designer.forms.length; i++) {
-            xml += Designer.forms[i].toXML();
-        }
-        xml += "</forms>\n";
+    private sendXml() {
+        var xml = this.getXML();
         alert(xml);
         $.ajax("default.htm", {
             type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
@@ -68,6 +67,15 @@ export class Designer {
                 }
             }
         });
+    }
+
+    public  getXML() {
+        var xml = "<forms>\n";
+        for (var i = 0; i < Designer.forms.length; i++) {
+            xml += Designer.forms[i].toXML();
+        }
+        xml += "</forms>\n";
+        return xml;
     }
 
     public updateFormsSelect() {
@@ -107,11 +115,17 @@ export class Designer {
         $(designerMenuDiv).attr("data-inset", "true");
         $(designerMenuDiv).attr("data-divider-theme", "d");
 
-        var sendXMLButton = $("<a id=\"sendXMLButton\" data-role=\"button\" draggable=\"false\">Generate!</a>");
-        $(designerMenuDiv).append(sendXMLButton);
-        sendXMLButton.button();
+        var propertiesParentDiv = $("#properties");
+        var propertiesDiv = document.createElement("ul");
+        $(propertiesDiv).attr("data-role", "listview");
+        $(propertiesDiv).attr("data-inset", "true");
+        $(propertiesDiv).attr("data-divider-theme", "d");
+        var sendXMLButton = $("#sendXMLButton");
+
+        //$(designerMenuDiv).append(sendXMLButton);
+        //sendXMLButton.button();
         $(sendXMLButton).click(function () {
-            _this.getXml();
+            _this.sendXml();
         });
 
         var formsTreeHeader = document.createElement("li");
@@ -148,6 +162,7 @@ export class Designer {
 
 
         var elementsPalleteHeader = document.createElement("li");
+        $(elementsPalleteHeader).css("margin-top", "20px");
         $(elementsPalleteHeader).attr("data-role", "list-divider");
         $(elementsPalleteHeader).text("Widgets");
         $(designerMenuDiv).append($(elementsPalleteHeader));
@@ -156,93 +171,62 @@ export class Designer {
         $(designerMenuDiv).append($(elementsPalleteContainer));
 
         var elementsPallete = document.createElement("div");
-        $(elementsPallete).addClass("ui-grid-b");
+        //$(elementsPallete).addClass("ui-grid-a");
         $(elementsPalleteContainer).append($(elementsPallete));
 
         var buttonElement = $("<a id=\"button\" data-role=\"button\" draggable=\"true\">Button</a>");
         $(elementsPallete).append(buttonElement);
-        buttonElement.addClass("ui-block-a");
+        //buttonElement.addClass("ui-block-a");
         buttonElement.button();
 
         var textViewElement = $("<a id=\"textView\" data-role=\"button\" draggable=\"true\">TextView</a>");
         $(elementsPallete).append(textViewElement);
-        textViewElement.addClass("ui-block-b");
+        //textViewElement.addClass("ui-block-b");
         textViewElement.button();
 
-        var imageViewElement = $("<a id=\"textView\" data-role=\"button\" draggable=\"true\">ImageView</a>");
+        var imageViewElement = $("<a id=\"imageView\" data-role=\"button\" draggable=\"true\">ImageView</a>");
         $(elementsPallete).append(imageViewElement);
-        imageViewElement.addClass("ui-block-a");
+        //imageViewElement.addClass("ui-block-a");
         imageViewElement.button();
 
         var webViewElement = $("<a id=\"webView\" data-role=\"button\" draggable=\"true\">WebView</a>");
         $(elementsPallete).append(webViewElement);
-        webViewElement.addClass("ui-block-b");
+        //webViewElement.addClass("ui-block-b");
         webViewElement.button();
 
         var propertiesEditorHeader = document.createElement("li");
         $(propertiesEditorHeader).attr("data-role", "list-divider");
         $(propertiesEditorHeader).text("Properties");
-        $(designerMenuDiv).append($(propertiesEditorHeader));
+        $(propertiesDiv).append($(propertiesEditorHeader));
 
         var propertiesEditorContainer = document.createElement("li");
-        $(designerMenuDiv).append($(propertiesEditorContainer));
+        $(propertiesDiv).append($(propertiesEditorContainer));
 
         var propertiesEditorDiv = document.createElement("div");
         propertiesEditorDiv.id = "propertiesEditor";
         $(propertiesEditorContainer).append($(propertiesEditorDiv));
 
         $(parentDiv).prepend($(designerMenuDiv));
+        $(propertiesParentDiv).prepend($(propertiesDiv));
         $(designerMenuDiv).listview();
+        $(propertiesDiv).listview();
 
-        $(buttonElement).click(function () {
-            var buttonPreferences = new mButtonPreferences.ButtonPreferences();
-            buttonPreferences.ButtonId = "buttoned";
-            buttonPreferences.Height = mElementPreferences.ElementPreferences.WrapContent;
-            buttonPreferences.Id = 3;
-            buttonPreferences.LayoutMarginTop = 20;
-            buttonPreferences.OnClickHandler = "onFullInfoClick";
-            buttonPreferences.Text = "Full info";
-            buttonPreferences.TextSize = 15;
-            buttonPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
-            var button = new mButton.Button(buttonPreferences);
-            layout.addChild(button);
-            button.init();
-        });
-        $(textViewElement).click(function () {
-            var textViewPreferences = new mTextViewPreferences.TextViewPreferences();
-            textViewPreferences.Height = mElementPreferences.ElementPreferences.WrapContent;
-            textViewPreferences.Id = 2;
-            textViewPreferences.LayoutMarginTop = 10;
-            textViewPreferences.Padding = 20;
-            textViewPreferences.Text = "TROLOLO!";
-            textViewPreferences.TextSize = 20;
-            textViewPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
-            var textView = new mTextView.TextView(textViewPreferences);
-            layout.addChild(textView);
-            textView.init();
-        });
-        $(imageViewElement).click(function () {
-            var imageViewPreferences = new mImageViewPreferences.ImageViewPreferences();
-            imageViewPreferences.Height = mElementPreferences.ElementPreferences.WrapContent;
-            imageViewPreferences.Id = 1;
-            imageViewPreferences.LayoutGravity = "center_horizontal";
-            imageViewPreferences.LayoutMarginTop = 10;
-            imageViewPreferences.Width = mElementPreferences.ElementPreferences.WrapContent;
-            imageViewPreferences.Src = "https://dl.dropbox.com/u/10802739/lt_logo.jpg";
-            var imageView = new mImageView.ImageView(imageViewPreferences);
-            layout.addChild(imageView);
-            imageView.init();
-        });
-        $(webViewElement).click(function () {
-            var webViewPreferences = new mWebViewPreferences.WebViewPreferences();
-            webViewPreferences.Height = mElementPreferences.ElementPreferences.FillParent;
-            webViewPreferences.Id = 1;
-            webViewPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
-            webViewPreferences.Url = "https://maps.google.ru/maps?q=%D0%BD%D0%B0%D0%B1.+%D0%9E%D0%B1%D0%B2%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE+%D0%9A%D0%B0%D0%BD%D0%B0%D0%BB%D0%B0,+60,+%D0%A1%D0%B0%D0%BD%D0%BA%D1%82-%D0%9F%D0%B5%D1%82%D0%B5%D1%80%D0%B1%D1%83%D1%80%D0%B3&hl=ru&ie=UTF8&sll=55,103&sspn=77.822465,156.621094&oq=%D0%BD%D0%B0&hnear=%D0%BD%D0%B0%D0%B1.+%D0%9E%D0%B1%D0%B2%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE+%D0%9A%D0%B0%D0%BD%D0%B0%D0%BB%D0%B0,+60,+%D0%A1%D0%B0%D0%BD%D0%BA%D1%82-%D0%9F%D0%B5%D1%82%D0%B5%D1%80%D0%B1%D1%83%D1%80%D0%B3,+192007&t=m&z=16&output=embed";
-            var webView = new mWebView.WebView(webViewPreferences);
-            layout.addChild(webView);
-            webView.init();
-        });
+        document.getElementById("button").ondragstart = function (ev: DragEvent) {
+            ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.Button.toString());
+            ev.dataTransfer.setData("IsNew", "yes");
+        }
+        document.getElementById("textView").ondragstart = function (ev: DragEvent) {
+            ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.TextView.toString());
+            ev.dataTransfer.setData("IsNew", "yes");
+        }
+        document.getElementById("imageView").ondragstart = function (ev: DragEvent) {
+            ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.ImageView.toString());
+            ev.dataTransfer.setData("IsNew", "yes");
+        }
+        document.getElementById("webView").ondragstart = function (ev: DragEvent) {
+            ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.WebView.toString());
+            ev.dataTransfer.setData("IsNew", "yes");
+        }
 
 
         Designer.activeForm = new mForm.Form("main", Designer.formsDomElement);
@@ -252,7 +236,8 @@ export class Designer {
         layoputPreferences.Orientation = mLinearLayoutPreferences.LinearLayoutPreferences.Vertical;
         layoputPreferences.Background = "#ffffff";
         layoputPreferences.Height = mElementPreferences.ElementPreferences.FillParent;
-        layoputPreferences.Id = 0;
+        layoputPreferences.Id = Designer.id;
+        Designer.id++;
         layoputPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
         var layout = new mLinearLayout.LinearLayout(layoputPreferences);
         Designer.activeForm.addElement(layout);

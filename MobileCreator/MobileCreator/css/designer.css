@@ -6,8 +6,8 @@
     padding: 15px;
 /*    margin-top: 20px;
     margin-left: 50px;*/
-    width: 480px;
-    height: 700px;
+    width: 320px;
+    height: 540px;
     float: left;
 }
 
@@ -17,12 +17,27 @@
 }
 
 #left {
-    width: 400px;
+    width: 300px;
     height: 700px;
     float: left;
     border: 0;
     border-radius: 11px;
     padding: 16px;
+}
+
+#right {
+    width: 300px;
+    height: 700px;
+    float: left;
+    border: 0;
+    border-radius: 11px;
+    padding: 16px;
+}
+
+#sendXMLButton {
+    width: 200px;
+    margin-left: 30px;
+    margin-top: 10px;
 }
 
 #designer {
@@ -31,8 +46,8 @@
 }
 
 #form {
-    width: 480px;
-    height: 640px;
+    width: 320px;
+    height: 480px;
     background: #fff;
     padding: 0px;
     overflow: hidden;

@@ -23,10 +23,10 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "desig
                     $("#emulator").hide();
                     $("#designer").show();
                 } else {
-                    $("#btChange").children('span').children('span').text("Emulator");
+                    $("#btChange").children('span').children('span').text("Back");
                     $("#emulator").show();
                     $("#designer").hide();
-                    mEmulator.Emulator.instance.createView();
+                    mEmulator.Emulator.instance.showXmlStringView(mDesigner.Designer.instance.getXML());
                 }
             });
         };
