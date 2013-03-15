@@ -54,9 +54,11 @@ export class WebView extends mElement.Element {
         textField.change(function () {
             var newValue: string = textField.val();
             //Dirty hack to deal with GoogleMaps server settings
+            /*
             if (newValue.search("maps.google.") != -1) {
-                newValue += "&output=embed";
+                newValue += "&amp;output=embed";
             }
+            */
             _this.preferences.Url = newValue;
             _this.init();
         });
