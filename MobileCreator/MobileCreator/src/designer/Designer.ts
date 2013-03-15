@@ -164,27 +164,27 @@ export class Designer {
         $(designerMenuDiv).append($(elementsPalleteContainer));
 
         var elementsPallete = document.createElement("div");
-        $(elementsPallete).addClass("ui-grid-b");
+        //$(elementsPallete).addClass("ui-grid-a");
         $(elementsPalleteContainer).append($(elementsPallete));
 
         var buttonElement = $("<a id=\"button\" data-role=\"button\" draggable=\"true\">Button</a>");
         $(elementsPallete).append(buttonElement);
-        buttonElement.addClass("ui-block-a");
+        //buttonElement.addClass("ui-block-a");
         buttonElement.button();
 
         var textViewElement = $("<a id=\"textView\" data-role=\"button\" draggable=\"true\">TextView</a>");
         $(elementsPallete).append(textViewElement);
-        textViewElement.addClass("ui-block-b");
+        //textViewElement.addClass("ui-block-b");
         textViewElement.button();
 
         var imageViewElement = $("<a id=\"imageView\" data-role=\"button\" draggable=\"true\">ImageView</a>");
         $(elementsPallete).append(imageViewElement);
-        imageViewElement.addClass("ui-block-a");
+        //imageViewElement.addClass("ui-block-a");
         imageViewElement.button();
 
         var webViewElement = $("<a id=\"webView\" data-role=\"button\" draggable=\"true\">WebView</a>");
         $(elementsPallete).append(webViewElement);
-        webViewElement.addClass("ui-block-b");
+        //webViewElement.addClass("ui-block-b");
         webViewElement.button();
 
         var propertiesEditorHeader = document.createElement("li");
