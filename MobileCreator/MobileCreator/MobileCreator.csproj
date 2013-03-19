@@ -106,9 +106,6 @@
       <DependentUpon>require.d.ts</DependentUpon>
     </Content>
     <Content Include="lib\require.js" />
-    <Content Include="src\App.js">
-      <DependentUpon>AppConfig.ts</DependentUpon>
-    </Content>
     <TypeScriptCompile Include="src\emulator\model\Emulator.ts" />
     <TypeScriptCompile Include="src\Application.ts" />
     <Content Include="src\Application.js">
