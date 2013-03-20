@@ -16,3 +16,4 @@ C:\Project\QRealWeb\QRealWeb\Website\bin\Debug\IntelliFactory.WebSharper.Raphael
 C:\Project\QRealWeb\QRealWeb\Website\bin\Debug\IntelliFactory.WebSharper.Raphael.xml
 C:\Project\QRealWeb\QRealWeb\Website\obj\Debug\Website.dll
 C:\Project\QRealWeb\QRealWeb\Website\obj\Debug\Website.pdb
+C:\Project\QRealWeb\QRealWeb\Website\obj\Debug\Website.fsprojResolveAssemblyReference.cache
