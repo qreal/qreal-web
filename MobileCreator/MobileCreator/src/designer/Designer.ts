@@ -57,13 +57,7 @@ export class Designer {
         var xml = this.getXML();
         $.ajax("http://localhost:12345", {
             type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
-                var servResp = eval(data);
-                if (!servResp.success) {
-                    alert("Error sending XML: " + servResp.msg);
-                }
-                else {
-                    alert("Success!");
-                }
+                window.location.assign("http://localhost/main-debug.apk");
             }
         });
     }
