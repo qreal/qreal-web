@@ -1,5 +1,7 @@
-define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emulator/model/ui/TextView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ImageViewTag", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/attributes/WebViewTag", "emulator/viewmodel/EmulatorViewModel", "emulator/model/managers/NavigationManager", "emulator/model/managers/XmlManager"], function(require, exports, __mLog__, __mButton__, __mTextView__, __mLinearLayout__, __mButtonTag__, __mLinearLayoutTag__, __mTextViewTag__, __mImageViewTag__, __mImageView__, __mWebView__, __mWebViewTag__, __mEmulatorViewModel__, __mNavigationManager__, __mXmlManager__) {
+define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/model/ui/Button", "emulator/model/ui/TextView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ImageViewTag", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/attributes/WebViewTag", "emulator/viewmodel/EmulatorViewModel", "emulator/model/managers/NavigationManager", "emulator/model/managers/XmlManager"], function(require, exports, __mLog__, __mXmlHelper__, __mButton__, __mTextView__, __mLinearLayout__, __mButtonTag__, __mLinearLayoutTag__, __mTextViewTag__, __mImageViewTag__, __mImageView__, __mWebView__, __mWebViewTag__, __mEmulatorViewModel__, __mNavigationManager__, __mXmlManager__) {
     var mLog = __mLog__;
+
+    var mXmlHelper = __mXmlHelper__;
 
     var mButton = __mButton__;
 
@@ -41,6 +43,39 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             });
         }
         Emulator.instance = new Emulator();
+        Emulator.prototype.showXmlStringView = function (xml) {
+            xml = mXmlHelper.escapeXml(xml);
+            this.logger.log("showView: \n" + xml);
+            this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
+            this.navigationManager = new mNavigationManager.NavigationManager();
+            this.xmlManager = new mXmlManager.XmlManager();
+            this.usedPages = [];
+            var pagename = this.xmlManager.parseXmlString(xml);
+            this.showPage(pagename);
+        };
+        Emulator.prototype.back = function () {
+            var previousPage = this.navigationManager.back();
+            console.log("previousPage: " + previousPage);
+            if(previousPage) {
+                this.showPage(previousPage);
+            }
+        };
+        Emulator.prototype.showPage = function (pageName) {
+            this.logger.log("showPage: " + pageName);
+            if(this.usedPages[pageName]) {
+                this.emulatorViewModel.showView(this.navigationManager.getPage(pageName));
+            } else {
+                this.usedPages[pageName] = true;
+                this.emulatorViewModel.showViewAndCreate(this.navigationManager.getPage(pageName));
+            }
+        };
+        Object.defineProperty(Emulator.prototype, "NavigationManager", {
+            get: function () {
+                return this.navigationManager;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Emulator.prototype.createView = function () {
             this.logger.log("createView");
             var page1 = this.showVisitCard();
@@ -52,33 +87,6 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             this.navigationManager.addPage("main2", main2);
             this.navigationManager.addPage("info2", info2);
             this.emulatorViewModel.showView(this.navigationManager.getPage("main2"));
-        };
-        Emulator.prototype.showXmlStringView = function (xmlString) {
-            xmlString = xmlString.replace(/&/g, "&amp;");
-            this.logger.log("showView: \n" + xmlString);
-            this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
-            this.navigationManager = new mNavigationManager.NavigationManager();
-            this.xmlManager = new mXmlManager.XmlManager();
-            this.usedPages = [];
-            var pagename = this.xmlManager.parseXmlString(xmlString);
-            this.showPage(pagename);
-            var _this = this;
-            var _navigationManager = this.navigationManager;
-        };
-        Emulator.prototype.back = function () {
-            var previousPage = this.navigationManager.back();
-            console.log("previousPage: " + previousPage);
-            if(previousPage) {
-                this.showPage(previousPage);
-            }
-        };
-        Emulator.prototype.showPage = function (pageName) {
-            if(this.usedPages[pageName]) {
-                this.emulatorViewModel.showView(this.navigationManager.getPage(pageName));
-            } else {
-                this.usedPages[pageName] = true;
-                this.emulatorViewModel.showViewAndCreate(this.navigationManager.getPage(pageName));
-            }
         };
         Emulator.prototype.showTestStub = function () {
             var layoutTag = new mLinearLayoutTag.LinearLayoutTag();
@@ -136,13 +144,6 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/Button", "emul
             layout.addChild(innerLayout);
             return layout;
         };
-        Object.defineProperty(Emulator.prototype, "NavigationManager", {
-            get: function () {
-                return this.navigationManager;
-            },
-            enumerable: true,
-            configurable: true
-        });
         return Emulator;
     })();
     exports.Emulator = Emulator;    

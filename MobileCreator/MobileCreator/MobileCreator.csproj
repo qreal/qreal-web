@@ -179,6 +179,10 @@
     <TypeScriptCompile Include="src\utils\log\Log.ts" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="src\utils\XmlHelper.ts" />
+    <Content Include="src\utils\XmlHelper.js">
+      <DependentUpon>XmlHelper.ts</DependentUpon>
+    </Content>
     <Content Include="web.config" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
