@@ -61,30 +61,27 @@ export class XmlManager {
         return this.parseForms(xmlDoc.firstChild);
     }
 
-    private parseForms(node: Node) {
+    /**
+    */
+    private parseForms(node: Node): Form[] {
         this.logger.log("parseForms: " + node.nodeName);
+        var forms: Form[] = [];
         for (var i = 0; i < node.childNodes.length; i++) {
             if (node.childNodes.item(i).nodeName == XmlManager.Form) {
-                this.parseForm(node.childNodes.item(i));
+                forms.push(this.parseForm(node.childNodes.item(i)));
             }
         }
-        return this.firstPageName;
+        return forms;
     }
 
-    private firstPageName: string;
-
-    private parseForm(node: Node) {
+    private parseForm(node: Node): Form {
         this.logger.log("parseForm: " + node.nodeName);
         var name: string = node.attributes['form_name'].value;
-        if (!this.firstPageName) {
-            this.firstPageName = name;
-            this.logger.log("firstPageName" + this.firstPageName);
-        }
         var view: mControl.Control = this.parseNode(node.childNodes.item(1));
-        mEmulator.Emulator.instance.NavigationManager.addPage(name, view);
+        return new Form(name, view);
     }
 
-    private parseNode(node: Node) {
+    private parseNode(node: Node): mControl.Control {
         this.logger.log("parse node: " + node.nodeName);
         var control: mControl.Control;
         switch (node.nodeName) {
@@ -107,7 +104,7 @@ export class XmlManager {
         return control;
     }
 
-    private parseLinearLayout(node: Node) {
+    private parseLinearLayout(node: Node): mLinearLayout.LinearLayout {
         this.logger.log("parseLinearLayout");
         var tag = new mLinearLayoutTag.LinearLayoutTag();
         this.fillLinearLayoutData(node, tag);
@@ -125,7 +122,7 @@ export class XmlManager {
         return linearLayout;
     }
 
-    private parseTextView(node: Node) {
+    private parseTextView(node: Node): mTextView.TextView {
         this.logger.log("parseTextView");
         var tag = new mTextViewTag.TextViewTag();
         this.fillTextViewData(node, tag);
@@ -133,7 +130,7 @@ export class XmlManager {
         return textView;
     }
 
-    private parseButton(node: Node) {
+    private parseButton(node: Node): mButton.Button {
         this.logger.log("parseButton");
         var tag = new mButtonTag.ButtonTag();
         this.fillButtonData(node, tag);
@@ -141,7 +138,7 @@ export class XmlManager {
         return button;
     }
 
-    private parseImageView(node: Node) {
+    private parseImageView(node: Node): mImageView.ImageView {
         this.logger.log("parseImageView");
         var tag = new mImageViewTag.ImageViewTag();
         this.fillImageViewData(node, tag);
@@ -149,7 +146,7 @@ export class XmlManager {
         return imageView;
     }
 
-    private parseWebView(node: Node) {
+    private parseWebView(node: Node): mWebView.WebView {
         this.logger.log("parseWebView");
         var tag = new mWebViewTag.WebViewTag();
         this.fillWebViewData(node, tag);
@@ -292,16 +289,22 @@ export class XmlManager {
             tag.MarginRight = parseInt(layout_marginRight.value);
         }
     }
+}
 
-    //#region Transition
-    public parseTransitionString(xmlString: string) {
-        this.logger.log("parseTransitionString");
-        var parser = new DOMParser();
-        var xmlDoc: Document = parser.parseFromString(xmlString, "text/xml");
-        //this.parse(xmlDoc.firstChild);
-        //return this.root;
+export class Form {
+    private name: string;
+    private page: mControl.Control;
+
+    constructor(name: string, page: mControl.Control) {
+        this.name = name;
+        this.page = page;
     }
 
-    //#endregion
+    get Name(): string {
+        return this.name;
+    }
 
+    get Page(): mControl.Control {
+        return this.page;
+    }
 }

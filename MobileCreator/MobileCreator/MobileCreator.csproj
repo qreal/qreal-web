@@ -75,6 +75,9 @@
       <DependentUpon>NavigationManager.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\emulator\model\managers\XmlManager.ts" />
+    <Content Include="src\emulator\model\managers\NavigationManager.min.js">
+      <DependentUpon>NavigationManager.ts</DependentUpon>
+    </Content>
     <Content Include="src\emulator\model\managers\XmlManager.js">
       <DependentUpon>XmlManager.ts</DependentUpon>
     </Content>

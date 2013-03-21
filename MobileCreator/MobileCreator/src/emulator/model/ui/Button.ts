@@ -24,7 +24,7 @@ export class Button extends mControl.Control {
         if (tag.OnClick) {
             $button.bind('click', function () {
                 Button.logger.log("onClick: " + tag.OnClick);
-                mEmulator.Emulator.instance.showPage(tag.OnClick);
+                mEmulator.Emulator.instance.NavigationManager.showPage(tag.OnClick);
             });
         }
     }

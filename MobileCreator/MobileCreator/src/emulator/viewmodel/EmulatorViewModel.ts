@@ -12,17 +12,20 @@ export class EmulatorViewModel {
         this.$screen = $("#screen");
     }
 
-    public showViewAndCreate(view: mControl.Control) {
-        this.logger.log("showViewAndCreate");
-        this.$screen.children().hide();
+    public addView(view: mControl.Control) {
+        this.logger.log("addView");
         this.$screen.append(view.$Control);
         this.$screen.trigger('create');
-        //view.create();
+        this.$screen.children().hide();
     }
 
     public showView(view: mControl.Control) {
         this.logger.log("showView");
         this.$screen.children().hide();
         view.$Control.show();
+    }
+
+    public clear() {
+        this.$screen.children().remove();
     }
 }

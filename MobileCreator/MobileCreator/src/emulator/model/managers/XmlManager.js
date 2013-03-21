@@ -1,8 +1,7 @@
-define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emulator/model/ui/TextView", "emulator/model/ui/Button", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/ControlTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/ImageViewTag", "emulator/model/attributes/WebViewTag"], function(require, exports, __mLog__, __mEmulator__, __mTextView__, __mButton__, __mImageView__, __mWebView__, __mLinearLayout__, __mLinearLayoutTag__, __mControlTag__, __mTextViewTag__, __mButtonTag__, __mImageViewTag__, __mWebViewTag__) {
+define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "emulator/model/ui/Button", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/ControlTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/ImageViewTag", "emulator/model/attributes/WebViewTag"], function(require, exports, __mLog__, __mTextView__, __mButton__, __mImageView__, __mWebView__, __mLinearLayout__, __mLinearLayoutTag__, __mControlTag__, __mTextViewTag__, __mButtonTag__, __mImageViewTag__, __mWebViewTag__) {
     var mLog = __mLog__;
 
-    var mEmulator = __mEmulator__;
-
+    
     
     var mTextView = __mTextView__;
 
@@ -63,22 +62,19 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emula
         };
         XmlManager.prototype.parseForms = function (node) {
             this.logger.log("parseForms: " + node.nodeName);
+            var forms = [];
             for(var i = 0; i < node.childNodes.length; i++) {
                 if(node.childNodes.item(i).nodeName == XmlManager.Form) {
-                    this.parseForm(node.childNodes.item(i));
+                    forms.push(this.parseForm(node.childNodes.item(i)));
                 }
             }
-            return this.firstPageName;
+            return forms;
         };
         XmlManager.prototype.parseForm = function (node) {
             this.logger.log("parseForm: " + node.nodeName);
             var name = node.attributes['form_name'].value;
-            if(!this.firstPageName) {
-                this.firstPageName = name;
-                this.logger.log("firstPageName" + this.firstPageName);
-            }
             var view = this.parseNode(node.childNodes.item(1));
-            mEmulator.Emulator.instance.NavigationManager.addPage(name, view);
+            return new Form(name, view);
         };
         XmlManager.prototype.parseNode = function (node) {
             this.logger.log("parse node: " + node.nodeName);
@@ -260,12 +256,29 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emula
                 tag.MarginRight = parseInt(layout_marginRight.value);
             }
         };
-        XmlManager.prototype.parseTransitionString = function (xmlString) {
-            this.logger.log("parseTransitionString");
-            var parser = new DOMParser();
-            var xmlDoc = parser.parseFromString(xmlString, "text/xml");
-        };
         return XmlManager;
     })();
     exports.XmlManager = XmlManager;    
+    var Form = (function () {
+        function Form(name, page) {
+            this.name = name;
+            this.page = page;
+        }
+        Object.defineProperty(Form.prototype, "Name", {
+            get: function () {
+                return this.name;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Form.prototype, "Page", {
+            get: function () {
+                return this.page;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return Form;
+    })();
+    exports.Form = Form;    
 })

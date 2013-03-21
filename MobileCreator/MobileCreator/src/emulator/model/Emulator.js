@@ -5,6 +5,7 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/mode
 
     var mButton = __mButton__;
 
+    
     var mTextView = __mTextView__;
 
     var mLinearLayout = __mLinearLayout__;
@@ -33,41 +34,31 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/mode
         function Emulator() {
             var _this = this;
             this.logger = new mLog.Logger("Emulator");
-            this.usedPages = [];
             this.logger.log("constructor");
             this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
             this.navigationManager = new mNavigationManager.NavigationManager();
             this.xmlManager = new mXmlManager.XmlManager();
-            $("#back_button").click(function (e) {
-                return _this.back();
+            $("#back_button").bind('click', function () {
+                return _this.navigationManager.back();
             });
         }
         Emulator.instance = new Emulator();
         Emulator.prototype.showXmlStringView = function (xml) {
+            var _this = this;
+            this.clearUi();
             xml = mXmlHelper.escapeXml(xml);
-            this.logger.log("showView: \n" + xml);
-            this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
-            this.navigationManager = new mNavigationManager.NavigationManager();
-            this.xmlManager = new mXmlManager.XmlManager();
-            this.usedPages = [];
-            var pagename = this.xmlManager.parseXmlString(xml);
-            this.showPage(pagename);
+            var forms = this.xmlManager.parseXmlString(xml);
+            forms.map(function (form) {
+                return _this.addPage(form.Name, form.Page);
+            });
+            this.navigationManager.showPage(forms[0].Name);
         };
-        Emulator.prototype.back = function () {
-            var previousPage = this.navigationManager.back();
-            console.log("previousPage: " + previousPage);
-            if(previousPage) {
-                this.showPage(previousPage);
-            }
+        Emulator.prototype.addPage = function (name, page) {
+            this.navigationManager.addPage(name, page);
+            this.emulatorViewModel.addView(page);
         };
-        Emulator.prototype.showPage = function (pageName) {
-            this.logger.log("showPage: " + pageName);
-            if(this.usedPages[pageName]) {
-                this.emulatorViewModel.showView(this.navigationManager.getPage(pageName));
-            } else {
-                this.usedPages[pageName] = true;
-                this.emulatorViewModel.showViewAndCreate(this.navigationManager.getPage(pageName));
-            }
+        Emulator.prototype.showPage = function (page) {
+            this.emulatorViewModel.showView(page);
         };
         Object.defineProperty(Emulator.prototype, "NavigationManager", {
             get: function () {
@@ -76,6 +67,10 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/mode
             enumerable: true,
             configurable: true
         });
+        Emulator.prototype.clearUi = function () {
+            this.navigationManager.clear();
+            this.emulatorViewModel.clear();
+        };
         Emulator.prototype.createView = function () {
             this.logger.log("createView");
             var page1 = this.showVisitCard();
@@ -86,7 +81,7 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/mode
             this.navigationManager.addPage("page2", page2);
             this.navigationManager.addPage("main2", main2);
             this.navigationManager.addPage("info2", info2);
-            this.emulatorViewModel.showView(this.navigationManager.getPage("main2"));
+            this.navigationManager.showPage("main2");
         };
         Emulator.prototype.showTestStub = function () {
             var layoutTag = new mLinearLayoutTag.LinearLayoutTag();

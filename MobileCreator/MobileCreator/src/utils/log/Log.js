@@ -4,7 +4,8 @@ define(["require", "exports"], function(require, exports) {
             this.tag = tag;
         }
         Logger.prototype.log = function (message) {
-            console.log("(" + this.tag + "): " + message);
+            var date = new Date();
+            console.log("[" + date.toLocaleTimeString() + "." + date.getMilliseconds() + "] (" + this.tag + "): " + message);
         };
         return Logger;
     })();

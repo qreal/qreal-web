@@ -3,6 +3,7 @@
 import mLog = module("utils/log/Log");
 import mXmlHelper = module("utils/XmlHelper");
 import mButton = module("emulator/model/ui/Button");
+import mControl = module("emulator/model/ui/Control");
 import mTextView = module("emulator/model/ui/TextView");
 import mLinearLayout = module("emulator/model/ui/LinearLayout");
 import mButtonTag = module("emulator/model/attributes/ButtonTag");
@@ -35,42 +36,33 @@ export class Emulator {
         this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
         this.navigationManager = new mNavigationManager.NavigationManager();
         this.xmlManager = new mXmlManager.XmlManager();
-        $("#back_button").click(e => this.back());
+        $("#back_button").bind('click', () => this.navigationManager.back());
     }
-    
+
     public showXmlStringView(xml: string) {
+        this.clearUi();
         xml = mXmlHelper.escapeXml(xml);
-        this.logger.log("showView: \n" + xml);
-        this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
-        this.navigationManager = new mNavigationManager.NavigationManager();
-        this.xmlManager = new mXmlManager.XmlManager();
-        this.usedPages = [];
-        var pagename = this.xmlManager.parseXmlString(xml);
-        this.showPage(pagename);
+        var forms = this.xmlManager.parseXmlString(xml);
+        forms.map(form => this.addPage(form.Name, form.Page));
+        this.navigationManager.showPage(forms[0].Name);
+    }
+
+    private addPage(name: string, page: mControl.Control) {
+        this.navigationManager.addPage(name, page);
+        this.emulatorViewModel.addView(page);
     }
     
-    private back() {
-        var previousPage = this.navigationManager.back();
-        console.log("previousPage: " + previousPage);
-        if (previousPage) {
-            this.showPage(previousPage);
-        }
-    }
-
-    private usedPages = [];
-    public showPage(pageName: string) {
-        this.logger.log("showPage: " + pageName);
-        if (this.usedPages[pageName]) {
-            this.emulatorViewModel.showView(this.navigationManager.getPage(pageName));
-        } else {
-            this.usedPages[pageName] = true;
-            this.emulatorViewModel.showViewAndCreate(this.navigationManager.getPage(pageName));
-        }
-
-    }
+    public showPage(page: mControl.Control) {
+        this.emulatorViewModel.showView(page);
+    }    
 
     get NavigationManager() {
         return this.navigationManager;
+    }
+
+    private clearUi() {
+        this.navigationManager.clear();
+        this.emulatorViewModel.clear();
     }
 
     //#region test stub
@@ -88,7 +80,7 @@ export class Emulator {
         this.navigationManager.addPage("page2", page2);
         this.navigationManager.addPage("main2", main2);
         this.navigationManager.addPage("info2", info2);
-        this.emulatorViewModel.showView(this.navigationManager.getPage("main2"));
+        this.navigationManager.showPage("main2");
         //end stub      
     }
 

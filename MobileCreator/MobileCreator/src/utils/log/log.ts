@@ -6,6 +6,7 @@ export class Logger {
     }
 
     public log(message: string): void {
-        console.log("(" + this.tag + "): " + message);
+        var date = new Date();
+        console.log("[" + date.toLocaleTimeString() + "." + date.getMilliseconds()+ "] (" + this.tag + "): " + message);
     }
 }
