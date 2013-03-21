@@ -55,12 +55,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
                 processData: false,
                 data: xml,
                 success: function (data) {
-                    var servResp = eval(data);
-                    if(!servResp.success) {
-                        alert("Error sending XML: " + servResp.msg);
-                    } else {
-                        alert("Success!");
-                    }
+                    window.location.assign("http://localhost/main-debug.apk");
                 }
             });
         };
