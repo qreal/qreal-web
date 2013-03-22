@@ -46,6 +46,8 @@ let parseXml =
     let currentBuilder = new StringBuilder()
     let builderAppend = append currentBuilder
     let tempStack = new Stack()
+    let getName (id : string) = id.Substring(5, id.Length - 5)
+    let getNumber (sizeAttr : string) = sizeAttr.Substring(0, sizeAttr.Length - 2)
     try
         while reader.Read() do
             let name = reader.Name
@@ -66,16 +68,22 @@ let parseXml =
                 // ключ - имя формы, занчение - пара, в которой 1 элемент - событие, 2 элемент - код, который нужно выполнить
                 triggers.Add(tempStack.Pop() :?> string, (tempStack.Pop() :?> string, currentBuilder.ToString()))
                 currentBuilder.Clear() |> ignore
-            | "seq" -> ()
-            | "first-operator" -> ()
-            | "second-operator" -> ()
             | "if" when reader.NodeType <> XmlNodeType.EndElement -> builderAppend <| "\nif (" + reader.GetAttribute("condition") + ")"
             | "then" when reader.NodeType <> XmlNodeType.EndElement -> builderAppend <| "\n{"
             | "then" when reader.NodeType = XmlNodeType.EndElement -> builderAppend <| "\n}"
             | "else" when reader.NodeType <> XmlNodeType.EndElement -> builderAppend <| "\nelse\n{"
             | "else" when reader.NodeType = XmlNodeType.EndElement -> builderAppend <| "\n}"
             | "transition" -> builderAppend <| "\nNavigationService.Navigate(new Uri(\"/" + reader.GetAttribute("form-id") + ".xaml\", UriKind.Relative));"
-            | "login-request" -> ()
+            | "login-request" -> builderAppend <| ("\nSystem.Net.WebRequest request = System.Net.WebRequest.Create(" + reader.GetAttribute("url") + ");
+request.Method = \"POST\";
+request.Timeout = 100000;
+request.ContentType = \"application/x-www-form-urlencoded\";
+string data = \"login=\"+" + reader.GetAttribute("login-id") + ".Text + \"&password=\" + " + reader.GetAttribute("password-id")) + ".Text;
+byte[] sendData = System.Text.Encoding.GetEncoding(1251).GetBytes(data);
+request.ContentLength = sendData.Length;
+System.IO.Stream sendStream = request.GetRequestStream();
+sendStream.Write(sentData, 0, sentData.Length);
+sendStream.Close();"
             | "save-session" -> ()
             | "bus-request" -> ()
             | "showmap" -> ()
@@ -142,20 +150,21 @@ public partial class " + fileName + ": PhoneApplicationPage
             | "LinearLayout" when reader.NodeType = XmlNodeType.EndElement -> 
                 appendXaml <| "\n" + depthTab + "</StackPanel>"
             | "TextView" -> 
-                let textSize = reader.GetAttribute("textSize")
-                let numberTextSize = textSize.Substring(0, textSize.Length - 2)
-                appendXaml <| "\n" + depthTab + "<TextBlock Text=\"" + reader.GetAttribute("text") + "\" HorizontalAlignment=\"Center\" FontSize=\"" + numberTextSize + "\"/>"
+                let textSize = getNumber(reader.GetAttribute("textSize"))
+                appendXaml <| "\n" + depthTab + "<TextBlock Text=\"" + reader.GetAttribute("text") + "\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
+            | "EditText" ->
+                let textSize = getNumber(reader.GetAttribute("textSize"))
+                appendXaml <| "\n" + depthTab + "<TextBox x:Name=\"" + getName (reader.GetAttribute("id")) + "\" IsReadOnly=\"False\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
             | "Button" -> 
-                let id = reader.GetAttribute("id")
-                let name = id.Substring(5, id.Length - 5)
+                let name = getName (reader.GetAttribute("id"))
                 if actions.Contains(name) then
                     let click = name + "Click"
-                    appendXaml <| "\n" + depthTab + "<Button Name=\"" + name + "1\" HorizontalAlignment=\"Center\" Click=\"" + click + "\" Content=\"" + reader.GetAttribute("text") + "\"> </Button>"
+                    appendXaml <| "\n" + depthTab + "<Button Name=\"" + name + "\" HorizontalAlignment=\"Center\" Click=\"" + click + "\" Content=\"" + reader.GetAttribute("text") + "\"> </Button>"
                     appendAdditions <| "\nprivate void " + click + "(object sender, RoutedEventArgs e)\n{"
                     appendAdditions <| (actions.Item(name) :?> string)
                     appendAdditions <| "\n}"
                 else 
-                    appendXaml <| "\n" + depthTab + "<Button Name=\"" + name + "1\" HorizontalAlignment=\"Center\" Content=\"" + reader.GetAttribute("text") + "\"> </Button>"
+                    appendXaml <| "\n" + depthTab + "<Button Name=\"" + name + "\" HorizontalAlignment=\"Center\" Content=\"" + reader.GetAttribute("text") + "\"> </Button>"
             | "ImageView" -> 
                 let url = reader.GetAttribute("src")
                 let fileName = "image" + string imageCounter + url.Substring(url.Length - 4, 4)
@@ -164,8 +173,7 @@ public partial class " + fileName + ": PhoneApplicationPage
                 appendXaml <| "\n" + depthTab + "<Image Source=\"" + fileName + "\" />"
                 imageCounter <- imageCounter + 1
             | "WebView" -> 
-                let name = reader.GetAttribute("id")
-                appendXaml <| "\n" + depthTab + "<phone:WebBrowser x:Name=\"" + name.Substring(5, name.Length - 5) + "1\" Source=\"" + reader.GetAttribute("url") + "\" />"
+                appendXaml <| "\n" + depthTab + "<phone:WebBrowser x:Name=\"" + getName(reader.GetAttribute("id")) + "\" Source=\"" + reader.GetAttribute("url") + "\" />"
             | _ -> ()
 
         with | :? XmlException as e ->
