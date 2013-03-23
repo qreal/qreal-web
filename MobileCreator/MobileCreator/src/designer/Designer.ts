@@ -114,6 +114,10 @@ export class Designer {
         $(propertiesDiv).attr("data-role", "listview");
         $(propertiesDiv).attr("data-inset", "true");
         $(propertiesDiv).attr("data-divider-theme", "d");
+        var formTriggersDiv = document.createElement("ul");
+        $(formTriggersDiv).attr("data-role", "listview");
+        $(formTriggersDiv).attr("data-inset", "true");
+        $(formTriggersDiv).attr("data-divider-theme", "d");
         var sendXMLButton = $("#sendXMLButton");
 
         //$(designerMenuDiv).append(sendXMLButton);
@@ -206,10 +210,18 @@ export class Designer {
         propertiesEditorDiv.id = "propertiesEditor";
         $(propertiesEditorContainer).append($(propertiesEditorDiv));
 
+        var formTriggersHeader = document.createElement("li");
+        $(formTriggersHeader).attr("data-role", "list-divider");
+        $(formTriggersHeader).text("Form triggers");
+        $(formTriggersDiv).append($(formTriggersHeader));
+
         $(parentDiv).prepend($(designerMenuDiv));
         $(propertiesParentDiv).prepend($(propertiesDiv));
+        $(propertiesParentDiv).append($(formTriggersDiv));
         $(designerMenuDiv).listview();
         $(propertiesDiv).listview();
+        $(formTriggersDiv).css("margin-top", "20px");
+        $(formTriggersDiv).listview();
 
         document.getElementById("button").ondragstart = function (ev: DragEvent) {
             ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.Button.toString());

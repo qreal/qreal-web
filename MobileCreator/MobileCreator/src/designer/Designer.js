@@ -107,6 +107,10 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             $(propertiesDiv).attr("data-role", "listview");
             $(propertiesDiv).attr("data-inset", "true");
             $(propertiesDiv).attr("data-divider-theme", "d");
+            var formTriggersDiv = document.createElement("ul");
+            $(formTriggersDiv).attr("data-role", "listview");
+            $(formTriggersDiv).attr("data-inset", "true");
+            $(formTriggersDiv).attr("data-divider-theme", "d");
             var sendXMLButton = $("#sendXMLButton");
             $(sendXMLButton).click(function () {
                 _this.sendXml();
@@ -136,6 +140,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
                 var index = Designer.formNames.indexOf(Designer.activeForm.FormName);
                 Designer.formNames[index] = newVal;
                 Designer.activeForm.FormName = newVal;
+                Designer.activeForm.updateTriggers();
                 _this.updateFormsSelect();
             });
             formNameField.textinput();
@@ -172,10 +177,17 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             var propertiesEditorDiv = document.createElement("div");
             propertiesEditorDiv.id = "propertiesEditor";
             $(propertiesEditorContainer).append($(propertiesEditorDiv));
+            var formTriggersHeader = document.createElement("li");
+            $(formTriggersHeader).attr("data-role", "list-divider");
+            $(formTriggersHeader).text("Form triggers");
+            $(formTriggersDiv).append($(formTriggersHeader));
             $(parentDiv).prepend($(designerMenuDiv));
             $(propertiesParentDiv).prepend($(propertiesDiv));
+            $(propertiesParentDiv).append($(formTriggersDiv));
             $(designerMenuDiv).listview();
             $(propertiesDiv).listview();
+            $(formTriggersDiv).css("margin-top", "20px");
+            $(formTriggersDiv).listview();
             document.getElementById("button").ondragstart = function (ev) {
                 ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.Button.toString());
                 ev.dataTransfer.setData("IsNew", "yes");

@@ -1,7 +1,14 @@
-define(["require", "exports"], function(require, exports) {
+define(["require", "exports", "designer/logic/FormTrigger"], function(require, exports, __mFormTrigger__) {
     
+    var mFormTrigger = __mFormTrigger__;
+
     var Form = (function () {
         function Form(formName, domElement) {
+            this.triggers = [];
+            this.triggers.push(new mFormTrigger.FormTrigger(formName, "onShow"));
+            this.triggers.push(new mFormTrigger.FormTrigger(formName, "onTimer"));
+            this.triggers.push(new mFormTrigger.FormTrigger(formName, "onLoginResponse"));
+            this.triggers.push(new mFormTrigger.FormTrigger(formName, "onPatientsResponse"));
             this.content = [];
             this.formName = formName;
             this.domElement = domElement;
@@ -16,6 +23,13 @@ define(["require", "exports"], function(require, exports) {
             set: function (formName) {
                 this.formName = formName;
                 this.formDomElement.attr("id", this.formName);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Form.prototype, "Triggers", {
+            get: function () {
+                return this.triggers;
             },
             enumerable: true,
             configurable: true
@@ -55,6 +69,11 @@ define(["require", "exports"], function(require, exports) {
         };
         Form.prototype.hide = function () {
             this.formDomElement.hide();
+        };
+        Form.prototype.updateTriggers = function () {
+            for(var i = 0; i < this.triggers.length; i++) {
+                this.triggers[i].FormId = this.formName;
+            }
         };
         Form.prototype.toXML = function () {
             var xml = "<form form_name=\"" + this.formName + "\">\n";
