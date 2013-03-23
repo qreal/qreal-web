@@ -150,6 +150,7 @@ export class Designer {
             Designer.formNames[index] = newVal;
 
             Designer.activeForm.FormName = newVal;
+            Designer.activeForm.updateTriggers();
             _this.updateFormsSelect();
         });
         formNameField.textinput();

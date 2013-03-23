@@ -2,12 +2,14 @@
 /// <reference path="../../lib/jquery.d.ts" />
 
 import mElement = module("designer/widgets/Element");
+import mFormTrigger = module("designer/logic/FormTrigger")
 
 export class Form {
     private formName: string;
     private domElement: JQuery;
     private content: mElement.Element[];
     private formDomElement: JQuery;
+    private triggers: mFormTrigger.FormTrigger[];
 
     get FormName() {
         return this.formName;
@@ -16,6 +18,10 @@ export class Form {
     set FormName(formName: string) {
         this.formName = formName;
         this.formDomElement.attr("id", this.formName);
+    }
+
+    get Triggers() {
+        return this.triggers;
     }
 
     get Content() {
@@ -56,6 +62,12 @@ export class Form {
         this.formDomElement.hide();
     }
 
+    public updateTriggers() {
+        for (var i = 0; i < this.triggers.length; i++) {
+            this.triggers[i].FormId = this.formName;
+        }
+    }
+
     public toXML() {
         var xml = "<form form_name=\"" + this.formName + "\">\n";
         this.content.forEach(function (element: mElement.Element) { xml += element.toXML() } );
@@ -64,6 +76,11 @@ export class Form {
     }
 
     constructor(formName: string, domElement: JQuery) {
+        this.triggers = [];
+        this.triggers.push(new mFormTrigger.FormTrigger(formName, "onShow"));
+        this.triggers.push(new mFormTrigger.FormTrigger(formName, "onTimer"));
+        this.triggers.push(new mFormTrigger.FormTrigger(formName, "onLoginResponse"));
+        this.triggers.push(new mFormTrigger.FormTrigger(formName, "onPatientsResponse"));
         this.content = [];
         this.formName = formName;
         this.domElement = domElement;
