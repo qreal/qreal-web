@@ -65,8 +65,8 @@ let parseXml =
                 tempStack.Push(reader.GetAttribute("event"))
                 tempStack.Push(reader.GetAttribute("form-id"))
             | "trigger" when reader.NodeType = XmlNodeType.EndElement ->
-                // ключ - имя формы, занчение - пара, в которой 1 элемент - событие, 2 элемент - код, который нужно выполнить
-                triggers.Add(tempStack.Pop() :?> string, (tempStack.Pop() :?> string, currentBuilder.ToString()))
+                // ключ - пара, в которой 1 элемент - имя формы, 2 элемент - событие, занчение - код, который нужно выполнить
+                triggers.Add((tempStack.Pop() :?> string, tempStack.Pop() :?> string), currentBuilder.ToString())
                 currentBuilder.Clear() |> ignore
             | "if" when reader.NodeType <> XmlNodeType.EndElement -> builderAppend <| "\nif (" + reader.GetAttribute("condition") + ")"
             | "then" when reader.NodeType <> XmlNodeType.EndElement -> builderAppend <| "\n{"
@@ -78,14 +78,17 @@ let parseXml =
 request.Method = \"POST\";
 request.Timeout = 100000;
 request.ContentType = \"application/x-www-form-urlencoded\";
-string data = \"login=\"+" + reader.GetAttribute("login-id") + ".Text + \"&password=\" + " + reader.GetAttribute("password-id")) + ".Text;
+string data = \"login=\"+" + reader.GetAttribute("login-id") + ".Text + \"&password=\" + " + reader.GetAttribute("password-id") + ".Text;
 byte[] sendData = System.Text.Encoding.GetEncoding(1251).GetBytes(data);
 request.ContentLength = sendData.Length;
 System.IO.Stream sendStream = request.GetRequestStream();
 sendStream.Write(sentData, 0, sentData.Length);
-sendStream.Close();"
-            | "save-session" -> ()
-            | "bus-request" -> ()
+sendStream.Close();
+onLoginResponse();")
+
+            | "save-session" -> builderAppend <| "\nint semicolonPos = result.IndexOf(';');
+string seesionId = result.Substring(semicolonPos + 1, result.Length - semicolonPos - 1);"
+            | "patients-request" -> ()
             | "showmap" -> ()
             | "form" ->
                 if reader.NodeType = XmlNodeType.EndElement then
@@ -144,6 +147,24 @@ public partial class " + fileName + ": PhoneApplicationPage
 {\n"
             
                     appendConstructor <| "public " + fileName + "()\n{\nInitializeComponent();"
+
+                    if triggers.Contains((fileName, "onTimer")) then
+                        appendConstructor <| "\nSystem.Windows.Threading.DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer();
+timer.Interval = new TimeSpan(0, 0, 0, 0, 2000);
+timer.Tick += new EventHandler(timerTick);
+timer.Start();"
+                        appendAdditions <| "\nprivate void timerTick(object sender, EventArgs e)\n{" + (triggers.Item((fileName, "onTimer")) :?> string) + "\n}"
+                    
+                    if triggers.Contains((fileName, "onLoginResponse")) then
+                        appendAdditions <| "\nprivate void onLoginResponse()\n{
+System.Net.WebResponse result = request.GetResponse();
+System.IO.Stream receiveStream = result.GetResponseStream();
+System.IO.StreamReader stream = new System.IO.StreamReader(receiveStream, Encoding.UTF8);
+string result = stream.ReadToEnd();
+bool loginSuccessful = false;
+if !(result.Equals(\"fail\"))
+{
+loginSuccessful = true;\n}" + (triggers.Item((fileName, "onLoginResponse")) :?> string) + "\n}"
 
             | "LinearLayout" when reader.NodeType <> XmlNodeType.EndElement -> 
                 appendXaml <| "\n" + depthTab + "<StackPanel Margin=\"10,18,10,0\">"
@@ -278,7 +299,7 @@ namespace " + projectName + "
             }
         }
 
-        #region Инициализация приложения телефона
+        #region Initialize App
 
         private bool phoneApplicationInitialized = false;
 
