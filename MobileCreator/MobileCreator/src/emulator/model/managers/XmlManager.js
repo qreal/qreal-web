@@ -1,8 +1,10 @@
-define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "emulator/model/ui/Button", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/ControlTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/ImageViewTag", "emulator/model/attributes/WebViewTag"], function(require, exports, __mLog__, __mTextView__, __mButton__, __mImageView__, __mWebView__, __mLinearLayout__, __mLinearLayoutTag__, __mControlTag__, __mTextViewTag__, __mButtonTag__, __mImageViewTag__, __mWebViewTag__) {
+define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/model/ui/TextView", "emulator/model/ui/Button", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/ControlTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/ImageViewTag", "emulator/model/attributes/WebViewTag"], function(require, exports, __mLog__, __mPage__, __mTextView__, __mButton__, __mImageView__, __mWebView__, __mLinearLayout__, __mLinearLayoutTag__, __mControlTag__, __mTextViewTag__, __mButtonTag__, __mImageViewTag__, __mWebViewTag__) {
     var mLog = __mLog__;
 
     
     
+    var mPage = __mPage__;
+
     var mTextView = __mTextView__;
 
     var mButton = __mButton__;
@@ -74,7 +76,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "em
             this.logger.log("parseForm: " + node.nodeName);
             var name = node.attributes['form_name'].value;
             var view = this.parseNode(node.childNodes.item(1));
-            return new Form(name, view);
+            return new mPage.Page(name, view);
         };
         XmlManager.prototype.parseNode = function (node) {
             this.logger.log("parse node: " + node.nodeName);
@@ -259,26 +261,4 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/TextView", "em
         return XmlManager;
     })();
     exports.XmlManager = XmlManager;    
-    var Form = (function () {
-        function Form(name, page) {
-            this.name = name;
-            this.page = page;
-        }
-        Object.defineProperty(Form.prototype, "Name", {
-            get: function () {
-                return this.name;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(Form.prototype, "Page", {
-            get: function () {
-                return this.page;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        return Form;
-    })();
-    exports.Form = Form;    
 })

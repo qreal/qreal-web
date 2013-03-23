@@ -3,6 +3,7 @@
 import mLog = module("utils/log/Log");
 import mEmulator = module("emulator/model/Emulator");
 import mControl = module("emulator/model/ui/Control");
+import mPage = module("emulator/model/Page");
 import mTextView = module("emulator/model/ui/TextView");
 import mButton = module("emulator/model/ui/Button");
 import mImageView = module("emulator/model/ui/ImageView");
@@ -63,9 +64,9 @@ export class XmlManager {
 
     /**
     */
-    private parseForms(node: Node): Form[] {
+    private parseForms(node: Node): mPage.Page[] {
         this.logger.log("parseForms: " + node.nodeName);
-        var forms: Form[] = [];
+        var forms: mPage.Page[] = [];
         for (var i = 0; i < node.childNodes.length; i++) {
             if (node.childNodes.item(i).nodeName == XmlManager.Form) {
                 forms.push(this.parseForm(node.childNodes.item(i)));
@@ -74,11 +75,11 @@ export class XmlManager {
         return forms;
     }
 
-    private parseForm(node: Node): Form {
+    private parseForm(node: Node): mPage.Page {
         this.logger.log("parseForm: " + node.nodeName);
         var name: string = node.attributes['form_name'].value;
         var view: mControl.Control = this.parseNode(node.childNodes.item(1));
-        return new Form(name, view);
+        return new mPage.Page(name, view);
     }
 
     private parseNode(node: Node): mControl.Control {
@@ -288,23 +289,5 @@ export class XmlManager {
             this.logger.log("layout_marginRight: " + layout_marginRight.value);
             tag.MarginRight = parseInt(layout_marginRight.value);
         }
-    }
-}
-
-export class Form {
-    private name: string;
-    private page: mControl.Control;
-
-    constructor(name: string, page: mControl.Control) {
-        this.name = name;
-        this.page = page;
-    }
-
-    get Name(): string {
-        return this.name;
-    }
-
-    get Page(): mControl.Control {
-        return this.page;
     }
 }

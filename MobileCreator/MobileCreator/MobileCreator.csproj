@@ -84,6 +84,10 @@
     <Content Include="src\emulator\model\managers\XmlManager.min.js">
       <DependentUpon>XmlManager.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="src\emulator\model\Page.ts" />
+    <Content Include="src\emulator\model\Page.js">
+      <DependentUpon>Page.ts</DependentUpon>
+    </Content>
     <Content Include="src\emulator\model\ui\Button.min.js">
       <DependentUpon>Button.ts</DependentUpon>
     </Content>
