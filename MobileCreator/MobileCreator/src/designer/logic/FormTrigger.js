@@ -1,0 +1,41 @@
+define(["require", "exports"], function(require, exports) {
+    
+    var FormTrigger = (function () {
+        function FormTrigger(formId, triggerName) {
+            this.formId = formId;
+            this.triggerName = triggerName;
+        }
+        Object.defineProperty(FormTrigger.prototype, "FormId", {
+            get: function () {
+                return this.formId;
+            },
+            set: function (formId) {
+                this.formId = formId;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(FormTrigger.prototype, "TriggerName", {
+            get: function () {
+                return this.triggerName;
+            },
+            set: function (triggerName) {
+                this.triggerName = triggerName;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(FormTrigger.prototype, "Action", {
+            get: function () {
+                return this.action;
+            },
+            set: function (action) {
+                this.action = action;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return FormTrigger;
+    })();
+    exports.FormTrigger = FormTrigger;    
+})
