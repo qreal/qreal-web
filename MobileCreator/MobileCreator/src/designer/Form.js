@@ -75,6 +75,13 @@ define(["require", "exports", "designer/logic/FormTrigger"], function(require, e
                 this.triggers[i].FormId = this.formName;
             }
         };
+        Form.prototype.getTriggerNames = function () {
+            var res = [];
+            for(var i = 0; i < this.triggers.length; i++) {
+                res.push(this.triggers[i].TriggerName);
+            }
+            return res;
+        };
         Form.prototype.toXML = function () {
             var xml = "<form form_name=\"" + this.formName + "\">\n";
             this.content.forEach(function (element) {

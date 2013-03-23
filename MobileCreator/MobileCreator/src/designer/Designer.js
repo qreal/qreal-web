@@ -46,6 +46,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             Designer.formNames.push(formName);
             Designer.activeForm.show();
             this.updateFormsSelect();
+            this.updateTriggersSelect();
         };
         Designer.prototype.sendXml = function () {
             var xml = this.getXML();
@@ -81,6 +82,16 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             }
             select.selectmenu("refresh", true);
         };
+        Designer.prototype.updateTriggersSelect = function () {
+            var select = $("#triggersSelect");
+            select.empty();
+            for(var i = 0; i < Designer.activeForm.Triggers.length; i++) {
+                var currentName = Designer.activeForm.Triggers[i].TriggerName;
+                var newOption = $("<option value=\"" + currentName + "\">" + currentName + "</option>");
+                select.append(newOption);
+            }
+            select.selectmenu("refresh", true);
+        };
         Designer.prototype.changeActiveForm = function (formName) {
             $("#propertiesEditor").empty();
             Designer.activeForm.hide();
@@ -93,6 +104,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             }
             $("#formNameField").val(Designer.activeForm.FormName);
             this.updateFormsSelect();
+            this.updateTriggersSelect();
         };
         Designer.prototype.initDesigner = function () {
             var _this = this;
@@ -181,6 +193,11 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             $(formTriggersHeader).attr("data-role", "list-divider");
             $(formTriggersHeader).text("Form triggers");
             $(formTriggersDiv).append($(formTriggersHeader));
+            var triggersSelect = $("<select id=\"triggersSelect\"></select>");
+            triggersSelect.change(function () {
+            });
+            $(formTriggersDiv).append($(triggersSelect));
+            triggersSelect.selectmenu();
             $(parentDiv).prepend($(designerMenuDiv));
             $(propertiesParentDiv).prepend($(propertiesDiv));
             $(propertiesParentDiv).append($(formTriggersDiv));

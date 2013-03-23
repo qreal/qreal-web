@@ -68,6 +68,14 @@ export class Form {
         }
     }
 
+    public getTriggerNames() {
+        var res = [];
+        for (var i = 0; i < this.triggers.length; i++) {
+            res.push(this.triggers[i].TriggerName);
+        }
+        return res;
+    }
+
     public toXML() {
         var xml = "<form form_name=\"" + this.formName + "\">\n";
         this.content.forEach(function (element: mElement.Element) { xml += element.toXML() } );

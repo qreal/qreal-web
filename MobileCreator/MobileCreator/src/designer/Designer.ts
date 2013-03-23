@@ -51,6 +51,7 @@ export class Designer {
         Designer.formNames.push(formName);
         Designer.activeForm.show();
         this.updateFormsSelect();
+        this.updateTriggersSelect();
     }
 
     private sendXml() {
@@ -86,6 +87,20 @@ export class Designer {
         select.selectmenu("refresh", true);
     }
 
+    public updateTriggersSelect() {
+        var select = $("#triggersSelect");
+        select.empty();
+        for (var i = 0; i < Designer.activeForm.Triggers.length; i++) {
+            var currentName = Designer.activeForm.Triggers[i].TriggerName;
+            var newOption = $("<option value=\"" + currentName + "\">" + currentName + "</option>");
+            //if (currentName == Designer.activeForm.FormName) {
+            //    newOption.attr("selected", "selected");
+            //}
+            select.append(newOption);
+        }
+        select.selectmenu("refresh", true);
+    }
+
     public changeActiveForm(formName: string) {
         $("#propertiesEditor").empty();
         Designer.activeForm.hide();
@@ -98,6 +113,7 @@ export class Designer {
         }
         $("#formNameField").val(Designer.activeForm.FormName);
         this.updateFormsSelect();
+        this.updateTriggersSelect();
     }
 
     public initDesigner() {
@@ -118,6 +134,9 @@ export class Designer {
         $(formTriggersDiv).attr("data-role", "listview");
         $(formTriggersDiv).attr("data-inset", "true");
         $(formTriggersDiv).attr("data-divider-theme", "d");
+
+        
+
         var sendXMLButton = $("#sendXMLButton");
 
         //$(designerMenuDiv).append(sendXMLButton);
@@ -214,6 +233,13 @@ export class Designer {
         $(formTriggersHeader).attr("data-role", "list-divider");
         $(formTriggersHeader).text("Form triggers");
         $(formTriggersDiv).append($(formTriggersHeader));
+
+        var triggersSelect = $("<select id=\"triggersSelect\"></select>");
+        triggersSelect.change(function () {
+            //_this.changeActiveForm(formsSelect.val());
+        });
+        $(formTriggersDiv).append($(triggersSelect));
+        triggersSelect.selectmenu();
 
         $(parentDiv).prepend($(designerMenuDiv));
         $(propertiesParentDiv).prepend($(propertiesDiv));
