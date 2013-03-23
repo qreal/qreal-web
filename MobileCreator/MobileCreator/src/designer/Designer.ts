@@ -51,10 +51,12 @@ export class Designer {
         Designer.formNames.push(formName);
         Designer.activeForm.show();
         this.updateFormsSelect();
+        this.updateTriggersSelect();
     }
 
     private sendXml() {
         var xml = this.getXML();
+        alert(xml);
         $.ajax("http://localhost:12345", {
             type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
                 window.location.assign("http://localhost/main-debug.apk");
@@ -62,12 +64,21 @@ export class Designer {
         });
     }
 
-    public  getXML() {
-        var xml = "<forms>\n";
+    public getXML() {
+        var xml = "<application>\n"
+        xml += "<logic>\n";
+        for (var i = 0; i < Designer.forms.length; i++) {
+            for (var j = 0; j < Designer.forms[i].Triggers.length; j++) {
+                xml += Designer.forms[i].Triggers[j].toXML();
+            }
+        }
+        xml += "</logic>\n";
+        xml += "<forms>\n";
         for (var i = 0; i < Designer.forms.length; i++) {
             xml += Designer.forms[i].toXML();
         }
         xml += "</forms>\n";
+        xml += "</application>\n";
         return xml;
     }
 
@@ -85,6 +96,20 @@ export class Designer {
         select.selectmenu("refresh", true);
     }
 
+    public updateTriggersSelect() {
+        var select = $("#triggersSelect");
+        select.empty();
+        for (var i = 0; i < Designer.activeForm.Triggers.length; i++) {
+            var currentName = Designer.activeForm.Triggers[i].TriggerName;
+            var newOption = $("<option value=\"" + currentName + "\">" + currentName + "</option>");
+            //if (currentName == Designer.activeForm.FormName) {
+            //    newOption.attr("selected", "selected");
+            //}
+            select.append(newOption);
+        }
+        select.selectmenu("refresh", true);
+    }
+
     public changeActiveForm(formName: string) {
         $("#propertiesEditor").empty();
         Designer.activeForm.hide();
@@ -97,6 +122,7 @@ export class Designer {
         }
         $("#formNameField").val(Designer.activeForm.FormName);
         this.updateFormsSelect();
+        this.updateTriggersSelect();
     }
 
     public initDesigner() {
@@ -113,6 +139,13 @@ export class Designer {
         $(propertiesDiv).attr("data-role", "listview");
         $(propertiesDiv).attr("data-inset", "true");
         $(propertiesDiv).attr("data-divider-theme", "d");
+        var formTriggersDiv = document.createElement("ul");
+        $(formTriggersDiv).attr("data-role", "listview");
+        $(formTriggersDiv).attr("data-inset", "true");
+        $(formTriggersDiv).attr("data-divider-theme", "d");
+
+        
+
         var sendXMLButton = $("#sendXMLButton");
 
         //$(designerMenuDiv).append(sendXMLButton);
@@ -149,6 +182,7 @@ export class Designer {
             Designer.formNames[index] = newVal;
 
             Designer.activeForm.FormName = newVal;
+            Designer.activeForm.updateTriggers();
             _this.updateFormsSelect();
         });
         formNameField.textinput();
@@ -187,6 +221,11 @@ export class Designer {
         //webViewElement.addClass("ui-block-b");
         webViewElement.button();
 
+        var editTextElement = $("<a id=\"editText\" data-role=\"button\" draggable=\"true\">EditText</a>");
+        $(elementsPallete).append(editTextElement);
+        //webViewElement.addClass("ui-block-b");
+        editTextElement.button();
+
         var propertiesEditorHeader = document.createElement("li");
         $(propertiesEditorHeader).attr("data-role", "list-divider");
         $(propertiesEditorHeader).text("Properties");
@@ -199,10 +238,25 @@ export class Designer {
         propertiesEditorDiv.id = "propertiesEditor";
         $(propertiesEditorContainer).append($(propertiesEditorDiv));
 
+        var formTriggersHeader = document.createElement("li");
+        $(formTriggersHeader).attr("data-role", "list-divider");
+        $(formTriggersHeader).text("Form triggers");
+        $(formTriggersDiv).append($(formTriggersHeader));
+
+        var triggersSelect = $("<select id=\"triggersSelect\"></select>");
+        triggersSelect.change(function () {
+            //_this.changeActiveForm(formsSelect.val());
+        });
+        $(formTriggersDiv).append($(triggersSelect));
+        triggersSelect.selectmenu();
+
         $(parentDiv).prepend($(designerMenuDiv));
         $(propertiesParentDiv).prepend($(propertiesDiv));
+        $(propertiesParentDiv).append($(formTriggersDiv));
         $(designerMenuDiv).listview();
         $(propertiesDiv).listview();
+        $(formTriggersDiv).css("margin-top", "20px");
+        $(formTriggersDiv).listview();
 
         document.getElementById("button").ondragstart = function (ev: DragEvent) {
             ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.Button.toString());
@@ -218,6 +272,10 @@ export class Designer {
         }
         document.getElementById("webView").ondragstart = function (ev: DragEvent) {
             ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.WebView.toString());
+            ev.dataTransfer.setData("IsNew", "yes");
+        }
+        document.getElementById("editText").ondragstart = function (ev: DragEvent) {
+            ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.EditText.toString());
             ev.dataTransfer.setData("IsNew", "yes");
         }
 

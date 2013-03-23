@@ -46,9 +46,11 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             Designer.formNames.push(formName);
             Designer.activeForm.show();
             this.updateFormsSelect();
+            this.updateTriggersSelect();
         };
         Designer.prototype.sendXml = function () {
             var xml = this.getXML();
+            alert(xml);
             $.ajax("http://localhost:12345", {
                 type: "POST",
                 contentType: "text/XML",
@@ -60,11 +62,20 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             });
         };
         Designer.prototype.getXML = function () {
-            var xml = "<forms>\n";
+            var xml = "<application>\n";
+            xml += "<logic>\n";
+            for(var i = 0; i < Designer.forms.length; i++) {
+                for(var j = 0; j < Designer.forms[i].Triggers.length; j++) {
+                    xml += Designer.forms[i].Triggers[j].toXML();
+                }
+            }
+            xml += "</logic>\n";
+            xml += "<forms>\n";
             for(var i = 0; i < Designer.forms.length; i++) {
                 xml += Designer.forms[i].toXML();
             }
             xml += "</forms>\n";
+            xml += "</application>\n";
             return xml;
         };
         Designer.prototype.updateFormsSelect = function () {
@@ -76,6 +87,16 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
                 if(currentName == Designer.activeForm.FormName) {
                     newOption.attr("selected", "selected");
                 }
+                select.append(newOption);
+            }
+            select.selectmenu("refresh", true);
+        };
+        Designer.prototype.updateTriggersSelect = function () {
+            var select = $("#triggersSelect");
+            select.empty();
+            for(var i = 0; i < Designer.activeForm.Triggers.length; i++) {
+                var currentName = Designer.activeForm.Triggers[i].TriggerName;
+                var newOption = $("<option value=\"" + currentName + "\">" + currentName + "</option>");
                 select.append(newOption);
             }
             select.selectmenu("refresh", true);
@@ -92,6 +113,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             }
             $("#formNameField").val(Designer.activeForm.FormName);
             this.updateFormsSelect();
+            this.updateTriggersSelect();
         };
         Designer.prototype.initDesigner = function () {
             var _this = this;
@@ -106,6 +128,10 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             $(propertiesDiv).attr("data-role", "listview");
             $(propertiesDiv).attr("data-inset", "true");
             $(propertiesDiv).attr("data-divider-theme", "d");
+            var formTriggersDiv = document.createElement("ul");
+            $(formTriggersDiv).attr("data-role", "listview");
+            $(formTriggersDiv).attr("data-inset", "true");
+            $(formTriggersDiv).attr("data-divider-theme", "d");
             var sendXMLButton = $("#sendXMLButton");
             $(sendXMLButton).click(function () {
                 _this.sendXml();
@@ -135,6 +161,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
                 var index = Designer.formNames.indexOf(Designer.activeForm.FormName);
                 Designer.formNames[index] = newVal;
                 Designer.activeForm.FormName = newVal;
+                Designer.activeForm.updateTriggers();
                 _this.updateFormsSelect();
             });
             formNameField.textinput();
@@ -159,6 +186,9 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             var webViewElement = $("<a id=\"webView\" data-role=\"button\" draggable=\"true\">WebView</a>");
             $(elementsPallete).append(webViewElement);
             webViewElement.button();
+            var editTextElement = $("<a id=\"editText\" data-role=\"button\" draggable=\"true\">EditText</a>");
+            $(elementsPallete).append(editTextElement);
+            editTextElement.button();
             var propertiesEditorHeader = document.createElement("li");
             $(propertiesEditorHeader).attr("data-role", "list-divider");
             $(propertiesEditorHeader).text("Properties");
@@ -168,10 +198,22 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             var propertiesEditorDiv = document.createElement("div");
             propertiesEditorDiv.id = "propertiesEditor";
             $(propertiesEditorContainer).append($(propertiesEditorDiv));
+            var formTriggersHeader = document.createElement("li");
+            $(formTriggersHeader).attr("data-role", "list-divider");
+            $(formTriggersHeader).text("Form triggers");
+            $(formTriggersDiv).append($(formTriggersHeader));
+            var triggersSelect = $("<select id=\"triggersSelect\"></select>");
+            triggersSelect.change(function () {
+            });
+            $(formTriggersDiv).append($(triggersSelect));
+            triggersSelect.selectmenu();
             $(parentDiv).prepend($(designerMenuDiv));
             $(propertiesParentDiv).prepend($(propertiesDiv));
+            $(propertiesParentDiv).append($(formTriggersDiv));
             $(designerMenuDiv).listview();
             $(propertiesDiv).listview();
+            $(formTriggersDiv).css("margin-top", "20px");
+            $(formTriggersDiv).listview();
             document.getElementById("button").ondragstart = function (ev) {
                 ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.Button.toString());
                 ev.dataTransfer.setData("IsNew", "yes");
@@ -186,6 +228,10 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             };
             document.getElementById("webView").ondragstart = function (ev) {
                 ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.WebView.toString());
+                ev.dataTransfer.setData("IsNew", "yes");
+            };
+            document.getElementById("editText").ondragstart = function (ev) {
+                ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.EditText.toString());
                 ev.dataTransfer.setData("IsNew", "yes");
             };
             Designer.activeForm = new mForm.Form("main", Designer.formsDomElement);

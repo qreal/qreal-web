@@ -3,7 +3,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences", "designer/preferences/LinearLayoutPreferences", "designer/widgets/WidgetTypes", "designer/preferences/ButtonPreferences", "designer/widgets/Button", "designer/Designer", "designer/preferences/TextViewPreferences", "designer/widgets/TextView", "designer/preferences/ImageViewPreferences", "designer/widgets/ImageView", "designer/preferences/WebViewPreference", "designer/widgets/WebView"], function(require, exports, __mElement__, __mElementPreferences__, __mLinearLayoutPreferences__, __mWidgetTypes__, __mButtonPreferences__, __mButton__, __mDesigner__, __mTextViewPreferences__, __mTextView__, __mImageViewPreferences__, __mImageView__, __mWebViewPreferences__, __mWebView__) {
+define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences", "designer/preferences/LinearLayoutPreferences", "designer/widgets/WidgetTypes", "designer/preferences/ButtonPreferences", "designer/widgets/Button", "designer/Designer", "designer/preferences/TextViewPreferences", "designer/widgets/TextView", "designer/preferences/ImageViewPreferences", "designer/widgets/ImageView", "designer/preferences/WebViewPreference", "designer/widgets/WebView", "designer/preferences/EditTextPreferences", "designer/widgets/EditText"], function(require, exports, __mElement__, __mElementPreferences__, __mLinearLayoutPreferences__, __mWidgetTypes__, __mButtonPreferences__, __mButton__, __mDesigner__, __mTextViewPreferences__, __mTextView__, __mImageViewPreferences__, __mImageView__, __mWebViewPreferences__, __mWebView__, __mEditTextPreferences__, __mEditText__) {
     var mElement = __mElement__;
 
     var mElementPreferences = __mElementPreferences__;
@@ -30,6 +30,10 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
 
     var mWebView = __mWebView__;
 
+    var mEditTextPreferences = __mEditTextPreferences__;
+
+    var mEditText = __mEditText__;
+
     var LinearLayout = (function (_super) {
         __extends(LinearLayout, _super);
         function LinearLayout(preferences, domElement) {
@@ -52,7 +56,8 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                     switch(widgetType) {
                         case mWidgetTypes.WidgetTypes.Button:
                             var buttonPreferences = new mButtonPreferences.ButtonPreferences();
-                            buttonPreferences.ButtonId = "buttone" + mDesigner.Designer.id;
+                            buttonPreferences.WidgetType = mWidgetTypes.WidgetTypes.Button;
+                            buttonPreferences.ButtonId = "button" + mDesigner.Designer.id;
                             buttonPreferences.Height = mElementPreferences.ElementPreferences.WrapContent;
                             buttonPreferences.Id = mDesigner.Designer.id;
                             mDesigner.Designer.id++;
@@ -67,6 +72,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             break;
                         case mWidgetTypes.WidgetTypes.TextView:
                             var textViewPreferences = new mTextViewPreferences.TextViewPreferences();
+                            textViewPreferences.WidgetType = mWidgetTypes.WidgetTypes.TextView;
                             textViewPreferences.Height = mElementPreferences.ElementPreferences.WrapContent;
                             textViewPreferences.Id = mDesigner.Designer.id;
                             mDesigner.Designer.id++;
@@ -81,6 +87,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             break;
                         case mWidgetTypes.WidgetTypes.ImageView:
                             var imageViewPreferences = new mImageViewPreferences.ImageViewPreferences();
+                            imageViewPreferences.WidgetType = mWidgetTypes.WidgetTypes.ImageView;
                             imageViewPreferences.Height = mElementPreferences.ElementPreferences.WrapContent;
                             imageViewPreferences.Id = mDesigner.Designer.id;
                             mDesigner.Designer.id++;
@@ -94,6 +101,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             break;
                         case mWidgetTypes.WidgetTypes.WebView:
                             var webViewPreferences = new mWebViewPreferences.WebViewPreferences();
+                            webViewPreferences.WidgetType = mWidgetTypes.WidgetTypes.WebView;
                             webViewPreferences.Height = mElementPreferences.ElementPreferences.FillParent;
                             webViewPreferences.Id = mDesigner.Designer.id;
                             mDesigner.Designer.id++;
@@ -102,6 +110,22 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             var webView = new mWebView.WebView(webViewPreferences);
                             _this.addChild(webView);
                             webView.init();
+                            break;
+                        case mWidgetTypes.WidgetTypes.EditText:
+                            var editTextPreferences = new mEditTextPreferences.EditTextPreferences();
+                            editTextPreferences.WidgetType = mWidgetTypes.WidgetTypes.EditText;
+                            editTextPreferences.Height = mElementPreferences.ElementPreferences.WrapContent;
+                            editTextPreferences.Id = mDesigner.Designer.id;
+                            editTextPreferences.EditTextId = "editText" + editTextPreferences.Id;
+                            mDesigner.Designer.id++;
+                            editTextPreferences.LayoutMarginTop = 10;
+                            editTextPreferences.Padding = 0;
+                            editTextPreferences.Text = "";
+                            editTextPreferences.TextSize = 26;
+                            editTextPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
+                            var editText = new mEditText.EditText(editTextPreferences);
+                            _this.addChild(editText);
+                            editText.init();
                             break;
                     }
                 }

@@ -21,10 +21,13 @@ let download (fileLocation:string) (url:string) =
     let webClient = new WebClient()
     webClient.DownloadFile(url, fileLocation)
 
-let projectName = "Default"
+let mutable projectName = "Default"
 
 let csprojItems = new StringBuilder()
 let csprojPages = new StringBuilder()
+
+let actions  = new Hashtable()
+let triggers = new Hashtable()
 
 let parseXml = 
     let newXaml = new StringBuilder()
@@ -35,27 +38,69 @@ let parseXml =
     let appendXaml = append newXaml
     let appendCs = append newCs
     let appendConstructor = append constructorCs
-    let appendAddirions = append additions
+    let appendAdditions = append additions
     let mutable hasAttr = false
     let mutable fileName = ""
     let mutable imageCounter = 1
     let tab = "    "
+    let currentBuilder = new StringBuilder()
+    let builderAppend = append currentBuilder
+    let tempStack = new Stack()
+    let getName (id : string) = id.Substring(5, id.Length - 5)
+    let getNumber (sizeAttr : string) = sizeAttr.Substring(0, sizeAttr.Length - 2)
     try
         while reader.Read() do
             let name = reader.Name
-            let depthTab = String.replicate reader.Depth tab
+            let depth = reader.Depth
+            let depthTab = if depth > 0 then String.replicate (reader.Depth - 1) tab else ""
             match name with
+            | "application" when reader.NodeType <> XmlNodeType.EndElement -> projectName <- reader.GetAttribute("name")
+            | "action" when reader.NodeType <> XmlNodeType.EndElement ->
+                tempStack.Push(reader.GetAttribute("control-id"))
+            | "action" when reader.NodeType = XmlNodeType.EndElement ->
+                // ключ - id контрола, значение - код, который нужно выполнить
+                actions.Add(tempStack.Pop() :?> string, currentBuilder.ToString())
+                currentBuilder.Clear() |> ignore
+            | "trigger" when reader.NodeType <> XmlNodeType.EndElement ->
+                tempStack.Push(reader.GetAttribute("event"))
+                tempStack.Push(reader.GetAttribute("form-id"))
+            | "trigger" when reader.NodeType = XmlNodeType.EndElement ->
+                // ключ - пара, в которой 1 элемент - имя формы, 2 элемент - событие, занчение - код, который нужно выполнить
+                triggers.Add((tempStack.Pop() :?> string, tempStack.Pop() :?> string), currentBuilder.ToString())
+                currentBuilder.Clear() |> ignore
+            | "if" when reader.NodeType <> XmlNodeType.EndElement -> builderAppend <| "\nif (" + reader.GetAttribute("condition") + ")"
+            | "then" when reader.NodeType <> XmlNodeType.EndElement -> builderAppend <| "\n{"
+            | "then" when reader.NodeType = XmlNodeType.EndElement -> builderAppend <| "\n}"
+            | "else" when reader.NodeType <> XmlNodeType.EndElement -> builderAppend <| "\nelse\n{"
+            | "else" when reader.NodeType = XmlNodeType.EndElement -> builderAppend <| "\n}"
+            | "transition" -> builderAppend <| "\nNavigationService.Navigate(new Uri(\"/" + reader.GetAttribute("form-id") + ".xaml\", UriKind.Relative));"
+            | "login-request" -> builderAppend <| ("\nSystem.Net.WebRequest request = System.Net.WebRequest.Create(" + reader.GetAttribute("url") + ");
+request.Method = \"POST\";
+request.Timeout = 100000;
+request.ContentType = \"application/x-www-form-urlencoded\";
+string data = \"login=\"+" + reader.GetAttribute("login-id") + ".Text + \"&password=\" + " + reader.GetAttribute("password-id") + ".Text;
+byte[] sendData = System.Text.Encoding.GetEncoding(1251).GetBytes(data);
+request.ContentLength = sendData.Length;
+System.IO.Stream sendStream = request.GetRequestStream();
+sendStream.Write(sentData, 0, sentData.Length);
+sendStream.Close();
+onLoginResponse();")
+
+            | "save-session" -> builderAppend <| "\nint semicolonPos = result.IndexOf(';');
+string seesionId = result.Substring(semicolonPos + 1, result.Length - semicolonPos - 1);"
+            | "patients-request" -> ()
+            | "showmap" -> ()
             | "form" ->
                 if reader.NodeType = XmlNodeType.EndElement then
                     appendXaml <| "\n</phone:PhoneApplicationPage>"
                     writeToFile (path + "\\" + fileName + ".xaml") <| newXaml.ToString()
                     newXaml.Clear() |> ignore
-                    appendConstructor <| "\n        }"
+                    appendConstructor <| "\n}"
                     appendCs <| constructorCs.ToString()
                     constructorCs.Clear() |> ignore
                     appendCs <| additions.ToString()
                     additions.Clear() |> ignore
-                    appendCs <| "\n" + tab + "}\n}"
+                    appendCs <| "\n}\n}"
                     writeToFile (path + "\\" + fileName + ".xaml.cs") <| newCs.ToString()
                     newCs.Clear() |> ignore
                 else
@@ -98,31 +143,49 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;\nnamespace " + projectName + "
 {
-    public partial class " + fileName + ": PhoneApplicationPage
-    {\n"
+public partial class " + fileName + ": PhoneApplicationPage
+{\n"
             
-                    appendConstructor <| "        public " + fileName + "()
-        {
-            InitializeComponent();"
+                    appendConstructor <| "public " + fileName + "()\n{\nInitializeComponent();"
+
+                    if triggers.Contains((fileName, "onTimer")) then
+                        appendConstructor <| "\nSystem.Windows.Threading.DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer();
+timer.Interval = new TimeSpan(0, 0, 0, 0, 2000);
+timer.Tick += new EventHandler(timerTick);
+timer.Start();"
+                        appendAdditions <| "\nprivate void timerTick(object sender, EventArgs e)\n{" + (triggers.Item((fileName, "onTimer")) :?> string) + "\n}"
+                    
+                    if triggers.Contains((fileName, "onLoginResponse")) then
+                        appendAdditions <| "\nprivate void onLoginResponse()\n{
+System.Net.WebResponse result = request.GetResponse();
+System.IO.Stream receiveStream = result.GetResponseStream();
+System.IO.StreamReader stream = new System.IO.StreamReader(receiveStream, Encoding.UTF8);
+string result = stream.ReadToEnd();
+bool loginSuccessful = false;
+if !(result.Equals(\"fail\"))
+{
+loginSuccessful = true;\n}" + (triggers.Item((fileName, "onLoginResponse")) :?> string) + "\n}"
 
             | "LinearLayout" when reader.NodeType <> XmlNodeType.EndElement -> 
                 appendXaml <| "\n" + depthTab + "<StackPanel Margin=\"10,18,10,0\">"
             | "LinearLayout" when reader.NodeType = XmlNodeType.EndElement -> 
                 appendXaml <| "\n" + depthTab + "</StackPanel>"
             | "TextView" -> 
-                let textSize = reader.GetAttribute("textSize")
-                let numberTextSize = textSize.Substring(0, textSize.Length - 2)
-                appendXaml <| "\n" + depthTab + "<TextBlock Text=\"" + reader.GetAttribute("text") + "\" HorizontalAlignment=\"Center\" FontSize=\"" + numberTextSize + "\"/>"
+                let textSize = getNumber(reader.GetAttribute("textSize"))
+                appendXaml <| "\n" + depthTab + "<TextBlock Text=\"" + reader.GetAttribute("text") + "\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
+            | "EditText" ->
+                let textSize = getNumber(reader.GetAttribute("textSize"))
+                appendXaml <| "\n" + depthTab + "<TextBox x:Name=\"" + getName (reader.GetAttribute("id")) + "\" IsReadOnly=\"False\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
             | "Button" -> 
-                let clickName = reader.GetAttribute "onClick"
-                let click = if clickName = "" then "" else "Click=\"" + clickName + "\""
-                let name = reader.GetAttribute("id")
-                appendXaml <| "\n" + depthTab + "<Button Name=\"" + name.Substring(5, name.Length - 5) + "1\" HorizontalAlignment=\"Center\" " + click + " Content=\"" + reader.GetAttribute("text") + "\"> </Button>"
-                appendAddirions <| "\n        private void " + clickName + "(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri(\"/" + clickName + ".xaml\", UriKind.Relative));
-        }"
-
+                let name = getName (reader.GetAttribute("id"))
+                if actions.Contains(name) then
+                    let click = name + "Click"
+                    appendXaml <| "\n" + depthTab + "<Button Name=\"" + name + "\" HorizontalAlignment=\"Center\" Click=\"" + click + "\" Content=\"" + reader.GetAttribute("text") + "\"> </Button>"
+                    appendAdditions <| "\nprivate void " + click + "(object sender, RoutedEventArgs e)\n{"
+                    appendAdditions <| (actions.Item(name) :?> string)
+                    appendAdditions <| "\n}"
+                else 
+                    appendXaml <| "\n" + depthTab + "<Button Name=\"" + name + "\" HorizontalAlignment=\"Center\" Content=\"" + reader.GetAttribute("text") + "\"> </Button>"
             | "ImageView" -> 
                 let url = reader.GetAttribute("src")
                 let fileName = "image" + string imageCounter + url.Substring(url.Length - 4, 4)
@@ -131,9 +194,7 @@ using Microsoft.Phone.Controls;\nnamespace " + projectName + "
                 appendXaml <| "\n" + depthTab + "<Image Source=\"" + fileName + "\" />"
                 imageCounter <- imageCounter + 1
             | "WebView" -> 
-                let name = reader.GetAttribute("id")
-                appendXaml <| "\n" + depthTab + "<phone:WebBrowser x:Name=\"" + name.Substring(5, name.Length - 5) + "1\" Source=\"" + reader.GetAttribute("url") + "\" />"
-            |  "" | "xml" | "forms" -> ()
+                appendXaml <| "\n" + depthTab + "<phone:WebBrowser x:Name=\"" + getName(reader.GetAttribute("id")) + "\" Source=\"" + reader.GetAttribute("url") + "\" />"
             | _ -> ()
 
         with | :? XmlException as e ->
@@ -238,7 +299,7 @@ namespace " + projectName + "
             }
         }
 
-        #region Инициализация приложения телефона
+        #region Initialize App
 
         private bool phoneApplicationInitialized = false;
 
