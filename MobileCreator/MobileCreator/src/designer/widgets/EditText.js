@@ -76,15 +76,6 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                 _this.init();
             });
             marginTopField.textinput();
-            var sizeLabel = $("<label for='text-size' > Font size: </label>");
-            var sizeField = $("<input type = 'number' name = 'text-size' id = 'text-size' value = '" + this.Preferences.TextSize + "' >");
-            editorLayer.append(sizeLabel);
-            editorLayer.append(sizeField);
-            sizeField.change(function () {
-                _this.preferences.TextSize = sizeField.val();
-                _this.init();
-            });
-            sizeField.textinput();
         };
         EditText.prototype.toXML = function () {
             var xmlString = "";

@@ -70,6 +70,7 @@ export class EditText extends mElement.Element {
             _this.init();
         });
         marginTopField.textinput();
+        /*
         var sizeLabel = $("<label for='text-size' > Font size: </label>");
         var sizeField = $("<input type = 'number' name = 'text-size' id = 'text-size' value = '" + this.Preferences.TextSize + "' >");
         editorLayer.append(sizeLabel);
