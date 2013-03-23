@@ -62,11 +62,20 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             });
         };
         Designer.prototype.getXML = function () {
-            var xml = "<forms>\n";
+            var xml = "<application>\n";
+            xml += "<logic>\n";
+            for(var i = 0; i < Designer.forms.length; i++) {
+                for(var j = 0; j < Designer.forms[i].Triggers.length; j++) {
+                    xml += Designer.forms[i].Triggers[j].toXML();
+                }
+            }
+            xml += "</logic>\n";
+            xml += "<forms>\n";
             for(var i = 0; i < Designer.forms.length; i++) {
                 xml += Designer.forms[i].toXML();
             }
             xml += "</forms>\n";
+            xml += "</application>\n";
             return xml;
         };
         Designer.prototype.updateFormsSelect = function () {

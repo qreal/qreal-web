@@ -1,9 +1,11 @@
-define(["require", "exports"], function(require, exports) {
-    
+define(["require", "exports", "designer/logic/Action"], function(require, exports, __mAction__) {
+    var mAction = __mAction__;
+
     var FormTrigger = (function () {
         function FormTrigger(formId, triggerName) {
             this.formId = formId;
             this.triggerName = triggerName;
+            this.action = new mAction.Action();
         }
         Object.defineProperty(FormTrigger.prototype, "FormId", {
             get: function () {
@@ -35,6 +37,12 @@ define(["require", "exports"], function(require, exports) {
             enumerable: true,
             configurable: true
         });
+        FormTrigger.prototype.toXML = function () {
+            var xml = "<trigger form-id='" + this.formId + "' event='" + this.triggerName + "'>\n";
+            xml += this.action.toXML();
+            xml += "</trigger>\n";
+            return xml;
+        };
         return FormTrigger;
     })();
     exports.FormTrigger = FormTrigger;    
