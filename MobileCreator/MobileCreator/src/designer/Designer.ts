@@ -55,6 +55,7 @@ export class Designer {
 
     private sendXml() {
         var xml = this.getXML();
+        alert(xml);
         $.ajax("http://localhost:12345", {
             type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
                 window.location.assign("http://localhost/main-debug.apk");
@@ -187,6 +188,11 @@ export class Designer {
         //webViewElement.addClass("ui-block-b");
         webViewElement.button();
 
+        var editTextElement = $("<a id=\"editText\" data-role=\"button\" draggable=\"true\">EditText</a>");
+        $(elementsPallete).append(editTextElement);
+        //webViewElement.addClass("ui-block-b");
+        editTextElement.button();
+
         var propertiesEditorHeader = document.createElement("li");
         $(propertiesEditorHeader).attr("data-role", "list-divider");
         $(propertiesEditorHeader).text("Properties");
@@ -218,6 +224,10 @@ export class Designer {
         }
         document.getElementById("webView").ondragstart = function (ev: DragEvent) {
             ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.WebView.toString());
+            ev.dataTransfer.setData("IsNew", "yes");
+        }
+        document.getElementById("editText").ondragstart = function (ev: DragEvent) {
+            ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.EditText.toString());
             ev.dataTransfer.setData("IsNew", "yes");
         }
 

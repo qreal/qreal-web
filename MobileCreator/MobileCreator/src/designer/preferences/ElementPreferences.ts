@@ -1,7 +1,10 @@
+import mWidgetTypes = module("designer/widgets/WidgetTypes")
+
 export class ElementPreferences {
     public static FillParent = 0;
     public static WrapContent = -1;
     private width;
+    private widgetType = mWidgetTypes.WidgetTypes.Unknown;
     get Width() {
         return this.width;
     }
@@ -21,5 +24,11 @@ export class ElementPreferences {
     }
     set Id(id: number) {
         this.id = id;
+    }
+    get WidgetType() {
+        return this.widgetType;
+    }
+    set WidgetType(widgetType) {
+        this.widgetType = widgetType;
     }
 }

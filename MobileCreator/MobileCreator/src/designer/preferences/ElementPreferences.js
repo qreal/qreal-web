@@ -1,6 +1,10 @@
-define(["require", "exports"], function(require, exports) {
+define(["require", "exports", "designer/widgets/WidgetTypes"], function(require, exports, __mWidgetTypes__) {
+    var mWidgetTypes = __mWidgetTypes__;
+
     var ElementPreferences = (function () {
-        function ElementPreferences() { }
+        function ElementPreferences() {
+            this.widgetType = mWidgetTypes.WidgetTypes.Unknown;
+        }
         ElementPreferences.FillParent = 0;
         ElementPreferences.WrapContent = -1;
         Object.defineProperty(ElementPreferences.prototype, "Width", {
@@ -29,6 +33,16 @@ define(["require", "exports"], function(require, exports) {
             },
             set: function (id) {
                 this.id = id;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(ElementPreferences.prototype, "WidgetType", {
+            get: function () {
+                return this.widgetType;
+            },
+            set: function (widgetType) {
+                this.widgetType = widgetType;
             },
             enumerable: true,
             configurable: true
