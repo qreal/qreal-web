@@ -94,10 +94,14 @@ myRequest.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), myR
     myRequest.BeginGetResponse(new AsyncCallback(GetResponsetStreamCallback), myRequest);
 }"
 
-            | "save-session" -> builderAppend <| "\nint semicolonPos = result.IndexOf(';');
-string seesionId = result.Substring(semicolonPos + 1, result.Length - semicolonPos - 1);"
-            | "patients-request" -> ()
-            | "showmap" -> ()
+            | "save-session" -> 
+                builderAppend <| "\nint semicolonPos = result.IndexOf(';');
+seesionId = result.Substring(semicolonPos + 1, result.Length - semicolonPos - 1);"
+                appendAdditions <| "\nprivate string seesionId;"
+            | "patients-request" -> builderAppend <| "\nWebClient data = new WebClient();
+data.DownloadStringCompleted += new DownloadStringCompletedEventHandler(getResponse);
+data.DownloadStringAsync(new Uri(\"" + reader.GetAttribute("url") + "\"));"
+            | "showmap" -> () // разбор строки patients и выставление пациентов на карте
             | "form" ->
                 if reader.NodeType = XmlNodeType.EndElement then
                     appendXaml <| "\n</phone:PhoneApplicationPage>"
@@ -182,6 +186,15 @@ bool loginSuccessful = false;
 if (!(result.Equals(\"fail\")))
 {
 loginSuccessful = true;\n}" + (triggers.Item((fileName, "onLoginResponse")) :?> string) + "\n}"
+
+                    if triggers.Contains((fileName, "onPatientsResponse")) then
+                        appendAdditions <| "\nprivate string patients;"
+                        appendAdditions <| "\nprivate void getResponse(object sender, DownloadStringCompletedEventArgs e)
+{
+patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> string) + "\n}"
+
+                    if triggers.Contains((fileName, "onShow")) then
+                        appendConstructor <| (triggers.Item((fileName, "onShow")) :?> string)
 
             | "LinearLayout" when reader.NodeType <> XmlNodeType.EndElement -> 
                 appendXaml <| "\n" + depthTab + "<StackPanel Margin=\"10,18,10,0\">"
