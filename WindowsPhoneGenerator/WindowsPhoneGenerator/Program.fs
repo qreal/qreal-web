@@ -48,6 +48,7 @@ let parseXml =
     let tempStack = new Stack()
     let getName (id : string) = id.Substring(5, id.Length - 5)
     let getNumber (sizeAttr : string) = sizeAttr.Substring(0, sizeAttr.Length - 2)
+    let loginRequest = new StringBuilder()
     try
         while reader.Read() do
             let name = reader.Name
@@ -74,17 +75,24 @@ let parseXml =
             | "else" when reader.NodeType <> XmlNodeType.EndElement -> builderAppend <| "\nelse\n{"
             | "else" when reader.NodeType = XmlNodeType.EndElement -> builderAppend <| "\n}"
             | "transition" -> builderAppend <| "\nNavigationService.Navigate(new Uri(\"/" + reader.GetAttribute("form-id") + ".xaml\", UriKind.Relative));"
-            | "login-request" -> builderAppend <| ("\nSystem.Net.WebRequest request = System.Net.WebRequest.Create(" + reader.GetAttribute("url") + ");
-request.Method = \"POST\";
-request.Timeout = 100000;
-request.ContentType = \"application/x-www-form-urlencoded\";
-string data = \"login=\"+" + reader.GetAttribute("login-id") + ".Text + \"&password=\" + " + reader.GetAttribute("password-id") + ".Text;
-byte[] sendData = System.Text.Encoding.GetEncoding(1251).GetBytes(data);
-request.ContentLength = sendData.Length;
-System.IO.Stream sendStream = request.GetRequestStream();
-sendStream.Write(sentData, 0, sentData.Length);
-sendStream.Close();
-onLoginResponse();")
+            | "login-request" -> 
+                builderAppend <| ("\nHttpWebRequest myRequest = (HttpWebRequest)HttpWebRequest.Create(\"" + reader.GetAttribute("url") + "\");
+myRequest.Method = \"POST\";
+myRequest.ContentType = \"application/x-www-form-urlencoded\";
+myRequest.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), myRequest);") 
+                append loginRequest <| "\nprivate void GetRequestStreamCallback(IAsyncResult callbackResult)
+{
+    HttpWebRequest myRequest = (HttpWebRequest)callbackResult.AsyncState;
+    Stream postStream = myRequest.EndGetRequestStream(callbackResult);
+
+    string postData = \"login=\"+" + reader.GetAttribute("login-id") + ".Text + \"&password=\" + " + reader.GetAttribute("password-id") + ".Text;
+    byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+
+    postStream.Write(byteArray, 0, byteArray.Length);
+    postStream.Close();
+ 
+    myRequest.BeginGetResponse(new AsyncCallback(GetResponsetStreamCallback), myRequest);
+}"
 
             | "save-session" -> builderAppend <| "\nint semicolonPos = result.IndexOf(';');
 string seesionId = result.Substring(semicolonPos + 1, result.Length - semicolonPos - 1);"
@@ -134,6 +142,9 @@ string seesionId = result.Substring(semicolonPos + 1, result.Length - semicolonP
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.IO;
+using System.Text;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -156,13 +167,19 @@ timer.Start();"
                         appendAdditions <| "\nprivate void timerTick(object sender, EventArgs e)\n{" + (triggers.Item((fileName, "onTimer")) :?> string) + "\n}"
                     
                     if triggers.Contains((fileName, "onLoginResponse")) then
-                        appendAdditions <| "\nprivate void onLoginResponse()\n{
-System.Net.WebResponse result = request.GetResponse();
-System.IO.Stream receiveStream = result.GetResponseStream();
-System.IO.StreamReader stream = new System.IO.StreamReader(receiveStream, Encoding.UTF8);
-string result = stream.ReadToEnd();
+                        appendAdditions <| loginRequest.ToString()
+                        appendAdditions <| "\nprivate void GetResponsetStreamCallback(IAsyncResult callbackResult)
+{
+HttpWebRequest request = (HttpWebRequest)callbackResult.AsyncState;
+HttpWebResponse response = (HttpWebResponse)request.EndGetResponse(callbackResult);
+string result = \"\";
+using (StreamReader httpWebStreamReader = new StreamReader(response.GetResponseStream()))
+{
+result = httpWebStreamReader.ReadToEnd();
+}
+
 bool loginSuccessful = false;
-if !(result.Equals(\"fail\"))
+if (!(result.Equals(\"fail\")))
 {
 loginSuccessful = true;\n}" + (triggers.Item((fileName, "onLoginResponse")) :?> string) + "\n}"
 
