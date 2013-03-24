@@ -1,6 +1,8 @@
 export class Trigger {
     public static OnShow = 'onShow';
     public static OnTimer = 'onTimer';
+    public static OnLoginResponse = 'onLoginResponse ';
+    public static OnPatientsResponse = 'onPatientsResponse  ';
 
     private eventType: string;
     private trigger: Function;

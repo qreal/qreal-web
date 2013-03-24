@@ -21,12 +21,27 @@ export class Button extends mControl.Control {
         if (tag.Width == mControlTag.ControlTag.WrapContent) {
             $button.attr('data-inline', 'true');
         }
+
+        //TODO: test stub
         if (tag.OnClick) {
-            $button.bind('click', function () {
-                Button.logger.log("onClick: " + tag.OnClick);
+            this.OnAction = function () {
                 mEmulator.Emulator.instance.NavigationManager.showPage(tag.OnClick);
-            });
+            }
         }
+        //endstub
+        var _this = this;
+        $button.bind('click', function () {
+            _this.onClick(_this);
+        });
+    }
+
+    private onClick(button: Button): void {
+        var tag = <mButtonTag.ButtonTag> button.Tag;
+        Button.logger.log("onClick: " + tag.OnClick);
+        if (button.OnAction) {
+            button.OnAction();
+        }
+
     }
 
 }

@@ -6,6 +6,8 @@ define(["require", "exports"], function(require, exports) {
         }
         Trigger.OnShow = 'onShow';
         Trigger.OnTimer = 'onTimer';
+        Trigger.OnLoginResponse = 'onLoginResponse ';
+        Trigger.OnPatientsResponse = 'onPatientsResponse  ';
         Object.defineProperty(Trigger.prototype, "Event", {
             get: function () {
                 return this.eventType;

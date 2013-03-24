@@ -29,13 +29,23 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emula
                 $button.attr('data-inline', 'true');
             }
             if(tag.OnClick) {
-                $button.bind('click', function () {
-                    Button.logger.log("onClick: " + tag.OnClick);
+                this.OnAction = function () {
                     mEmulator.Emulator.instance.NavigationManager.showPage(tag.OnClick);
-                });
+                };
             }
+            var _this = this;
+            $button.bind('click', function () {
+                _this.onClick(_this);
+            });
         }
         Button.logger = new mLog.Logger("Button");
+        Button.prototype.onClick = function (button) {
+            var tag = button.Tag;
+            Button.logger.log("onClick: " + tag.OnClick);
+            if(button.OnAction) {
+                button.OnAction();
+            }
+        };
         return Button;
     })(mControl.Control);
     exports.Button = Button;    

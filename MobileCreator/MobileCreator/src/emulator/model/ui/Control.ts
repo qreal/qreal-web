@@ -5,12 +5,20 @@ import mControlTag = module("emulator/model/attributes/ControlTag");
 export class Control {
 
     private $control: JQuery;
-    get $Control() { return this.$control; }
+    get $Control(): JQuery { return this.$control; }
     set $Control(value: JQuery) { this.$control = value; }
+
+    private onAction: Function;
+    set OnAction(value:Function) {
+        this.onAction = value;
+    }
+    get OnAction():Function {
+        return this.onAction;
+    }
 
     // Tag with control data
     private tag: mControlTag.ControlTag;
-    get Tag() { return this.tag; }
+    get Tag(): mControlTag.ControlTag { return this.tag; }
     set Tag(value: mControlTag.ControlTag) { this.tag = value; }
 
     constructor(tag: mControlTag.ControlTag, $control: JQuery) {
