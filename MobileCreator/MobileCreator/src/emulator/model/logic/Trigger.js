@@ -5,6 +5,7 @@ define(["require", "exports"], function(require, exports) {
             this.trigger = trigger;
         }
         Trigger.OnShow = 'onShow';
+        Trigger.OnTimer = 'onTimer';
         Object.defineProperty(Trigger.prototype, "Event", {
             get: function () {
                 return this.eventType;

@@ -1,5 +1,7 @@
-define(["require", "exports", "utils/log/Log"], function(require, exports, __mLog__) {
+define(["require", "exports", "utils/log/Log", "emulator/model/logic/Trigger"], function(require, exports, __mLog__, __mTrigger__) {
     var mLog = __mLog__;
+
+    var mTrigger = __mTrigger__;
 
     
     
@@ -13,16 +15,24 @@ define(["require", "exports", "utils/log/Log"], function(require, exports, __mLo
     
     
     
-    
     var Page = (function () {
-        function Page(name, root, onShowFunction) {
+        function Page(name, root) {
             this.triggers = [];
             Page.logger.log("Constructor name: " + name);
             this.name = name;
             this.root = root;
-            this.onShowFunction = onShowFunction;
         }
         Page.logger = new mLog.Logger("Page");
+        Page.prototype.onShow = function () {
+            var _this = this;
+            this.trigger(mTrigger.Trigger.OnShow);
+            this.timerToken = setInterval(function () {
+                return _this.trigger(mTrigger.Trigger.OnTimer);
+            }, 5000);
+        };
+        Page.prototype.onHide = function () {
+            clearTimeout(this.timerToken);
+        };
         Page.prototype.addTrigger = function (trigger) {
             Page.logger.log("addTrigger: " + trigger.Event);
             this.triggers.push(trigger);

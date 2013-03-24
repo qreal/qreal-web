@@ -10,6 +10,7 @@ export class NavigationManager {
 
     private pageStack: string[] = [];
     private pages: mPage.Page[] = [];
+    private currentPage: mPage.Page;
 
     constructor() {
         NavigationManager.logger.log("in constructor");
@@ -24,7 +25,11 @@ export class NavigationManager {
         var page:mPage.Page = this.pages[this.idPreffix + pageName];
         this.pageStack.push(this.idPreffix + pageName);
         mEmulator.Emulator.instance.showPage(page.Root);
-        page.trigger(mTrigger.Trigger.OnShow);
+        if (this.currentPage) {
+            this.currentPage.onHide();
+        }
+        page.onShow();
+        this.currentPage = page;
     }
 
     public back() {
@@ -39,5 +44,8 @@ export class NavigationManager {
     public clear() {
         this.pageStack = [];
         this.pages = [];
+        if (this.currentPage) {
+            this.currentPage.onHide();
+        }
     }
 }

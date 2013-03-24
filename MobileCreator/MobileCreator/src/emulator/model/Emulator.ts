@@ -52,12 +52,15 @@ export class Emulator {
 
         //TODO: test stub
         pages.map(function (page: mPage.Page) {
-            alert("add triggers");
-            var trigger = new mTrigger.Trigger(mTrigger.Trigger.OnShow, function () {
+            var onShowTrigger = new mTrigger.Trigger(mTrigger.Trigger.OnShow, function () {
                 console.log("OnShow Trigger");
-                alert("Trigger!!!");
             });
-            page.addTrigger(trigger);
+            page.addTrigger(onShowTrigger);
+
+            var onTimerTrigger = new mTrigger.Trigger(mTrigger.Trigger.OnTimer, function () {
+                console.log("onTimer Trigger");
+            });
+            page.addTrigger(onTimerTrigger);
         });
         //end stub
         this.navigationManager.showPage(pages[0].Name);

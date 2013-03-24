@@ -20,23 +20,31 @@ export class Page {
 
     private root: mControl.Control;
     private name: string;
-    private onShowFunction;
+    private triggers: mTrigger.Trigger[] = [];
+    private timerToken: number;
 
-    constructor(name: string, root: mControl.Control, onShowFunction?) {
+    constructor(name: string, root: mControl.Control) {
         Page.logger.log("Constructor name: " + name);
         this.name = name;
         this.root = root;
-        this.onShowFunction = onShowFunction;
     }
 
-    private triggers: mTrigger.Trigger[] = [];
+    public onShow(): void {
+        this.trigger(mTrigger.Trigger.OnShow);
+        this.timerToken = setInterval(() => this.trigger(mTrigger.Trigger.OnTimer), 5000);
+    }
+
+    public onHide(): void {
+        clearTimeout(this.timerToken);
+    }
+
     public addTrigger(trigger: mTrigger.Trigger) {
         Page.logger.log("addTrigger: " + trigger.Event);
         this.triggers.push(trigger);
     }
 
     public trigger(event: string) {
-        Page.logger.log("trigger: "+event);
+        Page.logger.log("trigger: " + event);
         this.triggers.forEach(function (trigger: mTrigger.Trigger, index: number, array: mTrigger.Trigger[]) {
             if (trigger.Event == event) {
                 trigger.Trigger(this);

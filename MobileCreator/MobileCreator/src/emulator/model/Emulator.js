@@ -46,12 +46,14 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
                 return _this.addPage(page);
             });
             pages.map(function (page) {
-                alert("add triggers");
-                var trigger = new mTrigger.Trigger(mTrigger.Trigger.OnShow, function () {
+                var onShowTrigger = new mTrigger.Trigger(mTrigger.Trigger.OnShow, function () {
                     console.log("OnShow Trigger");
-                    alert("Trigger!!!");
                 });
-                page.addTrigger(trigger);
+                page.addTrigger(onShowTrigger);
+                var onTimerTrigger = new mTrigger.Trigger(mTrigger.Trigger.OnTimer, function () {
+                    console.log("onTimer Trigger");
+                });
+                page.addTrigger(onTimerTrigger);
             });
             this.navigationManager.showPage(pages[0].Name);
         };

@@ -1,12 +1,11 @@
-define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emulator/model/logic/Trigger"], function(require, exports, __mLog__, __mEmulator__, __mTrigger__) {
+define(["require", "exports", "utils/log/Log", "emulator/model/Emulator"], function(require, exports, __mLog__, __mEmulator__) {
     var mLog = __mLog__;
 
     
     
     var mEmulator = __mEmulator__;
 
-    var mTrigger = __mTrigger__;
-
+    
     var NavigationManager = (function () {
         function NavigationManager() {
             this.idPreffix = "PageId_";
@@ -23,7 +22,11 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emula
             var page = this.pages[this.idPreffix + pageName];
             this.pageStack.push(this.idPreffix + pageName);
             mEmulator.Emulator.instance.showPage(page.Root);
-            page.trigger(mTrigger.Trigger.OnShow);
+            if(this.currentPage) {
+                this.currentPage.onHide();
+            }
+            page.onShow();
+            this.currentPage = page;
         };
         NavigationManager.prototype.back = function () {
             var length = this.pageStack.length;
@@ -36,6 +39,9 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emula
         NavigationManager.prototype.clear = function () {
             this.pageStack = [];
             this.pages = [];
+            if(this.currentPage) {
+                this.currentPage.onHide();
+            }
         };
         return NavigationManager;
     })();
