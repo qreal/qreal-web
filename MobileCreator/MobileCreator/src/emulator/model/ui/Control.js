@@ -31,8 +31,6 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
             enumerable: true,
             configurable: true
         });
-        Control.prototype.create = function () {
-        };
         Control.prototype.setDimensions = function ($element) {
             if (typeof $element === "undefined") { $element = this.$Control; }
             switch(this.Tag.Width) {

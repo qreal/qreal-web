@@ -12,8 +12,4 @@ export class ImageView extends mControl.Control {
         this.setDimensions($img);
         this.setDimensions();
     }
-
-    public create() {
-        super.create();  
-    }
 }

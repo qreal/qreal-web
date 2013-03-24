@@ -20,9 +20,6 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
             this.setDimensions();
             this.$Control.append($label);
         }
-        TextView.prototype.create = function () {
-            _super.prototype.create.call(this);
-        };
         return TextView;
     })(mControl.Control);
     exports.TextView = TextView;    

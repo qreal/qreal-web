@@ -20,12 +20,6 @@ define(["require", "exports", "emulator/model/ui/ControlPanel"], function(requir
             _super.prototype.addChild.call(this, child);
             this.$Control.append(child.$Control);
         };
-        LinearLayout.prototype.create = function () {
-            var tag = this.Tag;
-            this.Childrens.map(function (child) {
-                return child.create();
-            });
-        };
         return LinearLayout;
     })(mControlPanel.ControlPanel);
     exports.LinearLayout = LinearLayout;    

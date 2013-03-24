@@ -29,7 +29,4 @@ export class Button extends mControl.Control {
         }
     }
 
-    public create() {       
-        super.create();
-    }
 }

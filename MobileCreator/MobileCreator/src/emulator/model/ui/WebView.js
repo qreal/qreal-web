@@ -15,9 +15,6 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
             this.setDimensions($control);
             this.$Control.attr('src', (this.Tag).Url);
         }
-        WebView.prototype.create = function () {
-            _super.prototype.create.call(this);
-        };
         return WebView;
     })(mControl.Control);
     exports.WebView = WebView;    

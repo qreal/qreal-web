@@ -1,4 +1,4 @@
-define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/model/ui/TextView", "emulator/model/ui/Button", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/ControlTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/ImageViewTag", "emulator/model/attributes/WebViewTag"], function(require, exports, __mLog__, __mPage__, __mTextView__, __mButton__, __mImageView__, __mWebView__, __mLinearLayout__, __mLinearLayoutTag__, __mControlTag__, __mTextViewTag__, __mButtonTag__, __mImageViewTag__, __mWebViewTag__) {
+define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/model/ui/TextView", "emulator/model/ui/Button", "emulator/model/ui/Input", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/ControlTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/InputTag", "emulator/model/attributes/ImageViewTag", "emulator/model/attributes/WebViewTag"], function(require, exports, __mLog__, __mPage__, __mTextView__, __mButton__, __mInput__, __mImageView__, __mWebView__, __mLinearLayout__, __mLinearLayoutTag__, __mControlTag__, __mTextViewTag__, __mButtonTag__, __mInputTag__, __mImageViewTag__, __mWebViewTag__) {
     var mLog = __mLog__;
 
     
@@ -8,6 +8,8 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/
     var mTextView = __mTextView__;
 
     var mButton = __mButton__;
+
+    var mInput = __mInput__;
 
     var mImageView = __mImageView__;
 
@@ -25,6 +27,8 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/
 
     var mButtonTag = __mButtonTag__;
 
+    var mInputTag = __mInputTag__;
+
     var mImageViewTag = __mImageViewTag__;
 
     var mWebViewTag = __mWebViewTag__;
@@ -40,6 +44,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/
         XmlManager.FormName = "form_name";
         XmlManager.LinearLayout = "LinearLayout";
         XmlManager.TextView = "TextView";
+        XmlManager.EditText = "EditText";
         XmlManager.Button = "Button";
         XmlManager.ImageView = "ImageView";
         XmlManager.WebView = "WebView";
@@ -110,6 +115,9 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/
                 case XmlManager.TextView:
                     control = this.parseTextView(node);
                     break;
+                case XmlManager.EditText:
+                    control = this.parseInput(node);
+                    break;
                 case XmlManager.Button:
                     control = this.parseButton(node);
                     break;
@@ -143,6 +151,13 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/
             this.fillTextViewData(node, tag);
             var textView = new mTextView.TextView(tag);
             return textView;
+        };
+        XmlManager.prototype.parseInput = function (node) {
+            this.logger.log("parseInput");
+            var tag = new mInputTag.InputTag();
+            this.fillInputData(node, tag);
+            var input = new mInput.Input(tag);
+            return input;
         };
         XmlManager.prototype.parseButton = function (node) {
             this.logger.log("parseButton");
@@ -185,6 +200,9 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/
                 this.logger.log("textSize: " + textSize.value);
                 tag.TextSize = parseInt(textSize.value);
             }
+        };
+        XmlManager.prototype.fillInputData = function (node, tag) {
+            this.fillTextViewData(node, tag);
         };
         XmlManager.prototype.fillButtonData = function (node, tag) {
             this.fillTextViewData(node, tag);

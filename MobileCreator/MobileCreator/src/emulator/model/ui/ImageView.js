@@ -19,9 +19,6 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
             this.setDimensions($img);
             this.setDimensions();
         }
-        ImageView.prototype.create = function () {
-            _super.prototype.create.call(this);
-        };
         return ImageView;
     })(mControl.Control);
     exports.ImageView = ImageView;    

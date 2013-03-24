@@ -16,10 +16,4 @@ export class LinearLayout extends mControlPanel.ControlPanel {
         super.addChild(child);
         this.$Control.append(child.$Control);
     }
-
-    public create() {
-        var tag = <mLinearLayoutTag.LinearLayoutTag> this.Tag;
-        this.Childrens.map(child => child.create());
-        //var childrenElements = this.$Control.children();
-    }
 }

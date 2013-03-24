@@ -79,6 +79,16 @@
     </Content>
     <Content Include="res\info_activity.xml" />
     <Content Include="res\main.xml" />
+    <TypeScriptCompile Include="src\emulator\model\attributes\InputTag.ts" />
+    <Content Include="src\emulator\model\attributes\EditTextTag.js">
+      <DependentUpon>InputTag.ts</DependentUpon>
+    </Content>
+    <Content Include="src\emulator\model\attributes\InputTag.js">
+      <DependentUpon>InputTag.ts</DependentUpon>
+    </Content>
+    <Content Include="src\emulator\model\attributes\InputTag.min.js">
+      <DependentUpon>InputTag.ts</DependentUpon>
+    </Content>
     <Content Include="src\emulator\model\attributes\WebViewTag.js">
       <DependentUpon>WebViewTag.ts</DependentUpon>
     </Content>
@@ -106,6 +116,16 @@
     </Content>
     <Content Include="src\emulator\model\ui\Button.min.js">
       <DependentUpon>Button.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\emulator\model\ui\Input.ts" />
+    <Content Include="src\emulator\model\ui\file1.js">
+      <DependentUpon>Input.ts</DependentUpon>
+    </Content>
+    <Content Include="src\emulator\model\ui\Input.js">
+      <DependentUpon>Input.ts</DependentUpon>
+    </Content>
+    <Content Include="src\emulator\model\ui\Input.min.js">
+      <DependentUpon>Input.ts</DependentUpon>
     </Content>
     <Content Include="src\emulator\model\ui\WebView.js">
       <DependentUpon>WebView.ts</DependentUpon>

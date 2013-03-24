@@ -10,8 +10,4 @@ export class WebView extends mControl.Control {
         this.setDimensions($control);
         this.$Control.attr('src', (<mWebViewTag.WebViewTag>this.Tag).Url);
     }
-
-    public create() {
-        super.create();       
-    }
 }

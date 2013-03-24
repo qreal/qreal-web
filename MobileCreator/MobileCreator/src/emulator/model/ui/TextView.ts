@@ -15,8 +15,4 @@ export class TextView extends mControl.Control {
         this.setDimensions();
         this.$Control.append($label);
     }
-
-    public create() {
-        super.create();
-    }
 }

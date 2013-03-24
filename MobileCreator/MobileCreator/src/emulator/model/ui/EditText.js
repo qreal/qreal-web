@@ -13,13 +13,13 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emula
     
     var mControlTag = __mControlTag__;
 
-    var Button = (function (_super) {
-        __extends(Button, _super);
-        function Button(tag, $control) {
+    var Input = (function (_super) {
+        __extends(Input, _super);
+        function Input(tag, $control) {
             if (typeof $control === "undefined") { $control = $("<div></div>"); }
                 _super.call(this, tag, $control);
-            var $button = $("<a data-role='button'></a>");
-            this.$Control.append($button);
+            var $input = $("<input></input>");
+            this.$Control.append($input);
             var tag = this.Tag;
             if(tag.TextSize != 0) {
                 $button.css('font-size', tag.TextSize);
@@ -35,8 +35,8 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emula
                 });
             }
         }
-        Button.logger = new mLog.Logger("Button");
-        return Button;
+        Input.logger = new mLog.Logger("Button");
+        return Input;
     })(mControl.Control);
-    exports.Button = Button;    
+    exports.Input = Input;    
 })

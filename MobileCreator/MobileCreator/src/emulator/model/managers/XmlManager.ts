@@ -6,6 +6,7 @@ import mControl = module("emulator/model/ui/Control");
 import mPage = module("emulator/model/Page");
 import mTextView = module("emulator/model/ui/TextView");
 import mButton = module("emulator/model/ui/Button");
+import mInput = module("emulator/model/ui/Input");
 import mImageView = module("emulator/model/ui/ImageView");
 import mWebView = module("emulator/model/ui/WebView");
 import mControlPanel = module("emulator/model/ui/ControlPanel");
@@ -15,6 +16,7 @@ import mControlTag = module("emulator/model/attributes/ControlTag");
 import mControlPanelTag = module("emulator/model/attributes/ControlPanelTag");
 import mTextViewTag = module("emulator/model/attributes/TextViewTag");
 import mButtonTag = module("emulator/model/attributes/ButtonTag");
+import mInputTag = module("emulator/model/attributes/InputTag");
 import mImageViewTag = module("emulator/model/attributes/ImageViewTag");
 import mWebViewTag = module("emulator/model/attributes/WebViewTag");
 //#endregion
@@ -30,6 +32,7 @@ export class XmlManager {
 
     private static LinearLayout = "LinearLayout";
     private static TextView = "TextView";
+    private static EditText = "EditText";
     private static Button = "Button";
     private static ImageView = "ImageView";
     private static WebView = "WebView";
@@ -81,11 +84,11 @@ export class XmlManager {
                     this.parseLogic(childNode);
                     break
             }
-        }   
+        }
         return pages;
     }
 
-    private parseForms(node: Node): mPage.Page[]{
+    private parseForms(node: Node): mPage.Page[] {
         var forms: mPage.Page[] = [];
         for (var i = 0; i < node.childNodes.length; i++) {
             if (node.childNodes.item(i).nodeName == XmlManager.Form) {
@@ -114,6 +117,9 @@ export class XmlManager {
                 break;
             case XmlManager.TextView:
                 control = this.parseTextView(node);
+                break;
+            case XmlManager.EditText:
+                control = this.parseInput(node);
                 break;
             case XmlManager.Button:
                 control = this.parseButton(node);
@@ -152,6 +158,14 @@ export class XmlManager {
         this.fillTextViewData(node, tag);
         var textView = new mTextView.TextView(tag);
         return textView;
+    }
+
+    private parseInput(node: Node): mInput.Input {
+        this.logger.log("parseInput");
+        var tag = new mInputTag.InputTag();
+        this.fillInputData(node, tag);
+        var input = new mInput.Input(tag);
+        return input;
     }
 
     private parseButton(node: Node): mButton.Button {
@@ -204,6 +218,10 @@ export class XmlManager {
             this.logger.log("textSize: " + textSize.value);
             tag.TextSize = parseInt(textSize.value); //20dp -> 20
         }
+    }
+
+    private fillInputData(node: Node, tag: mInputTag.InputTag) {
+        this.fillTextViewData(node, tag);
     }
 
     private fillButtonData(node: Node, tag: mButtonTag.ButtonTag) {

@@ -25,9 +25,6 @@ export class Control {
         });       
     }
 
-    public create() {
-    }
-
     public setDimensions();
     public setDimensions($element: JQuery);
     public setDimensions($element?: JQuery = this.$Control) {
