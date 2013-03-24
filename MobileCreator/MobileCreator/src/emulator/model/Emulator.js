@@ -1,4 +1,4 @@
-define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/viewmodel/EmulatorViewModel", "emulator/model/managers/NavigationManager", "emulator/model/managers/XmlManager"], function(require, exports, __mLog__, __mXmlHelper__, __mEmulatorViewModel__, __mNavigationManager__, __mXmlManager__) {
+define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/viewmodel/EmulatorViewModel", "emulator/model/managers/NavigationManager", "emulator/model/managers/XmlManager", "emulator/model/logic/Trigger"], function(require, exports, __mLog__, __mXmlHelper__, __mEmulatorViewModel__, __mNavigationManager__, __mXmlManager__, __mTrigger__) {
     var mLog = __mLog__;
 
     var mXmlHelper = __mXmlHelper__;
@@ -21,6 +21,8 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
 
     var mXmlManager = __mXmlManager__;
 
+    var mTrigger = __mTrigger__;
+
     var Emulator = (function () {
         function Emulator() {
             var _this = this;
@@ -42,6 +44,14 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
             var pages = this.xmlManager.parseXmlString(xml);
             pages.map(function (page) {
                 return _this.addPage(page);
+            });
+            pages.map(function (page) {
+                alert("add triggers");
+                var trigger = new mTrigger.Trigger(mTrigger.Trigger.OnShow, function () {
+                    console.log("OnShow Trigger");
+                    alert("Trigger!!!");
+                });
+                page.addTrigger(trigger);
             });
             this.navigationManager.showPage(pages[0].Name);
         };

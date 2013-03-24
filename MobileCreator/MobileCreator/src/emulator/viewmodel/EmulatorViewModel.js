@@ -9,7 +9,7 @@ define(["require", "exports", "utils/log/Log"], function(require, exports, __mLo
             this.$screen = $("#screen");
         }
         EmulatorViewModel.prototype.addView = function (view) {
-            this.logger.log("addView");
+            this.logger.log("addView \n" + view.$Control.html());
             this.$screen.append(view.$Control);
             this.$screen.trigger('create');
             this.$screen.children().hide();

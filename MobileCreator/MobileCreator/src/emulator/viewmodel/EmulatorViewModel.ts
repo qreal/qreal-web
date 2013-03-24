@@ -2,7 +2,6 @@
 import mLog = module("utils/log/Log");
 import mControl = module("emulator/model/ui/Control");
 
-
 export class EmulatorViewModel {
     private logger = new mLog.Logger("EmulatorViewModel");
     private $screen: JQuery;
@@ -13,7 +12,7 @@ export class EmulatorViewModel {
     }
 
     public addView(view: mControl.Control) {
-        this.logger.log("addView");
+        this.logger.log("addView \n" + view.$Control.html());
         this.$screen.append(view.$Control);
         this.$screen.trigger('create');
         this.$screen.children().hide();

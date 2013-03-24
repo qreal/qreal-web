@@ -21,6 +21,9 @@ import mEmulatorViewModel = module("emulator/viewmodel/EmulatorViewModel");
 //Managers
 import mNavigationManager = module("emulator/model/managers/NavigationManager");
 import mXmlManager = module("emulator/model/managers/XmlManager");
+
+//Logic
+import mTrigger = module("emulator/model/logic/Trigger");
 //#endregion
 
 export class Emulator {
@@ -46,6 +49,17 @@ export class Emulator {
         xml = mXmlHelper.escapeXml(xml);
         var pages:mPage.Page[] = this.xmlManager.parseXmlString(xml);
         pages.map(page => this.addPage(page));
+
+        //TODO: test stub
+        pages.map(function (page: mPage.Page) {
+            alert("add triggers");
+            var trigger = new mTrigger.Trigger(mTrigger.Trigger.OnShow, function () {
+                console.log("OnShow Trigger");
+                alert("Trigger!!!");
+            });
+            page.addTrigger(trigger);
+        });
+        //end stub
         this.navigationManager.showPage(pages[0].Name);
     }
 

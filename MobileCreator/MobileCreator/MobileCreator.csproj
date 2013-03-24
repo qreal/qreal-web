@@ -97,6 +97,13 @@
     <Content Include="src\emulator\model\Emulator.min.js">
       <DependentUpon>Emulator.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="src\emulator\model\logic\Trigger.ts" />
+    <Content Include="src\emulator\model\logic\Trigger.js">
+      <DependentUpon>Trigger.ts</DependentUpon>
+    </Content>
+    <Content Include="src\emulator\model\logic\Trigger.min.js">
+      <DependentUpon>Trigger.ts</DependentUpon>
+    </Content>
     <Content Include="src\emulator\model\managers\NavigationManager.js">
       <DependentUpon>NavigationManager.ts</DependentUpon>
     </Content>
@@ -112,6 +119,9 @@
     </Content>
     <TypeScriptCompile Include="src\emulator\model\Page.ts" />
     <Content Include="src\emulator\model\Page.js">
+      <DependentUpon>Page.ts</DependentUpon>
+    </Content>
+    <Content Include="src\emulator\model\Page.min.js">
       <DependentUpon>Page.ts</DependentUpon>
     </Content>
     <Content Include="src\emulator\model\ui\Button.min.js">

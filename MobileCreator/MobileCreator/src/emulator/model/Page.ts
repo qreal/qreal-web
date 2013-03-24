@@ -1,5 +1,6 @@
 //#region Imports
 import mLog = module("utils/log/Log");
+import mTrigger = module("emulator/model/logic/Trigger");
 import mXmlHelper = module("utils/XmlHelper");
 import mButton = module("emulator/model/ui/Button");
 import mControl = module("emulator/model/ui/Control");
@@ -12,7 +13,6 @@ import mImageViewTag = module("emulator/model/attributes/ImageViewTag");
 import mImageView = module("emulator/model/ui/ImageView");
 import mWebView = module("emulator/model/ui/WebView");
 import mWebViewTag = module("emulator/model/attributes/WebViewTag");
-
 //#endregion
 
 export class Page {
@@ -29,11 +29,19 @@ export class Page {
         this.onShowFunction = onShowFunction;
     }
 
-    public onShow() {
-        Page.logger
-        if (this.onShowFunction) {
-            this.onShowFunction();
-        }
+    private triggers: mTrigger.Trigger[] = [];
+    public addTrigger(trigger: mTrigger.Trigger) {
+        Page.logger.log("addTrigger: " + trigger.Event);
+        this.triggers.push(trigger);
+    }
+
+    public trigger(event: string) {
+        Page.logger.log("trigger: "+event);
+        this.triggers.forEach(function (trigger: mTrigger.Trigger, index: number, array: mTrigger.Trigger[]) {
+            if (trigger.Event == event) {
+                trigger.Trigger(this);
+            }
+        });
     }
 
     get Root(): mControl.Control {

@@ -1,26 +1,29 @@
-define(["require", "exports", "utils/log/Log", "emulator/model/Emulator"], function(require, exports, __mLog__, __mEmulator__) {
+define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emulator/model/logic/Trigger"], function(require, exports, __mLog__, __mEmulator__, __mTrigger__) {
     var mLog = __mLog__;
 
     
     
     var mEmulator = __mEmulator__;
 
+    var mTrigger = __mTrigger__;
+
     var NavigationManager = (function () {
         function NavigationManager() {
-            this.logger = new mLog.Logger("NavigationManager");
             this.idPreffix = "PageId_";
             this.pageStack = [];
             this.pages = [];
-            this.logger.log("in constructor");
+            NavigationManager.logger.log("in constructor");
         }
+        NavigationManager.logger = new mLog.Logger("NavigationManager");
         NavigationManager.prototype.addPage = function (page) {
             this.pages[this.idPreffix + page.Name] = page;
         };
         NavigationManager.prototype.showPage = function (pageName) {
+            NavigationManager.logger.log("showPage " + pageName);
             var page = this.pages[this.idPreffix + pageName];
             this.pageStack.push(this.idPreffix + pageName);
             mEmulator.Emulator.instance.showPage(page.Root);
-            page.onShow();
+            page.trigger(mTrigger.Trigger.OnShow);
         };
         NavigationManager.prototype.back = function () {
             var length = this.pageStack.length;
