@@ -101,7 +101,44 @@ seesionId = result.Substring(semicolonPos + 1, result.Length - semicolonPos - 1)
             | "patients-request" -> builderAppend <| "\nWebClient data = new WebClient();
 data.DownloadStringCompleted += new DownloadStringCompletedEventHandler(getResponse);
 data.DownloadStringAsync(new Uri(\"" + reader.GetAttribute("url") + "\"));"
-            | "showmap" -> () // разбор строки patients и выставление пациентов на карте
+            // разбор строки patients и выставление пациентов на карте
+            | "showmap" -> builderAppend <| "\nint count = 0;
+int length = patients.Length;
+StringBuilder latitude = new StringBuilder();
+StringBuilder longitude = new StringBuilder();
+StringBuilder comment = new StringBuilder();
+for (int i = 0; i < length; i++)
+{
+    if (patients[i] == ';')
+    {
+        count++;
+    }
+    else
+    {
+        switch (count)
+        {
+            case 0:
+                latitude.Append(patients[i]);
+                break;
+            case 1:
+                longitude.Append(patients[i]);
+                break;
+            case 2:
+                comment.Append(patients[i]);
+                break;
+        }
+        if (count == 3 || i == length - 1)
+        {
+
+        // тут поставить маркер на карту
+
+        latitude.Clear();
+        longitude.Clear();
+        comment.Clear();
+        count = 0;
+        }
+    }
+}"
             | "form" ->
                 if reader.NodeType = XmlNodeType.EndElement then
                     appendXaml <| "\n</phone:PhoneApplicationPage>"
