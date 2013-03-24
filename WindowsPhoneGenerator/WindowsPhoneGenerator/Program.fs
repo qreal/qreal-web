@@ -193,6 +193,9 @@ loginSuccessful = true;\n}" + (triggers.Item((fileName, "onLoginResponse")) :?> 
 {
 patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> string) + "\n}"
 
+                    if triggers.Contains((fileName, "onShow")) then
+                        appendConstructor <| (triggers.Item((fileName, "onShow")) :?> string)
+
             | "LinearLayout" when reader.NodeType <> XmlNodeType.EndElement -> 
                 appendXaml <| "\n" + depthTab + "<StackPanel Margin=\"10,18,10,0\">"
             | "LinearLayout" when reader.NodeType = XmlNodeType.EndElement -> 
