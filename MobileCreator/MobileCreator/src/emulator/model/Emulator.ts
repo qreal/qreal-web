@@ -41,6 +41,7 @@ export class Emulator {
     }
 
     public showXmlStringView(xml: string) {
+        this.logger.log("showXmlStringView: \n"+xml);
         this.clearUi();
         xml = mXmlHelper.escapeXml(xml);
         var pages:mPage.Page[] = this.xmlManager.parseXmlString(xml);

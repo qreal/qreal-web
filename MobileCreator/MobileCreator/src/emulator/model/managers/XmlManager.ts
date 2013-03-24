@@ -23,6 +23,7 @@ export class XmlManager {
     private logger = new mLog.Logger("XmlManager");
 
     //#region Consts
+    private static App = "application";
     private static Forms = "forms";
     private static Form = "form";
     private static FormName = "form_name";
@@ -32,6 +33,11 @@ export class XmlManager {
     private static Button = "Button";
     private static ImageView = "ImageView";
     private static WebView = "WebView";
+
+    private static Logic = "logic";
+    private static Trigger = "trigger";
+    private static FormId = "form-id";
+    private static Event = "event";
 
     //#endregion
 
@@ -59,13 +65,27 @@ export class XmlManager {
         this.logger.log("parseXmlString");
         var parser = new DOMParser();
         var xmlDoc: Document = parser.parseFromString(xmlString, "text/xml");
-        return this.parseForms(xmlDoc.firstChild);
+        return this.parseApplication(xmlDoc.firstChild);
     }
 
-    /**
-    */
-    private parseForms(node: Node): mPage.Page[] {
-        this.logger.log("parseForms: " + node.nodeName);
+    private parseApplication(node: Node): mPage.Page[] {
+        this.logger.log("parseApplication: " + node.nodeName);
+        for (var i = 0; i < node.childNodes.length; i++) {
+            var childNode = node.childNodes.item(i);
+            var pages: mPage.Page[];
+            switch (childNode.nodeName) {
+                case XmlManager.Forms:
+                    pages = this.parseForms(childNode);
+                    break;
+                case XmlManager.Logic:
+                    this.parseLogic(childNode);
+                    break
+            }
+        }   
+        return pages;
+    }
+
+    private parseForms(node: Node): mPage.Page[]{
         var forms: mPage.Page[] = [];
         for (var i = 0; i < node.childNodes.length; i++) {
             if (node.childNodes.item(i).nodeName == XmlManager.Form) {
@@ -73,6 +93,9 @@ export class XmlManager {
             }
         }
         return forms;
+    }
+
+    private parseLogic(node: Node) {
     }
 
     private parseForm(node: Node): mPage.Page {

@@ -36,6 +36,7 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
         Emulator.instance = new Emulator();
         Emulator.prototype.showXmlStringView = function (xml) {
             var _this = this;
+            this.logger.log("showXmlStringView: \n" + xml);
             this.clearUi();
             xml = mXmlHelper.escapeXml(xml);
             var pages = this.xmlManager.parseXmlString(xml);

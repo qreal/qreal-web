@@ -34,6 +34,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/
             this.logger = new mLog.Logger("XmlManager");
             this.logger.log("in constructor");
         }
+        XmlManager.App = "application";
         XmlManager.Forms = "forms";
         XmlManager.Form = "form";
         XmlManager.FormName = "form_name";
@@ -42,6 +43,10 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/
         XmlManager.Button = "Button";
         XmlManager.ImageView = "ImageView";
         XmlManager.WebView = "WebView";
+        XmlManager.Logic = "logic";
+        XmlManager.Trigger = "trigger";
+        XmlManager.FormId = "form-id";
+        XmlManager.Event = "event";
         XmlManager.prototype.parsePage = function (page) {
             this.logger.log("parse page: " + page);
             var xmlHTTP = new XMLHttpRequest();
@@ -60,10 +65,25 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/
             this.logger.log("parseXmlString");
             var parser = new DOMParser();
             var xmlDoc = parser.parseFromString(xmlString, "text/xml");
-            return this.parseForms(xmlDoc.firstChild);
+            return this.parseApplication(xmlDoc.firstChild);
+        };
+        XmlManager.prototype.parseApplication = function (node) {
+            this.logger.log("parseApplication: " + node.nodeName);
+            for(var i = 0; i < node.childNodes.length; i++) {
+                var childNode = node.childNodes.item(i);
+                var pages;
+                switch(childNode.nodeName) {
+                    case XmlManager.Forms:
+                        pages = this.parseForms(childNode);
+                        break;
+                    case XmlManager.Logic:
+                        this.parseLogic(childNode);
+                        break;
+                }
+            }
+            return pages;
         };
         XmlManager.prototype.parseForms = function (node) {
-            this.logger.log("parseForms: " + node.nodeName);
             var forms = [];
             for(var i = 0; i < node.childNodes.length; i++) {
                 if(node.childNodes.item(i).nodeName == XmlManager.Form) {
@@ -71,6 +91,8 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/
                 }
             }
             return forms;
+        };
+        XmlManager.prototype.parseLogic = function (node) {
         };
         XmlManager.prototype.parseForm = function (node) {
             this.logger.log("parseForm: " + node.nodeName);
