@@ -26,3 +26,12 @@ C:\Users\nikit_000\Documents\Workspace\TypeScript\QrealWeb\qreal-web\Server\QRea
 C:\Users\nikit_000\Documents\Workspace\TypeScript\QrealWeb\qreal-web\Server\QRealWeb\Website\bin\Debug\FSharp.PowerPack.xml
 C:\Users\nikit_000\Documents\Workspace\TypeScript\QrealWeb\qreal-web\Server\QRealWeb\Website\bin\Debug\IntelliFactory.WebSharper.Raphael.xml
 C:\Users\nikit_000\Documents\Workspace\TypeScript\QrealWeb\qreal-web\Server\QRealWeb\Website\obj\Debug\Website.dll
+C:\Users\Nadusha\git\qrealweb\Server\QRealWeb\Website\bin\Debug\Website.dll
+C:\Users\Nadusha\git\qrealweb\Server\QRealWeb\Website\bin\Debug\Website.pdb
+C:\Users\Nadusha\git\qrealweb\Server\QRealWeb\Website\bin\Debug\IntelliFactory.WebSharper.Raphael.dll
+C:\Users\Nadusha\git\qrealweb\Server\QRealWeb\Website\bin\Debug\FSharp.PowerPack.pdb
+C:\Users\Nadusha\git\qrealweb\Server\QRealWeb\Website\bin\Debug\FSharp.PowerPack.xml
+C:\Users\Nadusha\git\qrealweb\Server\QRealWeb\Website\bin\Debug\IntelliFactory.WebSharper.Raphael.xml
+C:\Users\Nadusha\git\qrealweb\Server\QRealWeb\Website\obj\Debug\Website.fsprojResolveAssemblyReference.cache
+C:\Users\Nadusha\git\qrealweb\Server\QRealWeb\Website\obj\Debug\Website.dll
+C:\Users\Nadusha\git\qrealweb\Server\QRealWeb\Website\obj\Debug\Website.pdb
