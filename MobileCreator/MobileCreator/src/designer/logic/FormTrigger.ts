@@ -1,6 +1,7 @@
 /// <reference path="../../../lib/jquery.d.ts" />
 /// <reference path="../../../lib/jquerymobile.d.ts" />
 import mAction = module("designer/logic/Action")
+import mSaveSessionAction = module ("designer/logic/SaveSessionAction")
 
 export class FormTrigger {
     private formId: string;
@@ -8,7 +9,7 @@ export class FormTrigger {
     private actions: mAction.Action[];
     constructor(formId: string, triggerName: string) {
         this.actions = [];
-        this.actions.push(new mAction.Action());
+        //this.actions.push(new mAction.Action());
         this.formId = formId;
         this.triggerName = triggerName;
     }
@@ -34,22 +35,21 @@ export class FormTrigger {
         this.actions.push(action);
     }
     public show(domElement: JQuery) {
+        var _this = this;
         domElement.empty();
         for (var i = 0; i < this.actions.length; i++) {
-            this.actions[i].show();
-            if (i != (this.actions.length - 1)) {
-                var removeButton = $("<a href='#' data-role='button' data-inline='true' data-icon='delete' data-iconpos='notext' data-theme='e' data-mini='true'>Delete</a>");
-                domElement.append(removeButton);
-                removeButton.button();
-            }
+            this.actions[i].show(domElement);
+            var removeButton = $("<a href='#' data-role='button' data-icon='delete' data-iconpos='notext' data-theme='e' data-mini='true'>Delete</a>");
+            domElement.append(removeButton);
+            removeButton.button();
         }
-        var newActionDiv = $("<div class='ui-grid-b'></div>");
+        var newActionDiv = $("<div class='ui-grid-a'></div>");
         var selectActionDiv = $("<div class='ui-block-a'></div>");
         var buttonAddActionDiv = $("<div class='ui-block-b'></div>");
-        var selectAction = $("<select name='selectNewAction' id='selectNewAction' data-inline='true' data-mini='true'></select>");
+        var selectAction = $("<select name='selectNewAction' id='selectNewAction' data-mini='true'></select>");
         var loginAction = $("<option value='login'>login</option>");
         var ifAction = $("<option value='if'>if</option>");
-        var patientsAction = $("<option value='patients'>patientsRequest</option>");
+        var patientsAction = $("<option value='patients'>getPatients</option>");
         var saveSessionAction = $("<option value='saveSession'>saveSession</option>");
         var showMapAction = $("<option value='showMap'>showMap</option>");
         var transitionAction = $("<option value='transition'>transition</option>");
@@ -63,16 +63,24 @@ export class FormTrigger {
         newActionDiv.append(selectActionDiv);
         selectActionDiv.append(selectAction);
         selectAction.selectmenu();
-        var addActionButton = $("<a href='#' data-role='button' data-inline='true' data-icon='plus' data-iconpos='notext' data-theme='e' data-mini='true'>Add action</a>");
+        var addActionButton = $("<a href='#' data-role='button' data-icon='plus' data-iconpos='notext' data-theme='e' data-mini='true'>Add action</a>");
         domElement.append(addActionButton);
         newActionDiv.append(buttonAddActionDiv);
         buttonAddActionDiv.append(addActionButton);
         addActionButton.button();
+        addActionButton.click(function () {
+            switch (selectAction.val()) {
+                case "saveSession":
+                    _this.addAction(new mSaveSessionAction.SaveSessionAction());
+                    _this.show(domElement);
+                    break;
+            }
+        });
     }
     public toXML() {
         var xml = "<trigger form-id='" + this.formId + "' event='" + this.triggerName + "'>\n";
         var seqCount = 0;
-        for (var i = 0; i < this.actions.length - 1; i++) {
+        for (var i = 0; i < this.actions.length; i++) {
             if (this.actions.length == 1) {
                 xml += this.actions[i].toXML();
                 break;
