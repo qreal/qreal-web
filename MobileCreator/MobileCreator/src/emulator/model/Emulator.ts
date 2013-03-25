@@ -24,6 +24,7 @@ import mXmlManager = module("emulator/model/managers/XmlManager");
 
 //Logic
 import mTrigger = module("emulator/model/logic/Trigger");
+import mLogic = module("emulator/model/logic/Logic");
 //#endregion
 
 export class Emulator {
@@ -44,10 +45,10 @@ export class Emulator {
     }
 
     public showXmlStringView(xml: string) {
-        this.logger.log("showXmlStringView: \n"+xml);
+        this.logger.log("showXmlStringView: \n" + xml);
         this.clearUi();
         xml = mXmlHelper.escapeXml(xml);
-        var pages:mPage.Page[] = this.xmlManager.parseXmlString(xml);
+        var pages: mPage.Page[] = this.xmlManager.parseXmlString(xml);
         pages.map(page => this.addPage(page));
 
         //TODO: test stub
@@ -66,14 +67,14 @@ export class Emulator {
         this.navigationManager.showPage(pages[0].Name);
     }
 
-    private addPage(page:mPage.Page) {
+    private addPage(page: mPage.Page) {
         this.navigationManager.addPage(page);
         this.emulatorViewModel.addView(page.Root);
     }
-    
+
     public showPage(page: mControl.Control) {
         this.emulatorViewModel.showView(page);
-    }    
+    }
 
     get NavigationManager() {
         return this.navigationManager;

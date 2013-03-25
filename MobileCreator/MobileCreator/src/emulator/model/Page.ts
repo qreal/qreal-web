@@ -31,7 +31,7 @@ export class Page {
 
     public onShow(): void {
         this.trigger(mTrigger.Trigger.OnShow);
-        this.timerToken = setInterval(() => this.trigger(mTrigger.Trigger.OnTimer), 5000);
+       // this.timerToken = setInterval(() => this.trigger(mTrigger.Trigger.OnTimer), 5000);
     }
 
     public onHide(): void {

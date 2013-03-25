@@ -11,20 +11,24 @@ export class EmulatorViewModel {
         this.$screen = $("#screen");
     }
 
-    public addView(view: mControl.Control) {
+    public addView(view: mControl.Control):void {
         this.logger.log("addView \n" + view.$Control.html());
         this.$screen.append(view.$Control);
         this.$screen.trigger('create');
         this.$screen.children().hide();
     }
 
-    public showView(view: mControl.Control) {
+    public showView(view: mControl.Control):void {
         this.logger.log("showView");
         this.$screen.children().hide();
         view.$Control.show();
     }
 
-    public clear() {
+    public clear():void {
         this.$screen.children().remove();
+    }
+
+    public getInputText(inputId: string):string {
+        return this.$screen.find("#" + inputId).val();
     }
 }

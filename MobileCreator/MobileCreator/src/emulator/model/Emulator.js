@@ -23,6 +23,7 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
 
     var mTrigger = __mTrigger__;
 
+    
     var Emulator = (function () {
         function Emulator() {
             var _this = this;

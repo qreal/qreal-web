@@ -22,6 +22,9 @@ define(["require", "exports", "utils/log/Log"], function(require, exports, __mLo
         EmulatorViewModel.prototype.clear = function () {
             this.$screen.children().remove();
         };
+        EmulatorViewModel.prototype.getInputText = function (inputId) {
+            return this.$screen.find("#" + inputId).val();
+        };
         return EmulatorViewModel;
     })();
     exports.EmulatorViewModel = EmulatorViewModel;    

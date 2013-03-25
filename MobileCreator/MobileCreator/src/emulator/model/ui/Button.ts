@@ -41,7 +41,5 @@ export class Button extends mControl.Control {
         if (button.OnAction) {
             button.OnAction();
         }
-
     }
-
 }
