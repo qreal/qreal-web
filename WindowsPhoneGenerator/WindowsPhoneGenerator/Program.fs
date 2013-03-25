@@ -25,6 +25,7 @@ let mutable projectName = "Default"
 
 let csprojItems = new StringBuilder()
 let csprojPages = new StringBuilder()
+let resources = new StringBuilder()
 
 let actions  = new Hashtable()
 let triggers = new Hashtable()
@@ -234,7 +235,7 @@ patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> str
                         appendConstructor <| (triggers.Item((fileName, "onShow")) :?> string)
 
             | "LinearLayout" when reader.NodeType <> XmlNodeType.EndElement -> 
-                appendXaml <| "\n" + depthTab + "<StackPanel Margin=\"10,18,10,0\">"
+                appendXaml <| "\n" + depthTab + "<StackPanel Margin=\"5,5,5,0\">"
             | "LinearLayout" when reader.NodeType = XmlNodeType.EndElement -> 
                 appendXaml <| "\n" + depthTab + "</StackPanel>"
             | "TextView" -> 
@@ -242,7 +243,7 @@ patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> str
                 appendXaml <| "\n" + depthTab + "<TextBlock Text=\"" + reader.GetAttribute("text") + "\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
             | "EditText" ->
                 let textSize = getNumber(reader.GetAttribute("textSize"))
-                appendXaml <| "\n" + depthTab + "<TextBox x:Name=\"" + getName (reader.GetAttribute("id")) + "\" IsReadOnly=\"False\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
+                appendXaml <| "\n" + depthTab + "<TextBox x:Name=\"" + getName (reader.GetAttribute("id")) + "\" IsReadOnly=\"False\" MinWidth=\"250\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
             | "Button" -> 
                 let name = getName (reader.GetAttribute("id"))
                 if actions.Contains(name) then
@@ -260,8 +261,11 @@ patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> str
                 download fullFileName url
                 appendXaml <| "\n" + depthTab + "<Image Source=\"" + fileName + "\" />"
                 imageCounter <- imageCounter + 1
+                append resources <| "\n<Resource Include=\"" + fileName + "\" />" 
             | "WebView" -> 
-                appendXaml <| "\n" + depthTab + "<phone:WebBrowser x:Name=\"" + getName(reader.GetAttribute("id")) + "\" Source=\"" + reader.GetAttribute("url") + "\" />"
+                let name = getName(reader.GetAttribute("id"))
+                appendXaml <| "\n" + depthTab + "<phone:WebBrowser x:Name=\"" + name + "\" IsScriptEnabled=\"True\" Height=\"763\" Width=\"475\" />"
+                appendConstructor <| "\n" + name + ".Navigate(new Uri(\"" + reader.GetAttribute("url") + "\", UriKind.RelativeOrAbsolute));"
             | _ -> ()
 
         with | :? XmlException as e ->
@@ -478,7 +482,7 @@ let csprojFile = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
     </Content>
     <Content Include=\"Background.png\">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </Content>" + resources.ToString() + "
     <Content Include=\"SplashScreenImage.jpg\" />
   </ItemGroup>
   <Import Project=\"$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets\" />
