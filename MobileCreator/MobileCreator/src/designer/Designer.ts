@@ -15,6 +15,7 @@ import mButtonPreferences = module("designer/preferences/ButtonPreferences");
 import mButton = module("designer/widgets/Button");
 import mForm = module("designer/Form")
 import mWidgetTypes = module("designer/widgets/WidgetTypes")
+import mFormTrigger = module("designer/logic/FormTrigger")
 
 
 export class Designer {
@@ -97,6 +98,7 @@ export class Designer {
     }
 
     public updateTriggersSelect() {
+        var _this = this;
         var select = $("#triggersSelect");
         select.empty();
         for (var i = 0; i < Designer.activeForm.Triggers.length; i++) {
@@ -108,6 +110,16 @@ export class Designer {
             select.append(newOption);
         }
         select.selectmenu("refresh", true);
+        select.change(function () {
+            var trigger: mFormTrigger.FormTrigger = null;
+            for (var i = 0; i < Designer.activeForm.Triggers.length; i++) {
+                if (select.val() == Designer.activeForm.Triggers[i].TriggerName) {
+                    trigger = Designer.activeForm.Triggers[i];
+                    break;
+                }
+            }
+            trigger.show($("#triggerDiv"));
+        });
     }
 
     public changeActiveForm(formName: string) {
@@ -246,9 +258,14 @@ export class Designer {
         var triggersSelect = $("<select id=\"triggersSelect\"></select>");
         triggersSelect.change(function () {
             //_this.changeActiveForm(formsSelect.val());
+            //var activeForm = _this.
         });
         $(formTriggersDiv).append($(triggersSelect));
         triggersSelect.selectmenu();
+
+        var triggerDiv = document.createElement("div");
+        triggerDiv.id = "triggerDiv";
+        $(formTriggersDiv).append($(triggerDiv));
 
         $(parentDiv).prepend($(designerMenuDiv));
         $(propertiesParentDiv).prepend($(propertiesDiv));

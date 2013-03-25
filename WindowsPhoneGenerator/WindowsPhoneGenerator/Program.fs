@@ -25,6 +25,7 @@ let mutable projectName = "Default"
 
 let csprojItems = new StringBuilder()
 let csprojPages = new StringBuilder()
+let resources = new StringBuilder()
 
 let actions  = new Hashtable()
 let triggers = new Hashtable()
@@ -101,7 +102,44 @@ seesionId = result.Substring(semicolonPos + 1, result.Length - semicolonPos - 1)
             | "patients-request" -> builderAppend <| "\nWebClient data = new WebClient();
 data.DownloadStringCompleted += new DownloadStringCompletedEventHandler(getResponse);
 data.DownloadStringAsync(new Uri(\"" + reader.GetAttribute("url") + "\"));"
-            | "showmap" -> () // разбор строки patients и выставление пациентов на карте
+            // разбор строки patients и выставление пациентов на карте
+            | "showmap" -> builderAppend <| "\nint count = 0;
+int length = patients.Length;
+StringBuilder latitude = new StringBuilder();
+StringBuilder longitude = new StringBuilder();
+StringBuilder comment = new StringBuilder();
+for (int i = 0; i < length; i++)
+{
+    if (patients[i] == ';')
+    {
+        count++;
+    }
+    else
+    {
+        switch (count)
+        {
+            case 0:
+                latitude.Append(patients[i]);
+                break;
+            case 1:
+                longitude.Append(patients[i]);
+                break;
+            case 2:
+                comment.Append(patients[i]);
+                break;
+        }
+        if (count == 3 || i == length - 1)
+        {
+
+        // тут поставить маркер на карту
+
+        latitude.Clear();
+        longitude.Clear();
+        comment.Clear();
+        count = 0;
+        }
+    }
+}"
             | "form" ->
                 if reader.NodeType = XmlNodeType.EndElement then
                     appendXaml <| "\n</phone:PhoneApplicationPage>"
@@ -197,7 +235,7 @@ patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> str
                         appendConstructor <| (triggers.Item((fileName, "onShow")) :?> string)
 
             | "LinearLayout" when reader.NodeType <> XmlNodeType.EndElement -> 
-                appendXaml <| "\n" + depthTab + "<StackPanel Margin=\"10,18,10,0\">"
+                appendXaml <| "\n" + depthTab + "<StackPanel Margin=\"5,5,5,0\">"
             | "LinearLayout" when reader.NodeType = XmlNodeType.EndElement -> 
                 appendXaml <| "\n" + depthTab + "</StackPanel>"
             | "TextView" -> 
@@ -205,7 +243,7 @@ patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> str
                 appendXaml <| "\n" + depthTab + "<TextBlock Text=\"" + reader.GetAttribute("text") + "\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
             | "EditText" ->
                 let textSize = getNumber(reader.GetAttribute("textSize"))
-                appendXaml <| "\n" + depthTab + "<TextBox x:Name=\"" + getName (reader.GetAttribute("id")) + "\" IsReadOnly=\"False\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
+                appendXaml <| "\n" + depthTab + "<TextBox x:Name=\"" + getName (reader.GetAttribute("id")) + "\" IsReadOnly=\"False\" MinWidth=\"250\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
             | "Button" -> 
                 let name = getName (reader.GetAttribute("id"))
                 if actions.Contains(name) then
@@ -223,8 +261,11 @@ patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> str
                 download fullFileName url
                 appendXaml <| "\n" + depthTab + "<Image Source=\"" + fileName + "\" />"
                 imageCounter <- imageCounter + 1
+                append resources <| "\n<Resource Include=\"" + fileName + "\" />" 
             | "WebView" -> 
-                appendXaml <| "\n" + depthTab + "<phone:WebBrowser x:Name=\"" + getName(reader.GetAttribute("id")) + "\" Source=\"" + reader.GetAttribute("url") + "\" />"
+                let name = getName(reader.GetAttribute("id"))
+                appendXaml <| "\n" + depthTab + "<phone:WebBrowser x:Name=\"" + name + "\" IsScriptEnabled=\"True\" Height=\"763\" Width=\"475\" />"
+                appendConstructor <| "\n" + name + ".Navigate(new Uri(\"" + reader.GetAttribute("url") + "\", UriKind.RelativeOrAbsolute));"
             | _ -> ()
 
         with | :? XmlException as e ->
@@ -441,7 +482,7 @@ let csprojFile = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
     </Content>
     <Content Include=\"Background.png\">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </Content>" + resources.ToString() + "
     <Content Include=\"SplashScreenImage.jpg\" />
   </ItemGroup>
   <Import Project=\"$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets\" />
