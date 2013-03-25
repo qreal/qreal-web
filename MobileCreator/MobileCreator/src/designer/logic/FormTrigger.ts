@@ -8,7 +8,6 @@ export class FormTrigger {
         //this.action = 
         this.formId = formId;
         this.triggerName = triggerName;
-        this.action = new mAction.Action();
     }
     get FormId() {
         return this.formId;
@@ -28,7 +27,6 @@ export class FormTrigger {
     set Action(action: mAction.Action) {
         this.action = action;
     }
-
     public toXML() {
         var xml = "<trigger form-id='" + this.formId + "' event='" + this.triggerName + "'>\n";
         xml += this.action.toXML();
