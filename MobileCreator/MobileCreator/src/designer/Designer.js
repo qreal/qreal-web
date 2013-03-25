@@ -19,6 +19,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
 
     var mWidgetTypes = __mWidgetTypes__;
 
+    
     var Designer = (function () {
         function Designer() {
             this.logger = new mLog.Logger("Designer");
@@ -92,6 +93,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             select.selectmenu("refresh", true);
         };
         Designer.prototype.updateTriggersSelect = function () {
+            var _this = this;
             var select = $("#triggersSelect");
             select.empty();
             for(var i = 0; i < Designer.activeForm.Triggers.length; i++) {
@@ -100,6 +102,16 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
                 select.append(newOption);
             }
             select.selectmenu("refresh", true);
+            select.change(function () {
+                var trigger = null;
+                for(var i = 0; i < Designer.activeForm.Triggers.length; i++) {
+                    if(select.val() == Designer.activeForm.Triggers[i].TriggerName) {
+                        trigger = Designer.activeForm.Triggers[i];
+                        break;
+                    }
+                }
+                trigger.show($("#triggerDiv"));
+            });
         };
         Designer.prototype.changeActiveForm = function (formName) {
             $("#propertiesEditor").empty();
@@ -207,6 +219,9 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             });
             $(formTriggersDiv).append($(triggersSelect));
             triggersSelect.selectmenu();
+            var triggerDiv = document.createElement("div");
+            triggerDiv.id = "triggerDiv";
+            $(formTriggersDiv).append($(triggerDiv));
             $(parentDiv).prepend($(designerMenuDiv));
             $(propertiesParentDiv).prepend($(propertiesDiv));
             $(propertiesParentDiv).append($(formTriggersDiv));
