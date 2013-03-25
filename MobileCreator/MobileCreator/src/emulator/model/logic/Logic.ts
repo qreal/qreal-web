@@ -27,7 +27,6 @@ export class FunctionFactory {
 
     public loginRequestFunc(url: string, login_id: string, password_id: string) {
        // mEmulator.Emulator.instance.
-
     }
 }
 
