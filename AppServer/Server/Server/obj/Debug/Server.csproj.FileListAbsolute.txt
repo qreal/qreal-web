@@ -1,0 +1,12 @@
+C:\Projects\Movies\Server\Server\bin\Debug\Server.exe.config
+C:\Projects\Movies\Server\Server\bin\Debug\Server.exe
+C:\Projects\Movies\Server\Server\bin\Debug\Server.pdb
+C:\Projects\Movies\Server\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+C:\Projects\Movies\Server\Server\obj\Debug\Server.exe
+C:\Projects\Movies\Server\Server\obj\Debug\Server.pdb
+C:\Users\Nadusha\Downloads\Movies (2)\Server\Server\bin\Debug\Server.exe.config
+C:\Users\Nadusha\Downloads\Movies (2)\Server\Server\obj\Debug\Server.exe
+C:\Users\Nadusha\Downloads\Movies (2)\Server\Server\obj\Debug\Server.pdb
+C:\Users\Nadusha\Downloads\Movies (2)\Server\Server\bin\Debug\Server.exe
+C:\Users\Nadusha\Downloads\Movies (2)\Server\Server\bin\Debug\Server.pdb
+C:\Users\Nadusha\Downloads\Movies (2)\Server\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
