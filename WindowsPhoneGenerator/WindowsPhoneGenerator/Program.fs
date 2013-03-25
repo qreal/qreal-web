@@ -26,6 +26,9 @@ let mutable projectName = "Default"
 let csprojItems = new StringBuilder()
 let csprojPages = new StringBuilder()
 let resources = new StringBuilder()
+let references = new StringBuilder()
+let usings = new StringBuilder()
+let xmlns = new StringBuilder()
 
 let actions  = new Hashtable()
 let triggers = new Hashtable()
@@ -61,14 +64,16 @@ let parseXml =
                 tempStack.Push(reader.GetAttribute("control-id"))
             | "action" when reader.NodeType = XmlNodeType.EndElement ->
                 // ключ - id контрола, значение - код, который нужно выполнить
-                actions.Add(tempStack.Pop() :?> string, currentBuilder.ToString())
+                let controlName = tempStack.Pop() :?> string
+                actions.Add(controlName, currentBuilder.ToString())
                 currentBuilder.Clear() |> ignore
             | "trigger" when reader.NodeType <> XmlNodeType.EndElement ->
                 tempStack.Push(reader.GetAttribute("event"))
                 tempStack.Push(reader.GetAttribute("form-id"))
             | "trigger" when reader.NodeType = XmlNodeType.EndElement ->
                 // ключ - пара, в которой 1 элемент - имя формы, 2 элемент - событие, занчение - код, который нужно выполнить
-                triggers.Add((tempStack.Pop() :?> string, tempStack.Pop() :?> string), currentBuilder.ToString())
+                let formName = tempStack.Pop() :?> string
+                triggers.Add((formName, tempStack.Pop() :?> string), currentBuilder.ToString())
                 currentBuilder.Clear() |> ignore
             | "if" when reader.NodeType <> XmlNodeType.EndElement -> builderAppend <| "\nif (" + reader.GetAttribute("condition") + ")"
             | "then" when reader.NodeType <> XmlNodeType.EndElement -> builderAppend <| "\n{"
@@ -98,12 +103,18 @@ myRequest.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), myR
             | "save-session" -> 
                 builderAppend <| "\nint semicolonPos = result.IndexOf(';');
 seesionId = result.Substring(semicolonPos + 1, result.Length - semicolonPos - 1);"
-                appendAdditions <| "\nprivate string seesionId;"
             | "patients-request" -> builderAppend <| "\nWebClient data = new WebClient();
 data.DownloadStringCompleted += new DownloadStringCompletedEventHandler(getResponse);
 data.DownloadStringAsync(new Uri(\"" + reader.GetAttribute("url") + "\"));"
             // разбор строки patients и выставление пациентов на карте
-            | "showmap" -> builderAppend <| "\nint count = 0;
+            | "showmap" ->
+                append references <| "\n<Reference Include=\"Microsoft.Phone.Controls.Maps, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL\" />
+<Reference Include=\"System.Device\" />
+<Reference Include=\"System.Servicemodel\" />"
+                append xmlns <| "\nxmlns:maps=\"clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps\""
+                append usings <| "\nusing Microsoft.Phone.Controls.Maps;
+using System.Device.Location;"
+                builderAppend <| "\nint count = 0;
 int length = patients.Length;
 StringBuilder latitude = new StringBuilder();
 StringBuilder longitude = new StringBuilder();
@@ -128,16 +139,14 @@ for (int i = 0; i < length; i++)
                 comment.Append(patients[i]);
                 break;
         }
-        if (count == 3 || i == length - 1)
-        {
-
-        // тут поставить маркер на карту
-
+    }
+    if (count == 3 || i == length - 1)
+    {
+        createPushpin(latitude.ToString(), longitude.ToString(), comment.ToString());
         latitude.Clear();
         longitude.Clear();
         comment.Clear();
         count = 0;
-        }
     }
 }"
             | "form" ->
@@ -172,7 +181,7 @@ for (int i = 0; i < length; i++)
     xmlns:phone=\"clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone\"
     xmlns:shell=\"clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone\"
     xmlns:d=\"http://schemas.microsoft.com/expression/blend/2008\"
-    xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\"
+    xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\"" + xmlns.ToString() + "
     mc:Ignorable=\"d\" d:DesignWidth=\"480\" d:DesignHeight=\"768\"
     FontFamily=\"{StaticResource PhoneFontFamilyNormal}\"
     FontSize=\"{StaticResource PhoneFontSizeNormal}\"
@@ -194,7 +203,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-using Microsoft.Phone.Controls;\nnamespace " + projectName + "
+using Microsoft.Phone.Controls;" + usings.ToString() + "\nnamespace " + projectName + "
 {
 public partial class " + fileName + ": PhoneApplicationPage
 {\n"
@@ -209,6 +218,7 @@ timer.Start();"
                         appendAdditions <| "\nprivate void timerTick(object sender, EventArgs e)\n{" + (triggers.Item((fileName, "onTimer")) :?> string) + "\n}"
                     
                     if triggers.Contains((fileName, "onLoginResponse")) then
+                        appendAdditions <| "\nprivate string seesionId;"
                         appendAdditions <| loginRequest.ToString()
                         appendAdditions <| "\nprivate void GetResponsetStreamCallback(IAsyncResult callbackResult)
 {
@@ -266,6 +276,53 @@ patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> str
                 let name = getName(reader.GetAttribute("id"))
                 appendXaml <| "\n" + depthTab + "<phone:WebBrowser x:Name=\"" + name + "\" IsScriptEnabled=\"True\" Height=\"763\" Width=\"475\" />"
                 appendConstructor <| "\n" + name + ".Navigate(new Uri(\"" + reader.GetAttribute("url") + "\", UriKind.RelativeOrAbsolute));"
+            | "Map" ->
+                appendXaml <| "\n" + depthTab + "<maps:Map Name=\"mapPlace\" HorizontalAlignment=\"Stretch\" VerticalAlignment=\"Stretch\"
+            ScaleVisibility=\"Visible\"
+            Height=\"768\"
+            ZoomBarVisibility=\"Visible\"
+            CopyrightVisibility=\"Collapsed\"
+            CredentialsProvider=\"Al8CCFBXNKVlW0cm4lfHbXmzMmuiHr96NmftGF25_hI0hxtaVLeQ7KvIeHacrDBh\" >
+        </maps:Map>"
+                appendConstructor <| "\nPushpinLayer = new MapLayer();
+mapPlace.Children.Add(PushpinLayer);"
+                appendAdditions <| "\nprivate void createPushpin(string latitude, string longitude, string comment)
+{
+    double x = Convert.ToDouble(latitude);
+    double y = Convert.ToDouble(longitude);
+
+    Pushpin pushpin = new Pushpin();
+    pushpin.Background = new SolidColorBrush(Colors.Red);
+    pushpin.Tap += new EventHandler<GestureEventArgs>(pushPin_Tap);
+    pushpin.Location = new GeoCoordinate(x, y);
+    mapPlace.SetView(new GeoCoordinate(x, y), 14);
+    Border border = new Border();
+    border.Visibility = System.Windows.Visibility.Collapsed;
+    border.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+    pushpin.Content = border;
+    StackPanel panel = new StackPanel();
+    TextBlock text = new TextBlock();
+    text.Text = comment;
+    border.Child = text;
+    PushpinLayer.AddChild(pushpin, pushpin.Location);
+
+}
+
+private void pushPin_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+{
+    if (((Border)(((Pushpin)sender).Content)).Visibility == System.Windows.Visibility.Collapsed)
+    {
+        ((Border)(((Pushpin)sender).Content)).Visibility = System.Windows.Visibility.Visible;
+    }
+    else
+    {
+        ((Border)(((Pushpin)sender).Content)).Visibility = System.Windows.Visibility.Collapsed;
+    }
+
+    e.Handled = true;
+}
+
+private MapLayer PushpinLayer;"
             | _ -> ()
 
         with | :? XmlException as e ->
@@ -450,7 +507,7 @@ let csprojFile = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup>" + references.ToString() + "
     <Reference Include=\"Microsoft.Phone\" />
     <Reference Include=\"Microsoft.Phone.Interop\" />
     <Reference Include=\"System.Windows\" />
