@@ -51,6 +51,9 @@ define(["require", "exports", "designer/logic/Action"], function(require, export
                     removeButton.button();
                 }
             }
+            var newActionDiv = $("<div class='ui-grid-b'></div>");
+            var selectActionDiv = $("<div class='ui-block-a'></div>");
+            var buttonAddActionDiv = $("<div class='ui-block-b'></div>");
             var selectAction = $("<select name='selectNewAction' id='selectNewAction' data-inline='true' data-mini='true'></select>");
             var loginAction = $("<option value='login'>login</option>");
             var ifAction = $("<option value='if'>if</option>");
@@ -64,8 +67,15 @@ define(["require", "exports", "designer/logic/Action"], function(require, export
             selectAction.append(saveSessionAction);
             selectAction.append(showMapAction);
             selectAction.append(transitionAction);
-            domElement.append(selectAction);
+            domElement.append(newActionDiv);
+            newActionDiv.append(selectActionDiv);
+            selectActionDiv.append(selectAction);
             selectAction.selectmenu();
+            var addActionButton = $("<a href='#' data-role='button' data-inline='true' data-icon='plus' data-iconpos='notext' data-theme='e' data-mini='true'>Add action</a>");
+            domElement.append(addActionButton);
+            newActionDiv.append(buttonAddActionDiv);
+            buttonAddActionDiv.append(addActionButton);
+            addActionButton.button();
         };
         FormTrigger.prototype.toXML = function () {
             var xml = "<trigger form-id='" + this.formId + "' event='" + this.triggerName + "'>\n";
