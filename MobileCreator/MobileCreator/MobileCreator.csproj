@@ -60,6 +60,26 @@
     <Content Include="src\designer\logic\FormTrigger.js">
       <DependentUpon>FormTrigger.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="src\designer\logic\IfAction.ts" />
+    <Content Include="src\designer\logic\IfAction.js">
+      <DependentUpon>IfAction.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\designer\logic\SeqAction.ts" />
+    <TypeScriptCompile Include="src\designer\logic\LoginRequestAction.ts" />
+    <Content Include="src\designer\logic\LoginRequestAction.js">
+      <DependentUpon>LoginRequestAction.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\designer\logic\SaveSessionAction.ts" />
+    <Content Include="src\designer\logic\SaveSessionAction.js">
+      <DependentUpon>SaveSessionAction.ts</DependentUpon>
+    </Content>
+    <Content Include="src\designer\logic\SeqAction.js">
+      <DependentUpon>SeqAction.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\designer\logic\TransitionAction.ts" />
+    <Content Include="src\designer\logic\TransitionAction.js">
+      <DependentUpon>TransitionAction.ts</DependentUpon>
+    </Content>
     <Content Include="src\designer\preferences\EditTextPreferences.js">
       <DependentUpon>EditTextPreferences.ts</DependentUpon>
     </Content>

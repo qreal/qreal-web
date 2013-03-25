@@ -1,11 +1,9 @@
-define(["require", "exports", "designer/logic/Action"], function(require, exports, __mAction__) {
-    var mAction = __mAction__;
-
+define(["require", "exports"], function(require, exports) {
+    
     var FormTrigger = (function () {
         function FormTrigger(formId, triggerName) {
             this.formId = formId;
             this.triggerName = triggerName;
-            this.action = new mAction.Action();
         }
         Object.defineProperty(FormTrigger.prototype, "FormId", {
             get: function () {
