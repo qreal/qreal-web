@@ -29,6 +29,6 @@ export class EmulatorViewModel {
     }
 
     public getInputText(inputId: string):string {
-        return this.$screen.find("#" + inputId).val();
+        return this.$screen.find("#" + inputId).children().children().val();
     }
 }

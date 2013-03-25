@@ -1,4 +1,4 @@
-define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/viewmodel/EmulatorViewModel", "emulator/model/managers/NavigationManager", "emulator/model/managers/XmlManager", "emulator/model/logic/Trigger"], function(require, exports, __mLog__, __mXmlHelper__, __mEmulatorViewModel__, __mNavigationManager__, __mXmlManager__, __mTrigger__) {
+define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/viewmodel/EmulatorViewModel", "emulator/model/managers/NavigationManager", "emulator/model/managers/XmlManager", "emulator/model/logic/Trigger", "emulator/model/logic/Logic"], function(require, exports, __mLog__, __mXmlHelper__, __mEmulatorViewModel__, __mNavigationManager__, __mXmlManager__, __mTrigger__, __mLogic__) {
     var mLog = __mLog__;
 
     var mXmlHelper = __mXmlHelper__;
@@ -23,7 +23,8 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
 
     var mTrigger = __mTrigger__;
 
-    
+    var mLogic = __mLogic__;
+
     var Emulator = (function () {
         function Emulator() {
             var _this = this;
@@ -56,6 +57,7 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
                 });
                 page.addTrigger(onTimerTrigger);
             });
+            new mLogic.FunctionFactory().sendLoginRequest("http://localhost:54321", "Chizh", "password");
             this.navigationManager.showPage(pages[0].Name);
         };
         Emulator.prototype.addPage = function (page) {
@@ -72,6 +74,16 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(Emulator.prototype, "EmulatorViewModel", {
+            get: function () {
+                return this.emulatorViewModel;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Emulator.prototype.trigger = function (eventType, eventData) {
+            this.logger.log("trigger " + eventType + " eventData " + eventData);
+        };
         Emulator.prototype.clearUi = function () {
             this.navigationManager.clear();
             this.emulatorViewModel.clear();
