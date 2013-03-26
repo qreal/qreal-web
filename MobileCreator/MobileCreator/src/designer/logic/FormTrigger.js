@@ -1,6 +1,8 @@
-define(["require", "exports", "designer/logic/SaveSessionAction"], function(require, exports, __mSaveSessionAction__) {
+define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logic/TransitionAction"], function(require, exports, __mSaveSessionAction__, __mTransitionAction__) {
     
     var mSaveSessionAction = __mSaveSessionAction__;
+
+    var mTransitionAction = __mTransitionAction__;
 
     var FormTrigger = (function () {
         function FormTrigger(formId, triggerName) {
@@ -45,7 +47,7 @@ define(["require", "exports", "designer/logic/SaveSessionAction"], function(requ
             var _this = this;
             domElement.empty();
             for(var i = 0; i < this.actions.length; i++) {
-                var containDiv = $("<div></div>");
+                var containDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
                 var action = this.actions[i];
                 var actionIndex = i;
                 domElement.append(containDiv);
@@ -53,6 +55,7 @@ define(["require", "exports", "designer/logic/SaveSessionAction"], function(requ
                 var removeButton = $("<a href='#' data-role='button' data-icon='delete' data-inline='true' data-iconpos='notext' data-theme='e' data-mini='true'>Delete</a>");
                 containDiv.append(removeButton);
                 removeButton.button();
+                domElement.trigger("create");
                 removeButton.click(function () {
                     _this.actions.splice(actionIndex, 1);
                     _this.show(domElement);
@@ -87,6 +90,10 @@ define(["require", "exports", "designer/logic/SaveSessionAction"], function(requ
                 switch(selectAction.val()) {
                     case "saveSession":
                         _this.addAction(new mSaveSessionAction.SaveSessionAction());
+                        _this.show(domElement);
+                        break;
+                    case "transition":
+                        _this.addAction(new mTransitionAction.TransitionAction("main"));
                         _this.show(domElement);
                         break;
                 }
