@@ -1,4 +1,4 @@
-define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/viewmodel/EmulatorViewModel", "emulator/model/managers/NavigationManager", "emulator/model/managers/XmlManager"], function(require, exports, __mLog__, __mXmlHelper__, __mEmulatorViewModel__, __mNavigationManager__, __mXmlManager__) {
+define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/viewmodel/EmulatorViewModel", "emulator/model/managers/NavigationManager", "emulator/model/managers/XmlManager", "emulator/model/managers/EventManager"], function(require, exports, __mLog__, __mXmlHelper__, __mEmulatorViewModel__, __mNavigationManager__, __mXmlManager__, __mEventManager__) {
     var mLog = __mLog__;
 
     var mXmlHelper = __mXmlHelper__;
@@ -21,6 +21,8 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
 
     var mXmlManager = __mXmlManager__;
 
+    var mEventManager = __mEventManager__;
+
     
     
     var Emulator = (function () {
@@ -31,6 +33,7 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
             this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
             this.navigationManager = new mNavigationManager.NavigationManager();
             this.xmlManager = new mXmlManager.XmlManager();
+            this.eventManager = new mEventManager.EventManager();
             $("#back_button").bind('click', function () {
                 return _this.navigationManager.back();
             });
@@ -41,7 +44,13 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
             this.logger.log("showXmlStringView: \n" + xml);
             this.clearUi();
             xml = mXmlHelper.escapeXml(xml);
-            var pages = this.xmlManager.parseXmlString(xml);
+            var application = this.xmlManager.parseStoredXml('/res/application.xml');
+            var pages = application.pages;
+            var triggers = application.triggers;
+            var _eventManager = this.eventManager;
+            triggers.map(function (trigger) {
+                _eventManager.addTrigger(trigger);
+            });
             pages.map(function (page) {
                 return _this.addPage(page);
             });
@@ -68,12 +77,20 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(Emulator.prototype, "EventManager", {
+            get: function () {
+                return this.eventManager;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Emulator.prototype.trigger = function (eventType, eventData) {
             this.logger.log("trigger " + eventType + " eventData " + eventData);
         };
         Emulator.prototype.clearUi = function () {
             this.navigationManager.clear();
             this.emulatorViewModel.clear();
+            this.eventManager.clear();
         };
         return Emulator;
     })();

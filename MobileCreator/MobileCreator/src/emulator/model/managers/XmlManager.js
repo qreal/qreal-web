@@ -57,6 +57,8 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
         XmlManager.Trigger = "trigger";
         XmlManager.FormId = "form-id";
         XmlManager.Event = "event";
+        XmlManager.Action = "action";
+        XmlManager.ControlId = "control-id";
         XmlManager.Seq = "seq";
         XmlManager.SeqFirst = "first-operator";
         XmlManager.SeqSecond = "second-operator";
@@ -68,8 +70,8 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
         XmlManager.SaveSession = "save-session";
         XmlManager.PatientsRequest = "patients-request";
         XmlManager.ShowMap = "showmap";
-        XmlManager.prototype.parsePage = function (page) {
-            this.logger.log("parse page: " + page);
+        XmlManager.prototype.parseStoredXml = function (page) {
+            this.logger.log("parseStoredXml: " + page);
             var xmlHTTP = new XMLHttpRequest();
             var xmlDoc;
             try  {
@@ -80,7 +82,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
                 window.alert("Unable to load the requested file.");
                 return undefined;
             }
-            return this.parseNode(xmlDoc.firstChild);
+            return this.parseApplication(xmlDoc.firstChild);
         };
         XmlManager.prototype.parseXmlString = function (xmlString) {
             this.logger.log("parseXmlString");
@@ -103,14 +105,10 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
                         break;
                 }
             }
-            triggers.map(function (trigger) {
-                for(i = 0; i < pages.length; i++) {
-                    if(pages[i].Name == trigger.PageId) {
-                        pages[i].addTrigger(trigger);
-                    }
-                }
-            });
-            return pages;
+            return {
+                pages: pages,
+                triggers: triggers
+            };
         };
         XmlManager.prototype.parseLogic = function (node) {
             this.logger.log("parseLogic: " + node.nodeName);
@@ -121,6 +119,9 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
                 switch(child.nodeName) {
                     case XmlManager.Trigger:
                         triggers.push(this.parseTrigger(child));
+                        break;
+                    case XmlManager.Action:
+                        triggers.push(this.parseActionTrigger(child));
                         break;
                 }
             }
@@ -140,6 +141,21 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
                 }
             }
             return new mTrigger.Trigger(formId, event, triggerFunc);
+        };
+        XmlManager.prototype.parseActionTrigger = function (node) {
+            var controlId = node.attributes['control-id'].value;
+            var event = 'action';
+            this.logger.log("parseTrigger formId=" + controlId + " event=" + event);
+            var triggerFunc;
+            var length = node.childNodes.length;
+            for(var i = 0; i < length; i++) {
+                var child = node.childNodes.item(i);
+                var func = this.parseLogicNode(node);
+                if(func) {
+                    triggerFunc = func;
+                }
+            }
+            return new mTrigger.Trigger(controlId, event, triggerFunc);
         };
         XmlManager.prototype.parseLogicNode = function (node) {
             this.logger.log("parse logic node: " + node.nodeName);

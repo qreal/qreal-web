@@ -21,6 +21,7 @@ import mEmulatorViewModel = module("emulator/viewmodel/EmulatorViewModel");
 //Managers
 import mNavigationManager = module("emulator/model/managers/NavigationManager");
 import mXmlManager = module("emulator/model/managers/XmlManager");
+import mEventManager = module("emulator/model/managers/EventManager");
 
 //Logic
 import mTrigger = module("emulator/model/logic/Trigger");
@@ -35,12 +36,14 @@ export class Emulator {
     private emulatorViewModel: mEmulatorViewModel.EmulatorViewModel;
     private navigationManager: mNavigationManager.NavigationManager;
     private xmlManager: mXmlManager.XmlManager;
+    private eventManager: mEventManager.EventManager;
 
     constructor() {
         this.logger.log("constructor");
         this.emulatorViewModel = new mEmulatorViewModel.EmulatorViewModel();
         this.navigationManager = new mNavigationManager.NavigationManager();
         this.xmlManager = new mXmlManager.XmlManager();
+        this.eventManager = new mEventManager.EventManager();
         $("#back_button").bind('click', () => this.navigationManager.back());
     }
 
@@ -48,7 +51,14 @@ export class Emulator {
         this.logger.log("showXmlStringView: \n" + xml);
         this.clearUi();
         xml = mXmlHelper.escapeXml(xml);
-        var pages: mPage.Page[] = this.xmlManager.parseXmlString(xml);
+        //var application = this.xmlManager.parseXmlString(xml);
+        var application = this.xmlManager.parseStoredXml('/res/application.xml');
+        var pages = application.pages;
+        var triggers = application.triggers;
+        var _eventManager = this.eventManager;
+        triggers.map(function (trigger) {
+            _eventManager.addTrigger(trigger);
+        });
         pages.map(page => this.addPage(page));
 
         //TODO: test stub
@@ -67,7 +77,7 @@ export class Emulator {
         */
         //new mLogic.FunctionFactory().sendLoginRequest("http://localhost:54321", "Chizh", "password");
         //end stub
-        
+
         this.navigationManager.showPage(pages[0].Name);
     }
 
@@ -88,12 +98,17 @@ export class Emulator {
         return this.emulatorViewModel;
     }
 
+    get EventManager(): mEventManager.EventManager {
+        return this.eventManager;
+    }
+
     public trigger(eventType: string, eventData): void {
-        this.logger.log("trigger " + eventType+" eventData "+eventData);
+        this.logger.log("trigger " + eventType + " eventData " + eventData);
     }
 
     private clearUi() {
         this.navigationManager.clear();
         this.emulatorViewModel.clear();
+        this.eventManager.clear();
     }
 }

@@ -39,6 +39,7 @@
     <TypeScriptCompile Include="src\designer\preferences\TextViewPreferences.ts" />
     <TypeScriptCompile Include="src\emulator\model\attributes\WebViewTag.ts" />
     <TypeScriptCompile Include="src\designer\widgets\WidgetTypes.ts" />
+    <Content Include="res\application.xml" />
     <Content Include="res\imageview.png" />
     <Content Include="res\info2.xml" />
     <Content Include="res\main2.xml" />
@@ -138,6 +139,10 @@
     </Content>
     <Content Include="src\emulator\model\logic\Trigger.min.js">
       <DependentUpon>Trigger.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\emulator\model\managers\EventManager.ts" />
+    <Content Include="src\emulator\model\managers\EventManager.js">
+      <DependentUpon>EventManager.ts</DependentUpon>
     </Content>
     <Content Include="src\emulator\model\managers\NavigationManager.js">
       <DependentUpon>NavigationManager.ts</DependentUpon>

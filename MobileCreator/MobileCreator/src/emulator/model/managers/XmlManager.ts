@@ -43,6 +43,8 @@ export class XmlManager {
     private static Trigger = "trigger";
     private static FormId = "form-id";
     private static Event = "event";
+    private static Action = "action";
+    private static ControlId = "control-id";
 
     private static Seq = "seq";
     private static SeqFirst = "first-operator";
@@ -65,8 +67,8 @@ export class XmlManager {
         this.logger.log("in constructor");
     }
 
-    public parsePage(page: string) {
-        this.logger.log("parse page: " + page);
+    public parseStoredXml(page: string) {
+        this.logger.log("parseStoredXml: " + page);
         var xmlHTTP = new XMLHttpRequest();
         var xmlDoc: Document;
         try {
@@ -78,7 +80,7 @@ export class XmlManager {
             window.alert("Unable to load the requested file.");
             return undefined;
         }
-        return this.parseNode(xmlDoc.firstChild);
+        return this.parseApplication(xmlDoc.firstChild);
     }
 
     public parseXmlString(xmlString: string) {
@@ -88,7 +90,7 @@ export class XmlManager {
         return this.parseApplication(xmlDoc.firstChild);
     }
 
-    private parseApplication(node: Node): mPage.Page[] {
+    private parseApplication(node: Node) {
         this.logger.log("parseApplication: " + node.nodeName);
         var pages: mPage.Page[];
         var triggers: mTrigger.Trigger[];
@@ -103,16 +105,11 @@ export class XmlManager {
                     break
             }
         }
-
-        triggers.map(function (trigger) {
-            for (i = 0; i < pages.length; i++) {
-                if (pages[i].Name == trigger.PageId) {
-                    pages[i].addTrigger(trigger);
-                }
-            }
-        });
-
-        return pages;
+      
+        return {
+            pages: pages,
+            triggers:triggers
+        };
     }
 
     //#region Logic
@@ -126,6 +123,9 @@ export class XmlManager {
             switch (child.nodeName) {
                 case XmlManager.Trigger:
                     triggers.push(this.parseTrigger(child));
+                    break;
+                case XmlManager.Action:
+                    triggers.push(this.parseActionTrigger(child));
                     break;
             }
         }
@@ -146,6 +146,23 @@ export class XmlManager {
             }
         }
         return new mTrigger.Trigger(formId, event, triggerFunc);
+    }
+
+
+    private parseActionTrigger(node: Node): mTrigger.Trigger {
+        var controlId: string = node.attributes['control-id'].value;
+        var event: string = 'action';
+        this.logger.log("parseTrigger formId=" + controlId + " event=" + event);
+        var triggerFunc;
+        var length = node.childNodes.length;
+        for (var i = 0; i < length; i++) {
+            var child = node.childNodes.item(i);
+            var func = this.parseLogicNode(node);
+            if (func) {
+                triggerFunc = func;
+            }
+        }
+        return new mTrigger.Trigger(controlId, event, triggerFunc);
     }
 
     private parseLogicNode(node: Node): Function {
@@ -198,7 +215,6 @@ export class XmlManager {
         var passwordId: string = node.attributes['password-id'].value;
         return this.logicFunctionFactory.loginRequestFunc(url, loginId, passwordId);
     }
-
     //#endregion
 
     //#region Forms

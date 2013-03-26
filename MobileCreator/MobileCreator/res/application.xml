@@ -1,0 +1,95 @@
+<application>
+  <logic>
+    <trigger form-id='main' event='onShow'>
+    </trigger>
+    <trigger form-id='main' event='onTimer'>
+    </trigger>
+    <trigger form-id='main' event='onLoginResponse'>
+    </trigger>
+    <trigger form-id='main' event='onPatientsResponse'>
+    </trigger>
+    <trigger form-id='fail' event='onShow'>
+    </trigger>
+    <trigger form-id='fail' event='onTimer'>
+    </trigger>
+    <trigger form-id='fail' event='onLoginResponse'>
+    </trigger>
+    <trigger form-id='fail' event='onPatientsResponse'>
+    </trigger>
+    <trigger form-id='map' event='onShow'>
+    </trigger>
+    <trigger form-id='map' event='onTimer'>
+    </trigger>
+    <trigger form-id='map' event='onLoginResponse'>
+    </trigger>
+    <trigger form-id='map' event='onPatientsResponse'>
+    </trigger>
+    <action control-id='button6'>
+      <transition form-id='fail' />
+    </action>
+  </logic>
+  <forms>
+    <form form_name="main">
+      <LinearLayout
+      orientation="vertical" 
+      layout_width="fill_parent"
+      layout_height="fill_parent" 
+      background="#ffffff">
+        <TextView
+        layout_width="fill_parent" 
+        layout_height="wrap_content" 
+        layout_marginTop="10px"
+        padding="0px" 
+        text="Hello!"
+        textSize="26px" />
+        <TextView
+        layout_width="fill_parent" 
+        layout_height="wrap_content" 
+        layout_marginTop="10px" 
+        padding="0px" text="login:" 
+        textSize="26px" />
+        <EditText
+        layout_width="fill_parent"
+        layout_height="wrap_content" 
+        layout_marginTop="10px" 
+        id="editText3"
+        padding="0px" 
+        text="" 
+        textSize="26px" />
+        <TextView
+        layout_width="fill_parent" 
+        layout_height="wrap_content"
+        layout_marginTop="10px"
+        padding="0px" 
+        text="password:"
+        textSize="26px" />
+        <EditText
+        layout_width="fill_parent" 
+        layout_height="wrap_content"
+        layout_marginTop="10px" 
+        id="editText5"
+        padding="0px"
+        text=""
+        textSize="26px" />
+        <Button
+        layout_width="fill_parent" 
+        layout_height="wrap_content" 
+        layout_marginTop="20px" text="Submit" textSize="15px" id="button6" onClick="main" />
+      </LinearLayout>
+    </form>
+    <form form_name="fail">
+      <LinearLayout
+      orientation="vertical" layout_width="fill_parent" layout_height="fill_parent" background="#ffffff">
+        <TextView
+        layout_width="fill_parent" layout_height="wrap_content" layout_marginTop="10px" padding="0px" text="Fail!!!" textSize="50px" />
+      </LinearLayout>
+    </form>
+    <form form_name="map">
+      <LinearLayout
+      orientation="vertical" layout_width="fill_parent" layout_height="fill_parent" background="#ffffff">
+        <TextView
+        layout_width="fill_parent" layout_height="wrap_content" layout_marginTop="10px" padding="0px" text="Map" textSize="26px" />
+      </LinearLayout>
+    </form>
+  </forms>
+</application>
