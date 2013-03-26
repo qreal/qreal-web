@@ -50,7 +50,6 @@ let parseXml =
     let currentBuilder = new StringBuilder()
     let builderAppend = append currentBuilder
     let tempStack = new Stack()
-    let getName (id : string) = id.Substring(5, id.Length - 5)
     let getNumber (sizeAttr : string) = sizeAttr.Substring(0, sizeAttr.Length - 2)
     let loginRequest = new StringBuilder()
     try
@@ -64,8 +63,7 @@ let parseXml =
                 tempStack.Push(reader.GetAttribute("control-id"))
             | "action" when reader.NodeType = XmlNodeType.EndElement ->
                 // ключ - id контрола, значение - код, который нужно выполнить
-                let controlName = tempStack.Pop() :?> string
-                actions.Add(controlName, currentBuilder.ToString())
+                actions.Add(tempStack.Pop() :?> string, currentBuilder.ToString())
                 currentBuilder.Clear() |> ignore
             | "trigger" when reader.NodeType <> XmlNodeType.EndElement ->
                 tempStack.Push(reader.GetAttribute("event"))
@@ -253,9 +251,9 @@ patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> str
                 appendXaml <| "\n" + depthTab + "<TextBlock Text=\"" + reader.GetAttribute("text") + "\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
             | "EditText" ->
                 let textSize = getNumber(reader.GetAttribute("textSize"))
-                appendXaml <| "\n" + depthTab + "<TextBox x:Name=\"" + getName (reader.GetAttribute("id")) + "\" IsReadOnly=\"False\" MinWidth=\"250\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
+                appendXaml <| "\n" + depthTab + "<TextBox x:Name=\"" + reader.GetAttribute("id") + "\" IsReadOnly=\"False\" MinWidth=\"250\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
             | "Button" -> 
-                let name = getName (reader.GetAttribute("id"))
+                let name = reader.GetAttribute("id")
                 if actions.Contains(name) then
                     let click = name + "Click"
                     appendXaml <| "\n" + depthTab + "<Button Name=\"" + name + "\" HorizontalAlignment=\"Center\" Click=\"" + click + "\" Content=\"" + reader.GetAttribute("text") + "\"> </Button>"
@@ -265,7 +263,7 @@ patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> str
                 else 
                     appendXaml <| "\n" + depthTab + "<Button Name=\"" + name + "\" HorizontalAlignment=\"Center\" Content=\"" + reader.GetAttribute("text") + "\"> </Button>"
             | "ImageView" -> 
-                let url = reader.GetAttribute("src")
+                let url = reader.GetAttribute("src") 
                 let fileName = "image" + string imageCounter + url.Substring(url.Length - 4, 4)
                 let fullFileName = path + "\\" + fileName
                 download fullFileName url
@@ -273,7 +271,7 @@ patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> str
                 imageCounter <- imageCounter + 1
                 append resources <| "\n<Resource Include=\"" + fileName + "\" />" 
             | "WebView" -> 
-                let name = getName(reader.GetAttribute("id"))
+                let name = reader.GetAttribute("id")
                 appendXaml <| "\n" + depthTab + "<phone:WebBrowser x:Name=\"" + name + "\" IsScriptEnabled=\"True\" Height=\"763\" Width=\"475\" />"
                 appendConstructor <| "\n" + name + ".Navigate(new Uri(\"" + reader.GetAttribute("url") + "\", UriKind.RelativeOrAbsolute));"
             | "Map" ->

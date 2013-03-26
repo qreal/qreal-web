@@ -7,3 +7,9 @@ C:\Projects\Movies\Server\Server\obj\Debug\Server.pdb
 C:\Users\Nadusha\Downloads\Http\Server\Server\bin\Debug\Server.exe.config
 C:\Users\Nadusha\Downloads\Http\Server\Server\obj\Debug\Server.exe
 C:\Users\Nadusha\Downloads\Http\Server\Server\obj\Debug\Server.pdb
+C:\Users\nikit_000\Documents\Workspace\TypeScript\QrealWeb\qreal-web\AppServer\Server\Server\bin\Debug\Server.exe.config
+C:\Users\nikit_000\Documents\Workspace\TypeScript\QrealWeb\qreal-web\AppServer\Server\Server\obj\Debug\Server.exe
+C:\Users\nikit_000\Documents\Workspace\TypeScript\QrealWeb\qreal-web\AppServer\Server\Server\obj\Debug\Server.pdb
+C:\Users\nikit_000\Documents\Workspace\TypeScript\QrealWeb\qreal-web\AppServer\Server\Server\bin\Debug\Server.exe
+C:\Users\nikit_000\Documents\Workspace\TypeScript\QrealWeb\qreal-web\AppServer\Server\Server\bin\Debug\Server.pdb
+C:\Users\nikit_000\Documents\Workspace\TypeScript\QrealWeb\qreal-web\AppServer\Server\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache

@@ -104,7 +104,7 @@ export class LinearLayout extends mElement.Element {
                         imageViewPreferences.LayoutMarginTop = 10;
                         imageViewPreferences.Width = mElementPreferences.ElementPreferences.WrapContent;
                         //imageViewPreferences.Src = "https://dl.dropbox.com/u/10802739/lt_logo.jpg";
-                        imageViewPreferences.Src = "res/imageview.png";
+                        imageViewPreferences.Src = "images/imageview.png";
                         var imageView = new mImageView.ImageView(imageViewPreferences);
                         _this.addChild(imageView);
                         imageView.init();

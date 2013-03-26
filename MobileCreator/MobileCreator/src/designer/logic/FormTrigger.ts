@@ -1,7 +1,8 @@
 /// <reference path="../../../lib/jquery.d.ts" />
 /// <reference path="../../../lib/jquerymobile.d.ts" />
 import mAction = module("designer/logic/Action")
-import mSaveSessionAction = module ("designer/logic/SaveSessionAction")
+import mSaveSessionAction = module("designer/logic/SaveSessionAction")
+import mTransitionAction = module("designer/logic/TransitionAction")
 
 export class FormTrigger {
     private formId: string;
@@ -38,10 +39,19 @@ export class FormTrigger {
         var _this = this;
         domElement.empty();
         for (var i = 0; i < this.actions.length; i++) {
-            this.actions[i].show(domElement);
-            var removeButton = $("<a href='#' data-role='button' data-icon='delete' data-iconpos='notext' data-theme='e' data-mini='true'>Delete</a>");
-            domElement.append(removeButton);
+            var containDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
+            var action = this.actions[i];
+            var actionIndex = i;
+            domElement.append(containDiv);
+            action.show(containDiv);
+            var removeButton = $("<a href='#' data-role='button' data-icon='delete' data-inline='true' data-iconpos='notext' data-theme='e' data-mini='true'>Delete</a>");
+            containDiv.append(removeButton);
             removeButton.button();
+            domElement.trigger("create");
+            removeButton.click(function () {
+                _this.actions.splice(actionIndex, 1);
+                _this.show(domElement);
+            });
         }
         var newActionDiv = $("<div class='ui-grid-a'></div>");
         var selectActionDiv = $("<div class='ui-block-a'></div>");
@@ -72,6 +82,10 @@ export class FormTrigger {
             switch (selectAction.val()) {
                 case "saveSession":
                     _this.addAction(new mSaveSessionAction.SaveSessionAction());
+                    _this.show(domElement);
+                    break;
+                case "transition":
+                    _this.addAction(new mTransitionAction.TransitionAction("main"));
                     _this.show(domElement);
                     break;
             }
