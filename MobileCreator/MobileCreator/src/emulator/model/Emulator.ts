@@ -52,6 +52,7 @@ export class Emulator {
         pages.map(page => this.addPage(page));
 
         //TODO: test stub
+        /*
         pages.map(function (page: mPage.Page) {
             var onShowTrigger = new mTrigger.Trigger(mTrigger.Trigger.OnShow, function () {
                 console.log("OnShow Trigger");
@@ -63,9 +64,10 @@ export class Emulator {
             });
             page.addTrigger(onTimerTrigger);
         });
+        */
+        //new mLogic.FunctionFactory().sendLoginRequest("http://localhost:54321", "Chizh", "password");
         //end stub
-
-        new mLogic.FunctionFactory().sendLoginRequest("http://localhost:54321", "Chizh", "password");
+        
         this.navigationManager.showPage(pages[0].Name);
     }
 

@@ -1,6 +1,8 @@
 
 //#region Import
 import mLog = module("utils/log/Log");
+import mLogic = module("emulator/model/logic/Logic");
+import mTrigger = module("emulator/model/logic/Trigger");
 import mEmulator = module("emulator/model/Emulator");
 import mControl = module("emulator/model/ui/Control");
 import mPage = module("emulator/model/Page");
@@ -42,7 +44,22 @@ export class XmlManager {
     private static FormId = "form-id";
     private static Event = "event";
 
+    private static Seq = "seq";
+    private static SeqFirst = "first-operator";
+    private static SeqSecond = "second-operator";
+
+    private static If = "if";
+    private static Then = "then";
+    private static Else = "else";
+
+    private static Transition = "transition";
+    private static LoginRequest = "login-request";
+    private static SaveSession = "save-session";
+    private static PatientsRequest = "patients-request";
+    private static ShowMap = "showmap";
     //#endregion
+
+    private logicFunctionFactory: mLogic.FunctionFactory = new mLogic.FunctionFactory();
 
     constructor() {
         this.logger.log("in constructor");
@@ -73,21 +90,118 @@ export class XmlManager {
 
     private parseApplication(node: Node): mPage.Page[] {
         this.logger.log("parseApplication: " + node.nodeName);
+        var pages: mPage.Page[];
+        var triggers: mTrigger.Trigger[];
         for (var i = 0; i < node.childNodes.length; i++) {
             var childNode = node.childNodes.item(i);
-            var pages: mPage.Page[];
             switch (childNode.nodeName) {
                 case XmlManager.Forms:
                     pages = this.parseForms(childNode);
                     break;
                 case XmlManager.Logic:
-                    this.parseLogic(childNode);
+                    triggers = this.parseLogic(childNode);
                     break
             }
         }
+
+        triggers.map(function (trigger) {
+            for (i = 0; i < pages.length; i++) {
+                if (pages[i].Name == trigger.PageId) {
+                    pages[i].addTrigger(trigger);
+                }
+            }
+        });
+
         return pages;
     }
 
+    //#region Logic
+
+    private parseLogic(node: Node): mTrigger.Trigger[] {
+        this.logger.log("parseLogic: " + node.nodeName);
+        var triggers: mTrigger.Trigger[] = [];
+        var length = node.childNodes.length;
+        for (var i = 0; i < length; i++) {
+            var child = node.childNodes.item(i);
+            switch (child.nodeName) {
+                case XmlManager.Trigger:
+                    triggers.push(this.parseTrigger(child));
+                    break;
+            }
+        }
+        return triggers;
+    }
+
+    private parseTrigger(node: Node): mTrigger.Trigger {
+        var formId: string = node.attributes['form-id'].value;
+        var event: string = node.attributes['event'].value;
+        this.logger.log("parseTrigger formId=" + formId + " event=" + event);
+        var triggerFunc;
+        var length = node.childNodes.length;
+        for (var i = 0; i < length; i++) {
+            var child = node.childNodes.item(i);
+            var func = this.parseLogicNode(node);
+            if (func) {
+                triggerFunc = func;
+            }
+        }
+        return new mTrigger.Trigger(formId, event, triggerFunc);
+    }
+
+    private parseLogicNode(node: Node): Function {
+        this.logger.log("parse logic node: " + node.nodeName);
+        switch (node.nodeName) {
+            case XmlManager.Seq:
+                return this.parseSeq(node);
+                break;
+            case XmlManager.Transition:
+                return this.parseTransition(node);
+                break;
+            case XmlManager.LoginRequest:
+                return this.parseLoginRequest(node);
+                break;
+            default:
+                return undefined;
+                break;
+        }
+    }
+
+    private parseSeq(node: Node): Function {
+        this.logger.log("parseSeq");
+        var first: Function;
+        var second: Function;
+        var length = node.childNodes.length;
+        for (var i = 0; i < length; i++) {
+            var child = node.childNodes.item(i);
+            switch (child.nodeName) {
+                case XmlManager.SeqFirst:
+                    first = this.parseLogicNode(child);
+                    break;
+                case XmlManager.SeqSecond:
+                    second = this.parseLogicNode(child);
+                    break;
+            }
+        }
+        return this.logicFunctionFactory.seqFunc(first, second);
+    }
+
+    private parseTransition(node: Node): Function {
+        this.logger.log("parseTransition");
+        var formId: string = node.attributes['form-id'].value;
+        return this.logicFunctionFactory.transitionFunc(formId);
+    }
+
+    private parseLoginRequest(node: Node): Function {
+        this.logger.log("parseLoginRequest");
+        var url: string = node.attributes['url'].value;
+        var loginId: string = node.attributes['login-id'].value;
+        var passwordId: string = node.attributes['password-id'].value;
+        return this.logicFunctionFactory.loginRequestFunc(url, loginId, passwordId);
+    }
+
+    //#endregion
+
+    //#region Forms
     private parseForms(node: Node): mPage.Page[] {
         var forms: mPage.Page[] = [];
         for (var i = 0; i < node.childNodes.length; i++) {
@@ -96,9 +210,6 @@ export class XmlManager {
             }
         }
         return forms;
-    }
-
-    private parseLogic(node: Node) {
     }
 
     private parseForm(node: Node): mPage.Page {
@@ -331,4 +442,5 @@ export class XmlManager {
             tag.MarginRight = parseInt(layout_marginRight.value);
         }
     }
+    //#endregion
 }

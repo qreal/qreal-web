@@ -24,7 +24,11 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Trigger"], 
         }
         Page.logger = new mLog.Logger("Page");
         Page.prototype.onShow = function () {
+            var _this = this;
             this.trigger(mTrigger.Trigger.OnShow);
+            this.timerToken = setInterval(function () {
+                return _this.trigger(mTrigger.Trigger.OnTimer);
+            }, 5000);
         };
         Page.prototype.onHide = function () {
             clearTimeout(this.timerToken);

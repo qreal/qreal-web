@@ -1,5 +1,9 @@
-define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/model/ui/TextView", "emulator/model/ui/Button", "emulator/model/ui/Input", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/ControlTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/InputTag", "emulator/model/attributes/ImageViewTag", "emulator/model/attributes/WebViewTag"], function(require, exports, __mLog__, __mPage__, __mTextView__, __mButton__, __mInput__, __mImageView__, __mWebView__, __mLinearLayout__, __mLinearLayoutTag__, __mControlTag__, __mTextViewTag__, __mButtonTag__, __mInputTag__, __mImageViewTag__, __mWebViewTag__) {
+define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "emulator/model/logic/Trigger", "emulator/model/Page", "emulator/model/ui/TextView", "emulator/model/ui/Button", "emulator/model/ui/Input", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/ControlTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/InputTag", "emulator/model/attributes/ImageViewTag", "emulator/model/attributes/WebViewTag"], function(require, exports, __mLog__, __mLogic__, __mTrigger__, __mPage__, __mTextView__, __mButton__, __mInput__, __mImageView__, __mWebView__, __mLinearLayout__, __mLinearLayoutTag__, __mControlTag__, __mTextViewTag__, __mButtonTag__, __mInputTag__, __mImageViewTag__, __mWebViewTag__) {
     var mLog = __mLog__;
+
+    var mLogic = __mLogic__;
+
+    var mTrigger = __mTrigger__;
 
     
     
@@ -36,6 +40,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/
     var XmlManager = (function () {
         function XmlManager() {
             this.logger = new mLog.Logger("XmlManager");
+            this.logicFunctionFactory = new mLogic.FunctionFactory();
             this.logger.log("in constructor");
         }
         XmlManager.App = "application";
@@ -52,6 +57,17 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/
         XmlManager.Trigger = "trigger";
         XmlManager.FormId = "form-id";
         XmlManager.Event = "event";
+        XmlManager.Seq = "seq";
+        XmlManager.SeqFirst = "first-operator";
+        XmlManager.SeqSecond = "second-operator";
+        XmlManager.If = "if";
+        XmlManager.Then = "then";
+        XmlManager.Else = "else";
+        XmlManager.Transition = "transition";
+        XmlManager.LoginRequest = "login-request";
+        XmlManager.SaveSession = "save-session";
+        XmlManager.PatientsRequest = "patients-request";
+        XmlManager.ShowMap = "showmap";
         XmlManager.prototype.parsePage = function (page) {
             this.logger.log("parse page: " + page);
             var xmlHTTP = new XMLHttpRequest();
@@ -74,19 +90,103 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/
         };
         XmlManager.prototype.parseApplication = function (node) {
             this.logger.log("parseApplication: " + node.nodeName);
+            var pages;
+            var triggers;
             for(var i = 0; i < node.childNodes.length; i++) {
                 var childNode = node.childNodes.item(i);
-                var pages;
                 switch(childNode.nodeName) {
                     case XmlManager.Forms:
                         pages = this.parseForms(childNode);
                         break;
                     case XmlManager.Logic:
-                        this.parseLogic(childNode);
+                        triggers = this.parseLogic(childNode);
                         break;
                 }
             }
+            triggers.map(function (trigger) {
+                for(i = 0; i < pages.length; i++) {
+                    if(pages[i].Name == trigger.PageId) {
+                        pages[i].addTrigger(trigger);
+                    }
+                }
+            });
             return pages;
+        };
+        XmlManager.prototype.parseLogic = function (node) {
+            this.logger.log("parseLogic: " + node.nodeName);
+            var triggers = [];
+            var length = node.childNodes.length;
+            for(var i = 0; i < length; i++) {
+                var child = node.childNodes.item(i);
+                switch(child.nodeName) {
+                    case XmlManager.Trigger:
+                        triggers.push(this.parseTrigger(child));
+                        break;
+                }
+            }
+            return triggers;
+        };
+        XmlManager.prototype.parseTrigger = function (node) {
+            var formId = node.attributes['form-id'].value;
+            var event = node.attributes['event'].value;
+            this.logger.log("parseTrigger formId=" + formId + " event=" + event);
+            var triggerFunc;
+            var length = node.childNodes.length;
+            for(var i = 0; i < length; i++) {
+                var child = node.childNodes.item(i);
+                var func = this.parseLogicNode(node);
+                if(func) {
+                    triggerFunc = func;
+                }
+            }
+            return new mTrigger.Trigger(formId, event, triggerFunc);
+        };
+        XmlManager.prototype.parseLogicNode = function (node) {
+            this.logger.log("parse logic node: " + node.nodeName);
+            switch(node.nodeName) {
+                case XmlManager.Seq:
+                    return this.parseSeq(node);
+                    break;
+                case XmlManager.Transition:
+                    return this.parseTransition(node);
+                    break;
+                case XmlManager.LoginRequest:
+                    return this.parseLoginRequest(node);
+                    break;
+                default:
+                    return undefined;
+                    break;
+            }
+        };
+        XmlManager.prototype.parseSeq = function (node) {
+            this.logger.log("parseSeq");
+            var first;
+            var second;
+            var length = node.childNodes.length;
+            for(var i = 0; i < length; i++) {
+                var child = node.childNodes.item(i);
+                switch(child.nodeName) {
+                    case XmlManager.SeqFirst:
+                        first = this.parseLogicNode(child);
+                        break;
+                    case XmlManager.SeqSecond:
+                        second = this.parseLogicNode(child);
+                        break;
+                }
+            }
+            return this.logicFunctionFactory.seqFunc(first, second);
+        };
+        XmlManager.prototype.parseTransition = function (node) {
+            this.logger.log("parseTransition");
+            var formId = node.attributes['form-id'].value;
+            return this.logicFunctionFactory.transitionFunc(formId);
+        };
+        XmlManager.prototype.parseLoginRequest = function (node) {
+            this.logger.log("parseLoginRequest");
+            var url = node.attributes['url'].value;
+            var loginId = node.attributes['login-id'].value;
+            var passwordId = node.attributes['password-id'].value;
+            return this.logicFunctionFactory.loginRequestFunc(url, loginId, passwordId);
         };
         XmlManager.prototype.parseForms = function (node) {
             var forms = [];
@@ -96,8 +196,6 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Page", "emulator/
                 }
             }
             return forms;
-        };
-        XmlManager.prototype.parseLogic = function (node) {
         };
         XmlManager.prototype.parseForm = function (node) {
             this.logger.log("parseForm: " + node.nodeName);

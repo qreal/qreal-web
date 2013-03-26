@@ -1,4 +1,4 @@
-define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/viewmodel/EmulatorViewModel", "emulator/model/managers/NavigationManager", "emulator/model/managers/XmlManager", "emulator/model/logic/Trigger", "emulator/model/logic/Logic"], function(require, exports, __mLog__, __mXmlHelper__, __mEmulatorViewModel__, __mNavigationManager__, __mXmlManager__, __mTrigger__, __mLogic__) {
+define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/viewmodel/EmulatorViewModel", "emulator/model/managers/NavigationManager", "emulator/model/managers/XmlManager"], function(require, exports, __mLog__, __mXmlHelper__, __mEmulatorViewModel__, __mNavigationManager__, __mXmlManager__) {
     var mLog = __mLog__;
 
     var mXmlHelper = __mXmlHelper__;
@@ -21,10 +21,8 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
 
     var mXmlManager = __mXmlManager__;
 
-    var mTrigger = __mTrigger__;
-
-    var mLogic = __mLogic__;
-
+    
+    
     var Emulator = (function () {
         function Emulator() {
             var _this = this;
@@ -47,17 +45,6 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
             pages.map(function (page) {
                 return _this.addPage(page);
             });
-            pages.map(function (page) {
-                var onShowTrigger = new mTrigger.Trigger(mTrigger.Trigger.OnShow, function () {
-                    console.log("OnShow Trigger");
-                });
-                page.addTrigger(onShowTrigger);
-                var onTimerTrigger = new mTrigger.Trigger(mTrigger.Trigger.OnTimer, function () {
-                    console.log("onTimer Trigger");
-                });
-                page.addTrigger(onTimerTrigger);
-            });
-            new mLogic.FunctionFactory().sendLoginRequest("http://localhost:54321", "Chizh", "password");
             this.navigationManager.showPage(pages[0].Name);
         };
         Emulator.prototype.addPage = function (page) {
