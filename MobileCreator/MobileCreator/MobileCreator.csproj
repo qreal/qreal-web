@@ -130,6 +130,9 @@
     <Content Include="src\emulator\model\logic\Logic.js">
       <DependentUpon>Logic.ts</DependentUpon>
     </Content>
+    <Content Include="src\emulator\model\logic\Logic.min.js">
+      <DependentUpon>Logic.ts</DependentUpon>
+    </Content>
     <Content Include="src\emulator\model\logic\Trigger.js">
       <DependentUpon>Trigger.ts</DependentUpon>
     </Content>

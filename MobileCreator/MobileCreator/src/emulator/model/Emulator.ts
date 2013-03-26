@@ -30,8 +30,8 @@ import mLogic = module("emulator/model/logic/Logic");
 export class Emulator {
 
     public static instance = new Emulator();
-
     private logger = new mLog.Logger("Emulator");
+
     private emulatorViewModel: mEmulatorViewModel.EmulatorViewModel;
     private navigationManager: mNavigationManager.NavigationManager;
     private xmlManager: mXmlManager.XmlManager;
@@ -64,6 +64,8 @@ export class Emulator {
             page.addTrigger(onTimerTrigger);
         });
         //end stub
+
+        new mLogic.FunctionFactory().sendLoginRequest("http://localhost:54321", "Chizh", "password");
         this.navigationManager.showPage(pages[0].Name);
     }
 
@@ -76,8 +78,16 @@ export class Emulator {
         this.emulatorViewModel.showView(page);
     }
 
-    get NavigationManager() {
+    get NavigationManager(): mNavigationManager.NavigationManager {
         return this.navigationManager;
+    }
+
+    get EmulatorViewModel(): mEmulatorViewModel.EmulatorViewModel {
+        return this.emulatorViewModel;
+    }
+
+    public trigger(eventType: string, eventData): void {
+        this.logger.log("trigger " + eventType+" eventData "+eventData);
     }
 
     private clearUi() {

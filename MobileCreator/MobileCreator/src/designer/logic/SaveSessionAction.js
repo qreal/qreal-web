@@ -15,6 +15,11 @@ define(["require", "exports", "designer/logic/Action"], function(require, export
             var xml = "<save-session />\n";
             return xml;
         };
+        SaveSessionAction.prototype.show = function (domeElement) {
+            var saveSessionBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>SaveSession</a>");
+            domeElement.append(saveSessionBlock);
+            saveSessionBlock.button();
+        };
         return SaveSessionAction;
     })(mAction.Action);
     exports.SaveSessionAction = SaveSessionAction;    

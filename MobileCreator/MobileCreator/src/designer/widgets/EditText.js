@@ -95,7 +95,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                 xmlString += "layout_height=\"" + this.preferences.Width + "px\" ";
             }
             xmlString += "layout_marginTop=\"" + this.preferences.LayoutMarginTop + "px\" ";
-            xmlString += "id=\"@+id/" + this.preferences.EditTextId + "\" ";
+            xmlString += "id=\"" + this.preferences.EditTextId + "\" ";
             xmlString += "padding=\"" + this.preferences.Padding + "px\" ";
             xmlString += "text=\"" + this.preferences.Text + "\" ";
             xmlString += "textSize=\"" + this.preferences.TextSize + "px\" />\n";

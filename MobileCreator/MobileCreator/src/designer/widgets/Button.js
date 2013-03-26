@@ -110,7 +110,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             xmlString += "layout_marginTop=\"" + this.preferences.LayoutMarginTop + "px\" ";
             xmlString += "text=\"" + this.preferences.Text + "\" ";
             xmlString += "textSize=\"" + this.preferences.TextSize + "px\" ";
-            xmlString += "id=\"@+id/" + this.preferences.ButtonId + "\" ";
+            xmlString += "id=\"" + this.preferences.ButtonId + "\" ";
             xmlString += "onClick=\"" + this.preferences.OnClickHandler + "\" />\n";
             return xmlString;
         };

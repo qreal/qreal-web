@@ -81,7 +81,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             } else {
                 xmlString += "layout_height=\"" + this.preferences.Width + "px\" ";
             }
-            xmlString += "id=\"@+id/" + this.preferences.WebViewId + "\" ";
+            xmlString += "id=\"" + this.preferences.WebViewId + "\" ";
             xmlString += "url=\"" + this.preferences.Url + "\" />\n";
             return xmlString;
         };
