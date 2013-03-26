@@ -94,7 +94,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             imageViewPreferences.LayoutGravity = "center_horizontal";
                             imageViewPreferences.LayoutMarginTop = 10;
                             imageViewPreferences.Width = mElementPreferences.ElementPreferences.WrapContent;
-                            imageViewPreferences.Src = "res/imageview.png";
+                            imageViewPreferences.Src = "images/imageview.png";
                             var imageView = new mImageView.ImageView(imageViewPreferences);
                             _this.addChild(imageView);
                             imageView.init();
