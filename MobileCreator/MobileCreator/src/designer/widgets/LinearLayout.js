@@ -3,7 +3,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences", "designer/preferences/LinearLayoutPreferences", "designer/widgets/WidgetTypes", "designer/preferences/ButtonPreferences", "designer/widgets/Button", "designer/Designer", "designer/preferences/TextViewPreferences", "designer/widgets/TextView", "designer/preferences/ImageViewPreferences", "designer/widgets/ImageView", "designer/preferences/WebViewPreference", "designer/widgets/WebView", "designer/preferences/EditTextPreferences", "designer/widgets/EditText"], function(require, exports, __mElement__, __mElementPreferences__, __mLinearLayoutPreferences__, __mWidgetTypes__, __mButtonPreferences__, __mButton__, __mDesigner__, __mTextViewPreferences__, __mTextView__, __mImageViewPreferences__, __mImageView__, __mWebViewPreferences__, __mWebView__, __mEditTextPreferences__, __mEditText__) {
+define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences", "designer/preferences/LinearLayoutPreferences", "designer/widgets/WidgetTypes", "designer/preferences/ButtonPreferences", "designer/widgets/Button", "designer/Designer", "designer/preferences/TextViewPreferences", "designer/widgets/TextView", "designer/preferences/ImageViewPreferences", "designer/widgets/ImageView", "designer/preferences/WebViewPreference", "designer/widgets/WebView", "designer/preferences/EditTextPreferences", "designer/widgets/EditText", "designer/preferences/MapPreferences", "designer/widgets/Map"], function(require, exports, __mElement__, __mElementPreferences__, __mLinearLayoutPreferences__, __mWidgetTypes__, __mButtonPreferences__, __mButton__, __mDesigner__, __mTextViewPreferences__, __mTextView__, __mImageViewPreferences__, __mImageView__, __mWebViewPreferences__, __mWebView__, __mEditTextPreferences__, __mEditText__, __mMapPreferences__, __mMap__) {
     var mElement = __mElement__;
 
     var mElementPreferences = __mElementPreferences__;
@@ -33,6 +33,10 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
     var mEditTextPreferences = __mEditTextPreferences__;
 
     var mEditText = __mEditText__;
+
+    var mMapPreferences = __mMapPreferences__;
+
+    var mMap = __mMap__;
 
     var LinearLayout = (function (_super) {
         __extends(LinearLayout, _super);
@@ -106,6 +110,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             webViewPreferences.Id = mDesigner.Designer.id;
                             mDesigner.Designer.id++;
                             webViewPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
+                            webViewPreferences.WebViewId = "webview" + webViewPreferences.Id;
                             webViewPreferences.Url = "";
                             var webView = new mWebView.WebView(webViewPreferences);
                             _this.addChild(webView);
@@ -126,6 +131,18 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             var editText = new mEditText.EditText(editTextPreferences);
                             _this.addChild(editText);
                             editText.init();
+                            break;
+                        case mWidgetTypes.WidgetTypes.Map:
+                            var mapPreferences = new mMapPreferences.MapPreferences();
+                            mapPreferences.WidgetType = mWidgetTypes.WidgetTypes.Map;
+                            mapPreferences.Height = mElementPreferences.ElementPreferences.FillParent;
+                            mapPreferences.Id = mDesigner.Designer.id;
+                            mDesigner.Designer.id++;
+                            mapPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
+                            mapPreferences.MapId = "map" + mapPreferences.Id;
+                            var map = new mMap.Map(mapPreferences);
+                            _this.addChild(map);
+                            map.init();
                             break;
                     }
                 }

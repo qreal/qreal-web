@@ -8,6 +8,7 @@ define(["require", "exports"], function(require, exports) {
         WidgetTypes.TextView = 3;
         WidgetTypes.WebView = 4;
         WidgetTypes.EditText = 5;
+        WidgetTypes.Map = 6;
         return WidgetTypes;
     })();
     exports.WidgetTypes = WidgetTypes;    

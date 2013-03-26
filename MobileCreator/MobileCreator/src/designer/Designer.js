@@ -201,6 +201,9 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             var editTextElement = $("<a id=\"editText\" data-role=\"button\" draggable=\"true\">EditText</a>");
             $(elementsPallete).append(editTextElement);
             editTextElement.button();
+            var mapElement = $("<a id=\"map\" data-role=\"button\" draggable=\"true\">Map</a>");
+            $(elementsPallete).append(mapElement);
+            mapElement.button();
             var propertiesEditorHeader = document.createElement("li");
             $(propertiesEditorHeader).attr("data-role", "list-divider");
             $(propertiesEditorHeader).text("Properties");
@@ -247,6 +250,10 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             };
             document.getElementById("editText").ondragstart = function (ev) {
                 ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.EditText.toString());
+                ev.dataTransfer.setData("IsNew", "yes");
+            };
+            document.getElementById("map").ondragstart = function (ev) {
+                ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.Map.toString());
                 ev.dataTransfer.setData("IsNew", "yes");
             };
             Designer.activeForm = new mForm.Form("main", Designer.formsDomElement);

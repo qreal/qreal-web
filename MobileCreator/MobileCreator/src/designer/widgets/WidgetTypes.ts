@@ -6,4 +6,5 @@ export class WidgetTypes {
     public static TextView = 3;
     public static WebView = 4;
     public static EditText = 5;
+    public static Map = 6;
 }

@@ -238,6 +238,11 @@ export class Designer {
         //webViewElement.addClass("ui-block-b");
         editTextElement.button();
 
+        var mapElement = $("<a id=\"map\" data-role=\"button\" draggable=\"true\">Map</a>");
+        $(elementsPallete).append(mapElement);
+        //webViewElement.addClass("ui-block-b");
+        mapElement.button();
+
         var propertiesEditorHeader = document.createElement("li");
         $(propertiesEditorHeader).attr("data-role", "list-divider");
         $(propertiesEditorHeader).text("Properties");
@@ -293,6 +298,10 @@ export class Designer {
         }
         document.getElementById("editText").ondragstart = function (ev: DragEvent) {
             ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.EditText.toString());
+            ev.dataTransfer.setData("IsNew", "yes");
+        }
+        document.getElementById("map").ondragstart = function (ev: DragEvent) {
+            ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.Map.toString());
             ev.dataTransfer.setData("IsNew", "yes");
         }
 

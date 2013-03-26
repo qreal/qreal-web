@@ -15,6 +15,8 @@ import mWebViewPreferences = module("designer/preferences/WebViewPreference");
 import mWebView = module("designer/widgets/WebView");
 import mEditTextPreferences = module("designer/preferences/EditTextPreferences");
 import mEditText = module("designer/widgets/EditText");
+import mMapPreferences = module("designer/preferences/MapPreferences");
+import mMap = module("designer/widgets/Map");
 
 export class LinearLayout extends mElement.Element {
     private preferences: mLinearLayoutPreferences.LinearLayoutPreferences;
@@ -116,6 +118,7 @@ export class LinearLayout extends mElement.Element {
                         webViewPreferences.Id = mDesigner.Designer.id;
                         mDesigner.Designer.id++;
                         webViewPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
+                        webViewPreferences.WebViewId = "webview" + webViewPreferences.Id;
                         webViewPreferences.Url = "";
                         var webView = new mWebView.WebView(webViewPreferences);
                         _this.addChild(webView);
@@ -136,6 +139,18 @@ export class LinearLayout extends mElement.Element {
                         var editText = new mEditText.EditText(editTextPreferences);
                         _this.addChild(editText);
                         editText.init();
+                        break;
+                    case mWidgetTypes.WidgetTypes.Map:
+                        var mapPreferences = new mMapPreferences.MapPreferences();
+                        mapPreferences.WidgetType = mWidgetTypes.WidgetTypes.Map;
+                        mapPreferences.Height = mElementPreferences.ElementPreferences.FillParent;
+                        mapPreferences.Id = mDesigner.Designer.id;
+                        mDesigner.Designer.id++;
+                        mapPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
+                        mapPreferences.MapId = "map" + mapPreferences.Id;
+                        var map = new mMap.Map(mapPreferences);
+                        _this.addChild(map);
+                        map.init();
                         break;
                 }
             }
