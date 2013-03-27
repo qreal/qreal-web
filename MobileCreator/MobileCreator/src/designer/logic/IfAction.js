@@ -3,15 +3,18 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "designer/logic/Action", "designer/logic/CodeBlock"], function(require, exports, __mAction__, __mCodeBlock__) {
+define(["require", "exports", "designer/logic/Action", "designer/logic/CodeBlock", "designer/logic/ActionTypes"], function(require, exports, __mAction__, __mCodeBlock__, __mActionTypes__) {
     var mAction = __mAction__;
 
     var mCodeBlock = __mCodeBlock__;
+
+    var mActionTypes = __mActionTypes__;
 
     var IfAction = (function (_super) {
         __extends(IfAction, _super);
         function IfAction(marginLeft) {
                 _super.call(this);
+            this.ActionType = mActionTypes.ActionTypes.If;
             this.expression = "loginSuccess";
             this.thenBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
             this.elseBlock = new mCodeBlock.CodeBlock(marginLeft + 10);

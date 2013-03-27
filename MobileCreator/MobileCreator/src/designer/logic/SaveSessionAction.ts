@@ -1,9 +1,11 @@
 /// <reference path="../../../lib/jquery.d.ts" />
 /// <reference path="../../../lib/jquerymobile.d.ts" />
 import mAction = module("designer/logic/Action");
+import mActionTypes = module("designer/logic/ActionTypes");
 
 export class SaveSessionAction extends mAction.Action {
     constructor() {
+        this.ActionType = mActionTypes.ActionTypes.SaveSession;
         super();
     }
     public toXML() {

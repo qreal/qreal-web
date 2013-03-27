@@ -3,6 +3,7 @@ import mLinearLayout = module("designer/widgets/LinearLayout");
 import mWidgetTypes = module("designer/widgets/WidgetTypes");
 import mEditText = module("designer/widgets/EditText");
 import mDesigner = module("designer/Designer");
+import mActionTypes = module("designer/logic/ActionTypes");
 
 export class LoginRequestAction extends mAction.Action {
     private url: string;
@@ -11,6 +12,7 @@ export class LoginRequestAction extends mAction.Action {
 
     constructor(url: string) {
         super();
+        this.ActionType = mActionTypes.ActionTypes.LoginRequest;
         this.url = url;
         var editTexts: string[] = this.findEditTexts();
         if (editTexts.length > 0) {

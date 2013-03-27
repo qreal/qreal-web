@@ -1,5 +1,6 @@
 import mAction = module("designer/logic/Action");
 import mCodeBlock = module("designer/logic/CodeBlock");
+import mActionTypes = module("designer/logic/ActionTypes");
 
 export class IfAction extends mAction.Action {
     private expression: string;
@@ -9,6 +10,7 @@ export class IfAction extends mAction.Action {
 
     constructor(marginLeft) {
         super();
+        this.ActionType = mActionTypes.ActionTypes.If;
         this.expression = "loginSuccess";
         this.thenBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
         this.elseBlock = new mCodeBlock.CodeBlock(marginLeft + 10);

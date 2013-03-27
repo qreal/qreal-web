@@ -2,12 +2,14 @@
 /// <reference path="../../../lib/jquerymobile.d.ts" />
 import mAction = module("designer/logic/Action");
 import mDesigner = module("designer/Designer");
+import mActionTypes = module("designer/logic/ActionTypes");
 
 export class TransitionAction extends mAction.Action {
     private formId: string;
 
     constructor(formId: string) {
         super();
+        this.ActionType = mActionTypes.ActionTypes.Transition;
         this.formId = formId;
     }
 
