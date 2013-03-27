@@ -1,15 +1,20 @@
 import mAction = module("designer/logic/Action");
+import mCodeBlock = module("designer/logic/CodeBlock");
 
 export class IfAction extends mAction.Action {
     private expression: string;
-    private thenAction: mAction.Action;
-    private elseAction: mAction.Action;
+    private thenBlock: mCodeBlock.CodeBlock;
+    private elseBlock: mCodeBlock.CodeBlock;
+    private marginLeft;
 
-    constructor(expression: string, thenAction: mAction.Action, elseAction: mAction.Action) {
+    constructor(marginLeft) {
         super();
-        this.expression = expression;
-        this.thenAction = thenAction;
-        this.elseAction = elseAction;
+        this.expression = "loginSuccess";
+        this.thenBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
+        this.elseBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
+    }
+
+    public show() {
     }
 
     get Expression() {
@@ -18,26 +23,26 @@ export class IfAction extends mAction.Action {
     set Expression(expression: string) {
         this.expression = expression;
     }
-    get ThenAction() {
-        return this.thenAction;
+    get ThenBlock() {
+        return this.thenBlock;
     }
-    set ThenAction(thenAction: mAction.Action) {
-        this.thenAction = thenAction;
+    set ThenBlock(thenBlock: mCodeBlock.CodeBlock) {
+        this.thenBlock = thenBlock;
     }
-    get ElseAction() {
-        return this.elseAction;
+    get ElseBlock() {
+        return this.elseBlock;
     }
-    set ElseAction(elseAction: mAction.Action) {
-        this.elseAction = elseAction;
+    set ElseAction(elseBlock: mCodeBlock.CodeBlock) {
+        this.elseBlock = elseBlock;
     }
     public toXML() {
         var xml = "<if condition='" + this.expression + "'>\n"
         xml += "<then>\n"
-        xml += this.thenAction.toXML();
+        xml += this.thenBlock.toXML();
         xml += "</then>\n";
-        if (this.elseAction) {
+        if (this.elseBlock.Actions.length > 0) {
             xml += "<else>\n";
-            xml += this.elseAction.toXML();
+            xml += this.elseBlock.toXML();
             xml += "</else>\n";
         }
         xml += "</if>\n";

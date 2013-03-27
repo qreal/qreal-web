@@ -3,17 +3,21 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "designer/logic/Action"], function(require, exports, __mAction__) {
+define(["require", "exports", "designer/logic/Action", "designer/logic/CodeBlock"], function(require, exports, __mAction__, __mCodeBlock__) {
     var mAction = __mAction__;
+
+    var mCodeBlock = __mCodeBlock__;
 
     var IfAction = (function (_super) {
         __extends(IfAction, _super);
-        function IfAction(expression, thenAction, elseAction) {
+        function IfAction(marginLeft) {
                 _super.call(this);
-            this.expression = expression;
-            this.thenAction = thenAction;
-            this.elseAction = elseAction;
+            this.expression = "loginSuccess";
+            this.thenBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
+            this.elseBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
         }
+        IfAction.prototype.show = function () {
+        };
         Object.defineProperty(IfAction.prototype, "Expression", {
             get: function () {
                 return this.expression;
@@ -24,22 +28,26 @@ define(["require", "exports", "designer/logic/Action"], function(require, export
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(IfAction.prototype, "ThenAction", {
+        Object.defineProperty(IfAction.prototype, "ThenBlock", {
             get: function () {
-                return this.thenAction;
+                return this.thenBlock;
             },
-            set: function (thenAction) {
-                this.thenAction = thenAction;
+            set: function (thenBlock) {
+                this.thenBlock = thenBlock;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(IfAction.prototype, "ElseBlock", {
+            get: function () {
+                return this.elseBlock;
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(IfAction.prototype, "ElseAction", {
-            get: function () {
-                return this.elseAction;
-            },
-            set: function (elseAction) {
-                this.elseAction = elseAction;
+            set: function (elseBlock) {
+                this.elseBlock = elseBlock;
             },
             enumerable: true,
             configurable: true
@@ -47,11 +55,11 @@ define(["require", "exports", "designer/logic/Action"], function(require, export
         IfAction.prototype.toXML = function () {
             var xml = "<if condition='" + this.expression + "'>\n";
             xml += "<then>\n";
-            xml += this.thenAction.toXML();
+            xml += this.thenBlock.toXML();
             xml += "</then>\n";
-            if(this.elseAction) {
+            if(this.elseBlock.Actions.length > 0) {
                 xml += "<else>\n";
-                xml += this.elseAction.toXML();
+                xml += this.elseBlock.toXML();
                 xml += "</else>\n";
             }
             xml += "</if>\n";
