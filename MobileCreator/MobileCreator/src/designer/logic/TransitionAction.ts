@@ -23,9 +23,12 @@ export class TransitionAction extends mAction.Action {
     }
 
     public show(domElement) {
+        var _this = this;
         var saveSessionBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>Go to form </a>");     
         var formNames = mDesigner.Designer.formNames;
         var select = $("<select data-mini='true' data-inline='true'></select>");
+        var selectedOption = $("<option value='" + this.formId + "' selected='selected'>" + this.formId + "</option>");
+        select.append(selectedOption);
         domElement.append(saveSessionBlock);
         domElement.append(select);
         saveSessionBlock.button();
@@ -35,9 +38,15 @@ export class TransitionAction extends mAction.Action {
             _select.empty();
             for (var i = 0; i < formNames.length; i++) {
                 var option = $("<option value='" + formNames[i] + "'>" + formNames[i] + "</option>");
+                if (_this.formId == formNames[i]) {
+                    option.attr("selected", "selected");
+                }
                 _select.append(option);
             }
             _select.selectmenu("refresh", true);
+        });
+        select.change(function () {
+            _this.formId = _select.val();
         });
     }
 }
