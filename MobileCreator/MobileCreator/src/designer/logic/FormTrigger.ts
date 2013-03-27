@@ -3,6 +3,7 @@
 import mAction = module("designer/logic/Action")
 import mSaveSessionAction = module("designer/logic/SaveSessionAction")
 import mTransitionAction = module("designer/logic/TransitionAction")
+import mShowMapAction = module("designer/logic/ShowMapAction")
 
 export class FormTrigger {
     private formId: string;
@@ -90,6 +91,10 @@ export class FormTrigger {
                     break;
                 case "transition":
                     _this.addAction(new mTransitionAction.TransitionAction("main"));
+                    _this.show(domElement);
+                    break;
+                case "showMap":
+                    _this.addAction(new mShowMapAction.ShowMapAction(""));
                     _this.show(domElement);
                     break;
             }

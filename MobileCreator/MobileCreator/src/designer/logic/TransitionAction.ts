@@ -22,6 +22,7 @@ export class TransitionAction extends mAction.Action {
         return xml;
     }
 
+
     public show(domElement) {
         var _this = this;
         var saveSessionBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>Go to form </a>");     
