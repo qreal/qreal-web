@@ -44,7 +44,7 @@ define(["require", "exports", "designer/logic/Action", "designer/Designer", "des
             var maps = this.findMaps();
             var select = $("<select data-mini='true' data-inline='true'></select>");
             for(var i = 0; i < maps.length; i++) {
-                var option = $("<option value='" + maps[i] + "' selected='selected'>" + maps[i] + "</option>");
+                var option = $("<option value='" + maps[i] + "'>" + maps[i] + "</option>");
                 if(maps[i] == this.controlId) {
                     option.attr("selected", "selected");
                 }
