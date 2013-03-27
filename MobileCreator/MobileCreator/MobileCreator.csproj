@@ -40,6 +40,15 @@
     <TypeScriptCompile Include="src\emulator\model\attributes\WebViewTag.ts" />
     <TypeScriptCompile Include="src\designer\widgets\WidgetTypes.ts" />
     <Content Include="images\imageview.png" />
+    <Content Include="lib\bing\mapcontrol.js" />
+    <Content Include="lib\bing\Microsoft.Maps.AdvancedShapes.d.ts" />
+    <Content Include="lib\bing\Microsoft.Maps.All.d.ts" />
+    <Content Include="lib\bing\Microsoft.Maps.d.ts" />
+    <Content Include="lib\bing\Microsoft.Maps.Overlay.Style.d.ts" />
+    <Content Include="lib\bing\Microsoft.Maps.Search.d.ts" />
+    <Content Include="lib\bing\Microsoft.Maps.Themes.BingTheme.d.ts" />
+    <Content Include="lib\bing\Microsoft.Maps.Traffic.d.ts" />
+    <Content Include="lib\bing\Microsoft.Maps.VenueMaps.d.ts" />
     <Content Include="res\application5.xml" />
     <Content Include="res\info2.xml" />
     <Content Include="res\main2.xml" />
@@ -196,6 +205,9 @@
     <Content Include="src\emulator\model\ui\Map.js">
       <DependentUpon>Map.ts</DependentUpon>
     </Content>
+    <Content Include="src\emulator\model\ui\Map.min.js">
+      <DependentUpon>Map.ts</DependentUpon>
+    </Content>
     <Content Include="src\emulator\model\ui\WebView.js">
       <DependentUpon>WebView.ts</DependentUpon>
     </Content>
@@ -302,6 +314,9 @@
     <Content Include="src\emulator\model\logic\Logic.js.map">
       <DependentUpon>Logic.ts</DependentUpon>
     </Content>
+    <Content Include="src\emulator\model\ui\Map.js.map">
+      <DependentUpon>Map.ts</DependentUpon>
+    </Content>
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -309,6 +324,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

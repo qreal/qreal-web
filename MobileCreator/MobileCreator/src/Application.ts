@@ -29,5 +29,6 @@ export class Application {
                 mEmulator.Emulator.instance.showXmlStringView(mDesigner.Designer.instance.getXML());
             }
         });
+
     }
 }
