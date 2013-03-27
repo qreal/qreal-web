@@ -1,4 +1,4 @@
-define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "emulator/model/logic/Trigger", "emulator/model/managers/EventManager", "emulator/model/Page", "emulator/model/ui/TextView", "emulator/model/ui/Button", "emulator/model/ui/Input", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/ControlTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/InputTag", "emulator/model/attributes/ImageViewTag", "emulator/model/attributes/WebViewTag"], function(require, exports, __mLog__, __mLogic__, __mTrigger__, __mEventManager__, __mPage__, __mTextView__, __mButton__, __mInput__, __mImageView__, __mWebView__, __mLinearLayout__, __mLinearLayoutTag__, __mControlTag__, __mTextViewTag__, __mButtonTag__, __mInputTag__, __mImageViewTag__, __mWebViewTag__) {
+define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "emulator/model/logic/Trigger", "emulator/model/managers/EventManager", "emulator/model/Page", "emulator/model/ui/TextView", "emulator/model/ui/Button", "emulator/model/ui/Input", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/ui/Map", "emulator/model/ui/LinearLayout", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/ControlTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/InputTag", "emulator/model/attributes/ImageViewTag", "emulator/model/attributes/WebViewTag", "emulator/model/attributes/MapTag"], function(require, exports, __mLog__, __mLogic__, __mTrigger__, __mEventManager__, __mPage__, __mTextView__, __mButton__, __mInput__, __mImageView__, __mWebView__, __mMap__, __mLinearLayout__, __mLinearLayoutTag__, __mControlTag__, __mTextViewTag__, __mButtonTag__, __mInputTag__, __mImageViewTag__, __mWebViewTag__, __mMapTag__) {
     var mLog = __mLog__;
 
     var mLogic = __mLogic__;
@@ -21,6 +21,8 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
 
     var mWebView = __mWebView__;
 
+    var mMap = __mMap__;
+
     
     var mLinearLayout = __mLinearLayout__;
 
@@ -39,6 +41,8 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
 
     var mWebViewTag = __mWebViewTag__;
 
+    var mMapTag = __mMapTag__;
+
     var XmlManager = (function () {
         function XmlManager() {
             this.logger = new mLog.Logger("XmlManager");
@@ -55,6 +59,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
         XmlManager.Button = "Button";
         XmlManager.ImageView = "ImageView";
         XmlManager.WebView = "WebView";
+        XmlManager.Map = "Map";
         XmlManager.Logic = "logic";
         XmlManager.Trigger = "trigger";
         XmlManager.FormId = "form-id";
@@ -243,6 +248,9 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
                 case XmlManager.WebView:
                     control = this.parseWebView(node);
                     break;
+                case XmlManager.Map:
+                    control = this.parseMap(node);
+                    break;
             }
             return control;
         };
@@ -295,6 +303,13 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
             this.fillWebViewData(node, tag);
             var webView = new mWebView.WebView(tag);
             return webView;
+        };
+        XmlManager.prototype.parseMap = function (node) {
+            this.logger.log("parseMap");
+            var tag = new mMapTag.MapTag();
+            this.fillControlTagData(node, tag);
+            var map = new mMap.Map(tag);
+            return map;
         };
         XmlManager.prototype.fillLinearLayoutData = function (node, tag) {
             this.fillControlPanelData(node, tag);

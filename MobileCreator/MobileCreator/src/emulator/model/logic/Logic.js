@@ -61,7 +61,6 @@ define(["require", "exports", "emulator/model/Emulator", "emulator/model/manager
                 data: parameters,
                 success: function (data) {
                     mEmulator.Emulator.instance.EventManager.trigger(mEmulator.Emulator.instance.NavigationManager.CurrentPage.Name, mEventManager.EventManager.OnLoginResponse, data);
-                    alert("Response " + data);
                 },
                 dataType: "text"
             });
@@ -73,7 +72,6 @@ define(["require", "exports", "emulator/model/Emulator", "emulator/model/manager
                 url: url,
                 success: function (data) {
                     mEmulator.Emulator.instance.EventManager.trigger(mEmulator.Emulator.instance.NavigationManager.CurrentPage.Name, mEventManager.EventManager.OnPatientsResponse, data);
-                    alert("Response " + data);
                 },
                 dataType: "text"
             });

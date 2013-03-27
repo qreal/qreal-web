@@ -69,7 +69,7 @@ export class FunctionFactory {
                     mEmulator.Emulator.instance.NavigationManager.CurrentPage.Name,
                     mEventManager.EventManager.OnLoginResponse,
                     data);
-                alert("Response " + data);
+                //alert("Response " + data);
             },
             dataType: "text"
         });
@@ -85,7 +85,7 @@ export class FunctionFactory {
                    mEmulator.Emulator.instance.NavigationManager.CurrentPage.Name,
                    mEventManager.EventManager.OnPatientsResponse,
                    data);
-                alert("Response " + data);
+                //alert("Response " + data);
             },
             dataType: "text"
         });

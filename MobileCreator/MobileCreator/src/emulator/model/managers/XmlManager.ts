@@ -12,6 +12,7 @@ import mButton = module("emulator/model/ui/Button");
 import mInput = module("emulator/model/ui/Input");
 import mImageView = module("emulator/model/ui/ImageView");
 import mWebView = module("emulator/model/ui/WebView");
+import mMap = module("emulator/model/ui/Map");
 import mControlPanel = module("emulator/model/ui/ControlPanel");
 import mLinearLayout = module("emulator/model/ui/LinearLayout");
 import mLinearLayoutTag = module("emulator/model/attributes/LinearLayoutTag");
@@ -22,6 +23,7 @@ import mButtonTag = module("emulator/model/attributes/ButtonTag");
 import mInputTag = module("emulator/model/attributes/InputTag");
 import mImageViewTag = module("emulator/model/attributes/ImageViewTag");
 import mWebViewTag = module("emulator/model/attributes/WebViewTag");
+import mMapTag = module("emulator/model/attributes/MapTag");
 //#endregion
 
 export class XmlManager {
@@ -39,6 +41,7 @@ export class XmlManager {
     private static Button = "Button";
     private static ImageView = "ImageView";
     private static WebView = "WebView";
+    private static Map = "Map";
 
     private static Logic = "logic";
     private static Trigger = "trigger";
@@ -258,6 +261,9 @@ export class XmlManager {
             case XmlManager.WebView:
                 control = this.parseWebView(node);
                 break;
+            case XmlManager.Map:
+                control = this.parseMap(node);
+                break;
         }
         return control;
     }
@@ -318,6 +324,14 @@ export class XmlManager {
         this.fillWebViewData(node, tag);
         var webView = new mWebView.WebView(tag);
         return webView;
+    }
+
+    private parseMap(node: Node): mMap.Map {
+        this.logger.log("parseMap");
+        var tag = new mMapTag.MapTag();
+        this.fillControlTagData(node, tag);
+        var map = new mMap.Map(tag);
+        return map;
     }
 
     private fillLinearLayoutData(node: Node, tag: mLinearLayoutTag.LinearLayoutTag) {

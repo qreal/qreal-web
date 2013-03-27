@@ -40,7 +40,7 @@
     <TypeScriptCompile Include="src\emulator\model\attributes\WebViewTag.ts" />
     <TypeScriptCompile Include="src\designer\widgets\WidgetTypes.ts" />
     <Content Include="images\imageview.png" />
-    <Content Include="res\application4.xml" />
+    <Content Include="res\application5.xml" />
     <Content Include="res\info2.xml" />
     <Content Include="res\main2.xml" />
     <Content Include="res\Transition.xml" />
@@ -126,6 +126,10 @@
     <Content Include="src\emulator\model\attributes\InputTag.min.js">
       <DependentUpon>InputTag.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="src\emulator\model\attributes\MapTag.ts" />
+    <Content Include="src\emulator\model\attributes\MapTag.js">
+      <DependentUpon>MapTag.ts</DependentUpon>
+    </Content>
     <Content Include="src\emulator\model\attributes\WebViewTag.js">
       <DependentUpon>WebViewTag.ts</DependentUpon>
     </Content>
@@ -187,6 +191,10 @@
     </Content>
     <Content Include="src\emulator\model\ui\Input.min.js">
       <DependentUpon>Input.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\emulator\model\ui\Map.ts" />
+    <Content Include="src\emulator\model\ui\Map.js">
+      <DependentUpon>Map.ts</DependentUpon>
     </Content>
     <Content Include="src\emulator\model\ui\WebView.js">
       <DependentUpon>WebView.ts</DependentUpon>

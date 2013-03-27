@@ -52,30 +52,12 @@ export class Emulator {
         this.clearUi();
         xml = mXmlHelper.escapeXml(xml);
         //var application = this.xmlManager.parseXmlString(xml);
-        var application = this.xmlManager.parseStoredXml('/res/application4.xml');
+        var application = this.xmlManager.parseStoredXml('/res/application5.xml');
         var pages = application.pages;
         var triggers = application.triggers;
         var _eventManager = this.eventManager;
         triggers.map(trigger => this.eventManager.addTrigger(trigger));
         pages.map(page => this.addPage(page));
-
-        //TODO: test stub
-        /*
-        pages.map(function (page: mPage.Page) {
-            var onShowTrigger = new mTrigger.Trigger(mTrigger.Trigger.OnShow, function () {
-                console.log("OnShow Trigger");
-            });
-            page.addTrigger(onShowTrigger);
-
-            var onTimerTrigger = new mTrigger.Trigger(mTrigger.Trigger.OnTimer, function () {
-                console.log("onTimer Trigger");
-            });
-            page.addTrigger(onTimerTrigger);
-        });
-        */
-        //new mLogic.FunctionFactory().sendLoginRequest("http://localhost:54321", "Chizh", "password");
-        //end stub
-
         this.navigationManager.showPage(pages[0].Name);
     }
 

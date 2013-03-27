@@ -78,41 +78,37 @@
         <Button
           layout_width="fill_parent"
           layout_height="wrap_content"
-          layout_marginTop="20px" 
-          text="Submit" 
-          textSize="15px" 
-          id="button6" 
+          layout_marginTop="20px"
+          text="Submit"
+          textSize="15px"
+          id="button6"
           onClick="main" />
       </LinearLayout>
     </form>
     <form form_name="fail">
       <LinearLayout
-        orientation="vertical" 
-        layout_width="fill_parent" 
+        orientation="vertical"
+        layout_width="fill_parent"
         layout_height="fill_parent"
         background="#ffffff">
         <TextView
-          layout_width="fill_parent" 
-          layout_height="wrap_content" 
-          layout_marginTop="10px" 
-          padding="0px" 
-          text="Fail!!!" 
+          layout_width="fill_parent"
+          layout_height="wrap_content"
+          layout_marginTop="10px"
+          padding="0px"
+          text="Fail!!!"
           textSize="50px" />
       </LinearLayout>
     </form>
     <form form_name="map">
       <LinearLayout
-        orientation="vertical" 
-        layout_width="fill_parent" 
-        layout_height="fill_parent" 
+        orientation="vertical"
+        layout_width="fill_parent"
+        layout_height="fill_parent"
         background="#ffffff">
-        <TextView
-          layout_width="fill_parent" 
-          layout_height="wrap_content" 
-          layout_marginTop="10px" 
-          padding="0px" 
-          text="Map" 
-          textSize="26px" />
+        <Map layout_width="fill_parent"
+             layout_height="fill_parent"
+             id="mapId" />
       </LinearLayout>
     </form>
   </forms>
