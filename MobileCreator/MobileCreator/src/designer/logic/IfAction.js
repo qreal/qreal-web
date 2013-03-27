@@ -14,12 +14,22 @@ define(["require", "exports", "designer/logic/Action", "designer/logic/CodeBlock
         __extends(IfAction, _super);
         function IfAction(marginLeft) {
                 _super.call(this);
+            this.marginLeft = marginLeft;
             this.ActionType = mActionTypes.ActionTypes.If;
             this.expression = "loginSuccess";
             this.thenBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
             this.elseBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
         }
-        IfAction.prototype.show = function () {
+        IfAction.prototype.showIf = function (domElement, removeButton) {
+            var containDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
+            containDiv.css("margin-left", this.marginLeft + "px");
+            domElement.append(containDiv);
+            var ifBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>If</a>");
+            containDiv.append(ifBlock);
+            ifBlock.button();
+            var select = $("<select data-mini='true' data-inline='true'></select>");
+            containDiv.append(removeButton);
+            removeButton.button();
         };
         Object.defineProperty(IfAction.prototype, "Expression", {
             get: function () {

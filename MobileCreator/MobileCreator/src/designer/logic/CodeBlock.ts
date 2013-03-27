@@ -8,6 +8,7 @@ import mPatientsRequestAction = module("designer/logic/PatientsRequestAction")
 import mLoginRequestAction = module("designer/logic/LoginRequestAction")
 import mIfAction = module("designer/logic/IfAction")
 import mWidgetTypes = module("designer/widgets/WidgetTypes")
+import mActionTypes = module("designer/logic/ActionTypes")
 
 export class CodeBlock {
     private marginLeft;
@@ -36,13 +37,19 @@ export class CodeBlock {
         var _this = this;
         domElement.empty();
         for (var i = 0; i < this.actions.length; i++) {
-            var containDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
-            containDiv.css("margin-left", this.marginLeft + "px");
             var action = this.actions[i];
             var actionIndex = i;
+            var removeButton = $("<a href='#' data-role='button' data-icon='delete' data-inline='true' data-iconpos='notext' data-theme='e' data-mini='true'>Delete</a>");
+            if (action.ActionType == mActionTypes.ActionTypes.If) {
+                (<mIfAction.IfAction> action).showIf(domElement, removeButton);
+                domElement.trigger("create");
+                _this.setRemoveHandler(removeButton, i, domElement);
+                continue;
+            }
+            var containDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
+            containDiv.css("margin-left", this.marginLeft + "px");
             domElement.append(containDiv);
             action.show(containDiv);
-            var removeButton = $("<a href='#' data-role='button' data-icon='delete' data-inline='true' data-iconpos='notext' data-theme='e' data-mini='true'>Delete</a>");
             containDiv.append(removeButton);
             removeButton.button();
             domElement.trigger("create");

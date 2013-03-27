@@ -10,13 +10,31 @@ export class IfAction extends mAction.Action {
 
     constructor(marginLeft) {
         super();
+        this.marginLeft = marginLeft;
         this.ActionType = mActionTypes.ActionTypes.If;
         this.expression = "loginSuccess";
         this.thenBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
         this.elseBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
     }
 
-    public show() {
+    public showIf(domElement: JQuery, removeButton: JQuery) {
+        var containDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
+        containDiv.css("margin-left", this.marginLeft + "px");
+        domElement.append(containDiv);
+        var ifBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>If</a>");
+        containDiv.append(ifBlock);
+        ifBlock.button();
+        var select = $("<select data-mini='true' data-inline='true'></select>");
+        /*var 
+        for (var i = 0; i < maps.length; i++) {
+            var option = $("<option value='" + maps[i] + "'>" + maps[i] + "</option>");
+            if (maps[i] == this.controlId) {
+                option.attr("selected", "selected");
+            }
+            select.append(option);
+        }*/
+        containDiv.append(removeButton);
+        removeButton.button();
     }
 
     get Expression() {

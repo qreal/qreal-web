@@ -1,4 +1,4 @@
-define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logic/TransitionAction", "designer/logic/ShowMapAction", "designer/logic/PatientsRequestAction", "designer/logic/LoginRequestAction", "designer/logic/IfAction"], function(require, exports, __mSaveSessionAction__, __mTransitionAction__, __mShowMapAction__, __mPatientsRequestAction__, __mLoginRequestAction__, __mIfAction__) {
+define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logic/TransitionAction", "designer/logic/ShowMapAction", "designer/logic/PatientsRequestAction", "designer/logic/LoginRequestAction", "designer/logic/IfAction", "designer/logic/ActionTypes"], function(require, exports, __mSaveSessionAction__, __mTransitionAction__, __mShowMapAction__, __mPatientsRequestAction__, __mLoginRequestAction__, __mIfAction__, __mActionTypes__) {
     
     var mSaveSessionAction = __mSaveSessionAction__;
 
@@ -13,6 +13,8 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
     var mIfAction = __mIfAction__;
 
     
+    var mActionTypes = __mActionTypes__;
+
     var CodeBlock = (function () {
         function CodeBlock(marginLeft) {
             this.actions = [];
@@ -42,13 +44,19 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
             var _this = this;
             domElement.empty();
             for(var i = 0; i < this.actions.length; i++) {
-                var containDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
-                containDiv.css("margin-left", this.marginLeft + "px");
                 var action = this.actions[i];
                 var actionIndex = i;
+                var removeButton = $("<a href='#' data-role='button' data-icon='delete' data-inline='true' data-iconpos='notext' data-theme='e' data-mini='true'>Delete</a>");
+                if(action.ActionType == mActionTypes.ActionTypes.If) {
+                    (action).showIf(domElement, removeButton);
+                    domElement.trigger("create");
+                    _this.setRemoveHandler(removeButton, i, domElement);
+                    continue;
+                }
+                var containDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
+                containDiv.css("margin-left", this.marginLeft + "px");
                 domElement.append(containDiv);
                 action.show(containDiv);
-                var removeButton = $("<a href='#' data-role='button' data-icon='delete' data-inline='true' data-iconpos='notext' data-theme='e' data-mini='true'>Delete</a>");
                 containDiv.append(removeButton);
                 removeButton.button();
                 domElement.trigger("create");
