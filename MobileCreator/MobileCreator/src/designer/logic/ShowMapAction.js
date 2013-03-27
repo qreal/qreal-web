@@ -3,7 +3,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "designer/logic/Action", "designer/Designer", "designer/widgets/WidgetTypes"], function(require, exports, __mAction__, __mDesigner__, __mWidgetTypes__) {
+define(["require", "exports", "designer/logic/Action", "designer/Designer", "designer/widgets/WidgetTypes", "designer/logic/ActionTypes"], function(require, exports, __mAction__, __mDesigner__, __mWidgetTypes__, __mActionTypes__) {
     var mAction = __mAction__;
 
     var mDesigner = __mDesigner__;
@@ -13,10 +13,13 @@ define(["require", "exports", "designer/logic/Action", "designer/Designer", "des
 
     
     
+    var mActionTypes = __mActionTypes__;
+
     var ShowMapAction = (function (_super) {
         __extends(ShowMapAction, _super);
         function ShowMapAction(controlId) {
                 _super.call(this);
+            this.ActionType = mActionTypes.ActionTypes.ShowMap;
             this.controlId = controlId;
             var maps = this.findMaps();
             if(maps.length > 0) {

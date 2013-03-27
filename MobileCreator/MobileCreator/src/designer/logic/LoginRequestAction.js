@@ -3,7 +3,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "designer/logic/Action", "designer/widgets/WidgetTypes", "designer/Designer"], function(require, exports, __mAction__, __mWidgetTypes__, __mDesigner__) {
+define(["require", "exports", "designer/logic/Action", "designer/widgets/WidgetTypes", "designer/Designer", "designer/logic/ActionTypes"], function(require, exports, __mAction__, __mWidgetTypes__, __mDesigner__, __mActionTypes__) {
     var mAction = __mAction__;
 
     
@@ -12,10 +12,13 @@ define(["require", "exports", "designer/logic/Action", "designer/widgets/WidgetT
     
     var mDesigner = __mDesigner__;
 
+    var mActionTypes = __mActionTypes__;
+
     var LoginRequestAction = (function (_super) {
         __extends(LoginRequestAction, _super);
         function LoginRequestAction(url) {
                 _super.call(this);
+            this.ActionType = mActionTypes.ActionTypes.LoginRequest;
             this.url = url;
             var editTexts = this.findEditTexts();
             if(editTexts.length > 0) {

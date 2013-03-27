@@ -3,13 +3,16 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "designer/logic/Action"], function(require, exports, __mAction__) {
+define(["require", "exports", "designer/logic/Action", "designer/logic/ActionTypes"], function(require, exports, __mAction__, __mActionTypes__) {
     var mAction = __mAction__;
+
+    var mActionTypes = __mActionTypes__;
 
     var PatientsRequestAction = (function (_super) {
         __extends(PatientsRequestAction, _super);
         function PatientsRequestAction(url) {
                 _super.call(this);
+            this.ActionType = mActionTypes.ActionTypes.PatientsRequest;
             this.url = url;
         }
         PatientsRequestAction.prototype.show = function (domeElement) {

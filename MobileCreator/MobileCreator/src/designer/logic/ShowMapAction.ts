@@ -4,12 +4,14 @@ import mElement = module("designer/widgets/Element");
 import mWidgetTypes = module("designer/widgets/WidgetTypes");
 import mMap = module("designer/widgets/Map");
 import mLinearLayout = module("designer/widgets/LinearLayout");
+import mActionTypes = module("designer/logic/ActionTypes");
 
 export class ShowMapAction extends mAction.Action {
     private controlId: string;
 
     constructor(controlId: string) {
         super();
+        this.ActionType = mActionTypes.ActionTypes.ShowMap;
         this.controlId = controlId;
         var maps: string[] = this.findMaps();
         if (maps.length > 0) {
