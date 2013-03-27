@@ -120,6 +120,7 @@ export class Designer {
             }
             trigger.show($("#triggerDiv"));
         });
+        Designer.activeForm.Triggers[0].show($("#triggerDiv"));
     }
 
     public changeActiveForm(formName: string) {
