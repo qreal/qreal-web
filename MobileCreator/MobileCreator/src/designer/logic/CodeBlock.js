@@ -12,6 +12,7 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
 
     var mIfAction = __mIfAction__;
 
+    
     var CodeBlock = (function () {
         function CodeBlock(marginLeft) {
             this.actions = [];

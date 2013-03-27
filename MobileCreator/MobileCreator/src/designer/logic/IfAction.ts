@@ -10,8 +10,11 @@ export class IfAction extends mAction.Action {
     constructor(marginLeft) {
         super();
         this.expression = "loginSuccess";
-        this.thenBlock = new mCodeBlock.CodeBlock(marginLeft);
-        this.elseBlock = new mCodeBlock.CodeBlock(marginLeft);
+        this.thenBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
+        this.elseBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
+    }
+
+    public show() {
     }
 
     get Expression() {

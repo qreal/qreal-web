@@ -7,6 +7,7 @@ import mShowMapAction = module("designer/logic/ShowMapAction")
 import mPatientsRequestAction = module("designer/logic/PatientsRequestAction")
 import mLoginRequestAction = module("designer/logic/LoginRequestAction")
 import mIfAction = module("designer/logic/IfAction")
+import mWidgetTypes = module("designer/widgets/WidgetTypes")
 
 export class CodeBlock {
     private marginLeft;

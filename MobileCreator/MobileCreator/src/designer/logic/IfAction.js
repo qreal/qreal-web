@@ -13,9 +13,11 @@ define(["require", "exports", "designer/logic/Action", "designer/logic/CodeBlock
         function IfAction(marginLeft) {
                 _super.call(this);
             this.expression = "loginSuccess";
-            this.thenBlock = new mCodeBlock.CodeBlock(marginLeft);
-            this.elseBlock = new mCodeBlock.CodeBlock(marginLeft);
+            this.thenBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
+            this.elseBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
         }
+        IfAction.prototype.show = function () {
+        };
         Object.defineProperty(IfAction.prototype, "Expression", {
             get: function () {
                 return this.expression;
