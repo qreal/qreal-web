@@ -5,6 +5,7 @@
     <trigger form-id='main' event='onTimer'>
     </trigger>
     <trigger form-id='main' event='onLoginResponse'>
+      <transition form-id='map'></transition>
     </trigger>
     <trigger form-id='main' event='onPatientsResponse'>
     </trigger>
@@ -25,7 +26,10 @@
     <trigger form-id='map' event='onPatientsResponse'>
     </trigger>
     <action control-id='button6'>
-      <transition form-id='fail' />
+      <login-request
+			  url="http://localhost:54321"
+			  login-id="editText3"
+			  password-id="editText5" />
     </action>
   </logic>
   <forms>

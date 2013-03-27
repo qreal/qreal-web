@@ -17,12 +17,11 @@ define(["require", "exports", "utils/log/Log"], function(require, exports, __mLo
             this.logger.log('' + trigger.Trigger);
             this.triggers["trigger" + trigger.PageId + trigger.Event] = trigger;
         };
-        EventManager.prototype.trigger = function (pageId, eventType) {
-            this.logger.log("trigger, triggers size=" + this.triggers.length);
+        EventManager.prototype.trigger = function (pageId, eventType, data) {
             var trigger = this.triggers["trigger" + pageId + eventType];
-            if(trigger) {
+            if(trigger && trigger.Trigger) {
                 console.log(trigger.Trigger);
-                trigger.Trigger();
+                trigger.Trigger(data);
             }
         };
         EventManager.prototype.clear = function () {

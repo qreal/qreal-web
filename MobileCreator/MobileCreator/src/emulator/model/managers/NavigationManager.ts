@@ -12,6 +12,10 @@ export class NavigationManager {
     private pages: mPage.Page[] = [];
     private currentPage: mPage.Page;
 
+    get CurrentPage(): mPage.Page {
+        return this.currentPage;
+    }
+
     constructor() {
         NavigationManager.logger.log("in constructor");
     }
@@ -47,5 +51,6 @@ export class NavigationManager {
         if (this.currentPage) {
             this.currentPage.onHide();
         }
+        this.currentPage = undefined;
     }
 }

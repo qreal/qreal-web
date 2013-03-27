@@ -1,5 +1,7 @@
-define(["require", "exports", "emulator/model/Emulator", "utils/log/Log"], function(require, exports, __mEmulator__, __mLog__) {
+define(["require", "exports", "emulator/model/Emulator", "emulator/model/managers/EventManager", "utils/log/Log"], function(require, exports, __mEmulator__, __mEventManager__, __mLog__) {
     var mEmulator = __mEmulator__;
+
+    var mEventManager = __mEventManager__;
 
     var mLog = __mLog__;
 
@@ -28,10 +30,23 @@ define(["require", "exports", "emulator/model/Emulator", "utils/log/Log"], funct
             };
         };
         FunctionFactory.prototype.loginRequestFunc = function (url, login_id, password_id) {
-            var login = mEmulator.Emulator.instance.EmulatorViewModel.getInputText(login_id);
-            var password = mEmulator.Emulator.instance.EmulatorViewModel.getInputText(password_id);
+            var _this = this;
             return function () {
-                this.sendLoginRequest(url, login, password);
+                var login = mEmulator.Emulator.instance.EmulatorViewModel.getInputText(login_id);
+                var password = mEmulator.Emulator.instance.EmulatorViewModel.getInputText(password_id);
+                _this.sendLoginRequest(url, login, password);
+            };
+        };
+        FunctionFactory.prototype.saveSessionFunc = function () {
+            this.logger.log("saveSessionFunc");
+            return function () {
+            };
+        };
+        FunctionFactory.prototype.patientsRequestFunc = function (url) {
+            this.logger.log("saveSessionFunc");
+            var _this = this;
+            return function () {
+                _this.sendPatientsRequest(url);
             };
         };
         FunctionFactory.prototype.sendLoginRequest = function (url, login, password) {
@@ -45,7 +60,19 @@ define(["require", "exports", "emulator/model/Emulator", "utils/log/Log"], funct
                 url: url,
                 data: parameters,
                 success: function (data) {
-                    mEmulator.Emulator.instance.trigger("LoginResponse", data);
+                    mEmulator.Emulator.instance.EventManager.trigger(mEmulator.Emulator.instance.NavigationManager.CurrentPage.Name, mEventManager.EventManager.OnLoginResponse, data);
+                    alert("Response " + data);
+                },
+                dataType: "text"
+            });
+        };
+        FunctionFactory.prototype.sendPatientsRequest = function (url) {
+            this.logger.log("sendPatientsRequest: url=" + url);
+            $.ajax({
+                type: "POST",
+                url: url,
+                success: function (data) {
+                    mEmulator.Emulator.instance.EventManager.trigger(mEmulator.Emulator.instance.NavigationManager.CurrentPage.Name, mEventManager.EventManager.OnPatientsResponse, data);
                     alert("Response " + data);
                 },
                 dataType: "text"

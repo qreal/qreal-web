@@ -44,11 +44,11 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
             this.logger.log("showXmlStringView: \n" + xml);
             this.clearUi();
             xml = mXmlHelper.escapeXml(xml);
-            var application = this.xmlManager.parseStoredXml('/res/application.xml');
+            var application = this.xmlManager.parseStoredXml('/res/application4.xml');
             var pages = application.pages;
             var triggers = application.triggers;
             var _eventManager = this.eventManager;
-            triggers.forEach(function (trigger) {
+            triggers.map(function (trigger) {
                 return _this.eventManager.addTrigger(trigger);
             });
             pages.map(function (page) {
@@ -84,9 +84,6 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
             enumerable: true,
             configurable: true
         });
-        Emulator.prototype.trigger = function (eventType, eventData) {
-            this.logger.log("trigger " + eventType + " eventData " + eventData);
-        };
         Emulator.prototype.clearUi = function () {
             this.navigationManager.clear();
             this.emulatorViewModel.clear();

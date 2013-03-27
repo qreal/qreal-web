@@ -14,6 +14,13 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator"], funct
             NavigationManager.logger.log("in constructor");
         }
         NavigationManager.logger = new mLog.Logger("NavigationManager");
+        Object.defineProperty(NavigationManager.prototype, "CurrentPage", {
+            get: function () {
+                return this.currentPage;
+            },
+            enumerable: true,
+            configurable: true
+        });
         NavigationManager.prototype.addPage = function (page) {
             this.pages[this.idPreffix + page.Name] = page;
         };
@@ -42,6 +49,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator"], funct
             if(this.currentPage) {
                 this.currentPage.onHide();
             }
+            this.currentPage = undefined;
         };
         return NavigationManager;
     })();

@@ -52,11 +52,11 @@ export class Emulator {
         this.clearUi();
         xml = mXmlHelper.escapeXml(xml);
         //var application = this.xmlManager.parseXmlString(xml);
-        var application = this.xmlManager.parseStoredXml('/res/application.xml');
+        var application = this.xmlManager.parseStoredXml('/res/application4.xml');
         var pages = application.pages;
         var triggers = application.triggers;
         var _eventManager = this.eventManager;
-        triggers.forEach(trigger => this.eventManager.addTrigger(trigger));
+        triggers.map(trigger => this.eventManager.addTrigger(trigger));
         pages.map(page => this.addPage(page));
 
         //TODO: test stub
@@ -98,10 +98,6 @@ export class Emulator {
 
     get EventManager(): mEventManager.EventManager {
         return this.eventManager;
-    }
-
-    public trigger(eventType: string, eventData): void {
-        this.logger.log("trigger " + eventType + " eventData " + eventData);
     }
 
     private clearUi() {

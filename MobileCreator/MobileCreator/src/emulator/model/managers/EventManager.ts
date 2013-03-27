@@ -21,12 +21,12 @@ export class EventManager {
         this.triggers["trigger" + trigger.PageId + trigger.Event] = trigger;
     }
 
-    public trigger(pageId: string, eventType: string): void {
-        this.logger.log("trigger, triggers size="+this.triggers.length);
+
+    public trigger(pageId: string, eventType: string, data?): void {
         var trigger: mTrigger.Trigger = this.triggers["trigger" + pageId + eventType];
-        if (trigger) {
+        if (trigger && trigger.Trigger) {
             console.log(trigger.Trigger);
-            trigger.Trigger();
+            trigger.Trigger(data);
         }
     }
 
