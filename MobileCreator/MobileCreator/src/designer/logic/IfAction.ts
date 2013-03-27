@@ -10,13 +10,45 @@ export class IfAction extends mAction.Action {
 
     constructor(marginLeft) {
         super();
+        this.marginLeft = marginLeft;
         this.ActionType = mActionTypes.ActionTypes.If;
         this.expression = "loginSuccess";
-        this.thenBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
-        this.elseBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
+        this.thenBlock = new mCodeBlock.CodeBlock(marginLeft + 25);
+        this.elseBlock = new mCodeBlock.CodeBlock(marginLeft + 25);
     }
 
-    public show() {
+    public showIf(domElement: JQuery, removeButton: JQuery) {
+        var containDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
+        containDiv.css("margin-left", this.marginLeft + "px");
+        domElement.append(containDiv);
+        var ifBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>If</a>");
+        containDiv.append(ifBlock);
+        ifBlock.button();
+        var select = $("<select data-mini='true' data-inline='true'></select>");
+        var loginSuccessOption = $("<option value='loginSuccess'>loginSucess</option>");
+        select.append(loginSuccessOption);
+        containDiv.append(select);
+        select.selectmenu();
+        containDiv.append(removeButton);
+        removeButton.button();
+        var thenDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
+        thenDiv.css("margin-left", this.marginLeft + "px");
+        domElement.append(thenDiv);
+        var thenBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>then</a>");
+        thenDiv.append(thenBlock);
+        thenBlock.button();
+        var thenBlockDiv = $("<div></div>");
+        domElement.append(thenBlockDiv);
+        this.thenBlock.show(thenBlockDiv);
+        var elseDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
+        elseDiv.css("margin-left", this.marginLeft + "px");
+        domElement.append(elseDiv);
+        var elseBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>else</a>");
+        elseDiv.append(elseBlock);
+        elseBlock.button();
+        var elseBlockDiv = $("<div></div>");
+        domElement.append(elseBlockDiv);
+        this.elseBlock.show(elseBlockDiv);
     }
 
     get Expression() {

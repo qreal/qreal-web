@@ -14,12 +14,44 @@ define(["require", "exports", "designer/logic/Action", "designer/logic/CodeBlock
         __extends(IfAction, _super);
         function IfAction(marginLeft) {
                 _super.call(this);
+            this.marginLeft = marginLeft;
             this.ActionType = mActionTypes.ActionTypes.If;
             this.expression = "loginSuccess";
-            this.thenBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
-            this.elseBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
+            this.thenBlock = new mCodeBlock.CodeBlock(marginLeft + 25);
+            this.elseBlock = new mCodeBlock.CodeBlock(marginLeft + 25);
         }
-        IfAction.prototype.show = function () {
+        IfAction.prototype.showIf = function (domElement, removeButton) {
+            var containDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
+            containDiv.css("margin-left", this.marginLeft + "px");
+            domElement.append(containDiv);
+            var ifBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>If</a>");
+            containDiv.append(ifBlock);
+            ifBlock.button();
+            var select = $("<select data-mini='true' data-inline='true'></select>");
+            var loginSuccessOption = $("<option value='loginSuccess'>loginSucess</option>");
+            select.append(loginSuccessOption);
+            containDiv.append(select);
+            select.selectmenu();
+            containDiv.append(removeButton);
+            removeButton.button();
+            var thenDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
+            thenDiv.css("margin-left", this.marginLeft + "px");
+            domElement.append(thenDiv);
+            var thenBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>then</a>");
+            thenDiv.append(thenBlock);
+            thenBlock.button();
+            var thenBlockDiv = $("<div></div>");
+            domElement.append(thenBlockDiv);
+            this.thenBlock.show(thenBlockDiv);
+            var elseDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
+            elseDiv.css("margin-left", this.marginLeft + "px");
+            domElement.append(elseDiv);
+            var elseBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>else</a>");
+            elseDiv.append(elseBlock);
+            elseBlock.button();
+            var elseBlockDiv = $("<div></div>");
+            domElement.append(elseBlockDiv);
+            this.elseBlock.show(elseBlockDiv);
         };
         Object.defineProperty(IfAction.prototype, "Expression", {
             get: function () {
