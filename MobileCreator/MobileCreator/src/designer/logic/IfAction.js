@@ -28,8 +28,21 @@ define(["require", "exports", "designer/logic/Action", "designer/logic/CodeBlock
             containDiv.append(ifBlock);
             ifBlock.button();
             var select = $("<select data-mini='true' data-inline='true'></select>");
+            var loginSuccessOption = $("<option value='loginSuccess'>loginSucess</option>");
+            select.append(loginSuccessOption);
+            containDiv.append(select);
+            select.selectmenu();
             containDiv.append(removeButton);
             removeButton.button();
+            var thenDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
+            thenDiv.css("margin-left", this.marginLeft + "px");
+            domElement.append(thenDiv);
+            var thenBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>then</a>");
+            thenDiv.append(thenBlock);
+            thenBlock.button();
+            var thenBlockDiv = $("<div></div>");
+            domElement.append(thenBlockDiv);
+            this.thenBlock.show(thenBlockDiv);
         };
         Object.defineProperty(IfAction.prototype, "Expression", {
             get: function () {

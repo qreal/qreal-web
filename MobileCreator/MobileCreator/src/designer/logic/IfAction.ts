@@ -25,16 +25,21 @@ export class IfAction extends mAction.Action {
         containDiv.append(ifBlock);
         ifBlock.button();
         var select = $("<select data-mini='true' data-inline='true'></select>");
-        /*var 
-        for (var i = 0; i < maps.length; i++) {
-            var option = $("<option value='" + maps[i] + "'>" + maps[i] + "</option>");
-            if (maps[i] == this.controlId) {
-                option.attr("selected", "selected");
-            }
-            select.append(option);
-        }*/
+        var loginSuccessOption = $("<option value='loginSuccess'>loginSucess</option>");
+        select.append(loginSuccessOption);
+        containDiv.append(select);
+        select.selectmenu();
         containDiv.append(removeButton);
         removeButton.button();
+        var thenDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
+        thenDiv.css("margin-left", this.marginLeft + "px");
+        domElement.append(thenDiv);
+        var thenBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>then</a>");
+        thenDiv.append(thenBlock);
+        thenBlock.button();
+        var thenBlockDiv = $("<div></div>");
+        domElement.append(thenBlockDiv);
+        this.thenBlock.show(thenBlockDiv);
     }
 
     get Expression() {
