@@ -141,7 +141,7 @@ export class XmlManager {
         var length = node.childNodes.length;
         for (var i = 0; i < length; i++) {
             var child = node.childNodes.item(i);
-            var func = this.parseLogicNode(node);
+            var func = this.parseLogicNode(child);
             if (func) {
                 triggerFunc = func;
             }
@@ -158,7 +158,7 @@ export class XmlManager {
         var length = node.childNodes.length;
         for (var i = 0; i < length; i++) {
             var child = node.childNodes.item(i);
-            var func = this.parseLogicNode(node);
+            var func = this.parseLogicNode(child);
             if (func) {
                 triggerFunc = func;
             }

@@ -48,10 +48,8 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
             var pages = application.pages;
             var triggers = application.triggers;
             var _eventManager = this.eventManager;
-            triggers.map(function (trigger) {
-                return function (trigger) {
-                    _eventManager.addTrigger(trigger);
-                };
+            triggers.forEach(function (trigger) {
+                return _this.eventManager.addTrigger(trigger);
             });
             pages.map(function (page) {
                 return _this.addPage(page);

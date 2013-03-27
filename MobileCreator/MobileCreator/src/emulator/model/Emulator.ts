@@ -56,9 +56,7 @@ export class Emulator {
         var pages = application.pages;
         var triggers = application.triggers;
         var _eventManager = this.eventManager;
-        triggers.map(trigger => function (trigger) {
-            _eventManager.addTrigger(trigger);
-        });
+        triggers.forEach(trigger => this.eventManager.addTrigger(trigger));
         pages.map(page => this.addPage(page));
 
         //TODO: test stub

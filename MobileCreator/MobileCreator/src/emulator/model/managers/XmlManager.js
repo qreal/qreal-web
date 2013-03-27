@@ -137,7 +137,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
             var length = node.childNodes.length;
             for(var i = 0; i < length; i++) {
                 var child = node.childNodes.item(i);
-                var func = this.parseLogicNode(node);
+                var func = this.parseLogicNode(child);
                 if(func) {
                     triggerFunc = func;
                 }
@@ -152,7 +152,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
             var length = node.childNodes.length;
             for(var i = 0; i < length; i++) {
                 var child = node.childNodes.item(i);
-                var func = this.parseLogicNode(node);
+                var func = this.parseLogicNode(child);
                 if(func) {
                     triggerFunc = func;
                 }
