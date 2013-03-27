@@ -11,13 +11,9 @@ export class ShowMapAction extends mAction.Action {
     constructor(controlId: string) {
         super();
         this.controlId = controlId;
-        var Elements = mDesigner.Designer.activeForm.Content;
-        for (var i = 0; i < Elements.length; i++) {
-            var element = Elements[i];
-            if (element.Preferences.WidgetType == mWidgetTypes.WidgetTypes.Map) {
-                this.controlId = (<mMap.Map> element).Preferences.MapId;
-                break;
-            }
+        var maps: string[] = this.findMaps();
+        if (maps.length > 0) {
+            this.controlId = maps[0];
         }
     }
 

@@ -1,4 +1,4 @@
-define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logic/TransitionAction", "designer/logic/ShowMapAction", "designer/logic/PatientsRequestAction"], function(require, exports, __mSaveSessionAction__, __mTransitionAction__, __mShowMapAction__, __mPatientsRequestAction__) {
+define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logic/TransitionAction", "designer/logic/ShowMapAction", "designer/logic/PatientsRequestAction", "designer/logic/LoginRequestAction"], function(require, exports, __mSaveSessionAction__, __mTransitionAction__, __mShowMapAction__, __mPatientsRequestAction__, __mLoginRequestAction__) {
     
     var mSaveSessionAction = __mSaveSessionAction__;
 
@@ -7,6 +7,8 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
     var mShowMapAction = __mShowMapAction__;
 
     var mPatientsRequestAction = __mPatientsRequestAction__;
+
+    var mLoginRequestAction = __mLoginRequestAction__;
 
     var FormTrigger = (function () {
         function FormTrigger(formId, triggerName) {
@@ -110,6 +112,10 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
                         break;
                     case "patients":
                         _this.addAction(new mPatientsRequestAction.PatientsRequestAction("someURL"));
+                        _this.show(domElement);
+                        break;
+                    case "login":
+                        _this.addAction(new mLoginRequestAction.LoginRequestAction("someURL"));
                         _this.show(domElement);
                         break;
                 }

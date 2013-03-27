@@ -18,13 +18,9 @@ define(["require", "exports", "designer/logic/Action", "designer/Designer", "des
         function ShowMapAction(controlId) {
                 _super.call(this);
             this.controlId = controlId;
-            var Elements = mDesigner.Designer.activeForm.Content;
-            for(var i = 0; i < Elements.length; i++) {
-                var element = Elements[i];
-                if(element.Preferences.WidgetType == mWidgetTypes.WidgetTypes.Map) {
-                    this.controlId = (element).Preferences.MapId;
-                    break;
-                }
+            var maps = this.findMaps();
+            if(maps.length > 0) {
+                this.controlId = maps[0];
             }
         }
         ShowMapAction.prototype.findMaps = function () {

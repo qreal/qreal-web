@@ -14,3 +14,4 @@
 /MobileCreator/Server/obj
 /MobileCreator/Server/bin
 /MobileCreator/*.suo
+/MobileCreator/Server/Program2.cs
