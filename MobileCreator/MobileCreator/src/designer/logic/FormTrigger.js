@@ -43,6 +43,13 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
         FormTrigger.prototype.addAction = function (action) {
             this.actions.push(action);
         };
+        FormTrigger.prototype.setRemoveHandler = function (element, i, domElement) {
+            var _this = this;
+            element.click(function () {
+                _this.actions.splice(i, 1);
+                _this.show(domElement);
+            });
+        };
         FormTrigger.prototype.show = function (domElement) {
             var _this = this;
             domElement.empty();
@@ -56,10 +63,7 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
                 containDiv.append(removeButton);
                 removeButton.button();
                 domElement.trigger("create");
-                removeButton.click(function () {
-                    _this.actions.splice(actionIndex, 1);
-                    _this.show(domElement);
-                });
+                this.setRemoveHandler(removeButton, i, domElement);
             }
             var newActionDiv = $("<div class='ui-grid-a'></div>");
             var selectActionDiv = $("<div class='ui-block-a'></div>");

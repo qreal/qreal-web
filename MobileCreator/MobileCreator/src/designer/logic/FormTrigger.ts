@@ -35,6 +35,13 @@ export class FormTrigger {
     public addAction(action: mAction.Action) {
         this.actions.push(action);
     }
+    private setRemoveHandler(element: JQuery, i, domElement: JQuery) {
+        var _this = this;
+        element.click(function () {
+            _this.actions.splice(i, 1);
+            _this.show(domElement);
+        });
+    }
     public show(domElement: JQuery) {
         var _this = this;
         domElement.empty();
@@ -48,10 +55,7 @@ export class FormTrigger {
             containDiv.append(removeButton);
             removeButton.button();
             domElement.trigger("create");
-            removeButton.click(function () {
-                _this.actions.splice(actionIndex, 1);
-                _this.show(domElement);
-            });
+            this.setRemoveHandler(removeButton, i, domElement);
         }
         var newActionDiv = $("<div class='ui-grid-a'></div>");
         var selectActionDiv = $("<div class='ui-block-a'></div>");

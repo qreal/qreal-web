@@ -112,6 +112,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
                 }
                 trigger.show($("#triggerDiv"));
             });
+            Designer.activeForm.Triggers[0].show($("#triggerDiv"));
         };
         Designer.prototype.changeActiveForm = function (formName) {
             $("#propertiesEditor").empty();
