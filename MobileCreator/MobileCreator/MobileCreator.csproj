@@ -40,6 +40,15 @@
     <TypeScriptCompile Include="src\emulator\model\attributes\WebViewTag.ts" />
     <TypeScriptCompile Include="src\designer\widgets\WidgetTypes.ts" />
     <Content Include="images\imageview.png" />
+    <Content Include="lib\bing\mapcontrol.js" />
+    <Content Include="lib\bing\Microsoft.Maps.AdvancedShapes.d.ts" />
+    <Content Include="lib\bing\Microsoft.Maps.All.d.ts" />
+    <Content Include="lib\bing\Microsoft.Maps.d.ts" />
+    <Content Include="lib\bing\Microsoft.Maps.Overlay.Style.d.ts" />
+    <Content Include="lib\bing\Microsoft.Maps.Search.d.ts" />
+    <Content Include="lib\bing\Microsoft.Maps.Themes.BingTheme.d.ts" />
+    <Content Include="lib\bing\Microsoft.Maps.Traffic.d.ts" />
+    <Content Include="lib\bing\Microsoft.Maps.VenueMaps.d.ts" />
     <Content Include="res\application5.xml" />
     <Content Include="res\info2.xml" />
     <Content Include="res\main2.xml" />
@@ -58,6 +67,14 @@
     <Content Include="src\designer\logic\Action.js">
       <DependentUpon>Action.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="src\designer\logic\CodeBlock.ts" />
+    <TypeScriptCompile Include="src\designer\logic\ActionTypes.ts" />
+    <Content Include="src\designer\logic\ActionTypes.js">
+      <DependentUpon>ActionTypes.ts</DependentUpon>
+    </Content>
+    <Content Include="src\designer\logic\CodeBlock.js">
+      <DependentUpon>CodeBlock.ts</DependentUpon>
+    </Content>
     <Content Include="src\designer\logic\FormTrigger.js">
       <DependentUpon>FormTrigger.ts</DependentUpon>
     </Content>
@@ -65,7 +82,6 @@
     <Content Include="src\designer\logic\IfAction.js">
       <DependentUpon>IfAction.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="src\designer\logic\SeqAction.ts" />
     <TypeScriptCompile Include="src\designer\logic\LoginRequestAction.ts" />
     <Content Include="src\designer\logic\LoginRequestAction.js">
       <DependentUpon>LoginRequestAction.ts</DependentUpon>
@@ -77,9 +93,6 @@
     </Content>
     <Content Include="src\designer\logic\SaveSessionAction.js">
       <DependentUpon>SaveSessionAction.ts</DependentUpon>
-    </Content>
-    <Content Include="src\designer\logic\SeqAction.js">
-      <DependentUpon>SeqAction.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\designer\logic\TransitionAction.ts" />
     <TypeScriptCompile Include="src\designer\logic\ShowMapAction.ts" />
@@ -196,6 +209,9 @@
     <Content Include="src\emulator\model\ui\Map.js">
       <DependentUpon>Map.ts</DependentUpon>
     </Content>
+    <Content Include="src\emulator\model\ui\Map.min.js">
+      <DependentUpon>Map.ts</DependentUpon>
+    </Content>
     <Content Include="src\emulator\model\ui\WebView.js">
       <DependentUpon>WebView.ts</DependentUpon>
     </Content>
@@ -302,6 +318,9 @@
     <Content Include="src\emulator\model\logic\Logic.js.map">
       <DependentUpon>Logic.ts</DependentUpon>
     </Content>
+    <Content Include="src\emulator\model\ui\Map.js.map">
+      <DependentUpon>Map.ts</DependentUpon>
+    </Content>
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -309,6 +328,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

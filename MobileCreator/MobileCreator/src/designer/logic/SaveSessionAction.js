@@ -3,12 +3,15 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "designer/logic/Action"], function(require, exports, __mAction__) {
+define(["require", "exports", "designer/logic/Action", "designer/logic/ActionTypes"], function(require, exports, __mAction__, __mActionTypes__) {
     var mAction = __mAction__;
+
+    var mActionTypes = __mActionTypes__;
 
     var SaveSessionAction = (function (_super) {
         __extends(SaveSessionAction, _super);
         function SaveSessionAction() {
+            this.ActionType = mActionTypes.ActionTypes.SaveSession;
                 _super.call(this);
         }
         SaveSessionAction.prototype.toXML = function () {

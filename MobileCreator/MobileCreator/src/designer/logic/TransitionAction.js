@@ -3,15 +3,18 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "designer/logic/Action", "designer/Designer"], function(require, exports, __mAction__, __mDesigner__) {
+define(["require", "exports", "designer/logic/Action", "designer/Designer", "designer/logic/ActionTypes"], function(require, exports, __mAction__, __mDesigner__, __mActionTypes__) {
     var mAction = __mAction__;
 
     var mDesigner = __mDesigner__;
+
+    var mActionTypes = __mActionTypes__;
 
     var TransitionAction = (function (_super) {
         __extends(TransitionAction, _super);
         function TransitionAction(formId) {
                 _super.call(this);
+            this.ActionType = mActionTypes.ActionTypes.Transition;
             this.formId = formId;
         }
         Object.defineProperty(TransitionAction.prototype, "FormId", {

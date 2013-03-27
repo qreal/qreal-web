@@ -1,10 +1,12 @@
 import mAction = module("designer/logic/Action");
+import mActionTypes = module("designer/logic/ActionTypes");
 
 export class PatientsRequestAction extends mAction.Action {
     private url: string;
 
     constructor(url: string) {
         super();
+        this.ActionType = mActionTypes.ActionTypes.PatientsRequest;
         this.url = url;
     }
 
