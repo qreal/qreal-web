@@ -6,6 +6,7 @@ import mTransitionAction = module("designer/logic/TransitionAction")
 import mShowMapAction = module("designer/logic/ShowMapAction")
 import mPatientsRequestAction = module("designer/logic/PatientsRequestAction")
 import mLoginRequestAction = module("designer/logic/LoginRequestAction")
+import mIfAction = module("designer/logic/IfAction")
 
 export class CodeBlock {
     private marginLeft;
@@ -92,6 +93,10 @@ export class CodeBlock {
                     break;
                 case "login":
                     _this.addAction(new mLoginRequestAction.LoginRequestAction("http://localhost:54321"));
+                    _this.show(domElement);
+                    break;
+                case "if":
+                    _this.addAction(new mIfAction.IfAction(_this.marginLeft));
                     _this.show(domElement);
                     break;
             }

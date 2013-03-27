@@ -1,4 +1,4 @@
-define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logic/TransitionAction", "designer/logic/ShowMapAction", "designer/logic/PatientsRequestAction", "designer/logic/LoginRequestAction"], function(require, exports, __mSaveSessionAction__, __mTransitionAction__, __mShowMapAction__, __mPatientsRequestAction__, __mLoginRequestAction__) {
+define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logic/TransitionAction", "designer/logic/ShowMapAction", "designer/logic/PatientsRequestAction", "designer/logic/LoginRequestAction", "designer/logic/IfAction"], function(require, exports, __mSaveSessionAction__, __mTransitionAction__, __mShowMapAction__, __mPatientsRequestAction__, __mLoginRequestAction__, __mIfAction__) {
     
     var mSaveSessionAction = __mSaveSessionAction__;
 
@@ -9,6 +9,8 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
     var mPatientsRequestAction = __mPatientsRequestAction__;
 
     var mLoginRequestAction = __mLoginRequestAction__;
+
+    var mIfAction = __mIfAction__;
 
     var CodeBlock = (function () {
         function CodeBlock(marginLeft) {
@@ -97,6 +99,10 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
                         break;
                     case "login":
                         _this.addAction(new mLoginRequestAction.LoginRequestAction("http://localhost:54321"));
+                        _this.show(domElement);
+                        break;
+                    case "if":
+                        _this.addAction(new mIfAction.IfAction(_this.marginLeft));
                         _this.show(domElement);
                         break;
                 }
