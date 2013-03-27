@@ -275,35 +275,40 @@ patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> str
                 appendXaml <| "\n" + depthTab + "<phone:WebBrowser x:Name=\"" + name + "\" IsScriptEnabled=\"True\" Height=\"763\" Width=\"475\" />"
                 appendConstructor <| "\n" + name + ".Navigate(new Uri(\"" + reader.GetAttribute("url") + "\", UriKind.RelativeOrAbsolute));"
             | "Map" ->
-                appendXaml <| "\n" + depthTab + "<maps:Map Name=\"mapPlace\" HorizontalAlignment=\"Stretch\" VerticalAlignment=\"Stretch\"
+                let name = reader.GetAttribute("id")
+                appendXaml <| "\n" + depthTab + "<maps:Map Name=\"" + name + "\" HorizontalAlignment=\"Stretch\" VerticalAlignment=\"Stretch\"
             ScaleVisibility=\"Visible\"
             Height=\"768\"
             ZoomBarVisibility=\"Visible\"
             CopyrightVisibility=\"Collapsed\"
             CredentialsProvider=\"Al8CCFBXNKVlW0cm4lfHbXmzMmuiHr96NmftGF25_hI0hxtaVLeQ7KvIeHacrDBh\" >
         </maps:Map>"
-                appendConstructor <| "\nPushpinLayer = new MapLayer();
-mapPlace.Children.Add(PushpinLayer);"
+                appendConstructor <| "\nPushpinLayer = new MapLayer();\n" + name + ".Children.Add(PushpinLayer);\n" + name + ".SetView(new GeoCoordinate(59.95, 30.311667), 14);
+PairComparer pairComparer = new PairComparer();
+pushpins = new Dictionary<Pair, string>(pairComparer);"
                 appendAdditions <| "\nprivate void createPushpin(string latitude, string longitude, string comment)
 {
     double x = Convert.ToDouble(latitude);
     double y = Convert.ToDouble(longitude);
+    Pair currentPair = new Pair(x, y);
 
-    Pushpin pushpin = new Pushpin();
-    pushpin.Background = new SolidColorBrush(Colors.Red);
-    pushpin.Tap += new EventHandler<GestureEventArgs>(pushPin_Tap);
-    pushpin.Location = new GeoCoordinate(x, y);
-    mapPlace.SetView(new GeoCoordinate(x, y), 14);
-    Border border = new Border();
-    border.Visibility = System.Windows.Visibility.Collapsed;
-    border.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-    pushpin.Content = border;
-    StackPanel panel = new StackPanel();
-    TextBlock text = new TextBlock();
-    text.Text = comment;
-    border.Child = text;
-    PushpinLayer.AddChild(pushpin, pushpin.Location);
-
+    if (!pushpins.ContainsKey(currentPair))
+    {
+        pushpins.Add(currentPair, comment);
+        Pushpin pushpin = new Pushpin();
+        pushpin.Background = new SolidColorBrush(Colors.Red);
+        pushpin.Tap += new EventHandler<GestureEventArgs>(pushPin_Tap);
+        pushpin.Location = new GeoCoordinate(x, y);
+        Border border = new Border();
+        border.Visibility = System.Windows.Visibility.Collapsed;
+        border.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+        pushpin.Content = border;
+        StackPanel panel = new StackPanel();
+        TextBlock text = new TextBlock();
+        text.Text = comment;
+        border.Child = text;
+        PushpinLayer.AddChild(pushpin, pushpin.Location);
+    }
 }
 
 private void pushPin_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -320,7 +325,34 @@ private void pushPin_Tap(object sender, System.Windows.Input.GestureEventArgs e)
     e.Handled = true;
 }
 
-private MapLayer PushpinLayer;"
+private class Pair
+{
+    public Pair(double first, double second)
+    {
+        this.First = first;
+        this.Second = second;
+    }
+
+    public double First { get; set; }
+    public double Second { get; set; }
+};
+
+private class PairComparer : IEqualityComparer<Pair>
+{
+
+    public bool Equals(Pair x, Pair y)
+    {
+        return (x.First == y.First) && (x.Second == y.Second);
+    }
+
+    public int GetHashCode(Pair obj)
+    {
+        return obj.First.GetHashCode() + obj.Second.GetHashCode();
+    }
+};
+
+private MapLayer PushpinLayer;
+private Dictionary<Pair, string> pushpins;"
             | _ -> ()
 
         with | :? XmlException as e ->
