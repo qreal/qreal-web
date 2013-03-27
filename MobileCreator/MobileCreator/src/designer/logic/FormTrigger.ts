@@ -5,6 +5,7 @@ import mSaveSessionAction = module("designer/logic/SaveSessionAction")
 import mTransitionAction = module("designer/logic/TransitionAction")
 import mShowMapAction = module("designer/logic/ShowMapAction")
 import mPatientsRequestAction = module("designer/logic/PatientsRequestAction")
+import mLoginRequestAction = module("designer/logic/LoginRequestAction")
 
 export class FormTrigger {
     private formId: string;
@@ -100,6 +101,10 @@ export class FormTrigger {
                     break;
                 case "patients":
                     _this.addAction(new mPatientsRequestAction.PatientsRequestAction("someURL"));
+                    _this.show(domElement);
+                    break;
+                case "login":
+                    _this.addAction(new mLoginRequestAction.LoginRequestAction("someURL"));
                     _this.show(domElement);
                     break;
             }
