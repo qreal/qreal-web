@@ -40,6 +40,15 @@ export class IfAction extends mAction.Action {
         var thenBlockDiv = $("<div></div>");
         domElement.append(thenBlockDiv);
         this.thenBlock.show(thenBlockDiv);
+        var elseDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
+        elseDiv.css("margin-left", this.marginLeft + "px");
+        domElement.append(elseDiv);
+        var elseBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>else</a>");
+        elseDiv.append(elseBlock);
+        elseBlock.button();
+        var elseBlockDiv = $("<div></div>");
+        domElement.append(elseBlockDiv);
+        this.elseBlock.show(elseBlockDiv);
     }
 
     get Expression() {
