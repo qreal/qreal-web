@@ -12,6 +12,12 @@ define(["require", "exports", "designer/logic/Action"], function(require, export
                 _super.call(this);
             this.url = url;
         }
+        PatientsRequestAction.prototype.show = function (domeElement) {
+            var _this = this;
+            var getPatientsBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>Get patients from server</a>");
+            domeElement.append(getPatientsBlock);
+            getPatientsBlock.button();
+        };
         Object.defineProperty(PatientsRequestAction.prototype, "Url", {
             get: function () {
                 return this.url;

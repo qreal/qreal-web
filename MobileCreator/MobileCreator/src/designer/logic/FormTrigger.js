@@ -1,8 +1,12 @@
-define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logic/TransitionAction"], function(require, exports, __mSaveSessionAction__, __mTransitionAction__) {
+define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logic/TransitionAction", "designer/logic/ShowMapAction", "designer/logic/PatientsRequestAction"], function(require, exports, __mSaveSessionAction__, __mTransitionAction__, __mShowMapAction__, __mPatientsRequestAction__) {
     
     var mSaveSessionAction = __mSaveSessionAction__;
 
     var mTransitionAction = __mTransitionAction__;
+
+    var mShowMapAction = __mShowMapAction__;
+
+    var mPatientsRequestAction = __mPatientsRequestAction__;
 
     var FormTrigger = (function () {
         function FormTrigger(formId, triggerName) {
@@ -98,6 +102,14 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
                         break;
                     case "transition":
                         _this.addAction(new mTransitionAction.TransitionAction("main"));
+                        _this.show(domElement);
+                        break;
+                    case "showMap":
+                        _this.addAction(new mShowMapAction.ShowMapAction(""));
+                        _this.show(domElement);
+                        break;
+                    case "patients":
+                        _this.addAction(new mPatientsRequestAction.PatientsRequestAction("someURL"));
                         _this.show(domElement);
                         break;
                 }
