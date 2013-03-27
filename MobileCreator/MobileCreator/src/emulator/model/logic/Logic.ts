@@ -55,7 +55,7 @@ export class FunctionFactory {
 
     public sendLoginRequest(url: string, login: string, password: string): void {
         this.logger.log("sendLoginRequest: url=" + url + " login=" + login + " password=" + password);
-        var parameters = jQuery.param({
+        var parameters = "login?"+jQuery.param({
             login: login,
             password: password
         });

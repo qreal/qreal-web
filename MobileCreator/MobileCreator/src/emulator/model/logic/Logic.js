@@ -51,7 +51,7 @@ define(["require", "exports", "emulator/model/Emulator", "emulator/model/manager
         };
         FunctionFactory.prototype.sendLoginRequest = function (url, login, password) {
             this.logger.log("sendLoginRequest: url=" + url + " login=" + login + " password=" + password);
-            var parameters = jQuery.param({
+            var parameters = "login?" + jQuery.param({
                 login: login,
                 password: password
             });

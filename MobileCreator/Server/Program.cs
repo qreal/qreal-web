@@ -26,7 +26,7 @@ namespace Server {
     }
 
     class DB {
-        private static string sqlConn = "Data Source=.\\SQLEXPRESS;Initial Catalog=Doctor;Integrated Security=True";
+        private static string sqlConn = "Data Source=(local);Initial Catalog=Doctor;Integrated Security=True";
         private static SqlConnection doctorDB = new SqlConnection(sqlConn);
 
         public static void Open() { doctorDB.Open(); }
