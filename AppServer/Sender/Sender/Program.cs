@@ -39,11 +39,11 @@ namespace Sender {
         static void process(string login) {
             Console.WriteLine("Start " + login);
             var json = new System.Web.Script.Serialization.JavaScriptSerializer();
-            var a = HttpPost("http://localhost:54321/", "Login:" + json.Serialize(new Login(login, "password")), true);
+            var a = HttpPost("http://localhost:54321/", "Login?login=" + login + "&password=password", true);
             Console.WriteLine(a);
-            var coords = HttpPost("http://localhost:54321/", "coordinates:", false);
+            var coords = HttpPost("http://localhost:54321/", "coordinates", false);
             Console.WriteLine(coords);
-            HttpPost("http://localhost:54321/", "logout:", false);
+            HttpPost("http://localhost:54321/", "logout", false);
         }
 
         static void Main(string[] args) {

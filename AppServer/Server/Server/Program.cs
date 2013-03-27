@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Data.SqlClient;
 using System.Collections.Generic;
+using System.Web;
 
 namespace Server {
     public class Login {
@@ -25,7 +26,7 @@ namespace Server {
     }
 
     class DB {
-        private static string sqlConn = "Data Source=(local);Initial Catalog=Doctor;Integrated Security=True";
+        private static string sqlConn = "Data Source=.\\SQLEXPRESS;Initial Catalog=Doctor;Integrated Security=True";
         private static SqlConnection doctorDB = new SqlConnection(sqlConn);
 
         public static void Open() { doctorDB.Open(); }
@@ -63,7 +64,7 @@ namespace Server {
 
         public static Coordinate[] getCoordinates(int id) {
             Console.WriteLine("Getting " + id);
-            var sql = "SELECT x,y,comment FROM [Coordinates] us WHERE us.id = @id";
+            var sql = "SELECT x,y FROM [Coordinates] us WHERE us.id = @id";
             var cmd = new SqlCommand(sql, doctorDB);
             cmd.Parameters.AddWithValue("@id", id);
             var res = new List<Coordinate>();
@@ -143,17 +144,24 @@ namespace Server {
                     string input = new StreamReader(context.Request.InputStream).ReadToEnd();
                     string msg = context.Request.HttpMethod + " " + context.Request.Url;
                     Console.Write(msg);
+                    context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                    context.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
                     StringBuilder sb = new StringBuilder();
 
-                    var delimiter = input.IndexOf(":");
+                    var delimiter = input.IndexOf("?");
+                    var data = "";
+                    if (delimiter == -1) {
+                        delimiter = input.Length;
+                    } else {
+                        data = input.Substring(delimiter + 1);
+                    }
                     var name = input.Substring(0, delimiter);
-                    var data = input.Substring(delimiter + 1);
                     Console.WriteLine(" " + name);
-                    var json = new System.Web.Script.Serialization.JavaScriptSerializer();
 
                     if (name.ToLower() == "login") {
-                        var login = json.Deserialize<Login>(data);
+                        var parameters = HttpUtility.ParseQueryString(data);
+                        var login = new Login(parameters["login"], parameters["password"]); //json.Deserialize<Login>(data);
                         var id = DB.checkLogin(login.login, login.password);
                         if (id != -1) {
                             var loginCookie = new Cookie();
@@ -188,6 +196,7 @@ namespace Server {
                             var id = DB.checkCookie(cook.Value);
                             if (id != -1) {
                                 var coords = DB.getCoordinates(id);
+                                var json = new System.Web.Script.Serialization.JavaScriptSerializer();
                                 sb.Append(json.Serialize(coords));
                             }
                         }

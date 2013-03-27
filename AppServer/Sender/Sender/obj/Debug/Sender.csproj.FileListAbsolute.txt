@@ -4,6 +4,3 @@ C:\Projects\Movies\Sender\Sender\bin\Debug\Sender.pdb
 C:\Projects\Movies\Sender\Sender\obj\Debug\Sender.exe
 C:\Projects\Movies\Sender\Sender\obj\Debug\Sender.pdb
 C:\Projects\Movies\Sender\Sender\obj\Debug\Sender.csprojResolveAssemblyReference.cache
-C:\Users\Nadusha\Downloads\Http\Sender\Sender\bin\Debug\Sender.exe.config
-C:\Users\Nadusha\Downloads\Http\Sender\Sender\obj\Debug\Sender.exe
-C:\Users\Nadusha\Downloads\Http\Sender\Sender\obj\Debug\Sender.pdb
