@@ -66,3 +66,4 @@ define(["require", "exports", "designer/preferences/ElementPreferences"], functi
     })(mElementPreferences.ElementPreferences);
     exports.ButtonPreferences = ButtonPreferences;    
 })
+//@ sourceMappingURL=ButtonPreferences.js.map

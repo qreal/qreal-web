@@ -1,6 +1,7 @@
 //#region Imports
 import mLog = module("utils/log/Log");
-import mTrigger = module("emulator/model/logic/Trigger");
+import mEmulator = module("emulator/model/Emulator");
+import mEventManager = module("emulator/model/managers/EventManager");
 import mXmlHelper = module("utils/XmlHelper");
 import mButton = module("emulator/model/ui/Button");
 import mControl = module("emulator/model/ui/Control");
@@ -20,7 +21,6 @@ export class Page {
 
     private root: mControl.Control;
     private name: string;
-    private triggers: mTrigger.Trigger[] = [];
     private timerToken: number;
 
     constructor(name: string, root: mControl.Control) {
@@ -30,26 +30,13 @@ export class Page {
     }
 
     public onShow(): void {
-        this.trigger(mTrigger.Trigger.OnShow);
-        this.timerToken = setInterval(() => this.trigger(mTrigger.Trigger.OnTimer), 5000);
+        mEmulator.Emulator.instance.EventManager.trigger(name, mEventManager.EventManager.OnShow);
+        this.timerToken = setInterval(() =>
+            mEmulator.Emulator.instance.EventManager.trigger(name, mEventManager.EventManager.OnTimer), 10000);
     }
 
     public onHide(): void {
         clearTimeout(this.timerToken);
-    }
-
-    public addTrigger(trigger: mTrigger.Trigger) {
-        Page.logger.log("addTrigger: " + trigger.Event);
-        this.triggers.push(trigger);
-    }
-
-    public trigger(event: string) {
-        Page.logger.log("trigger: " + event);
-        this.triggers.forEach(function (trigger: mTrigger.Trigger, index: number, array: mTrigger.Trigger[]) {
-            if (trigger.Event == event) {
-                trigger.Trigger(this);
-            }
-        });
     }
 
     get Root(): mControl.Control {

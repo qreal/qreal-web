@@ -56,3 +56,4 @@ define(["require", "exports", "designer/preferences/ElementPreferences"], functi
     })();
     exports.Element = Element;    
 })
+//@ sourceMappingURL=Element.js.map

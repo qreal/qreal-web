@@ -8,14 +8,6 @@ export class Control {
     get $Control(): JQuery { return this.$control; }
     set $Control(value: JQuery) { this.$control = value; }
 
-    private onAction: Function;
-    set OnAction(value:Function) {
-        this.onAction = value;
-    }
-    get OnAction():Function {
-        return this.onAction;
-    }
-
     // Tag with control data
     private tag: mControlTag.ControlTag;
     get Tag(): mControlTag.ControlTag { return this.tag; }

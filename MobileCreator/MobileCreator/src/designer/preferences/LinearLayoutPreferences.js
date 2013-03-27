@@ -38,3 +38,4 @@ define(["require", "exports", "designer/preferences/ElementPreferences"], functi
     })(mElementPreferences.ElementPreferences);
     exports.LinearLayoutPreferences = LinearLayoutPreferences;    
 })
+//@ sourceMappingURL=LinearLayoutPreferences.js.map

@@ -34,3 +34,4 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "desig
     })();
     exports.Application = Application;    
 })
+//@ sourceMappingURL=Application.js.map

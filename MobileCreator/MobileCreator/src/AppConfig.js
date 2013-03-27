@@ -6,3 +6,4 @@ define(["require", "exports", "./Application"], function(require, exports, __mai
         appMain.onCreate();
     });
 })
+//@ sourceMappingURL=AppConfig.js.map

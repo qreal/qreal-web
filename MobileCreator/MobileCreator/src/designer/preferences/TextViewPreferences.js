@@ -56,3 +56,4 @@ define(["require", "exports", "designer/preferences/ElementPreferences"], functi
     })(mElementPreferences.ElementPreferences);
     exports.TextViewPreferences = TextViewPreferences;    
 })
+//@ sourceMappingURL=TextViewPreferences.js.map

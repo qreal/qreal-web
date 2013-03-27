@@ -36,3 +36,4 @@ define(["require", "exports", "designer/preferences/ElementPreferences"], functi
     })(mElementPreferences.ElementPreferences);
     exports.WebViewPreferences = WebViewPreferences;    
 })
+//@ sourceMappingURL=WebViewPreference.js.map

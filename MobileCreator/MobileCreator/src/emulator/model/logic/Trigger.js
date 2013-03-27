@@ -5,10 +5,6 @@ define(["require", "exports"], function(require, exports) {
             this.eventType = eventType;
             this.trigger = trigger;
         }
-        Trigger.OnShow = 'onShow';
-        Trigger.OnTimer = 'onTimer';
-        Trigger.OnLoginResponse = 'onLoginResponse';
-        Trigger.OnPatientsResponse = 'onPatientsResponse';
         Object.defineProperty(Trigger.prototype, "PageId", {
             get: function () {
                 return this.pageId;
@@ -34,3 +30,4 @@ define(["require", "exports"], function(require, exports) {
     })();
     exports.Trigger = Trigger;    
 })
+//@ sourceMappingURL=Trigger.js.map

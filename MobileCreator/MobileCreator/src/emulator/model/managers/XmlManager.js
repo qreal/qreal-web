@@ -1,9 +1,11 @@
-define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "emulator/model/logic/Trigger", "emulator/model/Page", "emulator/model/ui/TextView", "emulator/model/ui/Button", "emulator/model/ui/Input", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/ControlTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/InputTag", "emulator/model/attributes/ImageViewTag", "emulator/model/attributes/WebViewTag"], function(require, exports, __mLog__, __mLogic__, __mTrigger__, __mPage__, __mTextView__, __mButton__, __mInput__, __mImageView__, __mWebView__, __mLinearLayout__, __mLinearLayoutTag__, __mControlTag__, __mTextViewTag__, __mButtonTag__, __mInputTag__, __mImageViewTag__, __mWebViewTag__) {
+define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "emulator/model/logic/Trigger", "emulator/model/managers/EventManager", "emulator/model/Page", "emulator/model/ui/TextView", "emulator/model/ui/Button", "emulator/model/ui/Input", "emulator/model/ui/ImageView", "emulator/model/ui/WebView", "emulator/model/ui/LinearLayout", "emulator/model/attributes/LinearLayoutTag", "emulator/model/attributes/ControlTag", "emulator/model/attributes/TextViewTag", "emulator/model/attributes/ButtonTag", "emulator/model/attributes/InputTag", "emulator/model/attributes/ImageViewTag", "emulator/model/attributes/WebViewTag"], function(require, exports, __mLog__, __mLogic__, __mTrigger__, __mEventManager__, __mPage__, __mTextView__, __mButton__, __mInput__, __mImageView__, __mWebView__, __mLinearLayout__, __mLinearLayoutTag__, __mControlTag__, __mTextViewTag__, __mButtonTag__, __mInputTag__, __mImageViewTag__, __mWebViewTag__) {
     var mLog = __mLog__;
 
     var mLogic = __mLogic__;
 
     var mTrigger = __mTrigger__;
+
+    var mEventManager = __mEventManager__;
 
     
     
@@ -144,7 +146,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
         };
         XmlManager.prototype.parseActionTrigger = function (node) {
             var controlId = node.attributes['control-id'].value;
-            var event = 'action';
+            var event = mEventManager.EventManager.OnAction;
             this.logger.log("parseTrigger formId=" + controlId + " event=" + event);
             var triggerFunc;
             var length = node.childNodes.length;
@@ -416,3 +418,4 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
     })();
     exports.XmlManager = XmlManager;    
 })
+//@ sourceMappingURL=XmlManager.js.map

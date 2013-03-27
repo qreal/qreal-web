@@ -24,3 +24,4 @@ define(["require", "exports", "designer/logic/Action"], function(require, export
     })(mAction.Action);
     exports.SaveSessionAction = SaveSessionAction;    
 })
+//@ sourceMappingURL=SaveSessionAction.js.map

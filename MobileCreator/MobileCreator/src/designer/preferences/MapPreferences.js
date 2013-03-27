@@ -26,3 +26,4 @@ define(["require", "exports", "designer/preferences/ElementPreferences"], functi
     })(mElementPreferences.ElementPreferences);
     exports.MapPreferences = MapPreferences;    
 })
+//@ sourceMappingURL=MapPreferences.js.map

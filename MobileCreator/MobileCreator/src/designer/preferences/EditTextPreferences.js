@@ -66,3 +66,4 @@ define(["require", "exports", "designer/preferences/ElementPreferences"], functi
     })(mElementPreferences.ElementPreferences);
     exports.EditTextPreferences = EditTextPreferences;    
 })
+//@ sourceMappingURL=EditTextPreferences.js.map

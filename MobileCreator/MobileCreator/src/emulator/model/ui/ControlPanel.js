@@ -32,3 +32,4 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
     })(mControl.Control);
     exports.ControlPanel = ControlPanel;    
 })
+//@ sourceMappingURL=ControlPanel.js.map

@@ -51,3 +51,4 @@ define(["require", "exports", "designer/widgets/WidgetTypes"], function(require,
     })();
     exports.ElementPreferences = ElementPreferences;    
 })
+//@ sourceMappingURL=ElementPreferences.js.map

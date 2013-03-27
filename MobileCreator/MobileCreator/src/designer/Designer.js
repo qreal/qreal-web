@@ -275,3 +275,4 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
     })();
     exports.Designer = Designer;    
 })
+//@ sourceMappingURL=Designer.js.map

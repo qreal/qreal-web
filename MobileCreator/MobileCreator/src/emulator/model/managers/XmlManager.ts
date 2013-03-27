@@ -3,6 +3,7 @@
 import mLog = module("utils/log/Log");
 import mLogic = module("emulator/model/logic/Logic");
 import mTrigger = module("emulator/model/logic/Trigger");
+import mEventManager = module("emulator/model/managers/EventManager");
 import mEmulator = module("emulator/model/Emulator");
 import mControl = module("emulator/model/ui/Control");
 import mPage = module("emulator/model/Page");
@@ -151,7 +152,7 @@ export class XmlManager {
 
     private parseActionTrigger(node: Node): mTrigger.Trigger {
         var controlId: string = node.attributes['control-id'].value;
-        var event: string = 'action';
+        var event: string = mEventManager.EventManager.OnAction;
         this.logger.log("parseTrigger formId=" + controlId + " event=" + event);
         var triggerFunc;
         var length = node.childNodes.length;

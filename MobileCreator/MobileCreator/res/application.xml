@@ -31,64 +31,84 @@
   <forms>
     <form form_name="main">
       <LinearLayout
-      orientation="vertical" 
-      layout_width="fill_parent"
-      layout_height="fill_parent" 
-      background="#ffffff">
-        <TextView
-        layout_width="fill_parent" 
-        layout_height="wrap_content" 
-        layout_marginTop="10px"
-        padding="0px" 
-        text="Hello!"
-        textSize="26px" />
-        <TextView
-        layout_width="fill_parent" 
-        layout_height="wrap_content" 
-        layout_marginTop="10px" 
-        padding="0px" text="login:" 
-        textSize="26px" />
-        <EditText
+        orientation="vertical"
         layout_width="fill_parent"
-        layout_height="wrap_content" 
-        layout_marginTop="10px" 
-        id="editText3"
-        padding="0px" 
-        text="" 
-        textSize="26px" />
+        layout_height="fill_parent"
+        background="#ffffff">
         <TextView
-        layout_width="fill_parent" 
-        layout_height="wrap_content"
-        layout_marginTop="10px"
-        padding="0px" 
-        text="password:"
-        textSize="26px" />
+          layout_width="fill_parent"
+          layout_height="wrap_content"
+          layout_marginTop="10px"
+          padding="0px"
+          text="Hello!"
+          textSize="26px" />
+        <TextView
+          layout_width="fill_parent"
+          layout_height="wrap_content"
+          layout_marginTop="10px"
+          padding="0px" text="login:"
+          textSize="26px" />
         <EditText
-        layout_width="fill_parent" 
-        layout_height="wrap_content"
-        layout_marginTop="10px" 
-        id="editText5"
-        padding="0px"
-        text=""
-        textSize="26px" />
+          layout_width="fill_parent"
+          layout_height="wrap_content"
+          layout_marginTop="10px"
+          id="editText3"
+          padding="0px"
+          text=""
+          textSize="26px" />
+        <TextView
+          layout_width="fill_parent"
+          layout_height="wrap_content"
+          layout_marginTop="10px"
+          padding="0px"
+          text="password:"
+          textSize="18px" />
+        <EditText
+          layout_width="fill_parent"
+          layout_height="wrap_content"
+          layout_marginTop="10px"
+          id="editText5"
+          padding="0px"
+          text=""
+          textSize="18px" />
         <Button
-        layout_width="fill_parent" 
-        layout_height="wrap_content" 
-        layout_marginTop="20px" text="Submit" textSize="15px" id="button6" onClick="main" />
+          layout_width="fill_parent"
+          layout_height="wrap_content"
+          layout_marginTop="20px" 
+          text="Submit" 
+          textSize="15px" 
+          id="button6" 
+          onClick="main" />
       </LinearLayout>
     </form>
     <form form_name="fail">
       <LinearLayout
-      orientation="vertical" layout_width="fill_parent" layout_height="fill_parent" background="#ffffff">
+        orientation="vertical" 
+        layout_width="fill_parent" 
+        layout_height="fill_parent"
+        background="#ffffff">
         <TextView
-        layout_width="fill_parent" layout_height="wrap_content" layout_marginTop="10px" padding="0px" text="Fail!!!" textSize="50px" />
+          layout_width="fill_parent" 
+          layout_height="wrap_content" 
+          layout_marginTop="10px" 
+          padding="0px" 
+          text="Fail!!!" 
+          textSize="50px" />
       </LinearLayout>
     </form>
     <form form_name="map">
       <LinearLayout
-      orientation="vertical" layout_width="fill_parent" layout_height="fill_parent" background="#ffffff">
+        orientation="vertical" 
+        layout_width="fill_parent" 
+        layout_height="fill_parent" 
+        background="#ffffff">
         <TextView
-        layout_width="fill_parent" layout_height="wrap_content" layout_marginTop="10px" padding="0px" text="Map" textSize="26px" />
+          layout_width="fill_parent" 
+          layout_height="wrap_content" 
+          layout_marginTop="10px" 
+          padding="0px" 
+          text="Map" 
+          textSize="26px" />
       </LinearLayout>
     </form>
   </forms>

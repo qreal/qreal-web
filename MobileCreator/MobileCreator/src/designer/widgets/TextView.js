@@ -102,3 +102,4 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
     })(mElement.Element);
     exports.TextView = TextView;    
 })
+//@ sourceMappingURL=TextView.js.map

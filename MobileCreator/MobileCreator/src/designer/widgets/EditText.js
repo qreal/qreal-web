@@ -105,3 +105,4 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
     })(mElement.Element);
     exports.EditText = EditText;    
 })
+//@ sourceMappingURL=EditText.js.map

@@ -1,7 +1,9 @@
-define(["require", "exports", "utils/log/Log", "emulator/model/logic/Trigger"], function(require, exports, __mLog__, __mTrigger__) {
+define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emulator/model/managers/EventManager"], function(require, exports, __mLog__, __mEmulator__, __mEventManager__) {
     var mLog = __mLog__;
 
-    var mTrigger = __mTrigger__;
+    var mEmulator = __mEmulator__;
+
+    var mEventManager = __mEventManager__;
 
     
     
@@ -17,33 +19,19 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Trigger"], 
     
     var Page = (function () {
         function Page(name, root) {
-            this.triggers = [];
             Page.logger.log("Constructor name: " + name);
             this.name = name;
             this.root = root;
         }
         Page.logger = new mLog.Logger("Page");
         Page.prototype.onShow = function () {
-            var _this = this;
-            this.trigger(mTrigger.Trigger.OnShow);
+            mEmulator.Emulator.instance.EventManager.trigger(name, mEventManager.EventManager.OnShow);
             this.timerToken = setInterval(function () {
-                return _this.trigger(mTrigger.Trigger.OnTimer);
-            }, 5000);
+                return mEmulator.Emulator.instance.EventManager.trigger(name, mEventManager.EventManager.OnTimer);
+            }, 10000);
         };
         Page.prototype.onHide = function () {
             clearTimeout(this.timerToken);
-        };
-        Page.prototype.addTrigger = function (trigger) {
-            Page.logger.log("addTrigger: " + trigger.Event);
-            this.triggers.push(trigger);
-        };
-        Page.prototype.trigger = function (event) {
-            Page.logger.log("trigger: " + event);
-            this.triggers.forEach(function (trigger, index, array) {
-                if(trigger.Event == event) {
-                    trigger.Trigger(this);
-                }
-            });
         };
         Object.defineProperty(Page.prototype, "Root", {
             get: function () {
@@ -63,3 +51,4 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Trigger"], 
     })();
     exports.Page = Page;    
 })
+//@ sourceMappingURL=Page.js.map

@@ -21,16 +21,6 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(Control.prototype, "OnAction", {
-            get: function () {
-                return this.onAction;
-            },
-            set: function (value) {
-                this.onAction = value;
-            },
-            enumerable: true,
-            configurable: true
-        });
         Object.defineProperty(Control.prototype, "Tag", {
             get: function () {
                 return this.tag;
@@ -79,3 +69,4 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
     })();
     exports.Control = Control;    
 })
+//@ sourceMappingURL=Control.js.map

@@ -30,3 +30,4 @@ define(["require", "exports", "designer/logic/Action"], function(require, export
     })(mAction.Action);
     exports.ShowMapAction = ShowMapAction;    
 })
+//@ sourceMappingURL=ShowMapAction.js.map

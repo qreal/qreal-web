@@ -89,3 +89,4 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
     })(mElement.Element);
     exports.ImageView = ImageView;    
 })
+//@ sourceMappingURL=ImageView.js.map

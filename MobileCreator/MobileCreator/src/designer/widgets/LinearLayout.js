@@ -223,3 +223,4 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
     })(mElement.Element);
     exports.LinearLayout = LinearLayout;    
 })
+//@ sourceMappingURL=LinearLayout.js.map

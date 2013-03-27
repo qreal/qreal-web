@@ -13,3 +13,4 @@ define(["require", "exports"], function(require, exports) {
     })();
     exports.WidgetTypes = WidgetTypes;    
 })
+//@ sourceMappingURL=WidgetTypes.js.map

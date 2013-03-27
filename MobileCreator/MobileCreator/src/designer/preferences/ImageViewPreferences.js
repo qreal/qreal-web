@@ -56,3 +56,4 @@ define(["require", "exports", "designer/preferences/ElementPreferences"], functi
     })(mElementPreferences.ElementPreferences);
     exports.ImageViewPreferences = ImageViewPreferences;    
 })
+//@ sourceMappingURL=ImageViewPreferences.js.map

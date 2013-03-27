@@ -1,5 +1,6 @@
 import mLog = module("utils/log/Log");
 import mEmulator = module("emulator/model/Emulator");
+import mEventManager = module("emulator/model/managers/EventManager");
 import mControl = module("emulator/model/ui/Control");
 import mButtonTag = module("emulator/model/attributes/ButtonTag");
 import mControlTag = module("emulator/model/attributes/ControlTag");
@@ -21,14 +22,6 @@ export class Button extends mControl.Control {
         if (tag.Width == mControlTag.ControlTag.WrapContent) {
             $button.attr('data-inline', 'true');
         }
-
-        //TODO: test stub
-        if (tag.OnClick) {
-            this.OnAction = function () {
-                mEmulator.Emulator.instance.NavigationManager.showPage(tag.OnClick);
-            }
-        }
-        //endstub
         var _this = this;
         $button.bind('click', function () {
             _this.onClick(_this);
@@ -36,10 +29,7 @@ export class Button extends mControl.Control {
     }
 
     private onClick(button: Button): void {
-        var tag = <mButtonTag.ButtonTag> button.Tag;
-        Button.logger.log("onClick: " + tag.OnClick);
-        if (button.OnAction) {
-            button.OnAction();
-        }
+        Button.logger.log("onClick");
+        mEmulator.Emulator.instance.EventManager.trigger(this.Tag.Id, mEventManager.EventManager.OnAction);
     }
 }

@@ -49,7 +49,9 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
             var triggers = application.triggers;
             var _eventManager = this.eventManager;
             triggers.map(function (trigger) {
-                _eventManager.addTrigger(trigger);
+                return function (trigger) {
+                    _eventManager.addTrigger(trigger);
+                };
             });
             pages.map(function (page) {
                 return _this.addPage(page);
@@ -96,3 +98,4 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
     })();
     exports.Emulator = Emulator;    
 })
+//@ sourceMappingURL=Emulator.js.map

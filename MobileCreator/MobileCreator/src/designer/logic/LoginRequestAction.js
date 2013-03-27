@@ -52,3 +52,4 @@ define(["require", "exports", "designer/logic/Action"], function(require, export
     })(mAction.Action);
     exports.LoginRequestAction = LoginRequestAction;    
 })
+//@ sourceMappingURL=LoginRequestAction.js.map

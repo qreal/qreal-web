@@ -137,3 +137,4 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
     })();
     exports.FormTrigger = FormTrigger;    
 })
+//@ sourceMappingURL=FormTrigger.js.map

@@ -40,7 +40,7 @@
     <TypeScriptCompile Include="src\emulator\model\attributes\WebViewTag.ts" />
     <TypeScriptCompile Include="src\designer\widgets\WidgetTypes.ts" />
     <Content Include="images\imageview.png" />
-	<Content Include="res\application.xml" />
+    <Content Include="res\application.xml" />
     <Content Include="res\info2.xml" />
     <Content Include="res\main2.xml" />
     <Content Include="res\Transition.xml" />
@@ -150,6 +150,9 @@
     </Content>
     <TypeScriptCompile Include="src\emulator\model\managers\EventManager.ts" />
     <Content Include="src\emulator\model\managers\EventManager.js">
+      <DependentUpon>EventManager.ts</DependentUpon>
+    </Content>
+    <Content Include="src\emulator\model\managers\EventManager.min.js">
       <DependentUpon>EventManager.ts</DependentUpon>
     </Content>
     <Content Include="src\emulator\model\managers\NavigationManager.js">
@@ -322,10 +325,11 @@
   </ProjectExtensions>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptSourceMap> --module AMD</TypeScriptSourceMap>
+    <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
   <Target Name="BeforeBuild">
     <Message Text="Compiling TypeScript files" />
     <Message Text="Executing tsc$(TypeScriptSourceMap) @(TypeScriptCompile ->'&quot;%(fullpath)&quot;', ' ')" />
-    <Exec Command="tsc --target ES5 $(TypeScriptSourceMap) @(TypeScriptCompile ->'&quot;%(fullpath)&quot;', ' ')" />
+    <Exec Command="tsc -sourcemap --target ES5 $(TypeScriptSourceMap) @(TypeScriptCompile ->'&quot;%(fullpath)&quot;', ' ')" />
   </Target>
 </Project>

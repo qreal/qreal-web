@@ -56,7 +56,7 @@ export class Emulator {
         var pages = application.pages;
         var triggers = application.triggers;
         var _eventManager = this.eventManager;
-        triggers.map(function (trigger) {
+        triggers.map(trigger => function (trigger) {
             _eventManager.addTrigger(trigger);
         });
         pages.map(page => this.addPage(page));

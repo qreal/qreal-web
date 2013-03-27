@@ -118,3 +118,4 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
     })(mElement.Element);
     exports.Button = Button;    
 })
+//@ sourceMappingURL=Button.js.map

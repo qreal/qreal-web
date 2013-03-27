@@ -74,3 +74,4 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
     })(mElement.Element);
     exports.Map = Map;    
 })
+//@ sourceMappingURL=Map.js.map

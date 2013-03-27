@@ -50,3 +50,4 @@ define(["require", "exports", "designer/logic/Action", "designer/Designer"], fun
     })(mAction.Action);
     exports.TransitionAction = TransitionAction;    
 })
+//@ sourceMappingURL=TransitionAction.js.map

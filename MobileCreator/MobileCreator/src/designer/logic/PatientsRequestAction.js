@@ -30,3 +30,4 @@ define(["require", "exports", "designer/logic/Action"], function(require, export
     })(mAction.Action);
     exports.PatientsRequestAction = PatientsRequestAction;    
 })
+//@ sourceMappingURL=PatientsRequestAction.js.map
