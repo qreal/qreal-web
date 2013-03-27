@@ -13,8 +13,8 @@ export class IfAction extends mAction.Action {
         this.marginLeft = marginLeft;
         this.ActionType = mActionTypes.ActionTypes.If;
         this.expression = "loginSuccess";
-        this.thenBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
-        this.elseBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
+        this.thenBlock = new mCodeBlock.CodeBlock(marginLeft + 25);
+        this.elseBlock = new mCodeBlock.CodeBlock(marginLeft + 25);
     }
 
     public showIf(domElement: JQuery, removeButton: JQuery) {

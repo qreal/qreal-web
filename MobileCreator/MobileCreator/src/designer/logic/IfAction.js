@@ -17,8 +17,8 @@ define(["require", "exports", "designer/logic/Action", "designer/logic/CodeBlock
             this.marginLeft = marginLeft;
             this.ActionType = mActionTypes.ActionTypes.If;
             this.expression = "loginSuccess";
-            this.thenBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
-            this.elseBlock = new mCodeBlock.CodeBlock(marginLeft + 10);
+            this.thenBlock = new mCodeBlock.CodeBlock(marginLeft + 25);
+            this.elseBlock = new mCodeBlock.CodeBlock(marginLeft + 25);
         }
         IfAction.prototype.showIf = function (domElement, removeButton) {
             var containDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
