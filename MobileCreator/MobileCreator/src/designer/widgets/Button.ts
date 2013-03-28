@@ -118,6 +118,9 @@ export class Button extends mElement.Element {
         }
         onclickSelect.selectmenu();
         //select.selectmenu("refresh", true);*/
+        var onClickLabel = $("<label>OnClick:</label>");
+        onClickLabel.css("font-weight", "normal");
+        editorLayer.append(onClickLabel);
         var onClickDiv = $("<div></div>");
         editorLayer.append(onClickDiv);
         this.codeBlock.show(onClickDiv);

@@ -75,6 +75,9 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                 _this.init();
             });
             marginTopField.textinput();
+            var onClickLabel = $("<label>onClick:</label>");
+            onClickLabel.css("font-weight", "normal");
+            editorLayer.append(onClickLabel);
             var onClickDiv = $("<div></div>");
             editorLayer.append(onClickDiv);
             this.codeBlock.show(onClickDiv);
