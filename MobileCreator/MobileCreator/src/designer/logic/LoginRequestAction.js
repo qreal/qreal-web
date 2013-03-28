@@ -131,7 +131,7 @@ define(["require", "exports", "designer/logic/Action", "designer/widgets/WidgetT
             configurable: true
         });
         LoginRequestAction.prototype.toXML = function () {
-            var xml = "<transition url='" + this.url + "' login-id='" + this.loginId + "' password-id='" + this.passwordId + "' />\n";
+            var xml = "<login-request url='" + this.url + "' login-id='" + this.loginId + "' password-id='" + this.passwordId + "' />\n";
             return xml;
         };
         return LoginRequestAction;

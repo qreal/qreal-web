@@ -34,6 +34,24 @@ export class Designer {
     constructor() {
     }
 
+    private exportButtonsToXML() {
+        var xml = "";
+        for (var i = 0; i < Designer.forms.length; i++) {
+            var form = Designer.forms[i];
+            var baseLayout = <mLinearLayout.LinearLayout> form.Content[0];
+            for (var j = 0; j < baseLayout.Children.length; j++) {
+                var control = baseLayout.Children[j];
+                if (control.Preferences.WidgetType == mWidgetTypes.WidgetTypes.Button) {
+                    var codeBlock = (<mButton.Button> control).CodeBlock;
+                    xml += "<action control-id='" + (<mButton.Button> control).Preferences.ButtonId + "'>\n";
+                    xml += codeBlock.toXML();
+                    xml += "</action>\n";
+                }
+            }
+        }
+        return xml;
+    }
+
     public addForm(formName: string) {
         $("#propertiesEditor").empty();
         Designer.activeForm.hide()
@@ -57,7 +75,7 @@ export class Designer {
 
     private sendXml() {
         var xml = this.getXML();
-        alert(xml);
+        this.logger.log(xml);
         $.ajax("http://localhost:12345", {
             type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
                 window.location.assign("http://localhost/main-debug.apk");
@@ -68,6 +86,7 @@ export class Designer {
     public getXML() {
         var xml = "<application>\n"
         xml += "<logic>\n";
+        xml += this.exportButtonsToXML();
         for (var i = 0; i < Designer.forms.length; i++) {
             for (var j = 0; j < Designer.forms[i].Triggers.length; j++) {
                 xml += Designer.forms[i].Triggers[j].toXML();
