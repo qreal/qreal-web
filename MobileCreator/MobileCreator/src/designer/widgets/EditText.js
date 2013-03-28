@@ -97,8 +97,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             xmlString += "layout_marginTop=\"" + this.preferences.LayoutMarginTop + "px\" ";
             xmlString += "id=\"" + this.preferences.EditTextId + "\" ";
             xmlString += "padding=\"" + this.preferences.Padding + "px\" ";
-            xmlString += "text=\"" + this.preferences.Text + "\" ";
-            xmlString += "textSize=\"" + this.preferences.TextSize + "px\" />\n";
+            xmlString += "text=\"" + this.preferences.Text + "px\" />\n";
             return xmlString;
         };
         return EditText;

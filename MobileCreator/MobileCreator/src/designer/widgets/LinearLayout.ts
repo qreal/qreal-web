@@ -134,7 +134,7 @@ export class LinearLayout extends mElement.Element {
                         editTextPreferences.LayoutMarginTop = 10;
                         editTextPreferences.Padding = 0;
                         editTextPreferences.Text = "";
-                        editTextPreferences.TextSize = 26;
+                        //editTextPreferences.TextSize = 26;
                         editTextPreferences.Width = mElementPreferences.ElementPreferences.FillParent;
                         var editText = new mEditText.EditText(editTextPreferences);
                         _this.addChild(editText);
