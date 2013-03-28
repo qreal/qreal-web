@@ -19,4 +19,3 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
     })(mControl.Control);
     exports.WebView = WebView;    
 })
-//@ sourceMappingURL=WebView.js.map

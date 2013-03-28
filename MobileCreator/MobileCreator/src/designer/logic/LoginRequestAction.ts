@@ -117,7 +117,7 @@ export class LoginRequestAction extends mAction.Action {
         this.passwordId = passwordId;
     }
     public toXML() {
-        var xml = "<transition url='" + this.url + "' login-id='" + this.loginId + "' password-id='" + this.passwordId + "' />\n";
+        var xml = "<login-request url='" + this.url + "' login-id='" + this.loginId + "' password-id='" + this.passwordId + "' />\n";
         return xml;
     }
 }

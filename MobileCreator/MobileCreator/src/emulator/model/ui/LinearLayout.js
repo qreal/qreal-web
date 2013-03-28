@@ -24,4 +24,3 @@ define(["require", "exports", "emulator/model/ui/ControlPanel"], function(requir
     })(mControlPanel.ControlPanel);
     exports.LinearLayout = LinearLayout;    
 })
-//@ sourceMappingURL=LinearLayout.js.map

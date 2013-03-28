@@ -11,4 +11,3 @@ define(["require", "exports"], function(require, exports) {
     })();
     exports.Logger = Logger;    
 })
-//@ sourceMappingURL=Log.js.map

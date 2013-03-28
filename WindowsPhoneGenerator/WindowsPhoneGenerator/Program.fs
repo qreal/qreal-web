@@ -218,6 +218,7 @@ timer.Start();"
                     if triggers.Contains((fileName, "onLoginResponse")) then
                         appendAdditions <| "\nprivate string seesionId;"
                         appendAdditions <| loginRequest.ToString()
+                        loginRequest.Clear() |> ignore
                         appendAdditions <| "\nprivate void GetResponsetStreamCallback(IAsyncResult callbackResult)
 {
 HttpWebRequest request = (HttpWebRequest)callbackResult.AsyncState;
@@ -228,10 +229,12 @@ using (StreamReader httpWebStreamReader = new StreamReader(response.GetResponseS
 result = httpWebStreamReader.ReadToEnd();
 }
 
-bool loginSuccessful = false;
-if (!(result.Equals(\"fail\")))
+bool serverResponseSuccess = false;
+bool serverResponseFail = true;
+if (!result.Equals(\"fail\"))
 {
-loginSuccessful = true;\n}" + (triggers.Item((fileName, "onLoginResponse")) :?> string) + "\n}"
+serverResponseSuccess = true;
+serverResponseFail = false;\n}" + (triggers.Item((fileName, "onLoginResponse")) :?> string) + "\n}"
 
                     if triggers.Contains((fileName, "onPatientsResponse")) then
                         appendAdditions <| "\nprivate string patients;"
@@ -250,18 +253,18 @@ patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> str
                 let textSize = getNumber(reader.GetAttribute("textSize"))
                 appendXaml <| "\n" + depthTab + "<TextBlock Text=\"" + reader.GetAttribute("text") + "\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
             | "EditText" ->
-                let textSize = getNumber(reader.GetAttribute("textSize"))
-                appendXaml <| "\n" + depthTab + "<TextBox x:Name=\"" + reader.GetAttribute("id") + "\" IsReadOnly=\"False\" MinWidth=\"250\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
+                appendXaml <| "\n" + depthTab + "<TextBox x:Name=\"" + reader.GetAttribute("id") + "\" IsReadOnly=\"False\" MinWidth=\"250\" HorizontalAlignment=\"Center\" />"
             | "Button" -> 
                 let name = reader.GetAttribute("id")
+                let textSize = getNumber(reader.GetAttribute("textSize"))
                 if actions.Contains(name) then
                     let click = name + "Click"
-                    appendXaml <| "\n" + depthTab + "<Button Name=\"" + name + "\" HorizontalAlignment=\"Center\" Click=\"" + click + "\" Content=\"" + reader.GetAttribute("text") + "\"> </Button>"
+                    appendXaml <| "\n" + depthTab + "<Button Name=\"" + name + "\" HorizontalAlignment=\"Center\" Click=\"" + click + "\" FontSize=\"" + textSize + "\" Content=\"" + reader.GetAttribute("text") + "\"> </Button>"
                     appendAdditions <| "\nprivate void " + click + "(object sender, RoutedEventArgs e)\n{"
                     appendAdditions <| (actions.Item(name) :?> string)
                     appendAdditions <| "\n}"
                 else 
-                    appendXaml <| "\n" + depthTab + "<Button Name=\"" + name + "\" HorizontalAlignment=\"Center\" Content=\"" + reader.GetAttribute("text") + "\"> </Button>"
+                    appendXaml <| "\n" + depthTab + "<Button Name=\"" + name + "\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\" Content=\"" + reader.GetAttribute("text") + "\"> </Button>"
             | "ImageView" -> 
                 let url = reader.GetAttribute("src") 
                 let fileName = "image" + string imageCounter + url.Substring(url.Length - 4, 4)
@@ -303,7 +306,6 @@ pushpins = new Dictionary<Pair, string>(pairComparer);"
         border.Visibility = System.Windows.Visibility.Collapsed;
         border.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
         pushpin.Content = border;
-        StackPanel panel = new StackPanel();
         TextBlock text = new TextBlock();
         text.Text = comment;
         border.Child = text;

@@ -12,19 +12,48 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
         function Map(tag, $control) {
             if (typeof $control === "undefined") { $control = $("<div></div>"); }
                 _super.call(this, tag, $control);
-            this.url = "http://www.bing.com/maps/embed/viewer.aspx?v=3&cp=59.876984~29.839293&lvl=15&w=&mkt=en-us&src=SHELL&form=BMEMJS";
             this.setDimensions($control);
-            this.$Control.attr('src', this.url);
             $control.css('position', 'relative');
-            var map = new Microsoft.Maps.Map($control.get()[0], {
+            this.map = new Microsoft.Maps.Map($control.get()[0], {
                 credentials: "AvJwCah4br6cge458C1Vc6NSyzZy2SfsqzBrTwUVmuybDrtrc6pV-qCP98ZkTqKW",
                 center: new Microsoft.Maps.Location(59.876984, 29.839293),
                 mapTypeId: Microsoft.Maps.MapTypeId.road,
-                zoom: 7
+                zoom: 8
             });
+            var points = [];
+            points.push(new Point(59.9, 29.9));
+            points.push(new Point(60, 29.9));
+            points.push(new Point(59.9, 30));
+            points.push(new Point(60, 30));
+            points.push(new Point(59.8, 30));
+            this.addPushpins(points);
         }
+        Object.defineProperty(Map.prototype, "Map", {
+            get: function () {
+                return this.map;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Map.prototype.addPushpins = function (points) {
+            var _this = this;
+            points.map(function (point) {
+                return _this.addPushpin(point);
+            });
+        };
+        Map.prototype.addPushpin = function (point) {
+            var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(point.Latitude, point.Longitude), null);
+            this.map.entities.push(pushpin);
+        };
         return Map;
     })(mControl.Control);
     exports.Map = Map;    
+    var Point = (function () {
+        function Point(latitude, longitude) {
+            this.Latitude = latitude;
+            this.Longitude = longitude;
+        }
+        return Point;
+    })();
+    exports.Point = Point;    
 })
-//@ sourceMappingURL=Map.js.map

@@ -44,7 +44,7 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
             this.logger.log("showXmlStringView: \n" + xml);
             this.clearUi();
             xml = mXmlHelper.escapeXml(xml);
-            var application = this.xmlManager.parseStoredXml('/res/application5.xml');
+            var application = this.xmlManager.parseXmlString(xml);
             var pages = application.pages;
             var triggers = application.triggers;
             var _eventManager = this.eventManager;
@@ -93,4 +93,3 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
     })();
     exports.Emulator = Emulator;    
 })
-//@ sourceMappingURL=Emulator.js.map

@@ -3,13 +3,14 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences", "designer/Designer"], function(require, exports, __mElement__, __mElementPreferences__, __mDesigner__) {
+define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences", "designer/logic/CodeBlock"], function(require, exports, __mElement__, __mElementPreferences__, __mCodeBlock__) {
     var mElement = __mElement__;
 
     var mElementPreferences = __mElementPreferences__;
 
     
-    var mDesigner = __mDesigner__;
+    
+    var mCodeBlock = __mCodeBlock__;
 
     var Button = (function (_super) {
         __extends(Button, _super);
@@ -17,8 +18,16 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             if (typeof domElement === "undefined") { domElement = $("<div></div>"); }
                 _super.call(this, domElement);
             this.Preferences = preferences;
+            this.codeBlock = new mCodeBlock.CodeBlock(10);
             this.init();
         }
+        Object.defineProperty(Button.prototype, "CodeBlock", {
+            get: function () {
+                return this.codeBlock;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(Button.prototype, "Preferences", {
             get: function () {
                 return this.preferences;
@@ -73,22 +82,12 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                 _this.init();
             });
             marginTopField.textinput();
-            var onclickSelect = $("<select id=\"onclickSelect\"></select>");
-            editorLayer.append($(onclickSelect));
-            onclickSelect.change(function () {
-                _this.preferences.OnClickHandler = onclickSelect.val();
-            });
-            var select = $("#onclickSelect");
-            select.empty();
-            for(var i = 0; i < mDesigner.Designer.forms.length; i++) {
-                var currentName = mDesigner.Designer.forms[i].FormName;
-                var newOption = $("<option value=\"" + currentName + "\">" + currentName + "</option>");
-                if(currentName == _this.preferences.OnClickHandler) {
-                    newOption.attr("selected", "selected");
-                }
-                select.append(newOption);
-            }
-            onclickSelect.selectmenu();
+            var onClickLabel = $("<label>OnClick:</label>");
+            onClickLabel.css("font-weight", "normal");
+            editorLayer.append(onClickLabel);
+            var onClickDiv = $("<div></div>");
+            editorLayer.append(onClickDiv);
+            this.codeBlock.show(onClickDiv);
         };
         Button.prototype.toXML = function () {
             var xmlString = "";
@@ -110,8 +109,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             xmlString += "layout_marginTop=\"" + this.preferences.LayoutMarginTop + "px\" ";
             xmlString += "text=\"" + this.preferences.Text + "\" ";
             xmlString += "textSize=\"" + this.preferences.TextSize + "px\" ";
-            xmlString += "id=\"" + this.preferences.ButtonId + "\" ";
-            xmlString += "onClick=\"" + this.preferences.OnClickHandler + "\" />\n";
+            xmlString += "id=\"" + this.preferences.ButtonId + "\" />\n";
             return xmlString;
         };
         return Button;

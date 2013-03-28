@@ -113,8 +113,8 @@ export class EditText extends mElement.Element {
         xmlString += "layout_marginTop=\"" + this.preferences.LayoutMarginTop + "px\" ";
         xmlString += "id=\"" + this.preferences.EditTextId + "\" ";
         xmlString += "padding=\"" + this.preferences.Padding + "px\" ";
-        xmlString += "text=\"" + this.preferences.Text + "\" ";
-        xmlString += "textSize=\"" + this.preferences.TextSize + "px\" />\n";
+        xmlString += "text=\"" + this.preferences.Text + "px\" />\n";
+        //xmlString += "textSize=\"" + this.preferences.TextSize + "px\" />\n";
         return xmlString;
     }
 }

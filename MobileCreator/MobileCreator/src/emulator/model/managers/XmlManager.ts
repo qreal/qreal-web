@@ -180,6 +180,8 @@ export class XmlManager {
                 break;
             case XmlManager.LoginRequest:
                 return this.parseLoginRequest(node);
+            case XmlManager.PatientsRequest:
+                return this.parsePatientRequest(node);
                 break;
             default:
                 return undefined;
@@ -218,6 +220,18 @@ export class XmlManager {
         var loginId: string = node.attributes['login-id'].value;
         var passwordId: string = node.attributes['password-id'].value;
         return this.logicFunctionFactory.loginRequestFunc(url, loginId, passwordId);
+    }
+
+    private parsePatientRequest(node: Node): Function {
+        this.logger.log("parsePatientRequest");
+        var url: string = node.attributes['url'].value;
+        return this.logicFunctionFactory.patientsRequestFunc(url);
+    }
+
+    private parseShowMap(node: Node): Function {
+        this.logger.log("parseShowMap");
+        var id: string = node.attributes['id'].value;
+        return this.logicFunctionFactory.showMapFunc(id);
     }
     //#endregion
 

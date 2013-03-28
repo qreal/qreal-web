@@ -25,9 +25,11 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emula
         }
         Page.logger = new mLog.Logger("Page");
         Page.prototype.onShow = function () {
-            mEmulator.Emulator.instance.EventManager.trigger(name, mEventManager.EventManager.OnShow);
+            var _this = this;
+            Page.logger.log("onShow");
+            mEmulator.Emulator.instance.EventManager.trigger(this.Name, mEventManager.EventManager.OnShow);
             this.timerToken = setInterval(function () {
-                return mEmulator.Emulator.instance.EventManager.trigger(name, mEventManager.EventManager.OnTimer);
+                return mEmulator.Emulator.instance.EventManager.trigger(_this.Name, mEventManager.EventManager.OnTimer);
             }, 10000);
         };
         Page.prototype.onHide = function () {
@@ -51,4 +53,3 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emula
     })();
     exports.Page = Page;    
 })
-//@ sourceMappingURL=Page.js.map

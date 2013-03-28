@@ -28,4 +28,3 @@ define(["require", "exports", "emulator/model/attributes/ControlPanelTag"], func
     })(mControlPanelTag.ControlPanelTag);
     exports.LinearLayoutTag = LinearLayoutTag;    
 })
-//@ sourceMappingURL=LinearLayoutTag.js.map

@@ -51,11 +51,19 @@ export class FunctionFactory {
         }
     }
 
+    public showMapFunc(id: string): Function {
+        this.logger.log("saveSessionFunc");
+        var _this = this;
+        return function () {
+            _this.logger.log("show map. id="+id);
+        }
+    }
+
     //#region private functions
 
     public sendLoginRequest(url: string, login: string, password: string): void {
         this.logger.log("sendLoginRequest: url=" + url + " login=" + login + " password=" + password);
-        var parameters = jQuery.param({
+        var parameters = "login?"+jQuery.param({
             login: login,
             password: password
         });
@@ -80,12 +88,12 @@ export class FunctionFactory {
         $.ajax({
             type: "POST",
             url: url,
+            data: "coordinates",
             success: function (data) {
                 mEmulator.Emulator.instance.EventManager.trigger(
                    mEmulator.Emulator.instance.NavigationManager.CurrentPage.Name,
                    mEventManager.EventManager.OnPatientsResponse,
                    data);
-                //alert("Response " + data);
             },
             dataType: "text"
         });

@@ -49,9 +49,16 @@ define(["require", "exports", "emulator/model/Emulator", "emulator/model/manager
                 _this.sendPatientsRequest(url);
             };
         };
+        FunctionFactory.prototype.showMapFunc = function (id) {
+            this.logger.log("saveSessionFunc");
+            var _this = this;
+            return function () {
+                _this.logger.log("show map. id=" + id);
+            };
+        };
         FunctionFactory.prototype.sendLoginRequest = function (url, login, password) {
             this.logger.log("sendLoginRequest: url=" + url + " login=" + login + " password=" + password);
-            var parameters = jQuery.param({
+            var parameters = "login?" + jQuery.param({
                 login: login,
                 password: password
             });
@@ -70,6 +77,7 @@ define(["require", "exports", "emulator/model/Emulator", "emulator/model/manager
             $.ajax({
                 type: "POST",
                 url: url,
+                data: "coordinates",
                 success: function (data) {
                     mEmulator.Emulator.instance.EventManager.trigger(mEmulator.Emulator.instance.NavigationManager.CurrentPage.Name, mEventManager.EventManager.OnPatientsResponse, data);
                 },
@@ -80,4 +88,3 @@ define(["require", "exports", "emulator/model/Emulator", "emulator/model/manager
     })();
     exports.FunctionFactory = FunctionFactory;    
 })
-//@ sourceMappingURL=Logic.js.map

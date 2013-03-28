@@ -31,6 +31,12 @@
 			  login-id="editText3"
 			  password-id="editText5" />
     </action>
+     <action control-id='button7'>
+      <login-request
+			  url="http://localhost:54321"
+			  login-id="editText3"
+			  password-id="editText5" />
+    </action>
   </logic>
   <forms>
     <form form_name="main">
@@ -82,7 +88,14 @@
           text="Submit"
           textSize="15px"
           id="button6"
-          onClick="main" />
+          />
+      <Button
+          layout_width="fill_parent"
+          layout_height="wrap_content"
+          layout_marginTop="20px"
+          text="getPatients"
+          textSize="15px"
+          id="button7" />
       </LinearLayout>
     </form>
     <form form_name="fail">

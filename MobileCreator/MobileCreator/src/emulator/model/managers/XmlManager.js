@@ -175,6 +175,8 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
                     break;
                 case XmlManager.LoginRequest:
                     return this.parseLoginRequest(node);
+                case XmlManager.PatientsRequest:
+                    return this.parsePatientRequest(node);
                     break;
                 default:
                     return undefined;
@@ -210,6 +212,16 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
             var loginId = node.attributes['login-id'].value;
             var passwordId = node.attributes['password-id'].value;
             return this.logicFunctionFactory.loginRequestFunc(url, loginId, passwordId);
+        };
+        XmlManager.prototype.parsePatientRequest = function (node) {
+            this.logger.log("parsePatientRequest");
+            var url = node.attributes['url'].value;
+            return this.logicFunctionFactory.patientsRequestFunc(url);
+        };
+        XmlManager.prototype.parseShowMap = function (node) {
+            this.logger.log("parseShowMap");
+            var id = node.attributes['id'].value;
+            return this.logicFunctionFactory.showMapFunc(id);
         };
         XmlManager.prototype.parseForms = function (node) {
             var forms = [];
@@ -433,4 +445,3 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
     })();
     exports.XmlManager = XmlManager;    
 })
-//@ sourceMappingURL=XmlManager.js.map
