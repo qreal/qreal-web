@@ -44,3 +44,4 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emula
     })(mControl.Control);
     exports.Button = Button;    
 })
+//@ sourceMappingURL=Button.js.map

@@ -445,3 +445,4 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
     })();
     exports.XmlManager = XmlManager;    
 })
+//@ sourceMappingURL=XmlManager.js.map

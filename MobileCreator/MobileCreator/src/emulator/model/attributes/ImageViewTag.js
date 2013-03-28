@@ -25,3 +25,4 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
     })(mControlTag.ControlTag);
     exports.ImageViewTag = ImageViewTag;    
 })
+//@ sourceMappingURL=ImageViewTag.js.map

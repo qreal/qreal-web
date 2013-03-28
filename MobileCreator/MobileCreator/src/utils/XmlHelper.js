@@ -4,3 +4,4 @@ define(["require", "exports"], function(require, exports) {
     }
     exports.escapeXml = escapeXml;
 })
+//@ sourceMappingURL=XmlHelper.js.map

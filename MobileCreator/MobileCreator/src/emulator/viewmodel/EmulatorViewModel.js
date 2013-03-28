@@ -29,3 +29,4 @@ define(["require", "exports", "utils/log/Log"], function(require, exports, __mLo
     })();
     exports.EmulatorViewModel = EmulatorViewModel;    
 })
+//@ sourceMappingURL=EmulatorViewModel.js.map

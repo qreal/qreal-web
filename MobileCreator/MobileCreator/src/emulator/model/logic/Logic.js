@@ -88,3 +88,4 @@ define(["require", "exports", "emulator/model/Emulator", "emulator/model/manager
     })();
     exports.FunctionFactory = FunctionFactory;    
 })
+//@ sourceMappingURL=Logic.js.map

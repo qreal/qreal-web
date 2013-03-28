@@ -57,3 +57,4 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
     })();
     exports.Point = Point;    
 })
+//@ sourceMappingURL=Map.js.map

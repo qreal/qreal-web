@@ -15,3 +15,4 @@ define(["require", "exports", "emulator/model/attributes/TextViewTag"], function
     })(mTestViewTag.TextViewTag);
     exports.InputTag = InputTag;    
 })
+//@ sourceMappingURL=InputTag.js.map
