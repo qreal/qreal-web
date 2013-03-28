@@ -93,4 +93,3 @@ define(["require", "exports", "utils/log/Log", "utils/XmlHelper", "emulator/view
     })();
     exports.Emulator = Emulator;    
 })
-//@ sourceMappingURL=Emulator.js.map

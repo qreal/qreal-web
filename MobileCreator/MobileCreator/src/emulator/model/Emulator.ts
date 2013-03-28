@@ -1,5 +1,5 @@
 /// <reference path="../../../lib/jquery.d.ts" />
-/// <reference path="../../../lib/bing/Microsoft.Maps.d.ts" />
+/// <reference path="../../../lib/bing/Microsoft.Maps.All.d.ts" />
 //#region Imports
 import mLog = module("utils/log/Log");
 import mXmlHelper = module("utils/XmlHelper");

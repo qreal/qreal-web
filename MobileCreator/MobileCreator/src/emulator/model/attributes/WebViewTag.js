@@ -25,4 +25,3 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
     })(mControlTag.ControlTag);
     exports.WebViewTag = WebViewTag;    
 })
-//@ sourceMappingURL=WebViewTag.js.map

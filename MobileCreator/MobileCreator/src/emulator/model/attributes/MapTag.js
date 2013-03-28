@@ -15,4 +15,3 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
     })(mControlTag.ControlTag);
     exports.MapTag = MapTag;    
 })
-//@ sourceMappingURL=MapTag.js.map

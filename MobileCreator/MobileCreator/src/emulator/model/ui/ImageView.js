@@ -23,4 +23,3 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
     })(mControl.Control);
     exports.ImageView = ImageView;    
 })
-//@ sourceMappingURL=ImageView.js.map
