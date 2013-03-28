@@ -21,6 +21,13 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             this.codeBlock = new mCodeBlock.CodeBlock(10);
             this.init();
         }
+        Object.defineProperty(Button.prototype, "CodeBlock", {
+            get: function () {
+                return this.codeBlock;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(Button.prototype, "Preferences", {
             get: function () {
                 return this.preferences;
@@ -75,7 +82,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                 _this.init();
             });
             marginTopField.textinput();
-            var onClickLabel = $("<label>onClick:</label>");
+            var onClickLabel = $("<label>OnClick:</label>");
             onClickLabel.css("font-weight", "normal");
             editorLayer.append(onClickLabel);
             var onClickDiv = $("<div></div>");

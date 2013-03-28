@@ -29,6 +29,23 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
         Designer.forms = [];
         Designer.formNames = [];
         Designer.formsDomElement = $("#form");
+        Designer.prototype.exportButtonsToXML = function () {
+            var xml = "";
+            for(var i = 0; i < Designer.forms.length; i++) {
+                var form = Designer.forms[i];
+                var baseLayout = form.Content[0];
+                for(var j = 0; j < baseLayout.Children.length; j++) {
+                    var control = baseLayout.Children[j];
+                    if(control.Preferences.WidgetType == mWidgetTypes.WidgetTypes.Button) {
+                        var codeBlock = (control).CodeBlock;
+                        xml += "<action control-id='" + (control).Preferences.ButtonId + "'>\n";
+                        xml += codeBlock.toXML();
+                        xml += "</action>\n";
+                    }
+                }
+            }
+            return xml;
+        };
         Designer.prototype.addForm = function (formName) {
             $("#propertiesEditor").empty();
             Designer.activeForm.hide();
@@ -65,6 +82,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
         Designer.prototype.getXML = function () {
             var xml = "<application>\n";
             xml += "<logic>\n";
+            xml += this.exportButtonsToXML();
             for(var i = 0; i < Designer.forms.length; i++) {
                 for(var j = 0; j < Designer.forms[i].Triggers.length; j++) {
                     xml += Designer.forms[i].Triggers[j].toXML();

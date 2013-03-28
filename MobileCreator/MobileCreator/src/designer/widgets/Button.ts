@@ -9,6 +9,9 @@ import mCodeBlock = module("designer/logic/CodeBlock")
 export class Button extends mElement.Element {
     private preferences: mButtonPreferences.ButtonPreferences;
     private codeBlock: mCodeBlock.CodeBlock;
+    get CodeBlock() {
+        return this.codeBlock;
+    }
     get Preferences() {
         return this.preferences;
     }
