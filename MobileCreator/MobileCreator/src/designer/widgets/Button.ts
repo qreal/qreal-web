@@ -4,9 +4,11 @@ import mElement = module("designer/widgets/Element");
 import mElementPreferences = module("designer/preferences/ElementPreferences")
 import mButtonPreferences = module("designer/preferences/ButtonPreferences")
 import mDesigner = module("designer/Designer")
+import mCodeBlock = module("designer/logic/CodeBlock")
 
 export class Button extends mElement.Element {
     private preferences: mButtonPreferences.ButtonPreferences;
+    private codeBlock: mCodeBlock.CodeBlock;
     get Preferences() {
         return this.preferences;
     }
@@ -18,6 +20,7 @@ export class Button extends mElement.Element {
     constructor(preferences: mButtonPreferences.ButtonPreferences, domElement?: JQuery = $("<div></div>")) {
         super(domElement);
         this.Preferences = preferences;
+        this.codeBlock = new mCodeBlock.CodeBlock(10);
         this.init();
     }
     public init() {
@@ -95,6 +98,8 @@ export class Button extends mElement.Element {
             _this.init();
         });
         heightField.textinput();*/
+        /*
+        DEPRECATED
         var onclickSelect = $("<select id=\"onclickSelect\"></select>");
         editorLayer.append($(onclickSelect));
         
@@ -112,7 +117,10 @@ export class Button extends mElement.Element {
             select.append(newOption);
         }
         onclickSelect.selectmenu();
-        //select.selectmenu("refresh", true);
+        //select.selectmenu("refresh", true);*/
+        var onClickDiv = $("<div></div>");
+        editorLayer.append(onClickDiv);
+        this.codeBlock.show(onClickDiv);
     }
 
     public toXML() {
@@ -136,7 +144,7 @@ export class Button extends mElement.Element {
         xmlString += "text=\"" + this.preferences.Text + "\" ";
         xmlString += "textSize=\"" + this.preferences.TextSize + "px\" ";
         xmlString += "id=\"" + this.preferences.ButtonId + "\" ";
-        xmlString += "onClick=\"" + this.preferences.OnClickHandler + "\" />\n";
+        //xmlString += "onClick=\"" + this.preferences.OnClickHandler + "\" />\n";
         return xmlString;
     }
 }
