@@ -51,6 +51,14 @@ export class FunctionFactory {
         }
     }
 
+    public showMapFunc(id: string): Function {
+        this.logger.log("saveSessionFunc");
+        var _this = this;
+        return function () {
+            _this.logger.log("show map. id="+id);
+        }
+    }
+
     //#region private functions
 
     public sendLoginRequest(url: string, login: string, password: string): void {

@@ -49,6 +49,13 @@ define(["require", "exports", "emulator/model/Emulator", "emulator/model/manager
                 _this.sendPatientsRequest(url);
             };
         };
+        FunctionFactory.prototype.showMapFunc = function (id) {
+            this.logger.log("saveSessionFunc");
+            var _this = this;
+            return function () {
+                _this.logger.log("show map. id=" + id);
+            };
+        };
         FunctionFactory.prototype.sendLoginRequest = function (url, login, password) {
             this.logger.log("sendLoginRequest: url=" + url + " login=" + login + " password=" + password);
             var parameters = "login?" + jQuery.param({
