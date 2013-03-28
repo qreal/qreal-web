@@ -55,11 +55,9 @@ export class CodeBlock {
             domElement.trigger("create");
             this.setRemoveHandler(removeButton, i, domElement);
         }
-        var newActionDiv = $("<div class='ui-grid-a'></div>");
+        var newActionDiv = $("<div data-role='controlgroup' data-type='horizontal' name='addCP' id='AddCP' data-mini='true'></div>");
         newActionDiv.css("margin-left", this.marginLeft + "px");
-        var selectActionDiv = $("<div class='ui-block-a'></div>");
-        var buttonAddActionDiv = $("<div class='ui-block-b'></div>");
-        var selectAction = $("<select name='selectNewAction' id='selectNewAction' data-mini='true'></select>");
+        var selectAction = $("<select name='selectNewAction' id='selectNewAction' data-inline='true 'data-mini='true'></select>");
         var loginAction = $("<option value='login'>login</option>");
         var ifAction = $("<option value='if'>if</option>");
         var patientsAction = $("<option value='patients'>getPatients</option>");
@@ -73,14 +71,14 @@ export class CodeBlock {
         selectAction.append(showMapAction);
         selectAction.append(transitionAction);
         domElement.append(newActionDiv);
-        newActionDiv.append(selectActionDiv);
-        selectActionDiv.append(selectAction);
+        
+        newActionDiv.append(selectAction);
         selectAction.selectmenu();
         var addActionButton = $("<a href='#' data-role='button' data-icon='plus' data-iconpos='notext' data-theme='e' data-mini='true'>Add action</a>");
         domElement.append(addActionButton);
-        newActionDiv.append(buttonAddActionDiv);
-        buttonAddActionDiv.append(addActionButton);
+        newActionDiv.append(addActionButton);
         addActionButton.button();
+        domElement.trigger("create");
         addActionButton.click(function () {
             switch (selectAction.val()) {
                 case "saveSession":
