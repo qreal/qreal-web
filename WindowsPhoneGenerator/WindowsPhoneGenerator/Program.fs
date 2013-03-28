@@ -231,12 +231,7 @@ result = httpWebStreamReader.ReadToEnd();
 
 bool serverResponseSuccess = false;
 bool serverResponseFail = true;
-if (result.Equals(\"fail\"))
-{
-serverResponseSuccess = false;
-serverResponseFail = true;
-}
-else
+if (!result.Equals(\"fail\"))
 {
 serverResponseSuccess = true;
 serverResponseFail = false;\n}" + (triggers.Item((fileName, "onLoginResponse")) :?> string) + "\n}"
@@ -258,8 +253,7 @@ patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> str
                 let textSize = getNumber(reader.GetAttribute("textSize"))
                 appendXaml <| "\n" + depthTab + "<TextBlock Text=\"" + reader.GetAttribute("text") + "\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
             | "EditText" ->
-                let textSize = getNumber(reader.GetAttribute("textSize"))
-                appendXaml <| "\n" + depthTab + "<TextBox x:Name=\"" + reader.GetAttribute("id") + "\" IsReadOnly=\"False\" MinWidth=\"250\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
+                appendXaml <| "\n" + depthTab + "<TextBox x:Name=\"" + reader.GetAttribute("id") + "\" IsReadOnly=\"False\" MinWidth=\"250\" HorizontalAlignment=\"Center\" />"
             | "Button" -> 
                 let name = reader.GetAttribute("id")
                 let textSize = getNumber(reader.GetAttribute("textSize"))
