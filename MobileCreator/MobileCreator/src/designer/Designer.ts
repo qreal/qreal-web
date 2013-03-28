@@ -75,7 +75,7 @@ export class Designer {
 
     private sendXml() {
         var xml = this.getXML();
-        alert(xml);
+        this.logger.log(xml);
         $.ajax("http://localhost:12345", {
             type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
                 window.location.assign("http://localhost/main-debug.apk");
