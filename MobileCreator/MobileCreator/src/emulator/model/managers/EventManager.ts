@@ -9,20 +9,21 @@ export class EventManager {
     public static OnPatientsResponse = 'onPatientsResponse';
     public static OnAction = 'onAction';
 
-    private logger = new mLog.Logger("EventManager");
+    private static logger = new mLog.Logger("EventManager");
 
     private triggers: mTrigger.Trigger[] = [];
 
     constructor() { }
 
     public addTrigger(trigger: mTrigger.Trigger) {
-        this.logger.log("addTrigger: " + trigger.PageId + " " + trigger.Event);
-        this.logger.log(''+trigger.Trigger);
+        EventManager.logger.log("addTrigger: " + trigger.PageId + " " + trigger.Event);
+        EventManager.logger.log(''+trigger.Trigger);
         this.triggers["trigger" + trigger.PageId + trigger.Event] = trigger;
     }
 
 
     public trigger(pageId: string, eventType: string, data?): void {
+        EventManager.logger.log("trigger. pageId="+pageId+" eventType="+eventType);
         var trigger: mTrigger.Trigger = this.triggers["trigger" + pageId + eventType];
         if (trigger && trigger.Trigger) {
             console.log(trigger.Trigger);

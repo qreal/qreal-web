@@ -4,7 +4,6 @@ define(["require", "exports", "utils/log/Log"], function(require, exports, __mLo
     
     var EventManager = (function () {
         function EventManager() {
-            this.logger = new mLog.Logger("EventManager");
             this.triggers = [];
         }
         EventManager.OnShow = 'onShow';
@@ -12,12 +11,14 @@ define(["require", "exports", "utils/log/Log"], function(require, exports, __mLo
         EventManager.OnLoginResponse = 'onLoginResponse';
         EventManager.OnPatientsResponse = 'onPatientsResponse';
         EventManager.OnAction = 'onAction';
+        EventManager.logger = new mLog.Logger("EventManager");
         EventManager.prototype.addTrigger = function (trigger) {
-            this.logger.log("addTrigger: " + trigger.PageId + " " + trigger.Event);
-            this.logger.log('' + trigger.Trigger);
+            EventManager.logger.log("addTrigger: " + trigger.PageId + " " + trigger.Event);
+            EventManager.logger.log('' + trigger.Trigger);
             this.triggers["trigger" + trigger.PageId + trigger.Event] = trigger;
         };
         EventManager.prototype.trigger = function (pageId, eventType, data) {
+            EventManager.logger.log("trigger. pageId=" + pageId + " eventType=" + eventType);
             var trigger = this.triggers["trigger" + pageId + eventType];
             if(trigger && trigger.Trigger) {
                 console.log(trigger.Trigger);

@@ -30,9 +30,10 @@ export class Page {
     }
 
     public onShow(): void {
-        mEmulator.Emulator.instance.EventManager.trigger(name, mEventManager.EventManager.OnShow);
+        Page.logger.log("onShow");
+        mEmulator.Emulator.instance.EventManager.trigger(this.Name, mEventManager.EventManager.OnShow);
         this.timerToken = setInterval(() =>
-            mEmulator.Emulator.instance.EventManager.trigger(name, mEventManager.EventManager.OnTimer), 10000);
+            mEmulator.Emulator.instance.EventManager.trigger(this.Name, mEventManager.EventManager.OnTimer), 10000);
     }
 
     public onHide(): void {
