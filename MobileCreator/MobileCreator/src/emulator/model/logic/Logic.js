@@ -70,6 +70,7 @@ define(["require", "exports", "emulator/model/Emulator", "emulator/model/manager
             $.ajax({
                 type: "POST",
                 url: url,
+                data: "coordinates",
                 success: function (data) {
                     mEmulator.Emulator.instance.EventManager.trigger(mEmulator.Emulator.instance.NavigationManager.CurrentPage.Name, mEventManager.EventManager.OnPatientsResponse, data);
                 },

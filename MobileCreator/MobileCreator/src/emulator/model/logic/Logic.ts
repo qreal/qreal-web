@@ -80,12 +80,12 @@ export class FunctionFactory {
         $.ajax({
             type: "POST",
             url: url,
+            data: "coordinates",
             success: function (data) {
                 mEmulator.Emulator.instance.EventManager.trigger(
                    mEmulator.Emulator.instance.NavigationManager.CurrentPage.Name,
                    mEventManager.EventManager.OnPatientsResponse,
                    data);
-                //alert("Response " + data);
             },
             dataType: "text"
         });
