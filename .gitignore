@@ -1,4 +1,7 @@
-
+bin/
+obj/
+*.suo
+*.orig
 /TypeScript/MobileDesigner/MobileDesigner/bin
 /MobileCreator/MobileCreator/bin
 /MobileCreator/MobileCreator/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
