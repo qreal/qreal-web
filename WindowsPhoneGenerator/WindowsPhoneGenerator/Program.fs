@@ -28,9 +28,6 @@ let csprojItems = new StringBuilder()
 let csprojPages = new StringBuilder()
 let resourcesBuilder = new StringBuilder()
 let referencesBuilder = new StringBuilder()
-let usingsBuilder = new StringBuilder()
-let xmlnsBuilder = new StringBuilder()
-
 let resources = new Hashtable()
 let references = new Hashtable()
 
