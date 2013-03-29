@@ -34,7 +34,18 @@ export class Map extends mControl.Control {
     public addPushpin(point: Point) {
         //this.logger.log("addPushpin" +point.toString());
         var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(point.Latitude, point.Longitude), null);
-        this.map.entities.push(pushpin);
+        
+        var map = this.map;
+        (function (maps) {
+            var pushpinClick = maps.Events.addHandler(pushpin, 'click', function () {
+                alert(point.Coment);
+                //var infoboxOptions = { title: 'Infobox Title', description: point.Coment };
+                //var defaultInfobox = maps.Infobox(new Microsoft.Maps.Location(point.Latitude, point.Longitude), infoboxOptions);
+                //map.entities.push(defaultInfobox);
+            });
+        })(Microsoft.Maps);
+        
+        this.map.entities.push(pushpin);      
     }
 }
 

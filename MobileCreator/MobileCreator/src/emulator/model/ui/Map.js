@@ -39,6 +39,12 @@ define(["require", "exports", "emulator/model/ui/Control", "utils/log/Log"], fun
         };
         Map.prototype.addPushpin = function (point) {
             var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(point.Latitude, point.Longitude), null);
+            var map = this.map;
+            (function (maps) {
+                var pushpinClick = maps.Events.addHandler(pushpin, 'click', function () {
+                    alert(point.Coment);
+                });
+            })(Microsoft.Maps);
             this.map.entities.push(pushpin);
         };
         return Map;
