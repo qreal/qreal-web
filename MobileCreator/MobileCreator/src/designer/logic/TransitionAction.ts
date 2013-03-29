@@ -27,7 +27,7 @@ export class TransitionAction extends mAction.Action {
 
     public show(domElement) {
         var _this = this;
-        var saveSessionBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>Go to form </a>");     
+        var saveSessionBlock = $("<a href='#' data-role='button' data-corners='false' data-inline='true' data-mini='true'>Go to form </a>");
         var formNames = mDesigner.Designer.formNames;
         var select = $("<select data-mini='true' data-inline='true'></select>");
         var selectedOption = $("<option value='" + this.formId + "' selected='selected'>" + this.formId + "</option>");

@@ -21,7 +21,7 @@ export class IfAction extends mAction.Action {
         var containDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
         containDiv.css("margin-left", this.marginLeft + "px");
         domElement.append(containDiv);
-        var ifBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>If</a>");
+        var ifBlock = $("<a href='#' data-role='button' data-corners='false' data-inline='true' data-mini='true'>If</a>");
         containDiv.append(ifBlock);
         ifBlock.button();
         var select = $("<select data-mini='true' data-inline='true'></select>");
@@ -34,7 +34,7 @@ export class IfAction extends mAction.Action {
         var thenDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
         thenDiv.css("margin-left", this.marginLeft + "px");
         domElement.append(thenDiv);
-        var thenBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>then</a>");
+        var thenBlock = $("<a href='#' data-role='button' data-corners='false' data-inline='true' data-mini='true'>then</a>");
         thenDiv.append(thenBlock);
         thenBlock.button();
         var thenBlockDiv = $("<div></div>");
@@ -43,7 +43,7 @@ export class IfAction extends mAction.Action {
         var elseDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
         elseDiv.css("margin-left", this.marginLeft + "px");
         domElement.append(elseDiv);
-        var elseBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>else</a>");
+        var elseBlock = $("<a href='#' data-role='button' data-corners='false' data-inline='true' data-mini='true'>else</a>");
         elseDiv.append(elseBlock);
         elseBlock.button();
         var elseBlockDiv = $("<div></div>");
