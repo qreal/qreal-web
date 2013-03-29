@@ -730,7 +730,6 @@ let createXap() =
         startInfo.RedirectStandardError <- true
         proc.Start() |> ignore
         let so = proc.StandardOutput
-        proc.WaitForExit()
         printfn "%s" <| so.ReadToEnd()
         match proc.ExitCode with
         | 0 -> ()
