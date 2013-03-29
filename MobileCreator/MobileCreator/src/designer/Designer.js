@@ -80,7 +80,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             });
         };
         Designer.prototype.getXML = function () {
-            var xml = "<application>\n";
+            var xml = "<application name='patients'>\n";
             xml += "<logic>\n";
             xml += this.exportButtonsToXML();
             for(var i = 0; i < Designer.forms.length; i++) {

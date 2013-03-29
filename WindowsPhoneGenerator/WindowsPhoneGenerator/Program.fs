@@ -7,7 +7,8 @@ open System.Net
 let path =
     let args = System.Environment.GetCommandLineArgs()
     if args.Length <> 2 then
-        failwith "Specify project folder and package as command line arguments"
+        printfn "Specify project folder as command line arguments"
+        exit 1
     args.[1]
 
 let writeToFile fn (str : string) =
@@ -25,13 +26,12 @@ let mutable projectName = "Default"
 
 let csprojItems = new StringBuilder()
 let csprojPages = new StringBuilder()
-let resources = new StringBuilder()
-let references = new StringBuilder()
-let usings = new StringBuilder()
-let xmlns = new StringBuilder()
+let resourcesBuilder = new StringBuilder()
+let referencesBuilder = new StringBuilder()
+let resources = new Hashtable()
+let references = new Hashtable()
 
-let actions  = new Hashtable()
-let triggers = new Hashtable()
+exception NotFoundAttributeException of string
 
 let parseXml = 
     let newXaml = new StringBuilder()
@@ -47,49 +47,74 @@ let parseXml =
     let mutable fileName = ""
     let mutable imageCounter = 1
     let tab = "    "
+    let actions  = new Hashtable()
+    let actionsAdditions = new Hashtable()
+    let triggers = new Hashtable()
+    let triggersAdditions = new Hashtable()
+    let usingsBuilder = new StringBuilder()
+    let xmlnsBuilder = new StringBuilder()
+    let usings = new Hashtable()
+    let xmlns = new Hashtable()
     let currentBuilder = new StringBuilder()
+    let currentAdditionsBuilder = new StringBuilder()
     let builderAppend = append currentBuilder
     let tempStack = new Stack()
     let getNumber (sizeAttr : string) = sizeAttr.Substring(0, sizeAttr.Length - 2)
-    let loginRequest = new StringBuilder()
+    let getAttr (nodeName : string) (attrName : string) =
+        let value = reader.GetAttribute(attrName)
+        if value = null then raise ( NotFoundAttributeException ("A node \"" + nodeName + "\" doesn't have an attribute " + "\"" + attrName + "\""))
+        else value
+    let tryGetAttribute (nodeName : string) (attrName : string) =
+        try getAttr nodeName attrName
+        with
+        | NotFoundAttributeException(str) -> 
+            printfn "%s" str
+            exit 2
     try
         while reader.Read() do
             let name = reader.Name
             let depth = reader.Depth
             let depthTab = if depth > 0 then String.replicate (reader.Depth - 1) tab else ""
             match name with
-            | "application" when reader.NodeType <> XmlNodeType.EndElement -> projectName <- reader.GetAttribute("name")
+            | "application" when reader.NodeType <> XmlNodeType.EndElement -> 
+                projectName <- tryGetAttribute name "name"
             | "action" when reader.NodeType <> XmlNodeType.EndElement ->
-                tempStack.Push(reader.GetAttribute("control-id"))
+                tempStack.Push(tryGetAttribute name "control-id")
             | "action" when reader.NodeType = XmlNodeType.EndElement ->
                 // ключ - id контрола, значение - код, который нужно выполнить
-                actions.Add(tempStack.Pop() :?> string, currentBuilder.ToString())
+                let id = tempStack.Pop() :?> string
+                actions.Add(id, currentBuilder.ToString())
+                actionsAdditions.Add(id, currentAdditionsBuilder.ToString())
                 currentBuilder.Clear() |> ignore
+                currentAdditionsBuilder.Clear() |> ignore
             | "trigger" when reader.NodeType <> XmlNodeType.EndElement ->
-                tempStack.Push(reader.GetAttribute("event"))
-                tempStack.Push(reader.GetAttribute("form-id"))
+                tempStack.Push(tryGetAttribute name "event")
+                tempStack.Push(tryGetAttribute name "form-id")
             | "trigger" when reader.NodeType = XmlNodeType.EndElement ->
                 // ключ - пара, в которой 1 элемент - имя формы, 2 элемент - событие, занчение - код, который нужно выполнить
                 let formName = tempStack.Pop() :?> string
-                triggers.Add((formName, tempStack.Pop() :?> string), currentBuilder.ToString())
+                let event = tempStack.Pop() :?> string;
+                triggers.Add((formName, event), currentBuilder.ToString())
+                triggersAdditions.Add((formName, event), currentAdditionsBuilder.ToString())
                 currentBuilder.Clear() |> ignore
-            | "if" when reader.NodeType <> XmlNodeType.EndElement -> builderAppend <| "\nif (" + reader.GetAttribute("condition") + ")"
+                currentAdditionsBuilder.Clear() |> ignore
+            | "if" when reader.NodeType <> XmlNodeType.EndElement -> builderAppend <| "\nif (" + (tryGetAttribute name "condition") + ")"
             | "then" when reader.NodeType <> XmlNodeType.EndElement -> builderAppend <| "\n{"
             | "then" when reader.NodeType = XmlNodeType.EndElement -> builderAppend <| "\n}"
             | "else" when reader.NodeType <> XmlNodeType.EndElement -> builderAppend <| "\nelse\n{"
             | "else" when reader.NodeType = XmlNodeType.EndElement -> builderAppend <| "\n}"
-            | "transition" -> builderAppend <| "\nNavigationService.Navigate(new Uri(\"/" + reader.GetAttribute("form-id") + ".xaml\", UriKind.Relative));"
+            | "transition" -> builderAppend <| "\nNavigationService.Navigate(new Uri(\"/" + (tryGetAttribute name "form-id") + ".xaml\", UriKind.Relative));"
             | "login-request" -> 
-                builderAppend <| ("\nHttpWebRequest myRequest = (HttpWebRequest)HttpWebRequest.Create(\"" + reader.GetAttribute("url") + "\");
+                builderAppend <| ("\nHttpWebRequest myRequest = (HttpWebRequest)HttpWebRequest.Create(\"" + (tryGetAttribute name "url") + "\");
 myRequest.Method = \"POST\";
 myRequest.ContentType = \"application/x-www-form-urlencoded\";
 myRequest.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), myRequest);") 
-                append loginRequest <| "\nprivate void GetRequestStreamCallback(IAsyncResult callbackResult)
+                append currentAdditionsBuilder <| "\nprivate void GetRequestStreamCallback(IAsyncResult callbackResult)
 {
     HttpWebRequest myRequest = (HttpWebRequest)callbackResult.AsyncState;
     Stream postStream = myRequest.EndGetRequestStream(callbackResult);
 
-    string postData = \"login=\"+" + reader.GetAttribute("login-id") + ".Text + \"&password=\" + " + reader.GetAttribute("password-id") + ".Text;
+    string postData = \"login=\"+" + (tryGetAttribute name "login-id") + ".Text + \"&password=\" + " + (tryGetAttribute name"password-id") + ".Text;
     byte[] byteArray = Encoding.UTF8.GetBytes(postData);
 
     postStream.Write(byteArray, 0, byteArray.Length);
@@ -99,19 +124,26 @@ myRequest.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), myR
 }"
 
             | "save-session" -> 
+                append currentAdditionsBuilder <| "\nprivate string sessionId;"
                 builderAppend <| "\nint semicolonPos = result.IndexOf(';');
-seesionId = result.Substring(semicolonPos + 1, result.Length - semicolonPos - 1);"
+sessionId = result.Substring(semicolonPos + 1, result.Length - semicolonPos - 1);"
             | "patients-request" -> builderAppend <| "\nWebClient data = new WebClient();
 data.DownloadStringCompleted += new DownloadStringCompletedEventHandler(getResponse);
-data.DownloadStringAsync(new Uri(\"" + reader.GetAttribute("url") + "\"));"
+data.DownloadStringAsync(new Uri(\"" + (tryGetAttribute name "url") + "\"));"
             // разбор строки patients и выставление пациентов на карте
             | "showmap" ->
-                append references <| "\n<Reference Include=\"Microsoft.Phone.Controls.Maps, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL\" />
+                if not (references.ContainsKey("mapsReferences")) then
+                    append referencesBuilder <| "\n<Reference Include=\"Microsoft.Phone.Controls.Maps, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL\" />
 <Reference Include=\"System.Device\" />
 <Reference Include=\"System.Servicemodel\" />"
-                append xmlns <| "\nxmlns:maps=\"clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps\""
-                append usings <| "\nusing Microsoft.Phone.Controls.Maps;
+                    references.Add("mapsReferences", referencesBuilder.ToString())
+                if not (xmlns.ContainsKey("mapsXmlns")) then
+                    append xmlnsBuilder <| "\nxmlns:maps=\"clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps\""
+                    xmlns.Add("mapsXmlns", xmlnsBuilder.ToString())
+                if not (usings.ContainsKey("mapsUsings")) then
+                    append usingsBuilder <| "\nusing Microsoft.Phone.Controls.Maps;
 using System.Device.Location;"
+                    usings.Add("mapsUsings", usingsBuilder.ToString())
                 builderAppend <| "\nint count = 0;
 int length = patients.Length;
 StringBuilder latitude = new StringBuilder();
@@ -161,7 +193,7 @@ for (int i = 0; i < length; i++)
                     writeToFile (path + "\\" + fileName + ".xaml.cs") <| newCs.ToString()
                     newCs.Clear() |> ignore
                 else
-                    fileName <- reader.GetAttribute("form_name")
+                    fileName <- tryGetAttribute name "form_name"
 
                     append csprojItems <| "\n     <Compile Include=\"" + fileName + ".xaml.cs\">
       <DependentUpon>" + fileName + ".xaml</DependentUpon>
@@ -179,7 +211,7 @@ for (int i = 0; i < length; i++)
     xmlns:phone=\"clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone\"
     xmlns:shell=\"clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone\"
     xmlns:d=\"http://schemas.microsoft.com/expression/blend/2008\"
-    xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\"" + xmlns.ToString() + "
+    xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\"" + xmlnsBuilder.ToString() + "
     mc:Ignorable=\"d\" d:DesignWidth=\"480\" d:DesignHeight=\"768\"
     FontFamily=\"{StaticResource PhoneFontFamilyNormal}\"
     FontSize=\"{StaticResource PhoneFontSizeNormal}\"
@@ -201,7 +233,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-using Microsoft.Phone.Controls;" + usings.ToString() + "\nnamespace " + projectName + "
+using Microsoft.Phone.Controls;" + usingsBuilder.ToString() + "\nnamespace " + projectName + "
 {
 public partial class " + fileName + ": PhoneApplicationPage
 {\n"
@@ -216,9 +248,8 @@ timer.Start();"
                         appendAdditions <| "\nprivate void timerTick(object sender, EventArgs e)\n{" + (triggers.Item((fileName, "onTimer")) :?> string) + "\n}"
                     
                     if triggers.Contains((fileName, "onLoginResponse")) then
-                        appendAdditions <| "\nprivate string seesionId;"
-                        appendAdditions <| loginRequest.ToString()
-                        loginRequest.Clear() |> ignore
+                        if triggersAdditions.Contains((fileName, "onLoginResponse")) then
+                            appendAdditions <| (triggersAdditions.Item((fileName, "onLoginResponse")) :?> string)
                         appendAdditions <| "\nprivate void GetResponsetStreamCallback(IAsyncResult callbackResult)
 {
 HttpWebRequest request = (HttpWebRequest)callbackResult.AsyncState;
@@ -250,35 +281,39 @@ patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> str
             | "LinearLayout" when reader.NodeType = XmlNodeType.EndElement -> 
                 appendXaml <| "\n" + depthTab + "</StackPanel>"
             | "TextView" -> 
-                let textSize = getNumber(reader.GetAttribute("textSize"))
-                appendXaml <| "\n" + depthTab + "<TextBlock Text=\"" + reader.GetAttribute("text") + "\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
+                let textSize = getNumber(tryGetAttribute name "textSize")
+                appendXaml <| "\n" + depthTab + "<TextBlock Text=\"" + (tryGetAttribute name "text") + "\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
             | "EditText" ->
-                appendXaml <| "\n" + depthTab + "<TextBox x:Name=\"" + reader.GetAttribute("id") + "\" IsReadOnly=\"False\" MinWidth=\"250\" HorizontalAlignment=\"Center\" />"
+                appendXaml <| "\n" + depthTab + "<TextBox x:Name=\"" + (tryGetAttribute name "id") + "\" IsReadOnly=\"False\" MinWidth=\"250\" HorizontalAlignment=\"Center\" />"
             | "Button" -> 
-                let name = reader.GetAttribute("id")
-                let textSize = getNumber(reader.GetAttribute("textSize"))
-                if actions.Contains(name) then
+                let name = tryGetAttribute name "id"
+                let textSize = getNumber(tryGetAttribute name "textSize")
+                if actions.ContainsKey(name) then
                     let click = name + "Click"
-                    appendXaml <| "\n" + depthTab + "<Button Name=\"" + name + "\" HorizontalAlignment=\"Center\" Click=\"" + click + "\" FontSize=\"" + textSize + "\" Content=\"" + reader.GetAttribute("text") + "\"> </Button>"
+                    appendXaml <| "\n" + depthTab + "<Button Name=\"" + name + "\" HorizontalAlignment=\"Center\" Click=\"" + click + "\" FontSize=\"" + textSize + "\" Content=\"" + (tryGetAttribute name "text") + "\"> </Button>"
                     appendAdditions <| "\nprivate void " + click + "(object sender, RoutedEventArgs e)\n{"
                     appendAdditions <| (actions.Item(name) :?> string)
                     appendAdditions <| "\n}"
+                    if actionsAdditions.ContainsKey(name) then
+                        appendAdditions <| (actionsAdditions.Item(name) :?> string)
                 else 
-                    appendXaml <| "\n" + depthTab + "<Button Name=\"" + name + "\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\" Content=\"" + reader.GetAttribute("text") + "\"> </Button>"
+                    appendXaml <| "\n" + depthTab + "<Button Name=\"" + name + "\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\" Content=\"" + (tryGetAttribute name "text") + "\"> </Button>"
             | "ImageView" -> 
-                let url = reader.GetAttribute("src") 
+                let url = tryGetAttribute name "src"
                 let fileName = "image" + string imageCounter + url.Substring(url.Length - 4, 4)
                 let fullFileName = path + "\\" + fileName
                 download fullFileName url
                 appendXaml <| "\n" + depthTab + "<Image Source=\"" + fileName + "\" />"
                 imageCounter <- imageCounter + 1
-                append resources <| "\n<Resource Include=\"" + fileName + "\" />" 
+                if not (resources.ContainsKey(fileName)) then
+                    append resourcesBuilder <| "\n<Resource Include=\"" + fileName + "\" />"
+                    resources.Add(fileName, referencesBuilder.ToString()) 
             | "WebView" -> 
-                let name = reader.GetAttribute("id")
+                let name = tryGetAttribute name "id"
                 appendXaml <| "\n" + depthTab + "<phone:WebBrowser x:Name=\"" + name + "\" IsScriptEnabled=\"True\" Height=\"763\" Width=\"475\" />"
-                appendConstructor <| "\n" + name + ".Navigate(new Uri(\"" + reader.GetAttribute("url") + "\", UriKind.RelativeOrAbsolute));"
+                appendConstructor <| "\n" + name + ".Navigate(new Uri(\"" + (tryGetAttribute name "url") + "\", UriKind.RelativeOrAbsolute));"
             | "Map" ->
-                let name = reader.GetAttribute("id")
+                let name = tryGetAttribute name "id"
                 appendXaml <| "\n" + depthTab + "<maps:Map Name=\"" + name + "\" HorizontalAlignment=\"Stretch\" VerticalAlignment=\"Stretch\"
             ScaleVisibility=\"Visible\"
             Height=\"768\"
@@ -358,7 +393,8 @@ private Dictionary<Pair, string> pushpins;"
             | _ -> ()
 
         with | :? XmlException as e ->
-            failwithf "Error while parsing %s: %s" path e.Message
+            printfn "Error while parsing %s: %s" path e.Message
+            exit 3
 
     reader.Close()
 
@@ -539,7 +575,7 @@ let csprojFile = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <ItemGroup>" + references.ToString() + "
+  <ItemGroup>" + referencesBuilder.ToString() + "
     <Reference Include=\"Microsoft.Phone\" />
     <Reference Include=\"Microsoft.Phone.Interop\" />
     <Reference Include=\"System.Windows\" />
@@ -571,7 +607,7 @@ let csprojFile = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
     </Content>
     <Content Include=\"Background.png\">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>" + resources.ToString() + "
+    </Content>" + resourcesBuilder.ToString() + "
     <Content Include=\"SplashScreenImage.jpg\" />
   </ItemGroup>
   <Import Project=\"$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets\" />
@@ -698,8 +734,9 @@ let createXap() =
         printfn "%s" <| so.ReadToEnd()
         match proc.ExitCode with
         | 0 -> ()
-        | x -> failwithf "%s exited with code %d" name x
-
+        | x -> 
+            printfn "%s exited with code %d" name x
+            exit x
     // Путь до msbuild должен быть прописан в перменную среды PATH
     start ("cd /d " + path + " & msbuild " + projectName + ".csproj") "msbuild"
 

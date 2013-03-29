@@ -84,7 +84,7 @@ export class Designer {
     }
 
     public getXML() {
-        var xml = "<application>\n"
+        var xml = "<application name='patients'>\n"
         xml += "<logic>\n";
         xml += this.exportButtonsToXML();
         for (var i = 0; i < Designer.forms.length; i++) {

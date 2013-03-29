@@ -4,3 +4,5 @@ C:\Projects\Movies\Server\Server\bin\Debug\Server.pdb
 C:\Projects\Movies\Server\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
 C:\Projects\Movies\Server\Server\obj\Debug\Server.exe
 C:\Projects\Movies\Server\Server\obj\Debug\Server.pdb
+C:\Users\nikit_000\Documents\Workspace\TypeScript\QrealWeb\AppServer\Server\Server\bin\Debug\Server.exe.config
+C:\Users\nikit_000\Documents\Workspace\TypeScript\QrealWeb\AppServer\Server\Server\obj\Debug\Server.exe
