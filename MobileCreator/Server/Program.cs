@@ -9,6 +9,7 @@ using System.Threading;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Web;
+using System.Globalization;
 
 namespace Server {
     public class Login {
@@ -198,7 +199,9 @@ namespace Server {
                             if (id != -1) {
                                 var coords = DB.getCoordinates(id);
                                 var json = new System.Web.Script.Serialization.JavaScriptSerializer();
-                                sb.Append(json.Serialize(coords));
+                                foreach(var coordinate in coords){
+                                    sb.Append(String.Format(CultureInfo.InvariantCulture, "{0};{1};{2};", coordinate.x, coordinate.y, coordinate.comment));
+                                }
                             }
                         }
                     }

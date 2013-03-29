@@ -62,7 +62,7 @@ export class FunctionFactory {
         this.logger.log("showMapFunc");
         var _this = this;
         return function (responseData?: string) {
-            _this.logger.log("showMapFunc responseData: " + responseData)
+            _this.logger.log("showMapFunc responseData: " + responseData);
             var points: mMap.Point[] = [];
             if (responseData) {
                 var data:string[] = responseData.split(';');
