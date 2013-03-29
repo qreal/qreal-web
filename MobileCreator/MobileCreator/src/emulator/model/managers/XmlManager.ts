@@ -109,10 +109,10 @@ export class XmlManager {
                     break
             }
         }
-      
+
         return {
             pages: pages,
-            triggers:triggers
+            triggers: triggers
         };
     }
 
@@ -174,18 +174,18 @@ export class XmlManager {
         switch (node.nodeName) {
             case XmlManager.Seq:
                 return this.parseSeq(node);
-                break;
+            case XmlManager.Seq:
+                return this.parseIf(node);
             case XmlManager.Transition:
                 return this.parseTransition(node);
-                break;
             case XmlManager.LoginRequest:
                 return this.parseLoginRequest(node);
             case XmlManager.PatientsRequest:
                 return this.parsePatientRequest(node);
-                break;
+            case XmlManager.ShowMap:
+                return this.parseShowMap(node);
             default:
                 return undefined;
-                break;
         }
     }
 
@@ -207,6 +207,27 @@ export class XmlManager {
         }
         return this.logicFunctionFactory.seqFunc(first, second);
     }
+
+    private parseIf(node: Node): Function {
+        this.logger.log("parseIf");
+        var condition:string = node.attributes['condition'].value;
+        var thenFunc: Function;
+        var elseFunc: Function;
+        var length = node.childNodes.length;
+        for (var i = 0; i < length; i++) {
+            var child = node.childNodes.item(i);
+            switch (child.nodeName) {
+                case XmlManager.Then:
+                    thenFunc = this.parseLogicNode(child);
+                    break;
+                case XmlManager.Else:
+                    elseFunc = this.parseLogicNode(child);
+                    break;
+            }
+        }
+        return this.logicFunctionFactory.ifFunc(condition, thenFunc, elseFunc);
+    }
+
 
     private parseTransition(node: Node): Function {
         this.logger.log("parseTransition");

@@ -1,5 +1,6 @@
 import mLog = module("utils/log/Log");
 import mControl = module("emulator/model/ui/Control");
+import mControlPanel = module("emulator/model/ui/ControlPanel");
 import mPage = module("emulator/model/Page");
 import mEmulator = module("emulator/model/Emulator");
 import mTrigger = module("emulator/model/logic/Trigger");
@@ -32,8 +33,35 @@ export class NavigationManager {
         if (this.currentPage) {
             this.currentPage.onHide();
         }
-        page.onShow();
         this.currentPage = page;
+        page.onShow();
+
+    }
+
+    public findControlById(id: string): mControl.Control {
+        var control: mControl.Control;
+        var root = this.currentPage;
+        return this.getControlById(root.Root, id);
+    }
+
+    private getControlById(root: mControl.Control, id: string): mControl.Control {
+        if (!root) {
+            return undefined;
+        }
+        if (root.Tag.Id == id) {
+            return root;
+        }
+        if (root instanceof mControlPanel.ControlPanel) {
+            var childrens = (<mControlPanel.ControlPanel>root).Childrens;
+            
+            for (var i = 0; i < childrens.length; i++) {
+                var control = this.getControlById(childrens[i], id);
+                if (control) {
+                    return control;
+                }
+            };
+        }
+        return undefined;
     }
 
     public back() {

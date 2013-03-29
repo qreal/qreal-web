@@ -1,128 +1,23 @@
-<application>
-  <logic>
-    <trigger form-id='main' event='onShow'>
-    </trigger>
-    <trigger form-id='main' event='onTimer'>
-    </trigger>
-    <trigger form-id='main' event='onLoginResponse'>
-      <transition form-id='map'></transition>
-    </trigger>
-    <trigger form-id='main' event='onPatientsResponse'>
-    </trigger>
-    <trigger form-id='fail' event='onShow'>
-    </trigger>
-    <trigger form-id='fail' event='onTimer'>
-    </trigger>
-    <trigger form-id='fail' event='onLoginResponse'>
-    </trigger>
-    <trigger form-id='fail' event='onPatientsResponse'>
-    </trigger>
-    <trigger form-id='map' event='onShow'>
-    </trigger>
-    <trigger form-id='map' event='onTimer'>
-    </trigger>
-    <trigger form-id='map' event='onLoginResponse'>
-    </trigger>
-    <trigger form-id='map' event='onPatientsResponse'>
-    </trigger>
-    <action control-id='button6'>
-      <login-request
-			  url="http://localhost:54321"
-			  login-id="editText3"
-			  password-id="editText5" />
-    </action>
-     <action control-id='button7'>
-      <login-request
-			  url="http://localhost:54321"
-			  login-id="editText3"
-			  password-id="editText5" />
-    </action>
-  </logic>
-  <forms>
-    <form form_name="main">
-      <LinearLayout
-        orientation="vertical"
-        layout_width="fill_parent"
-        layout_height="fill_parent"
-        background="#ffffff">
-        <TextView
-          layout_width="fill_parent"
-          layout_height="wrap_content"
-          layout_marginTop="10px"
-          padding="0px"
-          text="Hello!"
-          textSize="26px" />
-        <TextView
-          layout_width="fill_parent"
-          layout_height="wrap_content"
-          layout_marginTop="10px"
-          padding="0px" text="login:"
-          textSize="26px" />
-        <EditText
-          layout_width="fill_parent"
-          layout_height="wrap_content"
-          layout_marginTop="10px"
-          id="editText3"
-          padding="0px"
-          text=""
-          textSize="26px" />
-        <TextView
-          layout_width="fill_parent"
-          layout_height="wrap_content"
-          layout_marginTop="10px"
-          padding="0px"
-          text="password:"
-          textSize="18px" />
-        <EditText
-          layout_width="fill_parent"
-          layout_height="wrap_content"
-          layout_marginTop="10px"
-          id="editText5"
-          padding="0px"
-          text=""
-          textSize="18px" />
-        <Button
-          layout_width="fill_parent"
-          layout_height="wrap_content"
-          layout_marginTop="20px"
-          text="Submit"
-          textSize="15px"
-          id="button6"
-          />
-      <Button
-          layout_width="fill_parent"
-          layout_height="wrap_content"
-          layout_marginTop="20px"
-          text="getPatients"
-          textSize="15px"
-          id="button7" />
-      </LinearLayout>
-    </form>
-    <form form_name="fail">
-      <LinearLayout
-        orientation="vertical"
-        layout_width="fill_parent"
-        layout_height="fill_parent"
-        background="#ffffff">
-        <TextView
-          layout_width="fill_parent"
-          layout_height="wrap_content"
-          layout_marginTop="10px"
-          padding="0px"
-          text="Fail!!!"
-          textSize="50px" />
-      </LinearLayout>
-    </form>
-    <form form_name="map">
-      <LinearLayout
-        orientation="vertical"
-        layout_width="fill_parent"
-        layout_height="fill_parent"
-        background="#ffffff">
-        <Map layout_width="fill_parent"
-             layout_height="fill_parent"
-             id="mapId" />
-      </LinearLayout>
-    </form>
-  </forms>
+<application name='patients'>
+<logic>
+<trigger form-id='main' event='onShow'>
+<showmap id='map1' />
+</trigger>
+<trigger form-id='main' event='onTimer'>
+</trigger>
+<trigger form-id='main' event='onLoginResponse'>
+</trigger>
+<trigger form-id='main' event='onPatientsResponse'>
+</trigger>
+</logic>
+<forms>
+<form form_name="main">
+<LinearLayout 
+xmlns="http://schemas.android.com/apk/res/android" 
+orientation="vertical" layout_width="fill_parent" layout_height="fill_parent" background="#ffffff"> 
+<Map 
+layout_width="fill_parent" layout_height="fill_parent" id="map1" />
+</LinearLayout>
+</form>
+</forms>
 </application>

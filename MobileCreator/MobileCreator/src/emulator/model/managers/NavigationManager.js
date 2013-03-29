@@ -1,7 +1,9 @@
-define(["require", "exports", "utils/log/Log", "emulator/model/Emulator"], function(require, exports, __mLog__, __mEmulator__) {
+define(["require", "exports", "utils/log/Log", "emulator/model/ui/ControlPanel", "emulator/model/Emulator"], function(require, exports, __mLog__, __mControlPanel__, __mEmulator__) {
     var mLog = __mLog__;
 
     
+    var mControlPanel = __mControlPanel__;
+
     
     var mEmulator = __mEmulator__;
 
@@ -32,8 +34,32 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator"], funct
             if(this.currentPage) {
                 this.currentPage.onHide();
             }
-            page.onShow();
             this.currentPage = page;
+            page.onShow();
+        };
+        NavigationManager.prototype.findControlById = function (id) {
+            var control;
+            var root = this.currentPage;
+            return this.getControlById(root.Root, id);
+        };
+        NavigationManager.prototype.getControlById = function (root, id) {
+            if(!root) {
+                return undefined;
+            }
+            if(root.Tag.Id == id) {
+                return root;
+            }
+            if(root instanceof mControlPanel.ControlPanel) {
+                var childrens = (root).Childrens;
+                for(var i = 0; i < childrens.length; i++) {
+                    var control = this.getControlById(childrens[i], id);
+                    if(control) {
+                        return control;
+                    }
+                }
+                ;
+            }
+            return undefined;
         };
         NavigationManager.prototype.back = function () {
             var length = this.pageStack.length;

@@ -1,9 +1,11 @@
-define(["require", "exports", "emulator/model/Emulator", "emulator/model/managers/EventManager", "utils/log/Log"], function(require, exports, __mEmulator__, __mEventManager__, __mLog__) {
+define(["require", "exports", "emulator/model/Emulator", "emulator/model/managers/EventManager", "utils/log/Log", "emulator/model/ui/Map"], function(require, exports, __mEmulator__, __mEventManager__, __mLog__, __mMap__) {
     var mEmulator = __mEmulator__;
 
     var mEventManager = __mEventManager__;
 
     var mLog = __mLog__;
+
+    var mMap = __mMap__;
 
     var FunctionFactory = (function () {
         function FunctionFactory() {
@@ -15,9 +17,9 @@ define(["require", "exports", "emulator/model/Emulator", "emulator/model/manager
                 func2();
             };
         };
-        FunctionFactory.prototype.ifFunc = function (conditionFunc, thenFunc, elseFunc) {
-            return function () {
-                if(conditionFunc()) {
+        FunctionFactory.prototype.ifFunc = function (condition, thenFunc, elseFunc) {
+            return function (data) {
+                if(true) {
                     thenFunc();
                 } else if(elseFunc) {
                     elseFunc();
@@ -50,10 +52,19 @@ define(["require", "exports", "emulator/model/Emulator", "emulator/model/manager
             };
         };
         FunctionFactory.prototype.showMapFunc = function (id) {
-            this.logger.log("saveSessionFunc");
+            this.logger.log("showMapFunc");
             var _this = this;
-            return function () {
-                _this.logger.log("show map. id=" + id);
+            return function (responseData) {
+                _this.logger.log("showMapFunc responseData: " + responseData);
+                var points = [];
+                if(responseData) {
+                    var data = responseData.split(';');
+                    for(var i = 0; i < data.length; i += 3) {
+                        points.push(new mMap.Point(parseFloat(data[i]), parseFloat(data[i + 1]), data[i + 2]));
+                    }
+                }
+                var map = mEmulator.Emulator.instance.NavigationManager.findControlById(id);
+                map.addPushpins(points);
             };
         };
         FunctionFactory.prototype.sendLoginRequest = function (url, login, password) {

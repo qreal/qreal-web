@@ -20,13 +20,6 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
                 mapTypeId: Microsoft.Maps.MapTypeId.road,
                 zoom: 8
             });
-            var points = [];
-            points.push(new Point(59.9, 29.9));
-            points.push(new Point(60, 29.9));
-            points.push(new Point(59.9, 30));
-            points.push(new Point(60, 30));
-            points.push(new Point(59.8, 30));
-            this.addPushpins(points);
         }
         Object.defineProperty(Map.prototype, "Map", {
             get: function () {
@@ -49,9 +42,10 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
     })(mControl.Control);
     exports.Map = Map;    
     var Point = (function () {
-        function Point(latitude, longitude) {
+        function Point(latitude, longitude, comment) {
             this.Latitude = latitude;
             this.Longitude = longitude;
+            this.Coment = comment;
         }
         return Point;
     })();

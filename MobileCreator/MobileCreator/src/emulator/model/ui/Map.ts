@@ -22,15 +22,6 @@ export class Map extends mControl.Control {
                                mapTypeId: Microsoft.Maps.MapTypeId.road,
                                zoom: 8
                            });
-
-
-        var points = [];
-        points.push(new Point(59.9, 29.9));
-        points.push(new Point(60, 29.9));
-        points.push(new Point(59.9, 30));
-        points.push(new Point(60, 30));
-        points.push(new Point(59.8, 30));
-        this.addPushpins(points);
     }
 
     public addPushpins(points: Point[]): void {
@@ -46,10 +37,11 @@ export class Map extends mControl.Control {
 export class Point {
     public Latitude: number;
     public Longitude: number;
+    public Coment: string;
 
-    constructor(latitude: number, longitude: number) {
+    constructor(latitude: number, longitude: number, comment:string) {
         this.Latitude = latitude;
         this.Longitude = longitude;
+        this.Coment = comment;
     }
-
 }

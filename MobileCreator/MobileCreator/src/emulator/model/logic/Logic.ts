@@ -1,6 +1,7 @@
 import mEmulator = module("emulator/model/Emulator");
 import mEventManager = module("emulator/model/managers/EventManager");
 import mLog = module("utils/log/Log");
+import mMap = module("emulator/model/ui/Map");
 
 export class FunctionFactory {
     private logger = new mLog.Logger("FunctionFactory");
@@ -12,9 +13,9 @@ export class FunctionFactory {
         }
     }
 
-    public ifFunc(conditionFunc: Function, thenFunc: Function, elseFunc: Function): Function {
-        return function () {
-            if (conditionFunc()) {
+    public ifFunc(condition: string, thenFunc: Function, elseFunc: Function): Function {
+        return function (data:string) {
+            if (true) {
                 thenFunc();
             } else if (elseFunc) {
                 elseFunc();
@@ -28,7 +29,7 @@ export class FunctionFactory {
         }
     }
 
-    public loginRequestFunc(url: string, login_id: string, password_id: string): Function {       
+    public loginRequestFunc(url: string, login_id: string, password_id: string): Function {
         var _this = this;
         return function () {
             var login = mEmulator.Emulator.instance.EmulatorViewModel.getInputText(login_id);
@@ -43,7 +44,7 @@ export class FunctionFactory {
         }
     }
 
-    public patientsRequestFunc(url: string):Function {
+    public patientsRequestFunc(url: string): Function {
         this.logger.log("saveSessionFunc");
         var _this = this;
         return function () {
@@ -52,10 +53,19 @@ export class FunctionFactory {
     }
 
     public showMapFunc(id: string): Function {
-        this.logger.log("saveSessionFunc");
+        this.logger.log("showMapFunc");
         var _this = this;
-        return function () {
-            _this.logger.log("show map. id="+id);
+        return function (responseData?: string) {
+            _this.logger.log("showMapFunc responseData: " + responseData)
+            var points: mMap.Point[] = [];
+            if (responseData) {
+                var data:string[] = responseData.split(';');
+                for (var i = 0; i < data.length; i+=3){
+                    points.push(new mMap.Point(parseFloat(data[i]), parseFloat(data[i+1]), data[i+2]));
+                }
+            }
+            var map = <mMap.Map> mEmulator.Emulator.instance.NavigationManager.findControlById(id);
+            map.addPushpins(points);
         }
     }
 
@@ -63,11 +73,11 @@ export class FunctionFactory {
 
     public sendLoginRequest(url: string, login: string, password: string): void {
         this.logger.log("sendLoginRequest: url=" + url + " login=" + login + " password=" + password);
-        var parameters = "login?"+jQuery.param({
+        var parameters = "login?" + jQuery.param({
             login: login,
             password: password
         });
-                
+
         $.ajax({
             type: "POST",
             url: url,

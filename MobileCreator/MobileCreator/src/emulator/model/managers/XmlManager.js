@@ -169,18 +169,18 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
             switch(node.nodeName) {
                 case XmlManager.Seq:
                     return this.parseSeq(node);
-                    break;
+                case XmlManager.Seq:
+                    return this.parseIf(node);
                 case XmlManager.Transition:
                     return this.parseTransition(node);
-                    break;
                 case XmlManager.LoginRequest:
                     return this.parseLoginRequest(node);
                 case XmlManager.PatientsRequest:
                     return this.parsePatientRequest(node);
-                    break;
+                case XmlManager.ShowMap:
+                    return this.parseShowMap(node);
                 default:
                     return undefined;
-                    break;
             }
         };
         XmlManager.prototype.parseSeq = function (node) {
@@ -200,6 +200,25 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
                 }
             }
             return this.logicFunctionFactory.seqFunc(first, second);
+        };
+        XmlManager.prototype.parseIf = function (node) {
+            this.logger.log("parseIf");
+            var condition = node.attributes['condition'].value;
+            var thenFunc;
+            var elseFunc;
+            var length = node.childNodes.length;
+            for(var i = 0; i < length; i++) {
+                var child = node.childNodes.item(i);
+                switch(child.nodeName) {
+                    case XmlManager.Then:
+                        thenFunc = this.parseLogicNode(child);
+                        break;
+                    case XmlManager.Else:
+                        elseFunc = this.parseLogicNode(child);
+                        break;
+                }
+            }
+            return this.logicFunctionFactory.ifFunc(condition, thenFunc, elseFunc);
         };
         XmlManager.prototype.parseTransition = function (node) {
             this.logger.log("parseTransition");
