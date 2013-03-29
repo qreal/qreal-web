@@ -174,7 +174,7 @@ export class XmlManager {
         switch (node.nodeName) {
             case XmlManager.Seq:
                 return this.parseSeq(node);
-            case XmlManager.Seq:
+            case XmlManager.If:
                 return this.parseIf(node);
             case XmlManager.Transition:
                 return this.parseTransition(node);
@@ -198,10 +198,10 @@ export class XmlManager {
             var child = node.childNodes.item(i);
             switch (child.nodeName) {
                 case XmlManager.SeqFirst:
-                    first = this.parseLogicNode(child);
+                    first = this.parseLogicNode(child.childNodes.item(1));
                     break;
                 case XmlManager.SeqSecond:
-                    second = this.parseLogicNode(child);
+                    second = this.parseLogicNode(child.childNodes.item(1));
                     break;
             }
         }
@@ -218,10 +218,10 @@ export class XmlManager {
             var child = node.childNodes.item(i);
             switch (child.nodeName) {
                 case XmlManager.Then:
-                    thenFunc = this.parseLogicNode(child);
+                    thenFunc = this.parseLogicNode(child.childNodes.item(1));
                     break;
                 case XmlManager.Else:
-                    elseFunc = this.parseLogicNode(child);
+                    elseFunc = this.parseLogicNode(child.childNodes.item(1));
                     break;
             }
         }

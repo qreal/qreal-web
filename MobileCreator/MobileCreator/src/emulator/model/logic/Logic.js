@@ -19,7 +19,13 @@ define(["require", "exports", "emulator/model/Emulator", "emulator/model/manager
         };
         FunctionFactory.prototype.ifFunc = function (condition, thenFunc, elseFunc) {
             return function (data) {
-                if(true) {
+                var ifCondition;
+                switch(condition) {
+                    case "loginSuccess":
+                        ifCondition = data == "success";
+                        break;
+                }
+                if(ifCondition) {
                     thenFunc();
                 } else if(elseFunc) {
                     elseFunc();
@@ -73,11 +79,13 @@ define(["require", "exports", "emulator/model/Emulator", "emulator/model/manager
                 login: login,
                 password: password
             });
+            var _this = this;
             $.ajax({
                 type: "POST",
                 url: url,
                 data: parameters,
                 success: function (data) {
+                    _this.logger.log("sendLoginRequest POST success");
                     mEmulator.Emulator.instance.EventManager.trigger(mEmulator.Emulator.instance.NavigationManager.CurrentPage.Name, mEventManager.EventManager.OnLoginResponse, data);
                 },
                 dataType: "text"

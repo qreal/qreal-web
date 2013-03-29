@@ -14,8 +14,14 @@ export class FunctionFactory {
     }
 
     public ifFunc(condition: string, thenFunc: Function, elseFunc: Function): Function {
-        return function (data:string) {
-            if (true) {
+        return function (data: string) {
+            var ifCondition: bool;
+            switch (condition) {
+                case "loginSuccess":
+                    ifCondition = data == "success";
+                    break;
+            }
+            if (ifCondition) {
                 thenFunc();
             } else if (elseFunc) {
                 elseFunc();
@@ -78,11 +84,14 @@ export class FunctionFactory {
             password: password
         });
 
+        var _this = this;
+
         $.ajax({
             type: "POST",
             url: url,
             data: parameters,
             success: function (data) {
+                _this.logger.log("sendLoginRequest POST success");
                 mEmulator.Emulator.instance.EventManager.trigger(
                     mEmulator.Emulator.instance.NavigationManager.CurrentPage.Name,
                     mEventManager.EventManager.OnLoginResponse,

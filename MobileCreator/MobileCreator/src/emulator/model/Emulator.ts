@@ -53,8 +53,8 @@ export class Emulator {
         this.logger.log("showXmlStringView: \n" + xml);
         this.clearUi();
         xml = mXmlHelper.escapeXml(xml);
-        var application = this.xmlManager.parseXmlString(xml);
-        //var application = this.xmlManager.parseStoredXml('/res/application5.xml');
+        //var application = this.xmlManager.parseXmlString(xml);
+        var application = this.xmlManager.parseStoredXml('/res/application5.xml');
         var pages = application.pages;
         var triggers = application.triggers;
         var _eventManager = this.eventManager;

@@ -3,15 +3,18 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "emulator/model/ui/Control"], function(require, exports, __mControl__) {
+define(["require", "exports", "emulator/model/ui/Control", "utils/log/Log"], function(require, exports, __mControl__, __mLog__) {
     var mControl = __mControl__;
 
     
+    var mLog = __mLog__;
+
     var Map = (function (_super) {
         __extends(Map, _super);
         function Map(tag, $control) {
             if (typeof $control === "undefined") { $control = $("<div></div>"); }
                 _super.call(this, tag, $control);
+            this.logger = new mLog.Logger("Map");
             this.setDimensions($control);
             $control.css('position', 'relative');
             this.map = new Microsoft.Maps.Map($control.get()[0], {
@@ -47,6 +50,9 @@ define(["require", "exports", "emulator/model/ui/Control"], function(require, ex
             this.Longitude = longitude;
             this.Coment = comment;
         }
+        Point.prototype.toString = function () {
+            return this.Latitude + ";" + this.Longitude + ";" + this.Coment + ";";
+        };
         return Point;
     })();
     exports.Point = Point;    

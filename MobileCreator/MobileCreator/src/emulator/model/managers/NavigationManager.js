@@ -30,10 +30,10 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/ControlPanel",
             NavigationManager.logger.log("showPage " + pageName);
             var page = this.pages[this.idPreffix + pageName];
             this.pageStack.push(this.idPreffix + pageName);
-            mEmulator.Emulator.instance.showPage(page.Root);
             if(this.currentPage) {
                 this.currentPage.onHide();
             }
+            mEmulator.Emulator.instance.showPage(page.Root);
             this.currentPage = page;
             page.onShow();
         };
@@ -66,7 +66,12 @@ define(["require", "exports", "utils/log/Log", "emulator/model/ui/ControlPanel",
             if(length > 1) {
                 this.pageStack.splice(length - 1, 1);
                 var pageId = this.pageStack[this.pageStack.length - 1];
+                if(this.currentPage) {
+                    this.currentPage.onHide();
+                }
+                this.currentPage = this.pages[pageId];
                 mEmulator.Emulator.instance.showPage(this.pages[pageId].Root);
+                this.currentPage.onShow();
             }
         };
         NavigationManager.prototype.clear = function () {

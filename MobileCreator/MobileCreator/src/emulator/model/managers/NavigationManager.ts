@@ -28,14 +28,13 @@ export class NavigationManager {
     public showPage(pageName: string) {
         NavigationManager.logger.log("showPage "+pageName);
         var page:mPage.Page = this.pages[this.idPreffix + pageName];
-        this.pageStack.push(this.idPreffix + pageName);
-        mEmulator.Emulator.instance.showPage(page.Root);
+        this.pageStack.push(this.idPreffix + pageName);       
         if (this.currentPage) {
             this.currentPage.onHide();
         }
+        mEmulator.Emulator.instance.showPage(page.Root);
         this.currentPage = page;
         page.onShow();
-
     }
 
     public findControlById(id: string): mControl.Control {
@@ -69,7 +68,12 @@ export class NavigationManager {
         if (length > 1) {
             this.pageStack.splice(length - 1, 1);
             var pageId = this.pageStack[this.pageStack.length - 1];
+            if (this.currentPage) {
+                this.currentPage.onHide();
+            }
+            this.currentPage = this.pages[pageId];
             mEmulator.Emulator.instance.showPage(this.pages[pageId].Root);
+            this.currentPage.onShow();
         }
     }
 

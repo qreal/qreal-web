@@ -1,7 +1,10 @@
 import mControl = module("emulator/model/ui/Control");
 import mMapTag = module("emulator/model/attributes/MapTag");
+import mLog = module("utils/log/Log");
 
 export class Map extends mControl.Control {
+
+    private logger = new mLog.Logger("Map");
 
     private map: Microsoft.Maps.Map;
     get Map(): Microsoft.Maps.Map {
@@ -29,6 +32,7 @@ export class Map extends mControl.Control {
     }
 
     public addPushpin(point: Point) {
+        //this.logger.log("addPushpin" +point.toString());
         var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(point.Latitude, point.Longitude), null);
         this.map.entities.push(pushpin);
     }
@@ -43,5 +47,9 @@ export class Point {
         this.Latitude = latitude;
         this.Longitude = longitude;
         this.Coment = comment;
+    }
+
+    public toString(): string{
+        return this.Latitude + ";" + this.Longitude + ";" + this.Coment + ";";
     }
 }
