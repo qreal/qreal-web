@@ -50,7 +50,7 @@ namespace Server {
 
 
         public static int checkLogin(string login, string password) {
-            var sql = "SELECT userid FROM [User] us WHERE us.Login = @login and us.Password = @password";
+            /*var sql = "SELECT userid FROM [User] us WHERE us.Login = @login and us.Password = @password";
             var cmd = new SqlCommand(sql, doctorDB);
             cmd.Parameters.AddWithValue("@login", login);
             cmd.Parameters.AddWithValue("@password", password);
@@ -61,7 +61,12 @@ namespace Server {
             } else {
                 res = -1;
             }
-            reader.Close();
+            reader.Close();*/
+            var res = 0;
+            if (login == "user" && password == "password")
+            {
+                res = 1;
+            }
             return res;
         }
 
@@ -92,7 +97,7 @@ namespace Server {
             }
             return res.ToArray();
         }
-
+        /*
         public static int checkCookie(string cookie) {
             var sql = "Select c.id from Cookies c where c.cookie = @cook";
             var cmd = new SqlCommand(sql, doctorDB);
@@ -122,7 +127,7 @@ namespace Server {
             cmd.Parameters.AddWithValue("@cook", cookie);
             cmd.Parameters.AddWithValue("@id", id);
             cmd.ExecuteNonQuery();
-        }
+        }*/
 
     }
 
@@ -180,8 +185,8 @@ namespace Server {
                         var parameters = HttpUtility.ParseQueryString(data);
                         var login = new Login(parameters["login"], parameters["password"]); //json.Deserialize<Login>(data);
                         var id = DB.checkLogin(login.login, login.password);
-                        if (id != -1) {
-                            var loginCookie = new Cookie();
+                        if (id == 1) {
+                            /*var loginCookie = new Cookie();
                             loginCookie.Name = "Session";
                             var cookie = "";
                             do {
@@ -191,12 +196,12 @@ namespace Server {
                             loginCookie.Value = cookie;
                             loginCookie.Expires = DateTime.Now.AddDays(1);
                             
-                            context.Response.Cookies.Add(loginCookie);
+                            context.Response.Cookies.Add(loginCookie);*/
                             sb.Append("success");
                         } else {
                             sb.Append("fail");
                         }
-                    } else if (name.ToLower() == "logout") {
+                    /*} /*else if (name.ToLower() == "logout") {
                         var cook = getCookie(context);
                         if (cook != null) {
                             var expCookie = new Cookie();
@@ -206,13 +211,14 @@ namespace Server {
                             if (DB.checkCookie(cook.Value) != -1) {
                                 DB.deleteCookie(cook.Value);
                             }
-                        }
+                        }*/
                     } else if (name.ToLower() == "coordinates") {
+                        /*Console.Write("LOLOL!");
                         var cook = getCookie(context);
                         if (cook != null) {
                             //var id = DB.checkCookie(cook.Value);
-                            //if (id != -1) {
-                            var id = 1;
+                            //if (id != -1) {*/
+                                var id = 1;
                                 var coords = DB.getCoordinates(id);
                                 var json = new System.Web.Script.Serialization.JavaScriptSerializer();
                                   foreach(var coordinate in coords){
@@ -220,7 +226,7 @@ namespace Server {
                                 }
                             //}
                         }
-                    }
+                    
 
                     byte[] b = Encoding.UTF8.GetBytes(sb.ToString());
                     context.Response.ContentLength64 = b.Length;
