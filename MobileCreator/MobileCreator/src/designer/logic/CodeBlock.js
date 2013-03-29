@@ -64,7 +64,6 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
             }
             var newActionDiv = $("<div data-role='controlgroup' data-type='horizontal' name='addCP' id='AddCP' data-mini='true'></div>");
             newActionDiv.css("margin-left", this.marginLeft + "px");
-            newActionDiv.append($("<hr />"));
             var selectAction = $("<select name='selectNewAction' data-theme='a' id='selectNewAction' data-inline='true 'data-mini='true'></select>");
             var loginAction = $("<option value='login'>login</option>");
             var ifAction = $("<option value='if'>if</option>");
