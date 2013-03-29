@@ -184,6 +184,20 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;" + usingsBuilder.ToString()
+                    insert newXaml <| ("<phone:PhoneApplicationPage 
+    x:Class=\"" + projectName + "." + fileName + "\"
+    xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"
+    xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"
+    xmlns:phone=\"clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone\"
+    xmlns:shell=\"clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone\"
+    xmlns:d=\"http://schemas.microsoft.com/expression/blend/2008\"
+    xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\"" + xmlnsBuilder.ToString() + "
+    mc:Ignorable=\"d\" d:DesignWidth=\"480\" d:DesignHeight=\"768\"
+    FontFamily=\"{StaticResource PhoneFontFamilyNormal}\"
+    FontSize=\"{StaticResource PhoneFontSizeNormal}\"
+    Foreground=\"{StaticResource PhoneForegroundBrush}\"
+    SupportedOrientations=\"Portrait\" Orientation=\"Portrait\"
+    shell:SystemTray.IsVisible=\"True\">\n")
                     appendXaml <| "\n</phone:PhoneApplicationPage>"
                     writeToFile (path + "\\" + fileName + ".xaml") <| newXaml.ToString()
                     newXaml.Clear() |> ignore
@@ -206,21 +220,6 @@ using Microsoft.Phone.Controls;" + usingsBuilder.ToString()
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>"
-
-                    appendXaml <| ("<phone:PhoneApplicationPage 
-    x:Class=\"" + projectName + "." + fileName + "\"
-    xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"
-    xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"
-    xmlns:phone=\"clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone\"
-    xmlns:shell=\"clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone\"
-    xmlns:d=\"http://schemas.microsoft.com/expression/blend/2008\"
-    xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\"" + xmlnsBuilder.ToString() + "
-    mc:Ignorable=\"d\" d:DesignWidth=\"480\" d:DesignHeight=\"768\"
-    FontFamily=\"{StaticResource PhoneFontFamilyNormal}\"
-    FontSize=\"{StaticResource PhoneFontSizeNormal}\"
-    Foreground=\"{StaticResource PhoneForegroundBrush}\"
-    SupportedOrientations=\"Portrait\" Orientation=\"Portrait\"
-    shell:SystemTray.IsVisible=\"True\">\n")
 
                     appendCs <| "\nnamespace " + projectName + "
 {
