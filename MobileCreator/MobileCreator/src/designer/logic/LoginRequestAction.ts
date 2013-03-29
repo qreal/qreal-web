@@ -35,7 +35,7 @@ export class LoginRequestAction extends mAction.Action {
 
     public show(domElement) {
         var _this = this;
-        var loginBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>Login: </a>");
+        var loginBlock = $("<a href='#' data-role='button' data-corners='false' data-inline='true' data-mini='true'>Login: </a>");
         var editTexts: string[] = this.findEditTexts();
         var loginSelect = $("<select data-mini='true' data-inline='true'></select>");
         for (var i = 0; i < editTexts.length; i++) {
@@ -66,7 +66,7 @@ export class LoginRequestAction extends mAction.Action {
             _this.loginId = _loginSelect.val();
         });
 
-        var passwdBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>Passwd: </a>");
+        var passwdBlock = $("<a href='#' data-role='button' data-corners='false' data-inline='true' data-mini='true'>Passwd: </a>");
         editTexts = this.findEditTexts();
         var passSelect = $("<select data-mini='true' data-inline='true'></select>");
         for (var i = 0; i < editTexts.length; i++) {

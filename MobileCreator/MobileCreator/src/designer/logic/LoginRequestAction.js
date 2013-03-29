@@ -39,7 +39,7 @@ define(["require", "exports", "designer/logic/Action", "designer/widgets/WidgetT
         };
         LoginRequestAction.prototype.show = function (domElement) {
             var _this = this;
-            var loginBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>Login: </a>");
+            var loginBlock = $("<a href='#' data-role='button' data-corners='false' data-inline='true' data-mini='true'>Login: </a>");
             var editTexts = this.findEditTexts();
             var loginSelect = $("<select data-mini='true' data-inline='true'></select>");
             for(var i = 0; i < editTexts.length; i++) {
@@ -69,7 +69,7 @@ define(["require", "exports", "designer/logic/Action", "designer/widgets/WidgetT
             loginSelect.change(function () {
                 _this.loginId = _loginSelect.val();
             });
-            var passwdBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>Passwd: </a>");
+            var passwdBlock = $("<a href='#' data-role='button' data-corners='false' data-inline='true' data-mini='true'>Passwd: </a>");
             editTexts = this.findEditTexts();
             var passSelect = $("<select data-mini='true' data-inline='true'></select>");
             for(var i = 0; i < editTexts.length; i++) {

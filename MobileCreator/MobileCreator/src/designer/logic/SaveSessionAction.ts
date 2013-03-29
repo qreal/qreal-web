@@ -13,7 +13,7 @@ export class SaveSessionAction extends mAction.Action {
         return xml;
     }
     public show(domeElement: JQuery) {
-        var saveSessionBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>SaveSession</a>");
+        var saveSessionBlock = $("<a href='#' data-role='button' data-corners='false' data-inline='true' data-mini='true'>SaveSession</a>");
         domeElement.append(saveSessionBlock);
         saveSessionBlock.button();
     }

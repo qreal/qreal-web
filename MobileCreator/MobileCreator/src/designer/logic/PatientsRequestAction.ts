@@ -12,7 +12,7 @@ export class PatientsRequestAction extends mAction.Action {
 
     public show(domeElement: JQuery) {
         var _this = this;
-        var getPatientsBlock = $("<a href='#' data-role='button' data-inline='true' data-mini='true'>Get patients from server</a>");
+        var getPatientsBlock = $("<a href='#' data-role='button' data-corners='false' data-inline='true' data-mini='true'>Get patients from server</a>");
         domeElement.append(getPatientsBlock);
         getPatientsBlock.button();
         /*
