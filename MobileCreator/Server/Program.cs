@@ -144,6 +144,7 @@ namespace Server {
                     string input = new StreamReader(context.Request.InputStream).ReadToEnd();
                     string msg = context.Request.HttpMethod + " " + context.Request.Url;
                     Console.Write(msg);
+                    Console.Write(input);
                     context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
                     context.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
@@ -202,6 +203,7 @@ namespace Server {
                         }
                     }
 
+                    Console.WriteLine("response: "+sb.ToString());
                     byte[] b = Encoding.UTF8.GetBytes(sb.ToString());
                     context.Response.ContentLength64 = b.Length;
                     var stream = context.Response.OutputStream;

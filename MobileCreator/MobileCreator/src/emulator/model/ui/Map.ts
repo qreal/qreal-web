@@ -41,7 +41,6 @@ export class Map extends mControl.Control {
         var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(point.Latitude, point.Longitude), null);
         this.map.entities.push(pushpin);
     }
-
 }
 
 export class Point {

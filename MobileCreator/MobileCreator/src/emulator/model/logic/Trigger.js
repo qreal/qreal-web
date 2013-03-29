@@ -30,3 +30,4 @@ define(["require", "exports"], function(require, exports) {
     })();
     exports.Trigger = Trigger;    
 })
+//@ sourceMappingURL=Trigger.js.map

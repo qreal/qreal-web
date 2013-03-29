@@ -36,3 +36,4 @@ define(["require", "exports", "emulator/model/attributes/ControlTag"], function(
     })(mControlTag.ControlTag);
     exports.TextViewTag = TextViewTag;    
 })
+//@ sourceMappingURL=TextViewTag.js.map

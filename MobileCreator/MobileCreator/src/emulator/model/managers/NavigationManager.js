@@ -55,3 +55,4 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator"], funct
     })();
     exports.NavigationManager = NavigationManager;    
 })
+//@ sourceMappingURL=NavigationManager.js.map

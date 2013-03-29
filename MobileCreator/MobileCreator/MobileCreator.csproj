@@ -321,6 +321,9 @@
     <Content Include="src\emulator\model\ui\Map.js.map">
       <DependentUpon>Map.ts</DependentUpon>
     </Content>
+    <Content Include="src\emulator\model\Emulator.js.map">
+      <DependentUpon>Emulator.ts</DependentUpon>
+    </Content>
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
