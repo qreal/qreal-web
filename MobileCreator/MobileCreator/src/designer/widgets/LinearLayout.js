@@ -191,7 +191,6 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
         LinearLayout.prototype.toXML = function () {
             var xmlString = "";
             xmlString += "<LinearLayout \n";
-            xmlString += "xmlns=\"http://schemas.android.com/apk/res/android\" \n";
             if(this.preferences.Orientation == mLinearLayoutPreferences.LinearLayoutPreferences.Horizontal) {
                 xmlString += "orientation=\"horizontal\" ";
             } else {
