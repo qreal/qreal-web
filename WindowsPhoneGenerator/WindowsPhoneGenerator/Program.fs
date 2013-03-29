@@ -132,18 +132,6 @@ data.DownloadStringCompleted += new DownloadStringCompletedEventHandler(getRespo
 data.DownloadStringAsync(new Uri(\"" + (tryGetAttribute name "url") + "\"));"
             // разбор строки patients и выставление пациентов на карте
             | "showmap" ->
-                if not (references.ContainsKey("mapsReferences")) then
-                    append referencesBuilder <| "\n<Reference Include=\"Microsoft.Phone.Controls.Maps, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL\" />
-<Reference Include=\"System.Device\" />
-<Reference Include=\"System.Servicemodel\" />"
-                    references.Add("mapsReferences", referencesBuilder.ToString())
-                if not (xmlns.ContainsKey("mapsXmlns")) then
-                    append xmlnsBuilder <| "\nxmlns:maps=\"clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps\""
-                    xmlns.Add("mapsXmlns", xmlnsBuilder.ToString())
-                if not (usings.ContainsKey("mapsUsings")) then
-                    append usingsBuilder <| "\nusing Microsoft.Phone.Controls.Maps;
-using System.Device.Location;"
-                    usings.Add("mapsUsings", usingsBuilder.ToString())
                 builderAppend <| "\nint count = 0;
 int length = patients.Length;
 StringBuilder latitude = new StringBuilder();
@@ -181,6 +169,21 @@ for (int i = 0; i < length; i++)
 }"
             | "form" ->
                 if reader.NodeType = XmlNodeType.EndElement then
+                    insert newCs <| "using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.IO;
+using System.Text;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Shapes;
+using Microsoft.Phone.Controls;" + usingsBuilder.ToString()
                     appendXaml <| "\n</phone:PhoneApplicationPage>"
                     writeToFile (path + "\\" + fileName + ".xaml") <| newXaml.ToString()
                     newXaml.Clear() |> ignore
@@ -219,21 +222,7 @@ for (int i = 0; i < length; i++)
     SupportedOrientations=\"Portrait\" Orientation=\"Portrait\"
     shell:SystemTray.IsVisible=\"True\">\n")
 
-                    appendCs <| "using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.IO;
-using System.Text;
-using System.Diagnostics;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using Microsoft.Phone.Controls;" + usingsBuilder.ToString() + "\nnamespace " + projectName + "
+                    appendCs <| "\nnamespace " + projectName + "
 {
 public partial class " + fileName + ": PhoneApplicationPage
 {\n"
@@ -313,6 +302,18 @@ patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> str
                 appendXaml <| "\n" + depthTab + "<phone:WebBrowser x:Name=\"" + name + "\" IsScriptEnabled=\"True\" Height=\"763\" Width=\"475\" />"
                 appendConstructor <| "\n" + name + ".Navigate(new Uri(\"" + (tryGetAttribute name "url") + "\", UriKind.RelativeOrAbsolute));"
             | "Map" ->
+                if not (references.ContainsKey("mapsReferences")) then
+                    append referencesBuilder <| "\n<Reference Include=\"Microsoft.Phone.Controls.Maps, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL\" />
+<Reference Include=\"System.Device\" />
+<Reference Include=\"System.Servicemodel\" />"
+                    references.Add("mapsReferences", referencesBuilder.ToString())
+                if not (xmlns.ContainsKey("mapsXmlns")) then
+                    append xmlnsBuilder <| "\nxmlns:maps=\"clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps\""
+                    xmlns.Add("mapsXmlns", xmlnsBuilder.ToString())
+                if not (usings.ContainsKey("mapsUsings")) then
+                    append usingsBuilder <| "\nusing Microsoft.Phone.Controls.Maps;
+using System.Device.Location;"
+                    usings.Add("mapsUsings", usingsBuilder.ToString())
                 let name = tryGetAttribute name "id"
                 appendXaml <| "\n" + depthTab + "<maps:Map Name=\"" + name + "\" HorizontalAlignment=\"Stretch\" VerticalAlignment=\"Stretch\"
             ScaleVisibility=\"Visible\"
