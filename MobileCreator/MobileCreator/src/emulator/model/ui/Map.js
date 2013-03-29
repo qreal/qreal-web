@@ -33,6 +33,7 @@ define(["require", "exports", "emulator/model/ui/Control", "utils/log/Log"], fun
         });
         Map.prototype.addPushpins = function (points) {
             var _this = this;
+            this.map.entities.clear();
             points.map(function (point) {
                 return _this.addPushpin(point);
             });
@@ -42,7 +43,13 @@ define(["require", "exports", "emulator/model/ui/Control", "utils/log/Log"], fun
             var map = this.map;
             (function (maps) {
                 var pushpinClick = maps.Events.addHandler(pushpin, 'click', function () {
-                    alert(point.Coment);
+                    var infoboxOptions = {
+                        width: 200,
+                        height: 100,
+                        description: point.Description
+                    };
+                    var defaultInfobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(point.Latitude, point.Longitude), infoboxOptions);
+                    map.entities.push(defaultInfobox);
                 });
             })(Microsoft.Maps);
             this.map.entities.push(pushpin);
@@ -51,13 +58,34 @@ define(["require", "exports", "emulator/model/ui/Control", "utils/log/Log"], fun
     })(mControl.Control);
     exports.Map = Map;    
     var Point = (function () {
-        function Point(latitude, longitude, comment) {
-            this.Latitude = latitude;
-            this.Longitude = longitude;
-            this.Coment = comment;
+        function Point(latitude, longitude, description) {
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.description = description;
         }
+        Object.defineProperty(Point.prototype, "Latitude", {
+            get: function () {
+                return this.latitude;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Point.prototype, "Longitude", {
+            get: function () {
+                return this.longitude;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Point.prototype, "Description", {
+            get: function () {
+                return this.description;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Point.prototype.toString = function () {
-            return this.Latitude + ";" + this.Longitude + ";" + this.Coment + ";";
+            return this.Latitude + ";" + this.Longitude + ";" + this.Description + ";";
         };
         return Point;
     })();

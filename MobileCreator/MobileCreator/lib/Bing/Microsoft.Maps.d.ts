@@ -86,7 +86,7 @@
         Note: This functionality is only available on browsers that support the W3C GeoLocation API.
     */
     export class GeoLocationProvider {
-        constructor (map: Map);
+        constructor(map: Map);
 
         /*
             Renders a geo location accuracy circle on the map. The accuracy circle is created with the center at the specified location, using the given radiusInMeters, and with the specified number of segments for the accuracy circle polygon. Additional options are also available to adjust the style of the polygon.
@@ -141,7 +141,7 @@
     }
 
     export class LocationRect {
-        constructor (center: Location, width: number, height: number);
+        constructor(center: Location, width: number, height: number);
 
         center: Location;
         height: number;
@@ -166,7 +166,7 @@
     }
 
     export class Location {
-        constructor (latitude: number, longitude: number, altitude?: number, altitudeReference?: AltitudeReference);
+        constructor(latitude: number, longitude: number, altitude?: number, altitudeReference?: AltitudeReference);
 
         altitude: number;
         altitudeReference: AltitudeReference;
@@ -222,7 +222,7 @@
         /*
             Initializes a new instance of the Color class. The a parameter represents opacity. The range of valid values for all parameters is 0 to 255.
         */
-        constructor (a: number, r: number, g: number, b: number);
+        constructor(a: number, r: number, g: number, b: number);
 
         /*
             The opacity of the color. The range of valid values is 0 to 255.
@@ -327,7 +327,7 @@
     }
 
     export class Point {
-        constructor (x: number, y: number);
+        constructor(x: number, y: number);
 
         x: number;
         y: number;
@@ -339,10 +339,12 @@
         toString(): string;
     }
 
-    export class Infobox implements Entity { }
+    export class Infobox implements Entity {
+        constructor(location: Microsoft.Maps.Location, infoboxOptions: any);
+    }
 
     export class Polygon implements Entity {
-        constructor (locations: Location[], options?: PolygonOptions);
+        constructor(locations: Location[], options?: PolygonOptions);
 
         getFillColor(): Color;
         getLocations(): Location[];
@@ -365,7 +367,7 @@
     }
 
     export class Polyline implements Entity {
-        constructor (locations: Location[], options?: PolylineOptions);
+        constructor(locations: Location[], options?: PolylineOptions);
 
         getLocations(): Location[];
         getStrokeColor(): Color;
@@ -387,7 +389,7 @@
     }
 
     export class Pushpin implements Entity {
-        constructor (location: Location, options?: PushpinOptions);
+        constructor(location: Location, options?: PushpinOptions);
         getAnchor(): Point;
         getIcon(): string;
         getHeight(): number;
@@ -416,7 +418,7 @@
     }
 
     export class TileLayer implements Entity {
-        constructor (options: TileLayerOptions);
+        constructor(options: TileLayerOptions);
 
         getOpacty(): number;
         /*
@@ -506,7 +508,7 @@
     }
 
     export class TileSource {
-        constructor (options: TileSourceOptions);
+        constructor(options: TileSourceOptions);
 
         getHeight(): number;
         getUriConstructor(): string;
@@ -646,7 +648,7 @@
             Removes all entities from the collection.
         */
         clear(): void;
-        get(index: number): Entity;
+        get (index: number): Entity;
         getLength(): number;
         getVisible(): bool;
         getZIndex(): number;
@@ -667,8 +669,8 @@
 
     export class Map {
         //Constructors
-        constructor (mapElement: HTMLElement, options?: MapOptions);
-        constructor (mapElement: HTMLElement, options?: ViewOptions);
+        constructor(mapElement: HTMLElement, options?: MapOptions);
+        constructor(mapElement: HTMLElement, options?: ViewOptions);
 
         //Properties
         entities: EntityCollection;

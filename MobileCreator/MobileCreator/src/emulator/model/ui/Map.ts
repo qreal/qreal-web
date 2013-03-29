@@ -7,6 +7,7 @@ export class Map extends mControl.Control {
     private logger = new mLog.Logger("Map");
 
     private map: Microsoft.Maps.Map;
+
     get Map(): Microsoft.Maps.Map {
         return this.map
     }
@@ -28,20 +29,23 @@ export class Map extends mControl.Control {
     }
 
     public addPushpins(points: Point[]): void {
+        this.map.entities.clear();
         points.map(point => this.addPushpin(point))
     }
 
     public addPushpin(point: Point) {
-        //this.logger.log("addPushpin" +point.toString());
         var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(point.Latitude, point.Longitude), null);
         
         var map = this.map;
         (function (maps) {
             var pushpinClick = maps.Events.addHandler(pushpin, 'click', function () {
-                alert(point.Coment);
-                //var infoboxOptions = { title: 'Infobox Title', description: point.Coment };
-                //var defaultInfobox = maps.Infobox(new Microsoft.Maps.Location(point.Latitude, point.Longitude), infoboxOptions);
-                //map.entities.push(defaultInfobox);
+                var infoboxOptions = {
+                    width: 200,
+                    height: 100,
+                    description: point.Description
+                };
+                var defaultInfobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(point.Latitude, point.Longitude), infoboxOptions);
+                map.entities.push(defaultInfobox);
             });
         })(Microsoft.Maps);
         
@@ -50,17 +54,29 @@ export class Map extends mControl.Control {
 }
 
 export class Point {
-    public Latitude: number;
-    public Longitude: number;
-    public Coment: string;
+    private latitude: number;
+    private longitude: number;
+    private description: string;
 
-    constructor(latitude: number, longitude: number, comment:string) {
-        this.Latitude = latitude;
-        this.Longitude = longitude;
-        this.Coment = comment;
+    get Latitude(): number{
+        return this.latitude;
+    }
+
+    get Longitude(): number {
+        return this.longitude;
+    }
+
+    get Description(): string {
+        return this.description;
+    }
+
+    constructor(latitude: number, longitude: number, description:string) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.description = description;
     }
 
     public toString(): string{
-        return this.Latitude + ";" + this.Longitude + ";" + this.Coment + ";";
+        return this.Latitude + ";" + this.Longitude + ";" + this.Description + ";";
     }
 }

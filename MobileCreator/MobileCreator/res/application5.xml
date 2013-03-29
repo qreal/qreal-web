@@ -1,39 +1,14 @@
 <application name='patients'>
 <logic>
-<action control-id='button1'>
-<login-request url='http://localhost:54321' login-id='editText2' password-id='editText3' />
-</action>
 <trigger form-id='main' event='onShow'>
+<patients-request url='http://localhost:54321' />
 </trigger>
 <trigger form-id='main' event='onTimer'>
 </trigger>
 <trigger form-id='main' event='onLoginResponse'>
-<if condition='loginSuccess'>
-<then>
-<transition form-id='win' />
-</then>
-<else>
-<transition form-id='fail' />
-</else>
-</if>
 </trigger>
 <trigger form-id='main' event='onPatientsResponse'>
-</trigger>
-<trigger form-id='win' event='onShow'>
-</trigger>
-<trigger form-id='win' event='onTimer'>
-</trigger>
-<trigger form-id='win' event='onLoginResponse'>
-</trigger>
-<trigger form-id='win' event='onPatientsResponse'>
-</trigger>
-<trigger form-id='fail' event='onShow'>
-</trigger>
-<trigger form-id='fail' event='onTimer'>
-</trigger>
-<trigger form-id='fail' event='onLoginResponse'>
-</trigger>
-<trigger form-id='fail' event='onPatientsResponse'>
+<showmap id='map1' />
 </trigger>
 </logic>
 <forms>
@@ -41,28 +16,8 @@
 <LinearLayout 
 xmlns="http://schemas.android.com/apk/res/android" 
 orientation="vertical" layout_width="fill_parent" layout_height="fill_parent" background="#ffffff"> 
-<Button 
-layout_width="fill_parent" layout_height="wrap_content" layout_marginTop="20px" text="Button" textSize="15px" id="button1" />
-<EditText 
-layout_width="fill_parent" layout_height="wrap_content" layout_marginTop="10px" id="editText2" padding="0px" text="px" />
-<EditText 
-layout_width="fill_parent" layout_height="wrap_content" layout_marginTop="10px" id="editText3" padding="0px" text="px" />
-</LinearLayout>
-</form>
-<form form_name="win">
-<LinearLayout 
-xmlns="http://schemas.android.com/apk/res/android" 
-orientation="vertical" layout_width="fill_parent" layout_height="fill_parent" background="#ffffff"> 
 <Map 
-layout_width="fill_parent" layout_height="fill_parent" id="map7" />
-</LinearLayout>
-</form>
-<form form_name="fail">
-<LinearLayout 
-xmlns="http://schemas.android.com/apk/res/android" 
-orientation="vertical" layout_width="fill_parent" layout_height="fill_parent" background="#ffffff"> 
-<ImageView 
-layout_width="wrap_content" layout_height="wrap_content" src="images/imageview.png" layout_gravity="center_horizontal" layout_marginTop="10px" />
+layout_width="fill_parent" layout_height="fill_parent" id="map1" />
 </LinearLayout>
 </form>
 </forms>
