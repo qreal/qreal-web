@@ -9,6 +9,7 @@ using System.Threading;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Web;
+using System.Globalization;
 
 namespace Server {
     public class Login {
@@ -28,6 +29,8 @@ namespace Server {
     class DB {
         private static string sqlConn = "Data Source=.\\SQLEXPRESS;Initial Catalog=Doctor;Integrated Security=True";
         private static SqlConnection doctorDB = new SqlConnection(sqlConn);
+        private static int count = 0;
+        private static bool done = false;
 
         public static void Open() { doctorDB.Open(); }
 
@@ -63,6 +66,7 @@ namespace Server {
         }
 
         public static Coordinate[] getCoordinates(int id) {
+            /*
             Console.WriteLine("Getting " + id);
             var sql = "SELECT x,y,comment FROM [Coordinates] us WHERE us.id = @id";
             var cmd = new SqlCommand(sql, doctorDB);
@@ -74,6 +78,18 @@ namespace Server {
                             (float)Convert.ToDouble(reader[1]), Convert.ToString(reader[2])));
             }
             reader.Close();
+            return res.ToArray();
+            */
+            var res = new List<Coordinate>();
+            res.Add(new Coordinate((float)55.698099, (float)37.392397, "Kill the christian"));
+            res.Add(new Coordinate((float)55.710238, (float)37.409563, "Hammer smashed face"));
+            res.Add(new Coordinate((float)55.723823, (float)37.397289, "Slowly we rot"));
+            DB.count++;
+            if (DB.count > 5 && done == false)
+            {
+                res.Add(new Coordinate((float)55.730058, (float)37.392225, "Make them suffer!"));
+                DB.done = true;
+            }
             return res.ToArray();
         }
 
@@ -194,12 +210,15 @@ namespace Server {
                     } else if (name.ToLower() == "coordinates") {
                         var cook = getCookie(context);
                         if (cook != null) {
-                            var id = DB.checkCookie(cook.Value);
-                            if (id != -1) {
+                            //var id = DB.checkCookie(cook.Value);
+                            //if (id != -1) {
+                            var id = 1;
                                 var coords = DB.getCoordinates(id);
                                 var json = new System.Web.Script.Serialization.JavaScriptSerializer();
-                                sb.Append(json.Serialize(coords));
-                            }
+                                  foreach(var coordinate in coords){
+                                    sb.Append(String.Format(CultureInfo.InvariantCulture, "{0};{1};{2};", coordinate.x, coordinate.y, coordinate.comment));
+                                }
+                            //}
                         }
                     }
 
