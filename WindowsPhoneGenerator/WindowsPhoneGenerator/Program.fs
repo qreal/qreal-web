@@ -59,7 +59,9 @@ let parseXml =
     let currentAdditionsBuilder = new StringBuilder()
     let builderAppend = append currentBuilder
     let tempStack = new Stack()
-    let getNumber (sizeAttr : string) = sizeAttr.Substring(0, sizeAttr.Length - 2)
+    let getNumber (sizeAttr : string) = 
+        let number = System.Convert.ToDouble(sizeAttr.Substring(0, sizeAttr.Length - 2))
+        string (System.Math.Round(number * 1.5))
     let getAttr (nodeName : string) (attrName : string) =
         let value = reader.GetAttribute(attrName)
         if value = null then raise ( NotFoundAttributeException ("A node \"" + nodeName + "\" doesn't have an attribute " + "\"" + attrName + "\""))
@@ -248,12 +250,12 @@ using (StreamReader httpWebStreamReader = new StreamReader(response.GetResponseS
 result = httpWebStreamReader.ReadToEnd();
 }
 
-bool serverResponseSuccess = false;
-bool serverResponseFail = true;
+bool loginSuccess = false;
+bool loginFailed = true;
 if (!result.Equals(\"fail\"))
 {
-serverResponseSuccess = true;
-serverResponseFail = false;\n}" + (triggers.Item((fileName, "onLoginResponse")) :?> string) + "\n}"
+loginSuccess = true;
+loginFailed = false;\n}" + (triggers.Item((fileName, "onLoginResponse")) :?> string) + "\n}"
 
                     if triggers.Contains((fileName, "onPatientsResponse")) then
                         appendAdditions <| "\nprivate string patients;"
@@ -272,7 +274,7 @@ patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> str
                 let textSize = getNumber(tryGetAttribute name "textSize")
                 appendXaml <| "\n" + depthTab + "<TextBlock Text=\"" + (tryGetAttribute name "text") + "\" HorizontalAlignment=\"Center\" FontSize=\"" + textSize + "\"/>"
             | "EditText" ->
-                appendXaml <| "\n" + depthTab + "<TextBox x:Name=\"" + (tryGetAttribute name "id") + "\" IsReadOnly=\"False\" MinWidth=\"250\" HorizontalAlignment=\"Center\" />"
+                appendXaml <| "\n" + depthTab + "<TextBox x:Name=\"" + (tryGetAttribute name "id") + "\" IsReadOnly=\"False\" MinWidth=\"350\" HorizontalAlignment=\"Center\"  FontSize=\"30\" />"
             | "Button" -> 
                 let name = tryGetAttribute name "id"
                 let textSize = getNumber(tryGetAttribute name "textSize")
@@ -321,7 +323,7 @@ using System.Device.Location;"
             CopyrightVisibility=\"Collapsed\"
             CredentialsProvider=\"Al8CCFBXNKVlW0cm4lfHbXmzMmuiHr96NmftGF25_hI0hxtaVLeQ7KvIeHacrDBh\" >
         </maps:Map>"
-                appendConstructor <| "\nPushpinLayer = new MapLayer();\n" + name + ".Children.Add(PushpinLayer);\n" + name + ".SetView(new GeoCoordinate(59.95, 30.311667), 14);
+                appendConstructor <| "\nPushpinLayer = new MapLayer();\n" + name + ".Children.Add(PushpinLayer);\n" + name + ".SetView(new GeoCoordinate(55.698099, 37.392397), 12);
 PairComparer pairComparer = new PairComparer();
 pushpins = new Dictionary<Pair, string>(pairComparer);"
                 appendAdditions <| "\nprivate void createPushpin(string latitude, string longitude, string comment)
@@ -717,7 +719,7 @@ let WMAppManifest = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 
 writeToFile (path + "\Properties\WMAppManifest.xml") WMAppManifest
 
-let createXap() =
+(*let createXap() =
     let start exe name =
         let proc = new System.Diagnostics.Process()
         let startInfo = proc.StartInfo
@@ -739,4 +741,4 @@ let createXap() =
     // Путь до msbuild должен быть прописан в перменную среды PATH
     start ("cd /d " + path + " & msbuild " + projectName + ".csproj") "msbuild"
 
-createXap()
+createXap()*)
