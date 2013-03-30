@@ -719,7 +719,7 @@ let WMAppManifest = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 
 writeToFile (path + "\Properties\WMAppManifest.xml") WMAppManifest
 
-(*let createXap() =
+let createXap() =
     let start exe name =
         let proc = new System.Diagnostics.Process()
         let startInfo = proc.StartInfo
@@ -741,4 +741,4 @@ writeToFile (path + "\Properties\WMAppManifest.xml") WMAppManifest
     // Путь до msbuild должен быть прописан в перменную среды PATH
     start ("cd /d " + path + " & msbuild " + projectName + ".csproj") "msbuild"
 
-createXap()*)
+createXap()
