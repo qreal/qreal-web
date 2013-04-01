@@ -107,35 +107,50 @@ let parseXml =
             | "else" when reader.NodeType = XmlNodeType.EndElement -> builderAppend <| "\n}"
             | "transition" -> builderAppend <| "\nDispatcher.BeginInvoke(new Action( () => NavigationService.Navigate(new Uri(\"/" + (tryGetAttribute name "form-id") + ".xaml\", UriKind.Relative))));"
             | "login-request" -> 
-                builderAppend <| ("\nHttpWebRequest myRequest = (HttpWebRequest)HttpWebRequest.Create(\"" + (tryGetAttribute name "url") + "\");
-myRequest.Method = \"POST\";
-myRequest.ContentType = \"application/x-www-form-urlencoded\";
+                builderAppend <| ("\nHttpWebRequest loginRequest = (HttpWebRequest)HttpWebRequest.Create(\"" + (tryGetAttribute name "url") + "\");
+loginRequest.Method = \"POST\";
+loginRequest.ContentType = \"application/x-www-form-urlencoded\";
 login = " + tryGetAttribute name "login-id" + ".Text;
 password = " + tryGetAttribute name "password-id" + ".Text;
-myRequest.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), myRequest);")
+loginRequest.BeginGetRequestStream(new AsyncCallback(LoginRequestStreamCallback), loginRequest);")
                 append currentAdditionsBuilder <| "\nprivate string login = \"\";
 private string password = \"\";
-private void GetRequestStreamCallback(IAsyncResult callbackResult)
+private void LoginRequestStreamCallback(IAsyncResult callbackResult)
 {
-    HttpWebRequest myRequest = (HttpWebRequest)callbackResult.AsyncState;
-    Stream postStream = myRequest.EndGetRequestStream(callbackResult);
+    HttpWebRequest loginRequest = (HttpWebRequest)callbackResult.AsyncState;
+    Stream postStream = loginRequest.EndGetRequestStream(callbackResult);
 
-    string postData = \"login=\" + login + \"&password=\" + password;
+    string postData = \"login?login=\" + login + \"&password=\" + password;
     byte[] byteArray = Encoding.UTF8.GetBytes(postData);
 
     postStream.Write(byteArray, 0, byteArray.Length);
     postStream.Close();
  
-    myRequest.BeginGetResponse(new AsyncCallback(GetResponsetStreamCallback), myRequest);
+    loginRequest.BeginGetResponse(new AsyncCallback(LoginResponsetStreamCallback), loginRequest);
 }"
 
             | "save-session" -> 
                 append currentAdditionsBuilder <| "\nprivate string sessionId;"
                 builderAppend <| "\nint semicolonPos = result.IndexOf(';');
 sessionId = result.Substring(semicolonPos + 1, result.Length - semicolonPos - 1);"
-            | "patients-request" -> builderAppend <| "\nWebClient data = new WebClient();
-data.DownloadStringCompleted += new DownloadStringCompletedEventHandler(getResponse);
-data.DownloadStringAsync(new Uri(\"" + (tryGetAttribute name "url") + "\"));"
+            | "patients-request" -> 
+                builderAppend <| "\nHttpWebRequest patientsRequest = (HttpWebRequest)HttpWebRequest.Create(\"" + (tryGetAttribute name "url") + "\");
+patientsRequest.Method = \"POST\";
+patientsRequest.ContentType = \"application/x-www-form-urlencoded\";
+patientsRequest.BeginGetRequestStream(new AsyncCallback(PatientsRequestStreamCallback), patientsRequest);"
+                append currentAdditionsBuilder <| "\nprivate void PatientsRequestStreamCallback(IAsyncResult callbackResult)
+{
+    HttpWebRequest patientsRequest = (HttpWebRequest)callbackResult.AsyncState;
+    Stream postStream = patientsRequest.EndGetRequestStream(callbackResult);
+
+    string postData = \"coordinates\";
+    byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+
+    postStream.Write(byteArray, 0, byteArray.Length);
+    postStream.Close();
+ 
+    patientsRequest.BeginGetResponse(new AsyncCallback(PatientsResponsetStreamCallback), patientsRequest);
+}"
             // разбор строки patients и выставление пациентов на карте
             | "showmap" ->
                 builderAppend <| "\nint count = 0;
@@ -235,6 +250,8 @@ public partial class " + fileName + ": PhoneApplicationPage
                     appendConstructor <| "public " + fileName + "()\n{\nInitializeComponent();"
 
                     if triggers.Contains((fileName, "onTimer")) then
+                        if triggersAdditions.Contains((fileName, "onTimer")) then
+                            appendAdditions <| (triggersAdditions.Item((fileName, "onTimer")) :?> string)
                         appendConstructor <| "\nSystem.Windows.Threading.DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer();
 timer.Interval = new TimeSpan(0, 0, 0, 0, 2000);
 timer.Tick += new EventHandler(timerTick);
@@ -244,7 +261,7 @@ timer.Start();"
                     if triggers.Contains((fileName, "onLoginResponse")) then
                         if triggersAdditions.Contains((fileName, "onLoginResponse")) then
                             appendAdditions <| (triggersAdditions.Item((fileName, "onLoginResponse")) :?> string)
-                        appendAdditions <| "\nprivate void GetResponsetStreamCallback(IAsyncResult callbackResult)
+                        appendAdditions <| "\nprivate void LoginResponsetStreamCallback(IAsyncResult callbackResult)
 {
 HttpWebRequest request = (HttpWebRequest)callbackResult.AsyncState;
 HttpWebResponse response = (HttpWebResponse)request.EndGetResponse(callbackResult);
@@ -262,12 +279,20 @@ loginSuccess = true;
 loginFailed = false;\n}" + (triggers.Item((fileName, "onLoginResponse")) :?> string) + "\n}"
 
                     if triggers.Contains((fileName, "onPatientsResponse")) then
+                        if triggersAdditions.Contains((fileName, "onPatientsResponse")) then
+                            appendAdditions <| (triggersAdditions.Item((fileName, "onPatientsResponse")) :?> string)
                         appendAdditions <| "\nprivate string patients;"
-                        appendAdditions <| "\nprivate void getResponse(object sender, DownloadStringCompletedEventArgs e)
+                        appendAdditions <| "\nprivate void PatientsResponsetStreamCallback(IAsyncResult callbackResult)
 {
-patients = e.Result;" + (triggers.Item((fileName, "onPatientsResponse")) :?> string) + "\n}"
+HttpWebRequest request = (HttpWebRequest)callbackResult.AsyncState;
+HttpWebResponse response = (HttpWebResponse)request.EndGetResponse(callbackResult);
+using (StreamReader httpWebStreamReader = new StreamReader(response.GetResponseStream()))
+{
+patients = httpWebStreamReader.ReadToEnd();\n}" + (triggers.Item((fileName, "onPatientsResponse")) :?> string) + "\n}"
 
                     if triggers.Contains((fileName, "onShow")) then
+                        if triggersAdditions.Contains((fileName, "onShow")) then
+                            appendAdditions <| (triggersAdditions.Item((fileName, "onShow")) :?> string)
                         appendConstructor <| (triggers.Item((fileName, "onShow")) :?> string)
 
             | "LinearLayout" when reader.NodeType <> XmlNodeType.EndElement -> 
@@ -338,19 +363,22 @@ pushpins = new Dictionary<Pair, string>(pairComparer);"
 
     if (!pushpins.ContainsKey(currentPair))
     {
-        pushpins.Add(currentPair, comment);
-        Pushpin pushpin = new Pushpin();
-        pushpin.Background = new SolidColorBrush(Colors.Red);
-        pushpin.Tap += new EventHandler<GestureEventArgs>(pushPin_Tap);
-        pushpin.Location = new GeoCoordinate(x, y);
-        Border border = new Border();
-        border.Visibility = System.Windows.Visibility.Collapsed;
-        border.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-        pushpin.Content = border;
-        TextBlock text = new TextBlock();
-        text.Text = comment;
-        border.Child = text;
-        PushpinLayer.AddChild(pushpin, pushpin.Location);
+        Dispatcher.BeginInvoke( () =>
+        {
+            pushpins.Add(currentPair, comment);
+            Pushpin pushpin = new Pushpin();
+            pushpin.Background = new SolidColorBrush(Colors.Red);
+            pushpin.Tap += new EventHandler<GestureEventArgs>(pushPin_Tap);
+            pushpin.Location = new GeoCoordinate(x, y);
+            Border border = new Border();
+            border.Visibility = System.Windows.Visibility.Collapsed;
+            border.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+            pushpin.Content = border;
+            TextBlock text = new TextBlock();
+            text.Text = comment;
+            border.Child = text;
+            PushpinLayer.AddChild(pushpin, pushpin.Location);
+        });
     }
 }
 
