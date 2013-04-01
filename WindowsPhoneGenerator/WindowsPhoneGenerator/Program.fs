@@ -105,18 +105,22 @@ let parseXml =
             | "then" when reader.NodeType = XmlNodeType.EndElement -> builderAppend <| "\n}"
             | "else" when reader.NodeType <> XmlNodeType.EndElement -> builderAppend <| "\nelse\n{"
             | "else" when reader.NodeType = XmlNodeType.EndElement -> builderAppend <| "\n}"
-            | "transition" -> builderAppend <| "\nNavigationService.Navigate(new Uri(\"/" + (tryGetAttribute name "form-id") + ".xaml\", UriKind.Relative));"
+            | "transition" -> builderAppend <| "\nDispatcher.BeginInvoke(new Action( () => NavigationService.Navigate(new Uri(\"/" + (tryGetAttribute name "form-id") + ".xaml\", UriKind.Relative))));"
             | "login-request" -> 
                 builderAppend <| ("\nHttpWebRequest myRequest = (HttpWebRequest)HttpWebRequest.Create(\"" + (tryGetAttribute name "url") + "\");
 myRequest.Method = \"POST\";
 myRequest.ContentType = \"application/x-www-form-urlencoded\";
-myRequest.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), myRequest);") 
-                append currentAdditionsBuilder <| "\nprivate void GetRequestStreamCallback(IAsyncResult callbackResult)
+login = " + tryGetAttribute name "login-id" + ".Text;
+password = " + tryGetAttribute name "password-id" + ".Text;
+myRequest.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), myRequest);")
+                append currentAdditionsBuilder <| "\nprivate string login = \"\";
+private string password = \"\";
+private void GetRequestStreamCallback(IAsyncResult callbackResult)
 {
     HttpWebRequest myRequest = (HttpWebRequest)callbackResult.AsyncState;
     Stream postStream = myRequest.EndGetRequestStream(callbackResult);
 
-    string postData = \"login=\"+" + (tryGetAttribute name "login-id") + ".Text + \"&password=\" + " + (tryGetAttribute name"password-id") + ".Text;
+    string postData = \"login=\" + login + \"&password=\" + password;
     byte[] byteArray = Encoding.UTF8.GetBytes(postData);
 
     postStream.Write(byteArray, 0, byteArray.Length);
