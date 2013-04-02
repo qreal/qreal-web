@@ -154,6 +154,8 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             $(designerMenuDiv).attr("data-role", "listview");
             $(designerMenuDiv).attr("data-inset", "true");
             $(designerMenuDiv).attr("data-divider-theme", "d");
+            var formsSelector = $("<div></div>");
+            formsSelector.css("padding", "16px");
             var propertiesParentDiv = $("#properties");
             var propertiesDiv = document.createElement("ul");
             $(propertiesDiv).attr("data-role", "listview");
@@ -172,21 +174,21 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             $(formsTreeHeader).text("Forms");
             $(designerMenuDiv).append($(formsTreeHeader));
             var formsSelect = $("<select id=\"formsSelect\"></select>");
-            $(designerMenuDiv).append($(formsSelect));
+            $(formsSelector).append($(formsSelect));
             formsSelect.selectmenu();
             formsSelect.change(function () {
                 _this.changeActiveForm(formsSelect.val());
             });
             var addFormButton = $("<a id=\"addFormButton\" data-role=\"button\" draggable=\"false\">New form</a>");
-            $(designerMenuDiv).append(addFormButton);
+            $(formsSelector).append($(addFormButton));
             addFormButton.button();
             $(addFormButton).click(function () {
                 _this.addForm("New form");
             });
             var formNameLabel = $("<label for='formNameField' >Form name: </label>");
             var formNameField = $("<input type = 'text' name = 'formNameField' id = 'formNameField' value = '' >");
-            $(designerMenuDiv).append(formNameLabel);
-            $(designerMenuDiv).append(formNameField);
+            $(formsSelector).append($(formNameLabel));
+            $(formsSelector).append($(formNameField));
             $(formNameField).change(function () {
                 var newVal = $(formNameField).val();
                 var index = Designer.formNames.indexOf(Designer.activeForm.FormName);
@@ -196,6 +198,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
                 _this.updateFormsSelect();
             });
             formNameField.textinput();
+            $(designerMenuDiv).append($(formsSelector));
             var elementsPalleteHeader = document.createElement("li");
             $(elementsPalleteHeader).css("margin-top", "20px");
             $(elementsPalleteHeader).attr("data-role", "list-divider");
