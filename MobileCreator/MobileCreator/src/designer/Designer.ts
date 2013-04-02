@@ -278,17 +278,24 @@ export class Designer {
         var formTriggersHeader = document.createElement("li");
         $(formTriggersHeader).attr("data-role", "list-divider");
         $(formTriggersHeader).text("Form triggers");
+        
         $(formTriggersDiv).append($(formTriggersHeader));
+
+        var triggerSelectDiv = $("<div></div>");
+        $(triggerSelectDiv).css("padding-left", "16px");
+        $(triggerSelectDiv).css("padding-right", "16px");
 
         var triggersSelect = $("<select id=\"triggersSelect\"></select>");
         triggersSelect.change(function () {
             //_this.changeActiveForm(formsSelect.val());
             //var activeForm = _this.
         });
-        $(formTriggersDiv).append($(triggersSelect));
+        $(triggerSelectDiv).append($(triggersSelect));
+        $(formTriggersDiv).append($(triggerSelectDiv));
         triggersSelect.selectmenu();
 
         var triggerDiv = document.createElement("div");
+        $(triggerDiv).css("padding", "16px");
         triggerDiv.id = "triggerDiv";
         $(formTriggersDiv).append($(triggerDiv));
 

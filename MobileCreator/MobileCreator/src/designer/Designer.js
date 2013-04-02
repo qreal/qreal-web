@@ -236,12 +236,17 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             $(formTriggersHeader).attr("data-role", "list-divider");
             $(formTriggersHeader).text("Form triggers");
             $(formTriggersDiv).append($(formTriggersHeader));
+            var triggerSelectDiv = $("<div></div>");
+            $(triggerSelectDiv).css("padding-left", "16px");
+            $(triggerSelectDiv).css("padding-right", "16px");
             var triggersSelect = $("<select id=\"triggersSelect\"></select>");
             triggersSelect.change(function () {
             });
-            $(formTriggersDiv).append($(triggersSelect));
+            $(triggerSelectDiv).append($(triggersSelect));
+            $(formTriggersDiv).append($(triggerSelectDiv));
             triggersSelect.selectmenu();
             var triggerDiv = document.createElement("div");
+            $(triggerDiv).css("padding", "16px");
             triggerDiv.id = "triggerDiv";
             $(formTriggersDiv).append($(triggerDiv));
             $(parentDiv).prepend($(designerMenuDiv));
