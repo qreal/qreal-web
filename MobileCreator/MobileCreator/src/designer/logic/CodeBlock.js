@@ -46,7 +46,7 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
             for(var i = 0; i < this.actions.length; i++) {
                 var action = this.actions[i];
                 var actionIndex = i;
-                var removeButton = $("<a href='#' data-role='button' data-icon='delete' data-inline='true' data-iconpos='notext' data-theme='a' data-mini='true'>Delete</a>");
+                var removeButton = $("<a href='#' data-role='button' data-inline='true' data-theme='a' data-mini='true'>Delete</a>");
                 if(action.ActionType == mActionTypes.ActionTypes.If) {
                     (action).showIf(domElement, removeButton);
                     domElement.trigger("create");
@@ -80,7 +80,7 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
             domElement.append(newActionDiv);
             newActionDiv.append(selectAction);
             selectAction.selectmenu();
-            var addActionButton = $("<a href='#' data-role='button' data-icon='plus' data-iconpos='notext' data-theme='a' data-mini='true'>Add action</a>");
+            var addActionButton = $("<a href='#' data-role='button' data-theme='a' data-mini='true'>Add action</a>");
             domElement.append(addActionButton);
             newActionDiv.append(addActionButton);
             addActionButton.button();
