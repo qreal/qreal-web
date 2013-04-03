@@ -218,7 +218,7 @@ export class Designer {
             _this.changeActiveForm(formsSelect.val());
         });
 
-        var addFormButton = $("<a id=\"addFormButton\" data-role=\"button\" draggable=\"false\">New form</a>");
+        var addFormButton = $("<a id=\"addFormButton\" data-theme='a' data-role=\"button\" draggable=\"false\">New form</a>");
         //$(designerMenuDiv).append(addFormButton);
         $(formsSelector).append($(addFormButton));
         addFormButton.button();
@@ -226,6 +226,7 @@ export class Designer {
             _this.addForm("New form");
         });
         var formNameLabel = $("<label for='formNameField' >Form name: </label>");
+        formNameLabel.css("font-weight", "bold");
         var formNameField = $("<input type = 'text' name = 'formNameField' id = 'formNameField' value = '' >");
         //$(designerMenuDiv).append(formNameLabel);
         //$(designerMenuDiv).append(formNameField);
@@ -239,6 +240,7 @@ export class Designer {
             Designer.activeForm.FormName = newVal;
             Designer.activeForm.updateTriggers();
             _this.updateFormsSelect();
+            _this.updateFormHeader();
         });
         formNameField.textinput();
         $(designerMenuDiv).append($(formsSelector));

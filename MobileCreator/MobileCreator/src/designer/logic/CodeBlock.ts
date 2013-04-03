@@ -40,6 +40,7 @@ export class CodeBlock {
             var action = this.actions[i];
             var actionIndex = i;
             var removeButton = $("<a href='#' data-role='button' data-inline='true' data-theme='a' data-mini='true'>Delete</a>");
+            removeButton.css("margin-left", "6px");
             if (action.ActionType == mActionTypes.ActionTypes.If) {
                 (<mIfAction.IfAction> action).showIf(domElement, removeButton);
                 domElement.trigger("create");
@@ -81,6 +82,7 @@ export class CodeBlock {
         newActionDiv.append(selectAction);
         selectAction.selectmenu();
         var addActionButton = $("<a href='#' data-role='button' data-theme='a' data-mini='true'>Add action</a>");
+        addActionButton.css("margin-left", "6px");
         domElement.append(addActionButton);
         newActionDiv.append(addActionButton);
         addActionButton.button();

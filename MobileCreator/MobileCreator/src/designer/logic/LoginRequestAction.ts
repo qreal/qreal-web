@@ -26,6 +26,8 @@ export class LoginRequestAction extends mAction.Action {
         var loginDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
         loginDiv.css("margin-left", marginLeft + "px");
         var loginBlock = $("<a href='#' data-role='button' data-corners='false' data-inline='true' data-mini='true'>Login: </a>");
+        //addActionButton.css("margin-left", "4px");
+        loginBlock.css("margin-right", "6px");
         var editTexts: string[] = this.findEditTexts();
         var loginSelect = $("<select data-mini='true' data-inline='true'></select>");
         for (var i = 0; i < editTexts.length; i++) {
@@ -56,11 +58,14 @@ export class LoginRequestAction extends mAction.Action {
             _this.loginId = _loginSelect.val();
         });
         removeButton.button();
+        removeButton.css("margin-left", "6px");
         loginDiv.append(removeButton);
         domElement.append(loginDiv);
         var passwordDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
         passwordDiv.css("margin-left", marginLeft + "px");
+        
         var passwdBlock = $("<a href='#' data-role='button' data-corners='false' data-inline='true' data-mini='true'>Passwd: </a>");
+        passwdBlock.css("margin-right", "6px");
         editTexts = this.findEditTexts();
         var passSelect = $("<select data-mini='true' data-inline='true'></select>");
         for (var i = 0; i < editTexts.length; i++) {
