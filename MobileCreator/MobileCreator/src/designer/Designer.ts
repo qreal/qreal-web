@@ -71,6 +71,7 @@ export class Designer {
         Designer.activeForm.show();
         this.updateFormsSelect();
         this.updateTriggersSelect();
+        this.updateFormHeader();
     }
 
     private sendXml() {
@@ -142,6 +143,14 @@ export class Designer {
         Designer.activeForm.Triggers[0].show($("#triggerDiv"));
     }
 
+    private updateFormHeader() {
+        var div = $("#formHeader");
+        div.empty();
+        //var header = Designer.activeForm.FormName;
+        var header = $("<h2 align='center'>" + Designer.activeForm.FormName + "<h2>");
+        div.append(header);
+    }
+
     public changeActiveForm(formName: string) {
         $("#propertiesEditor").empty();
         Designer.activeForm.hide();
@@ -155,6 +164,7 @@ export class Designer {
         $("#formNameField").val(Designer.activeForm.FormName);
         this.updateFormsSelect();
         this.updateTriggersSelect();
+        this.updateFormHeader();
     }
 
     public initDesigner() {

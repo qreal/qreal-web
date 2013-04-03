@@ -65,6 +65,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             Designer.activeForm.show();
             this.updateFormsSelect();
             this.updateTriggersSelect();
+            this.updateFormHeader();
         };
         Designer.prototype.sendXml = function () {
             var xml = this.getXML();
@@ -132,6 +133,12 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             });
             Designer.activeForm.Triggers[0].show($("#triggerDiv"));
         };
+        Designer.prototype.updateFormHeader = function () {
+            var div = $("#formHeader");
+            div.empty();
+            var header = $("<h2 align='center'>" + Designer.activeForm.FormName + "<h2>");
+            div.append(header);
+        };
         Designer.prototype.changeActiveForm = function (formName) {
             $("#propertiesEditor").empty();
             Designer.activeForm.hide();
@@ -145,6 +152,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             $("#formNameField").val(Designer.activeForm.FormName);
             this.updateFormsSelect();
             this.updateTriggersSelect();
+            this.updateFormHeader();
         };
         Designer.prototype.initDesigner = function () {
             var _this = this;
