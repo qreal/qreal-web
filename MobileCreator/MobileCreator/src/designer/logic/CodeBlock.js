@@ -53,6 +53,12 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
                     _this.setRemoveHandler(removeButton, i, domElement);
                     continue;
                 }
+                if(action.ActionType == mActionTypes.ActionTypes.LoginRequest) {
+                    (action).showLogin(domElement, removeButton, this.marginLeft);
+                    domElement.trigger("create");
+                    _this.setRemoveHandler(removeButton, i, domElement);
+                    continue;
+                }
                 var containDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
                 containDiv.css("margin-left", this.marginLeft + "px");
                 domElement.append(containDiv);
