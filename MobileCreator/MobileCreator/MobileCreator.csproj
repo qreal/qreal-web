@@ -49,10 +49,16 @@
     <Content Include="lib\bing\Microsoft.Maps.Themes.BingTheme.d.ts" />
     <Content Include="lib\bing\Microsoft.Maps.Traffic.d.ts" />
     <Content Include="lib\bing\Microsoft.Maps.VenueMaps.d.ts" />
-    <Content Include="res\application5.xml" />
+    <Content Include="res\application5.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="res\info2.xml" />
     <Content Include="res\main2.xml" />
     <Content Include="res\Transition.xml" />
+    <TypeScriptCompile Include="src\AppConfig.ts" />
+    <Content Include="src\AppConfig.js">
+      <DependentUpon>AppConfig.ts</DependentUpon>
+    </Content>
     <Content Include="src\Application.min.js">
       <DependentUpon>Application.ts</DependentUpon>
     </Content>
@@ -220,7 +226,6 @@
     <Content Include="lib\jquery.js" />
     <Content Include="lib\jquery.d.ts" />
     <Content Include="lib\jquerymobile.js" />
-    <TypeScriptCompile Include="src\AppConfig.ts" />
     <TypeScriptCompile Include="lib\require.d.ts" />
     <TypeScriptCompile Include="lib\jquerymobile.d.ts" />
     <Content Include="lib\jquerymobile.d.js">
@@ -327,6 +332,14 @@
     <Content Include="src\emulator\model\managers\NavigationManager.js.map">
       <DependentUpon>NavigationManager.ts</DependentUpon>
     </Content>
+    <Content Include="src\emulator\model\Page.js.map">
+      <DependentUpon>Page.ts</DependentUpon>
+    </Content>
+    <Content Include="packages.config" />
+    <None Include="qrealweb - FTP.pubxml" />
+    <None Include="qrealweb - Web Deploy.pubxml" />
+    <None Include="qrealwebcreator - FTP.pubxml" />
+    <None Include="qrealwebcreator - Web Deploy.pubxml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -334,7 +347,24 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\QrealWebAzure\packages\Microsoft.WindowsAzure.ConfigurationManager.1.8.0.0\lib\net35-full\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.StorageClient, Version=1.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\QrealWebAzure\packages\WindowsAzure.Storage.1.7.0.0\lib\net35-full\Microsoft.WindowsAzure.StorageClient.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

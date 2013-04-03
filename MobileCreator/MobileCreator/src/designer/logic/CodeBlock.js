@@ -100,11 +100,11 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
                         _this.show(domElement);
                         break;
                     case "patients":
-                        _this.addAction(new mPatientsRequestAction.PatientsRequestAction("http://localhost:54321"));
+                        _this.addAction(new mPatientsRequestAction.PatientsRequestAction("http://nb.infolan.me:54321"));
                         _this.show(domElement);
                         break;
                     case "login":
-                        _this.addAction(new mLoginRequestAction.LoginRequestAction("http://localhost:54321"));
+                        _this.addAction(new mLoginRequestAction.LoginRequestAction("http://nb.infolan.me:54321"));
                         _this.show(domElement);
                         break;
                     case "if":

@@ -25,15 +25,15 @@ module SampleSite =
             let input = inputStream.ReadToEnd()
             let path = @"C:\Project\work"
             let addPath str = Path.Combine(path, str)
-            //System.IO.File.WriteAllText (addPath "forms.xml", input)
-            //let cmd = addPath "AndroidGenerator.exe"  + " " + path + " aaa"
-            //System.Diagnostics.Process.Start("cmd.exe", "/C " + cmd).WaitForExit()
+            System.IO.File.WriteAllText (addPath "forms.xml", input)
+            let cmd = "C:\Project\winphonegen\WindowsPhoneGenerator.exe"  + " " + path
+            //System.Diagnostics.Process.Start("cmd.exe", "/C "+cmd).WaitForExit()
             //let client = new WebClient()
             //client.DownloadStringAsync <| new System.Uri(@"C:\Projects\Movies\Test\a.txt")
 
-            let outputFile = Path.Combine(path, "bin", "main-debug.apk")
-            let server = System.Web.HttpContext.Current.Server
-            //System.Web.HttpContext.Current <- ctx.Response
+            let outputFile = Path.Combine(path, "Bin","Debug" , "patients.xap")
+            //let server = System.Web.HttpContext.Current.Server
+            System.Web.HttpContext.Current <- ctx.Response
             let response = ctx.Response //System.Web.HttpContext.Current.Response
             let stream = server.CreateObject "ADODB.Stream"
             let resFile = @"C:\inetpub\wwwroot\main-debug.apk"
@@ -159,7 +159,7 @@ module SampleSite =
                 //A [HRef @"C:\Projects\qreal\work\bin\main-debug.apk"] -< [Text "Page 2"]
                 //A [HRef @"http:\\localhost\main-debug.apk"] -< [Text "Page 2"]
                 //downloadLink
-                IFrame [Src "http://localhost:61082/default.htm"; Width "1040"; Height "800"]
+                IFrame [Src "http://localhost:61082/"; Width "1040"; Height "800"]
             ]
             //    [Div [new Canvas.RaphaelViewer()]]
 

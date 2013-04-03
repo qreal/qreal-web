@@ -22,9 +22,9 @@ export class Map extends mControl.Control {
         this.map = new Microsoft.Maps.Map($control.get()[0],
                            {
                                credentials: "AvJwCah4br6cge458C1Vc6NSyzZy2SfsqzBrTwUVmuybDrtrc6pV-qCP98ZkTqKW",
-                               center: new Microsoft.Maps.Location(59.876984, 29.839293),
+                               center: new Microsoft.Maps.Location(55.698099, 37.392397),
                                mapTypeId: Microsoft.Maps.MapTypeId.road,
-                               zoom: 8
+                               zoom: 12
                            });
     }
 

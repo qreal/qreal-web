@@ -5,7 +5,7 @@
     <Platform Condition="'$(Platform)' == ''">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{00CAB8A0-D6B4-4ED6-B1F8-6BD6A91BB21B}</ProjectGuid>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -46,16 +46,32 @@
     <Content Include="Views\**\*.*" />
     <Content Include="*.asax" />
     <Compile Include="*.asax.cs" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="*.html" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">
       <Private>true</Private>
     </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\QrealWebAzure\packages\Microsoft.WindowsAzure.ConfigurationManager.1.8.0.0\lib\net35-full\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.StorageClient, Version=1.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\QrealWebAzure\packages\WindowsAzure.Storage.1.7.0.0\lib\net35-full\Microsoft.WindowsAzure.StorageClient.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Services.Client" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.DynamicData" />
@@ -70,7 +86,15 @@
       <Name>Website</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\qrealweb - FTP %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\qrealweb - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\qrealweb - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\qrealweb - Web Deploy.pubxml" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VisualStudioVersion)' != '10.0'AND Exists('$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets')" />
@@ -81,12 +105,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>51987</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost:51987/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
