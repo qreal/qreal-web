@@ -204,6 +204,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using System.Globalization;
 using Microsoft.Phone.Controls;" + usingsBuilder.ToString()
                     insert newXaml <| ("<phone:PhoneApplicationPage 
     x:Class=\"" + projectName + "." + fileName + "\"
@@ -357,8 +358,8 @@ PairComparer pairComparer = new PairComparer();
 pushpins = new Dictionary<Pair, string>(pairComparer);"
                 appendAdditions <| "\nprivate void createPushpin(string latitude, string longitude, string comment)
 {
-    double x = Convert.ToDouble(latitude);
-    double y = Convert.ToDouble(longitude);
+    double x = Convert.ToDouble(latitude, CultureInfo.InvariantCulture);
+    double y = Convert.ToDouble(longitude, CultureInfo.InvariantCulture);
     Pair currentPair = new Pair(x, y);
 
     if (!pushpins.ContainsKey(currentPair))
