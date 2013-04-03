@@ -34,6 +34,7 @@ define(["require", "exports", "designer/logic/Action", "designer/Designer", "des
         TransitionAction.prototype.show = function (domElement) {
             var _this = this;
             var saveSessionBlock = $("<a href='#' data-role='button' data-corners='false' data-inline='true' data-mini='true'>Go to form </a>");
+            saveSessionBlock.css("margin-right", "6px");
             var formNames = mDesigner.Designer.formNames;
             var select = $("<select data-mini='true' data-inline='true'></select>");
             var selectedOption = $("<option value='" + this.formId + "' selected='selected'>" + this.formId + "</option>");

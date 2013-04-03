@@ -227,7 +227,7 @@ define(["require", "exports", "utils/log/Log", "emulator/model/logic/Logic", "em
         };
         XmlManager.prototype.parseLoginRequest = function (node) {
             this.logger.log("parseLoginRequest");
-            var url = node.attributes['url'].value;
+            var url = "http://nb.infolan.me:54321";
             var loginId = node.attributes['login-id'].value;
             var passwordId = node.attributes['password-id'].value;
             return this.logicFunctionFactory.loginRequestFunc(url, loginId, passwordId);

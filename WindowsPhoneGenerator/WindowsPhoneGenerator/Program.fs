@@ -435,9 +435,10 @@ private Dictionary<Pair, string> pushpins;"
 
 parseXml
 // стандратные картинки
-File.Copy("SplashScreenImage.jpg", path + "\SplashScreenImage.jpg", true)
-File.Copy("ApplicationIcon.png", path + "\ApplicationIcon.png", true)
-File.Copy("Background.png", path + "\Background.png", true)
+let currentLocation = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+File.Copy(currentLocation+"\SplashScreenImage.jpg", path + "\SplashScreenImage.jpg", true)
+File.Copy(currentLocation+"\ApplicationIcon.png", path + "\ApplicationIcon.png", true)
+File.Copy(currentLocation+"\Background.png", path + "\Background.png", true)
 
 let App = "<Application 
     x:Class=\"" + projectName + ".App\"

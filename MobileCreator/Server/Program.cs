@@ -30,7 +30,6 @@ namespace Server {
         private static string sqlConn = "Data Source=.\\SQLEXPRESS;Initial Catalog=Doctor;Integrated Security=True";
         //private static SqlConnection doctorDB = new SqlConnection(sqlConn);
         private static int count = 0;
-        private static bool done = false;
 
         //public static void Open() { doctorDB.Open(); }
         /*
@@ -90,10 +89,9 @@ namespace Server {
             res.Add(new Coordinate((float)55.710238, (float)37.409563, "Hammer smashed face"));
             res.Add(new Coordinate((float)55.723823, (float)37.397289, "Slowly we rot"));
             DB.count++;
-            if (DB.count > 5 && DB.done == false)
+            if (DB.count > 5)
             { 
                 res.Add(new Coordinate((float)55.730058, (float)37.392225, "Make them suffer!"));
-                DB.done = true;
             }
             return res.ToArray();
         }

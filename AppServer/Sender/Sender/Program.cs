@@ -48,9 +48,8 @@ namespace Sender {
 
         static void Main(string[] args) {
             cookies.MaxCookieSize = 80;
-            process("Chizh");
-            process("Chizh2");
-            process("Chizh3");
+            process("user");
+
         }
     }
 }
