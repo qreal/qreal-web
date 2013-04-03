@@ -47,8 +47,15 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
                 var action = this.actions[i];
                 var actionIndex = i;
                 var removeButton = $("<a href='#' data-role='button' data-inline='true' data-theme='a' data-mini='true'>Delete</a>");
+                removeButton.css("margin-left", "6px");
                 if(action.ActionType == mActionTypes.ActionTypes.If) {
                     (action).showIf(domElement, removeButton);
+                    domElement.trigger("create");
+                    _this.setRemoveHandler(removeButton, i, domElement);
+                    continue;
+                }
+                if(action.ActionType == mActionTypes.ActionTypes.LoginRequest) {
+                    (action).showLogin(domElement, removeButton, this.marginLeft);
                     domElement.trigger("create");
                     _this.setRemoveHandler(removeButton, i, domElement);
                     continue;
@@ -81,6 +88,7 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
             newActionDiv.append(selectAction);
             selectAction.selectmenu();
             var addActionButton = $("<a href='#' data-role='button' data-theme='a' data-mini='true'>Add action</a>");
+            addActionButton.css("margin-left", "6px");
             domElement.append(addActionButton);
             newActionDiv.append(addActionButton);
             addActionButton.button();

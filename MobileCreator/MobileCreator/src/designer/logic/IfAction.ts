@@ -22,6 +22,7 @@ export class IfAction extends mAction.Action {
         containDiv.css("margin-left", this.marginLeft + "px");
         domElement.append(containDiv);
         var ifBlock = $("<a href='#' data-role='button' data-corners='false' data-inline='true' data-mini='true'>If</a>");
+        ifBlock.css("margin-right", "6px");
         containDiv.append(ifBlock);
         ifBlock.button();
         var select = $("<select data-mini='true' data-inline='true'></select>");
@@ -30,6 +31,7 @@ export class IfAction extends mAction.Action {
         containDiv.append(select);
         select.selectmenu();
         containDiv.append(removeButton);
+        removeButton.css("margin-left", "6px");
         removeButton.button();
         var thenDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
         thenDiv.css("margin-left", this.marginLeft + "px");

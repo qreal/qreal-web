@@ -34,6 +34,7 @@ export class ShowMapAction extends mAction.Action {
     public show(domElement) {
         var _this = this;
         var showMapBlock = $("<a href='#' data-role='button' data-corners='false' data-inline='true' data-mini='true'>Show map on </a>");
+        showMapBlock.css("margin-right", "6px");
         var maps: string[] = this.findMaps();
         var select = $("<select data-mini='true' data-inline='true'></select>");
         for (var i = 0; i < maps.length; i++) {

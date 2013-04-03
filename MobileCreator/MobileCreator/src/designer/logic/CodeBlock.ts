@@ -40,8 +40,15 @@ export class CodeBlock {
             var action = this.actions[i];
             var actionIndex = i;
             var removeButton = $("<a href='#' data-role='button' data-inline='true' data-theme='a' data-mini='true'>Delete</a>");
+            removeButton.css("margin-left", "6px");
             if (action.ActionType == mActionTypes.ActionTypes.If) {
                 (<mIfAction.IfAction> action).showIf(domElement, removeButton);
+                domElement.trigger("create");
+                _this.setRemoveHandler(removeButton, i, domElement);
+                continue;
+            }
+            if (action.ActionType == mActionTypes.ActionTypes.LoginRequest) {
+                (<mLoginRequestAction.LoginRequestAction> action).showLogin(domElement, removeButton, this.marginLeft);
                 domElement.trigger("create");
                 _this.setRemoveHandler(removeButton, i, domElement);
                 continue;
@@ -75,6 +82,7 @@ export class CodeBlock {
         newActionDiv.append(selectAction);
         selectAction.selectmenu();
         var addActionButton = $("<a href='#' data-role='button' data-theme='a' data-mini='true'>Add action</a>");
+        addActionButton.css("margin-left", "6px");
         domElement.append(addActionButton);
         newActionDiv.append(addActionButton);
         addActionButton.button();

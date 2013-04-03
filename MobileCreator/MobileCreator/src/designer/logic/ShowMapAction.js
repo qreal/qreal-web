@@ -40,6 +40,7 @@ define(["require", "exports", "designer/logic/Action", "designer/Designer", "des
         ShowMapAction.prototype.show = function (domElement) {
             var _this = this;
             var showMapBlock = $("<a href='#' data-role='button' data-corners='false' data-inline='true' data-mini='true'>Show map on </a>");
+            showMapBlock.css("margin-right", "6px");
             var maps = this.findMaps();
             var select = $("<select data-mini='true' data-inline='true'></select>");
             for(var i = 0; i < maps.length; i++) {
