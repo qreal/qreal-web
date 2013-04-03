@@ -156,6 +156,10 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             $(designerMenuDiv).attr("data-divider-theme", "d");
             var formsSelector = $("<div></div>");
             formsSelector.css("padding", "16px");
+            var controlsDiv = document.createElement("ul");
+            $(controlsDiv).attr("data-role", "listview");
+            $(controlsDiv).attr("data-inset", "true");
+            $(controlsDiv).attr("data-divider-theme", "d");
             var propertiesParentDiv = $("#properties");
             var propertiesDiv = document.createElement("ul");
             $(propertiesDiv).attr("data-role", "listview");
@@ -203,9 +207,9 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             $(elementsPalleteHeader).css("margin-top", "20px");
             $(elementsPalleteHeader).attr("data-role", "list-divider");
             $(elementsPalleteHeader).text("Widgets");
-            $(designerMenuDiv).append($(elementsPalleteHeader));
+            $(controlsDiv).append($(elementsPalleteHeader));
             var elementsPalleteContainer = document.createElement("li");
-            $(designerMenuDiv).append($(elementsPalleteContainer));
+            $(controlsDiv).append($(elementsPalleteContainer));
             var elementsPallete = document.createElement("div");
             $(elementsPalleteContainer).append($(elementsPallete));
             var buttonElement = $("<a id=\"button\" data-role=\"button\" draggable=\"true\">Button</a>");
@@ -252,12 +256,15 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             $(triggerDiv).css("padding", "16px");
             triggerDiv.id = "triggerDiv";
             $(formTriggersDiv).append($(triggerDiv));
+            $(parentDiv).prepend($(controlsDiv));
             $(parentDiv).prepend($(designerMenuDiv));
             $(propertiesParentDiv).prepend($(propertiesDiv));
             $(propertiesParentDiv).append($(formTriggersDiv));
             $(designerMenuDiv).listview();
             $(propertiesDiv).listview();
-            $(formTriggersDiv).css("margin-top", "20px");
+            $(controlsDiv).css("margin-top", "40px");
+            $(controlsDiv).listview();
+            $(formTriggersDiv).css("margin-top", "40px");
             $(formTriggersDiv).listview();
             document.getElementById("button").ondragstart = function (ev) {
                 ev.dataTransfer.setData("WidgetType", mWidgetTypes.WidgetTypes.Button.toString());
