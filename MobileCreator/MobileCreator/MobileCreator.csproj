@@ -340,6 +340,9 @@
     <None Include="qrealweb - Web Deploy.pubxml" />
     <None Include="qrealwebcreator - FTP.pubxml" />
     <None Include="qrealwebcreator - Web Deploy.pubxml" />
+    <Content Include="src\designer\Designer.js.map">
+      <DependentUpon>Designer.ts</DependentUpon>
+    </Content>
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

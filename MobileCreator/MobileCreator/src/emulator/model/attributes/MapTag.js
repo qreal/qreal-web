@@ -3,16 +3,13 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "emulator/model/attributes/ControlTag"], function(require, exports, __mControlTag__) {
-    var mControlTag = __mControlTag__;
-
-    var MapTag = (function (_super) {
-        __extends(MapTag, _super);
-        function MapTag() {
-                _super.call(this);
-        }
-        return MapTag;
-    })(mControlTag.ControlTag);
-    exports.MapTag = MapTag;    
-})
+var mControlTag = require("./emulator/model/attributes/ControlTag")
+var MapTag = (function (_super) {
+    __extends(MapTag, _super);
+    function MapTag() {
+        _super.call(this);
+    }
+    return MapTag;
+})(mControlTag.ControlTag);
+exports.MapTag = MapTag;
 //@ sourceMappingURL=MapTag.js.map
