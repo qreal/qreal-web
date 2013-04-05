@@ -3,13 +3,16 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-var mControlTag = require("./emulator/model/attributes/ControlTag")
-var ControlPanelTag = (function (_super) {
-    __extends(ControlPanelTag, _super);
-    function ControlPanelTag() {
-        _super.call(this);
-    }
-    return ControlPanelTag;
-})(mControlTag.ControlTag);
-exports.ControlPanelTag = ControlPanelTag;
+define(["require", "exports", "emulator/model/attributes/ControlTag"], function(require, exports, __mControlTag__) {
+    var mControlTag = __mControlTag__;
+
+    var ControlPanelTag = (function (_super) {
+        __extends(ControlPanelTag, _super);
+        function ControlPanelTag() {
+                _super.call(this);
+        }
+        return ControlPanelTag;
+    })(mControlTag.ControlTag);
+    exports.ControlPanelTag = ControlPanelTag;    
+})
 //@ sourceMappingURL=ControlPanelTag.js.map

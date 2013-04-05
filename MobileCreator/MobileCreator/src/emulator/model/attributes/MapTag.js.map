@@ -1,1 +1,1 @@
-{"version":3,"file":"MapTag.js","sources":["MapTag.ts"],"names":["MapTag","MapTag.constructor"],"mappings":";;;;;AAAA,kBAA4B,iDAAsC;AAElE;;IAEIA,SAFSA,MAAMA;QAGXC,iBAEPA;IADGA,CAACA;IACLD;AAACA,CAAAA,EAL2B,WAAW,CAAC,UAAU,EAKjD;AALD,wBAKC;AAAA"}
+{"version":3,"file":"MapTag.js","sources":["MapTag.ts"],"names":["MapTag","MapTag.constructor"],"mappings":";;;;;AAAA;IAAA,kBAA4B;AAAsC;IAElE;;QAEIA,SAFSA,MAAMA;YAGXC,qBAEPA;QADGA,CAACA;QACLD;AAACA,IAADA,CAACA,EAL2B,WAAW,CAAC,UAAU,EAKjD;IALD,wBAKC,IAAA;;AAAA"}

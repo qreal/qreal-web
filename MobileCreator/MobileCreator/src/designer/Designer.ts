@@ -78,9 +78,9 @@ export class Designer {
         this.logger.log("sendXml");
         var xml = this.getXML();
         this.logger.log(xml);
-        this.logger.log("$.ajax(http://localhost:12345");
+        this.logger.log("to localhost");
         var _this = this;
-        $.ajax("http://localhost:12345", {
+        $.ajax("http://localhost:12345/", {
             type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
                 _this.logger.log("response");
                 window.location.assign("http://localhost:51987/patients.xap");

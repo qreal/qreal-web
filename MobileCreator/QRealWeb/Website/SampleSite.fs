@@ -172,7 +172,7 @@ module SampleSite =
                 //A [HRef @"C:\Projects\qreal\work\bin\main-debug.apk"] -< [Text "Page 2"]
                 //A [HRef @"http:\\localhost\main-debug.apk"] -< [Text "Page 2"]
                 //downloadLink
-                IFrame [Src "http://localhost:61082"; Width "1020"; Height "800"]
+                IFrame [Src "http://localhost:61082"; Width "1020"; Height "800"; FrameBorder "0";]
             ]
             //    [Div [new Canvas.RaphaelViewer()]]
 
