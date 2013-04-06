@@ -18,3 +18,6 @@ obj/
 /MobileCreator/Server/bin
 /MobileCreator/*.suo
 /MobileCreator/Server/Program2.cs
+
+/QrealWebAzure/QrealWebAzure/csx
+/QrealWebAzure/QrealWebAzure/csx
