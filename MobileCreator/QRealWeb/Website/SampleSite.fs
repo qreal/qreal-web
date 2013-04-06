@@ -15,6 +15,7 @@ module SampleSite =
     //let downloadLink = A [HRef @"http:\\localhost\main-debug.apk"] -< [Text "Page 2"]
     
     let walked = ref false
+    (*
     let asyncServer = HttpListener.Start("http://localhost:12345/", fun ctx -> async {
         ctx.Response.Headers.Add("Access-Control-Allow-Origin", "*")
         ctx.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
@@ -65,6 +66,7 @@ module SampleSite =
             *)
         walked := not !walked
     })
+    *)
 
     /// Actions that corresponds to the different pages in the site.
     type Action =

@@ -28,15 +28,46 @@
     <Content Include="css\jquerymobile.css" />
     <Content Include="default.htm" />
     <TypeScriptCompile Include="src\designer\preferences\ElementPreferences.ts" />
+    <Content Include="src\designer\preferences\ElementPreferences.js">
+      <DependentUpon>ElementPreferences.ts</DependentUpon>
+    </Content>
     <TypeScriptCompile Include="src\designer\preferences\ButtonPreferences.ts" />
+    <Content Include="src\designer\preferences\ButtonPreferences.js">
+      <DependentUpon>ButtonPreferences.ts</DependentUpon>
+    </Content>
     <TypeScriptCompile Include="src\designer\widgets\Button.ts" />
+    <Content Include="src\designer\widgets\Button.js">
+      <DependentUpon>Button.ts</DependentUpon>
+    </Content>
     <TypeScriptCompile Include="src\designer\preferences\LinearLayoutPreferences.ts" />
+    <Content Include="src\designer\preferences\LinearLayoutPreferences.js">
+      <DependentUpon>LinearLayoutPreferences.ts</DependentUpon>
+    </Content>
     <TypeScriptCompile Include="src\designer\preferences\ImageViewPreferences.ts" />
+    <Content Include="src\designer\preferences\ImageViewPreferences.js">
+      <DependentUpon>ImageViewPreferences.ts</DependentUpon>
+    </Content>
     <TypeScriptCompile Include="src\designer\widgets\ImageView.ts" />
+    <Content Include="src\designer\widgets\ImageView.js">
+      <DependentUpon>ImageView.ts</DependentUpon>
+    </Content>
     <TypeScriptCompile Include="src\designer\widgets\LinearLayout.ts" />
+    <Content Include="src\designer\widgets\LinearLayout.js">
+      <DependentUpon>LinearLayout.ts</DependentUpon>
+    </Content>
     <TypeScriptCompile Include="src\designer\widgets\Element.ts" />
+    <Content Include="src\designer\widgets\Element.js">
+      <DependentUpon>Element.ts</DependentUpon>
+    </Content>
     <TypeScriptCompile Include="src\designer\widgets\TextView.ts" />
+    <Content Include="src\designer\widgets\TextView.js">
+      <DependentUpon>TextView.ts</DependentUpon>
+    </Content>
     <TypeScriptCompile Include="src\designer\preferences\TextViewPreferences.ts" />
+    <Content Include="src\designer\preferences\TextViewPreferences.js">
+      <DependentUpon>TextViewPreferences.ts</DependentUpon>
+    </Content>
+    
     <TypeScriptCompile Include="src\emulator\model\attributes\WebViewTag.ts" />
     <TypeScriptCompile Include="src\designer\widgets\WidgetTypes.ts" />
     <Content Include="images\imageview.png" />
@@ -67,8 +98,17 @@
       <DependentUpon>Form.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\designer\preferences\WebViewPreference.ts" />
+    <Content Include="src\designer\preferences\WebViewPreference.js">
+      <DependentUpon>WebViewPreference.ts</DependentUpon>
+    </Content>
     <TypeScriptCompile Include="src\designer\preferences\EditTextPreferences.ts" />
+    <Content Include="src\designer\preferences\EditTextPreferences.js">
+      <DependentUpon>EditTextPreferences.ts</DependentUpon>
+    </Content>
     <TypeScriptCompile Include="src\designer\logic\FormTrigger.ts" />
+    <Content Include="src\designer\logic\FormTrigger.js">
+      <DependentUpon>FormTrigger.ts</DependentUpon>
+    </Content>
     <TypeScriptCompile Include="src\designer\logic\Action.ts" />
     <Content Include="src\designer\logic\Action.js">
       <DependentUpon>Action.ts</DependentUpon>
@@ -80,9 +120,6 @@
     </Content>
     <Content Include="src\designer\logic\CodeBlock.js">
       <DependentUpon>CodeBlock.ts</DependentUpon>
-    </Content>
-    <Content Include="src\designer\logic\FormTrigger.js">
-      <DependentUpon>FormTrigger.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\designer\logic\IfAction.ts" />
     <Content Include="src\designer\logic\IfAction.js">
@@ -108,15 +145,9 @@
     <Content Include="src\designer\logic\TransitionAction.js">
       <DependentUpon>TransitionAction.ts</DependentUpon>
     </Content>
-    <Content Include="src\designer\preferences\EditTextPreferences.js">
-      <DependentUpon>EditTextPreferences.ts</DependentUpon>
-    </Content>
     <TypeScriptCompile Include="src\designer\preferences\MapPreferences.ts" />
     <Content Include="src\designer\preferences\MapPreferences.js">
       <DependentUpon>MapPreferences.ts</DependentUpon>
-    </Content>
-    <Content Include="src\designer\preferences\WebViewPreference.js">
-      <DependentUpon>WebViewPreference.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\designer\widgets\WebView.ts" />
     <TypeScriptCompile Include="src\designer\widgets\EditText.ts" />
@@ -136,9 +167,6 @@
     <Content Include="res\info_activity.xml" />
     <Content Include="res\main.xml" />
     <TypeScriptCompile Include="src\emulator\model\attributes\InputTag.ts" />
-    <Content Include="src\emulator\model\attributes\EditTextTag.js">
-      <DependentUpon>InputTag.ts</DependentUpon>
-    </Content>
     <Content Include="src\emulator\model\attributes\InputTag.js">
       <DependentUpon>InputTag.ts</DependentUpon>
     </Content>
@@ -202,9 +230,6 @@
       <DependentUpon>Button.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\emulator\model\ui\Input.ts" />
-    <Content Include="src\emulator\model\ui\file1.js">
-      <DependentUpon>Input.ts</DependentUpon>
-    </Content>
     <Content Include="src\emulator\model\ui\Input.js">
       <DependentUpon>Input.ts</DependentUpon>
     </Content>
@@ -249,7 +274,7 @@
       <DependentUpon>Designer.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\emulator\model\attributes\ControlTag.ts" />
-    <Content Include="src\emulator\model\attributes\Atributes.js">
+    <Content Include="src\emulator\model\attributes\ControlTag.js">
       <DependentUpon>ControlTag.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="src\emulator\model\attributes\ControlPanelTag.ts" />
@@ -396,13 +421,9 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TypeScriptSourceMap> --module AMD</TypeScriptSourceMap>
-    <DefineConstants>DEBUG</DefineConstants>
-  </PropertyGroup>
   <Target Name="BeforeBuild">
     <Message Text="Compiling TypeScript files" />
     <Message Text="Executing tsc$(TypeScriptSourceMap) @(TypeScriptCompile ->'&quot;%(fullpath)&quot;', ' ')" />
-    <Exec Command="tsc -sourcemap --target ES5 $(TypeScriptSourceMap) @(TypeScriptCompile ->'&quot;%(fullpath)&quot;', ' ')" />
+    <Exec Command="tsc -sourcemap --target ES5 --module AMD $(TypeScriptSourceMap) @(TypeScriptCompile ->'&quot;%(fullpath)&quot;', ' ')" />
   </Target>
 </Project>
