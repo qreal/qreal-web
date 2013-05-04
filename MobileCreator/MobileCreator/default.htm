@@ -19,38 +19,44 @@
     <script type="text/javascript" src="lib/knockout.js"></script>
 
     <!-- bing map -->
-      <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+    <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
 
 
     <script data-main="src/AppConfig" type="text/javascript" src="lib/require.js"></script>
 
 </head>
 <body>
-    <a id="btChange" data-role="button" data-inline="true">Designer</a>
-    <a id="sendXMLButton" data-role="button" data-inline="true">Generate!</a>
-    <div id="content">
-        <div id='designer'>
-            <div id="left">
-                <div id="menu">
+    <div id="inner">
+        <a id="btChange" data-role="button" data-inline="true">Run in emulator</a>
+        <a id="sendXMLButton" data-role="button" data-inline="true">Generate app</a>
+        <div id="content">
+            <div id='designer'>
+
+                <div id="left">
+                    <div id="menu">
+                    </div>
+                </div>
+                <div id="designerContainer">
+                    <div id="formHeader"></div>
+                    <div id="designerSkin">
+                        <div id="form"></div>
+                    </div>
+                </div>
+                <div id="right">
+                    <div id="properties">
+                    </div>
                 </div>
             </div>
-            <div id="designerSkin">
-                <div id="form"></div>
-            </div>
-            <div id="right">
-                <div id="properties">
+            <div id='emulator'>
+                <div id='emulatorSkin'>
+                    <div id='screen'></div>
+                    <a href="#" data-role="button" data-mini="true" data-inline="true" id="back_button" data-theme="a" style="margin-top: 10px">Back</a>
                 </div>
             </div>
+            <script>
+                $("#emulator").hide();
+            </script>
         </div>
-        <div id='emulator'>
-            <div id='emulatorSkin'>
-                <div id='screen'></div>
-                <a href="#" data-role="button" data-mini="true" data-inline="true" id="back_button" data-theme="a" style="margin-top: 10px">Back</a>
-            </div>
-        </div>
-        <script>
-            $("#emulator").hide();
-        </script>
     </div>
 </body>
 </html>

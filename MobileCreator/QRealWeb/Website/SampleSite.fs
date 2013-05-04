@@ -15,6 +15,7 @@ module SampleSite =
     //let downloadLink = A [HRef @"http:\\localhost\main-debug.apk"] -< [Text "Page 2"]
     
     let walked = ref false
+    (*
     let asyncServer = HttpListener.Start("http://localhost:12345/", fun ctx -> async {
         ctx.Response.Headers.Add("Access-Control-Allow-Origin", "*")
         ctx.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
@@ -25,21 +26,34 @@ module SampleSite =
             let input = inputStream.ReadToEnd()
             let path = @"C:\Project\work"
             let addPath str = Path.Combine(path, str)
-            //System.IO.File.WriteAllText (addPath "forms.xml", input)
-            //let cmd = addPath "AndroidGenerator.exe"  + " " + path + " aaa"
-            //System.Diagnostics.Process.Start("cmd.exe", "/C " + cmd).WaitForExit()
+            System.IO.File.WriteAllText (addPath "forms.xml", input)
+            let cmd = "C:\Project\winphonegen\WindowsPhoneGenerator.exe"  + " " + path
+            System.Diagnostics.Process.Start("cmd.exe", "/C "+cmd).WaitForExit()
             //let client = new WebClient()
             //client.DownloadStringAsync <| new System.Uri(@"C:\Projects\Movies\Test\a.txt")
 
-            let outputFile = Path.Combine(path, "bin", "main-debug.apk")
-            let server = System.Web.HttpContext.Current.Server
+            let outputFile = Path.Combine(path, "Bin","Debug" , "patients.xap")
+            //let server = System.Web.HttpContext.Current.Server
             //System.Web.HttpContext.Current <- ctx.Response
             let response = ctx.Response //System.Web.HttpContext.Current.Response
-            let stream = server.CreateObject "ADODB.Stream"
-            let resFile = @"C:\inetpub\wwwroot\main-debug.apk"
+            //let stream = server.CreateObject "ADODB.Stream"
+            let resFile = @"C:\Users\nikit_000\Documents\Workspace\QrealWeb\qreal-web\MobileCreator\QRealWeb\Web\patients.xap"
             if System.IO.File.Exists resFile then
                 System.IO.File.Delete resFile
-            System.IO.File.Move(addPath @"bin\main-debug.apk", resFile)
+            System.IO.File.Move(addPath "Bin\Debug\patients.xap", resFile)
+            
+            (*
+            response.Clear();
+            response.ClearHeaders();
+            response.ClearContent();
+            response.AddHeader("Content-Disposition", "attachment; filename=" + "patients.xap")//outputFile)
+            response.AddHeader("Content-Length", patientsFile.Length.ToString());
+            response.ContentType = "text/plain";
+            response.Flush();
+            response.TransmitFile(patientsFile.FullName);
+            response.End();
+            *)
+            
             (*
             response.AddHeader("Content-Disposition", "attachment; filename=" + "main-debug.apk")//outputFile)
             response.AddHeader("Content-Type", "application/octet-stream")
@@ -52,6 +66,7 @@ module SampleSite =
             *)
         walked := not !walked
     })
+    *)
 
     /// Actions that corresponds to the different pages in the site.
     type Action =
@@ -159,7 +174,7 @@ module SampleSite =
                 //A [HRef @"C:\Projects\qreal\work\bin\main-debug.apk"] -< [Text "Page 2"]
                 //A [HRef @"http:\\localhost\main-debug.apk"] -< [Text "Page 2"]
                 //downloadLink
-                IFrame [Src "http://localhost:61082/default.htm"; Width "1040"; Height "800"]
+                IFrame [Src "http://localhost:61082"; Width "1020"; Height "800"; FrameBorder "0";]
             ]
             //    [Div [new Canvas.RaphaelViewer()]]
 

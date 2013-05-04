@@ -4,3 +4,9 @@ C:\Projects\Movies\Sender\Sender\bin\Debug\Sender.pdb
 C:\Projects\Movies\Sender\Sender\obj\Debug\Sender.exe
 C:\Projects\Movies\Sender\Sender\obj\Debug\Sender.pdb
 C:\Projects\Movies\Sender\Sender\obj\Debug\Sender.csprojResolveAssemblyReference.cache
+C:\Users\nikit_000\Documents\Workspace\QrealWeb\qreal-web\AppServer\Sender\Sender\bin\Debug\Sender.exe.config
+C:\Users\nikit_000\Documents\Workspace\QrealWeb\qreal-web\AppServer\Sender\Sender\obj\Debug\Sender.exe
+C:\Users\nikit_000\Documents\Workspace\QrealWeb\qreal-web\AppServer\Sender\Sender\obj\Debug\Sender.pdb
+C:\Users\nikit_000\Documents\Workspace\QrealWeb\qreal-web\AppServer\Sender\Sender\bin\Debug\Sender.exe
+C:\Users\nikit_000\Documents\Workspace\QrealWeb\qreal-web\AppServer\Sender\Sender\bin\Debug\Sender.pdb
+C:\Users\nikit_000\Documents\Workspace\QrealWeb\qreal-web\AppServer\Sender\Sender\obj\Debug\Sender.csprojResolveAssemblyReference.cache

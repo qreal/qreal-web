@@ -39,9 +39,16 @@ export class CodeBlock {
         for (var i = 0; i < this.actions.length; i++) {
             var action = this.actions[i];
             var actionIndex = i;
-            var removeButton = $("<a href='#' data-role='button' data-icon='delete' data-inline='true' data-iconpos='notext' data-theme='a' data-mini='true'>Delete</a>");
+            var removeButton = $("<a href='#' data-role='button' data-inline='true' data-theme='a' data-mini='true'>Delete</a>");
+            removeButton.css("margin-left", "6px");
             if (action.ActionType == mActionTypes.ActionTypes.If) {
                 (<mIfAction.IfAction> action).showIf(domElement, removeButton);
+                domElement.trigger("create");
+                _this.setRemoveHandler(removeButton, i, domElement);
+                continue;
+            }
+            if (action.ActionType == mActionTypes.ActionTypes.LoginRequest) {
+                (<mLoginRequestAction.LoginRequestAction> action).showLogin(domElement, removeButton, this.marginLeft);
                 domElement.trigger("create");
                 _this.setRemoveHandler(removeButton, i, domElement);
                 continue;
@@ -74,7 +81,8 @@ export class CodeBlock {
         
         newActionDiv.append(selectAction);
         selectAction.selectmenu();
-        var addActionButton = $("<a href='#' data-role='button' data-icon='plus' data-iconpos='notext' data-theme='a' data-mini='true'>Add action</a>");
+        var addActionButton = $("<a href='#' data-role='button' data-theme='a' data-mini='true'>Add action</a>");
+        addActionButton.css("margin-left", "6px");
         domElement.append(addActionButton);
         newActionDiv.append(addActionButton);
         addActionButton.button();
@@ -94,11 +102,11 @@ export class CodeBlock {
                     _this.show(domElement);
                     break;
                 case "patients":
-                    _this.addAction(new mPatientsRequestAction.PatientsRequestAction("http://localhost:54321"));
+                    _this.addAction(new mPatientsRequestAction.PatientsRequestAction("http://nb.infolan.me:54321"));
                     _this.show(domElement);
                     break;
                 case "login":
-                    _this.addAction(new mLoginRequestAction.LoginRequestAction("http://localhost:54321"));
+                    _this.addAction(new mLoginRequestAction.LoginRequestAction("http://nb.infolan.me:54321"));
                     _this.show(domElement);
                     break;
                 case "if":

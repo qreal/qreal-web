@@ -71,14 +71,19 @@ export class Designer {
         Designer.activeForm.show();
         this.updateFormsSelect();
         this.updateTriggersSelect();
+        this.updateFormHeader();
     }
 
     private sendXml() {
+        this.logger.log("sendXml");
         var xml = this.getXML();
         this.logger.log(xml);
-        $.ajax("http://localhost:12345", {
+        this.logger.log("to localhost");
+        var _this = this;
+        $.ajax("http://localhost:12345/", {
             type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
-                window.location.assign("http://localhost/main-debug.apk");
+                _this.logger.log("response");
+                window.location.assign("http://localhost:51987/patients.xap");
             }
         });
     }
@@ -142,6 +147,14 @@ export class Designer {
         Designer.activeForm.Triggers[0].show($("#triggerDiv"));
     }
 
+    private updateFormHeader() {
+        var div = $("#formHeader");
+        div.empty();
+        //var header = Designer.activeForm.FormName;
+        var header = $("<h2 align='center'>" + Designer.activeForm.FormName + "<h2>");
+        div.append(header);
+    }
+
     public changeActiveForm(formName: string) {
         $("#propertiesEditor").empty();
         Designer.activeForm.hide();
@@ -155,6 +168,7 @@ export class Designer {
         $("#formNameField").val(Designer.activeForm.FormName);
         this.updateFormsSelect();
         this.updateTriggersSelect();
+        this.updateFormHeader();
     }
 
     public initDesigner() {
@@ -165,6 +179,14 @@ export class Designer {
         $(designerMenuDiv).attr("data-role", "listview");
         $(designerMenuDiv).attr("data-inset", "true");
         $(designerMenuDiv).attr("data-divider-theme", "d");
+        var formsSelector = $("<div></div>");
+        formsSelector.css("padding", "16px");
+
+        var controlsDiv = document.createElement("ul");
+        $(controlsDiv).attr("data-role", "listview");
+        $(controlsDiv).attr("data-inset", "true");
+        $(controlsDiv).attr("data-divider-theme", "d");
+        
 
         var propertiesParentDiv = $("#properties");
         var propertiesDiv = document.createElement("ul");
@@ -189,25 +211,31 @@ export class Designer {
         var formsTreeHeader = document.createElement("li");
         $(formsTreeHeader).attr("data-role", "list-divider");
         $(formsTreeHeader).text("Forms");
+        //$(formsSelector).append($(formsTreeHeader));
         $(designerMenuDiv).append($(formsTreeHeader));
 
         var formsSelect = $("<select id=\"formsSelect\"></select>");
-        $(designerMenuDiv).append($(formsSelect));
+        //$(designerMenuDiv).append($(formsSelect));
+        $(formsSelector).append($(formsSelect));
         formsSelect.selectmenu();
         formsSelect.change(function () {
             _this.changeActiveForm(formsSelect.val());
         });
 
-        var addFormButton = $("<a id=\"addFormButton\" data-role=\"button\" draggable=\"false\">New form</a>");
-        $(designerMenuDiv).append(addFormButton);
+        var addFormButton = $("<a id=\"addFormButton\" data-theme='a' data-role=\"button\" draggable=\"false\">New form</a>");
+        //$(designerMenuDiv).append(addFormButton);
+        $(formsSelector).append($(addFormButton));
         addFormButton.button();
         $(addFormButton).click(function () {
             _this.addForm("New form");
         });
         var formNameLabel = $("<label for='formNameField' >Form name: </label>");
+        formNameLabel.css("font-weight", "bold");
         var formNameField = $("<input type = 'text' name = 'formNameField' id = 'formNameField' value = '' >");
-        $(designerMenuDiv).append(formNameLabel);
-        $(designerMenuDiv).append(formNameField);
+        //$(designerMenuDiv).append(formNameLabel);
+        //$(designerMenuDiv).append(formNameField);
+        $(formsSelector).append($(formNameLabel));
+        $(formsSelector).append($(formNameField));
         $(formNameField).change(function () {
             var newVal = $(formNameField).val();
             var index = Designer.formNames.indexOf(Designer.activeForm.FormName);
@@ -216,18 +244,20 @@ export class Designer {
             Designer.activeForm.FormName = newVal;
             Designer.activeForm.updateTriggers();
             _this.updateFormsSelect();
+            _this.updateFormHeader();
         });
         formNameField.textinput();
+        $(designerMenuDiv).append($(formsSelector));
 
 
         var elementsPalleteHeader = document.createElement("li");
         $(elementsPalleteHeader).css("margin-top", "20px");
         $(elementsPalleteHeader).attr("data-role", "list-divider");
         $(elementsPalleteHeader).text("Widgets");
-        $(designerMenuDiv).append($(elementsPalleteHeader));
+        $(controlsDiv).append($(elementsPalleteHeader));
 
         var elementsPalleteContainer = document.createElement("li");
-        $(designerMenuDiv).append($(elementsPalleteContainer));
+        $(controlsDiv).append($(elementsPalleteContainer));
 
         var elementsPallete = document.createElement("div");
         //$(elementsPallete).addClass("ui-grid-a");
@@ -278,26 +308,37 @@ export class Designer {
         var formTriggersHeader = document.createElement("li");
         $(formTriggersHeader).attr("data-role", "list-divider");
         $(formTriggersHeader).text("Form triggers");
+        
         $(formTriggersDiv).append($(formTriggersHeader));
+
+        var triggerSelectDiv = $("<div></div>");
+        $(triggerSelectDiv).css("padding-left", "16px");
+        $(triggerSelectDiv).css("padding-right", "16px");
 
         var triggersSelect = $("<select id=\"triggersSelect\"></select>");
         triggersSelect.change(function () {
             //_this.changeActiveForm(formsSelect.val());
             //var activeForm = _this.
         });
-        $(formTriggersDiv).append($(triggersSelect));
+        $(triggerSelectDiv).append($(triggersSelect));
+        $(formTriggersDiv).append($(triggerSelectDiv));
         triggersSelect.selectmenu();
 
         var triggerDiv = document.createElement("div");
+        $(triggerDiv).css("padding", "16px");
         triggerDiv.id = "triggerDiv";
         $(formTriggersDiv).append($(triggerDiv));
 
+        $(parentDiv).prepend($(controlsDiv));
         $(parentDiv).prepend($(designerMenuDiv));
+
         $(propertiesParentDiv).prepend($(propertiesDiv));
         $(propertiesParentDiv).append($(formTriggersDiv));
         $(designerMenuDiv).listview();
         $(propertiesDiv).listview();
-        $(formTriggersDiv).css("margin-top", "20px");
+        $(controlsDiv).css("margin-top", "40px");
+        $(controlsDiv).listview();
+        $(formTriggersDiv).css("margin-top", "40px");
         $(formTriggersDiv).listview();
 
         document.getElementById("button").ondragstart = function (ev: DragEvent) {

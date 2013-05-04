@@ -3,3 +3,8 @@
     margin-left: 30px;
     margin-top: 10px;
 }
+
+#inner{
+    display: table;
+    margin: 0 auto;
+}

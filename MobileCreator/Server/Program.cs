@@ -27,11 +27,12 @@ namespace Server {
     }
 
     class DB {
-        private static string sqlConn = "Data Source=(local);Initial Catalog=Doctor;Integrated Security=True";
-        private static SqlConnection doctorDB = new SqlConnection(sqlConn);
+        private static string sqlConn = "Data Source=.\\SQLEXPRESS;Initial Catalog=Doctor;Integrated Security=True";
+        //private static SqlConnection doctorDB = new SqlConnection(sqlConn);
+        private static int count = 0;
 
-        public static void Open() { doctorDB.Open(); }
-
+        //public static void Open() { doctorDB.Open(); }
+        /*
         public static bool existsUser(string user) {
             var sql = "Select CASE WHEN EXISTS (SELECT * FROM [User] us WHERE us.Login = @login) THEN 1 ELSE 0 END";
             var cmd = new SqlCommand(sql, doctorDB);
@@ -44,11 +45,11 @@ namespace Server {
             var cmd = new SqlCommand(sql, doctorDB);
             cmd.Parameters.AddWithValue("@cook", cookie);
             return (int)cmd.ExecuteScalar() != 0;
-        }
+        }*/
 
 
         public static int checkLogin(string login, string password) {
-            var sql = "SELECT userid FROM [User] us WHERE us.Login = @login and us.Password = @password";
+            /*var sql = "SELECT userid FROM [User] us WHERE us.Login = @login and us.Password = @password";
             var cmd = new SqlCommand(sql, doctorDB);
             cmd.Parameters.AddWithValue("@login", login);
             cmd.Parameters.AddWithValue("@password", password);
@@ -59,24 +60,42 @@ namespace Server {
             } else {
                 res = -1;
             }
-            reader.Close();
+            reader.Close();*/
+            var res = 0;
+            if (login == "user" && password == "password")
+            {
+                res = 1;
+            }
             return res;
         }
 
         public static Coordinate[] getCoordinates(int id) {
+            /*
             Console.WriteLine("Getting " + id);
-            var sql = "SELECT x,y FROM [Coordinates] us WHERE us.id = @id";
+            var sql = "SELECT x,y,comment FROM [Coordinates] us WHERE us.id = @id";
             var cmd = new SqlCommand(sql, doctorDB);
             cmd.Parameters.AddWithValue("@id", id);
             var res = new List<Coordinate>();
             var reader = cmd.ExecuteReader();
             while (reader.Read()) {
-                res.Add(new Coordinate((float)Convert.ToDouble(reader[0]), (float)Convert.ToDouble(reader[1]), ""));
+                res.Add(new Coordinate((float)Convert.ToDouble(reader[0]),
+                            (float)Convert.ToDouble(reader[1]), Convert.ToString(reader[2])));
             }
             reader.Close();
             return res.ToArray();
+            */
+            var res = new List<Coordinate>();
+            res.Add(new Coordinate((float)55.698099, (float)37.392397, "Kill the christian"));
+            res.Add(new Coordinate((float)55.710238, (float)37.409563, "Hammer smashed face"));
+            res.Add(new Coordinate((float)55.723823, (float)37.397289, "Slowly we rot"));
+            DB.count++;
+            if (DB.count > 5)
+            { 
+                res.Add(new Coordinate((float)55.730058, (float)37.392225, "Make them suffer!"));
+            }
+            return res.ToArray();
         }
-
+        /*
         public static int checkCookie(string cookie) {
             var sql = "Select c.id from Cookies c where c.cookie = @cook";
             var cmd = new SqlCommand(sql, doctorDB);
@@ -106,13 +125,13 @@ namespace Server {
             cmd.Parameters.AddWithValue("@cook", cookie);
             cmd.Parameters.AddWithValue("@id", id);
             cmd.ExecuteNonQuery();
-        }
+        }*/
 
     }
 
     class Program {
         static void Main() {
-            DB.Open();
+            //DB.Open();
             HttpListener listener = new HttpListener();
             listener.Prefixes.Add("http://localhost:54321/");
             listener.Start();
@@ -145,7 +164,6 @@ namespace Server {
                     string input = new StreamReader(context.Request.InputStream).ReadToEnd();
                     string msg = context.Request.HttpMethod + " " + context.Request.Url;
                     Console.Write(msg);
-                    Console.Write(input);
                     context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
                     context.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
@@ -165,8 +183,8 @@ namespace Server {
                         var parameters = HttpUtility.ParseQueryString(data);
                         var login = new Login(parameters["login"], parameters["password"]); //json.Deserialize<Login>(data);
                         var id = DB.checkLogin(login.login, login.password);
-                        if (id != -1) {
-                            var loginCookie = new Cookie();
+                        if (id == 1) {
+                            /*var loginCookie = new Cookie();
                             loginCookie.Name = "Session";
                             var cookie = "";
                             do {
@@ -176,12 +194,12 @@ namespace Server {
                             loginCookie.Value = cookie;
                             loginCookie.Expires = DateTime.Now.AddDays(1);
                             
-                            context.Response.Cookies.Add(loginCookie);
+                            context.Response.Cookies.Add(loginCookie);*/
                             sb.Append("success");
                         } else {
                             sb.Append("fail");
                         }
-                    } else if (name.ToLower() == "logout") {
+                    /*} /*else if (name.ToLower() == "logout") {
                         var cook = getCookie(context);
                         if (cook != null) {
                             var expCookie = new Cookie();
@@ -191,22 +209,23 @@ namespace Server {
                             if (DB.checkCookie(cook.Value) != -1) {
                                 DB.deleteCookie(cook.Value);
                             }
-                        }
+                        }*/
                     } else if (name.ToLower() == "coordinates") {
+                        /*Console.Write("LOLOL!");
                         var cook = getCookie(context);
                         if (cook != null) {
-                            var id = DB.checkCookie(cook.Value);
-                            if (id != -1) {
+                            //var id = DB.checkCookie(cook.Value);
+                            //if (id != -1) {*/
+                                var id = 1;
                                 var coords = DB.getCoordinates(id);
                                 var json = new System.Web.Script.Serialization.JavaScriptSerializer();
-                                foreach(var coordinate in coords){
+                                  foreach(var coordinate in coords){
                                     sb.Append(String.Format(CultureInfo.InvariantCulture, "{0};{1};{2};", coordinate.x, coordinate.y, coordinate.comment));
                                 }
-                            }
+                            //}
                         }
-                    }
+                    
 
-                    Console.WriteLine("response: "+sb.ToString());
                     byte[] b = Encoding.UTF8.GetBytes(sb.ToString());
                     context.Response.ContentLength64 = b.Length;
                     var stream = context.Response.OutputStream;

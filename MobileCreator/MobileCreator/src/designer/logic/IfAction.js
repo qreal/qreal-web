@@ -25,6 +25,7 @@ define(["require", "exports", "designer/logic/Action", "designer/logic/CodeBlock
             containDiv.css("margin-left", this.marginLeft + "px");
             domElement.append(containDiv);
             var ifBlock = $("<a href='#' data-role='button' data-corners='false' data-inline='true' data-mini='true'>If</a>");
+            ifBlock.css("margin-right", "6px");
             containDiv.append(ifBlock);
             ifBlock.button();
             var select = $("<select data-mini='true' data-inline='true'></select>");
@@ -33,6 +34,7 @@ define(["require", "exports", "designer/logic/Action", "designer/logic/CodeBlock
             containDiv.append(select);
             select.selectmenu();
             containDiv.append(removeButton);
+            removeButton.css("margin-left", "6px");
             removeButton.button();
             var thenDiv = $("<div data-role='controlgroup' data-type='horizontal' data-mini='true'></div>");
             thenDiv.css("margin-left", this.marginLeft + "px");

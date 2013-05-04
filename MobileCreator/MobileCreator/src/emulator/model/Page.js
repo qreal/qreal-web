@@ -28,9 +28,10 @@ define(["require", "exports", "utils/log/Log", "emulator/model/Emulator", "emula
             var _this = this;
             Page.logger.log("onShow");
             mEmulator.Emulator.instance.EventManager.trigger(this.Name, mEventManager.EventManager.OnShow);
+            mEmulator.Emulator.instance.EventManager.trigger(this.Name, mEventManager.EventManager.OnTimer);
             this.timerToken = setInterval(function () {
                 return mEmulator.Emulator.instance.EventManager.trigger(_this.Name, mEventManager.EventManager.OnTimer);
-            }, 10000);
+            }, 2000);
         };
         Page.prototype.onHide = function () {
             clearTimeout(this.timerToken);

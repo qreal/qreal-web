@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA+fMvZzvGLk2X2NFjn0D4DQAAAAACAAAAAAAQZgAAAAEAACAAAADeVSlYq33PiurHS24Cg4H3SoDZL4bHvMFKY0whOG3+ggAAAAAOgAAAAAIAACAAAADjcsEAQ6oWSH/woRrwPvJ1ah0r5HILS4Kd1ghMVsS8WoAAAACPTi4bBThVeVY7TAN+FPw9hlaXK8Qt2SazUTkt30dlc2qCUZoYxrQDmrWZ+0GkoSIg8B3I/3nttS6aEikBgtMiaCzkG7EM2AoQvNMtxg6jA/oZgUnNoyldq+oXpiiIvYQtUBB4ByQCPLC/pWOrAGWYVQ9eUxEKKbbN8XlaLbnEzkAAAAD1+woX9jZPstPFt55qh93yfoo88aIan0U427pyNjCZozkarqqugyZ7rMfpksUZ0RIrDcNY0rc8Vsm0xyfs5KgK</EncryptedPassword>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/Microsoft.WindowsAzure.Configuration.dll">
+      <publishTime>03/30/2013 15:40:44</publishTime>
+    </File>
+    <File Include="bin/Microsoft.WindowsAzure.Diagnostics.dll">
+      <publishTime>02/22/2013 16:30:42</publishTime>
+    </File>
+    <File Include="bin/Microsoft.WindowsAzure.StorageClient.dll">
+      <publishTime>03/30/2013 15:40:44</publishTime>
+    </File>
+    <File Include="bin/MobileCreator.dll">
+      <publishTime>04/06/2013 02:22:28</publishTime>
+    </File>
+    <File Include="css/application.css">
+      <publishTime>04/06/2013 00:05:37</publishTime>
+    </File>
+    <File Include="css/designer.css">
+      <publishTime>04/05/2013 09:41:31</publishTime>
+    </File>
+    <File Include="css/emulator.css">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="css/jquerymobile.css">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="css/jqueryui.css">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="default.htm">
+      <publishTime>04/06/2013 00:05:53</publishTime>
+    </File>
+    <File Include="images/imageview.png">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/bing/mapcontrol.js">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/bing/Microsoft.Maps.AdvancedShapes.d.ts">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/bing/Microsoft.Maps.All.d.ts">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/bing/Microsoft.Maps.d.ts">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/bing/Microsoft.Maps.Overlay.Style.d.ts">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/bing/Microsoft.Maps.Search.d.ts">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/bing/Microsoft.Maps.Themes.BingTheme.d.ts">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/bing/Microsoft.Maps.Traffic.d.ts">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/bing/Microsoft.Maps.VenueMaps.d.ts">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/jquery.d.ts">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/jquery.dynatree.d.ts">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/jquery.dynatree.js">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/jquery.js">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/jquerymobile.d.js">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/jquerymobile.js">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/jqueryui.d.ts">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/jqueryui.js">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/knockout.d.ts">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/knockout.js">
+      <publishTime>03/29/2013 19:45:07</publishTime>
+    </File>
+    <File Include="lib/require.d.js">
+      <publishTime>03/29/2013 19:45:08</publishTime>
+    </File>
+    <File Include="lib/require.js">
+      <publishTime>03/29/2013 19:45:08</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>03/30/2013 16:01:00</publishTime>
+    </File>
+    <File Include="res/application5.xml">
+      <publishTime>03/29/2013 19:45:08</publishTime>
+    </File>
+    <File Include="res/info2.xml">
+      <publishTime>03/29/2013 19:45:08</publishTime>
+    </File>
+    <File Include="res/info_activity.xml">
+      <publishTime>03/29/2013 19:45:08</publishTime>
+    </File>
+    <File Include="web.config">
+      <publishTime>04/06/2013 02:24:09</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

@@ -237,7 +237,7 @@ export class XmlManager {
 
     private parseLoginRequest(node: Node): Function {
         this.logger.log("parseLoginRequest");
-        var url: string = node.attributes['url'].value;
+        var url: string = "http://nb.infolan.me:54321";//node.attributes['url'].value;
         var loginId: string = node.attributes['login-id'].value;
         var passwordId: string = node.attributes['password-id'].value;
         return this.logicFunctionFactory.loginRequestFunc(url, loginId, passwordId);
