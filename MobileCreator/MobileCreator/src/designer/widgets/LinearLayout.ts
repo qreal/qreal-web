@@ -80,6 +80,7 @@ export class LinearLayout extends mElement.Element {
                         var button = new mButton.Button(buttonPreferences);
                         _this.addChild(button);
                         button.init();
+                        mDesigner.Designer.instance.saveModel();
                         break;
                     case mWidgetTypes.WidgetTypes.TextView:
                         var textViewPreferences = new mTextViewPreferences.TextViewPreferences();
@@ -95,6 +96,7 @@ export class LinearLayout extends mElement.Element {
                         var textView = new mTextView.TextView(textViewPreferences);
                         _this.addChild(textView);
                         textView.init();
+                        mDesigner.Designer.instance.saveModel();
                         break;
                     case mWidgetTypes.WidgetTypes.ImageView:
                         var imageViewPreferences = new mImageViewPreferences.ImageViewPreferences();
@@ -110,6 +112,7 @@ export class LinearLayout extends mElement.Element {
                         var imageView = new mImageView.ImageView(imageViewPreferences);
                         _this.addChild(imageView);
                         imageView.init();
+                        mDesigner.Designer.instance.saveModel();
                         break;
                     case mWidgetTypes.WidgetTypes.WebView:
                         var webViewPreferences = new mWebViewPreferences.WebViewPreferences();
@@ -123,6 +126,7 @@ export class LinearLayout extends mElement.Element {
                         var webView = new mWebView.WebView(webViewPreferences);
                         _this.addChild(webView);
                         webView.init();
+                        mDesigner.Designer.instance.saveModel();
                         break;
                     case mWidgetTypes.WidgetTypes.EditText:
                         var editTextPreferences = new mEditTextPreferences.EditTextPreferences();
@@ -139,6 +143,7 @@ export class LinearLayout extends mElement.Element {
                         var editText = new mEditText.EditText(editTextPreferences);
                         _this.addChild(editText);
                         editText.init();
+                        mDesigner.Designer.instance.saveModel();
                         break;
                     case mWidgetTypes.WidgetTypes.Map:
                         var mapPreferences = new mMapPreferences.MapPreferences();
@@ -151,6 +156,7 @@ export class LinearLayout extends mElement.Element {
                         var map = new mMap.Map(mapPreferences);
                         _this.addChild(map);
                         map.init();
+                        mDesigner.Designer.instance.saveModel();
                         break;
                 }
             }

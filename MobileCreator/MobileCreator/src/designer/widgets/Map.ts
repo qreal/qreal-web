@@ -3,6 +3,7 @@
 import mElement = module("designer/widgets/Element");
 import mElementPreferences = module("designer/preferences/ElementPreferences")
 import mMapPreferences = module("designer/preferences/MapPreferences")
+import mDesigner = module("designer/Designer")
 
 export class Map extends mElement.Element {
     private preferences: mMapPreferences.MapPreferences;
@@ -40,6 +41,7 @@ export class Map extends mElement.Element {
         editorLayer.append(idField);
         idField.change(function () {
             _this.preferences.MapId = idField.val();
+            mDesigner.Designer.instance.saveModel();
         });
         idField.textinput();
     }

@@ -1,4 +1,4 @@
-define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logic/TransitionAction", "designer/logic/ShowMapAction", "designer/logic/PatientsRequestAction", "designer/logic/LoginRequestAction", "designer/logic/IfAction", "designer/logic/ActionTypes"], function(require, exports, __mSaveSessionAction__, __mTransitionAction__, __mShowMapAction__, __mPatientsRequestAction__, __mLoginRequestAction__, __mIfAction__, __mActionTypes__) {
+define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logic/TransitionAction", "designer/logic/ShowMapAction", "designer/logic/PatientsRequestAction", "designer/logic/LoginRequestAction", "designer/logic/IfAction", "designer/logic/ActionTypes", "designer/Designer"], function(require, exports, __mSaveSessionAction__, __mTransitionAction__, __mShowMapAction__, __mPatientsRequestAction__, __mLoginRequestAction__, __mIfAction__, __mActionTypes__, __mDesigner__) {
     
     var mSaveSessionAction = __mSaveSessionAction__;
 
@@ -14,6 +14,8 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
 
     
     var mActionTypes = __mActionTypes__;
+
+    var mDesigner = __mDesigner__;
 
     var CodeBlock = (function () {
         function CodeBlock(marginLeft) {
@@ -38,6 +40,7 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
             element.click(function () {
                 _this.actions.splice(i, 1);
                 _this.show(domElement);
+                mDesigner.Designer.instance.saveModel();
             });
         };
         CodeBlock.prototype.show = function (domElement) {
@@ -98,26 +101,32 @@ define(["require", "exports", "designer/logic/SaveSessionAction", "designer/logi
                     case "saveSession":
                         _this.addAction(new mSaveSessionAction.SaveSessionAction());
                         _this.show(domElement);
+                        mDesigner.Designer.instance.saveModel();
                         break;
                     case "transition":
                         _this.addAction(new mTransitionAction.TransitionAction("main"));
                         _this.show(domElement);
+                        mDesigner.Designer.instance.saveModel();
                         break;
                     case "showMap":
                         _this.addAction(new mShowMapAction.ShowMapAction(""));
                         _this.show(domElement);
+                        mDesigner.Designer.instance.saveModel();
                         break;
                     case "patients":
                         _this.addAction(new mPatientsRequestAction.PatientsRequestAction("http://nb.infolan.me:54321"));
                         _this.show(domElement);
+                        mDesigner.Designer.instance.saveModel();
                         break;
                     case "login":
                         _this.addAction(new mLoginRequestAction.LoginRequestAction("http://nb.infolan.me:54321"));
                         _this.show(domElement);
+                        mDesigner.Designer.instance.saveModel();
                         break;
                     case "if":
                         _this.addAction(new mIfAction.IfAction(_this.marginLeft));
                         _this.show(domElement);
+                        mDesigner.Designer.instance.saveModel();
                         break;
                 }
             });

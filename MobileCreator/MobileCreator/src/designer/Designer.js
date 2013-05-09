@@ -66,6 +66,22 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             this.updateFormsSelect();
             this.updateTriggersSelect();
             this.updateFormHeader();
+            this.saveModel();
+        };
+        Designer.prototype.saveModel = function () {
+            this.logger.log("saving");
+            var xml = this.getXML();
+            this.logger.log("to localhost");
+            var _this = this;
+            $.ajax("http://localhost:12345/", {
+                type: "POST",
+                contentType: "text/XML",
+                processData: false,
+                data: xml,
+                success: function (data) {
+                    _this.logger.log("saved");
+                }
+            });
         };
         Designer.prototype.sendXml = function () {
             this.logger.log("sendXml");
@@ -214,6 +230,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
                 Designer.activeForm.updateTriggers();
                 _this.updateFormsSelect();
                 _this.updateFormHeader();
+                _this.saveModel();
             });
             formNameField.textinput();
             $(designerMenuDiv).append($(formsSelector));
@@ -318,6 +335,7 @@ define(["require", "exports", "utils/log/Log", "designer/preferences/ElementPref
             Designer.activeForm.addElement(layout);
             Designer.activeForm.show();
             this.changeActiveForm("main");
+            this.saveModel();
         };
         return Designer;
     })();

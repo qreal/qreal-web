@@ -60,6 +60,7 @@ define(["require", "exports", "designer/logic/Action", "designer/widgets/WidgetT
             });
             loginSelect.change(function () {
                 _this.loginId = _loginSelect.val();
+                mDesigner.Designer.instance.saveModel();
             });
             removeButton.button();
             removeButton.css("margin-left", "6px");
@@ -97,6 +98,7 @@ define(["require", "exports", "designer/logic/Action", "designer/widgets/WidgetT
             });
             passSelect.change(function () {
                 _this.passwordId = _passSelect.val();
+                mDesigner.Designer.instance.saveModel();
             });
             domElement.append(passwordDiv);
         };

@@ -73,6 +73,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             var button = new mButton.Button(buttonPreferences);
                             _this.addChild(button);
                             button.init();
+                            mDesigner.Designer.instance.saveModel();
                             break;
                         case mWidgetTypes.WidgetTypes.TextView:
                             var textViewPreferences = new mTextViewPreferences.TextViewPreferences();
@@ -88,6 +89,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             var textView = new mTextView.TextView(textViewPreferences);
                             _this.addChild(textView);
                             textView.init();
+                            mDesigner.Designer.instance.saveModel();
                             break;
                         case mWidgetTypes.WidgetTypes.ImageView:
                             var imageViewPreferences = new mImageViewPreferences.ImageViewPreferences();
@@ -102,6 +104,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             var imageView = new mImageView.ImageView(imageViewPreferences);
                             _this.addChild(imageView);
                             imageView.init();
+                            mDesigner.Designer.instance.saveModel();
                             break;
                         case mWidgetTypes.WidgetTypes.WebView:
                             var webViewPreferences = new mWebViewPreferences.WebViewPreferences();
@@ -115,6 +118,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             var webView = new mWebView.WebView(webViewPreferences);
                             _this.addChild(webView);
                             webView.init();
+                            mDesigner.Designer.instance.saveModel();
                             break;
                         case mWidgetTypes.WidgetTypes.EditText:
                             var editTextPreferences = new mEditTextPreferences.EditTextPreferences();
@@ -130,6 +134,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             var editText = new mEditText.EditText(editTextPreferences);
                             _this.addChild(editText);
                             editText.init();
+                            mDesigner.Designer.instance.saveModel();
                             break;
                         case mWidgetTypes.WidgetTypes.Map:
                             var mapPreferences = new mMapPreferences.MapPreferences();
@@ -142,6 +147,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                             var map = new mMap.Map(mapPreferences);
                             _this.addChild(map);
                             map.init();
+                            mDesigner.Designer.instance.saveModel();
                             break;
                     }
                 }

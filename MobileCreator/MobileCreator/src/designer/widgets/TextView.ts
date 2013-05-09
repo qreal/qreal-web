@@ -3,6 +3,7 @@
 import mElement = module("designer/widgets/Element");
 import mElementPreferences = module("designer/preferences/ElementPreferences")
 import mTextViewPreferences = module("designer/preferences/TextViewPreferences")
+import mDesigner = module("designer/Designer")
 
 export class TextView extends mElement.Element {
     private preferences: mTextViewPreferences.TextViewPreferences;
@@ -47,6 +48,7 @@ export class TextView extends mElement.Element {
         textField.change(function () {
             _this.preferences.Text = textField.val();
             _this.init();
+            mDesigner.Designer.instance.saveModel();
         });
         textField.textinput();
         var marginTopLabel = $("<label for='text-margin-top' > Top margin: </label>");
@@ -56,6 +58,7 @@ export class TextView extends mElement.Element {
         marginTopField.change(function () {
             _this.preferences.LayoutMarginTop = marginTopField.val();
             _this.init();
+            mDesigner.Designer.instance.saveModel();
         });
         marginTopField.textinput();
         var sizeLabel = $("<label for='text-size' > Font size: </label>");
@@ -65,6 +68,7 @@ export class TextView extends mElement.Element {
         sizeField.change(function () {
             _this.preferences.TextSize = sizeField.val();
             _this.init();
+            mDesigner.Designer.instance.saveModel();
         });
         sizeField.textinput();
         /*

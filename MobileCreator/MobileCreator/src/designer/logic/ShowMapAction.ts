@@ -63,6 +63,7 @@ export class ShowMapAction extends mAction.Action {
         });
         select.change(function () {
             _this.controlId = _select.val();
+            mDesigner.Designer.instance.saveModel();
         });
     }
 

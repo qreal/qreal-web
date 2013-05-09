@@ -9,6 +9,7 @@ import mLoginRequestAction = module("designer/logic/LoginRequestAction")
 import mIfAction = module("designer/logic/IfAction")
 import mWidgetTypes = module("designer/widgets/WidgetTypes")
 import mActionTypes = module("designer/logic/ActionTypes")
+import mDesigner = module("designer/Designer")
 
 export class CodeBlock {
     private marginLeft;
@@ -31,6 +32,7 @@ export class CodeBlock {
         element.click(function () {
             _this.actions.splice(i, 1);
             _this.show(domElement);
+            mDesigner.Designer.instance.saveModel();
         });
     }
     public show(domElement: JQuery) {
@@ -92,26 +94,32 @@ export class CodeBlock {
                 case "saveSession":
                     _this.addAction(new mSaveSessionAction.SaveSessionAction());
                     _this.show(domElement);
+                    mDesigner.Designer.instance.saveModel();
                     break;
                 case "transition":
                     _this.addAction(new mTransitionAction.TransitionAction("main"));
                     _this.show(domElement);
+                    mDesigner.Designer.instance.saveModel();
                     break;
                 case "showMap":
                     _this.addAction(new mShowMapAction.ShowMapAction(""));
                     _this.show(domElement);
+                    mDesigner.Designer.instance.saveModel();
                     break;
                 case "patients":
                     _this.addAction(new mPatientsRequestAction.PatientsRequestAction("http://nb.infolan.me:54321"));
                     _this.show(domElement);
+                    mDesigner.Designer.instance.saveModel();
                     break;
                 case "login":
                     _this.addAction(new mLoginRequestAction.LoginRequestAction("http://nb.infolan.me:54321"));
                     _this.show(domElement);
+                    mDesigner.Designer.instance.saveModel();
                     break;
                 case "if":
                     _this.addAction(new mIfAction.IfAction(_this.marginLeft));
                     _this.show(domElement);
+                    mDesigner.Designer.instance.saveModel();
                     break;
             }
         });

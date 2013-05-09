@@ -3,13 +3,14 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences", "designer/logic/CodeBlock"], function(require, exports, __mElement__, __mElementPreferences__, __mCodeBlock__) {
+define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences", "designer/Designer", "designer/logic/CodeBlock"], function(require, exports, __mElement__, __mElementPreferences__, __mDesigner__, __mCodeBlock__) {
     var mElement = __mElement__;
 
     var mElementPreferences = __mElementPreferences__;
 
     
-    
+    var mDesigner = __mDesigner__;
+
     var mCodeBlock = __mCodeBlock__;
 
     var Button = (function (_super) {
@@ -62,6 +63,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             editorLayer.append(idField);
             idField.change(function () {
                 _this.preferences.ButtonId = idField.val();
+                mDesigner.Designer.instance.saveModel();
             });
             idField.textinput();
             var textLabel = $("<label for='text-text' > Text: </label>");
@@ -71,6 +73,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             textField.change(function () {
                 _this.preferences.Text = textField.val();
                 _this.init();
+                mDesigner.Designer.instance.saveModel();
             });
             textField.textinput();
             var marginTopLabel = $("<label for='text-margin-top' > Top margin: </label>");
@@ -80,6 +83,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             marginTopField.change(function () {
                 _this.preferences.LayoutMarginTop = marginTopField.val();
                 _this.init();
+                mDesigner.Designer.instance.saveModel();
             });
             marginTopField.textinput();
             var onClickLabel = $("<label>OnClick:</label>");

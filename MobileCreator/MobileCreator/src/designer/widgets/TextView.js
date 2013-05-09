@@ -3,12 +3,14 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences"], function(require, exports, __mElement__, __mElementPreferences__) {
+define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences", "designer/Designer"], function(require, exports, __mElement__, __mElementPreferences__, __mDesigner__) {
     var mElement = __mElement__;
 
     var mElementPreferences = __mElementPreferences__;
 
     
+    var mDesigner = __mDesigner__;
+
     var TextView = (function (_super) {
         __extends(TextView, _super);
         function TextView(preferences, domElement) {
@@ -54,6 +56,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             textField.change(function () {
                 _this.preferences.Text = textField.val();
                 _this.init();
+                mDesigner.Designer.instance.saveModel();
             });
             textField.textinput();
             var marginTopLabel = $("<label for='text-margin-top' > Top margin: </label>");
@@ -63,6 +66,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             marginTopField.change(function () {
                 _this.preferences.LayoutMarginTop = marginTopField.val();
                 _this.init();
+                mDesigner.Designer.instance.saveModel();
             });
             marginTopField.textinput();
             var sizeLabel = $("<label for='text-size' > Font size: </label>");
@@ -72,6 +76,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             sizeField.change(function () {
                 _this.preferences.TextSize = sizeField.val();
                 _this.init();
+                mDesigner.Designer.instance.saveModel();
             });
             sizeField.textinput();
         };

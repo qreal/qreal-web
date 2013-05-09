@@ -3,6 +3,7 @@
 import mElement = module("designer/widgets/Element");
 import mElementPreferences = module("designer/preferences/ElementPreferences")
 import mEditTextPreferences = module("designer/preferences/EditTextPreferences")
+import mDesigner = module("designer/Designer")
 
 export class EditText extends mElement.Element {
     private preferences: mEditTextPreferences.EditTextPreferences;
@@ -34,6 +35,7 @@ export class EditText extends mElement.Element {
         var _this = this;
         text.change(function () {
             _this.Preferences.Text = text.val();
+            mDesigner.Designer.instance.saveModel();
         });
         this.DomElement.click(function () {
             _this.fillPropertiesEditor($("#propertiesEditor"));
@@ -50,6 +52,7 @@ export class EditText extends mElement.Element {
         editorLayer.append(idField);
         idField.change(function () {
             _this.preferences.EditTextId = idField.val();
+            mDesigner.Designer.instance.saveModel();
         });
         idField.textinput();
         var textLabel = $("<label for='text-text' > Text: </label>");
@@ -58,6 +61,7 @@ export class EditText extends mElement.Element {
         editorLayer.append(textField);
         textField.change(function () {
             _this.preferences.Text = textField.val();
+            mDesigner.Designer.instance.saveModel();
             _this.init();
         });
         textField.textinput();
@@ -68,6 +72,7 @@ export class EditText extends mElement.Element {
         marginTopField.change(function () {
             _this.preferences.LayoutMarginTop = marginTopField.val();
             _this.init();
+            mDesigner.Designer.instance.saveModel();
         });
         marginTopField.textinput();
         /*

@@ -56,6 +56,7 @@ export class LoginRequestAction extends mAction.Action {
         });
         loginSelect.change(function () {
             _this.loginId = _loginSelect.val();
+            mDesigner.Designer.instance.saveModel();
         });
         removeButton.button();
         removeButton.css("margin-left", "6px");
@@ -94,6 +95,7 @@ export class LoginRequestAction extends mAction.Action {
         });
         passSelect.change(function () {
             _this.passwordId = _passSelect.val();
+            mDesigner.Designer.instance.saveModel();
         });
         domElement.append(passwordDiv);
     }

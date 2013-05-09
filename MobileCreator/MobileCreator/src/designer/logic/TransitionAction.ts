@@ -51,6 +51,7 @@ export class TransitionAction extends mAction.Action {
         });
         select.change(function () {
             _this.formId = _select.val();
+            mDesigner.Designer.instance.saveModel();
         });
     }
 }

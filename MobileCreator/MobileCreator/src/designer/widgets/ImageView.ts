@@ -3,6 +3,7 @@
 import mElement = module("designer/widgets/Element");
 import mElementPreferences = module("designer/preferences/ElementPreferences")
 import mImageViewPreferences = module("designer/preferences/ImageViewPreferences")
+import mDesigner = module("designer/Designer")
 
 export class ImageView extends mElement.Element {
     private preferences: mImageViewPreferences.ImageViewPreferences;
@@ -43,6 +44,7 @@ export class ImageView extends mElement.Element {
         srcField.change(function () {
             _this.preferences.Src = srcField.val();
             _this.init();
+            mDesigner.Designer.instance.saveModel();
         });
         srcField.textinput();
         var marginTopLabel = $("<label for='text-margin-top' > Top margin: </label>");
@@ -52,6 +54,7 @@ export class ImageView extends mElement.Element {
         marginTopField.change(function () {
             _this.preferences.LayoutMarginTop = marginTopField.val();
             _this.init();
+            mDesigner.Designer.instance.saveModel();
         });
         marginTopField.textinput();
     }

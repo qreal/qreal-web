@@ -3,12 +3,14 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences"], function(require, exports, __mElement__, __mElementPreferences__) {
+define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences", "designer/Designer"], function(require, exports, __mElement__, __mElementPreferences__, __mDesigner__) {
     var mElement = __mElement__;
 
     var mElementPreferences = __mElementPreferences__;
 
     
+    var mDesigner = __mDesigner__;
+
     var WebView = (function (_super) {
         __extends(WebView, _super);
         function WebView(preferences, domElement) {
@@ -51,6 +53,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             editorLayer.append(idField);
             idField.change(function () {
                 _this.preferences.WebViewId = idField.val();
+                mDesigner.Designer.instance.saveModel();
             });
             idField.textinput();
             var textLabel = $("<label for='text-url' > Url: </label>");
@@ -61,6 +64,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
                 var newValue = textField.val();
                 _this.preferences.Url = newValue;
                 _this.init();
+                mDesigner.Designer.instance.saveModel();
             });
             textField.textinput();
         };

@@ -3,12 +3,14 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences"], function(require, exports, __mElement__, __mElementPreferences__) {
+define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences", "designer/Designer"], function(require, exports, __mElement__, __mElementPreferences__, __mDesigner__) {
     var mElement = __mElement__;
 
     var mElementPreferences = __mElementPreferences__;
 
     
+    var mDesigner = __mDesigner__;
+
     var ImageView = (function (_super) {
         __extends(ImageView, _super);
         function ImageView(preferences, domElement) {
@@ -51,6 +53,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             srcField.change(function () {
                 _this.preferences.Src = srcField.val();
                 _this.init();
+                mDesigner.Designer.instance.saveModel();
             });
             srcField.textinput();
             var marginTopLabel = $("<label for='text-margin-top' > Top margin: </label>");
@@ -60,6 +63,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             marginTopField.change(function () {
                 _this.preferences.LayoutMarginTop = marginTopField.val();
                 _this.init();
+                mDesigner.Designer.instance.saveModel();
             });
             marginTopField.textinput();
         };

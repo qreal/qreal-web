@@ -69,6 +69,7 @@ define(["require", "exports", "designer/logic/Action", "designer/Designer", "des
             });
             select.change(function () {
                 _this.controlId = _select.val();
+                mDesigner.Designer.instance.saveModel();
             });
         };
         Object.defineProperty(ShowMapAction.prototype, "ControlId", {

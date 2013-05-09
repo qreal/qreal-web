@@ -52,6 +52,7 @@ export class Button extends mElement.Element {
         editorLayer.append(idField);
         idField.change(function () {
             _this.preferences.ButtonId = idField.val();
+            mDesigner.Designer.instance.saveModel();
         });
         idField.textinput();
         var textLabel = $("<label for='text-text' > Text: </label>");
@@ -61,6 +62,7 @@ export class Button extends mElement.Element {
         textField.change(function () {
             _this.preferences.Text = textField.val();
             _this.init();
+            mDesigner.Designer.instance.saveModel();
         });
         textField.textinput();
         /*
@@ -80,6 +82,7 @@ export class Button extends mElement.Element {
         marginTopField.change(function () {
             _this.preferences.LayoutMarginTop = marginTopField.val();
             _this.init();
+            mDesigner.Designer.instance.saveModel();
         });
         marginTopField.textinput();
         /*

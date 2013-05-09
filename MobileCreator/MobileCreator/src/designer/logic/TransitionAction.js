@@ -57,6 +57,7 @@ define(["require", "exports", "designer/logic/Action", "designer/Designer", "des
             });
             select.change(function () {
                 _this.formId = _select.val();
+                mDesigner.Designer.instance.saveModel();
             });
         };
         return TransitionAction;

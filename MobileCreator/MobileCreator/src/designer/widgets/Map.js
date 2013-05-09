@@ -3,12 +3,14 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences"], function(require, exports, __mElement__, __mElementPreferences__) {
+define(["require", "exports", "designer/widgets/Element", "designer/preferences/ElementPreferences", "designer/Designer"], function(require, exports, __mElement__, __mElementPreferences__, __mDesigner__) {
     var mElement = __mElement__;
 
     var mElementPreferences = __mElementPreferences__;
 
     
+    var mDesigner = __mDesigner__;
+
     var Map = (function (_super) {
         __extends(Map, _super);
         function Map(preferences, domElement) {
@@ -47,6 +49,7 @@ define(["require", "exports", "designer/widgets/Element", "designer/preferences/
             editorLayer.append(idField);
             idField.change(function () {
                 _this.preferences.MapId = idField.val();
+                mDesigner.Designer.instance.saveModel();
             });
             idField.textinput();
         };

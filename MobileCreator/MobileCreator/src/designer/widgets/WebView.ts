@@ -3,6 +3,7 @@
 import mElement = module("designer/widgets/Element");
 import mElementPreferences = module("designer/preferences/ElementPreferences")
 import mWebViewPreferences = module("designer/preferences/WebViewPreference")
+import mDesigner = module("designer/Designer")
 
 export class WebView extends mElement.Element {
     private preferences: mWebViewPreferences.WebViewPreferences;
@@ -45,6 +46,7 @@ export class WebView extends mElement.Element {
         editorLayer.append(idField);
         idField.change(function () {
             _this.preferences.WebViewId = idField.val();
+            mDesigner.Designer.instance.saveModel();
         });
         idField.textinput();
         var textLabel = $("<label for='text-url' > Url: </label>");
@@ -61,6 +63,7 @@ export class WebView extends mElement.Element {
             */
             _this.preferences.Url = newValue;
             _this.init();
+            mDesigner.Designer.instance.saveModel();
         });
         textField.textinput();
     }

@@ -72,6 +72,20 @@ export class Designer {
         this.updateFormsSelect();
         this.updateTriggersSelect();
         this.updateFormHeader();
+        this.saveModel();
+    }
+
+    public saveModel() {
+        this.logger.log("saving");
+        var xml = this.getXML();
+        //this.logger.log(xml);
+        this.logger.log("to localhost");
+        var _this = this;
+        $.ajax("http://localhost:12345/", {
+            type: "POST", contentType: "text/XML", processData: false, data: xml, success: function (data) {
+                _this.logger.log("saved");
+            }
+        });
     }
 
     private sendXml() {
@@ -245,6 +259,7 @@ export class Designer {
             Designer.activeForm.updateTriggers();
             _this.updateFormsSelect();
             _this.updateFormHeader();
+            _this.saveModel();
         });
         formNameField.textinput();
         $(designerMenuDiv).append($(formsSelector));
@@ -381,6 +396,7 @@ export class Designer {
         Designer.activeForm.addElement(layout);
         Designer.activeForm.show();
         this.changeActiveForm("main");
+        this.saveModel();
         //form.append(layout.DomElement);
     }
 }
