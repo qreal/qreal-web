@@ -53,6 +53,20 @@ module SampleSite =
         walked := not !walked
     })
 
+    let walked2 = ref false
+    /// Server for saving xmls
+    let asyncSaver = HttpListener.Start("http://localhost:12222/", fun ctx -> async {
+        ctx.Response.Headers.Add("Access-Control-Allow-Origin", "*")
+        ctx.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+        use sw = new BinaryWriter(ctx.Response.OutputStream)
+        if !walked2 then
+            use inputStream = new StreamReader(ctx.Request.InputStream)
+            let input = inputStream.ReadToEnd()
+            let num = "0"
+            System.IO.File.WriteAllText (@"C:\Projects\qreal\saved\" + num + ".xml", input)
+        walked2 := not !walked2
+    })
+
     /// Actions that corresponds to the different pages in the site.
     type Action =
         | Register
