@@ -1,14 +1,11 @@
-//import gt = require("app/classes/Greeter");
-define(["require", "exports"], function(require, exports) {
+define(["require", "exports", "app/classes/Controller"], function(require, exports, __Controlller__) {
+    var Controlller = __Controlller__;
+
     var App = (function () {
         function App() {
         }
         App.Main = function () {
-            // code from window.onload
-            //var el = document.getElementById('content');
-            //var greeter = new gt.Greeter(el);
-            //greeter.start();
-            alert("Main");
+            Controlller.Instance.Init();
         };
         return App;
     })();
@@ -16,4 +13,3 @@ define(["require", "exports"], function(require, exports) {
     
     return App;
 });
-//# sourceMappingURL=AppMain.js.map
