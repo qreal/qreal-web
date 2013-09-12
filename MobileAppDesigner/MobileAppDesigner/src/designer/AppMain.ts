@@ -1,4 +1,6 @@
-import Controlller = require("src/designer/controller/Controller");
+///<reference path="../modules/jquery.d.ts" />
+
+import Controlller = require("src/designer/Controller");
 import Log = require("util/log/Log");
 
 class App {

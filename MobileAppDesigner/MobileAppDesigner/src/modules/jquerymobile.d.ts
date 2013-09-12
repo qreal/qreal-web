@@ -359,7 +359,7 @@ interface JQuery {
     fixedtoolbar(events: FixedToolbarEvents): JQuery;
 
 
-    button(): JQuery;
+    //button(): JQuery;
     button(command: string): JQuery;
     button(options?: ButtonOptions): JQuery;
     button(events: ButtonEvents): JQuery;

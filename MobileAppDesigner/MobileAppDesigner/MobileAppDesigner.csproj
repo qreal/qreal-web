@@ -17,7 +17,7 @@
   </PropertyGroup>
   <ItemGroup>
     <TypeScriptCompile Include="src\designer\AppMain.ts" />
-    <TypeScriptCompile Include="src\designer\controller\Controller.ts" />
+    <TypeScriptCompile Include="src\designer\Controller.ts" />
     <TypeScriptCompile Include="util\log\Log.ts" />
     <Content Include="css\designer.css" />
     <Content Include="css\device-mockups2.css" />
@@ -42,9 +42,11 @@
     <Content Include="lib\jquery-ui.js" />
     <Content Include="lib\jquery.mobile-1.3.2.js" />
     <Content Include="lib\require.js" />
-    <TypeScriptCompile Include="src\designer\modules\jquerymobile.d.ts" />
-    <TypeScriptCompile Include="src\designer\modules\jquery.d.ts" />
-    <Content Include="src\designer\modules\require.d.ts" />
+    <TypeScriptCompile Include="src\modules\jquerymobile.d.ts" />
+    <TypeScriptCompile Include="src\modules\jquery.d.ts" />
+    <TypeScriptCompile Include="src\modules\jqueryui.d.ts" />
+    <TypeScriptCompile Include="src\designer\ToolsView.ts" />
+    <Content Include="src\modules\require.d.ts" />
     <TypeScriptCompile Include="RequireJsConfig.ts" />
     <Content Include="src\device\device.html" />
     <Content Include="res\button.png" />

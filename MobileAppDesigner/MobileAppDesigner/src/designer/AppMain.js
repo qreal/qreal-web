@@ -1,4 +1,4 @@
-define(["require", "exports", "src/designer/controller/Controller", "util/log/Log"], function(require, exports, __Controlller__, __Log__) {
+define(["require", "exports", "src/designer/Controller", "util/log/Log"], function(require, exports, __Controlller__, __Log__) {
     var Controlller = __Controlller__;
     var Log = __Log__;
 

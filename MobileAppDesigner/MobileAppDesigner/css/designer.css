@@ -5,6 +5,11 @@
 
 #tools-widget {
     width: 400px;
+}
+
+#tools-widget-wrap {
+    padding: 10px;
+    height: 600px;
     float: left;
 }
 

@@ -16,20 +16,26 @@
 
     <script data-main="RequireJsConfig" src="lib/require.js" type="text/javascript"></script>
 
-    <script>
+    <script type="text/javascript">
         $(function () {
-            $("#tools-widget").accordion();
+            $("#tools-widget").tabs({
+                heightStyle: "fill"
+            });
         });
     </script>
 </head>
 <body>
     <div id="workspace">
-        <div id="tools-widget">
-            <h3>Pages</h3>
-            <div id="pages">
-            </div>
-            <h3>Controls</h3>
-            <div id="controls">
+        <div id="tools-widget-wrap">
+            <div id="tools-widget">
+                <ul>
+                    <li><a href="#controls">Controls</a></li>
+                    <li><a href="#pages">Pages</a></li>
+                </ul>
+                <div id="controls">
+                </div>
+                <div id="pages">
+                </div>
             </div>
         </div>
         <div id="device-wrapper">
@@ -45,5 +51,5 @@
             </div>
         </div>
     </div>
-</body> 
+</body>
 </html>

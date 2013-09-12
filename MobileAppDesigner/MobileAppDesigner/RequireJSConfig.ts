@@ -1,4 +1,4 @@
-/// <reference path="src/designer/modules/require.d.ts" />
+/// <reference path="src/modules/require.d.ts" />
 
 import Main = require('src/designer/AppMain');
 
