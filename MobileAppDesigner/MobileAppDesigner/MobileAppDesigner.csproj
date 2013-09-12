@@ -16,18 +16,38 @@
     <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="app\AppMain.ts" />
-    <TypeScriptCompile Include="app\classes\Controller.ts" />
-    <TypeScriptCompile Include="app\classes\log\Log.ts" />
+    <TypeScriptCompile Include="src\designer\AppMain.ts" />
+    <TypeScriptCompile Include="src\designer\controller\Controller.ts" />
+    <TypeScriptCompile Include="util\log\Log.ts" />
+    <Content Include="css\designer.css" />
+    <Content Include="css\device-mockups2.css" />
+    <Content Include="css\images\animated-overlay.gif" />
+    <Content Include="css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="css\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="css\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="css\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="css\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="css\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="css\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="css\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="css\images\ui-icons_222222_256x240.png" />
+    <Content Include="css\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="css\images\ui-icons_454545_256x240.png" />
+    <Content Include="css\images\ui-icons_888888_256x240.png" />
+    <Content Include="css\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="css\jquery-ui.css" />
     <Content Include="css\jquery.mobile-1.3.2.css" />
     <Content Include="default.htm" />
-    <TypeScriptCompile Include="RequireJSConfig.ts" />
     <Content Include="lib\jquery-1.10.2.js" />
+    <Content Include="lib\jquery-ui.js" />
     <Content Include="lib\jquery.mobile-1.3.2.js" />
     <Content Include="lib\require.js" />
-    <TypeScriptCompile Include="modules\jquery.d.ts" />
-    <TypeScriptCompile Include="modules\jquerymobile.d.ts" />
-    <Content Include="modules\require.d.ts" />
+    <TypeScriptCompile Include="src\designer\modules\jquerymobile.d.ts" />
+    <TypeScriptCompile Include="src\designer\modules\jquery.d.ts" />
+    <Content Include="src\designer\modules\require.d.ts" />
+    <TypeScriptCompile Include="RequireJsConfig.ts" />
+    <Content Include="src\device\device.html" />
+    <Content Include="res\button.png" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -67,7 +87,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TypeScriptTarget>ES3</TypeScriptTarget>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
     <TypeScriptModuleKind>AMD</TypeScriptModuleKind>

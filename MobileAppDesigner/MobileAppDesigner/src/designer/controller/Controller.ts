@@ -1,4 +1,4 @@
-import Log = require("app/classes/log/Log");
+import Log = require("util/log/Log");
 
 class Controller {
 

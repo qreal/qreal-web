@@ -1,4 +1,4 @@
-define(["require", "exports", "app/classes/log/Log"], function(require, exports, __Log__) {
+define(["require", "exports", "util/log/Log"], function(require, exports, __Log__) {
     var Log = __Log__;
 
     var Controller = (function () {

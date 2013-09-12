@@ -1,7 +1,8 @@
-/// <reference path="./modules/require.d.ts" />
+/// <reference path="src/designer/modules/require.d.ts" />
 
-import Main = require('app/AppMain');
+import Main = require('src/designer/AppMain');
 
 require([], function () {
+    //alert("config");
     Main.Main();
 });
