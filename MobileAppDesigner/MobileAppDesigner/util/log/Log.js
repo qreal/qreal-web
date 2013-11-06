@@ -17,3 +17,4 @@ define(["require", "exports"], function(require, exports) {
     
     return Log;
 });
+//# sourceMappingURL=Log.js.map

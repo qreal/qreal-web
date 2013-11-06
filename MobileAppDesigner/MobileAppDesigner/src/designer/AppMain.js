@@ -1,3 +1,4 @@
+///<reference path="../modules/jquery.d.ts" />
 define(["require", "exports", "src/designer/Controller", "util/log/Log"], function(require, exports, __Controlller__, __Log__) {
     var Controlller = __Controlller__;
     var Log = __Log__;
@@ -16,3 +17,4 @@ define(["require", "exports", "src/designer/Controller", "util/log/Log"], functi
     
     return App;
 });
+//# sourceMappingURL=AppMain.js.map

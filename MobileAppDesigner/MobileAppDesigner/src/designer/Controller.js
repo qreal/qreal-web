@@ -26,3 +26,4 @@ define(["require", "exports", "util/log/Log", "src/designer/ToolsView"], functio
     
     return Controller;
 });
+//# sourceMappingURL=Controller.js.map

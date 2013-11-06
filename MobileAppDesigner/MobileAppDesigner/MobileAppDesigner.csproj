@@ -20,7 +20,27 @@
     <TypeScriptCompile Include="src\designer\Controller.ts" />
     <TypeScriptCompile Include="util\log\Log.ts" />
     <Content Include="css\designer.css" />
-    <Content Include="css\device-mockups2.css" />
+    <Content Include="css\device-mockup\device-mockups.css" />
+    <Content Include="css\device-mockup\device-mockups2.css" />
+    <Content Include="css\device-mockup\galaxy_s3\s3_land_black.png" />
+    <Content Include="css\device-mockup\galaxy_s3\s3_land_white.png" />
+    <Content Include="css\device-mockup\galaxy_s3\s3_port_black.png" />
+    <Content Include="css\device-mockup\galaxy_s3\s3_port_white.png" />
+    <Content Include="css\device-mockup\imac\imac.png" />
+    <Content Include="css\device-mockup\ipad\ipad_land_black.png" />
+    <Content Include="css\device-mockup\ipad\ipad_land_white.png" />
+    <Content Include="css\device-mockup\ipad\ipad_port_black.png" />
+    <Content Include="css\device-mockup\ipad\ipad_port_white.png" />
+    <Content Include="css\device-mockup\iphone5\iphone5_land_black.png" />
+    <Content Include="css\device-mockup\iphone5\iphone5_land_white.png" />
+    <Content Include="css\device-mockup\iphone5\iphone5_port_black.png" />
+    <Content Include="css\device-mockup\iphone5\iphone5_port_white.png" />
+    <Content Include="css\device-mockup\lumia920\lumia920_land.png" />
+    <Content Include="css\device-mockup\lumia920\lumia920_port.png" />
+    <Content Include="css\device-mockup\macbook\macbook.png" />
+    <Content Include="css\device-mockup\nexus7\nexus7_land.png" />
+    <Content Include="css\device-mockup\nexus7\nexus7_port.png" />
+    <Content Include="css\device-mockup\surface\surface.png" />
     <Content Include="css\images\animated-overlay.gif" />
     <Content Include="css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="css\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -53,6 +73,20 @@
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\device-mockup\galaxy_s3\s3_land.psd" />
+    <Content Include="css\device-mockup\galaxy_s3\s3_port.psd" />
+    <Content Include="css\device-mockup\icons\icon buttons.psd" />
+    <Content Include="css\device-mockup\imac\imac.psd" />
+    <Content Include="css\device-mockup\ipad\ipad.psd" />
+    <Content Include="css\device-mockup\ipad\ipad_land.psd" />
+    <Content Include="css\device-mockup\iphone5\iphone5.psd" />
+    <Content Include="css\device-mockup\iphone5\iphone5_land.psd" />
+    <Content Include="css\device-mockup\lumia920\lumia920.psd" />
+    <Content Include="css\device-mockup\lumia920\lumia920_land.psd" />
+    <Content Include="css\device-mockup\macbook\macbook.psd" />
+    <Content Include="css\device-mockup\nexus7\Nexus7_land.psd" />
+    <Content Include="css\device-mockup\nexus7\Nexus7_port.psd" />
+    <Content Include="css\device-mockup\surface\surface.psd" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

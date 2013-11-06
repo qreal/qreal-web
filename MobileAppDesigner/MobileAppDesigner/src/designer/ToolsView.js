@@ -8,6 +8,7 @@ define(["require", "exports", "util/log/Log"], function(require, exports, __Log_
         ToolsView.prototype.Init = function () {
             this.log.Debug("Init");
 
+            //TODO: stub
             var img = $('<img id="button">');
             img.attr('src', 'res/button.png');
             img.appendTo('#controls');
@@ -18,3 +19,4 @@ define(["require", "exports", "util/log/Log"], function(require, exports, __Log_
     
     return ToolsView;
 });
+//# sourceMappingURL=ToolsView.js.map
