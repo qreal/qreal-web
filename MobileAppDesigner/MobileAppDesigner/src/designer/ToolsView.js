@@ -7,11 +7,10 @@ define(["require", "exports", "src/util/log/Log"], function(require, exports, __
         }
         ToolsView.prototype.Init = function () {
             this.log.Debug("Init");
-
             //TODO: stub
-            var img = $('<img id="button">');
-            img.attr('src', 'res/button.png');
-            img.appendTo('#controls');
+            //var img = $('<img id="button">');
+            //img.attr('src', 'res/button.png');
+            //img.appendTo('#controls');
         };
         return ToolsView;
     })();

@@ -10,9 +10,9 @@ class ToolsView {
         this.log.Debug("Init");
 
         //TODO: stub
-        var img = $('<img id="button">');
-        img.attr('src', 'res/button.png');
-        img.appendTo('#controls');
+        //var img = $('<img id="button">');
+        //img.attr('src', 'res/button.png');
+        //img.appendTo('#controls');
     }
 }
 

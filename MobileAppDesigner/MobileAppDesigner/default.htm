@@ -13,6 +13,7 @@
 
     <script type="text/javascript" src="lib/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="lib/jquery-ui.js"></script>
+    <script type="text/javascript" src="lib/jquery.tmpl.js"></script>
 
     <script data-main="RequireJsConfig" src="lib/require.js" type="text/javascript"></script>
 
@@ -22,8 +23,52 @@
                 heightStyle: "fill"
             });
         });
-        browser.cache.offline.enable = false;
     </script>
+
+    <script type="text/javascript">
+        var dataItems = [
+            {
+                title: 'Button',
+                icon: 'button2.png'
+            },
+            {
+                title: 'Button2',
+                icon: 'button2.png'
+            },
+            {
+                title: 'Button2',
+                icon: 'button2.png'
+            },
+            {
+                title: 'Button2',
+                icon: 'button2.png'
+            },
+            {
+                title: 'Button2',
+                icon: 'button2.png'
+            },
+            {
+                title: 'Button2',
+                icon: 'button2.png'
+            }
+        ]
+    </script>
+
+    <script id="toolTmpl" type="text/x-jquery-tmpl">
+        <div class="tool-bag">
+            <img src="res/${icon}" class="tool-icon" />
+            <label class="tool-title">${title}</label>
+        </div>
+    </script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            $('#toolTmpl').tmpl(dataItems).appendTo('#controls');
+        });
+
+    </script>
+
 </head>
 <body>
     <div id="workspace">
