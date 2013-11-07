@@ -1,4 +1,4 @@
-define(["require", "exports", "util/log/Log", "src/designer/ToolsView"], function(require, exports, __Log__, __ToolsView__) {
+define(["require", "exports", "src/util/log/Log", "src/designer/ToolsView"], function(require, exports, __Log__, __ToolsView__) {
     var Log = __Log__;
     var ToolsView = __ToolsView__;
 

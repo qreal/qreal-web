@@ -1,9 +1,9 @@
-define(["require", "exports", "util/log/Log"], function(require, exports, __Log__) {
+define(["require", "exports", "src/util/log/Log"], function(require, exports, __Log__) {
     var Log = __Log__;
 
     var ToolsView = (function () {
         function ToolsView() {
-            this.log = new Log("Controller");
+            this.log = new Log("ToolsView");
         }
         ToolsView.prototype.Init = function () {
             this.log.Debug("Init");

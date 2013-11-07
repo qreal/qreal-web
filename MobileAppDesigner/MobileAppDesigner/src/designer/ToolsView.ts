@@ -1,8 +1,8 @@
-import Log = require("util/log/Log");
+import Log = require("src/util/log/Log");
 
 class ToolsView {
 
-    private log = new Log("Controller");
+    private log = new Log("ToolsView");
 
     constructor() { }
 

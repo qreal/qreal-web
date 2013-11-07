@@ -18,7 +18,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="src\designer\AppMain.ts" />
     <TypeScriptCompile Include="src\designer\Controller.ts" />
-    <TypeScriptCompile Include="util\log\Log.ts" />
+    <TypeScriptCompile Include="src\util\log\Log.ts" />
     <Content Include="css\designer.css" />
     <Content Include="css\device-mockup\device-mockups.css" />
     <Content Include="css\device-mockup\device-mockups2.css" />

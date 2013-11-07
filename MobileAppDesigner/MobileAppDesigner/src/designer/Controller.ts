@@ -1,4 +1,4 @@
-import Log = require("util/log/Log");
+import Log = require("src/util/log/Log");
 import ToolsView = require("src/designer/ToolsView");
 
 class Controller {
