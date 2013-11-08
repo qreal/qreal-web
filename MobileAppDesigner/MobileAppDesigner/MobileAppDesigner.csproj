@@ -68,6 +68,7 @@
     <TypeScriptCompile Include="src\modules\jqueryui.d.ts" />
     <TypeScriptCompile Include="src\designer\ToolsView.ts" />
     <Content Include="res\button2.png" />
+    <TypeScriptCompile Include="src\modules\jquery.tmpl.d.ts" />
     <Content Include="src\modules\require.d.ts" />
     <TypeScriptCompile Include="RequireJsConfig.ts" />
     <Content Include="src\device\device.html" />

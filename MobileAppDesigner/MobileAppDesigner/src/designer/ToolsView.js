@@ -4,13 +4,37 @@ define(["require", "exports", "src/util/log/Log"], function(require, exports, __
     var ToolsView = (function () {
         function ToolsView() {
             this.log = new Log("ToolsView");
+            this.controls = [
+                {
+                    title: 'Button',
+                    icon: 'button.png'
+                },
+                {
+                    title: 'Button2',
+                    icon: 'button.png'
+                },
+                {
+                    title: 'Button2',
+                    icon: 'button.png'
+                },
+                {
+                    title: 'Button2',
+                    icon: 'button.png'
+                },
+                {
+                    title: 'Button2',
+                    icon: 'button.png'
+                },
+                {
+                    title: 'Button2',
+                    icon: 'button.png'
+                }
+            ];
         }
         ToolsView.prototype.Init = function () {
             this.log.Debug("Init");
-            //TODO: stub
-            //var img = $('<img id="button">');
-            //img.attr('src', 'res/button.png');
-            //img.appendTo('#controls');
+
+            $('#toolTmpl').tmpl(this.controls).appendTo('#controls');
         };
         return ToolsView;
     })();

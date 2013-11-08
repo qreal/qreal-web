@@ -4,15 +4,39 @@ class ToolsView {
 
     private log = new Log("ToolsView");
 
+    private controls = [
+        {
+            title: 'Button',
+            icon: 'button.png'
+        },
+        {
+            title: 'Button2',
+            icon: 'button.png'
+        },
+        {
+            title: 'Button2',
+            icon: 'button.png'
+        },
+        {
+            title: 'Button2',
+            icon: 'button.png'
+        },
+        {
+            title: 'Button2',
+            icon: 'button.png'
+        },
+        {
+            title: 'Button2',
+            icon: 'button.png'
+        }
+    ]
+
     constructor() { }
 
     public Init() {
         this.log.Debug("Init");
 
-        //TODO: stub
-        //var img = $('<img id="button">');
-        //img.attr('src', 'res/button.png');
-        //img.appendTo('#controls');
+        $('#toolTmpl').tmpl(this.controls).appendTo('#controls');
     }
 }
 

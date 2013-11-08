@@ -24,51 +24,7 @@
             });
         });
     </script>
-
-    <script type="text/javascript">
-        var dataItems = [
-            {
-                title: 'Button',
-                icon: 'button2.png'
-            },
-            {
-                title: 'Button2',
-                icon: 'button2.png'
-            },
-            {
-                title: 'Button2',
-                icon: 'button2.png'
-            },
-            {
-                title: 'Button2',
-                icon: 'button2.png'
-            },
-            {
-                title: 'Button2',
-                icon: 'button2.png'
-            },
-            {
-                title: 'Button2',
-                icon: 'button2.png'
-            }
-        ]
-    </script>
-
-    <script id="toolTmpl" type="text/x-jquery-tmpl">
-        <div class="tool-bag">
-            <img src="res/${icon}" class="tool-icon" />
-            <label class="tool-title">${title}</label>
-        </div>
-    </script>
-
-    <script type="text/javascript">
-
-        $(function () {
-            $('#toolTmpl').tmpl(dataItems).appendTo('#controls');
-        });
-
-    </script>
-
+    <style type="text/css">.tool-title { }</style>
 </head>
 <body>
     <div id="workspace">
@@ -88,7 +44,7 @@
             <div class="device-mockup" data-device="s3" data-orientation="portrait" data-color="white">
                 <div class="device">
                     <div class="screen" style="background: #fff">
-                        <iframe id="app-content-frame" frameborder="no" src="src/device/device.html"></iframe>
+                        <iframe id="app-content-frame" src="src/device/device.html"></iframe>
                     </div>
                     <div class="button">
                         <!-- You can hook the "home button" to some JavaScript events or just remove it -->
@@ -97,5 +53,15 @@
             </div>
         </div>
     </div>
+
+    <!-- Templates -->
+    
+    <script id="toolTmpl" type="text/x-jquery-tmpl">
+        <div class="tool-bag">
+            <img alt="Icon: ${title}" class="tool-icon" src="res/${icon}" />
+            <label class="tool-title">${title}</label>
+        </div>
+    </script>
+
 </body>
 </html>
