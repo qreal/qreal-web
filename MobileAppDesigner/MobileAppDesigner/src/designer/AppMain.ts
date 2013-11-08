@@ -1,7 +1,7 @@
 ///<reference path="../modules/jquery.d.ts" />
 ///<reference path="../modules/jquery.tmpl.d.ts" />
 
-import Controlller = require("src/designer/Controller");
+import Controller = require("src/designer/Controller");
 import Log = require("src/util/log/Log");
 
 class App {
@@ -10,7 +10,7 @@ class App {
 
     public static Main(): void {
         App.log.Debug("Main");
-        Controlller.Instance.Init();
+        Controller.Instance.Init();
     }
 }
 

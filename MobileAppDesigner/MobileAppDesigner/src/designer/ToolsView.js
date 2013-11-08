@@ -1,40 +1,59 @@
-define(["require", "exports", "src/util/log/Log"], function(require, exports, __Log__) {
+﻿define(["require", "exports", "src/util/log/Log"], function(require, exports, __Log__) {
     var Log = __Log__;
+    
 
     var ToolsView = (function () {
-        function ToolsView() {
+        function ToolsView(controller) {
             this.log = new Log("ToolsView");
             this.controls = [
                 {
+                    id: 'tool-button',
                     title: 'Button',
-                    icon: 'button.png'
+                    tool: 'button'
                 },
                 {
+                    id: 'tool-button2',
                     title: 'Button2',
-                    icon: 'button.png'
-                },
-                {
-                    title: 'Button2',
-                    icon: 'button.png'
-                },
-                {
-                    title: 'Button2',
-                    icon: 'button.png'
-                },
-                {
-                    title: 'Button2',
-                    icon: 'button.png'
-                },
-                {
-                    title: 'Button2',
-                    icon: 'button.png'
+                    tool: 'button'
                 }
             ];
+            this.controller = controller;
         }
         ToolsView.prototype.Init = function () {
+            var _this = this;
             this.log.Debug("Init");
-
             $('#toolTmpl').tmpl(this.controls).appendTo('#controls');
+
+            var jquery = jQuery;
+            jquery.event.props.push('dataTransfer');
+
+            var toolItems = $('.tool-item');
+
+            toolItems.bind('dragstart', function (event) {
+                return _this.OnDragStart(event);
+            });
+            toolItems.bind('drag', function (event) {
+                return _this.OnDrag(event);
+            });
+            toolItems.bind('dragend', function () {
+                return _this.OnDragend();
+            });
+            toolItems.bind('click', function (e) {
+                return false;
+            });
+        };
+
+        ToolsView.prototype.OnDragStart = function (event) {
+            this.log.Debug("OnDragStart: ");
+            event.originalEvent.dataTransfer.setData("ControlId", $(event.target).closest('div').attr('id'));
+        };
+
+        ToolsView.prototype.OnDrag = function (event) {
+            //this.log.Debug("OnDrag: " + event);
+        };
+
+        ToolsView.prototype.OnDragend = function () {
+            this.log.Debug("OnDragend");
         };
         return ToolsView;
     })();

@@ -27,7 +27,7 @@
 #controls {
 }
 
-.tool-bag {
+.tool-item {
     width: 165px;
     background: #fbfbfb;
     display: inline-block;
@@ -35,13 +35,23 @@
     margin: 3px;
 }
 
-    .tool-bag * {
+    .tool-item * {
         display: table;
         margin: 0 auto;
     }
 
-    .tool-bag .tool-icon {
+    .tool-item .tool-icon {
         margin-top: 2px;
     }
 
-    .tool-bag .tool-title { }
+    .tool-item .tool-title { }
+
+/** Controls **/
+.tool-icon {
+  width: 148px;
+  height: 32px;
+}
+
+.tool-button {
+    background: url('/res/button.png') no-repeat transparent;
+}

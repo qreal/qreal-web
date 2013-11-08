@@ -16,15 +16,8 @@
     <script type="text/javascript" src="lib/jquery.tmpl.js"></script>
 
     <script data-main="RequireJsConfig" src="lib/require.js" type="text/javascript"></script>
-
-    <script type="text/javascript">
-        $(function () {
-            $("#tools-widget").tabs({
-                heightStyle: "fill"
-            });
-        });
-    </script>
-    <style type="text/css">.tool-title { }</style>
+    
+    <script type="text/javascript"  src="src/init.js"></script>
 </head>
 <body>
     <div id="workspace">
@@ -57,8 +50,8 @@
     <!-- Templates -->
     
     <script id="toolTmpl" type="text/x-jquery-tmpl">
-        <div class="tool-bag">
-            <img alt="Icon: ${title}" class="tool-icon" src="res/${icon}" />
+        <div class="tool-item" id="${id}" draggable="true">
+            <div class="tool-icon tool-${tool}" />
             <label class="tool-title">${title}</label>
         </div>
     </script>
