@@ -33,10 +33,10 @@ class ToolsView {
    
         var toolItems = $('.tool-item');
 
-        toolItems.bind('dragstart', event => this.OnDragStart(event));
-        toolItems.bind('drag', event => this.OnDrag(event));
-        toolItems.bind('dragend', () => this.OnDragend());
-        toolItems.bind('click', (e) => false);
+        toolItems.on('dragstart', event => this.OnDragStart(event));
+        toolItems.on('drag', event => this.OnDrag(event));
+        toolItems.on('dragend', () => this.OnDragend());
+        toolItems.on('click', (e) => false);
     }
 
     public OnDragStart(event) {

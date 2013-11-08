@@ -29,16 +29,16 @@
 
             var toolItems = $('.tool-item');
 
-            toolItems.bind('dragstart', function (event) {
+            toolItems.on('dragstart', function (event) {
                 return _this.OnDragStart(event);
             });
-            toolItems.bind('drag', function (event) {
+            toolItems.on('drag', function (event) {
                 return _this.OnDrag(event);
             });
-            toolItems.bind('dragend', function () {
+            toolItems.on('dragend', function () {
                 return _this.OnDragend();
             });
-            toolItems.bind('click', function (e) {
+            toolItems.on('click', function (e) {
                 return false;
             });
         };

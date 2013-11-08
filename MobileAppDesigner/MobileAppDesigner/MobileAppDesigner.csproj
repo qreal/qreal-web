@@ -68,11 +68,13 @@
     <TypeScriptCompile Include="src\modules\jqueryui.d.ts" />
     <TypeScriptCompile Include="src\designer\ToolsView.ts" />
     <TypeScriptCompile Include="src\modules\jquery.tmpl.d.ts" />
-    <TypeScriptCompile Include="src\designer\DeviceManager.ts" />
+    <TypeScriptCompile Include="RequireJSConfigDevice.ts" />
+    <TypeScriptCompile Include="src\device\DeviceMain.ts" />
+    <TypeScriptCompile Include="src\device\DeviceController.ts" />
     <Content Include="src\init.js" />
     <Content Include="src\modules\require.d.ts" />
     <TypeScriptCompile Include="RequireJsConfig.ts" />
-    <Content Include="src\device\device.html" />
+    <Content Include="device.html" />
     <Content Include="res\button.png" />
     <Content Include="web.config" />
   </ItemGroup>
