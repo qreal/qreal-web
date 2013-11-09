@@ -28,15 +28,25 @@ class ToolsView {
         this.log.Debug("Init");
         $('#toolTmpl').tmpl(this.controls).appendTo('#controls');
 
-        var jquery:any = jQuery;
+        var jquery: any = jQuery;
         jquery.event.props.push('dataTransfer');
-   
+
         var toolItems = $('.tool-item');
 
         toolItems.on('dragstart', event => this.OnDragStart(event));
         toolItems.on('drag', event => this.OnDrag(event));
         toolItems.on('dragend', () => this.OnDragend());
-        toolItems.on('click', (e) => false);
+        var self = this;
+        toolItems.on('click', function (e) {
+            self.log.Debug('click');
+            console.log($('body'));
+            $('body').trigger('eventname');
+        });
+
+        $('body').on('eventname', function (e) {
+            self.log.Debug('eventHandled');
+        });
+
     }
 
     public OnDragStart(event) {

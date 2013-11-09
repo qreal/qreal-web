@@ -27,6 +27,10 @@ define(["require", "exports", "src/util/log/Log"], function(require, exports, __
             $('#mainPage').on('dragover', function (event) {
                 return _this.OnDragOver(event);
             });
+            var self = this;
+            (parent).$('body').on('eventname', function (e) {
+                self.log.Debug("Yesss!!!");
+            });
         };
 
         DeviceController.prototype.OnDrop = function (event) {

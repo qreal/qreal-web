@@ -22,6 +22,12 @@ class DeviceController {
         this.log.Debug("Init");
         $('#mainPage').on('drop', event => this.OnDrop(event));
         $('#mainPage').on('dragover', event => this.OnDragOver(event));
+        var self = this;
+        (<any>parent).$('body').on('eventname', function (e) {
+            self.log.Debug("Yesss!!!");
+        });
+
+
 
     }
 

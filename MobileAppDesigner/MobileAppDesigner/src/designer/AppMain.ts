@@ -10,8 +10,14 @@ class App {
 
     public static Main(): void {
         App.log.Debug("Main");
-        Controller.Instance.Init();
+        Controller.Instance.Init();     
     }
+
+    private test() {
+        alert('test');
+    }
+
 }
+
 
 export = App;

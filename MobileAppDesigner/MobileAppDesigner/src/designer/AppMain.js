@@ -11,6 +11,10 @@ define(["require", "exports", "src/designer/Controller", "src/util/log/Log"], fu
             App.log.Debug("Main");
             Controller.Instance.Init();
         };
+
+        App.prototype.test = function () {
+            alert('test');
+        };
         App.log = new Log("App");
         return App;
     })();

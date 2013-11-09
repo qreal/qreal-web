@@ -8,25 +8,6 @@
     
     <script data-main="RequireJsConfigDevice" src="lib/require.js" type="text/javascript"></script>
 </head>
-<script>
-    function allowDrop(ev) {
-        ev.preventDefault();
-    }
-
-    function drag(ev) {
-        ev.dataTransfer.setData("Text", ev.target.id);
-    }
-
-    function drop(ev) {
-        ev.preventDefault();
-        var data = ev.dataTransfer.getData("ControlId");
-        console.log("data: " + data);
-        //ev.target.appendChild(document.getElementById(data));
-        var bt = $("<button>My Button</button>");
-        $(event.currentTarget).append(bt);
-        bt.button();
-    }
-</script>
 <body>
     <div id="mainPage" data-role="page" >
         <button>A button element</button>

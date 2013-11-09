@@ -38,8 +38,15 @@
             toolItems.on('dragend', function () {
                 return _this.OnDragend();
             });
+            var self = this;
             toolItems.on('click', function (e) {
-                return false;
+                self.log.Debug('click');
+                console.log($('body'));
+                $('body').trigger('eventname');
+            });
+
+            $('body').on('eventname', function (e) {
+                self.log.Debug('eventHandled');
             });
         };
 
