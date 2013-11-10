@@ -22,8 +22,7 @@ class EventManager {
 
     private OnEvent(event, data): void {
         this.log.Debug('OnEvent: ' + event.type);
-        //this.log.DebugObj(event);
-        
+               
         if (this.subscribers[event.type]) {
             this.subscribers[event.type].forEach(listener => listener.OnEvent(data));
         }

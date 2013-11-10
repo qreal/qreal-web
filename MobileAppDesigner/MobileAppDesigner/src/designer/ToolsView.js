@@ -25,9 +25,6 @@
             this.log.Debug("Init");
             $('#toolTmpl').tmpl(this.controls).appendTo('#controls');
 
-            var jquery = jQuery;
-            jquery.event.props.push('dataTransfer');
-
             var toolItems = $('.tool-item');
 
             toolItems.on('dragstart', function (event) {

@@ -6,7 +6,7 @@ import Log = require("src/util/log/Log");
 
 class Main {
 
-    private static log = new Log("App");
+    private static log = new Log("DeviceMain");
 
     public static Main(): void {
         Main.log.Debug("Main");

@@ -7,7 +7,6 @@ define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"
         function DeviceController() {
             this.log = new Log("DeviceController");
             this.log.Debug("constructor");
-
             this.eventManager = new EventManager((parent).$('body'));
 
             var self = this;
@@ -20,10 +19,6 @@ define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"
         }
         Object.defineProperty(DeviceController, "Instance", {
             get: function () {
-                new Log("DeviceController").Debug("get Instance");
-                if (!this.instance) {
-                    this.instance = new DeviceController();
-                }
                 return this.instance;
             },
             enumerable: true,
@@ -44,7 +39,7 @@ define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"
         DeviceController.prototype.OnDrop = function (event) {
             this.log.Debug("OnDrop");
             event.preventDefault();
-            console.log(event);
+            this.log.DebugObj(event);
             var data = event.originalEvent.dataTransfer.getData("ControlId");
             this.log.Debug("OnDrop. data: " + data);
 
@@ -65,6 +60,7 @@ define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"
             enumerable: true,
             configurable: true
         });
+        DeviceController.instance = new DeviceController();
         return DeviceController;
     })();
 

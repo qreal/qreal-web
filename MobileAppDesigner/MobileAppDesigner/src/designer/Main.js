@@ -1,8 +1,8 @@
 ///<reference path="../modules/jquery.d.ts" />
 ///<reference path="../modules/jquery.tmpl.d.ts" />
-define(["require", "exports", "src/designer/Controller", "src/util/log/Log"], function(require, exports, __Controller__, __Log__) {
-    var Controller = __Controller__;
-    var Log = __Log__;
+define(["require", "exports", "src/util/log/Log"], function(require, exports, __Log__) {
+    
+    var Log = "src/util/log/Log";
 
     var Main = (function () {
         function Main() {
@@ -11,11 +11,7 @@ define(["require", "exports", "src/designer/Controller", "src/util/log/Log"], fu
             Main.log.Debug("Main");
             Controller.Instance.Init();
         };
-
-        Main.prototype.test = function () {
-            alert('test');
-        };
-        Main.log = new Log("Main");
+        Main.log = new Log("DesignerMain");
         return Main;
     })();
 

@@ -29,16 +29,13 @@ class ToolsView {
         this.log.Debug("Init");
         $('#toolTmpl').tmpl(this.controls).appendTo('#controls');
 
-        var jquery: any = jQuery;
-        jquery.event.props.push('dataTransfer');
-
         var toolItems = $('.tool-item');
 
         toolItems.on('dragstart', event => this.OnDragStart(event));
         toolItems.on('drag', event => this.OnDrag(event));
         toolItems.on('dragend', () => this.OnDragend());
         var self = this;
-        toolItems.on('click', function (e) {
+        toolItems.on('click', (e) => {
             self.log.Debug('click');
             self.controller.EventManager.Trigger(EventManager.EVENT_TEST, { testkey: 'testValue' });
         });

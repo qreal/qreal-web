@@ -6,21 +6,16 @@ class DeviceController {
 
     private log = new Log("DeviceController");
 
-    private static instance;
+    private static instance = new DeviceController();
 
     private eventManager: EventManager;
 
     static get Instance(): DeviceController {
-        new Log("DeviceController").Debug("get Instance");
-        if (!this.instance) {
-            this.instance = new DeviceController();
-        }
         return this.instance;
     }
 
     constructor() {
         this.log.Debug("constructor");
-
         this.eventManager = new EventManager((<any>parent).$('body'));
 
         var self = this;
@@ -41,7 +36,7 @@ class DeviceController {
     public OnDrop(event) {
         this.log.Debug("OnDrop");
         event.preventDefault();
-        console.log(event);
+        this.log.DebugObj(event);
         var data = event.originalEvent.dataTransfer.getData("ControlId");
         this.log.Debug("OnDrop. data: " + data);
 

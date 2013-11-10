@@ -6,16 +6,12 @@ define(["require", "exports", "src/util/log/Log", "src/designer/ToolsView", "src
     var Controller = (function () {
         function Controller() {
             this.log = new Log("Controller");
-            this.log.Debug("In constructor");
+            this.log.Debug("constructor");
             this.toolsView = new ToolsView(this);
             this.eventManager = new EventManager($('body'));
         }
         Object.defineProperty(Controller, "Instance", {
             get: function () {
-                new Log("Controller").Debug("get Instance");
-                if (!this.instance) {
-                    this.instance = new Controller();
-                }
                 return this.instance;
             },
             enumerable: true,
@@ -34,6 +30,7 @@ define(["require", "exports", "src/util/log/Log", "src/designer/ToolsView", "src
             enumerable: true,
             configurable: true
         });
+        Controller.instance = new Controller();
         return Controller;
     })();
 

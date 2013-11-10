@@ -6,17 +6,12 @@ import Log = require("src/util/log/Log");
 
 class Main {
 
-    private static log = new Log("Main");
+    private static log = new Log("DesignerMain");
 
     public static Main(): void {
         Main.log.Debug("Main");
         Controller.Instance.Init();     
     }
-
-    private test() {
-        alert('test');
-    }
-
 }
 
 

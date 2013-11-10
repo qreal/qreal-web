@@ -11,7 +11,7 @@ define(["require", "exports", "src/device/DeviceController", "src/util/log/Log"]
             Main.log.Debug("Main");
             DeviceController.Instance.Init();
         };
-        Main.log = new Log("App");
+        Main.log = new Log("DeviceMain");
         return Main;
     })();
 
