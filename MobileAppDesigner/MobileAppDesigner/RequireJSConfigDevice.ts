@@ -1,8 +1,8 @@
 /// <reference path="src/modules/require.d.ts" />
 
-import DeviceMain = require('src/device/DeviceMain');
+import Main = require('src/device/Main');
 
 require([], function () {
     //alert("config");
-    DeviceMain.Main();
+    Main.Main();
 });

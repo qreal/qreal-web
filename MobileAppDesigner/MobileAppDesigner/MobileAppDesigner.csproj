@@ -16,7 +16,7 @@
     <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="src\designer\AppMain.ts" />
+    <TypeScriptCompile Include="src\designer\Main.ts" />
     <TypeScriptCompile Include="src\designer\Controller.ts" />
     <TypeScriptCompile Include="src\util\log\Log.ts" />
     <Content Include="css\designer.css" />
@@ -69,13 +69,15 @@
     <TypeScriptCompile Include="src\designer\ToolsView.ts" />
     <TypeScriptCompile Include="src\modules\jquery.tmpl.d.ts" />
     <TypeScriptCompile Include="RequireJSConfigDevice.ts" />
-    <TypeScriptCompile Include="src\device\DeviceMain.ts" />
+    <TypeScriptCompile Include="src\device\Main.ts" />
     <TypeScriptCompile Include="src\device\DeviceController.ts" />
+    <TypeScriptCompile Include="src\util\events\EventManager.ts" />
     <Content Include="src\init.js" />
     <Content Include="src\modules\require.d.ts" />
-    <TypeScriptCompile Include="RequireJsConfig.ts" />
+    <TypeScriptCompile Include="RequireJsConfigDesigner.ts" />
     <Content Include="device.html" />
     <Content Include="res\button.png" />
+    <TypeScriptCompile Include="src\util\events\IEventListener.ts" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

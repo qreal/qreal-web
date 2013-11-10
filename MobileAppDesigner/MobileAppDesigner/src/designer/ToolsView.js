@@ -1,6 +1,7 @@
-﻿define(["require", "exports", "src/util/log/Log"], function(require, exports, __Log__) {
+﻿define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"], function(require, exports, __Log__, __EventManager__) {
     var Log = __Log__;
     
+    var EventManager = __EventManager__;
 
     var ToolsView = (function () {
         function ToolsView(controller) {
@@ -41,12 +42,7 @@
             var self = this;
             toolItems.on('click', function (e) {
                 self.log.Debug('click');
-                console.log($('body'));
-                $('body').trigger('eventname');
-            });
-
-            $('body').on('eventname', function (e) {
-                self.log.Debug('eventHandled');
+                self.controller.EventManager.Trigger(EventManager.EVENT_TEST, { testkey: 'testValue' });
             });
         };
 

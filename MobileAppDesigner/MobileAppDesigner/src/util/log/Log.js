@@ -11,6 +11,14 @@ define(["require", "exports"], function(require, exports) {
             var date = new Date();
             console.log("[" + date.toLocaleTimeString() + "." + date.getMilliseconds() + "] (" + this.tag + "): " + message);
         };
+
+        Log.prototype.DebugObj = function (obj) {
+            if (this.logLevel < 1) {
+                return;
+            }
+            this.Debug("Object: " + String.fromCharCode(9660));
+            console.log(obj);
+        };
         return Log;
     })();
 

@@ -1,10 +1,22 @@
-define(["require", "exports", "src/util/log/Log"], function(require, exports, __Log__) {
+define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"], function(require, exports, __Log__, __EventManager__) {
     var Log = __Log__;
+    var EventManager = __EventManager__;
+    
 
     var DeviceController = (function () {
         function DeviceController() {
             this.log = new Log("DeviceController");
-            this.log.Debug("In constructor");
+            this.log.Debug("constructor");
+
+            this.eventManager = new EventManager((parent).$('body'));
+
+            var self = this;
+            this.eventManager.AddSubscriber(EventManager.EVENT_TEST, {
+                OnEvent: function (data) {
+                    self.log.Debug("OnEvent");
+                    self.log.DebugObj(data);
+                }
+            });
         }
         Object.defineProperty(DeviceController, "Instance", {
             get: function () {
@@ -27,10 +39,6 @@ define(["require", "exports", "src/util/log/Log"], function(require, exports, __
             $('#mainPage').on('dragover', function (event) {
                 return _this.OnDragOver(event);
             });
-            var self = this;
-            (parent).$('body').on('eventname', function (e) {
-                self.log.Debug("Yesss!!!");
-            });
         };
 
         DeviceController.prototype.OnDrop = function (event) {
@@ -49,6 +57,14 @@ define(["require", "exports", "src/util/log/Log"], function(require, exports, __
             //this.log.Debug("OnDragOver");
             e.preventDefault();
         };
+
+        Object.defineProperty(DeviceController.prototype, "EventManager", {
+            get: function () {
+                return this.eventManager;
+            },
+            enumerable: true,
+            configurable: true
+        });
         return DeviceController;
     })();
 

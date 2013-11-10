@@ -1,23 +1,17 @@
 ///<reference path="../modules/jquery.d.ts" />
 ///<reference path="../modules/jquery.tmpl.d.ts" />
 
-import Controller = require("src/designer/Controller");
+import DeviceController = require("src/device/DeviceController");
 import Log = require("src/util/log/Log");
 
-class App {
+class Main {
 
     private static log = new Log("App");
 
     public static Main(): void {
-        App.log.Debug("Main");
-        Controller.Instance.Init();     
+        Main.log.Debug("Main");
+        DeviceController.Instance.Init();
     }
-
-    private test() {
-        alert('test');
-    }
-
 }
 
-
-export = App;
+export = Main;

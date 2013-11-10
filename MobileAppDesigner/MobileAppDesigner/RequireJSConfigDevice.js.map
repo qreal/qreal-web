@@ -1,1 +1,1 @@
-{"version":3,"file":"RequireJSConfigDevice.js","sourceRoot":"","sources":["RequireJSConfigDevice.ts"],"names":[""],"mappings":"AAAA,iDAAiD;AAAjD;IAEA,iBAA4B,cAAuB;;IAEnD,OAAO,CAAC,EAAE,EAAE;QACRA,kBAAkBA;QAClBA,UAAUA,CAACA,IAAIA,CAACA,CAACA,CAACA;IACtBA,CAACA,CAAC,CAAC;GAAA"}
+{"version":3,"file":"RequireJSConfigDevice.js","sourceRoot":"","sources":["RequireJSConfigDevice.ts"],"names":[""],"mappings":"AAAA,iDAAiD;AAAjD;IAEA,WAAsB,QAAiB;;IAEvC,OAAO,CAAC,EAAE,EAAE;QACRA,kBAAkBA;QAClBA,IAAIA,CAACA,IAAIA,CAACA,CAACA,CAACA;IAChBA,CAACA,CAAC,CAAC;GAAA"}
