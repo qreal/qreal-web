@@ -44,12 +44,30 @@
         margin-top: 2px;
     }
 
-    .tool-item .tool-title { }
+    .tool-item .tool-title {
+    }
+
+.propertyDialog {
+}
+
+.property label {
+    font-weight: bold;
+    font-size: 14px;
+    margin: 4px 10px 3px 0px;
+    width: 45px;
+    float: left;
+    text-align: right;
+}
+
+.property input {
+    width: 100px;
+    padding: 7px 0px 6px 5px;
+}
 
 /** Controls **/
 .tool-icon {
-  width: 148px;
-  height: 32px;
+    width: 148px;
+    height: 32px;
 }
 
 .tool-button {
