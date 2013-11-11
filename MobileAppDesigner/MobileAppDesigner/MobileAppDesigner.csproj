@@ -72,6 +72,7 @@
     <TypeScriptCompile Include="src\device\Main.ts" />
     <TypeScriptCompile Include="src\device\DeviceController.ts" />
     <TypeScriptCompile Include="src\util\events\EventManager.ts" />
+    <TypeScriptCompile Include="src\designer\PropertiesView.ts" />
     <Content Include="src\init.js" />
     <Content Include="src\modules\require.d.ts" />
     <TypeScriptCompile Include="RequireJsConfigDesigner.ts" />

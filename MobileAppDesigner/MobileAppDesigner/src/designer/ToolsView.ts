@@ -37,7 +37,7 @@ class ToolsView {
         var self = this;
         toolItems.on('click', (e) => {
             self.log.Debug('click');
-            self.controller.EventManager.Trigger(EventManager.EVENT_TEST, { testkey: 'testValue' });
+            self.controller.EventManager.Trigger(EventManager.EventTest, { testkey: 'testValue' });
         });
 
     }

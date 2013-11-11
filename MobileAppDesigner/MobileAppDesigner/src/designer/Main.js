@@ -1,8 +1,8 @@
 ///<reference path="../modules/jquery.d.ts" />
 ///<reference path="../modules/jquery.tmpl.d.ts" />
-define(["require", "exports", "src/util/log/Log"], function(require, exports, __Log__) {
-    
-    var Log = "src/util/log/Log";
+define(["require", "exports", "src/designer/Controller", "src/util/log/Log"], function(require, exports, __Controller__, __Log__) {
+    var Controller = __Controller__;
+    var Log = __Log__;
 
     var Main = (function () {
         function Main() {

@@ -10,7 +10,7 @@ define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"
             this.eventManager = new EventManager((parent).$('body'));
 
             var self = this;
-            this.eventManager.AddSubscriber(EventManager.EVENT_TEST, {
+            this.eventManager.AddSubscriber(EventManager.EventTest, {
                 OnEvent: function (data) {
                     self.log.Debug("OnEvent");
                     self.log.DebugObj(data);
@@ -45,6 +45,12 @@ define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"
 
             var bt = $("<button>My Button</button>");
             $(event.currentTarget).append(bt);
+
+            var self = this;
+            bt.on('click', function (e) {
+                self.log.Debug('bt click');
+                self.eventManager.Trigger(EventManager.EventShowProperties, { id: 'buttonId' });
+            });
             bt.button();
         };
 

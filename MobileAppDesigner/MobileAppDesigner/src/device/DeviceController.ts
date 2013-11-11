@@ -19,7 +19,7 @@ class DeviceController {
         this.eventManager = new EventManager((<any>parent).$('body'));
 
         var self = this;
-        this.eventManager.AddSubscriber(EventManager.EVENT_TEST, {
+        this.eventManager.AddSubscriber(EventManager.EventTest, {
             OnEvent: (data) => {
                 self.log.Debug("OnEvent");
                 self.log.DebugObj(data);
@@ -42,6 +42,12 @@ class DeviceController {
 
         var bt = $("<button>My Button</button>");
         $(event.currentTarget).append(bt);
+
+        var self = this;
+        bt.on('click', e => {
+            self.log.Debug('bt click');
+            self.eventManager.Trigger(EventManager.EventShowProperties, { id: 'buttonId' });
+        });
         bt.button();
     }
 
