@@ -33,17 +33,35 @@
 .tool-item .tool-icon {
   margin-top: 2px;
 }
-.property label {
+.property {
+  width: 100%;
+}
+.table {
+  display: table;
+  border-spacing: 3px;
+}
+.row {
+  display: table-row;
+}
+.cell {
+  display: table-cell;
+}
+.property .name {
   font-weight: bold;
   font-size: 14px;
-  margin: 4px 10px 3px 0px;
-  width: 45px;
-  float: left;
   text-align: right;
+  padding-right: 5px;
+  vertical-align: middle;
+  width: 50px;
 }
-.property input {
-  width: 100px;
-  padding: 7px 0px 6px 5px;
+.property .val {
+  vertical-align: middle;
+}
+.property .val input {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
 }
 /** Controls **/
 .tool-icon {

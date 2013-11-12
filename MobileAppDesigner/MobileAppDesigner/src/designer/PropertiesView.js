@@ -24,8 +24,19 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
         PropertiesView.prototype.ShowProperty = function () {
             this.log.Debug('ShowProperty');
             var dialog = $('#propertyDialogTmpl').tmpl({ title: 'My property' });
-            var content = $('#propertyButtonTmpl').tmpl({});
-            dialog.append(content);
+            var content = dialog.children('.property');
+            var prop1 = $('#propertyTextTmpl').tmpl({
+                name: 'Id:',
+                valId: 'id1',
+                value: 'id1'
+            });
+            var prop2 = $('#propertyNumberTmpl').tmpl({
+                name: 'Text:',
+                valId: 'id1'
+            });
+            content.append(prop1);
+            content.append(prop2);
+
             dialog.appendTo('body');
             $(".propertyDialog").dialog();
         };

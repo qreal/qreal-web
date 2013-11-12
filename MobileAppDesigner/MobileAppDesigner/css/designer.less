@@ -1,4 +1,4 @@
-﻿@workspace-width:900px;
+﻿@workspace-width: 900px;
 
 #workspace {
     width: @workspace-width;
@@ -49,22 +49,48 @@
     .tool-item .tool-title {
     }
 
+// Propertyes
+
 .propertyDialog {
 }
 
-.property label {
-    font-weight: bold;
-    font-size: 14px;
-    margin: 4px 10px 3px 0px;
-    width: 45px;
-    float: left;
-    text-align: right;
+.property {
+    width: 100%;
 }
 
-.property input {
-    width: 100px;
-    padding: 7px 0px 6px 5px;
+.table {
+    display: table;
+    border-spacing:3px;
 }
+
+.row{
+    display:table-row;
+}
+
+.cell{
+    display:table-cell;
+}
+
+.property .name {
+    font-weight: bold;
+    font-size: 14px;
+    text-align: right;
+    padding-right:5px;
+    vertical-align: middle;
+    width: 50px;
+}
+
+.property .val {
+    vertical-align: middle;
+}
+
+    .property .val input {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 100%;
+    }
+
 
 /** Controls **/
 .tool-icon {
