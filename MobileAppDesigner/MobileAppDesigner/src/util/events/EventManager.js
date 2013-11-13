@@ -9,9 +9,6 @@ define(["require", "exports", "src/util/log/Log"], function(require, exports, __
             this.subscribers = [];
             this.log.Debug("constructor");
             this.element = element;
-            this.element.on(EventManager.EventTest, function (e, data) {
-                return _this.OnEvent(e, data);
-            });
             this.element.on(EventManager.EventShowProperties, function (e, data) {
                 return _this.OnEvent(e, data);
             });
@@ -37,9 +34,8 @@ define(["require", "exports", "src/util/log/Log"], function(require, exports, __
             }
             this.subscribers[eventType].push(listener);
         };
-        EventManager.EventTest = "test_event";
         EventManager.EventShowProperties = 'show_property';
-        EventManager.events = [EventManager.EventTest, EventManager.EventShowProperties];
+        EventManager.events = [EventManager.EventShowProperties];
         return EventManager;
     })();
 

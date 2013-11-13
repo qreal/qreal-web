@@ -36,11 +36,6 @@
             toolItems.on('dragend', function () {
                 return _this.OnDragend();
             });
-            var self = this;
-            toolItems.on('click', function (e) {
-                self.log.Debug('click');
-                self.controller.EventManager.Trigger(EventManager.EventTest, { testkey: 'testValue' });
-            });
         };
 
         ToolsView.prototype.OnDragStart = function (event) {

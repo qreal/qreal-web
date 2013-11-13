@@ -16,12 +16,12 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
                 OnEvent: function (data) {
                     self.log.Debug("OnEvent");
                     self.log.DebugObj(data);
-                    self.ShowProperty();
+                    self.ShowProperty(data);
                 }
             });
         };
 
-        PropertiesView.prototype.ShowProperty = function () {
+        PropertiesView.prototype.ShowProperty = function (data) {
             this.log.Debug('ShowProperty');
             var dialog = $('#propertyDialogTmpl').tmpl({ title: 'My property' });
             var content = dialog.children('.property');
@@ -30,9 +30,9 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
                 valId: 'id1',
                 value: 'id1'
             });
-            var prop2 = $('#propertyNumberTmpl').tmpl({
+            var prop2 = $('#propertyTextTmpl').tmpl({
                 name: 'Text:',
-                valId: 'id1'
+                valId: 'id2'
             });
             content.append(prop1);
             content.append(prop2);

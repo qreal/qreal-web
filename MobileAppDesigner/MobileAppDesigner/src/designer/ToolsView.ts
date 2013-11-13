@@ -34,12 +34,6 @@ class ToolsView {
         toolItems.on('dragstart', event => this.OnDragStart(event));
         toolItems.on('drag', event => this.OnDrag(event));
         toolItems.on('dragend', () => this.OnDragend());
-        var self = this;
-        toolItems.on('click', (e) => {
-            self.log.Debug('click');
-            self.controller.EventManager.Trigger(EventManager.EventTest, { testkey: 'testValue' });
-        });
-
     }
 
     public OnDragStart(event) {

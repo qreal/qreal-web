@@ -85,6 +85,9 @@
     <Content Include="device.html" />
     <Content Include="res\button.png" />
     <TypeScriptCompile Include="src\util\events\IEventListener.ts" />
+    <TypeScriptCompile Include="src\properties\ButtonProperty.ts" />
+    <TypeScriptCompile Include="src\properties\Property.ts" />
+    <TypeScriptCompile Include="src\properties\PropertyHelper.ts" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

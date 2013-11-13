@@ -6,9 +6,8 @@ class EventManager {
     private log = new Log("EventManager");
 
     // Events types    
-    public static EventTest = "test_event";
     public static EventShowProperties = 'show_property';
-    private static events = [EventManager.EventTest, EventManager.EventShowProperties];
+    private static events = [EventManager.EventShowProperties];
 
     private element: JQuery;
     private subscribers: Array<IEventListener>[] = [];
@@ -16,7 +15,6 @@ class EventManager {
     constructor(element: JQuery) {
         this.log.Debug("constructor");
         this.element = element;
-        this.element.on(EventManager.EventTest, (e, data) => this.OnEvent(e, data));
         this.element.on(EventManager.EventShowProperties, (e, data) => this.OnEvent(e, data));
     }
 

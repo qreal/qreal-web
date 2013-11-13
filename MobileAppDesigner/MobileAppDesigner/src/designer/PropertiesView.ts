@@ -20,12 +20,12 @@ class PropertiesView {
             OnEvent: (data) => {
                 self.log.Debug("OnEvent");
                 self.log.DebugObj(data);
-                self.ShowProperty();
+                self.ShowProperty(data);
             }
         });
     }
 
-    public ShowProperty(): void {
+    public ShowProperty(data): void {
         this.log.Debug('ShowProperty');
         var dialog = $('#propertyDialogTmpl').tmpl({ title: 'My property' });
         var content = dialog.children('.property');
@@ -35,10 +35,11 @@ class PropertiesView {
                 valId: 'id1',
                 value: 'id1'
             });
-        var prop2 = $('#propertyNumberTmpl').tmpl({
-            name: 'Text:',
-            valId: 'id1'
-        });
+        var prop2 = $('#propertyTextTmpl').tmpl(
+            {
+                name: 'Text:',
+                valId: 'id2'
+            });
         content.append(prop1);
         content.append(prop2);
 

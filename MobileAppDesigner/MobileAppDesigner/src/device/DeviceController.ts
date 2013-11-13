@@ -1,6 +1,9 @@
 import Log = require("src/util/log/Log");
 import EventManager = require("src/util/events/EventManager");
 import IEventListener = require("src/util/events/IEventListener");
+import PropertyHelper = require("src/properties/PropertyHelper");
+import Property = require("src/properties/Property");
+import ButtonProperty = require("src/properties/ButtonProperty");
 
 class DeviceController {
 
@@ -17,14 +20,6 @@ class DeviceController {
     constructor() {
         this.log.Debug("constructor");
         this.eventManager = new EventManager((<any>parent).$('body'));
-
-        var self = this;
-        this.eventManager.AddSubscriber(EventManager.EventTest, {
-            OnEvent: (data) => {
-                self.log.Debug("OnEvent");
-                self.log.DebugObj(data);
-            }
-        });
     }
 
     public Init(): void {
@@ -43,10 +38,21 @@ class DeviceController {
         var bt = $("<button>My Button</button>");
         $(event.currentTarget).append(bt);
 
+        var prop: ButtonProperty = new ButtonProperty();
+        prop.Type = 'Button'
+        prop.Id = 'myId';
+        prop.Text = 'Button';
+        var jsonProp = PropertyHelper.ToJson(prop);
+        this.log.Debug("json prop: " + jsonProp);
+        this.log.DebugObj(PropertyHelper.FromJson(jsonProp));
+
+        bt.data('prop', jsonProp);
+
         var self = this;
-        bt.on('click', e => {
+        bt.on('click', function (event) {
             self.log.Debug('bt click');
-            self.eventManager.Trigger(EventManager.EventShowProperties, { id: 'buttonId' });
+            self.log.DebugObj($(event.target).data('prop'));
+            self.eventManager.Trigger(EventManager.EventShowProperties, $(event.target).data('prop'));
         });
         bt.button();
     }
