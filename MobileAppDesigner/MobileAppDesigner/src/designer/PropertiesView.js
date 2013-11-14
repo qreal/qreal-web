@@ -2,6 +2,8 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
     var Log = __Log__;
     var Controller = __Controller__;
     var EventManager = __EventManager__;
+    
+    
 
     var PropertiesView = (function () {
         function PropertiesView(controller) {
@@ -21,21 +23,38 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
             });
         };
 
-        PropertiesView.prototype.ShowProperty = function (data) {
-            this.log.Debug('ShowProperty');
-            var dialog = $('#propertyDialogTmpl').tmpl({ title: 'My property' });
-            var content = dialog.children('.property');
-            var prop1 = $('#propertyTextTmpl').tmpl({
+        PropertiesView.prototype.ShowProperty = function (property) {
+            this.log.Debug('ShowProperty ' + property.Type);
+            this["ShowProperty_" + property.Type](property);
+        };
+
+        PropertiesView.prototype.ShowProperty_Button = function (data) {
+            this.log.Debug("ShowProperty_Button");
+            var dialog = $('#propertyDialogTmpl').tmpl({ title: data.Type });
+            var dialogContent = dialog.children('.property');
+            var idProperty = $('#propertyTextTmpl').tmpl({
                 name: 'Id:',
                 valId: 'id1',
-                value: 'id1'
+                value: data.Id
             });
-            var prop2 = $('#propertyTextTmpl').tmpl({
+            var self = this;
+
+            var textProperty = $('#propertyTextTmpl').tmpl({
                 name: 'Text:',
-                valId: 'id2'
+                valId: 'id2',
+                value: data.Text
             });
-            content.append(prop1);
-            content.append(prop2);
+
+            textProperty.find('input').change(function () {
+                self.log.Debug('change: ' + $(this).val());
+                self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+                    id: data.Id,
+                    text: $(this).val()
+                });
+            });
+
+            dialogContent.append(idProperty);
+            dialogContent.append(textProperty);
 
             dialog.appendTo('body');
             $(".propertyDialog").dialog();

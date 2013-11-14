@@ -7,6 +7,7 @@ class EventManager {
 
     // Events types    
     public static EventShowProperties = 'show_property';
+    public static EventPropertiesChanged = 'property_changed';
     private static events = [EventManager.EventShowProperties];
 
     private element: JQuery;
@@ -16,6 +17,7 @@ class EventManager {
         this.log.Debug("constructor");
         this.element = element;
         this.element.on(EventManager.EventShowProperties, (e, data) => this.OnEvent(e, data));
+        this.element.on(EventManager.EventPropertiesChanged, (e, data) => this.OnEvent(e, data));
     }
 
     public Trigger(eventName: string, data: any): void {

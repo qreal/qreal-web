@@ -11,11 +11,6 @@ class ToolsView {
             id: 'tool-button',
             title: 'Button',
             tool: 'button'
-        },
-        {
-            id: 'tool-button2',
-            title: 'Button2',
-            tool: 'button'
         }
     ]
 
