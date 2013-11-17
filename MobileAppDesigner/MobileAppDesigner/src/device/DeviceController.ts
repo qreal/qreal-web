@@ -1,7 +1,8 @@
+import App = require("src/Application");
 import Log = require("src/util/log/Log");
 import EventManager = require("src/util/events/EventManager");
 import IEventListener = require("src/util/events/IEventListener");
-import PropertyHelper = require("src/properties/PropertyHelper");
+import ControlManager = require("src/device/ControlManager");
 import Property = require("src/properties/Property");
 import ButtonProperty = require("src/properties/ButtonProperty");
 
@@ -9,17 +10,15 @@ class DeviceController {
 
     private log = new Log("DeviceController");
 
-    private static instance = new DeviceController();
-
     private eventManager: EventManager;
+    private controlManager: ControlManager;
 
-    static get Instance(): DeviceController {
-        return this.instance;
-    }
 
     constructor() {
         this.log.Debug("constructor");
+        App.DeviceController = this;
         this.eventManager = new EventManager((<any>parent).$('body'));
+        this.controlManager = new ControlManager();
     }
 
     public Init(): void {
@@ -32,7 +31,7 @@ class DeviceController {
             OnEvent: (data) => {
                 self.log.Debug("EventPropertiesChanged");
                 self.log.DebugObj(data);
-                $('#' + data.id).siblings('.ui-btn-inner').children('.ui-btn-text').text(data.text);
+                $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);
             }
         });
     }
@@ -42,7 +41,7 @@ class DeviceController {
         event.preventDefault();
         this.log.DebugObj(event);
         var controlId = event.originalEvent.dataTransfer.getData("ControlId");      
-        this.CreateControl(controlId);       
+        this.controlManager.CreateControl(controlId);       
     }
 
     public OnDragOver(e) {
@@ -53,38 +52,6 @@ class DeviceController {
     public get EventManager(): EventManager {
         return this.eventManager;
     }
-
-    private CreateControl(controlId: string): void {
-        this.log.Debug("CreateControl: " + controlId);
-        //var bt = $('<a href="#" data-role="button"></a>');
-        var bt = $('<button></button>');
-        //bt = bt.button();
-
-        $(event.currentTarget).append(bt);
-
-        var prop: ButtonProperty = new ButtonProperty();
-        prop.Type = 'Button'
-        prop.Id = 'myId';
-        prop.Text = 'Button';
-
-        bt.attr('id', prop.Id);
-        bt.html(prop.Text);
-
-        bt.data('prop', prop);
-
-     
-        var self = this;
-        bt.on('click', function (event) {
-            self.log.Debug('bt click');
-            self.log.DebugObj($(event.target).data('prop'));
-            self.eventManager.Trigger(EventManager.EventShowProperties, $(event.target).data('prop'));
-        });
-        var b = bt.button();
-        this.log.DebugObj(b);
-        this.log.Debug(b.attr('id'));
-        this.log.DebugObj($('#myId'));
-    }
-
 }
 
 export = DeviceController;

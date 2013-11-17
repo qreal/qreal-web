@@ -1,8 +1,9 @@
-define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager", "src/properties/PropertyHelper", "src/properties/Property", "src/properties/ButtonProperty"], function(require, exports, __Log__, __EventManager__, __PropertyHelper__, __Property__, __ButtonProperty__) {
+define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/events/EventManager", "src/device/ControlManager", "src/properties/Property", "src/properties/ButtonProperty"], function(require, exports, __App__, __Log__, __EventManager__, __ControlManager__, __Property__, __ButtonProperty__) {
+    var App = __App__;
     var Log = __Log__;
     var EventManager = __EventManager__;
     
-    var PropertyHelper = __PropertyHelper__;
+    var ControlManager = __ControlManager__;
     var Property = __Property__;
     var ButtonProperty = __ButtonProperty__;
 
@@ -10,16 +11,10 @@ define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"
         function DeviceController() {
             this.log = new Log("DeviceController");
             this.log.Debug("constructor");
+            App.DeviceController = this;
             this.eventManager = new EventManager((parent).$('body'));
+            this.controlManager = new ControlManager();
         }
-        Object.defineProperty(DeviceController, "Instance", {
-            get: function () {
-                return this.instance;
-            },
-            enumerable: true,
-            configurable: true
-        });
-
         DeviceController.prototype.Init = function () {
             var _this = this;
             this.log.Debug("Init");
@@ -35,7 +30,7 @@ define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"
                 OnEvent: function (data) {
                     self.log.Debug("EventPropertiesChanged");
                     self.log.DebugObj(data);
-                    $('#' + data.id).siblings('.ui-btn-inner').children('.ui-btn-text').text(data.text);
+                    $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);
                 }
             });
         };
@@ -45,7 +40,7 @@ define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"
             event.preventDefault();
             this.log.DebugObj(event);
             var controlId = event.originalEvent.dataTransfer.getData("ControlId");
-            this.CreateControl(controlId);
+            this.controlManager.CreateControl(controlId);
         };
 
         DeviceController.prototype.OnDragOver = function (e) {
@@ -60,38 +55,6 @@ define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"
             enumerable: true,
             configurable: true
         });
-
-        DeviceController.prototype.CreateControl = function (controlId) {
-            this.log.Debug("CreateControl: " + controlId);
-
-            //var bt = $('<a href="#" data-role="button"></a>');
-            var bt = $('<button></button>');
-
-            //bt = bt.button();
-            $(event.currentTarget).append(bt);
-
-            var prop = new ButtonProperty();
-            prop.Type = 'Button';
-            prop.Id = 'myId';
-            prop.Text = 'Button';
-
-            bt.attr('id', prop.Id);
-            bt.html(prop.Text);
-
-            bt.data('prop', prop);
-
-            var self = this;
-            bt.on('click', function (event) {
-                self.log.Debug('bt click');
-                self.log.DebugObj($(event.target).data('prop'));
-                self.eventManager.Trigger(EventManager.EventShowProperties, $(event.target).data('prop'));
-            });
-            var b = bt.button();
-            this.log.DebugObj(b);
-            this.log.Debug(b.attr('id'));
-            this.log.DebugObj($('#myId'));
-        };
-        DeviceController.instance = new DeviceController();
         return DeviceController;
     })();
 

@@ -3,6 +3,5 @@
 import Main = require('src/designer/Main');
 
 require([], function () {
-    //alert("config");
     Main.Main();
 });

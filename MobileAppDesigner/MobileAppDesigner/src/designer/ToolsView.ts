@@ -8,11 +8,11 @@ class ToolsView {
 
     private controls = [
         {
-            id: 'tool-button',
+            id: 'Button',
             title: 'Button',
             tool: 'button'
         }
-    ]
+    ];
 
     private controller: Controller;
 

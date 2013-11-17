@@ -3,7 +3,6 @@ define(["require", "exports", 'src/device/Main'], function(require, exports, __M
     var Main = __Main__;
 
     require([], function () {
-        //alert("config");
         Main.Main();
     });
 });

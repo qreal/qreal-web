@@ -1,15 +1,15 @@
 ///<reference path="../modules/jquery.d.ts" />
 ///<reference path="../modules/jquery.tmpl.d.ts" />
-define(["require", "exports", "src/device/DeviceController", "src/util/log/Log"], function(require, exports, __DeviceController__, __Log__) {
-    var DeviceController = __DeviceController__;
+define(["require", "exports", "src/util/log/Log", "src/device/DeviceController"], function(require, exports, __Log__, __DeviceController__) {
     var Log = __Log__;
+    var DeviceController = __DeviceController__;
 
     var Main = (function () {
         function Main() {
         }
         Main.Main = function () {
             Main.log.Debug("Main");
-            DeviceController.Instance.Init();
+            new DeviceController().Init();
         };
         Main.log = new Log("DeviceMain");
         return Main;

@@ -30,7 +30,7 @@ class Controller {
         this.propertiesView.Init();
     }
 
-    public get EventManager(): EventManager {
+    get EventManager(): EventManager {
         return this.eventManager;
     }
 }

@@ -79,6 +79,8 @@
     <TypeScriptCompile Include="src\device\DeviceController.ts" />
     <TypeScriptCompile Include="src\util\events\EventManager.ts" />
     <TypeScriptCompile Include="src\designer\PropertiesView.ts" />
+    <TypeScriptCompile Include="src\device\ControlManager.ts" />
+    <TypeScriptCompile Include="src\Application.ts" />
     <Content Include="src\init.js" />
     <Content Include="src\modules\require.d.ts" />
     <TypeScriptCompile Include="RequireJsConfigDesigner.ts" />
@@ -144,13 +146,13 @@
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
-    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+    <TypeScriptModuleKind>AMD </TypeScriptModuleKind>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
     <TypeScriptSourceMap>false</TypeScriptSourceMap>
-    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+    <TypeScriptModuleKind>AMD </TypeScriptModuleKind>
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\TypeScript\Microsoft.TypeScript.targets" />
 </Project>

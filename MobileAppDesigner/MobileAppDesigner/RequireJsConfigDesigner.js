@@ -3,7 +3,6 @@ define(["require", "exports", 'src/designer/Main'], function(require, exports, _
     var Main = __Main__;
 
     require([], function () {
-        //alert("config");
         Main.Main();
     });
 });

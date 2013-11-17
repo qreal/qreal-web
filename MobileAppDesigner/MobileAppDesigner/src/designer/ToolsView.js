@@ -8,7 +8,7 @@
             this.log = new Log("ToolsView");
             this.controls = [
                 {
-                    id: 'tool-button',
+                    id: 'Button',
                     title: 'Button',
                     tool: 'button'
                 }
