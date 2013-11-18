@@ -1,6 +1,7 @@
 define(["require", "exports"], function(require, exports) {
     var Property = (function () {
-        function Property() {
+        function Property(type) {
+            this.Type = type;
         }
         Object.defineProperty(Property.prototype, "Type", {
             get: function () {
@@ -13,6 +14,7 @@ define(["require", "exports"], function(require, exports) {
             configurable: true
         });
 
+        Property.TypeButton = "Button";
         return Property;
     })();
 

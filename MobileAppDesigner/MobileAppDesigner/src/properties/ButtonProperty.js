@@ -9,8 +9,11 @@ define(["require", "exports", "src/properties/Property"], function(require, expo
 
     var ButtonProperty = (function (_super) {
         __extends(ButtonProperty, _super);
-        function ButtonProperty() {
-            _super.apply(this, arguments);
+        function ButtonProperty(id) {
+            _super.call(this, Property.TypeButton);
+            this.Id = id || "id";
+            this.Text = "Button";
+            this.Inline = false;
         }
         Object.defineProperty(ButtonProperty.prototype, "Id", {
             get: function () {
@@ -30,6 +33,18 @@ define(["require", "exports", "src/properties/Property"], function(require, expo
             },
             set: function (value) {
                 this.text = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+
+        Object.defineProperty(ButtonProperty.prototype, "Inline", {
+            get: function () {
+                return this.inline;
+            },
+            set: function (value) {
+                this.inline = value;
             },
             enumerable: true,
             configurable: true

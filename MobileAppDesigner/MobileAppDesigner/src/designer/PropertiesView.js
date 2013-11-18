@@ -41,11 +41,11 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
 
             var textProperty = $('#propertyTextTmpl').tmpl({
                 name: 'Text:',
-                valId: 'id2',
+                id: 'textProperty',
                 value: data.Text
             });
 
-            textProperty.find('input').change(function () {
+            textProperty.find('#textProperty').change(function () {
                 self.log.Debug('change: ' + $(this).val());
                 self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: data.Id,
@@ -53,8 +53,27 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
                 });
             });
 
+            var inlineProperty = $('#propertySelectTmpl').tmpl({
+                id: 'inlineProperty',
+                name: 'Inline:'
+            });
+
+            $("#templateOptionItem").tmpl([
+                { Text: "No", Value: "0" },
+                { Text: "Yes", Value: "1" }
+            ]).appendTo(inlineProperty.find('#inlineProperty'));
+
+            inlineProperty.find('#inlineProperty').change(function () {
+                self.log.Debug('change: ' + $(this).val());
+                self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+                    id: data.Id,
+                    inline: $(this).val()
+                });
+            });
+
             dialogContent.append(idProperty);
             dialogContent.append(textProperty);
+            dialogContent.append(inlineProperty);
 
             dialog.appendTo('body');
             $(".propertyDialog").dialog();

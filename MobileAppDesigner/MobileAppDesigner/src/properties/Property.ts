@@ -1,5 +1,7 @@
 class Property {
 
+    public static TypeButton = "Button";
+
     private type: string;
 
     public get Type(): string {
@@ -8,6 +10,10 @@ class Property {
 
     public set Type(value: string) {
         this.type = value;
+    }
+
+    constructor(type: string) {
+        this.Type = type;
     }
 }
 

@@ -30,7 +30,12 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/e
                 OnEvent: function (data) {
                     self.log.Debug("EventPropertiesChanged");
                     self.log.DebugObj(data);
-                    $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);
+                    if (data.text) {
+                        $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);
+                    }
+                    if (data.inline) {
+                        $('#' + data.id).buttonMarkup({ inline: data.inline == 1 });
+                    }
                 }
             });
         };

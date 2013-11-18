@@ -31,7 +31,12 @@ class DeviceController {
             OnEvent: (data) => {
                 self.log.Debug("EventPropertiesChanged");
                 self.log.DebugObj(data);
-                $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);
+                if (data.text) {
+                    $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);
+                }
+                if (data.inline) {
+                    $('#' + data.id).buttonMarkup({ inline: data.inline == 1 });
+                }
             }
         });
     }
@@ -40,8 +45,8 @@ class DeviceController {
         this.log.Debug("OnDrop");
         event.preventDefault();
         this.log.DebugObj(event);
-        var controlId = event.originalEvent.dataTransfer.getData("ControlId");      
-        this.controlManager.CreateControl(controlId);       
+        var controlId = event.originalEvent.dataTransfer.getData("ControlId");
+        this.controlManager.CreateControl(controlId);
     }
 
     public OnDragOver(e) {

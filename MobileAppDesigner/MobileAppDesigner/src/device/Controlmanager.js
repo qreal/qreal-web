@@ -20,28 +20,22 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/device
         ControlManager.prototype.CreateButton = function () {
             var _this = this;
             var bt = $('<a href="#" data-role="button"></a>');
-
-            //var bt = $('<button></button>');
-            $(event.currentTarget).append(bt);
-
-            var prop = new ButtonProperty();
-            prop.Type = 'Button';
-            prop.Id = 'myId';
-            prop.Text = 'Button';
-
+            var prop = new ButtonProperty('id' + ControlManager.idIndex);
             bt.attr('id', prop.Id);
             bt.text(prop.Text);
+            $(event.currentTarget).append(bt);
 
-            var bt = bt.button();
             this.log.DebugObj(bt);
 
-            bt.children('.ui-btn-inner').data('prop', prop);
             bt.on('click', function (event) {
                 _this.log.Debug('bt click');
                 _this.log.DebugObj($(event.target));
                 _this.log.DebugObj($(event.target).data('prop'));
                 App.DeviceController.EventManager.Trigger(EventManager.EventShowProperties, $(event.target).data('prop'));
             });
+
+            var bt = bt.button();
+            bt.children('.ui-btn-inner').data('prop', prop);
         };
         ControlManager.idIndex = 1;
         return ControlManager;
