@@ -34,7 +34,19 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/e
                         $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);
                     }
                     if (data.inline) {
-                        $('#' + data.id).buttonMarkup({ inline: data.inline == 1 });
+                        var cond = data.inline == "true";
+                        $('#' + data.id).buttonMarkup({ inline: cond });
+                    }
+                    if (data.corners) {
+                        var cond = data.corners == "true";
+                        $('#' + data.id).buttonMarkup({ corners: cond });
+                    }
+                    if (data.mini) {
+                        var cond = data.mini == "true";
+                        $('#' + data.id).buttonMarkup({ mini: cond });
+                    }
+                    if (data.theme) {
+                        $('#' + data.id).buttonMarkup({ theme: data.theme });
                     }
                 }
             });

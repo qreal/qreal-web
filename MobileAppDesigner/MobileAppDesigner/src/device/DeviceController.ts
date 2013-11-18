@@ -35,7 +35,19 @@ class DeviceController {
                     $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);
                 }
                 if (data.inline) {
-                    $('#' + data.id).buttonMarkup({ inline: data.inline == 1 });
+                    var cond: boolean = data.inline == "true";
+                    $('#' + data.id).buttonMarkup({ inline: cond });
+                }
+                if (data.corners) {
+                    var cond: boolean = data.corners == "true";
+                    $('#' + data.id).buttonMarkup({ corners: cond });
+                }
+                if (data.mini) {
+                    var cond: boolean = data.mini == "true";
+                    $('#' + data.id).buttonMarkup({ mini: cond });
+                }
+                if (data.theme) {
+                    $('#' + data.id).buttonMarkup({ theme: data.theme });
                 }
             }
         });
