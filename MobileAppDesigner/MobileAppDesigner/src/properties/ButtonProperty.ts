@@ -5,6 +5,9 @@ class ButtonProperty extends Property {
     private id: string;
     private text: string;
     private inline: boolean;
+    private corners: boolean;
+    private mini: boolean;
+    private theme: string;
 
     public get Id(): string {
         return this.id;
@@ -30,6 +33,31 @@ class ButtonProperty extends Property {
         this.inline = value;
     }
 
+    public get Corners(): boolean {
+        return this.corners;
+    }
+
+    public set Corners(value: boolean) {
+        this.corners = value;
+    }
+
+    public get Mini(): boolean {
+        return this.mini;
+    }
+
+    public set Mini(value: boolean) {
+        this.mini = value;
+    }
+
+    public get Theme(): string {
+        return this.theme;
+    }
+
+    public set Theme(value: string) {
+        this.theme = value;
+    }
+
+
     constructor();
     constructor(id: string)
     constructor(id?: string) {
@@ -37,6 +65,9 @@ class ButtonProperty extends Property {
         this.Id = id || "id";
         this.Text = "Button";
         this.Inline = false;
+        this.Corners = false;
+        this.Mini = false;
+        this.Theme = 'c';
     }
 
 }

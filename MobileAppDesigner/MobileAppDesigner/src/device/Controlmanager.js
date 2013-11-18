@@ -12,6 +12,11 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/device
             this.log = new Log("ControlManager");
             this.log.Debug("constructor");
         }
+        ControlManager.prototype.Init = function () {
+            this.log.Debug("Init");
+            App.DeviceController.EventManager.AddSubscriber(EventManager.EventPropertiesChanged, new PropertyChangeListener());
+        };
+
         ControlManager.prototype.CreateControl = function (controlId) {
             this.log.Debug("CreateControl: " + controlId);
             this['Create' + controlId]();
@@ -20,12 +25,10 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/device
         ControlManager.prototype.CreateButton = function () {
             var _this = this;
             var bt = $('<a href="#" data-role="button"></a>');
-            var prop = new ButtonProperty('id' + ControlManager.idIndex);
+            var prop = new ButtonProperty('id' + ControlManager.idIndex++);
             bt.attr('id', prop.Id);
             bt.text(prop.Text);
             $(event.currentTarget).append(bt);
-
-            this.log.DebugObj(bt);
 
             bt.on('click', function (event) {
                 _this.log.Debug('bt click');
@@ -39,6 +42,35 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/device
         };
         ControlManager.idIndex = 1;
         return ControlManager;
+    })();
+
+    var PropertyChangeListener = (function () {
+        function PropertyChangeListener() {
+            this.log = new Log("PropertyChangeListener");
+        }
+        PropertyChangeListener.prototype.OnEvent = function (data) {
+            this.log.Debug("EventPropertiesChanged");
+            this.log.DebugObj(data);
+            if (data.text) {
+                $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);
+            }
+            if (data.inline) {
+                var cond = data.inline == "true";
+                $('#' + data.id).buttonMarkup({ inline: cond });
+            }
+            if (data.corners) {
+                var cond = data.corners == "true";
+                $('#' + data.id).buttonMarkup({ corners: cond });
+            }
+            if (data.mini) {
+                var cond = data.mini == "true";
+                $('#' + data.id).buttonMarkup({ mini: cond });
+            }
+            if (data.theme) {
+                $('#' + data.id).buttonMarkup({ theme: data.theme });
+            }
+        };
+        return PropertyChangeListener;
     })();
 
     

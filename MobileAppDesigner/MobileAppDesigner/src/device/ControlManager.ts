@@ -13,7 +13,12 @@ class ControlManager {
     private static idIndex = 1;
 
     constructor() {
-        this.log.Debug("constructor");    
+        this.log.Debug("constructor");
+    }
+
+    public Init(): void {
+        this.log.Debug("Init");
+        App.DeviceController.EventManager.AddSubscriber(EventManager.EventPropertiesChanged, new PropertyChangeListener());
     }
 
     public CreateControl(controlId: string): void {
@@ -23,14 +28,11 @@ class ControlManager {
 
     private CreateButton() {
         var bt = $('<a href="#" data-role="button"></a>');
-        var prop: ButtonProperty = new ButtonProperty('id' + ControlManager.idIndex);      
+        var prop: ButtonProperty = new ButtonProperty('id' + ControlManager.idIndex++);
         bt.attr('id', prop.Id);
         bt.text(prop.Text);
         $(event.currentTarget).append(bt);
 
-       
-        this.log.DebugObj(bt);
-        
         bt.on('click', event => {
             this.log.Debug('bt click');
             this.log.DebugObj($(event.target));
@@ -41,7 +43,34 @@ class ControlManager {
         var bt = bt.button();
         bt.children('.ui-btn-inner').data('prop', prop);
     }
+}
 
+class PropertyChangeListener implements IEventListener {
+
+    private log = new Log("PropertyChangeListener");
+
+    public OnEvent(data): void {
+        this.log.Debug("EventPropertiesChanged");
+        this.log.DebugObj(data);
+        if (data.text) {
+            $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);
+        }
+        if (data.inline) {
+            var cond: boolean = data.inline == "true";
+            $('#' + data.id).buttonMarkup({ inline: cond });
+        }
+        if (data.corners) {
+            var cond: boolean = data.corners == "true";
+            $('#' + data.id).buttonMarkup({ corners: cond });
+        }
+        if (data.mini) {
+            var cond: boolean = data.mini == "true";
+            $('#' + data.id).buttonMarkup({ mini: cond });
+        }
+        if (data.theme) {
+            $('#' + data.id).buttonMarkup({ theme: data.theme });
+        }
+    }
 }
 
 export = ControlManager;

@@ -14,6 +14,9 @@ define(["require", "exports", "src/properties/Property"], function(require, expo
             this.Id = id || "id";
             this.Text = "Button";
             this.Inline = false;
+            this.Corners = false;
+            this.Mini = false;
+            this.Theme = 'c';
         }
         Object.defineProperty(ButtonProperty.prototype, "Id", {
             get: function () {
@@ -45,6 +48,42 @@ define(["require", "exports", "src/properties/Property"], function(require, expo
             },
             set: function (value) {
                 this.inline = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+
+        Object.defineProperty(ButtonProperty.prototype, "Corners", {
+            get: function () {
+                return this.corners;
+            },
+            set: function (value) {
+                this.corners = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+
+        Object.defineProperty(ButtonProperty.prototype, "Mini", {
+            get: function () {
+                return this.mini;
+            },
+            set: function (value) {
+                this.mini = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+
+        Object.defineProperty(ButtonProperty.prototype, "Theme", {
+            get: function () {
+                return this.theme;
+            },
+            set: function (value) {
+                this.theme = value;
             },
             enumerable: true,
             configurable: true

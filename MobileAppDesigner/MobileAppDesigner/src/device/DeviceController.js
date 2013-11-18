@@ -18,37 +18,12 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/e
         DeviceController.prototype.Init = function () {
             var _this = this;
             this.log.Debug("Init");
+            this.controlManager.Init();
             $('#mainPage').on('drop', function (event) {
                 return _this.OnDrop(event);
             });
             $('#mainPage').on('dragover', function (event) {
                 return _this.OnDragOver(event);
-            });
-
-            var self = this;
-            this.eventManager.AddSubscriber(EventManager.EventPropertiesChanged, {
-                OnEvent: function (data) {
-                    self.log.Debug("EventPropertiesChanged");
-                    self.log.DebugObj(data);
-                    if (data.text) {
-                        $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);
-                    }
-                    if (data.inline) {
-                        var cond = data.inline == "true";
-                        $('#' + data.id).buttonMarkup({ inline: cond });
-                    }
-                    if (data.corners) {
-                        var cond = data.corners == "true";
-                        $('#' + data.id).buttonMarkup({ corners: cond });
-                    }
-                    if (data.mini) {
-                        var cond = data.mini == "true";
-                        $('#' + data.id).buttonMarkup({ mini: cond });
-                    }
-                    if (data.theme) {
-                        $('#' + data.id).buttonMarkup({ theme: data.theme });
-                    }
-                }
             });
         };
 

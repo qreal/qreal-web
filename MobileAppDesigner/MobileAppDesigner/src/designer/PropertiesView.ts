@@ -34,8 +34,9 @@ class PropertiesView {
 
     public ShowProperty_Button(data: ButtonProperty): void {
         this.log.Debug("ShowProperty_Button");
+
         var dialog = $('#propertyDialogFor' + data.Id)
-        if (dialog.length) {
+        if ((<any>dialog).exists()) {
             this.log.DebugObj(dialog);
             dialog.dialog("open");
             return;

@@ -30,8 +30,9 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
 
         PropertiesView.prototype.ShowProperty_Button = function (data) {
             this.log.Debug("ShowProperty_Button");
+
             var dialog = $('#propertyDialogFor' + data.Id);
-            if (dialog.length) {
+            if ((dialog).exists()) {
                 this.log.DebugObj(dialog);
                 dialog.dialog("open");
                 return;

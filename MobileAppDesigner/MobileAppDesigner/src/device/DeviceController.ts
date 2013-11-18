@@ -23,34 +23,9 @@ class DeviceController {
 
     public Init(): void {
         this.log.Debug("Init");
+        this.controlManager.Init();
         $('#mainPage').on('drop', event => this.OnDrop(event));
-        $('#mainPage').on('dragover', event => this.OnDragOver(event));
-
-        var self = this;
-        this.eventManager.AddSubscriber(EventManager.EventPropertiesChanged, {
-            OnEvent: (data) => {
-                self.log.Debug("EventPropertiesChanged");
-                self.log.DebugObj(data);
-                if (data.text) {
-                    $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);
-                }
-                if (data.inline) {
-                    var cond: boolean = data.inline == "true";
-                    $('#' + data.id).buttonMarkup({ inline: cond });
-                }
-                if (data.corners) {
-                    var cond: boolean = data.corners == "true";
-                    $('#' + data.id).buttonMarkup({ corners: cond });
-                }
-                if (data.mini) {
-                    var cond: boolean = data.mini == "true";
-                    $('#' + data.id).buttonMarkup({ mini: cond });
-                }
-                if (data.theme) {
-                    $('#' + data.id).buttonMarkup({ theme: data.theme });
-                }
-            }
-        });
+        $('#mainPage').on('dragover', event => this.OnDragOver(event));      
     }
 
     public OnDrop(event) {
