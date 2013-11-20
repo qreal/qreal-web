@@ -55,6 +55,44 @@
   box-sizing: border-box;
   width: 100%;
 }
+/* Page */
+.page-toolbar {
+  height: 30px;
+  background: #aaa;
+  border: 2px solid black;
+}
+#addPage {
+  font-size: 12px;
+  float: right;
+  margin-right: 5px;
+}
+.pages-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.pages-list li {
+  margin: 3px 0;
+  padding: 5px;
+  font-size: 1em;
+  padding: 0px 0;
+}
+.pages-list .ui-selecting {
+  background: #FECA40;
+}
+.pages-list .ui-selected {
+  background: #F39814;
+  color: white;
+}
+.pages-list li span {
+  display: inline-block;
+}
+code {
+  background: black;
+  color: white;
+  display: inline-block;
+  vertical-align: middle;
+}
 /** Controls **/
 .tool-item {
   width: 100px;

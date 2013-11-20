@@ -79,6 +79,10 @@ class ToolsView {
         toolItems.on('dragstart', event => this.OnDragStart(event));
         toolItems.on('drag', event => this.OnDrag(event));
         toolItems.on('dragend', () => this.OnDragend());
+
+        $('#addPage').click(function (e) {
+            alert('Add Page!!!');
+        });
     }
 
     public OnDragStart(event) {

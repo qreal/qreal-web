@@ -81,6 +81,10 @@
             toolItems.on('dragend', function () {
                 return _this.OnDragend();
             });
+
+            $('#addPage').click(function (e) {
+                alert('Add Page!!!');
+            });
         };
 
         ToolsView.prototype.OnDragStart = function (event) {

@@ -92,6 +92,7 @@
     <Content Include="res\input.png" />
     <Content Include="res\navbar.png" />
     <Content Include="res\selection.png" />
+    <Content Include="packages.config" />
     <Content Include="src\init.js" />
     <Content Include="src\modules\require.d.ts" />
     <TypeScriptCompile Include="RequireJsConfigDesigner.ts" />
