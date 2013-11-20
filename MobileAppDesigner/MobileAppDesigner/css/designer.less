@@ -29,25 +29,7 @@
 #controls {
 }
 
-.tool-item {
-    width: 165px;
-    background: #fbfbfb;
-    display: inline-block;
-    border: 2px solid #aaa;
-    margin: 3px;
-}
 
-    .tool-item * {
-        display: table;
-        margin: 0 auto;
-    }
-
-    .tool-item .tool-icon {
-        margin-top: 2px;
-    }
-
-    .tool-item .tool-title {
-    }
 
 // Propertyes
 
@@ -60,22 +42,22 @@
 
 .table {
     display: table;
-    border-spacing:3px;
+    border-spacing: 3px;
 }
 
-.row{
-    display:table-row;
+.row {
+    display: table-row;
 }
 
-.cell{
-    display:table-cell;
+.cell {
+    display: table-cell;
 }
 
 .property .name {
     font-weight: bold;
     font-size: 14px;
     text-align: right;
-    padding-right:5px;
+    padding-right: 5px;
     vertical-align: middle;
     width: 50px;
 }
@@ -91,7 +73,7 @@
         width: 100%;
     }
 
-     .property .val select {
+    .property .val select {
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
@@ -101,11 +83,74 @@
 
 
 /** Controls **/
+
+.tool-item {
+    width: 100px;
+    background: #fbfbfb;
+    display: inline-block;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    margin: 2px;
+    padding: 5px;
+}
+
+    .tool-item * {
+        display: table;
+        margin: 0 auto;
+    }
+
+
 .tool-icon {
-    width: 148px;
-    height: 32px;
+    width: 75px;
+    height: 75px;
+}
+
+.tool-title {
+    margin-top: 5px;
+    font-weight: bold;
+    font-size: 12px;
 }
 
 .tool-button {
     background: url('/res/button.png') no-repeat transparent;
+}
+
+.tool-input {
+    background: url('/res/input.png') no-repeat transparent;
+}
+
+.tool-selection {
+    background: url('/res/selection.png') no-repeat transparent;
+}
+
+.tool-checkbox {
+    background: url('/res/checkbox.png') no-repeat transparent;
+}
+
+.tool-checkbox2 {
+    background: url('/res/checkbox2.png') no-repeat transparent;
+}
+
+.tool-header {
+    background: url('/res/header.png') no-repeat transparent;
+}
+
+.tool-header2 {
+    background: url('/res/header2.png') no-repeat transparent;
+}
+
+.tool-footer {
+    background: url('/res/footer.png') no-repeat transparent;
+}
+
+.tool-navbar {
+    background: url('/res/navbar.png') no-repeat transparent;
+}
+
+.tool-grid {
+    background: url('/res/grid.png') no-repeat transparent;
+}
+
+.tool-controlgroup {
+    background: url('/res/controlgroup_widget.png') no-repeat transparent;
 }

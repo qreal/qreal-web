@@ -10,7 +10,9 @@ class ControlManager {
 
     private log = new Log("ControlManager");
 
-    private static idIndex = 1;
+    private idIndex = 1;
+    private idList = [];
+    private propertiesMap = [];
 
     constructor() {
         this.log.Debug("constructor");
@@ -28,9 +30,11 @@ class ControlManager {
 
     private CreateButton() {
         var bt = $('<a href="#" data-role="button"></a>');
-        var prop: ButtonProperty = new ButtonProperty('id' + ControlManager.idIndex++);
+        var prop: ButtonProperty = new ButtonProperty(this.GetNewId());
+
         bt.attr('id', prop.Id);
         bt.text(prop.Text);
+        this.propertiesMap[prop.Id] = prop;
         $(event.currentTarget).append(bt);
 
         bt.on('click', event => {
@@ -43,6 +47,19 @@ class ControlManager {
         var bt = bt.button();
         bt.children('.ui-btn-inner').data('prop', prop);
     }
+
+    private GetNewId(): string {
+        var id = 'id' + this.idIndex++;
+        if (this.ContainsId(id)) {
+            id = 'id' + this.idIndex++;
+        }
+        this.idList.push(id);
+        return id;
+    }
+
+    public ContainsId(id: string): boolean {
+        return this.idList.indexOf(id) > 0;
+    }
 }
 
 class PropertyChangeListener implements IEventListener {
@@ -52,6 +69,9 @@ class PropertyChangeListener implements IEventListener {
     public OnEvent(data): void {
         this.log.Debug("EventPropertiesChanged");
         this.log.DebugObj(data);
+        if (data.newId) {
+            $('#' + data.id).attr('id', data.newId);
+        }
         if (data.text) {
             $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);
         }

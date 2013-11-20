@@ -10,6 +10,9 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/device
     var ControlManager = (function () {
         function ControlManager() {
             this.log = new Log("ControlManager");
+            this.idIndex = 1;
+            this.idList = [];
+            this.propertiesMap = [];
             this.log.Debug("constructor");
         }
         ControlManager.prototype.Init = function () {
@@ -25,9 +28,11 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/device
         ControlManager.prototype.CreateButton = function () {
             var _this = this;
             var bt = $('<a href="#" data-role="button"></a>');
-            var prop = new ButtonProperty('id' + ControlManager.idIndex++);
+            var prop = new ButtonProperty(this.GetNewId());
+
             bt.attr('id', prop.Id);
             bt.text(prop.Text);
+            this.propertiesMap[prop.Id] = prop;
             $(event.currentTarget).append(bt);
 
             bt.on('click', function (event) {
@@ -40,7 +45,19 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/device
             var bt = bt.button();
             bt.children('.ui-btn-inner').data('prop', prop);
         };
-        ControlManager.idIndex = 1;
+
+        ControlManager.prototype.GetNewId = function () {
+            var id = 'id' + this.idIndex++;
+            if (this.ContainsId(id)) {
+                id = 'id' + this.idIndex++;
+            }
+            this.idList.push(id);
+            return id;
+        };
+
+        ControlManager.prototype.ContainsId = function (id) {
+            return this.idList.indexOf(id) > 0;
+        };
         return ControlManager;
     })();
 
@@ -51,6 +68,9 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/device
         PropertyChangeListener.prototype.OnEvent = function (data) {
             this.log.Debug("EventPropertiesChanged");
             this.log.DebugObj(data);
+            if (data.newId) {
+                $('#' + data.id).attr('id', data.newId);
+            }
             if (data.text) {
                 $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);
             }

@@ -81,6 +81,17 @@
     <TypeScriptCompile Include="src\designer\PropertiesView.ts" />
     <TypeScriptCompile Include="src\device\ControlManager.ts" />
     <TypeScriptCompile Include="src\Application.ts" />
+    <Content Include="res\checkbox.png" />
+    <Content Include="res\checkbox2.png" />
+    <Content Include="res\controlgroup_widget.png" />
+    <Content Include="res\controlgroup_widget2.png" />
+    <Content Include="res\footer.png" />
+    <Content Include="res\grid.png" />
+    <Content Include="res\header.png" />
+    <Content Include="res\header2.png" />
+    <Content Include="res\input.png" />
+    <Content Include="res\navbar.png" />
+    <Content Include="res\selection.png" />
     <Content Include="src\init.js" />
     <Content Include="src\modules\require.d.ts" />
     <TypeScriptCompile Include="RequireJsConfigDesigner.ts" />

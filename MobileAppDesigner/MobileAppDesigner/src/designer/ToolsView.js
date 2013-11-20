@@ -11,6 +11,56 @@
                     id: 'Button',
                     title: 'Button',
                     tool: 'button'
+                },
+                {
+                    id: 'Input',
+                    title: 'Input',
+                    tool: 'input'
+                },
+                {
+                    id: 'Selection',
+                    title: 'Selection',
+                    tool: 'selection'
+                },
+                {
+                    id: 'Checkbox',
+                    title: 'Checkbox',
+                    tool: 'checkbox'
+                },
+                {
+                    id: 'Checkbox2',
+                    title: 'Checkbox2',
+                    tool: 'checkbox2'
+                },
+                {
+                    id: 'Header',
+                    title: 'Header',
+                    tool: 'header'
+                },
+                {
+                    id: 'Header2',
+                    title: 'Header2',
+                    tool: 'header2'
+                },
+                {
+                    id: 'Footer',
+                    title: 'Footer',
+                    tool: 'footer'
+                },
+                {
+                    id: 'Navbar',
+                    title: 'Navbar',
+                    tool: 'navbar'
+                },
+                {
+                    id: 'Grid',
+                    title: 'Grid',
+                    tool: 'grid'
+                },
+                {
+                    id: 'ControlGroup',
+                    title: 'Control group',
+                    tool: 'controlgroup'
                 }
             ];
             this.controller = controller;

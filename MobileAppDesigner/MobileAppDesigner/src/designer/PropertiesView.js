@@ -8,6 +8,17 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
     var PropertiesView = (function () {
         function PropertiesView(controller) {
             this.log = new Log("PropertiesView");
+            this.trueFalseOptions = [
+                { Text: "No", Value: false },
+                { Text: "Yes", Value: true }
+            ];
+            this.themes = [
+                { Text: "Theme A", Value: "a" },
+                { Text: "Theme B", Value: "b" },
+                { Text: "Theme C", Value: "c" },
+                { Text: "Theme D", Value: "d" },
+                { Text: "Theme E", Value: "e" }
+            ];
             this.controller = controller;
         }
         PropertiesView.prototype.Init = function () {
@@ -30,6 +41,7 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
 
         PropertiesView.prototype.ShowProperty_Button = function (data) {
             this.log.Debug("ShowProperty_Button");
+            var self = this;
 
             var dialog = $('#propertyDialogFor' + data.Id);
             if ((dialog).exists()) {
@@ -37,27 +49,29 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
                 dialog.dialog("open");
                 return;
             }
+
             dialog = $('#propertyDialogTmpl').tmpl({ title: data.Type });
             var dialogContent = dialog.children('.property');
+
+            var oldId = data.Id;
             var idProperty = $('#propertyTextTmpl').tmpl({
                 name: 'Id:',
-                valId: 'id1',
                 value: data.Id
             });
-            var self = this;
-
-            var trueFalseOptions = [
-                { Text: "No", Value: false },
-                { Text: "Yes", Value: true }
-            ];
+            idProperty.find('input').change(function () {
+                self.log.Debug('change: ' + $(this).val());
+                self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+                    id: oldId,
+                    newId: $(this).val()
+                });
+            });
 
             var textProperty = $('#propertyTextTmpl').tmpl({
                 name: 'Text:',
-                id: 'textProperty',
                 value: data.Text
             });
 
-            textProperty.find('#textProperty').change(function () {
+            textProperty.find('input').change(function () {
                 self.log.Debug('change: ' + $(this).val());
                 self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: data.Id,
@@ -66,13 +80,12 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
             });
 
             var inlineProperty = $('#propertySelectTmpl').tmpl({
-                id: 'inlineProperty',
                 name: 'Inline:'
             });
 
-            $("#templateOptionItem").tmpl(trueFalseOptions).appendTo(inlineProperty.find('#inlineProperty'));
+            $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(inlineProperty.find('select'));
 
-            inlineProperty.find('#inlineProperty').change(function () {
+            inlineProperty.find('select').change(function () {
                 self.log.Debug('change: ' + $(this).val());
                 self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: data.Id,
@@ -81,14 +94,13 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
             });
 
             var cornersProperty = $('#propertySelectTmpl').tmpl({
-                id: 'cornersProperty',
                 name: 'Rounded corners:'
             });
 
-            $("#templateOptionItem").tmpl(trueFalseOptions).appendTo(cornersProperty.find('#cornersProperty'));
+            $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(cornersProperty.find('select'));
 
-            cornersProperty.find('#cornersProperty').val('true');
-            cornersProperty.find('#cornersProperty').change(function () {
+            cornersProperty.find('select').val('true');
+            cornersProperty.find('select').change(function () {
                 self.log.Debug('change: ' + $(this).val());
                 self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: data.Id,
@@ -97,13 +109,12 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
             });
 
             var miniProperty = $('#propertySelectTmpl').tmpl({
-                id: 'miniProperty',
                 name: 'Mini:'
             });
 
-            $("#templateOptionItem").tmpl(trueFalseOptions).appendTo(miniProperty.find('#miniProperty'));
+            $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(miniProperty.find('select'));
 
-            miniProperty.find('#miniProperty').change(function () {
+            miniProperty.find('select').change(function () {
                 self.log.Debug('change: ' + $(this).val());
                 self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: data.Id,
@@ -112,20 +123,13 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
             });
 
             var themeProperty = $('#propertySelectTmpl').tmpl({
-                id: 'themeProperty',
                 name: 'Theme:'
             });
 
-            $("#templateOptionItem").tmpl([
-                { Text: "Theme A", Value: "a" },
-                { Text: "Theme B", Value: "b" },
-                { Text: "Theme C", Value: "c" },
-                { Text: "Theme D", Value: "d" },
-                { Text: "Theme E", Value: "e" }
-            ]).appendTo(themeProperty.find('#themeProperty'));
+            $("#templateOptionItem").tmpl(this.themes).appendTo(themeProperty.find('select'));
 
-            themeProperty.find('#themeProperty').val('c');
-            themeProperty.find('#themeProperty').change(function () {
+            themeProperty.find('select').val('c');
+            themeProperty.find('select').change(function () {
                 self.log.Debug('change: ' + $(this).val());
                 self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: data.Id,
@@ -143,7 +147,6 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
             dialog.appendTo('body');
             dialog.attr('id', 'propertyDialogFor' + data.Id);
             $('#propertyDialogFor' + data.Id).dialog();
-            //$('#propertyDialogFor' + data.Id).dialog('open');
         };
         return PropertiesView;
     })();
