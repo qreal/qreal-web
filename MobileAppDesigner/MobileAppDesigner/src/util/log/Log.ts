@@ -8,19 +8,33 @@ class Log {
     }
 
     public Debug(message: string): void {
+        this.Log(message, 'log');
+    }
+
+    public DebugObj(obj): void;
+    public DebugObj(obj, tag?: string): void
+    public DebugObj(obj, tag = "Object: "): void {
+        if (this.logLevel < 1) {
+            return;
+        }
+        this.Debug(tag + String.fromCharCode(9660));
+        console.log(obj);
+    }
+
+    public Error(message: string): void {
+        this.Log(message, 'error');
+    }
+
+    public Warn(message: string): void {
+        this.Log(message, 'warn');
+    }
+
+    private Log(message: string, method: string): void {
         if (this.logLevel < 1) {
             return;
         }
         var date = new Date();
-        console.log("[" + date.toLocaleTimeString() + "." + date.getMilliseconds() + "] (" + this.tag + "): " + message);
-    }
-
-    public DebugObj(obj): void {
-        if (this.logLevel < 1) {
-            return;
-        }
-        this.Debug("Object: " + String.fromCharCode(9660));
-        console.log(obj);
+        console[method]("[" + date.toLocaleTimeString() + "." + date.getMilliseconds() + "] (" + this.tag + "): " + message);
     }
 }
 

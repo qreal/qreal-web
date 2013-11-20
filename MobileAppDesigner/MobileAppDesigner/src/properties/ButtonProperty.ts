@@ -65,7 +65,7 @@ class ButtonProperty extends Property {
         this.Id = id || "id";
         this.Text = "Button";
         this.Inline = false;
-        this.Corners = false;
+        this.Corners = true;
         this.Mini = false;
         this.Theme = 'c';
     }

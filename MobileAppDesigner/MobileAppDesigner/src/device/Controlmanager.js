@@ -17,7 +17,7 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/device
         }
         ControlManager.prototype.Init = function () {
             this.log.Debug("Init");
-            App.DeviceController.EventManager.AddSubscriber(EventManager.EventPropertiesChanged, new PropertyChangeListener());
+            App.DeviceController.EventManager.AddSubscriber(EventManager.EventPropertiesChanged, new PropertyChangeListener(this));
         };
 
         ControlManager.prototype.CreateControl = function (controlId) {
@@ -49,6 +49,7 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/device
         ControlManager.prototype.GetNewId = function () {
             var id = 'id' + this.idIndex++;
             if (this.ContainsId(id)) {
+                this.log.Warn('id: ' + id + ' already exists');
                 id = 'id' + this.idIndex++;
             }
             this.idList.push(id);
@@ -58,18 +59,38 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/device
         ControlManager.prototype.ContainsId = function (id) {
             return this.idList.indexOf(id) > 0;
         };
+
+        ControlManager.prototype.ChangeId = function (id, newId) {
+            this.log.Debug("ChangeId, id=" + id + ", newId=" + newId);
+
+            this.idList.push(newId);
+            delete this.idList[this.idList.indexOf(id)];
+            this.propertiesMap[newId] = this.propertiesMap[id];
+            this.propertiesMap[newId].Id = newId;
+            delete this.propertiesMap[id];
+            this.log.DebugObj(this.idList);
+            this.log.DebugObj(this.propertiesMap);
+        };
         return ControlManager;
     })();
 
     var PropertyChangeListener = (function () {
-        function PropertyChangeListener() {
+        function PropertyChangeListener(controlManager) {
             this.log = new Log("PropertyChangeListener");
+            this.controlManager = null;
+            this.controlManager = controlManager;
         }
         PropertyChangeListener.prototype.OnEvent = function (data) {
             this.log.Debug("EventPropertiesChanged");
             this.log.DebugObj(data);
             if (data.newId) {
-                $('#' + data.id).attr('id', data.newId);
+                if (this.controlManager.ContainsId(data.newId)) {
+                    //TODO: show notification
+                    alert('Id already exists');
+                } else {
+                    $('#' + data.id).attr('id', data.newId);
+                    this.controlManager.ChangeId(data.id, data.newId);
+                }
             }
             if (data.text) {
                 $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);

@@ -20,7 +20,7 @@ class ControlManager {
 
     public Init(): void {
         this.log.Debug("Init");
-        App.DeviceController.EventManager.AddSubscriber(EventManager.EventPropertiesChanged, new PropertyChangeListener());
+        App.DeviceController.EventManager.AddSubscriber(EventManager.EventPropertiesChanged, new PropertyChangeListener(this));
     }
 
     public CreateControl(controlId: string): void {
@@ -51,6 +51,7 @@ class ControlManager {
     private GetNewId(): string {
         var id = 'id' + this.idIndex++;
         if (this.ContainsId(id)) {
+            this.log.Warn('id: ' + id+' already exists');
             id = 'id' + this.idIndex++;
         }
         this.idList.push(id);
@@ -60,17 +61,44 @@ class ControlManager {
     public ContainsId(id: string): boolean {
         return this.idList.indexOf(id) > 0;
     }
+
+    public ChangeId(id: string, newId: string): void {
+        this.log.Debug("ChangeId, id=" + id + ", newId=" + newId);
+
+        this.idList.push(newId);
+        delete this.idList[this.idList.indexOf(id)];
+        this.propertiesMap[newId] = this.propertiesMap[id];
+        this.propertiesMap[newId].Id = newId;
+        delete this.propertiesMap[id];
+        this.log.DebugObj(this.idList);
+        this.log.DebugObj(this.propertiesMap);
+        
+    }
 }
 
 class PropertyChangeListener implements IEventListener {
 
     private log = new Log("PropertyChangeListener");
 
+    private controlManager: ControlManager = null;
+
+    constructor(controlManager: ControlManager) {
+        this.controlManager = controlManager;
+    }
+
     public OnEvent(data): void {
         this.log.Debug("EventPropertiesChanged");
         this.log.DebugObj(data);
         if (data.newId) {
-            $('#' + data.id).attr('id', data.newId);
+            if (this.controlManager.ContainsId(data.newId)) {
+                //TODO: show notification
+                alert('Id already exists');
+            } else {
+                $('#' + data.id).attr('id', data.newId);
+                this.controlManager.ChangeId(data.id, data.newId);
+            }
+
+
         }
         if (data.text) {
             $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);

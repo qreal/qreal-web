@@ -39,42 +39,41 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
             this["ShowProperty_" + property.Type](property);
         };
 
-        PropertiesView.prototype.ShowProperty_Button = function (data) {
+        PropertiesView.prototype.ShowProperty_Button = function (property) {
             this.log.Debug("ShowProperty_Button");
             var self = this;
 
-            var dialog = $('#propertyDialogFor' + data.Id);
+            var dialog = $('#propertyDialogFor' + property.Id);
             if ((dialog).exists()) {
                 this.log.DebugObj(dialog);
                 dialog.dialog("open");
                 return;
             }
 
-            dialog = $('#propertyDialogTmpl').tmpl({ title: data.Type });
+            dialog = $('#propertyDialogTmpl').tmpl({ title: property.Type });
             var dialogContent = dialog.children('.property');
 
-            var oldId = data.Id;
             var idProperty = $('#propertyTextTmpl').tmpl({
                 name: 'Id:',
-                value: data.Id
+                value: property.Id
             });
             idProperty.find('input').change(function () {
                 self.log.Debug('change: ' + $(this).val());
                 self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                    id: oldId,
+                    id: property.Id,
                     newId: $(this).val()
                 });
             });
 
             var textProperty = $('#propertyTextTmpl').tmpl({
                 name: 'Text:',
-                value: data.Text
+                value: property.Text
             });
 
             textProperty.find('input').change(function () {
                 self.log.Debug('change: ' + $(this).val());
                 self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                    id: data.Id,
+                    id: property.Id,
                     text: $(this).val()
                 });
             });
@@ -83,27 +82,28 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
                 name: 'Inline:'
             });
 
-            $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(inlineProperty.find('select'));
+            var inlineSelect = inlineProperty.find('select');
+            $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(inlineSelect);
 
-            inlineProperty.find('select').change(function () {
+            inlineSelect.val(String(property.Inline));
+            inlineSelect.change(function () {
                 self.log.Debug('change: ' + $(this).val());
                 self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                    id: data.Id,
+                    id: property.Id,
                     inline: $(this).val()
                 });
             });
-
             var cornersProperty = $('#propertySelectTmpl').tmpl({
                 name: 'Rounded corners:'
             });
+            var cornersSelect = cornersProperty.find('select');
+            $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(cornersSelect);
 
-            $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(cornersProperty.find('select'));
-
-            cornersProperty.find('select').val('true');
-            cornersProperty.find('select').change(function () {
+            cornersSelect.val(String(property.Corners));
+            cornersSelect.change(function () {
                 self.log.Debug('change: ' + $(this).val());
                 self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                    id: data.Id,
+                    id: property.Id,
                     corners: $(this).val()
                 });
             });
@@ -111,13 +111,14 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
             var miniProperty = $('#propertySelectTmpl').tmpl({
                 name: 'Mini:'
             });
+            var miniSelect = miniProperty.find('select');
+            $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(miniSelect);
 
-            $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(miniProperty.find('select'));
-
-            miniProperty.find('select').change(function () {
+            miniSelect.val(String(property.Mini));
+            miniSelect.change(function () {
                 self.log.Debug('change: ' + $(this).val());
                 self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                    id: data.Id,
+                    id: property.Id,
                     mini: $(this).val()
                 });
             });
@@ -126,13 +127,14 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
                 name: 'Theme:'
             });
 
-            $("#templateOptionItem").tmpl(this.themes).appendTo(themeProperty.find('select'));
+            var themeSelect = themeProperty.find('select');
+            $("#templateOptionItem").tmpl(this.themes).appendTo(themeSelect);
 
-            themeProperty.find('select').val('c');
-            themeProperty.find('select').change(function () {
+            themeSelect.val(property.Theme);
+            themeSelect.change(function () {
                 self.log.Debug('change: ' + $(this).val());
                 self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                    id: data.Id,
+                    id: property.Id,
                     theme: $(this).val()
                 });
             });
@@ -145,8 +147,8 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
             dialogContent.append(themeProperty);
 
             dialog.appendTo('body');
-            dialog.attr('id', 'propertyDialogFor' + data.Id);
-            $('#propertyDialogFor' + data.Id).dialog();
+            dialog.attr('id', 'propertyDialogFor' + property.Id);
+            $('#propertyDialogFor' + property.Id).dialog();
         };
         return PropertiesView;
     })();
