@@ -4,8 +4,13 @@ define(["require", "exports"], function(require, exports) {
             this.logLevel = 1;
             this.tag = tag;
         }
-        Log.prototype.Debug = function (message) {
-            this.Log(message, 'log');
+        Log.prototype.Debug = function (message, obj) {
+            if (typeof obj === "undefined") { obj = null; }
+            if (obj) {
+                this.DebugObj(obj, message);
+            } else {
+                this.Log(message, 'log');
+            }
         };
 
         Log.prototype.DebugObj = function (obj, tag) {

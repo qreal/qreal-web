@@ -12,6 +12,7 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/e
             this.log = new Log("DeviceController");
             this.log.Debug("constructor");
             App.DeviceController = this;
+            parent.window['test'] = this;
             this.eventManager = new EventManager((parent).$('body'));
             this.controlManager = new ControlManager();
         }
@@ -28,9 +29,8 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/e
         };
 
         DeviceController.prototype.OnDrop = function (event) {
-            this.log.Debug("OnDrop");
+            this.log.Debug("OnDrop, event: ", event);
             event.preventDefault();
-            this.log.DebugObj(event);
             var controlId = event.originalEvent.dataTransfer.getData("ControlId");
             this.controlManager.CreateControl(controlId);
         };
@@ -47,6 +47,10 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/e
             enumerable: true,
             configurable: true
         });
+
+        DeviceController.prototype.Test = function () {
+            alert('Device Test!!!!');
+        };
         return DeviceController;
     })();
 

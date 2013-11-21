@@ -17,6 +17,7 @@ class DeviceController {
     constructor() {
         this.log.Debug("constructor");
         App.DeviceController = this;
+        parent.window['test'] = this;
         this.eventManager = new EventManager((<any>parent).$('body'));
         this.controlManager = new ControlManager();
     }
@@ -25,13 +26,12 @@ class DeviceController {
         this.log.Debug("Init");
         this.controlManager.Init();
         $('#mainPage').on('drop', event => this.OnDrop(event));
-        $('#mainPage').on('dragover', event => this.OnDragOver(event));      
+        $('#mainPage').on('dragover', event => this.OnDragOver(event));                 
     }
 
     public OnDrop(event) {
-        this.log.Debug("OnDrop");
+        this.log.Debug("OnDrop, event: ", event);
         event.preventDefault();
-        this.log.DebugObj(event);
         var controlId = event.originalEvent.dataTransfer.getData("ControlId");
         this.controlManager.CreateControl(controlId);
     }
@@ -43,6 +43,10 @@ class DeviceController {
 
     public get EventManager(): EventManager {
         return this.eventManager;
+    }
+
+    public Test(): void{
+        alert('Device Test!!!!');
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿import Log = require("src/util/log/Log");
+import App = require("src/Application");
 import Controller = require("src/designer/Controller");
 import EventManager = require("src/util/events/EventManager");
 
@@ -64,10 +65,7 @@ class ToolsView {
         }
     ];
 
-    private controller: Controller;
-
-    constructor(controller: Controller) {
-        this.controller = controller;
+    constructor() {
     }
 
     public Init() {
@@ -80,8 +78,14 @@ class ToolsView {
         toolItems.on('drag', event => this.OnDrag(event));
         toolItems.on('dragend', () => this.OnDragend());
 
+        var self = this;
         $('#addPage').click(function (e) {
-            alert('Add Page!!!');
+            //TODO: create normal dialog
+            var pageName = prompt('New page', 'MyPage');
+            if (pageName) {
+                self.log.Debug("PageName: " + pageName);
+                window['test'].Test();
+            }
         });
     }
 

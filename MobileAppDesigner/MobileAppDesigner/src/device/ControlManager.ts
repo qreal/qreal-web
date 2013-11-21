@@ -21,6 +21,7 @@ class ControlManager {
     public Init(): void {
         this.log.Debug("Init");
         App.DeviceController.EventManager.AddSubscriber(EventManager.EventPropertiesChanged, new PropertyChangeListener(this));
+        App.DeviceController.EventManager.AddSubscriber(EventManager.EventAddPage, new AddPageListener(this));
     }
 
     public CreateControl(controlId: string): void {
@@ -87,7 +88,7 @@ class PropertyChangeListener implements IEventListener {
     }
 
     public OnEvent(data): void {
-        this.log.Debug("EventPropertiesChanged");
+        this.log.Debug("OnEvent, data: ", data);
         this.log.DebugObj(data);
         if (data.newId) {
             if (this.controlManager.ContainsId(data.newId)) {
@@ -97,8 +98,6 @@ class PropertyChangeListener implements IEventListener {
                 $('#' + data.id).attr('id', data.newId);
                 this.controlManager.ChangeId(data.id, data.newId);
             }
-
-
         }
         if (data.text) {
             $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);
@@ -118,6 +117,24 @@ class PropertyChangeListener implements IEventListener {
         if (data.theme) {
             $('#' + data.id).buttonMarkup({ theme: data.theme });
         }
+    }
+}
+
+class AddPageListener implements IEventListener {
+
+    private log = new Log("AddPageListener");
+
+    private controlManager: ControlManager = null;
+
+    constructor(controlManager: ControlManager) {
+        this.controlManager = controlManager;
+    }
+
+    public OnEvent(data): void {
+        this.log.Debug("OnEvent, data: ", data);
+        var newPage = $('<div data-role="page"></div>');
+        newPage.attr('id', data.id);
+        $('body').append(newPage);
     }
 }
 

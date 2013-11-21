@@ -1,4 +1,5 @@
 import Log = require("src/util/log/Log");
+import App = require("src/Application");
 import Controller = require("src/designer/Controller");
 import EventManager = require("src/util/events/EventManager");
 import Property = require("src/properties/Property");
@@ -7,8 +8,6 @@ import ButtonProperty = require("src/properties/ButtonProperty");
 class PropertiesView {
 
     private log = new Log("PropertiesView");
-
-    private controller: Controller;
 
     private trueFalseOptions = [
         { Text: "No", Value: false },
@@ -22,18 +21,17 @@ class PropertiesView {
         { Text: "Theme E", Value: "e" },
     ];
 
-    constructor(controller: Controller) {
-        this.controller = controller;
+    constructor() {
+        this.log.Debug("constructor");
     }
 
     public Init(): void {
         this.log.Debug("Init");
 
         var self = this;
-        this.controller.EventManager.AddSubscriber(EventManager.EventShowProperties, {
+        App.DesignerController.EventManager.AddSubscriber(EventManager.EventShowProperties, {
             OnEvent: (data) => {
-                self.log.Debug("OnEvent");
-                self.log.DebugObj(data);
+                self.log.Debug("OnEvent: ", data);
                 self.ShowProperty(data);
             }
         });
@@ -65,22 +63,22 @@ class PropertiesView {
             });
         idProperty.find('input').change(function () {
             self.log.Debug('change: ' + $(this).val());
-            self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+            App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                 id: property.Id,
                 newId: $(this).val()
             });
         });
-       
-        
+
+
         var textProperty = $('#propertyTextTmpl').tmpl(
             {
                 name: 'Text:',
                 value: property.Text
             });
 
-        textProperty.find('input').change(function() {
+        textProperty.find('input').change(function () {
             self.log.Debug('change: ' + $(this).val());
-            self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+            App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                 id: property.Id,
                 text: $(this).val()
             });
@@ -97,7 +95,7 @@ class PropertiesView {
         inlineSelect.val(String(property.Inline));
         inlineSelect.change(function () {
             self.log.Debug('change: ' + $(this).val());
-            self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+            App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                 id: property.Id,
                 inline: $(this).val()
             });
@@ -112,7 +110,7 @@ class PropertiesView {
         cornersSelect.val(String(property.Corners));
         cornersSelect.change(function () {
             self.log.Debug('change: ' + $(this).val());
-            self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+            App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                 id: property.Id,
                 corners: $(this).val()
             });
@@ -128,7 +126,7 @@ class PropertiesView {
         miniSelect.val(String(property.Mini));
         miniSelect.change(function () {
             self.log.Debug('change: ' + $(this).val());
-            self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+            App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                 id: property.Id,
                 mini: $(this).val()
             });
@@ -139,14 +137,14 @@ class PropertiesView {
             {
                 name: 'Theme:'
             });
-        
+
         var themeSelect = themeProperty.find('select');
         $("#templateOptionItem").tmpl(this.themes).appendTo(themeSelect);
 
         themeSelect.val(property.Theme);
         themeSelect.change(function () {
             self.log.Debug('change: ' + $(this).val());
-            self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+            App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                 id: property.Id,
                 theme: $(this).val()
             });

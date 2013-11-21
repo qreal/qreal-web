@@ -1,12 +1,13 @@
-define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "src/util/events/EventManager"], function(require, exports, __Log__, __Controller__, __EventManager__) {
+define(["require", "exports", "src/util/log/Log", "src/Application", "src/designer/Controller", "src/util/events/EventManager", "src/properties/Property", "src/properties/ButtonProperty"], function(require, exports, __Log__, __App__, __Controller__, __EventManager__, __Property__, __ButtonProperty__) {
     var Log = __Log__;
+    var App = __App__;
     var Controller = __Controller__;
     var EventManager = __EventManager__;
-    
-    
+    var Property = __Property__;
+    var ButtonProperty = __ButtonProperty__;
 
     var PropertiesView = (function () {
-        function PropertiesView(controller) {
+        function PropertiesView() {
             this.log = new Log("PropertiesView");
             this.trueFalseOptions = [
                 { Text: "No", Value: false },
@@ -19,16 +20,15 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
                 { Text: "Theme D", Value: "d" },
                 { Text: "Theme E", Value: "e" }
             ];
-            this.controller = controller;
+            this.log.Debug("constructor");
         }
         PropertiesView.prototype.Init = function () {
             this.log.Debug("Init");
 
             var self = this;
-            this.controller.EventManager.AddSubscriber(EventManager.EventShowProperties, {
+            App.DesignerController.EventManager.AddSubscriber(EventManager.EventShowProperties, {
                 OnEvent: function (data) {
-                    self.log.Debug("OnEvent");
-                    self.log.DebugObj(data);
+                    self.log.Debug("OnEvent: ", data);
                     self.ShowProperty(data);
                 }
             });
@@ -59,7 +59,7 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
             });
             idProperty.find('input').change(function () {
                 self.log.Debug('change: ' + $(this).val());
-                self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+                App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: property.Id,
                     newId: $(this).val()
                 });
@@ -72,7 +72,7 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
 
             textProperty.find('input').change(function () {
                 self.log.Debug('change: ' + $(this).val());
-                self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+                App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: property.Id,
                     text: $(this).val()
                 });
@@ -88,7 +88,7 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
             inlineSelect.val(String(property.Inline));
             inlineSelect.change(function () {
                 self.log.Debug('change: ' + $(this).val());
-                self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+                App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: property.Id,
                     inline: $(this).val()
                 });
@@ -102,7 +102,7 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
             cornersSelect.val(String(property.Corners));
             cornersSelect.change(function () {
                 self.log.Debug('change: ' + $(this).val());
-                self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+                App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: property.Id,
                     corners: $(this).val()
                 });
@@ -117,7 +117,7 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
             miniSelect.val(String(property.Mini));
             miniSelect.change(function () {
                 self.log.Debug('change: ' + $(this).val());
-                self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+                App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: property.Id,
                     mini: $(this).val()
                 });
@@ -133,7 +133,7 @@ define(["require", "exports", "src/util/log/Log", "src/designer/Controller", "sr
             themeSelect.val(property.Theme);
             themeSelect.change(function () {
                 self.log.Debug('change: ' + $(this).val());
-                self.controller.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+                App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: property.Id,
                     theme: $(this).val()
                 });

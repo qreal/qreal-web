@@ -1,6 +1,6 @@
-define(["require", "exports", "src/designer/Controller"], function(require, exports, __DesignerController__) {
+define(["require", "exports"], function(require, exports) {
     
-    var DesignerController = __DesignerController__;
+    
 
     var Application = (function () {
         function Application() {

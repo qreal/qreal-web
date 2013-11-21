@@ -1,10 +1,11 @@
-﻿define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"], function(require, exports, __Log__, __EventManager__) {
+﻿define(["require", "exports", "src/util/log/Log", "src/Application", "src/designer/Controller", "src/util/events/EventManager"], function(require, exports, __Log__, __App__, __Controller__, __EventManager__) {
     var Log = __Log__;
-    
+    var App = __App__;
+    var Controller = __Controller__;
     var EventManager = __EventManager__;
 
     var ToolsView = (function () {
-        function ToolsView(controller) {
+        function ToolsView() {
             this.log = new Log("ToolsView");
             this.controls = [
                 {
@@ -63,7 +64,6 @@
                     tool: 'controlgroup'
                 }
             ];
-            this.controller = controller;
         }
         ToolsView.prototype.Init = function () {
             var _this = this;
@@ -82,8 +82,14 @@
                 return _this.OnDragend();
             });
 
+            var self = this;
             $('#addPage').click(function (e) {
-                alert('Add Page!!!');
+                //TODO: create normal dialog
+                var pageName = prompt('New page', 'MyPage');
+                if (pageName) {
+                    self.log.Debug("PageName: " + pageName);
+                    window['test'].Test();
+                }
             });
         };
 

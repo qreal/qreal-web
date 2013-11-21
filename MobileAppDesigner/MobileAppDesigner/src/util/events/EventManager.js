@@ -9,11 +9,10 @@ define(["require", "exports", "src/util/log/Log"], function(require, exports, __
             this.subscribers = [];
             this.log.Debug("constructor");
             this.element = element;
-            this.element.on(EventManager.EventShowProperties, function (e, data) {
-                return _this.OnEvent(e, data);
-            });
-            this.element.on(EventManager.EventPropertiesChanged, function (e, data) {
-                return _this.OnEvent(e, data);
+            EventManager.events.map(function (eventType) {
+                _this.element.on(eventType, function (e, data) {
+                    return _this.OnEvent(e, data);
+                });
             });
         }
         EventManager.prototype.Trigger = function (eventName, data) {
@@ -39,7 +38,8 @@ define(["require", "exports", "src/util/log/Log"], function(require, exports, __
         };
         EventManager.EventShowProperties = 'show_property';
         EventManager.EventPropertiesChanged = 'property_changed';
-        EventManager.events = [EventManager.EventShowProperties];
+        EventManager.EventAddPage = 'add_page';
+        EventManager.events = [EventManager.EventShowProperties, EventManager.EventPropertiesChanged, EventManager.EventAddPage];
         return EventManager;
     })();
 

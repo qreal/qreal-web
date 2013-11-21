@@ -19,88 +19,85 @@
 
     <script type="text/javascript" src="src/init.js"></script>
 </head>
-    <body>
-     
-
-<p>Some text <code>A<br />B<br />C<br />D</code> continues afterward.</p>
-        <div id="workspace">
-            <div id="tools-widget-wrap">
-                <div id="tools-widget">
-                    <ul>
-                        <li><a href="#controls">Controls</a></li>
-                        <li><a href="#pages">Pages</a></li>
-                    </ul>
-                    <div id="controls"></div>
-                    <div id="pages">
-                        <div class="page-toolbar">
-                            <button id="addPage">Add page</button>
-                        </div>
-                        <ul class="pages-list">
-                            <li class="ui-widget-content"><span class="ui-icon ui-icon-document"></span>Page 1</li>
-                            <li class="ui-widget-content"><span class="ui-icon ui-icon-document"></span>Page 2</li>
-                        </ul>
+<body>
+    <div id="workspace">
+        <div id="tools-widget-wrap">
+            <div id="tools-widget">
+                <ul>
+                    <li><a href="#controls">Controls</a></li>
+                    <li><a href="#pages">Pages</a></li>
+                </ul>
+                <div id="controls"></div>
+                <div id="pages">
+                    <div class="page-toolbar">
+                        <button id="addPage">Add page</button>
                     </div>
+                    <ul class="pages-list">
+                        <li class="ui-widget-content"><span class="ui-icon ui-icon-document"></span>Page 1</li>
+                        <li class="ui-widget-content"><span class="ui-icon ui-icon-document"></span>Page 2</li>
+                    </ul>
                 </div>
             </div>
-            <div id="device-wrapper">
-                <div class="device-mockup" data-device="s3" data-orientation="portrait" data-color="white">
-                    <div class="device">
-                        <div class="screen" style="background: #fff">
-                            <iframe id="app-content-frame" src="device.html"></iframe>
-                        </div>
-                        <div class="button">
-                            <!-- You can hook the "home button" to some JavaScript events or just remove it -->
-                        </div>
+        </div>
+        <div id="device-wrapper">
+            <div class="device-mockup" data-device="s3" data-orientation="portrait" data-color="white">
+                <div class="device">
+                    <div class="screen" style="background: #fff">
+                        <iframe id="app-content-frame" src="device.html"></iframe>
+                    </div>
+                    <div class="button">
+                        <!-- You can hook the "home button" to some JavaScript events or just remove it -->
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Templates -->
+    <!-- Templates -->
 
-        <script id="toolTmpl" type="text/x-jquery-tmpl">
-            <div class="tool-item" id="${id}" draggable="true">
-                <div class="tool-icon tool-${tool}"></div>
-                <label class="tool-title">${title}</label>
+    <script id="toolTmpl" type="text/x-jquery-tmpl">
+        <div class="tool-item" id="${id}" draggable="true">
+            <div class="tool-icon tool-${tool}"></div>
+            <label class="tool-title">${title}</label>
+        </div>
+    </script>
+
+    <script id="propertyDialogTmpl" type="text/x-jquery-tmpl">
+        <div class="propertyDialog" title="${title}">
+            <div class="property table"></div>
+        </div>
+    </script>
+
+    <script id="propertyTextTmpl" type="text/x-jquery-tmpl">
+        <div class="row">
+            <div class="name cell">${name}</div>
+            <div class="val cell">
+                <input type="text" value="${value}" />
             </div>
-        </script>
+        </div>
+    </script>
 
-        <script id="propertyDialogTmpl" type="text/x-jquery-tmpl">
-            <div class="propertyDialog" title="${title}">
-                <div class="property table"></div>
+    <script id="propertyNumberTmpl" type="text/x-jquery-tmpl">
+        <div class="row">
+            <div class="name cell">${name}</div>
+            <div class="val cell">
+                <input value="${value}" type="number" />
             </div>
-        </script>
+        </div>
+    </script>
 
-        <script id="propertyTextTmpl" type="text/x-jquery-tmpl">
-            <div class="row">
-                <div class="name cell">${name}</div>
-                <div class="val cell">
-                    <input type="text" value="${value}" />
-                </div>
+    <script id="propertySelectTmpl" type="text/x-jquery-tmpl">
+        <div class="row">
+            <div class="name cell">${name}</div>
+            <div class="val cell">
+                <select>
+                </select>
             </div>
-        </script>
+        </div>
+    </script>
 
-        <script id="propertyNumberTmpl" type="text/x-jquery-tmpl">
-            <div class="row">
-                <div class="name cell">${name}</div>
-                <div class="val cell">
-                    <input value="${value}" type="number" />
-                </div>
-            </div>
-        </script>
-
-        <script id="propertySelectTmpl" type="text/x-jquery-tmpl">
-            <div class="row">
-                <div class="name cell">${name}</div>
-                <div class="val cell">
-                    <select>
-                    </select>
-                </div>
-            </div>
-        </script>
-
-        <script id="templateOptionItem" type="text/html">
-            <option value='{{= Value}}'>{{= Text}}</option>
-        </script>
-    </body>
+    <script id="templateOptionItem" type="text/html">
+        <option value='{{= Value}}'>{{= Text}}</option>
+    </script>
+</body>
 </html>

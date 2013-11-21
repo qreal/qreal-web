@@ -7,12 +7,14 @@ class Log {
         this.tag = tag;
     }
 
-    public Debug(message: string): void {
-        this.Log(message, 'log');
+    public Debug(message: string, obj: any = null): void {
+        if (obj) {
+            this.DebugObj(obj, message);
+        } else {
+            this.Log(message, 'log');
+        }
     }
 
-    public DebugObj(obj): void;
-    public DebugObj(obj, tag?: string): void
     public DebugObj(obj, tag = "Object: "): void {
         if (this.logLevel < 1) {
             return;

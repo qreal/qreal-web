@@ -1,4 +1,5 @@
 import Log = require("src/util/log/Log");
+import App = require("src/Application");
 import EventManager = require("src/util/events/EventManager");
 import ToolsView = require("src/designer/ToolsView");
 import PropertiesView = require("src/designer/PropertiesView");
@@ -19,8 +20,9 @@ class Controller {
 
     constructor() {
         this.log.Debug("constructor");
-        this.toolsView = new ToolsView(this);
-        this.propertiesView = new PropertiesView(this);
+        App.DesignerController = this;
+        this.toolsView = new ToolsView();
+        this.propertiesView = new PropertiesView();
         this.eventManager = new EventManager($('body'));
     }
 
@@ -32,6 +34,10 @@ class Controller {
 
     get EventManager(): EventManager {
         return this.eventManager;
+    }
+
+    public Test(): void {
+        alert('Designer Test!!!!');
     }
 }
 

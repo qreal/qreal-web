@@ -8,7 +8,8 @@ class EventManager {
     // Events types    
     public static EventShowProperties = 'show_property';
     public static EventPropertiesChanged = 'property_changed';
-    private static events = [EventManager.EventShowProperties];
+    public static EventAddPage = 'add_page';
+    private static events = [EventManager.EventShowProperties, EventManager.EventPropertiesChanged, EventManager.EventAddPage];
 
     private element: JQuery;
     private subscribers: Array<IEventListener>[] = [];
@@ -16,8 +17,9 @@ class EventManager {
     constructor(element: JQuery) {
         this.log.Debug("constructor");
         this.element = element;
-        this.element.on(EventManager.EventShowProperties, (e, data) => this.OnEvent(e, data));
-        this.element.on(EventManager.EventPropertiesChanged, (e, data) => this.OnEvent(e, data));
+        EventManager.events.map((eventType) => {
+            this.element.on(eventType, (e, data) => this.OnEvent(e, data));
+        });
     }
 
     public Trigger(eventName: string, data: any): void {

@@ -1,7 +1,7 @@
-define(["require", "exports", "src/Application", "src/util/log/Log", "src/device/DeviceController", "src/util/events/EventManager", "src/properties/Property", "src/properties/ButtonProperty"], function(require, exports, __App__, __Log__, __DeviceController__, __EventManager__, __Property__, __ButtonProperty__) {
+define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/events/EventManager", "src/properties/Property", "src/properties/ButtonProperty"], function(require, exports, __App__, __Log__, __EventManager__, __Property__, __ButtonProperty__) {
     var App = __App__;
     var Log = __Log__;
-    var DeviceController = __DeviceController__;
+    
     var EventManager = __EventManager__;
     
     var Property = __Property__;
@@ -18,6 +18,7 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/device
         ControlManager.prototype.Init = function () {
             this.log.Debug("Init");
             App.DeviceController.EventManager.AddSubscriber(EventManager.EventPropertiesChanged, new PropertyChangeListener(this));
+            App.DeviceController.EventManager.AddSubscriber(EventManager.EventAddPage, new AddPageListener(this));
         };
 
         ControlManager.prototype.CreateControl = function (controlId) {
@@ -81,7 +82,7 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/device
             this.controlManager = controlManager;
         }
         PropertyChangeListener.prototype.OnEvent = function (data) {
-            this.log.Debug("EventPropertiesChanged");
+            this.log.Debug("OnEvent, data: ", data);
             this.log.DebugObj(data);
             if (data.newId) {
                 if (this.controlManager.ContainsId(data.newId)) {
@@ -112,6 +113,21 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/device
             }
         };
         return PropertyChangeListener;
+    })();
+
+    var AddPageListener = (function () {
+        function AddPageListener(controlManager) {
+            this.log = new Log("AddPageListener");
+            this.controlManager = null;
+            this.controlManager = controlManager;
+        }
+        AddPageListener.prototype.OnEvent = function (data) {
+            this.log.Debug("OnEvent, data: ", data);
+            var newPage = $('<div data-role="page"></div>');
+            newPage.attr('id', data.id);
+            $('body').append(newPage);
+        };
+        return AddPageListener;
     })();
 
     
