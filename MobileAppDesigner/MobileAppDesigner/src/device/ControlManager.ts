@@ -39,8 +39,6 @@ class ControlManager {
 
         bt.on('click', event => {
             this.log.Debug('bt click');
-            this.log.DebugObj($(event.target));
-            this.log.DebugObj($(event.target).data('prop'));
             App.Instance.Device.EventManager.Trigger(EventManager.EventShowProperties, $(event.target).data('prop'));
         });
 
