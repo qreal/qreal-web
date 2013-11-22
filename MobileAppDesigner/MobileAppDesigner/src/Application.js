@@ -1,36 +1,57 @@
-define(["require", "exports"], function(require, exports) {
+define(["require", "exports", "src/util/log/Log"], function(require, exports, __Log__) {
+    var Log = __Log__;
     
     
 
     var Application = (function () {
         function Application() {
+            this.device = null;
+            this.designer = null;
         }
-        Object.defineProperty(Application, "DeviceController", {
+        Object.defineProperty(Application, "Instance", {
             get: function () {
-                return this.deviceController;
+                Application.log.Debug('Get Instance');
+                if (!Application.instance) {
+                    Application.log.Debug('Instance is null. Create new');
+                    Application.instance = new Application();
+                }
+                return Application.instance;
             },
             set: function (value) {
-                this.deviceController = value;
+                Application.log.Debug('Set Instance');
+                Application.instance = value;
             },
             enumerable: true,
             configurable: true
         });
 
 
-        Object.defineProperty(Application, "DesignerController", {
+        Object.defineProperty(Application.prototype, "Device", {
             get: function () {
-                return this.designerController;
+                return this.device;
             },
             set: function (value) {
-                this.designerController = value;
+                this.device = value;
             },
             enumerable: true,
             configurable: true
         });
 
-        Application.deviceController = null;
 
-        Application.designerController = null;
+        Object.defineProperty(Application.prototype, "Designer", {
+            get: function () {
+                return this.designer;
+            },
+            set: function (value) {
+                this.designer = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Application.log = new Log('Application');
+
+        Application.instance = null;
         return Application;
     })();
     

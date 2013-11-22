@@ -1,4 +1,4 @@
-define(["require", "exports", "src/util/log/Log", "src/Application", "src/designer/Controller", "src/util/events/EventManager", "src/properties/Property", "src/properties/ButtonProperty"], function(require, exports, __Log__, __App__, __Controller__, __EventManager__, __Property__, __ButtonProperty__) {
+define(["require", "exports", "src/util/log/Log", "src/Application", "src/designer/Designer", "src/util/events/EventManager", "src/properties/Property", "src/properties/ButtonProperty"], function(require, exports, __Log__, __App__, __Controller__, __EventManager__, __Property__, __ButtonProperty__) {
     var Log = __Log__;
     var App = __App__;
     var Controller = __Controller__;
@@ -26,7 +26,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/design
             this.log.Debug("Init");
 
             var self = this;
-            App.DesignerController.EventManager.AddSubscriber(EventManager.EventShowProperties, {
+            App.Instance.Designer.EventManager.AddSubscriber(EventManager.EventShowProperties, {
                 OnEvent: function (data) {
                     self.log.Debug("OnEvent: ", data);
                     self.ShowProperty(data);
@@ -59,7 +59,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/design
             });
             idProperty.find('input').change(function () {
                 self.log.Debug('change: ' + $(this).val());
-                App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+                App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: property.Id,
                     newId: $(this).val()
                 });
@@ -72,7 +72,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/design
 
             textProperty.find('input').change(function () {
                 self.log.Debug('change: ' + $(this).val());
-                App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+                App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: property.Id,
                     text: $(this).val()
                 });
@@ -88,7 +88,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/design
             inlineSelect.val(String(property.Inline));
             inlineSelect.change(function () {
                 self.log.Debug('change: ' + $(this).val());
-                App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+                App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: property.Id,
                     inline: $(this).val()
                 });
@@ -102,7 +102,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/design
             cornersSelect.val(String(property.Corners));
             cornersSelect.change(function () {
                 self.log.Debug('change: ' + $(this).val());
-                App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+                App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: property.Id,
                     corners: $(this).val()
                 });
@@ -117,7 +117,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/design
             miniSelect.val(String(property.Mini));
             miniSelect.change(function () {
                 self.log.Debug('change: ' + $(this).val());
-                App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+                App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: property.Id,
                     mini: $(this).val()
                 });
@@ -133,7 +133,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/design
             themeSelect.val(property.Theme);
             themeSelect.change(function () {
                 self.log.Debug('change: ' + $(this).val());
-                App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+                App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                     id: property.Id,
                     theme: $(this).val()
                 });

@@ -1,6 +1,6 @@
 import App = require("src/Application");
 import Log = require("src/util/log/Log");
-import DeviceController = require("src/device/DeviceController");
+import Device = require("src/device/Device");
 import EventManager = require("src/util/events/EventManager");
 import IEventListener = require("src/util/events/IEventListener");
 import Property = require("src/properties/Property");
@@ -20,8 +20,7 @@ class ControlManager {
 
     public Init(): void {
         this.log.Debug("Init");
-        App.DeviceController.EventManager.AddSubscriber(EventManager.EventPropertiesChanged, new PropertyChangeListener(this));
-        App.DeviceController.EventManager.AddSubscriber(EventManager.EventAddPage, new AddPageListener(this));
+        App.Instance.Device.EventManager.AddSubscriber(EventManager.EventPropertiesChanged, new PropertyChangeListener(this));
     }
 
     public CreateControl(controlId: string): void {
@@ -42,7 +41,7 @@ class ControlManager {
             this.log.Debug('bt click');
             this.log.DebugObj($(event.target));
             this.log.DebugObj($(event.target).data('prop'));
-            App.DeviceController.EventManager.Trigger(EventManager.EventShowProperties, $(event.target).data('prop'));
+            App.Instance.Device.EventManager.Trigger(EventManager.EventShowProperties, $(event.target).data('prop'));
         });
 
         var bt = bt.button();
@@ -52,7 +51,7 @@ class ControlManager {
     private GetNewId(): string {
         var id = 'id' + this.idIndex++;
         if (this.ContainsId(id)) {
-            this.log.Warn('id: ' + id+' already exists');
+            this.log.Warn('id: ' + id + ' already exists');
             id = 'id' + this.idIndex++;
         }
         this.idList.push(id);
@@ -71,9 +70,33 @@ class ControlManager {
         this.propertiesMap[newId] = this.propertiesMap[id];
         this.propertiesMap[newId].Id = newId;
         delete this.propertiesMap[id];
-        this.log.DebugObj(this.idList);
-        this.log.DebugObj(this.propertiesMap);
-        
+    }
+
+    public CreatePage(pageId: string): void {
+        this.log.Debug("CreatePage: " + pageId);
+        var newPage = $('<div data-role="page"></div>');
+        newPage.attr('id', pageId);
+        newPage.on('drop', event => this.OnDrop(event));
+        newPage.on('dragover', event => this.OnDragOver(event));   
+        $('body').append(newPage);                 
+    }
+
+    public SelectPage(pageId: string): void {
+        this.log.Debug("SelectPage: " + pageId);
+        $.mobile.changePage('#' + pageId);
+    }
+
+
+    public OnDrop(event) {
+        this.log.Debug("OnDrop, event: ", event);
+        event.preventDefault();
+        var controlId = event.originalEvent.dataTransfer.getData("ControlId");
+        this.CreateControl(controlId);
+    }
+
+    public OnDragOver(e) {
+        //this.log.Debug("OnDragOver");
+        e.preventDefault();
     }
 }
 
@@ -117,24 +140,6 @@ class PropertyChangeListener implements IEventListener {
         if (data.theme) {
             $('#' + data.id).buttonMarkup({ theme: data.theme });
         }
-    }
-}
-
-class AddPageListener implements IEventListener {
-
-    private log = new Log("AddPageListener");
-
-    private controlManager: ControlManager = null;
-
-    constructor(controlManager: ControlManager) {
-        this.controlManager = controlManager;
-    }
-
-    public OnEvent(data): void {
-        this.log.Debug("OnEvent, data: ", data);
-        var newPage = $('<div data-role="page"></div>');
-        newPage.attr('id', data.id);
-        $('body').append(newPage);
     }
 }
 

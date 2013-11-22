@@ -1,4 +1,4 @@
-﻿define(["require", "exports", "src/util/log/Log", "src/Application", "src/designer/Controller", "src/util/events/EventManager"], function(require, exports, __Log__, __App__, __Controller__, __EventManager__) {
+﻿define(["require", "exports", "src/util/log/Log", "src/Application", "src/designer/Designer", "src/util/events/EventManager"], function(require, exports, __Log__, __App__, __Controller__, __EventManager__) {
     var Log = __Log__;
     var App = __App__;
     var Controller = __Controller__;
@@ -83,12 +83,18 @@
             });
 
             var self = this;
+            $('#pages .pages-list').on("selectableselected", function (event, ui) {
+                self.log.Debug('selectableselected, event: ', { event: event, ui: ui });
+                App.Instance.Device.ControlManager.SelectPage($(ui.selected).text());
+            });
+
             $('#addPage').click(function (e) {
                 //TODO: create normal dialog
                 var pageName = prompt('New page', 'MyPage');
                 if (pageName) {
                     self.log.Debug("PageName: " + pageName);
-                    window['test'].Test();
+                    App.Instance.Device.ControlManager.CreatePage(pageName);
+                    $('#templatePageItem').tmpl({ name: pageName }).appendTo('#pages .pages-list');
                 }
             });
         };

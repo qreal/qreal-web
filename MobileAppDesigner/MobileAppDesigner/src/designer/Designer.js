@@ -1,6 +1,6 @@
-define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, __Log__, __EventManager__, __ToolsView__, __PropertiesView__) {
+define(["require", "exports", "src/util/log/Log", "src/Application", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, __Log__, __App__, __EventManager__, __ToolsView__, __PropertiesView__) {
     var Log = __Log__;
-    
+    var App = __App__;
     var EventManager = __EventManager__;
     var ToolsView = __ToolsView__;
     var PropertiesView = __PropertiesView__;
@@ -26,14 +26,10 @@ define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"
             enumerable: true,
             configurable: true
         });
-
-        Designer.prototype.Test = function () {
-            alert('Designer Test!!!!');
-        };
         return Designer;
     })();
 
     
     return Designer;
 });
-//# sourceMappingURL=Controller.js.map
+//# sourceMappingURL=Designer.js.map

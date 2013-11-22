@@ -1,8 +1,9 @@
 ///<reference path="../modules/jquery.d.ts" />
 ///<reference path="../modules/jquery.tmpl.d.ts" />
 
-import Controller = require("src/designer/Controller");
+import Designer = require("src/designer/Designer");
 import Log = require("src/util/log/Log");
+import App = require("src/Application");
 
 class Main {
 
@@ -10,7 +11,13 @@ class Main {
 
     public static Main(): void {
         Main.log.Debug("Main");
-        Controller.Instance.Init();     
+        if (!window['app']) {
+            window['app'] = App.Instance;
+        } else {
+            App.Instance = <App>window['app'];
+        }
+        App.Instance.Designer = new Designer();
+        App.Instance.Designer.Init();
     }
 }
 

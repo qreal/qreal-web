@@ -1,28 +1,46 @@
-import DeviceController = require("src/device/DeviceController");
-import DesignerController = require("src/designer/Controller");
+import Log = require("src/util/log/Log");
+import Device = require("src/device/Device");
+import Designer = require("src/designer/Designer");
 
-class Application{
+class Application {
 
-    private static deviceController: DeviceController = null;
+    private static log = new Log('Application');
 
-    public static get DeviceController(): DeviceController{
-        return this.deviceController;
+    private static instance: Application = null;
+
+    public static get Instance(): Application {
+        Application.log.Debug('Get Instance');
+        if (!Application.instance) {
+            Application.log.Debug('Instance is null. Create new');
+            Application.instance = new Application();
+        }
+        return Application.instance;
     }
 
-    public static set DeviceController(value: DeviceController) {
-        this.deviceController = value;
+    public static set Instance(value: Application) {
+        Application.log.Debug('Set Instance');
+        Application.instance = value;
     }
 
-    private static designerController: DesignerController = null;
+    private device: Device = null;
 
-    public static get DesignerController(): DesignerController {
-        return this.designerController;
+    public get Device(): Device {
+        return this.device;
     }
 
-    public static set DesignerController(value: DesignerController) {
-        this.designerController = value;
+    public set Device(value: Device) {
+        this.device = value;
     }
 
+    private designer: Designer = null;
+
+    public get Designer(): Designer {
+        return this.designer;
+    }
+
+    public set Designer(value: Designer) {
+        this.designer = value;
+    }
 
 }
 export = Application;

@@ -17,8 +17,7 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/e
         }
         ControlManager.prototype.Init = function () {
             this.log.Debug("Init");
-            App.DeviceController.EventManager.AddSubscriber(EventManager.EventPropertiesChanged, new PropertyChangeListener(this));
-            App.DeviceController.EventManager.AddSubscriber(EventManager.EventAddPage, new AddPageListener(this));
+            App.Instance.Device.EventManager.AddSubscriber(EventManager.EventPropertiesChanged, new PropertyChangeListener(this));
         };
 
         ControlManager.prototype.CreateControl = function (controlId) {
@@ -40,7 +39,7 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/e
                 _this.log.Debug('bt click');
                 _this.log.DebugObj($(event.target));
                 _this.log.DebugObj($(event.target).data('prop'));
-                App.DeviceController.EventManager.Trigger(EventManager.EventShowProperties, $(event.target).data('prop'));
+                App.Instance.Device.EventManager.Trigger(EventManager.EventShowProperties, $(event.target).data('prop'));
             });
 
             var bt = bt.button();
@@ -69,8 +68,37 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/e
             this.propertiesMap[newId] = this.propertiesMap[id];
             this.propertiesMap[newId].Id = newId;
             delete this.propertiesMap[id];
-            this.log.DebugObj(this.idList);
-            this.log.DebugObj(this.propertiesMap);
+        };
+
+        ControlManager.prototype.CreatePage = function (pageId) {
+            var _this = this;
+            this.log.Debug("CreatePage: " + pageId);
+            var newPage = $('<div data-role="page"></div>');
+            newPage.attr('id', pageId);
+            newPage.on('drop', function (event) {
+                return _this.OnDrop(event);
+            });
+            newPage.on('dragover', function (event) {
+                return _this.OnDragOver(event);
+            });
+            $('body').append(newPage);
+        };
+
+        ControlManager.prototype.SelectPage = function (pageId) {
+            this.log.Debug("SelectPage: " + pageId);
+            $.mobile.changePage('#' + pageId);
+        };
+
+        ControlManager.prototype.OnDrop = function (event) {
+            this.log.Debug("OnDrop, event: ", event);
+            event.preventDefault();
+            var controlId = event.originalEvent.dataTransfer.getData("ControlId");
+            this.CreateControl(controlId);
+        };
+
+        ControlManager.prototype.OnDragOver = function (e) {
+            //this.log.Debug("OnDragOver");
+            e.preventDefault();
         };
         return ControlManager;
     })();
@@ -113,21 +141,6 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/e
             }
         };
         return PropertyChangeListener;
-    })();
-
-    var AddPageListener = (function () {
-        function AddPageListener(controlManager) {
-            this.log = new Log("AddPageListener");
-            this.controlManager = null;
-            this.controlManager = controlManager;
-        }
-        AddPageListener.prototype.OnEvent = function (data) {
-            this.log.Debug("OnEvent, data: ", data);
-            var newPage = $('<div data-role="page"></div>');
-            newPage.attr('id', data.id);
-            $('body').append(newPage);
-        };
-        return AddPageListener;
     })();
 
     

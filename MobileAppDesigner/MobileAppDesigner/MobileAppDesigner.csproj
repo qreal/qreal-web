@@ -17,7 +17,7 @@
   </PropertyGroup>
   <ItemGroup>
     <TypeScriptCompile Include="src\designer\Main.ts" />
-    <TypeScriptCompile Include="src\designer\Controller.ts" />
+    <TypeScriptCompile Include="src\designer\Designer.ts" />
     <TypeScriptCompile Include="src\util\log\Log.ts" />
     <None Include="css\designer.less" />
     <Content Include="css\designer.css">
@@ -76,7 +76,7 @@
     <TypeScriptCompile Include="src\modules\jquery.tmpl.d.ts" />
     <TypeScriptCompile Include="RequireJSConfigDevice.ts" />
     <TypeScriptCompile Include="src\device\Main.ts" />
-    <TypeScriptCompile Include="src\device\DeviceController.ts" />
+    <TypeScriptCompile Include="src\device\Device.ts" />
     <TypeScriptCompile Include="src\util\events\EventManager.ts" />
     <TypeScriptCompile Include="src\designer\PropertiesView.ts" />
     <TypeScriptCompile Include="src\device\ControlManager.ts" />

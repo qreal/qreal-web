@@ -1,6 +1,6 @@
 import Log = require("src/util/log/Log");
 import App = require("src/Application");
-import Controller = require("src/designer/Controller");
+import Controller = require("src/designer/Designer");
 import EventManager = require("src/util/events/EventManager");
 import Property = require("src/properties/Property");
 import ButtonProperty = require("src/properties/ButtonProperty");
@@ -29,7 +29,7 @@ class PropertiesView {
         this.log.Debug("Init");
 
         var self = this;
-        App.DesignerController.EventManager.AddSubscriber(EventManager.EventShowProperties, {
+        App.Instance.Designer.EventManager.AddSubscriber(EventManager.EventShowProperties, {
             OnEvent: (data) => {
                 self.log.Debug("OnEvent: ", data);
                 self.ShowProperty(data);
@@ -63,7 +63,7 @@ class PropertiesView {
             });
         idProperty.find('input').change(function () {
             self.log.Debug('change: ' + $(this).val());
-            App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+            App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                 id: property.Id,
                 newId: $(this).val()
             });
@@ -78,7 +78,7 @@ class PropertiesView {
 
         textProperty.find('input').change(function () {
             self.log.Debug('change: ' + $(this).val());
-            App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+            App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                 id: property.Id,
                 text: $(this).val()
             });
@@ -95,7 +95,7 @@ class PropertiesView {
         inlineSelect.val(String(property.Inline));
         inlineSelect.change(function () {
             self.log.Debug('change: ' + $(this).val());
-            App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+            App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                 id: property.Id,
                 inline: $(this).val()
             });
@@ -110,7 +110,7 @@ class PropertiesView {
         cornersSelect.val(String(property.Corners));
         cornersSelect.change(function () {
             self.log.Debug('change: ' + $(this).val());
-            App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+            App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                 id: property.Id,
                 corners: $(this).val()
             });
@@ -126,7 +126,7 @@ class PropertiesView {
         miniSelect.val(String(property.Mini));
         miniSelect.change(function () {
             self.log.Debug('change: ' + $(this).val());
-            App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+            App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                 id: property.Id,
                 mini: $(this).val()
             });
@@ -144,7 +144,7 @@ class PropertiesView {
         themeSelect.val(property.Theme);
         themeSelect.change(function () {
             self.log.Debug('change: ' + $(this).val());
-            App.DesignerController.EventManager.Trigger(EventManager.EventPropertiesChanged, {
+            App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
                 id: property.Id,
                 theme: $(this).val()
             });

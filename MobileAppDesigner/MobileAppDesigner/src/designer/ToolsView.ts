@@ -1,6 +1,6 @@
 ﻿import Log = require("src/util/log/Log");
 import App = require("src/Application");
-import Controller = require("src/designer/Controller");
+import Controller = require("src/designer/Designer");
 import EventManager = require("src/util/events/EventManager");
 
 class ToolsView {
@@ -79,12 +79,19 @@ class ToolsView {
         toolItems.on('dragend', () => this.OnDragend());
 
         var self = this;
+        $('#pages .pages-list').on("selectableselected", function (event, ui) {
+            self.log.Debug('selectableselected, event: ', { event: event, ui: ui });
+            App.Instance.Device.ControlManager.SelectPage($(ui.selected).text())
+        });
+
+      
         $('#addPage').click(function (e) {
             //TODO: create normal dialog
             var pageName = prompt('New page', 'MyPage');
             if (pageName) {
                 self.log.Debug("PageName: " + pageName);
-                window['test'].Test();
+                App.Instance.Device.ControlManager.CreatePage(pageName);
+                $('#templatePageItem').tmpl({ name: pageName }).appendTo('#pages .pages-list');
             }
         });
     }

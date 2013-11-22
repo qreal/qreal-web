@@ -33,8 +33,7 @@
                         <button id="addPage">Add page</button>
                     </div>
                     <ul class="pages-list">
-                        <li class="ui-widget-content"><span class="ui-icon ui-icon-document"></span>Page 1</li>
-                        <li class="ui-widget-content"><span class="ui-icon ui-icon-document"></span>Page 2</li>
+                        
                     </ul>
                 </div>
             </div>
@@ -98,6 +97,10 @@
 
     <script id="templateOptionItem" type="text/html">
         <option value='{{= Value}}'>{{= Text}}</option>
+    </script>
+
+    <script id="templatePageItem" type="text/html">
+        <li class="ui-widget-content"><span class="ui-icon ui-icon-document"></span>${name}</li>
     </script>
 </body>
 </html>

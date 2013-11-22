@@ -11,8 +11,6 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/e
         function DeviceController() {
             this.log = new Log("DeviceController");
             this.log.Debug("constructor");
-            App.DeviceController = this;
-            parent.window['test'] = this;
             this.eventManager = new EventManager((parent).$('body'));
             this.controlManager = new ControlManager();
         }
@@ -47,10 +45,6 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/e
             enumerable: true,
             configurable: true
         });
-
-        DeviceController.prototype.Test = function () {
-            alert('Device Test!!!!');
-        };
         return DeviceController;
     })();
 
