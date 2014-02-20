@@ -26,6 +26,10 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/util/e
             enumerable: true,
             configurable: true
         });
+
+        Designer.prototype.AddPage = function (pageName) {
+            this.toolsView.AddNewPage(pageName);
+        };
         return Designer;
     })();
 

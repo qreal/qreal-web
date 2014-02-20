@@ -37,8 +37,6 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/e
 
             bt.on('click', function (event) {
                 _this.log.Debug('bt click');
-                _this.log.DebugObj($(event.target));
-                _this.log.DebugObj($(event.target).data('prop'));
                 App.Instance.Device.EventManager.Trigger(EventManager.EventShowProperties, $(event.target).data('prop'));
             });
 
@@ -73,6 +71,12 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/e
         ControlManager.prototype.CreatePage = function (pageId) {
             var _this = this;
             this.log.Debug("CreatePage: " + pageId);
+            if (this.ContainsId(pageId)) {
+                //TODO: show notification
+                alert('Id already exists');
+                return false;
+            }
+            this.idList.push(pageId);
             var newPage = $('<div data-role="page"></div>');
             newPage.attr('id', pageId);
             newPage.on('drop', function (event) {
@@ -82,6 +86,8 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/e
                 return _this.OnDragOver(event);
             });
             $('body').append(newPage);
+            this.SelectPage(pageId);
+            return true;
         };
 
         ControlManager.prototype.SelectPage = function (pageId) {

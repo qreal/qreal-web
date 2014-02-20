@@ -28,6 +28,10 @@ class Designer {
     get EventManager(): EventManager {
         return this.eventManager;
     }
+
+    public AddPage(pageName: string) {
+        this.toolsView.AddNewPage(pageName);
+    }
 }
 
 export = Designer;

@@ -22,7 +22,7 @@ class Device {
 
     public Init(): void {
         this.log.Debug("Init");
-        this.controlManager.Init();               
+        this.controlManager.Init();            
     }
 
 

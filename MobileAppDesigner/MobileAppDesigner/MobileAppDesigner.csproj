@@ -64,6 +64,13 @@
     <Content Include="css\jquery-ui.css" />
     <Content Include="css\jquery.mobile-1.3.2.css" />
     <Content Include="default.htm" />
+    <Content Include="lib\bootstrap-3.1.1\css\bootstrap-theme.css" />
+    <Content Include="lib\bootstrap-3.1.1\css\bootstrap-theme.min.css" />
+    <Content Include="lib\bootstrap-3.1.1\css\bootstrap.css" />
+    <Content Include="lib\bootstrap-3.1.1\css\bootstrap.min.css" />
+    <Content Include="lib\bootstrap-3.1.1\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="lib\bootstrap-3.1.1\js\bootstrap.js" />
+    <Content Include="lib\bootstrap-3.1.1\js\bootstrap.min.js" />
     <Content Include="lib\jquery-1.10.2.js" />
     <Content Include="lib\jquery-ui.js" />
     <Content Include="lib\jquery.mobile-1.3.2.js" />
@@ -117,6 +124,11 @@
     <Content Include="css\device-mockup\nexus7\Nexus7_land.psd" />
     <Content Include="css\device-mockup\nexus7\Nexus7_port.psd" />
     <Content Include="css\device-mockup\surface\surface.psd" />
+    <Content Include="lib\bootstrap-3.1.1\css\bootstrap-theme.css.map" />
+    <Content Include="lib\bootstrap-3.1.1\css\bootstrap.css.map" />
+    <Content Include="lib\bootstrap-3.1.1\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="lib\bootstrap-3.1.1\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="lib\bootstrap-3.1.1\fonts\glyphicons-halflings-regular.woff" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

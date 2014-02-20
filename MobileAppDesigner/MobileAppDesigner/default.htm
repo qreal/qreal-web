@@ -2,40 +2,37 @@
 
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="Cache-Control" content="no-store" />
-
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mobile Disigner 2.0</title>
+    <link href="lib/bootstrap-3.1.1/css/bootstrap.css" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="css/device-mockup/device-mockups2.css" />
     <link rel="stylesheet" type="text/css" href="css/designer.css">
-    <link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
 
     <script type="text/javascript" src="lib/jquery-1.10.2.js"></script>
-    <script type="text/javascript" src="lib/jquery-ui.js"></script>
     <script type="text/javascript" src="lib/jquery.tmpl.js"></script>
+    <script src="lib/bootstrap-3.1.1/js/bootstrap.js"></script>
 
     <script data-main="RequireJsConfigDesigner" src="lib/require.js" type="text/javascript"></script>
 
     <script type="text/javascript" src="src/init.js"></script>
 </head>
 <body>
-    <div id="workspace">
-        <div id="tools-widget-wrap">
-            <div id="tools-widget">
-                <ul>
-                    <li><a href="#controls">Controls</a></li>
-                    <li><a href="#pages">Pages</a></li>
-                </ul>
-                <div id="controls"></div>
-                <div id="pages">
-                    <div class="page-toolbar">
-                        <button id="addPage">Add page</button>
-                    </div>
-                    <ul class="pages-list">
-                        
-                    </ul>
+    <div id="workspace" class="container">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#controls">Controls</a></li>
+            <li><a href="#pages">Pages</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane active" id="controls"></div>
+            <div class="tab-pane" id="pages">
+                <div class="page-toolbar">
+                    <button id="addPage">Add page</button>
                 </div>
+                <ul class="pages-list"></ul>
             </div>
         </div>
         <div id="device-wrapper">
@@ -89,8 +86,7 @@
         <div class="row">
             <div class="name cell">${name}</div>
             <div class="val cell">
-                <select>
-                </select>
+                <select></select>
             </div>
         </div>
     </script>

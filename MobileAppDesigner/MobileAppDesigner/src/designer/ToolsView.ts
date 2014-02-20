@@ -89,11 +89,13 @@ class ToolsView {
             //TODO: create normal dialog
             var pageName = prompt('New page', 'MyPage');
             if (pageName) {
-                self.log.Debug("PageName: " + pageName);
-                App.Instance.Device.ControlManager.CreatePage(pageName);
-                $('#templatePageItem').tmpl({ name: pageName }).appendTo('#pages .pages-list');
+                self.AddNewPage(pageName);
             }
         });
+
+        var pageItem = $('#templatePageItem').tmpl({ name: 'Main Page' });
+        pageItem.appendTo('#pages .pages-list');
+        pageItem.select();
     }
 
     public OnDragStart(event) {
@@ -107,6 +109,17 @@ class ToolsView {
 
     public OnDragend() {
         this.log.Debug("OnDragend");
+    }
+
+    public AddNewPage(pageId: string) {
+        this.log.Debug("PageName: " + pageId);
+        var result = App.Instance.Device.ControlManager.CreatePage(pageId);
+        if (result) {
+            var pageItem = $('#templatePageItem').tmpl({ name: pageId });
+            pageItem.appendTo('#pages .pages-list');
+            pageItem.select();
+        }
+      
     }
 }
 

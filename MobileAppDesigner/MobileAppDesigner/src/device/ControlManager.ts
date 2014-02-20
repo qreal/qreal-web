@@ -70,20 +70,27 @@ class ControlManager {
         delete this.propertiesMap[id];
     }
 
-    public CreatePage(pageId: string): void {
+    public CreatePage(pageId: string): boolean {
         this.log.Debug("CreatePage: " + pageId);
+        if (this.ContainsId(pageId)) {
+            //TODO: show notification
+            alert('Id already exists');
+            return false;
+        }
+        this.idList.push(pageId);
         var newPage = $('<div data-role="page"></div>');
         newPage.attr('id', pageId);
         newPage.on('drop', event => this.OnDrop(event));
         newPage.on('dragover', event => this.OnDragOver(event));   
-        $('body').append(newPage);                 
+        $('body').append(newPage);  
+        this.SelectPage(pageId);     
+        return true;          
     }
 
     public SelectPage(pageId: string): void {
         this.log.Debug("SelectPage: " + pageId);
         $.mobile.changePage('#' + pageId);
     }
-
 
     public OnDrop(event) {
         this.log.Debug("OnDrop, event: ", event);
