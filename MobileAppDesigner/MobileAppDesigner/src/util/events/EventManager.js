@@ -1,7 +1,4 @@
-define(["require", "exports", "src/util/log/Log"], function(require, exports, __Log__) {
-    var Log = __Log__;
-    
-
+define(["require", "exports", "src/util/log/Log"], function(require, exports, Log) {
     var EventManager = (function () {
         function EventManager(element) {
             var _this = this;

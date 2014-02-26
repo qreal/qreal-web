@@ -1,11 +1,4 @@
-define(["require", "exports", "src/util/log/Log", "src/Application", "src/designer/Designer", "src/util/events/EventManager", "src/properties/Property", "src/properties/ButtonProperty"], function(require, exports, __Log__, __App__, __Controller__, __EventManager__, __Property__, __ButtonProperty__) {
-    var Log = __Log__;
-    var App = __App__;
-    var Controller = __Controller__;
-    var EventManager = __EventManager__;
-    var Property = __Property__;
-    var ButtonProperty = __ButtonProperty__;
-
+define(["require", "exports", "src/util/log/Log", "src/Application", "src/designer/Designer", "src/util/events/EventManager", "src/properties/Property", "src/properties/ButtonProperty"], function(require, exports, Log, App, Controller, EventManager, Property, ButtonProperty) {
     var PropertiesView = (function () {
         function PropertiesView() {
             this.log = new Log("PropertiesView");
@@ -44,7 +37,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/design
             var self = this;
 
             var dialog = $('#propertyDialogFor' + property.Id);
-            if ((dialog).exists()) {
+            if (dialog.exists()) {
                 this.log.DebugObj(dialog);
                 dialog.dialog("open");
                 return;

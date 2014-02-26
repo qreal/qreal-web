@@ -1,8 +1,4 @@
-define(["require", "exports", "src/util/log/Log"], function(require, exports, __Log__) {
-    var Log = __Log__;
-    
-    
-
+define(["require", "exports", "src/util/log/Log"], function(require, exports, Log) {
     var Application = (function () {
         function Application() {
             this.device = null;

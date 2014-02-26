@@ -4,9 +4,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "src/properties/Property"], function(require, exports, __Property__) {
-    var Property = __Property__;
-
+define(["require", "exports", "src/properties/Property"], function(require, exports, Property) {
     var ButtonProperty = (function (_super) {
         __extends(ButtonProperty, _super);
         function ButtonProperty(id) {

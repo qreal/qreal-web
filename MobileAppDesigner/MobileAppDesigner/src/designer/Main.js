@@ -1,10 +1,6 @@
 ///<reference path="../modules/jquery.d.ts" />
 ///<reference path="../modules/jquery.tmpl.d.ts" />
-define(["require", "exports", "src/designer/Designer", "src/util/log/Log", "src/Application"], function(require, exports, __Designer__, __Log__, __App__) {
-    var Designer = __Designer__;
-    var Log = __Log__;
-    var App = __App__;
-
+define(["require", "exports", "src/designer/Designer", "src/util/log/Log", "src/Application"], function(require, exports, Designer, Log, App) {
     var Main = (function () {
         function Main() {
         }

@@ -1,12 +1,4 @@
-define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/events/EventManager", "src/properties/Property", "src/properties/ButtonProperty"], function(require, exports, __App__, __Log__, __EventManager__, __Property__, __ButtonProperty__) {
-    var App = __App__;
-    var Log = __Log__;
-    
-    var EventManager = __EventManager__;
-    
-    var Property = __Property__;
-    var ButtonProperty = __ButtonProperty__;
-
+define(["require", "exports", "src/Application", "src/util/log/Log", "src/device/Device", "src/util/events/EventManager", "src/properties/Property", "src/properties/ButtonProperty"], function(require, exports, App, Log, Device, EventManager, Property, ButtonProperty) {
     var ControlManager = (function () {
         function ControlManager() {
             this.log = new Log("ControlManager");

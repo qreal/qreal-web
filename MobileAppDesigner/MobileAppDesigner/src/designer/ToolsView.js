@@ -1,9 +1,4 @@
-﻿define(["require", "exports", "src/util/log/Log", "src/Application", "src/designer/Designer", "src/util/events/EventManager"], function(require, exports, __Log__, __App__, __Controller__, __EventManager__) {
-    var Log = __Log__;
-    var App = __App__;
-    var Controller = __Controller__;
-    var EventManager = __EventManager__;
-
+﻿define(["require", "exports", "src/util/log/Log", "src/Application", "src/designer/Designer", "src/util/events/EventManager"], function(require, exports, Log, App, Controller, EventManager) {
     var ToolsView = (function () {
         function ToolsView() {
             this.log = new Log("ToolsView");
@@ -68,8 +63,8 @@
         ToolsView.prototype.Init = function () {
             var _this = this;
             this.log.Debug("Init");
-            $('#toolTmpl').tmpl(this.controls).appendTo('#controls');
 
+            //$('#toolTmpl').tmpl(this.controls).appendTo('#controls');
             var toolItems = $('.tool-item');
 
             toolItems.on('dragstart', function (event) {
@@ -83,7 +78,7 @@
             });
 
             var self = this;
-            $('#pages .pages-list').on("selectableselected", function (event, ui) {
+            $('#pages .pages-list').on("selectableselected", function (event, component, ui) {
                 self.log.Debug('selectableselected, event: ', { event: event, ui: ui });
                 App.Instance.Device.ControlManager.SelectPage($(ui.selected).text());
             });

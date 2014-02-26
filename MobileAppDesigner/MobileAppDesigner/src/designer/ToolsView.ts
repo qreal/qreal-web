@@ -70,7 +70,7 @@ class ToolsView {
 
     public Init() {
         this.log.Debug("Init");
-        $('#toolTmpl').tmpl(this.controls).appendTo('#controls');
+        //$('#toolTmpl').tmpl(this.controls).appendTo('#controls');
 
         var toolItems = $('.tool-item');
 
@@ -79,12 +79,12 @@ class ToolsView {
         toolItems.on('dragend', () => this.OnDragend());
 
         var self = this;
-        $('#pages .pages-list').on("selectableselected", function (event, ui) {
+        $('#pages .pages-list').on("selectableselected", (event, component?, ui?) => {
             self.log.Debug('selectableselected, event: ', { event: event, ui: ui });
             App.Instance.Device.ControlManager.SelectPage($(ui.selected).text())
         });
 
-      
+
         $('#addPage').click(function (e) {
             //TODO: create normal dialog
             var pageName = prompt('New page', 'MyPage');
@@ -119,7 +119,7 @@ class ToolsView {
             pageItem.appendTo('#pages .pages-list');
             pageItem.select();
         }
-      
+
     }
 }
 
