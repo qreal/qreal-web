@@ -1,4 +1,4 @@
-﻿define(["require", "exports", "src/util/log/Log", "src/Application", "src/designer/Designer", "src/util/events/EventManager"], function(require, exports, Log, App, Controller, EventManager) {
+﻿define(["require", "exports", "src/util/log/Log", "src/Application"], function(require, exports, Log, App) {
     var ToolsView = (function () {
         function ToolsView() {
             this.log = new Log("ToolsView");
@@ -63,8 +63,8 @@
         ToolsView.prototype.Init = function () {
             var _this = this;
             this.log.Debug("Init");
+            $('#toolTmpl').tmpl(this.controls).appendTo('#controls');
 
-            //$('#toolTmpl').tmpl(this.controls).appendTo('#controls');
             var toolItems = $('.tool-item');
 
             toolItems.on('dragstart', function (event) {
@@ -90,15 +90,14 @@
                     self.AddNewPage(pageName);
                 }
             });
-
-            var pageItem = $('#templatePageItem').tmpl({ name: 'Main Page' });
-            pageItem.appendTo('#pages .pages-list');
-            pageItem.select();
+            //var pageItem = $('#templatePageItem').tmpl({ name: 'Main Page' });
+            //pageItem.appendTo('#pages .pages-list');
+            //pageItem.select();
         };
 
         ToolsView.prototype.OnDragStart = function (event) {
             this.log.Debug("OnDragStart: ");
-            event.originalEvent.dataTransfer.setData("ControlId", $(event.target).closest('div').attr('id'));
+            event.originalEvent.dataTransfer.setData("Text", $(event.target).closest('div').attr('id'));
         };
 
         ToolsView.prototype.OnDrag = function (event) {

@@ -1,4 +1,4 @@
-define(["require", "exports", "src/Application", "src/util/log/Log", "src/device/Device", "src/util/events/EventManager", "src/properties/Property", "src/properties/ButtonProperty"], function(require, exports, App, Log, Device, EventManager, Property, ButtonProperty) {
+define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/events/EventManager", "src/properties/ButtonProperty"], function(require, exports, App, Log, EventManager, ButtonProperty) {
     var ControlManager = (function () {
         function ControlManager() {
             this.log = new Log("ControlManager");
@@ -10,6 +10,7 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/device
         ControlManager.prototype.Init = function () {
             this.log.Debug("Init");
             App.Instance.Device.EventManager.AddSubscriber(EventManager.EventPropertiesChanged, new PropertyChangeListener(this));
+            this.CreatePage("Main Page");
         };
 
         ControlManager.prototype.CreateControl = function (controlId) {
@@ -90,7 +91,7 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/device
         ControlManager.prototype.OnDrop = function (event) {
             this.log.Debug("OnDrop, event: ", event);
             event.preventDefault();
-            var controlId = event.originalEvent.dataTransfer.getData("ControlId");
+            var controlId = event.originalEvent.dataTransfer.getData("Text");
             this.CreateControl(controlId);
         };
 

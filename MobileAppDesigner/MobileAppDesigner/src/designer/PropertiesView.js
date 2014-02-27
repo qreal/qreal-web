@@ -1,4 +1,4 @@
-define(["require", "exports", "src/util/log/Log", "src/Application", "src/designer/Designer", "src/util/events/EventManager", "src/properties/Property", "src/properties/ButtonProperty"], function(require, exports, Log, App, Controller, EventManager, Property, ButtonProperty) {
+define(["require", "exports", "src/util/log/Log", "src/Application", "src/util/events/EventManager"], function(require, exports, Log, App, EventManager) {
     var PropertiesView = (function () {
         function PropertiesView() {
             this.log = new Log("PropertiesView");

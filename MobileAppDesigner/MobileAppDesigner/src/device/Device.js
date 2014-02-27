@@ -1,4 +1,4 @@
-define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/events/EventManager", "src/device/ControlManager", "src/properties/Property", "src/properties/ButtonProperty"], function(require, exports, App, Log, EventManager, ControlManager, Property, ButtonProperty) {
+define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager", "src/device/ControlManager"], function(require, exports, Log, EventManager, ControlManager) {
     var Device = (function () {
         function Device() {
             this.log = new Log("Device");

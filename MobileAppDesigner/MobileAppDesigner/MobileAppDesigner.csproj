@@ -19,16 +19,7 @@
     <TypeScriptCompile Include="src\designer\Main.ts" />
     <TypeScriptCompile Include="src\designer\Designer.ts" />
     <TypeScriptCompile Include="src\util\log\Log.ts" />
-    <Content Include="css\designer.css.map">
-      <DependentUpon>designer.css</DependentUpon>
-    </Content>
-    <None Include="css\designer.less" />
-    <Content Include="css\designer.css">
-      <DependentUpon>designer.less</DependentUpon>
-    </Content>
-    <Content Include="css\designer.min.css">
-      <DependentUpon>designer.less</DependentUpon>
-    </Content>
+    <Content Include="css\designer.css" />
     <Content Include="css\device-mockup\device-mockups.css" />
     <Content Include="css\device-mockup\device-mockups2.css" />
     <Content Include="css\device-mockup\galaxy_s3\s3_land_black.png" />

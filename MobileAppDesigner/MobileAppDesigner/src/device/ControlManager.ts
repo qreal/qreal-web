@@ -21,6 +21,7 @@ class ControlManager {
     public Init(): void {
         this.log.Debug("Init");
         App.Instance.Device.EventManager.AddSubscriber(EventManager.EventPropertiesChanged, new PropertyChangeListener(this));
+        this.CreatePage("Main Page");
     }
 
     public CreateControl(controlId: string): void {
@@ -95,7 +96,7 @@ class ControlManager {
     public OnDrop(event) {
         this.log.Debug("OnDrop, event: ", event);
         event.preventDefault();
-        var controlId = event.originalEvent.dataTransfer.getData("ControlId");
+        var controlId = event.originalEvent.dataTransfer.getData("Text");
         this.CreateControl(controlId);
     }
 

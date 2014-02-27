@@ -70,7 +70,7 @@ class ToolsView {
 
     public Init() {
         this.log.Debug("Init");
-        //$('#toolTmpl').tmpl(this.controls).appendTo('#controls');
+        $('#toolTmpl').tmpl(this.controls).appendTo('#controls');
 
         var toolItems = $('.tool-item');
 
@@ -93,14 +93,14 @@ class ToolsView {
             }
         });
 
-        var pageItem = $('#templatePageItem').tmpl({ name: 'Main Page' });
-        pageItem.appendTo('#pages .pages-list');
-        pageItem.select();
+        //var pageItem = $('#templatePageItem').tmpl({ name: 'Main Page' });
+        //pageItem.appendTo('#pages .pages-list');
+        //pageItem.select();
     }
 
     public OnDragStart(event) {
         this.log.Debug("OnDragStart: ");
-        event.originalEvent.dataTransfer.setData("ControlId", $(event.target).closest('div').attr('id'));
+        event.originalEvent.dataTransfer.setData("Text", $(event.target).closest('div').attr('id'));
     }
 
     public OnDrag(event) {

@@ -46,72 +46,95 @@
         width: 100%;
     }
 
-    */
+*/
+
+iframe.app-content-frame {
+    width: 100%;
+    height: 100%;
+}
+
 /* Page */
 .page-toolbar {
-  height: 30px;
-  background: #aaa;
-  border: 2px solid black;
+    height: 30px;
+    background: #aaa;
+    border: 2px solid black;
 }
+
 #addPage {
-  font-size: 12px;
-  float: right;
-  margin-right: 5px;
+    font-size: 12px;
+    float: right;
+    margin-right: 5px;
 }
+
 /** Controls **/
+
 .tool-item {
-  width: 100px;
-  background: #fbfbfb;
-  display: inline-block;
-  border: 1px solid #aaa;
-  border-radius: 10px;
-  margin: 2px;
-  padding: 5px;
+    width: 100px;
+    background: #fbfbfb;
+    display: inline-block;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    margin: 2px;
+    padding: 5px;
 }
-.tool-item * {
-  display: table;
-  margin: 0 auto;
-}
+
+    .tool-item * {
+        display: table;
+        margin: 0 auto;
+    }
+
+
 .tool-icon {
-  width: 75px;
-  height: 75px;
+    width: 75px;
+    height: 75px;
 }
+
 .tool-title {
-  margin-top: 5px;
-  font-weight: bold;
-  font-size: 12px;
+    margin-top: 5px;
+    font-weight: bold;
+    font-size: 12px;
 }
+
 .tool-button {
-  background: url('/res/button.png') no-repeat transparent;
+    background: url('/res/button.png') no-repeat transparent;
 }
+
 .tool-input {
-  background: url('/res/input.png') no-repeat transparent;
+    background: url('/res/input.png') no-repeat transparent;
 }
+
 .tool-selection {
-  background: url('/res/selection.png') no-repeat transparent;
+    background: url('/res/selection.png') no-repeat transparent;
 }
+
 .tool-checkbox {
-  background: url('/res/checkbox.png') no-repeat transparent;
+    background: url('/res/checkbox.png') no-repeat transparent;
 }
+
 .tool-checkbox2 {
-  background: url('/res/checkbox2.png') no-repeat transparent;
+    background: url('/res/checkbox2.png') no-repeat transparent;
 }
+
 .tool-header {
-  background: url('/res/header.png') no-repeat transparent;
+    background: url('/res/header.png') no-repeat transparent;
 }
+
 .tool-header2 {
-  background: url('/res/header2.png') no-repeat transparent;
+    background: url('/res/header2.png') no-repeat transparent;
 }
+
 .tool-footer {
-  background: url('/res/footer.png') no-repeat transparent;
+    background: url('/res/footer.png') no-repeat transparent;
 }
+
 .tool-navbar {
-  background: url('/res/navbar.png') no-repeat transparent;
+    background: url('/res/navbar.png') no-repeat transparent;
 }
+
 .tool-grid {
-  background: url('/res/grid.png') no-repeat transparent;
+    background: url('/res/grid.png') no-repeat transparent;
 }
+
 .tool-controlgroup {
-  background: url('/res/controlgroup_widget.png') no-repeat transparent;
+    background: url('/res/controlgroup_widget.png') no-repeat transparent;
 }
-/*# sourceMappingURL=designer.css.map */
