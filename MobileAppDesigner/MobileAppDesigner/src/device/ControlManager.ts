@@ -21,7 +21,9 @@ class ControlManager {
     public Init(): void {
         this.log.Debug("Init");
         App.Instance.Device.EventManager.AddSubscriber(EventManager.EventPropertiesChanged, new PropertyChangeListener(this));
-        this.CreatePage("Main Page");
+        //this.CreatePage("Main Page");
+        $("#MainPage").on('drop', event => this.OnDrop(event));
+        $("#MainPage").on('dragover', event => this.OnDragOver(event));   
     }
 
     public CreateControl(controlId: string): void {
@@ -40,7 +42,7 @@ class ControlManager {
 
         bt.on('click', event => {
             this.log.Debug('bt click');
-            App.Instance.Device.EventManager.Trigger(EventManager.EventShowProperties, $(event.target).data('prop'));
+            App.Instance.Designer.ShowProperty($(event.target).data('prop'));
         });
 
         var bt = bt.button();

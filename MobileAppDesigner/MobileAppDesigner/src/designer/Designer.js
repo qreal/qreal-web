@@ -24,6 +24,10 @@ define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"
         Designer.prototype.AddPage = function (pageName) {
             this.toolsView.AddNewPage(pageName);
         };
+
+        Designer.prototype.ShowProperty = function (data) {
+            this.propertiesView.ShowProperty(data);
+        };
         return Designer;
     })();
 

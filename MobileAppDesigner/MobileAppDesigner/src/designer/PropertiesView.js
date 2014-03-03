@@ -17,14 +17,6 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/util/e
         }
         PropertiesView.prototype.Init = function () {
             this.log.Debug("Init");
-
-            var self = this;
-            App.Instance.Designer.EventManager.AddSubscriber(EventManager.EventShowProperties, {
-                OnEvent: function (data) {
-                    self.log.Debug("OnEvent: ", data);
-                    self.ShowProperty(data);
-                }
-            });
         };
 
         PropertiesView.prototype.ShowProperty = function (property) {
@@ -36,15 +28,19 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/util/e
             this.log.Debug("ShowProperty_Button");
             var self = this;
 
-            var dialog = $('#propertyDialogFor' + property.Id);
-            if (dialog.exists()) {
-                this.log.DebugObj(dialog);
-                dialog.dialog("open");
+            if (this.currentPropertyDiv) {
+                this.currentPropertyDiv.hide();
+            }
+
+            var propertyPanel = $('#propertyFor' + property.Id);
+            if (propertyPanel.exists()) {
+                this.currentPropertyDiv = propertyPanel;
+                this.currentPropertyDiv.show();
                 return;
             }
 
-            dialog = $('#propertyDialogTmpl').tmpl({ title: property.Type });
-            var dialogContent = dialog.children('.property');
+            propertyPanel = $('#propertiesTmpl').tmpl({ title: property.Type });
+            var dialogContent = propertyPanel.children("#property-table");
 
             var idProperty = $('#propertyTextTmpl').tmpl({
                 name: 'Id:',
@@ -139,9 +135,9 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/util/e
             dialogContent.append(miniProperty);
             dialogContent.append(themeProperty);
 
-            dialog.appendTo('body');
-            dialog.attr('id', 'propertyDialogFor' + property.Id);
-            $('#propertyDialogFor' + property.Id).dialog();
+            propertyPanel.appendTo('#properties');
+            propertyPanel.attr('id', 'propertyFor' + property.Id);
+            this.currentPropertyDiv = propertyPanel;
         };
         return PropertiesView;
     })();

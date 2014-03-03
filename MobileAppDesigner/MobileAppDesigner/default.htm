@@ -55,6 +55,9 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-4" id="properties">
+                
+            </div>
         </div>
     </div>
 
@@ -79,44 +82,45 @@
         </div>
     </script>
 
-    <script id="propertyDialogTmpl" type="text/x-jquery-tmpl">
-        <div class="propertyDialog" title="${title}">
-            <div class="property table"></div>
+    <script id="propertiesTmpl" type="text/x-jquery-tmpl">
+        <div class="property-panel">
+            <div class="property-title">${title}</div>
+            <div id="property-table" class="property-table"></div>
         </div>
     </script>
 
     <script id="propertyTextTmpl" type="text/x-jquery-tmpl">
-        <div class="row">
-            <div class="name cell">${name}</div>
-            <div class="val cell">
-                <input type="text" value="${value}" />
+        <div class="property-row">
+            <div class="property-cell property-label">${name}</div>
+            <div class="property-cell">
+                <input type="text" class="form-control" value="${value}" />
             </div>
         </div>
     </script>
 
     <script id="propertyNumberTmpl" type="text/x-jquery-tmpl">
-        <div class="row">
-            <div class="name cell">${name}</div>
-            <div class="val cell">
-                <input value="${value}" type="number" />
+        <div class="property-row">
+            <div class="property-cell property-label">${name}</div>
+            <div class="property-cell">
+                <input type="number" class="form-control" value="${value}" />
             </div>
         </div>
     </script>
 
     <script id="propertySelectTmpl" type="text/x-jquery-tmpl">
-        <div class="row">
-            <div class="name cell">${name}</div>
-            <div class="val cell">
-                <select></select>
+        <div class="property-row">
+            <div class="property-cell property-label">${name}</div>
+            <div class="property-cell">
+                <select class="form-control"></select>
             </div>
         </div>
     </script>
 
-    <script id="templateOptionItem" type="text/html">
+    <script id="templateOptionItem" type="text/x-jquery-tmpl">
         <option value='{{= Value}}'>{{= Text}}</option>
     </script>
 
-    <script id="templatePageItem" type="text/html">
+    <script id="templatePageItem" type="text/x-jquery-tmpl">
         <li class="ui-widget-content"><span class="ui-icon ui-icon-document"></span>${name}</li>
     </script>
 </body>

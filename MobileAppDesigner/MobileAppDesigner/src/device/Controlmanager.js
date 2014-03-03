@@ -8,9 +8,17 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/e
             this.log.Debug("constructor");
         }
         ControlManager.prototype.Init = function () {
+            var _this = this;
             this.log.Debug("Init");
             App.Instance.Device.EventManager.AddSubscriber(EventManager.EventPropertiesChanged, new PropertyChangeListener(this));
-            this.CreatePage("Main Page");
+
+            //this.CreatePage("Main Page");
+            $("#MainPage").on('drop', function (event) {
+                return _this.OnDrop(event);
+            });
+            $("#MainPage").on('dragover', function (event) {
+                return _this.OnDragOver(event);
+            });
         };
 
         ControlManager.prototype.CreateControl = function (controlId) {
@@ -30,7 +38,7 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/e
 
             bt.on('click', function (event) {
                 _this.log.Debug('bt click');
-                App.Instance.Device.EventManager.Trigger(EventManager.EventShowProperties, $(event.target).data('prop'));
+                App.Instance.Designer.ShowProperty($(event.target).data('prop'));
             });
 
             var bt = bt.button();

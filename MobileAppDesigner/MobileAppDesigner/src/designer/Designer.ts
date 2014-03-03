@@ -3,6 +3,7 @@ import App = require("src/Application");
 import EventManager = require("src/util/events/EventManager");
 import ToolsView = require("src/designer/ToolsView");
 import PropertiesView = require("src/designer/PropertiesView");
+import Property = require("src/properties/Property");
 
 class Designer {
 
@@ -25,12 +26,16 @@ class Designer {
         this.propertiesView.Init();
     }
 
-    get EventManager(): EventManager {
+    public get EventManager(): EventManager {
         return this.eventManager;
     }
 
     public AddPage(pageName: string) {
         this.toolsView.AddNewPage(pageName);
+    }
+
+    public ShowProperty(data: Property) {
+        this.propertiesView.ShowProperty(data);
     }
 }
 

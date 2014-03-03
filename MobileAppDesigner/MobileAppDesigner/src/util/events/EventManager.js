@@ -33,10 +33,9 @@ define(["require", "exports", "src/util/log/Log"], function(require, exports, Lo
             }
             this.subscribers[eventType].push(listener);
         };
-        EventManager.EventShowProperties = 'show_property';
         EventManager.EventPropertiesChanged = 'property_changed';
         EventManager.EventAddPage = 'add_page';
-        EventManager.events = [EventManager.EventShowProperties, EventManager.EventPropertiesChanged, EventManager.EventAddPage];
+        EventManager.events = [EventManager.EventPropertiesChanged, EventManager.EventAddPage];
         return EventManager;
     })();
 

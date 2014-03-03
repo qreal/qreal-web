@@ -2,22 +2,9 @@
 .propertyDialog {
 }
 
-.property {
-    width: 100%;
-}
 
-.table {
-    display: table;
-    border-spacing: 3px;
-}
 
-.row {
-    display: table-row;
-}
 
-.cell {
-    display: table-cell;
-}
 
 .property .name {
     font-weight: bold;
@@ -47,6 +34,40 @@
     }
 
 */
+
+.property-table {
+    display: table;
+    border-spacing: 0px 10px;
+}
+
+
+.property-row {
+    display: table-row;
+}
+
+.property-cell {
+    display: table-cell;
+}
+
+.property-label {
+    font-weight: bold;
+    font-size: 14px;
+    text-align: right;
+    padding-right: 5px;
+}
+
+.property-title{
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+    margin-bottom:10px;
+}
+
+.property-panel{
+    border: 2px solid #aaa;
+    padding:10px;
+    margin:10px;
+}
 
 iframe.app-content-frame {
     width: 100%;
