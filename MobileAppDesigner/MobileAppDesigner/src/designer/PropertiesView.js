@@ -1,4 +1,4 @@
-define(["require", "exports", "src/util/log/Log", "src/Application", "src/util/events/EventManager"], function(require, exports, Log, App, EventManager) {
+define(["require", "exports", "src/util/log/Log", "src/Application"], function(require, exports, Log, App) {
     var PropertiesView = (function () {
         function PropertiesView() {
             this.log = new Log("PropertiesView");
@@ -27,6 +27,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/util/e
         PropertiesView.prototype.ShowProperty_Button = function (property) {
             this.log.Debug("ShowProperty_Button");
             var self = this;
+            var controlManager = App.Instance.Device.ControlManager;
 
             if (this.currentPropertyDiv) {
                 this.currentPropertyDiv.hide();
@@ -47,11 +48,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/util/e
                 value: property.Id
             });
             idProperty.find('input').change(function () {
-                self.log.Debug('change: ' + $(this).val());
-                App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                    id: property.Id,
-                    newId: $(this).val()
-                });
+                controlManager.ChangeProperty(property.Id, 1 /* Id */, 0 /* Button */, $(this).val());
             });
 
             var textProperty = $('#propertyTextTmpl').tmpl({
@@ -60,11 +57,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/util/e
             });
 
             textProperty.find('input').change(function () {
-                self.log.Debug('change: ' + $(this).val());
-                App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                    id: property.Id,
-                    text: $(this).val()
-                });
+                controlManager.ChangeProperty(property.Id, 0 /* Text */, 0 /* Button */, $(this).val());
             });
 
             var inlineProperty = $('#propertySelectTmpl').tmpl({
@@ -76,11 +69,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/util/e
 
             inlineSelect.val(String(property.Inline));
             inlineSelect.change(function () {
-                self.log.Debug('change: ' + $(this).val());
-                App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                    id: property.Id,
-                    inline: $(this).val()
-                });
+                controlManager.ChangeProperty(property.Id, 2 /* Inline */, 0 /* Button */, $(this).val());
             });
             var cornersProperty = $('#propertySelectTmpl').tmpl({
                 name: 'Rounded corners:'
@@ -90,11 +79,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/util/e
 
             cornersSelect.val(String(property.Corners));
             cornersSelect.change(function () {
-                self.log.Debug('change: ' + $(this).val());
-                App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                    id: property.Id,
-                    corners: $(this).val()
-                });
+                controlManager.ChangeProperty(property.Id, 3 /* Corners */, 0 /* Button */, $(this).val());
             });
 
             var miniProperty = $('#propertySelectTmpl').tmpl({
@@ -105,11 +90,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/util/e
 
             miniSelect.val(String(property.Mini));
             miniSelect.change(function () {
-                self.log.Debug('change: ' + $(this).val());
-                App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                    id: property.Id,
-                    mini: $(this).val()
-                });
+                controlManager.ChangeProperty(property.Id, 4 /* Mini */, 0 /* Button */, $(this).val());
             });
 
             var themeProperty = $('#propertySelectTmpl').tmpl({
@@ -121,11 +102,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/util/e
 
             themeSelect.val(property.Theme);
             themeSelect.change(function () {
-                self.log.Debug('change: ' + $(this).val());
-                App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                    id: property.Id,
-                    theme: $(this).val()
-                });
+                controlManager.ChangeProperty(property.Id, 5 /* Theme */, 0 /* Button */, $(this).val());
             });
 
             dialogContent.append(idProperty);

@@ -1,4 +1,4 @@
-import App = require("src/Application");
+﻿import App = require("src/Application");
 import Log = require("src/util/log/Log");
 import Device = require("src/device/Device");
 import EventManager = require("src/util/events/EventManager");
@@ -20,10 +20,9 @@ class ControlManager {
 
     public Init(): void {
         this.log.Debug("Init");
-        App.Instance.Device.EventManager.AddSubscriber(EventManager.EventPropertiesChanged, new PropertyChangeListener(this));
         //this.CreatePage("Main Page");
         $("#MainPage").on('drop', event => this.OnDrop(event));
-        $("#MainPage").on('dragover', event => this.OnDragOver(event));   
+        $("#MainPage").on('dragover', event => this.OnDragOver(event));
     }
 
     public CreateControl(controlId: string): void {
@@ -84,10 +83,10 @@ class ControlManager {
         var newPage = $('<div data-role="page"></div>');
         newPage.attr('id', pageId);
         newPage.on('drop', event => this.OnDrop(event));
-        newPage.on('dragover', event => this.OnDragOver(event));   
-        $('body').append(newPage);  
-        this.SelectPage(pageId);     
-        return true;          
+        newPage.on('dragover', event => this.OnDragOver(event));
+        $('body').append(newPage);
+        this.SelectPage(pageId);
+        return true;
     }
 
     public SelectPage(pageId: string): void {
@@ -106,28 +105,22 @@ class ControlManager {
         //this.log.Debug("OnDragOver");
         e.preventDefault();
     }
-}
 
-class PropertyChangeListener implements IEventListener {
-
-    private log = new Log("PropertyChangeListener");
-
-    private controlManager: ControlManager = null;
-
-    constructor(controlManager: ControlManager) {
-        this.controlManager = controlManager;
-    }
-
-    public OnEvent(data): void {
-        this.log.Debug("OnEvent, data: ", data);
-        this.log.DebugObj(data);
+    public ChangeProperty(propertyId: string, propertyType: PropertyType, controlType: ControlType, newValue: string): void {
+        this.log.Debug("OnChangeProperty, propertyId: " + propertyId + " propertyType: " + propertyType + " controlType: " + controlType + " value: " + newValue);
+        switch (controlType) {
+            case ControlType.Button:
+                this.ChangeButtonProperty(propertyId, propertyType, newValue);
+                break;
+        }
+        /*
         if (data.newId) {
-            if (this.controlManager.ContainsId(data.newId)) {
+            if (this.ContainsId(data.newId)) {
                 //TODO: show notification
                 alert('Id already exists');
             } else {
                 $('#' + data.id).attr('id', data.newId);
-                this.controlManager.ChangeId(data.id, data.newId);
+                this.ChangeId(data.id, data.newId);
             }
         }
         if (data.text) {
@@ -147,6 +140,40 @@ class PropertyChangeListener implements IEventListener {
         }
         if (data.theme) {
             $('#' + data.id).buttonMarkup({ theme: data.theme });
+        }
+*/
+    }
+
+    private ChangeButtonProperty(propertyId: string, propertyType: PropertyType, newValue: string): void {
+        switch (propertyType) {
+            case PropertyType.Id:
+                if (this.ContainsId(newValue)) {
+                    //TODO: show notification
+                    alert('Id already exists');
+                } else {
+                    $('#' + propertyId).attr('id', newValue);
+                    this.ChangeId(propertyId, newValue);
+                }
+                break;
+            case PropertyType.Text:
+                $('#' + propertyId).children('.ui-btn-inner').children('.ui-btn-text').text(newValue);
+                break;
+            case PropertyType.Inline:
+                var cond: boolean = newValue == "true";
+                $('#' + propertyId).buttonMarkup({ inline: cond });
+                break;
+            case PropertyType.Corners:
+                var cond: boolean = newValue == "true";
+                $('#' + propertyId).buttonMarkup({ corners: cond });
+                break;
+            case PropertyType.Mini:
+                var cond: boolean = newValue == "true";
+                $('#' + propertyId).buttonMarkup({ mini: cond });
+                break;
+            case PropertyType.Theme:
+                $('#' + propertyId).buttonMarkup({ theme: newValue });
+                break;
+
         }
     }
 }

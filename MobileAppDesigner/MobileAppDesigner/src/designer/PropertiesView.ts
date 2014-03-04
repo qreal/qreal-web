@@ -39,20 +39,21 @@ class PropertiesView {
     public ShowProperty_Button(property: ButtonProperty): void {
         this.log.Debug("ShowProperty_Button");
         var self = this;
+        var controlManager = App.Instance.Device.ControlManager;
 
         if (this.currentPropertyDiv) {
             this.currentPropertyDiv.hide();
         }
 
         var propertyPanel = $('#propertyFor' + property.Id);
-        if ((<any>propertyPanel).exists()) {           
+        if ((<any>propertyPanel).exists()) {
             this.currentPropertyDiv = propertyPanel;
             this.currentPropertyDiv.show();
             return;
         }
 
         propertyPanel = $('#propertiesTmpl').tmpl({ title: property.Type });
-        var dialogContent = propertyPanel.children("#property-table");      
+        var dialogContent = propertyPanel.children("#property-table");
 
         var idProperty = $('#propertyTextTmpl').tmpl(
             {
@@ -60,13 +61,8 @@ class PropertiesView {
                 value: property.Id
             });
         idProperty.find('input').change(function () {
-            self.log.Debug('change: ' + $(this).val());
-            App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                id: property.Id,
-                newId: $(this).val()
-            });
+            controlManager.ChangeProperty(property.Id, PropertyType.Id, ControlType.Button, $(this).val());
         });
-
 
         var textProperty = $('#propertyTextTmpl').tmpl(
             {
@@ -75,11 +71,7 @@ class PropertiesView {
             });
 
         textProperty.find('input').change(function () {
-            self.log.Debug('change: ' + $(this).val());
-            App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                id: property.Id,
-                text: $(this).val()
-            });
+            controlManager.ChangeProperty(property.Id, PropertyType.Text, ControlType.Button, $(this).val());
         });
 
         var inlineProperty = $('#propertySelectTmpl').tmpl(
@@ -92,11 +84,7 @@ class PropertiesView {
 
         inlineSelect.val(String(property.Inline));
         inlineSelect.change(function () {
-            self.log.Debug('change: ' + $(this).val());
-            App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                id: property.Id,
-                inline: $(this).val()
-            });
+            controlManager.ChangeProperty(property.Id, PropertyType.Inline, ControlType.Button, $(this).val());
         });
         var cornersProperty = $('#propertySelectTmpl').tmpl(
             {
@@ -107,11 +95,7 @@ class PropertiesView {
 
         cornersSelect.val(String(property.Corners));
         cornersSelect.change(function () {
-            self.log.Debug('change: ' + $(this).val());
-            App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                id: property.Id,
-                corners: $(this).val()
-            });
+            controlManager.ChangeProperty(property.Id, PropertyType.Corners, ControlType.Button, $(this).val());
         });
 
         var miniProperty = $('#propertySelectTmpl').tmpl(
@@ -123,11 +107,7 @@ class PropertiesView {
 
         miniSelect.val(String(property.Mini));
         miniSelect.change(function () {
-            self.log.Debug('change: ' + $(this).val());
-            App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                id: property.Id,
-                mini: $(this).val()
-            });
+            controlManager.ChangeProperty(property.Id, PropertyType.Mini, ControlType.Button, $(this).val());
         });
 
 
@@ -141,11 +121,7 @@ class PropertiesView {
 
         themeSelect.val(property.Theme);
         themeSelect.change(function () {
-            self.log.Debug('change: ' + $(this).val());
-            App.Instance.Designer.EventManager.Trigger(EventManager.EventPropertiesChanged, {
-                id: property.Id,
-                theme: $(this).val()
-            });
+            controlManager.ChangeProperty(property.Id, PropertyType.Theme, ControlType.Button, $(this).val());
         });
 
 

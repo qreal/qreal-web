@@ -2,9 +2,9 @@ import App = require("src/Application");
 import Log = require("src/util/log/Log");
 import EventManager = require("src/util/events/EventManager");
 import IEventListener = require("src/util/events/IEventListener");
-import ControlManager = require("src/device/ControlManager");
 import Property = require("src/properties/Property");
 import ButtonProperty = require("src/properties/ButtonProperty");
+import ControlManager = require("src/device/ControlManager");
 
 class Device {
 
@@ -12,7 +12,6 @@ class Device {
 
     private eventManager: EventManager;
     private controlManager: ControlManager;
-
 
     constructor() {
         this.log.Debug("constructor");
@@ -33,6 +32,7 @@ class Device {
     public get ControlManager(): ControlManager {
         return this.controlManager;
     }
+
 }
 
 export = Device;

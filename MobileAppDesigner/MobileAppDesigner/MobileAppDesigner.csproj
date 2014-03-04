@@ -18,6 +18,9 @@
   <ItemGroup>
     <TypeScriptCompile Include="src\designer\Main.ts" />
     <TypeScriptCompile Include="src\designer\Designer.ts" />
+    <TypeScriptCompile Include="src\device\ControlManager.ts" />
+    <TypeScriptCompile Include="src\model\ControlTypes.ts" />
+    <TypeScriptCompile Include="src\model\PropertyTypes.ts" />
     <TypeScriptCompile Include="src\util\log\Log.ts" />
     <Content Include="css\designer.css" />
     <Content Include="css\device-mockup\device-mockups.css" />
@@ -265,7 +268,6 @@
     <TypeScriptCompile Include="src\device\Device.ts" />
     <TypeScriptCompile Include="src\util\events\EventManager.ts" />
     <TypeScriptCompile Include="src\designer\PropertiesView.ts" />
-    <TypeScriptCompile Include="src\device\ControlManager.ts" />
     <TypeScriptCompile Include="src\Application.ts" />
     <Content Include="res\checkbox.png" />
     <Content Include="res\checkbox2.png" />
