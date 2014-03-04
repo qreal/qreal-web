@@ -93,9 +93,9 @@ class ToolsView {
             }
         });
 
-        //var pageItem = $('#templatePageItem').tmpl({ name: 'Main Page' });
-        //pageItem.appendTo('#pages .pages-list');
-        //pageItem.select();
+        var pageItem = $('#templatePageItem').tmpl({ name: 'MainPage' });
+        pageItem.appendTo('#pages .pages-list');
+        pageItem.select();
     }
 
     public OnDragStart(event) {
@@ -119,7 +119,6 @@ class ToolsView {
             pageItem.appendTo('#pages .pages-list');
             pageItem.select();
         }
-
     }
 }
 

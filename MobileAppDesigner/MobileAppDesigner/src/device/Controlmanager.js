@@ -11,7 +11,7 @@
             var _this = this;
             this.log.Debug("Init");
 
-            //this.CreatePage("Main Page");
+            //this.CreatePage("MainPage");
             $("#MainPage").on('drop', function (event) {
                 return _this.OnDrop(event);
             });
@@ -114,35 +114,6 @@
                     this.ChangeButtonProperty(propertyId, propertyType, newValue);
                     break;
             }
-            /*
-            if (data.newId) {
-            if (this.ContainsId(data.newId)) {
-            //TODO: show notification
-            alert('Id already exists');
-            } else {
-            $('#' + data.id).attr('id', data.newId);
-            this.ChangeId(data.id, data.newId);
-            }
-            }
-            if (data.text) {
-            $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);
-            }
-            if (data.inline) {
-            var cond: boolean = data.inline == "true";
-            $('#' + data.id).buttonMarkup({ inline: cond });
-            }
-            if (data.corners) {
-            var cond: boolean = data.corners == "true";
-            $('#' + data.id).buttonMarkup({ corners: cond });
-            }
-            if (data.mini) {
-            var cond: boolean = data.mini == "true";
-            $('#' + data.id).buttonMarkup({ mini: cond });
-            }
-            if (data.theme) {
-            $('#' + data.id).buttonMarkup({ theme: data.theme });
-            }
-            */
         };
 
         ControlManager.prototype.ChangeButtonProperty = function (propertyId, propertyType, newValue) {

@@ -6,9 +6,7 @@ class EventManager {
     private log = new Log("EventManager");
 
     // Events types    
-    public static EventPropertiesChanged = 'property_changed';
-    public static EventAddPage = 'add_page';
-    private static events = [EventManager.EventPropertiesChanged, EventManager.EventAddPage];
+    private static events = [];
 
     private element: JQuery;
     private subscribers: Array<IEventListener>[] = [];

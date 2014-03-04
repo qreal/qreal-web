@@ -20,7 +20,7 @@ class ControlManager {
 
     public Init(): void {
         this.log.Debug("Init");
-        //this.CreatePage("Main Page");
+        //this.CreatePage("MainPage");
         $("#MainPage").on('drop', event => this.OnDrop(event));
         $("#MainPage").on('dragover', event => this.OnDragOver(event));
     }
@@ -113,35 +113,6 @@ class ControlManager {
                 this.ChangeButtonProperty(propertyId, propertyType, newValue);
                 break;
         }
-        /*
-        if (data.newId) {
-            if (this.ContainsId(data.newId)) {
-                //TODO: show notification
-                alert('Id already exists');
-            } else {
-                $('#' + data.id).attr('id', data.newId);
-                this.ChangeId(data.id, data.newId);
-            }
-        }
-        if (data.text) {
-            $('#' + data.id).children('.ui-btn-inner').children('.ui-btn-text').text(data.text);
-        }
-        if (data.inline) {
-            var cond: boolean = data.inline == "true";
-            $('#' + data.id).buttonMarkup({ inline: cond });
-        }
-        if (data.corners) {
-            var cond: boolean = data.corners == "true";
-            $('#' + data.id).buttonMarkup({ corners: cond });
-        }
-        if (data.mini) {
-            var cond: boolean = data.mini == "true";
-            $('#' + data.id).buttonMarkup({ mini: cond });
-        }
-        if (data.theme) {
-            $('#' + data.id).buttonMarkup({ theme: data.theme });
-        }
-*/
     }
 
     private ChangeButtonProperty(propertyId: string, propertyType: PropertyType, newValue: string): void {
@@ -173,7 +144,6 @@ class ControlManager {
             case PropertyType.Theme:
                 $('#' + propertyId).buttonMarkup({ theme: newValue });
                 break;
-
         }
     }
 }

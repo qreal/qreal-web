@@ -1,45 +1,7 @@
-﻿/*
-.propertyDialog {
-}
-
-
-
-
-
-.property .name {
-    font-weight: bold;
-    font-size: 14px;
-    text-align: right;
-    padding-right: 5px;
-    vertical-align: middle;
-    width: 50px;
-}
-
-.property .val {
-    vertical-align: middle;
-}
-
-    .property .val input {
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-        width: 100%;
-    }
-
-    .property .val select {
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-        width: 100%;
-    }
-
-*/
-
-.property-table {
+﻿.property-table {
     display: table;
     border-spacing: 0px 10px;
 }
-
 
 .property-row {
     display: table-row;
@@ -56,17 +18,17 @@
     padding-right: 5px;
 }
 
-.property-title{
+.property-title {
     font-weight: bold;
     font-size: 18px;
     text-align: center;
-    margin-bottom:10px;
+    margin-bottom: 10px;
 }
 
-.property-panel{
+.property-panel {
     border: 2px solid #aaa;
-    padding:10px;
-    margin:10px;
+    padding: 10px;
+    margin: 10px;
 }
 
 iframe.app-content-frame {
@@ -76,15 +38,25 @@ iframe.app-content-frame {
 
 /* Page */
 .page-toolbar {
-    height: 30px;
-    background: #aaa;
-    border: 2px solid black;
+    margin-top:2px;
+    min-height: 40px;
+    padding-right: 20px;
+    padding-left: 20px;
+    background-color: #fafafa;
+    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+    background-repeat: repeat-x;
+    border: 1px solid #d4d4d4;
+    -webkit-border-bottom-right-radius: 4px;
+    -webkit-border-bottom-left-radius: 4px;
+    -moz-border-radius-bottomright: 4px;
+    -moz-border-radius-bottomleft: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;   
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
 }
 
 #addPage {
-    font-size: 12px;
-    float: right;
-    margin-right: 5px;
+   margin-top:4px;
 }
 
 /** Controls **/

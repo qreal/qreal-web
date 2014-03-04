@@ -90,9 +90,10 @@
                     self.AddNewPage(pageName);
                 }
             });
-            //var pageItem = $('#templatePageItem').tmpl({ name: 'Main Page' });
-            //pageItem.appendTo('#pages .pages-list');
-            //pageItem.select();
+
+            var pageItem = $('#templatePageItem').tmpl({ name: 'MainPage' });
+            pageItem.appendTo('#pages .pages-list');
+            pageItem.select();
         };
 
         ToolsView.prototype.OnDragStart = function (event) {
