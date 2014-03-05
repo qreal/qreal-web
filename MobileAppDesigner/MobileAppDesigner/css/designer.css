@@ -1,6 +1,21 @@
-﻿ body {
-        margin-top: 60px;
-    }
+﻿body, html {
+  height: 100%;
+}
+
+body {
+    margin-top: 60px;
+}
+
+/* test full screnn widgets */
+.full-screen{
+    height:100%;
+}
+
+/* Propertyes */
+
+#properties{
+    height:100%;
+}
 
 .property-table {
     display: table;
@@ -30,7 +45,7 @@
 }
 
 .properties-panel {
-    margin-top: 40px;
+    margin-top: 40px;   
 }
 
 iframe.app-content-frame {
@@ -40,13 +55,13 @@ iframe.app-content-frame {
 
 /* Page */
 
-.control-panel{
-    margin-top:10px;
+.control-panel {
+    margin-top: 10px;
 }
 
 .pages-list {
     height: 400px;
-    width: 100%;
+    overflow-y: auto;
 }
 
 #addPage {
