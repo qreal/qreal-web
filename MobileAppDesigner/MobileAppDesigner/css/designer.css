@@ -1,4 +1,8 @@
-﻿.property-table {
+﻿ body {
+        margin-top: 60px;
+    }
+
+.property-table {
     display: table;
     border-spacing: 0px 10px;
 }
@@ -25,10 +29,8 @@
     margin-bottom: 10px;
 }
 
-.property-panel {
-    border: 2px solid #aaa;
-    padding: 10px;
-    margin: 10px;
+.properties-panel {
+    margin-top: 40px;
 }
 
 iframe.app-content-frame {
@@ -37,26 +39,17 @@ iframe.app-content-frame {
 }
 
 /* Page */
-.page-toolbar {
-    margin-top:2px;
-    min-height: 40px;
-    padding-right: 20px;
-    padding-left: 20px;
-    background-color: #fafafa;
-    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
-    background-repeat: repeat-x;
-    border: 1px solid #d4d4d4;
-    -webkit-border-bottom-right-radius: 4px;
-    -webkit-border-bottom-left-radius: 4px;
-    -moz-border-radius-bottomright: 4px;
-    -moz-border-radius-bottomleft: 4px;
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;   
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+
+.control-panel{
+    margin-top:10px;
+}
+
+.pages-list {
+    height: 400px;
+    width: 100%;
 }
 
 #addPage {
-   margin-top:4px;
 }
 
 /** Controls **/

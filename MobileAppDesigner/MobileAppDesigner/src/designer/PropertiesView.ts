@@ -132,7 +132,7 @@ class PropertiesView {
         dialogContent.append(miniProperty);
         dialogContent.append(themeProperty);
 
-        propertyPanel.appendTo('#properties');
+        propertyPanel.appendTo('#properties-widget');
         propertyPanel.attr('id', 'propertyFor' + property.Id);
         this.currentPropertyDiv = propertyPanel;
     }

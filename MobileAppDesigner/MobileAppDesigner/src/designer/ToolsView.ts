@@ -70,7 +70,7 @@ class ToolsView {
 
     public Init() {
         this.log.Debug("Init");
-        $('#toolTmpl').tmpl(this.controls).appendTo('#controls');
+        $('#toolTmpl').tmpl(this.controls).appendTo('#controls-widget');
 
         var toolItems = $('.tool-item');
 
@@ -95,7 +95,6 @@ class ToolsView {
 
         var pageItem = $('#templatePageItem').tmpl({ name: 'MainPage' });
         pageItem.appendTo('#pages .pages-list');
-        pageItem.select();
     }
 
     public OnDragStart(event) {
