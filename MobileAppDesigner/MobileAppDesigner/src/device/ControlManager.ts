@@ -5,7 +5,6 @@ import EventManager = require("src/util/events/EventManager");
 import IEventListener = require("src/util/events/IEventListener");
 import Property = require("src/properties/Property");
 import ButtonProperty = require("src/properties/ButtonProperty");
-
 class ControlManager {
 
     private log = new Log("ControlManager");
@@ -59,7 +58,7 @@ class ControlManager {
     }
 
     public ContainsId(id: string): boolean {
-        return this.idList.indexOf(id) > 0;
+        return this.idList.indexOf(id) >= 0;
     }
 
     public ChangeId(id: string, newId: string): void {
@@ -74,7 +73,9 @@ class ControlManager {
 
     public CreatePage(pageId: string): boolean {
         this.log.Debug("CreatePage: " + pageId);
+        this.log.DebugObj(this.idList);
         if (this.ContainsId(pageId)) {
+            this.log.Warn("Page id alredy exists");
             //TODO: show notification
             alert('Id already exists');
             return false;

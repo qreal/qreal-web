@@ -5,8 +5,10 @@ class EventManager {
 
     private log = new Log("EventManager");
 
+    public static OnDeviceLoaded = "OnDeviceLoaded";
+
     // Events types    
-    private static events = [];
+    private static events = [EventManager.OnDeviceLoaded];
 
     private element: JQuery;
     private subscribers: Array<IEventListener>[] = [];
@@ -19,7 +21,7 @@ class EventManager {
         });
     }
 
-    public Trigger(eventName: string, data: any): void {
+    public Trigger(eventName: string, data?: any ): void {
         this.log.Debug('trigger, event: ' + eventName);
         this.element.trigger(eventName, data);
     }

@@ -4,6 +4,7 @@
 import Log = require("src/util/log/Log");
 import App = require("src/Application");
 import Device = require("src/device/Device");
+import EventManager = require("src/util/events/EventManager");
 
 class Main {
 
@@ -18,6 +19,7 @@ class Main {
         }
         App.Instance.Device = new Device();
         App.Instance.Device.Init();
+        App.Instance.Device.EventManager.Trigger(EventManager.OnDeviceLoaded )
     }
 }
 

@@ -63,17 +63,17 @@
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    <div class="tab-pane active" id="controls">
+                    <div class="tab-pane active" id="controls"> <!-- Controls -->
                         <div class="panel panel-default control-panel">
                             <div class="panel-body" id="controls-widget">
 
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane" id="pages">
+                    <div class="tab-pane" id="pages"><!-- Pages -->
                         <div class="panel panel-default control-panel">
                             <div class="panel-body">
-                                <ul class="pages-list list-group"></ul>
+                                <div class="pages-list list-group"></div>
                             </div>
                             <div class="panel-footer">
                                 <button id="addPage" class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-plus"></span> Add page</button>
@@ -120,7 +120,10 @@
                 return this.length !== 0;
             };
         });
+
+      
     </script>
+
     <!-- Templates -->
 
     <script id="toolTmpl" type="text/x-jquery-tmpl">
@@ -169,7 +172,7 @@
     </script>
 
     <script id="templatePageItem" type="text/x-jquery-tmpl">
-        <li class="list-group-item"><span class="glyphicon glyphicon-file"></span> ${name}</li>
+        <a href="#" class="list-group-item" data-toggle="tab" data-pageid="${page_id}"><span class="glyphicon glyphicon-file"></span> ${name}</a>
     </script>
 </body>
 </html>

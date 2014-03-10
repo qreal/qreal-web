@@ -69,7 +69,10 @@ class ToolsView {
     }
 
     public Init() {
+        var self = this;
         this.log.Debug("Init");
+
+        //Controlls
         $('#toolTmpl').tmpl(this.controls).appendTo('#controls-widget');
 
         var toolItems = $('.tool-item');
@@ -78,12 +81,11 @@ class ToolsView {
         toolItems.on('drag', event => this.OnDrag(event));
         toolItems.on('dragend', () => this.OnDragend());
 
-        var self = this;
-        $('#pages .pages-list').on("selectableselected", (event, component?, ui?) => {
-            self.log.Debug('selectableselected, event: ', { event: event, ui: ui });
-            App.Instance.Device.ControlManager.SelectPage($(ui.selected).text())
+        //Pages
+        $('.pages-list').on('click', 'a', function (e) {
+            self.ToogleListState($(e.target));
+            App.Instance.Device.ControlManager.SelectPage($(e.target).data('pageid'));
         });
-
 
         $('#addPage').click(function (e) {
             //TODO: create normal dialog
@@ -93,8 +95,20 @@ class ToolsView {
             }
         });
 
-        var pageItem = $('#templatePageItem').tmpl({ name: 'MainPage' });
-        pageItem.appendTo('#pages .pages-list');
+        App.Instance.Designer.EventManager.AddSubscriber(EventManager.OnDeviceLoaded, {
+            OnEvent: function (data) {
+                self.log.Debug("Device loaded");
+                self.AddNewPage("Main Page");
+            }
+        });
+
+        //var pageItem = $('#templatePageItem').tmpl({
+        //    name: 'Main Page',
+         //   page_id: 'Main_Page'
+        //});
+        //pageItem.appendTo('#pages .pages-list');
+        //pageItem.addClass('active');
+       
     }
 
     public OnDragStart(event) {
@@ -110,14 +124,25 @@ class ToolsView {
         this.log.Debug("OnDragend");
     }
 
-    public AddNewPage(pageId: string) {
-        this.log.Debug("PageName: " + pageId);
+    public AddNewPage(pageName: string) {
+        this.log.Debug("PageName: " + pageName);
+        var pageId = pageName.trim().replace(' ', '_');
+        this.log.Debug("pageId: " + pageId);
         var result = App.Instance.Device.ControlManager.CreatePage(pageId);
         if (result) {
-            var pageItem = $('#templatePageItem').tmpl({ name: pageId });
+            var pageItem = $('#templatePageItem').tmpl({
+                name: pageName,
+                page_id: pageId
+            });
             pageItem.appendTo('#pages .pages-list');
-            pageItem.select();
+            this.ToogleListState(pageItem);
         }
+    }
+
+    private ToogleListState(element: JQuery): void {
+        var previous = element.closest(".list-group").children(".active");
+        previous.removeClass('active'); // previous list-item
+        element.addClass('active'); // activated list-item
     }
 }
 

@@ -16,12 +16,12 @@ class Device {
     constructor() {
         this.log.Debug("constructor");
         this.eventManager = new EventManager((<any>parent).$('body'));
-        this.controlManager = new ControlManager();
+        this.controlManager = new ControlManager();        
     }
 
     public Init(): void {
         this.log.Debug("Init");
-        this.controlManager.Init();            
+        this.controlManager.Init();                    
     }
 
 

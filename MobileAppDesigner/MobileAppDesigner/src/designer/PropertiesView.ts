@@ -70,6 +70,7 @@ class PropertiesView {
                 value: property.Text
             });
 
+        ControlType.Button;
         textProperty.find('input').change(function () {
             controlManager.ChangeProperty(property.Id, PropertyType.Text, ControlType.Button, $(this).val());
         });
