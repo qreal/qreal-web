@@ -77,26 +77,23 @@ class ControlManager {
     }
 
     private CreateInput() {
-        var inputLabel = $('<label>Title:</label>');
-        var inputField = $('<input type="text" name="name" value="">');
+        var input = $('<input type="text">');
+
         var prop: InputProperty = new InputProperty(this.GetNewId());
 
-        inputLabel.text(prop.Title);
-        inputLabel.attr('for', prop.Id);
-        inputField.attr('id', prop.Id);        
+        input.attr('id', prop.Id);
 
         this.propertiesMap[prop.Id] = prop;
-        $(event.currentTarget).append(inputLabel);
-        $(event.currentTarget).append(inputField);
+        $(event.currentTarget).append(input);
 
-        inputField.on('click', event => {
+        input.on('click', event => {
             this.log.Debug('input click', $(event.target));
             App.Instance.Designer.ShowProperty($(event.target).data('prop'));
         });
 
-        $(event.currentTarget).trigger('create');
-        //var bt = bt.button();
-        inputField.data('prop', prop);
+        //$(event.currentTarget).trigger('create');
+        input.parent().trigger('create');
+        input.data('prop', prop);
     }
 
     /* Id */
@@ -125,7 +122,7 @@ class ControlManager {
         delete this.propertiesMap[id];
     }
 
-     public OnDrop(event) {
+    public OnDrop(event) {
         this.log.Debug("OnDrop, event: ", event);
         event.preventDefault();
         var controlId = event.originalEvent.dataTransfer.getData("Text");
@@ -195,8 +192,16 @@ class ControlManager {
                 break;
             case PropertyType.Mini:
                 var cond: boolean = newValue == "true";
-                $('#' + propertyId).textinput({ mini: cond });
-                break;       
+                this.log.Debug("PropertyType.Mini " + cond);
+                //$('#' + propertyId).textinput({ mini: cond });
+                //$('#' + propertyId).textinput({ disabled: true }).trigger('refresh');
+                break;
+            case PropertyType.Theme:
+                //$('#' + propertyId).attr('data-theme', newValue).trigger('refresh');
+                //$('#' + propertyId).attr('data-theme', newValue).removeClass('ui-body-c').addClass('ui-body-e').trigger('create');
+                $('#' + propertyId).attr('data-theme', 'e').removeClass('ui-body-c').addClass('ui-body-e').trigger('create');
+                //$('#' + propertyId).attr('data-theme', newValue).parent().trigger('refresh');
+                break;
         }
     }
 }

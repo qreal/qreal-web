@@ -78,27 +78,23 @@
 
         ControlManager.prototype.CreateInput = function () {
             var _this = this;
-            var inputLabel = $('<label>Title:</label>');
-            var inputField = $('<input type="text" name="name" value="">');
+            var input = $('<input type="text">');
+
             var prop = new InputProperty(this.GetNewId());
 
-            inputLabel.text(prop.Title);
-            inputLabel.attr('for', prop.Id);
-            inputField.attr('id', prop.Id);
+            input.attr('id', prop.Id);
 
             this.propertiesMap[prop.Id] = prop;
-            $(event.currentTarget).append(inputLabel);
-            $(event.currentTarget).append(inputField);
+            $(event.currentTarget).append(input);
 
-            inputField.on('click', function (event) {
+            input.on('click', function (event) {
                 _this.log.Debug('input click', $(event.target));
                 App.Instance.Designer.ShowProperty($(event.target).data('prop'));
             });
 
-            $(event.currentTarget).trigger('create');
-
-            //var bt = bt.button();
-            inputField.data('prop', prop);
+            //$(event.currentTarget).trigger('create');
+            input.parent().trigger('create');
+            input.data('prop', prop);
         };
 
         /* Id */
@@ -196,7 +192,14 @@
                     break;
                 case 4 /* Mini */:
                     var cond = newValue == "true";
-                    $('#' + propertyId).textinput({ mini: cond });
+                    this.log.Debug("PropertyType.Mini " + cond);
+
+                    break;
+                case 5 /* Theme */:
+                    //$('#' + propertyId).attr('data-theme', newValue).trigger('refresh');
+                    //$('#' + propertyId).attr('data-theme', newValue).removeClass('ui-body-c').addClass('ui-body-e').trigger('create');
+                    $('#' + propertyId).attr('data-theme', 'e').removeClass('ui-body-c').addClass('ui-body-e').trigger('create');
+
                     break;
             }
         };
