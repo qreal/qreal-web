@@ -1,4 +1,4 @@
-﻿define(["require", "exports", "src/util/log/Log", "src/Application"], function(require, exports, Log, App) {
+﻿define(["require", "exports", "src/util/log/Log", "src/Application", "src/util/events/EventManager"], function(require, exports, Log, App, EventManager) {
     var ToolsView = (function () {
         function ToolsView() {
             this.log = new Log("ToolsView");
@@ -62,7 +62,10 @@
         }
         ToolsView.prototype.Init = function () {
             var _this = this;
+            var self = this;
             this.log.Debug("Init");
+
+            //Controlls
             $('#toolTmpl').tmpl(this.controls).appendTo('#controls-widget');
 
             var toolItems = $('.tool-item');
@@ -77,10 +80,10 @@
                 return _this.OnDragend();
             });
 
-            var self = this;
-            $('#pages .pages-list').on("selectableselected", function (event, component, ui) {
-                self.log.Debug('selectableselected, event: ', { event: event, ui: ui });
-                App.Instance.Device.ControlManager.SelectPage($(ui.selected).text());
+            //Pages
+            $('.pages-list').on('click', 'a', function (e) {
+                self.ToogleListState($(e.target));
+                App.Instance.Device.ControlManager.SelectPage($(e.target).data('pageid'));
             });
 
             $('#addPage').click(function (e) {
@@ -91,8 +94,18 @@
                 }
             });
 
-            var pageItem = $('#templatePageItem').tmpl({ name: 'MainPage' });
-            pageItem.appendTo('#pages .pages-list');
+            App.Instance.Designer.EventManager.AddSubscriber(EventManager.OnDeviceLoaded, {
+                OnEvent: function (data) {
+                    self.log.Debug("Device loaded");
+                    self.AddNewPage("Main Page");
+                }
+            });
+            //var pageItem = $('#templatePageItem').tmpl({
+            //    name: 'Main Page',
+            //   page_id: 'Main_Page'
+            //});
+            //pageItem.appendTo('#pages .pages-list');
+            //pageItem.addClass('active');
         };
 
         ToolsView.prototype.OnDragStart = function (event) {
@@ -108,14 +121,25 @@
             this.log.Debug("OnDragend");
         };
 
-        ToolsView.prototype.AddNewPage = function (pageId) {
-            this.log.Debug("PageName: " + pageId);
+        ToolsView.prototype.AddNewPage = function (pageName) {
+            this.log.Debug("PageName: " + pageName);
+            var pageId = pageName.trim().replace(' ', '_');
+            this.log.Debug("pageId: " + pageId);
             var result = App.Instance.Device.ControlManager.CreatePage(pageId);
             if (result) {
-                var pageItem = $('#templatePageItem').tmpl({ name: pageId });
+                var pageItem = $('#templatePageItem').tmpl({
+                    name: pageName,
+                    page_id: pageId
+                });
                 pageItem.appendTo('#pages .pages-list');
-                pageItem.select();
+                this.ToogleListState(pageItem);
             }
+        };
+
+        ToolsView.prototype.ToogleListState = function (element) {
+            var previous = element.closest(".list-group").children(".active");
+            previous.removeClass('active'); // previous list-item
+            element.addClass('active'); // activated list-item
         };
         return ToolsView;
     })();

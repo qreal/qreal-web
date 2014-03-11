@@ -1,6 +1,6 @@
 ///<reference path="../modules/jquery.d.ts" />
 ///<reference path="../modules/jquery.tmpl.d.ts" />
-define(["require", "exports", "src/util/log/Log", "src/Application", "src/device/Device"], function(require, exports, Log, App, Device) {
+define(["require", "exports", "src/util/log/Log", "src/Application", "src/device/Device", "src/util/events/EventManager"], function(require, exports, Log, App, Device, EventManager) {
     var Main = (function () {
         function Main() {
         }
@@ -13,6 +13,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/device
             }
             App.Instance.Device = new Device();
             App.Instance.Device.Init();
+            App.Instance.Device.EventManager.Trigger(EventManager.OnDeviceLoaded);
         };
         Main.log = new Log("DeviceMain");
         return Main;

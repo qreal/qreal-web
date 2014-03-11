@@ -3,7 +3,7 @@ import App = require("src/Application");
 import EventManager = require("src/util/events/EventManager");
 import ToolsView = require("src/designer/ToolsView");
 import PropertiesView = require("src/designer/PropertiesView");
-import Property = require("src/properties/Property");
+import Property = require("src/model/properties/Property");
 
 class Designer {
 

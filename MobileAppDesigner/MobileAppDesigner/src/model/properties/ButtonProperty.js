@@ -4,30 +4,17 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "src/properties/Property"], function(require, exports, Property) {
+define(["require", "exports", "src/model/properties/Property"], function(require, exports, Property) {
     var ButtonProperty = (function (_super) {
         __extends(ButtonProperty, _super);
         function ButtonProperty(id) {
-            _super.call(this, Property.TypeButton);
-            this.Id = id || "id";
+            _super.call(this, 0 /* Button */, id);
             this.Text = "Button";
             this.Inline = false;
             this.Corners = true;
             this.Mini = false;
             this.Theme = 'c';
         }
-        Object.defineProperty(ButtonProperty.prototype, "Id", {
-            get: function () {
-                return this.id;
-            },
-            set: function (value) {
-                this.id = value;
-            },
-            enumerable: true,
-            configurable: true
-        });
-
-
         Object.defineProperty(ButtonProperty.prototype, "Text", {
             get: function () {
                 return this.text;

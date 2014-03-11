@@ -3,8 +3,11 @@ import Log = require("src/util/log/Log");
 import Device = require("src/device/Device");
 import EventManager = require("src/util/events/EventManager");
 import IEventListener = require("src/util/events/IEventListener");
-import Property = require("src/properties/Property");
-import ButtonProperty = require("src/properties/ButtonProperty");
+import Property = require("src/model/properties/Property");
+import ButtonProperty = require("src/model/properties/ButtonProperty");
+import InputProperty = require("src/model/properties/InputProperty");
+
+
 class ControlManager {
 
     private log = new Log("ControlManager");
@@ -24,6 +27,32 @@ class ControlManager {
         $("#MainPage").on('dragover', event => this.OnDragOver(event));
     }
 
+    /* Pages */
+    public CreatePage(pageId: string): boolean {
+        this.log.Debug("CreatePage: " + pageId);
+        this.log.DebugObj(this.idList);
+        if (this.ContainsId(pageId)) {
+            this.log.Warn("Page id alredy exists");
+            //TODO: show notification
+            alert('Id already exists');
+            return false;
+        }
+        this.idList.push(pageId);
+        var newPage = $('<div data-role="page"></div>');
+        newPage.attr('id', pageId);
+        newPage.on('drop', event => this.OnDrop(event));
+        newPage.on('dragover', event => this.OnDragOver(event));
+        $('body').append(newPage);
+        this.SelectPage(pageId);
+        return true;
+    }
+
+    public SelectPage(pageId: string): void {
+        this.log.Debug("SelectPage: " + pageId);
+        $.mobile.changePage('#' + pageId);
+    }
+
+    /* Controls */
     public CreateControl(controlId: string): void {
         this.log.Debug("CreateControl: " + controlId);
         this['Create' + controlId]();
@@ -46,6 +75,31 @@ class ControlManager {
         var bt = bt.button();
         bt.children('.ui-btn-inner').data('prop', prop);
     }
+
+    private CreateInput() {
+        var inputLabel = $('<label>Title:</label>');
+        var inputField = $('<input type="text" name="name" value="">');
+        var prop: InputProperty = new InputProperty(this.GetNewId());
+
+        inputLabel.text(prop.Title);
+        inputLabel.attr('for', prop.Id);
+        inputField.attr('id', prop.Id);        
+
+        this.propertiesMap[prop.Id] = prop;
+        $(event.currentTarget).append(inputLabel);
+        $(event.currentTarget).append(inputField);
+
+        inputField.on('click', event => {
+            this.log.Debug('input click', $(event.target));
+            App.Instance.Designer.ShowProperty($(event.target).data('prop'));
+        });
+
+        $(event.currentTarget).trigger('create');
+        //var bt = bt.button();
+        inputField.data('prop', prop);
+    }
+
+    /* Id */
 
     private GetNewId(): string {
         var id = 'id' + this.idIndex++;
@@ -71,31 +125,7 @@ class ControlManager {
         delete this.propertiesMap[id];
     }
 
-    public CreatePage(pageId: string): boolean {
-        this.log.Debug("CreatePage: " + pageId);
-        this.log.DebugObj(this.idList);
-        if (this.ContainsId(pageId)) {
-            this.log.Warn("Page id alredy exists");
-            //TODO: show notification
-            alert('Id already exists');
-            return false;
-        }
-        this.idList.push(pageId);
-        var newPage = $('<div data-role="page"></div>');
-        newPage.attr('id', pageId);
-        newPage.on('drop', event => this.OnDrop(event));
-        newPage.on('dragover', event => this.OnDragOver(event));
-        $('body').append(newPage);
-        this.SelectPage(pageId);
-        return true;
-    }
-
-    public SelectPage(pageId: string): void {
-        this.log.Debug("SelectPage: " + pageId);
-        $.mobile.changePage('#' + pageId);
-    }
-
-    public OnDrop(event) {
+     public OnDrop(event) {
         this.log.Debug("OnDrop, event: ", event);
         event.preventDefault();
         var controlId = event.originalEvent.dataTransfer.getData("Text");
@@ -112,6 +142,9 @@ class ControlManager {
         switch (controlType) {
             case ControlType.Button:
                 this.ChangeButtonProperty(propertyId, propertyType, newValue);
+                break;
+            case ControlType.Input:
+                this.ChangeInputProperty(propertyId, propertyType, newValue);
                 break;
         }
     }
@@ -145,6 +178,25 @@ class ControlManager {
             case PropertyType.Theme:
                 $('#' + propertyId).buttonMarkup({ theme: newValue });
                 break;
+        }
+    }
+
+    private ChangeInputProperty(propertyId: string, propertyType: PropertyType, newValue: string): void {
+        this.log.Debug("ChangeInputProperty");
+        switch (propertyType) {
+            case PropertyType.Id:
+                if (this.ContainsId(newValue)) {
+                    //TODO: show notification
+                    alert('Id already exists');
+                } else {
+                    $('#' + propertyId).attr('id', newValue);
+                    this.ChangeId(propertyId, newValue);
+                }
+                break;
+            case PropertyType.Mini:
+                var cond: boolean = newValue == "true";
+                $('#' + propertyId).textinput({ mini: cond });
+                break;       
         }
     }
 }

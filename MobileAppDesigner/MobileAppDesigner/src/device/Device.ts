@@ -2,8 +2,8 @@ import App = require("src/Application");
 import Log = require("src/util/log/Log");
 import EventManager = require("src/util/events/EventManager");
 import IEventListener = require("src/util/events/IEventListener");
-import Property = require("src/properties/Property");
-import ButtonProperty = require("src/properties/ButtonProperty");
+import Property = require("src/model/properties/Property");
+import ButtonProperty = require("src/model/properties/ButtonProperty");
 import ControlManager = require("src/device/ControlManager");
 
 class Device {

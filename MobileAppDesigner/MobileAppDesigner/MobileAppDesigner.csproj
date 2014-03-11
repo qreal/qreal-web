@@ -20,6 +20,7 @@
     <TypeScriptCompile Include="src\designer\Designer.ts" />
     <TypeScriptCompile Include="src\device\ControlManager.ts" />
     <TypeScriptCompile Include="src\model\ControlTypes.ts" />
+    <TypeScriptCompile Include="src\model\properties\InputProperty.ts" />
     <TypeScriptCompile Include="src\model\PropertyTypes.ts" />
     <TypeScriptCompile Include="src\util\log\Log.ts" />
     <Content Include="css\designer.css" />
@@ -286,8 +287,8 @@
     <Content Include="device.html" />
     <Content Include="res\button.png" />
     <TypeScriptCompile Include="src\util\events\IEventListener.ts" />
-    <TypeScriptCompile Include="src\properties\ButtonProperty.ts" />
-    <TypeScriptCompile Include="src\properties\Property.ts" />
+    <TypeScriptCompile Include="src\model\properties\ButtonProperty.ts" />
+    <TypeScriptCompile Include="src\model\properties\Property.ts" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

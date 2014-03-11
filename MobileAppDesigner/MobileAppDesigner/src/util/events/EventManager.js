@@ -33,7 +33,9 @@ define(["require", "exports", "src/util/log/Log"], function(require, exports, Lo
             }
             this.subscribers[eventType].push(listener);
         };
-        EventManager.events = [];
+        EventManager.OnDeviceLoaded = "OnDeviceLoaded";
+
+        EventManager.events = [EventManager.OnDeviceLoaded];
         return EventManager;
     })();
 

@@ -1,3 +1,4 @@
 ﻿enum ControlType {
-    Button
+    Button,
+    Input
 } 
