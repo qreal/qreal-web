@@ -136,10 +136,10 @@
         ControlManager.prototype.ChangeProperty = function (propertyId, propertyType, controlType, newValue) {
             this.log.Debug("OnChangeProperty, propertyId: " + propertyId + " propertyType: " + propertyType + " controlType: " + controlType + " value: " + newValue);
             switch (controlType) {
-                case 0 /* Button */:
+                case 1 /* Button */:
                     this.ChangeButtonProperty(propertyId, propertyType, newValue);
                     break;
-                case 1 /* Input */:
+                case 2 /* Input */:
                     this.ChangeInputProperty(propertyId, propertyType, newValue);
                     break;
             }
