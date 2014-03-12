@@ -72,7 +72,7 @@ class ControlManager {
             App.Instance.Designer.ShowProperty($(event.target).data('prop'));
         });
 
-        var bt = bt.button();
+        bt = bt.button();
         bt.children('.ui-btn-inner').data('prop', prop);
     }
 
@@ -80,8 +80,7 @@ class ControlManager {
         var input = $('<input type="text">');
 
         var prop: InputProperty = new InputProperty(this.GetNewId());
-
-        input.attr('id', prop.Id);
+        input.attr('id', prop.Id);       
 
         this.propertiesMap[prop.Id] = prop;
         $(event.currentTarget).append(input);
@@ -92,7 +91,7 @@ class ControlManager {
         });
 
         //$(event.currentTarget).trigger('create');
-        input.parent().trigger('create');
+        input = input.textinput();      
         input.data('prop', prop);
     }
 
@@ -192,15 +191,12 @@ class ControlManager {
                 break;
             case PropertyType.Mini:
                 var cond: boolean = newValue == "true";
-                this.log.Debug("PropertyType.Mini " + cond);
-                //$('#' + propertyId).textinput({ mini: cond });
-                //$('#' + propertyId).textinput({ disabled: true }).trigger('refresh');
+                //Not work
+                $('#' + propertyId).textinput({ mini: cond });                
                 break;
             case PropertyType.Theme:
-                //$('#' + propertyId).attr('data-theme', newValue).trigger('refresh');
-                //$('#' + propertyId).attr('data-theme', newValue).removeClass('ui-body-c').addClass('ui-body-e').trigger('create');
-                $('#' + propertyId).attr('data-theme', 'e').removeClass('ui-body-c').addClass('ui-body-e').trigger('create');
-                //$('#' + propertyId).attr('data-theme', newValue).parent().trigger('refresh');
+                //Not work
+                //$('#' + propertyId).textinput({ theme: newValue });
                 break;
         }
     }

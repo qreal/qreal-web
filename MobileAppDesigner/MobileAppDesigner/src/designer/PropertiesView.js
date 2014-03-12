@@ -147,7 +147,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application"], function(r
             });
 
             titleProperty.find('input').change(function () {
-                controlManager.ChangeProperty(property.Id, 0 /* Text */, 1 /* Input */, $(this).val());
+                controlManager.ChangeProperty(property.Id, 6 /* Title */, 1 /* Input */, $(this).val());
             });
 
             var inlineProperty = $('#propertySelectTmpl').tmpl({

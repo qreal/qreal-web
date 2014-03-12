@@ -72,7 +72,7 @@
                 App.Instance.Designer.ShowProperty($(event.target).data('prop'));
             });
 
-            var bt = bt.button();
+            bt = bt.button();
             bt.children('.ui-btn-inner').data('prop', prop);
         };
 
@@ -81,7 +81,6 @@
             var input = $('<input type="text">');
 
             var prop = new InputProperty(this.GetNewId());
-
             input.attr('id', prop.Id);
 
             this.propertiesMap[prop.Id] = prop;
@@ -93,7 +92,7 @@
             });
 
             //$(event.currentTarget).trigger('create');
-            input.parent().trigger('create');
+            input = input.textinput();
             input.data('prop', prop);
         };
 
@@ -192,14 +191,11 @@
                     break;
                 case 4 /* Mini */:
                     var cond = newValue == "true";
-                    this.log.Debug("PropertyType.Mini " + cond);
 
+                    //Not work
+                    $('#' + propertyId).textinput({ mini: cond });
                     break;
                 case 5 /* Theme */:
-                    //$('#' + propertyId).attr('data-theme', newValue).trigger('refresh');
-                    //$('#' + propertyId).attr('data-theme', newValue).removeClass('ui-body-c').addClass('ui-body-e').trigger('create');
-                    $('#' + propertyId).attr('data-theme', 'e').removeClass('ui-body-c').addClass('ui-body-e').trigger('create');
-
                     break;
             }
         };

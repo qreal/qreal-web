@@ -4,5 +4,7 @@
     Inline,
     Corners,
     Mini,
-    Theme
+    Theme,
+
+    Title
 }

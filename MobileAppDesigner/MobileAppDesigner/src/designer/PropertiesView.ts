@@ -170,7 +170,7 @@ class PropertiesView {
             });
 
         titleProperty.find('input').change(function () {
-            controlManager.ChangeProperty(property.Id, PropertyType.Text, ControlType.Input, $(this).val());
+            controlManager.ChangeProperty(property.Id, PropertyType.Title, ControlType.Input, $(this).val());
         });
 
         var inlineProperty = $('#propertySelectTmpl').tmpl(
