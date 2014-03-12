@@ -7,10 +7,14 @@ import Property = require("src/model/properties/Property");
 import ButtonProperty = require("src/model/properties/ButtonProperty");
 import InputProperty = require("src/model/properties/InputProperty");
 
+import DesignerControlFactory = require("src/device/DesignerControlFactory");
+import IControlFactory = require("src/device/DesignerControlFactory");
 
 class ControlManager {
 
     private log = new Log("ControlManager");
+
+    private controlFactory: IControlFactory;
 
     private idIndex = 1;
     private idList = [];
@@ -18,6 +22,7 @@ class ControlManager {
 
     constructor() {
         this.log.Debug("constructor");
+        this.controlFactory = new DesignerControlFactory();
     }
 
     public Init(): void {
@@ -59,21 +64,9 @@ class ControlManager {
     }
 
     private CreateButton() {
-        var bt = $('<a href="#" data-role="button"></a>');
-        var prop: ButtonProperty = new ButtonProperty(this.GetNewId());
-
-        bt.attr('id', prop.Id);
-        bt.text(prop.Text);
-        this.propertiesMap[prop.Id] = prop;
-        $(event.currentTarget).append(bt);
-
-        bt.on('click', event => {
-            this.log.Debug('bt click');
-            App.Instance.Designer.ShowProperty($(event.target).data('prop'));
-        });
-
-        bt = bt.button();
-        bt.children('.ui-btn-inner').data('prop', prop);
+        var bt = this.controlFactory.CreateButton(this.GetNewId());
+        this.propertiesMap[bt.Properties.Id] = bt.Properties;
+        $(event.currentTarget).append(bt.Element);
     }
 
     private CreateInput() {

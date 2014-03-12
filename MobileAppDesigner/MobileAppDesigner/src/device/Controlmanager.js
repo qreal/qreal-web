@@ -1,4 +1,4 @@
-﻿define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/properties/ButtonProperty", "src/model/properties/InputProperty"], function(require, exports, App, Log, ButtonProperty, InputProperty) {
+﻿define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/properties/InputProperty", "src/device/DesignerControlFactory"], function(require, exports, App, Log, InputProperty, DesignerControlFactory) {
     var ControlManager = (function () {
         function ControlManager() {
             this.log = new Log("ControlManager");
@@ -6,6 +6,7 @@
             this.idList = [];
             this.propertiesMap = [];
             this.log.Debug("constructor");
+            this.controlFactory = new DesignerControlFactory();
         }
         ControlManager.prototype.Init = function () {
             var _this = this;
@@ -58,22 +59,9 @@
         };
 
         ControlManager.prototype.CreateButton = function () {
-            var _this = this;
-            var bt = $('<a href="#" data-role="button"></a>');
-            var prop = new ButtonProperty(this.GetNewId());
-
-            bt.attr('id', prop.Id);
-            bt.text(prop.Text);
-            this.propertiesMap[prop.Id] = prop;
-            $(event.currentTarget).append(bt);
-
-            bt.on('click', function (event) {
-                _this.log.Debug('bt click');
-                App.Instance.Designer.ShowProperty($(event.target).data('prop'));
-            });
-
-            bt = bt.button();
-            bt.children('.ui-btn-inner').data('prop', prop);
+            var bt = this.controlFactory.CreateButton(this.GetNewId());
+            this.propertiesMap[bt.Properties.Id] = bt.Properties;
+            $(event.currentTarget).append(bt.Element);
         };
 
         ControlManager.prototype.CreateInput = function () {

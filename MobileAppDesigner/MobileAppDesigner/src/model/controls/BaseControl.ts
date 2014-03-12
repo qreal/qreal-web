@@ -1,7 +1,7 @@
 ﻿import Log = require("src/util/log/Log");
 import Property = require("src/model/properties/Property");
 
-class BaseControl<T extends Property> implements ICreatable {
+class BaseControl<T extends Property> {
 
     public log = new Log("BaseControl");
 
@@ -23,16 +23,6 @@ class BaseControl<T extends Property> implements ICreatable {
 
     constructor(properties: T) {
         this.properties = properties;
-    }
-
-    public Create(): JQuery {
-        this.log.Error("This method should not be used");
-        return $("");
-    }
-
-    public CreateForDesigner(): JQuery {
-        this.log.Error("This method should not be used");
-        return $("");
     }
 }  
 

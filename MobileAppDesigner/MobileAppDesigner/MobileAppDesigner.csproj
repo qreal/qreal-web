@@ -19,11 +19,12 @@
     <TypeScriptCompile Include="src\designer\Main.ts" />
     <TypeScriptCompile Include="src\designer\Designer.ts" />
     <TypeScriptCompile Include="src\device\ControlManager.ts" />
+    <TypeScriptCompile Include="src\device\DesignerControlFactory.ts" />
+    <TypeScriptCompile Include="src\device\IControlFactory.ts" />
     <TypeScriptCompile Include="src\model\controls\BaseContainer.ts" />
     <TypeScriptCompile Include="src\model\controls\BaseControl.ts" />
     <TypeScriptCompile Include="src\model\controls\Button.ts" />
     <TypeScriptCompile Include="src\model\controls\ContainerControl.ts" />
-    <TypeScriptCompile Include="src\model\controls\ICreatable.ts" />
     <TypeScriptCompile Include="src\model\controls\Page.ts" />
     <TypeScriptCompile Include="src\model\ControlTypes.ts" />
     <TypeScriptCompile Include="src\model\properties\InputProperty.ts" />
