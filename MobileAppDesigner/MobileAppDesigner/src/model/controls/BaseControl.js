@@ -23,16 +23,6 @@
             configurable: true
         });
 
-
-        BaseControl.prototype.Create = function () {
-            this.log.Error("This method should not be used");
-            return $("");
-        };
-
-        BaseControl.prototype.CreateForDesigner = function () {
-            this.log.Error("This method should not be used");
-            return $("");
-        };
         return BaseControl;
     })();
 

@@ -8,7 +8,7 @@ define(["require", "exports", "src/model/properties/Property"], function(require
     var InputProperty = (function (_super) {
         __extends(InputProperty, _super);
         function InputProperty(id) {
-            _super.call(this, 1 /* Input */, id);
+            _super.call(this, 2 /* Input */, id);
             this.Title = "Title";
             this.Inline = false;
             this.Corners = true;
