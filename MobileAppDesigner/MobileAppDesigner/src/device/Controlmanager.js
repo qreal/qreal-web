@@ -23,6 +23,7 @@
                 return false;
             }
 
+            this.idList.push(pageId);
             var page = this.controlFactory.CreatePage(pageId);
             this.pages.push(page);
             $('body').append(page.Element);

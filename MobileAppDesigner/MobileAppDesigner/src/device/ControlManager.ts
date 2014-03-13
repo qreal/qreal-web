@@ -15,8 +15,6 @@ import BaseContainer = require("src/model/controls/BaseContainer");
 import Button = require("src/model/controls/Button");
 import Page = require("src/model/controls/Page");
 
-
-
 class ControlManager {
 
     private log = new Log("ControlManager");
@@ -46,6 +44,7 @@ class ControlManager {
             return false;
         }
 
+        this.idList.push(pageId);
         var page = this.controlFactory.CreatePage(pageId);
         this.pages.push(page);
         $('body').append(page.Element);
