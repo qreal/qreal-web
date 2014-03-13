@@ -101,14 +101,6 @@ class ToolsView {
                 self.AddNewPage("Main Page");
             }
         });
-
-        //var pageItem = $('#templatePageItem').tmpl({
-        //    name: 'Main Page',
-         //   page_id: 'Main_Page'
-        //});
-        //pageItem.appendTo('#pages .pages-list');
-        //pageItem.addClass('active');
-       
     }
 
     public OnDragStart(event) {

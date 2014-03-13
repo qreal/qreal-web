@@ -10,6 +10,13 @@ import InputProperty = require("src/model/properties/InputProperty");
 import DesignerControlFactory = require("src/device/DesignerControlFactory");
 import IControlFactory = require("src/device/DesignerControlFactory");
 
+import BaseControl = require("src/model/controls/BaseControl");
+import BaseContainer = require("src/model/controls/BaseContainer");
+import Button = require("src/model/controls/Button");
+import Page = require("src/model/controls/Page");
+
+
+
 class ControlManager {
 
     private log = new Log("ControlManager");
@@ -18,7 +25,7 @@ class ControlManager {
 
     private idIndex = 1;
     private idList = [];
-    private propertiesMap = [];
+    private pages = new Array<Page>();
 
     constructor() {
         this.log.Debug("constructor");
@@ -27,27 +34,21 @@ class ControlManager {
 
     public Init(): void {
         this.log.Debug("Init");
-        //this.CreatePage("MainPage");
-        $("#MainPage").on('drop', event => this.OnDrop(event));
-        $("#MainPage").on('dragover', event => this.OnDragOver(event));
     }
 
     /* Pages */
     public CreatePage(pageId: string): boolean {
         this.log.Debug("CreatePage: " + pageId);
-        this.log.DebugObj(this.idList);
         if (this.ContainsId(pageId)) {
             this.log.Warn("Page id alredy exists");
             //TODO: show notification
             alert('Id already exists');
             return false;
         }
-        this.idList.push(pageId);
-        var newPage = $('<div data-role="page"></div>');
-        newPage.attr('id', pageId);
-        newPage.on('drop', event => this.OnDrop(event));
-        newPage.on('dragover', event => this.OnDragOver(event));
-        $('body').append(newPage);
+
+        var page = this.controlFactory.CreatePage(pageId);
+        this.pages.push(page);
+        $('body').append(page.Element);
         this.SelectPage(pageId);
         return true;
     }
@@ -58,24 +59,28 @@ class ControlManager {
     }
 
     /* Controls */
-    public CreateControl(controlId: string): void {
+    public CreateControl(controlId: string): BaseControl<Property> {
         this.log.Debug("CreateControl: " + controlId);
-        this['Create' + controlId]();
+        switch (controlId) {
+            case "Button":
+                return this.CreateButton();
+            break
+        }
+
     }
 
-    private CreateButton() {
+    private CreateButton(): Button {
         var bt = this.controlFactory.CreateButton(this.GetNewId());
-        this.propertiesMap[bt.Properties.Id] = bt.Properties;
-        $(event.currentTarget).append(bt.Element);
+        return bt;
     }
 
     private CreateInput() {
+        return;
         var input = $('<input type="text">');
 
         var prop: InputProperty = new InputProperty(this.GetNewId());
-        input.attr('id', prop.Id);       
+        input.attr('id', prop.Id);
 
-        this.propertiesMap[prop.Id] = prop;
         $(event.currentTarget).append(input);
 
         input.on('click', event => {
@@ -84,12 +89,11 @@ class ControlManager {
         });
 
         //$(event.currentTarget).trigger('create');
-        input = input.textinput();      
+        input = input.textinput();
         input.data('prop', prop);
     }
 
     /* Id */
-
     private GetNewId(): string {
         var id = 'id' + this.idIndex++;
         if (this.ContainsId(id)) {
@@ -109,21 +113,10 @@ class ControlManager {
 
         this.idList.push(newId);
         delete this.idList[this.idList.indexOf(id)];
-        this.propertiesMap[newId] = this.propertiesMap[id];
-        this.propertiesMap[newId].Id = newId;
-        delete this.propertiesMap[id];
-    }
-
-    public OnDrop(event) {
-        this.log.Debug("OnDrop, event: ", event);
-        event.preventDefault();
-        var controlId = event.originalEvent.dataTransfer.getData("Text");
-        this.CreateControl(controlId);
-    }
-
-    public OnDragOver(e) {
-        //this.log.Debug("OnDragOver");
-        e.preventDefault();
+        this.FindById(id).Properties.Id = newId;
+        //this.propertiesMap[newId] = this.propertiesMap[id];
+        //this.propertiesMap[newId].Id = newId;
+        //delete this.propertiesMap[id];
     }
 
     public ChangeProperty(propertyId: string, propertyType: PropertyType, controlType: ControlType, newValue: string): void {
@@ -185,13 +178,41 @@ class ControlManager {
             case PropertyType.Mini:
                 var cond: boolean = newValue == "true";
                 //Not work
-                $('#' + propertyId).textinput({ mini: cond });                
+                $('#' + propertyId).textinput({ mini: cond });
                 break;
             case PropertyType.Theme:
                 //Not work
                 //$('#' + propertyId).textinput({ theme: newValue });
                 break;
         }
+    }
+
+    private FindById(id: string): BaseControl<Property> {
+        this.log.Debug("FindById: " + id, this.pages)
+        for (var i in this.pages) {
+            var control = this.FindInContainer(id, this.pages[i]);
+            if (control) {
+                return control;
+            }
+        }
+        return null;
+    }
+
+    private FindInContainer(id: string, control: BaseControl<Property>): BaseControl<Property> {
+        this.log.Debug("FindInContainer: ", control)
+        if (control.Properties.Id === id) {
+            return control;
+        }
+        if (control instanceof BaseContainer) {
+            var childrens = (<BaseContainer<Property>>control).Childrens;
+            for (var i in childrens) {
+                var res = this.FindInContainer(id, childrens[i]);
+                if (res) {
+                    return res;
+                }
+            }
+        }
+        return null;
     }
 }
 

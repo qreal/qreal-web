@@ -6,6 +6,7 @@ import ButtonProperty = require("src/model/properties/ButtonProperty");
 import InputProperty = require("src/model/properties/InputProperty");
 
 import Button = require("src/model/controls/Button");
+import Page = require("src/model/controls/Page");
 
 import IControlFactory = require("src/device/IControlFactory");
 
@@ -16,26 +17,36 @@ class DesignerControlFactory implements IControlFactory {
     constructor() {
     }
 
-    public CreatePage(id: string): any {
-        return "";
+    public CreatePage(id: string): Page {
+        //this.idList.push(pageId);
+        var page = new Page(id);
+        var $page = $('<div></div>');
+        $page.data('role', 'page');
+        $page.attr('id', id);
+        
+        $page.on('drop', event => page.OnDrop(event));
+        $page.on('dragover', event => page.OnDragOver(event));
+        page.Element = $page;
+        return page;
     }
 
     public CreateButton(id: string): Button {
         var button = new Button(id);
-        button.Element = $('<a href="#" data-role="button"></a>');             
-
-        button.Element.attr('id', button.Properties.Id);
-        button.Element.text(button.Properties.Text);
-
-        button.Element.on('click', event => {
+        var $bt = $('<a href="#"></a>');    
+             
+        $bt.data('role', 'button');
+        $bt.attr('id', button.Properties.Id);
+        $bt.text(button.Properties.Text);
+        
+        $bt.on('click', event => {
             this.log.Debug('bt click');
-            App.Instance.Designer.ShowProperty($(event.target).data('prop'));
+            App.Instance.Designer.ShowProperty(button.Properties);
         });
 
-        button.Element = button.Element.button();
-        button.Element.children('.ui-btn-inner').data('prop', button.Properties);
+        button.Element = $bt.button();
         return button;
     }
+
 }
 
 export = DesignerControlFactory;

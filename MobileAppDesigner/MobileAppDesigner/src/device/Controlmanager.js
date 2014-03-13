@@ -1,31 +1,20 @@
-﻿define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/properties/InputProperty", "src/device/DesignerControlFactory"], function(require, exports, App, Log, InputProperty, DesignerControlFactory) {
+﻿define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/properties/InputProperty", "src/device/DesignerControlFactory", "src/model/controls/BaseContainer"], function(require, exports, App, Log, InputProperty, DesignerControlFactory, BaseContainer) {
     var ControlManager = (function () {
         function ControlManager() {
             this.log = new Log("ControlManager");
             this.idIndex = 1;
             this.idList = [];
-            this.propertiesMap = [];
+            this.pages = new Array();
             this.log.Debug("constructor");
             this.controlFactory = new DesignerControlFactory();
         }
         ControlManager.prototype.Init = function () {
-            var _this = this;
             this.log.Debug("Init");
-
-            //this.CreatePage("MainPage");
-            $("#MainPage").on('drop', function (event) {
-                return _this.OnDrop(event);
-            });
-            $("#MainPage").on('dragover', function (event) {
-                return _this.OnDragOver(event);
-            });
         };
 
         /* Pages */
         ControlManager.prototype.CreatePage = function (pageId) {
-            var _this = this;
             this.log.Debug("CreatePage: " + pageId);
-            this.log.DebugObj(this.idList);
             if (this.ContainsId(pageId)) {
                 this.log.Warn("Page id alredy exists");
 
@@ -33,16 +22,10 @@
                 alert('Id already exists');
                 return false;
             }
-            this.idList.push(pageId);
-            var newPage = $('<div data-role="page"></div>');
-            newPage.attr('id', pageId);
-            newPage.on('drop', function (event) {
-                return _this.OnDrop(event);
-            });
-            newPage.on('dragover', function (event) {
-                return _this.OnDragOver(event);
-            });
-            $('body').append(newPage);
+
+            var page = this.controlFactory.CreatePage(pageId);
+            this.pages.push(page);
+            $('body').append(page.Element);
             this.SelectPage(pageId);
             return true;
         };
@@ -55,23 +38,26 @@
         /* Controls */
         ControlManager.prototype.CreateControl = function (controlId) {
             this.log.Debug("CreateControl: " + controlId);
-            this['Create' + controlId]();
+            switch (controlId) {
+                case "Button":
+                    return this.CreateButton();
+                    break;
+            }
         };
 
         ControlManager.prototype.CreateButton = function () {
             var bt = this.controlFactory.CreateButton(this.GetNewId());
-            this.propertiesMap[bt.Properties.Id] = bt.Properties;
-            $(event.currentTarget).append(bt.Element);
+            return bt;
         };
 
         ControlManager.prototype.CreateInput = function () {
             var _this = this;
+            return;
             var input = $('<input type="text">');
 
             var prop = new InputProperty(this.GetNewId());
             input.attr('id', prop.Id);
 
-            this.propertiesMap[prop.Id] = prop;
             $(event.currentTarget).append(input);
 
             input.on('click', function (event) {
@@ -104,21 +90,10 @@
 
             this.idList.push(newId);
             delete this.idList[this.idList.indexOf(id)];
-            this.propertiesMap[newId] = this.propertiesMap[id];
-            this.propertiesMap[newId].Id = newId;
-            delete this.propertiesMap[id];
-        };
-
-        ControlManager.prototype.OnDrop = function (event) {
-            this.log.Debug("OnDrop, event: ", event);
-            event.preventDefault();
-            var controlId = event.originalEvent.dataTransfer.getData("Text");
-            this.CreateControl(controlId);
-        };
-
-        ControlManager.prototype.OnDragOver = function (e) {
-            //this.log.Debug("OnDragOver");
-            e.preventDefault();
+            this.FindById(id).Properties.Id = newId;
+            //this.propertiesMap[newId] = this.propertiesMap[id];
+            //this.propertiesMap[newId].Id = newId;
+            //delete this.propertiesMap[id];
         };
 
         ControlManager.prototype.ChangeProperty = function (propertyId, propertyType, controlType, newValue) {
@@ -186,6 +161,34 @@
                 case 5 /* Theme */:
                     break;
             }
+        };
+
+        ControlManager.prototype.FindById = function (id) {
+            this.log.Debug("FindById: " + id, this.pages);
+            for (var i in this.pages) {
+                var control = this.FindInContainer(id, this.pages[i]);
+                if (control) {
+                    return control;
+                }
+            }
+            return null;
+        };
+
+        ControlManager.prototype.FindInContainer = function (id, control) {
+            this.log.Debug("FindInContainer: ", control);
+            if (control.Properties.Id === id) {
+                return control;
+            }
+            if (control instanceof BaseContainer) {
+                var childrens = control.Childrens;
+                for (var i in childrens) {
+                    var res = this.FindInContainer(id, childrens[i]);
+                    if (res) {
+                        return res;
+                    }
+                }
+            }
+            return null;
         };
         return ControlManager;
     })();
