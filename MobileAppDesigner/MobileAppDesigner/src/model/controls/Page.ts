@@ -18,6 +18,7 @@ class Page extends BaseContainer<PageProperty> {
         var control = App.Instance.Device.ControlManager.CreateControl(controlId);
         this.Childrens.push(control);
         this.Element.append(control.Element);
+        $('#' + this.Properties.Id).trigger('create');
     }
 
     public OnDragOver(e) {

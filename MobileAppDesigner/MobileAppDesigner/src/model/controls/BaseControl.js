@@ -23,6 +23,9 @@
             configurable: true
         });
 
+
+        BaseControl.prototype.ChangeProperty = function (propertyId, propertyType, newValue) {
+        };
         return BaseControl;
     })();
 

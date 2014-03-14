@@ -11,6 +11,31 @@ define(["require", "exports", "src/util/log/Log", "src/model/properties/ButtonPr
             _super.call(this, new ButtonProperty(id));
             this.log = new Log("Button");
         }
+        Button.prototype.ChangeProperty = function (propertyId, propertyType, newValue) {
+            switch (propertyType) {
+                case 1 /* Id */:
+                    break;
+                case 0 /* Text */:
+                    this.log.Debug("PropertyType.Text:", this.Element);
+                    this.Element.find('.ui-btn-text').text(newValue);
+                    break;
+                case 2 /* Inline */:
+                    var cond = newValue == "true";
+                    this.Element.buttonMarkup({ inline: cond });
+                    break;
+                case 3 /* Corners */:
+                    var cond = newValue == "true";
+                    this.Element.buttonMarkup({ corners: cond });
+                    break;
+                case 4 /* Mini */:
+                    var cond = newValue == "true";
+                    this.Element.buttonMarkup({ mini: cond });
+                    break;
+                case 5 /* Theme */:
+                    this.Element.buttonMarkup({ theme: newValue });
+                    break;
+            }
+        };
         return Button;
     })(BaseControl);
 

@@ -24,6 +24,9 @@ class BaseControl<T extends Property> {
     constructor(properties: T) {
         this.properties = properties;
     }
+
+    public ChangeProperty(propertyId: string, propertyType: PropertyType, newValue: string) {
+    }
 }  
 
 export = BaseControl;

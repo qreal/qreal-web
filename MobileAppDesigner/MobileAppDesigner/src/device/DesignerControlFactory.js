@@ -1,4 +1,4 @@
-﻿define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/controls/Button", "src/model/controls/Page"], function(require, exports, App, Log, Button, Page) {
+﻿define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/controls/Button", "src/model/controls/Input", "src/model/controls/Page"], function(require, exports, App, Log, Button, Input, Page) {
     var DesignerControlFactory = (function () {
         function DesignerControlFactory() {
             this.log = new Log("DesignerControlFactory");
@@ -36,6 +36,22 @@
 
             button.Element = $bt.button();
             return button;
+        };
+
+        DesignerControlFactory.prototype.CreateInput = function (id) {
+            var _this = this;
+            var input = new Input(id);
+            var $input = $('<input type="text" name="name" />');
+
+            $input.attr('id', input.Properties.Id);
+
+            $input.on('click', function (event) {
+                _this.log.Debug('input click');
+                App.Instance.Designer.ShowProperty(input.Properties);
+            });
+
+            input.Element = $input;
+            return input;
         };
         return DesignerControlFactory;
     })();

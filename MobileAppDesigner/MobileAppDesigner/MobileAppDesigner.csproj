@@ -25,6 +25,7 @@
     <TypeScriptCompile Include="src\model\controls\BaseControl.ts" />
     <TypeScriptCompile Include="src\model\controls\Button.ts" />
     <TypeScriptCompile Include="src\model\controls\ContainerControl.ts" />
+    <TypeScriptCompile Include="src\model\controls\Input.ts" />
     <TypeScriptCompile Include="src\model\controls\Page.ts" />
     <TypeScriptCompile Include="src\model\ControlTypes.ts" />
     <TypeScriptCompile Include="src\model\properties\InputProperty.ts" />

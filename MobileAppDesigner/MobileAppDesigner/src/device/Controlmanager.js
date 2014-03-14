@@ -1,4 +1,4 @@
-﻿define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/properties/InputProperty", "src/device/DesignerControlFactory", "src/model/controls/BaseContainer"], function(require, exports, App, Log, InputProperty, DesignerControlFactory, BaseContainer) {
+﻿define(["require", "exports", "src/util/log/Log", "src/device/DesignerControlFactory", "src/model/controls/BaseContainer"], function(require, exports, Log, DesignerControlFactory, BaseContainer) {
     var ControlManager = (function () {
         function ControlManager() {
             this.log = new Log("ControlManager");
@@ -42,33 +42,18 @@
             switch (controlId) {
                 case "Button":
                     return this.CreateButton();
+                case "Input":
+                    return this.CreateInput();
                     break;
             }
         };
 
         ControlManager.prototype.CreateButton = function () {
-            var bt = this.controlFactory.CreateButton(this.GetNewId());
-            return bt;
+            return this.controlFactory.CreateButton(this.GetNewId());
         };
 
         ControlManager.prototype.CreateInput = function () {
-            var _this = this;
-            return;
-            var input = $('<input type="text">');
-
-            var prop = new InputProperty(this.GetNewId());
-            input.attr('id', prop.Id);
-
-            $(event.currentTarget).append(input);
-
-            input.on('click', function (event) {
-                _this.log.Debug('input click', $(event.target));
-                App.Instance.Designer.ShowProperty($(event.target).data('prop'));
-            });
-
-            //$(event.currentTarget).trigger('create');
-            input = input.textinput();
-            input.data('prop', prop);
+            return this.controlFactory.CreateInput(this.GetNewId());
         };
 
         /* Id */
@@ -92,16 +77,13 @@
             this.idList.push(newId);
             delete this.idList[this.idList.indexOf(id)];
             this.FindById(id).Properties.Id = newId;
-            //this.propertiesMap[newId] = this.propertiesMap[id];
-            //this.propertiesMap[newId].Id = newId;
-            //delete this.propertiesMap[id];
         };
 
         ControlManager.prototype.ChangeProperty = function (propertyId, propertyType, controlType, newValue) {
             this.log.Debug("OnChangeProperty, propertyId: " + propertyId + " propertyType: " + propertyType + " controlType: " + controlType + " value: " + newValue);
             switch (controlType) {
                 case 1 /* Button */:
-                    this.ChangeButtonProperty(propertyId, propertyType, newValue);
+                    this.FindById(propertyId).ChangeProperty(propertyId, propertyType, newValue);
                     break;
                 case 2 /* Input */:
                     this.ChangeInputProperty(propertyId, propertyType, newValue);
@@ -156,8 +138,6 @@
                 case 4 /* Mini */:
                     var cond = newValue == "true";
 
-                    //Not work
-                    $('#' + propertyId).textinput({ mini: cond });
                     break;
                 case 5 /* Theme */:
                     break;

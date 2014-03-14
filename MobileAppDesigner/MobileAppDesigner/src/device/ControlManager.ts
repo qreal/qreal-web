@@ -63,33 +63,19 @@ class ControlManager {
         switch (controlId) {
             case "Button":
                 return this.CreateButton();
+            case "Input":
+                return this.CreateInput();
             break
         }
 
     }
 
     private CreateButton(): Button {
-        var bt = this.controlFactory.CreateButton(this.GetNewId());
-        return bt;
+        return this.controlFactory.CreateButton(this.GetNewId());
     }
 
     private CreateInput() {
-        return;
-        var input = $('<input type="text">');
-
-        var prop: InputProperty = new InputProperty(this.GetNewId());
-        input.attr('id', prop.Id);
-
-        $(event.currentTarget).append(input);
-
-        input.on('click', event => {
-            this.log.Debug('input click', $(event.target));
-            App.Instance.Designer.ShowProperty($(event.target).data('prop'));
-        });
-
-        //$(event.currentTarget).trigger('create');
-        input = input.textinput();
-        input.data('prop', prop);
+        return this.controlFactory.CreateInput(this.GetNewId());
     }
 
     /* Id */
@@ -113,16 +99,13 @@ class ControlManager {
         this.idList.push(newId);
         delete this.idList[this.idList.indexOf(id)];
         this.FindById(id).Properties.Id = newId;
-        //this.propertiesMap[newId] = this.propertiesMap[id];
-        //this.propertiesMap[newId].Id = newId;
-        //delete this.propertiesMap[id];
     }
 
     public ChangeProperty(propertyId: string, propertyType: PropertyType, controlType: ControlType, newValue: string): void {
         this.log.Debug("OnChangeProperty, propertyId: " + propertyId + " propertyType: " + propertyType + " controlType: " + controlType + " value: " + newValue);
         switch (controlType) {
             case ControlType.Button:
-                this.ChangeButtonProperty(propertyId, propertyType, newValue);
+                (<Button>this.FindById(propertyId)).ChangeProperty(propertyId, propertyType, newValue);               
                 break;
             case ControlType.Input:
                 this.ChangeInputProperty(propertyId, propertyType, newValue);
@@ -177,7 +160,7 @@ class ControlManager {
             case PropertyType.Mini:
                 var cond: boolean = newValue == "true";
                 //Not work
-                $('#' + propertyId).textinput({ mini: cond });
+                //$('#' + propertyId).buttonMarkup({ mini: cond });
                 break;
             case PropertyType.Theme:
                 //Not work

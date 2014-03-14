@@ -49,7 +49,6 @@ class InputProperty extends Property {
         this.theme = value;
     }
 
-
     public get Placeholder(): string {
         return this.placeholder;
     }
@@ -57,7 +56,6 @@ class InputProperty extends Property {
     public set Placeholder(value: string) {
         this.placeholder = value;
     }
-
 
     constructor(id: string) {
         super(ControlType.Input, id);

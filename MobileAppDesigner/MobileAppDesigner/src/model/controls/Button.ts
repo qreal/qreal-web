@@ -11,6 +11,39 @@ class Button extends BaseControl<ButtonProperty> {
         this.log = new Log("Button");
     }
 
+    public ChangeProperty(propertyId: string, propertyType: PropertyType, newValue: string): void {
+        switch (propertyType) {
+            case PropertyType.Id:
+               // if (this.ContainsId(newValue)) {
+                    //TODO: show notification
+                //    alert('Id already exists');
+                //} else {
+                //    $('#' + propertyId).attr('id', newValue);
+                //    this.ChangeId(propertyId, newValue);
+                //}
+                break;
+            case PropertyType.Text:
+                this.log.Debug("PropertyType.Text:", this.Element);
+                this.Element.find('.ui-btn-text').text(newValue);
+                break;
+            case PropertyType.Inline:
+                var cond: boolean = newValue == "true";
+                this.Element.buttonMarkup({ inline: cond });
+                break;
+            case PropertyType.Corners:
+                var cond: boolean = newValue == "true";
+                this.Element.buttonMarkup({ corners: cond });
+                break;
+            case PropertyType.Mini:
+                var cond: boolean = newValue == "true";
+                this.Element.buttonMarkup({ mini: cond });
+                break;
+            case PropertyType.Theme:
+                this.Element.buttonMarkup({ theme: newValue });
+                break;
+        }
+    }
+
 }   
 
 export = Button;
