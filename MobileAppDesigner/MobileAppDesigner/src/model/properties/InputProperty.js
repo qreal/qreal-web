@@ -15,6 +15,7 @@ define(["require", "exports", "src/model/properties/Property"], function(require
             this.Mini = false;
             this.Theme = 'c';
             this.Placeholder = '';
+            this.Name = '';
         }
         Object.defineProperty(InputProperty.prototype, "Title", {
             get: function () {
@@ -82,6 +83,18 @@ define(["require", "exports", "src/model/properties/Property"], function(require
             },
             set: function (value) {
                 this.placeholder = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+
+        Object.defineProperty(InputProperty.prototype, "Name", {
+            get: function () {
+                return this.name;
+            },
+            set: function (value) {
+                this.name = value;
             },
             enumerable: true,
             configurable: true

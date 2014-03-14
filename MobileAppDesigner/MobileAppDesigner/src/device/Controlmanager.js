@@ -3,7 +3,6 @@
         function ControlManager() {
             this.log = new Log("ControlManager");
             this.idIndex = 1;
-            this.idList = [];
             this.pages = new Array();
             this.log.Debug("constructor");
             this.controlFactory = new DesignerControlFactory();
@@ -23,7 +22,6 @@
                 return false;
             }
 
-            this.idList.push(pageId);
             var page = this.controlFactory.CreatePage(pageId);
             this.pages.push(page);
             $('body').append(page.Element);
@@ -49,33 +47,33 @@
         };
 
         ControlManager.prototype.CreateButton = function () {
-            return this.controlFactory.CreateButton(this.GetNewId());
+            return this.controlFactory.CreateButton(this.GetNewId('button'));
         };
 
         ControlManager.prototype.CreateInput = function () {
-            return this.controlFactory.CreateInput(this.GetNewId());
+            return this.controlFactory.CreateInput(this.GetNewId('input'));
         };
 
         /* Id */
-        ControlManager.prototype.GetNewId = function () {
-            var id = 'id' + this.idIndex++;
+        ControlManager.prototype.GetNewId = function (prefix) {
+            if (typeof prefix === "undefined") { prefix = 'id'; }
+            var id = prefix + this.idIndex++;
             if (this.ContainsId(id)) {
                 this.log.Warn('id: ' + id + ' already exists');
-                id = 'id' + this.idIndex++;
+                id = prefix + this.idIndex++;
             }
-            this.idList.push(id);
             return id;
         };
 
         ControlManager.prototype.ContainsId = function (id) {
-            return this.idList.indexOf(id) >= 0;
+            return this.FindById(id) != null;
         };
 
         ControlManager.prototype.ChangeId = function (id, newId) {
             this.log.Debug("ChangeId, id=" + id + ", newId=" + newId);
 
-            this.idList.push(newId);
-            delete this.idList[this.idList.indexOf(id)];
+            //this.idList.push(newId);
+            //delete this.idList[this.idList.indexOf(id)];
             this.FindById(id).Properties.Id = newId;
         };
 

@@ -41,15 +41,18 @@
         DesignerControlFactory.prototype.CreateInput = function (id) {
             var _this = this;
             var input = new Input(id);
-            var $input = $('<input type="text" name="name" />');
+            var $input = $('<input />');
 
+            $input.attr('type', 'text');
             $input.attr('id', input.Properties.Id);
+            $input.attr('name', input.Properties.Name);
 
             $input.on('click', function (event) {
                 _this.log.Debug('input click');
                 App.Instance.Designer.ShowProperty(input.Properties);
             });
 
+            this.log.Debug('input: ', $input);
             input.Element = $input;
             return input;
         };

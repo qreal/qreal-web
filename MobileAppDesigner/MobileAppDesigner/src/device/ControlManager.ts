@@ -22,7 +22,6 @@ class ControlManager {
     private controlFactory: IControlFactory;
 
     private idIndex = 1;
-    private idList = [];
     private pages = new Array<Page>();
 
     constructor() {
@@ -44,7 +43,6 @@ class ControlManager {
             return false;
         }
 
-        this.idList.push(pageId);
         var page = this.controlFactory.CreatePage(pageId);
         this.pages.push(page);
         $('body').append(page.Element);
@@ -71,33 +69,32 @@ class ControlManager {
     }
 
     private CreateButton(): Button {
-        return this.controlFactory.CreateButton(this.GetNewId());
+        return this.controlFactory.CreateButton(this.GetNewId('button'));
     }
 
     private CreateInput() {
-        return this.controlFactory.CreateInput(this.GetNewId());
+        return this.controlFactory.CreateInput(this.GetNewId('input'));
     }
 
     /* Id */
-    private GetNewId(): string {
-        var id = 'id' + this.idIndex++;
+    private GetNewId(prefix: string = 'id'): string {
+        var id = prefix + this.idIndex++;
         if (this.ContainsId(id)) {
             this.log.Warn('id: ' + id + ' already exists');
-            id = 'id' + this.idIndex++;
+            id = prefix + this.idIndex++;
         }
-        this.idList.push(id);
         return id;
     }
 
     public ContainsId(id: string): boolean {
-        return this.idList.indexOf(id) >= 0;
+        return this.FindById(id) != null;
     }
 
     public ChangeId(id: string, newId: string): void {
         this.log.Debug("ChangeId, id=" + id + ", newId=" + newId);
 
-        this.idList.push(newId);
-        delete this.idList[this.idList.indexOf(id)];
+        //this.idList.push(newId);
+        //delete this.idList[this.idList.indexOf(id)];
         this.FindById(id).Properties.Id = newId;
     }
 
@@ -105,7 +102,7 @@ class ControlManager {
         this.log.Debug("OnChangeProperty, propertyId: " + propertyId + " propertyType: " + propertyType + " controlType: " + controlType + " value: " + newValue);
         switch (controlType) {
             case ControlType.Button:
-                (<Button>this.FindById(propertyId)).ChangeProperty(propertyId, propertyType, newValue);               
+                (<Button>this.FindById(propertyId)).ChangeProperty(propertyId, propertyType, newValue);
                 break;
             case ControlType.Input:
                 this.ChangeInputProperty(propertyId, propertyType, newValue);

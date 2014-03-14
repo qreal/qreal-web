@@ -6,7 +6,7 @@ import BaseControl = require("src/model/controls/BaseControl");
 
 class Button extends BaseControl<ButtonProperty> {
 
-    constructor(id:string) {
+    constructor(id: string) {
         super(new ButtonProperty(id));
         this.log = new Log("Button");
     }
@@ -14,13 +14,14 @@ class Button extends BaseControl<ButtonProperty> {
     public ChangeProperty(propertyId: string, propertyType: PropertyType, newValue: string): void {
         switch (propertyType) {
             case PropertyType.Id:
-               // if (this.ContainsId(newValue)) {
+
+                if (App.Instance.Device.ControlManager.ContainsId(newValue)) {
                     //TODO: show notification
-                //    alert('Id already exists');
-                //} else {
-                //    $('#' + propertyId).attr('id', newValue);
-                //    this.ChangeId(propertyId, newValue);
-                //}
+                    alert('Id already exists');
+                } else {
+                    $('#' + propertyId).attr('id', newValue);
+                    App.Instance.Device.ControlManager.ChangeId(propertyId, newValue);
+                }
                 break;
             case PropertyType.Text:
                 this.log.Debug("PropertyType.Text:", this.Element);
@@ -44,6 +45,6 @@ class Button extends BaseControl<ButtonProperty> {
         }
     }
 
-}   
+}
 
 export = Button;

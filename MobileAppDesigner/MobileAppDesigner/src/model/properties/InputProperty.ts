@@ -8,6 +8,7 @@ class InputProperty extends Property {
     private mini: boolean;
     private theme: string;
     private placeholder: string;
+    private name: string;
 
     public get Title(): string {
         return this.title;
@@ -57,6 +58,14 @@ class InputProperty extends Property {
         this.placeholder = value;
     }
 
+    public get Name(): string {
+        return this.name;
+    }
+
+    public set Name(value: string) {
+        this.name = value;
+    }
+
     constructor(id: string) {
         super(ControlType.Input, id);
         this.Title = "Title";
@@ -65,6 +74,7 @@ class InputProperty extends Property {
         this.Mini = false;
         this.Theme = 'c';
         this.Placeholder = '';
+        this.Name = '';
     }
 }
 

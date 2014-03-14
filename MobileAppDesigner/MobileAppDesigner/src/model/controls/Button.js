@@ -4,7 +4,7 @@
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "src/util/log/Log", "src/model/properties/ButtonProperty", "src/model/controls/BaseControl"], function(require, exports, Log, ButtonProperty, BaseControl) {
+define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/properties/ButtonProperty", "src/model/controls/BaseControl"], function(require, exports, App, Log, ButtonProperty, BaseControl) {
     var Button = (function (_super) {
         __extends(Button, _super);
         function Button(id) {
@@ -14,6 +14,13 @@ define(["require", "exports", "src/util/log/Log", "src/model/properties/ButtonPr
         Button.prototype.ChangeProperty = function (propertyId, propertyType, newValue) {
             switch (propertyType) {
                 case 1 /* Id */:
+                    if (App.Instance.Device.ControlManager.ContainsId(newValue)) {
+                        //TODO: show notification
+                        alert('Id already exists');
+                    } else {
+                        $('#' + propertyId).attr('id', newValue);
+                        App.Instance.Device.ControlManager.ChangeId(propertyId, newValue);
+                    }
                     break;
                 case 0 /* Text */:
                     this.log.Debug("PropertyType.Text:", this.Element);
