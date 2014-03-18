@@ -1,0 +1,22 @@
+{
+	"MainActivity": {
+		"Main": true,
+		"Button": {
+			"Id": "test_btn",
+			"Text": "push",
+			"Link": "Second",
+			"Inline": "No"
+		},
+		"Button": {
+			"Id": "second_btn",
+			"Text": "to Second",
+			"Link": "Second",
+			"Inline": "No"
+		}
+	},
+	"Second": {
+		"Main": false
+	}
+}
+			
+			
