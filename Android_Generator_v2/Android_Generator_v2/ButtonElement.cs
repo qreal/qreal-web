@@ -59,6 +59,11 @@ namespace Android_Generator_v2
             return imports;
         }
 
+        public String getVariables()
+        {
+            return "";
+        }
+
         private String onClickSrc = @"
             public void onClick{0}(View v) {{
                 {1}

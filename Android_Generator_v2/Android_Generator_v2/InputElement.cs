@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 
 namespace Android_Generator_v2
 {
-    class TextElement : Element
+    class InputElement : Element
     {
-        public TextElement()
+        public InputElement()
         {
-            imports.Add("import android.widget.TextView;");
+            imports.Add("import android.widget.EditText;");
         }
 
         public void setId(String id)
         {
             this.id = id;
-            String initTextView = String.Format(@"
-                TextView {0} = (TextView) findViewById(R.id.{0});", id);
-            onCreateActions.Append(initTextView);
+            String init = String.Format("\n{0} = (EditText) findViewById(R.id.{0});", id);
+            addOnCreateActions(init);
         }
 
         public void addXmlAttr(String attr, String value)
@@ -34,7 +33,7 @@ namespace Android_Generator_v2
 
         public String getXml()
         {
-            return String.Format(xmlTemplate, xmlAttrs.ToString());;
+            return String.Format(xmlTemplate, id, xmlAttrs.ToString());
         }
 
         public String getOnCreateActions()
@@ -49,19 +48,27 @@ namespace Android_Generator_v2
 
         public String getVariables()
         {
-            return "";
+            return String.Format("private EditText {0};", id);
+        }
+
+        public String getValueGetter() {
+            return String.Format(valueGetterTemplate, id);
         }
 
         private StringBuilder onCreateActions = new StringBuilder();
         private StringBuilder xmlAttrs = new StringBuilder();
-        private String id;
         private HashSet<String> imports = new HashSet<String>();
+        private String id;
+        private static String valueGetterTemplate = @"
+            private String get{0}Value() {{
+    	        return {0}.getText().toString();
+        }}";
         private static String xmlTemplate = @"
-            <TextView 
+            <EditText 
+                android:id=""@+id/{0}""
                 android:layout_height=""wrap_content""
-                android:layout_width=""match_parent""
-                {0}
+                {1}
                 >
-            </TextView>";
+            </EditText>";
     }
 }

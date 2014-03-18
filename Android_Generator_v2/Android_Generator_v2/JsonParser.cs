@@ -44,7 +44,11 @@ namespace Android_Generator_v2
                             }
                             if (value.Equals("Button")) 
                             { 
-                                parseButton();
+                                parseButtonElement();
+                            }
+                            if (value.Equals("Input"))
+                            {
+                                parseInputElement();
                             }
                         }
                     }
@@ -67,9 +71,9 @@ namespace Android_Generator_v2
             }
         }
 
-        private static void parseButton()
+        private static void parseButtonElement()
         {
-            ButtonElement element = new ButtonElement();
+            ButtonElement buttonElement = new ButtonElement();
 
             while (!reader.TokenType.ToString().Equals("EndObject"))
             {
@@ -82,17 +86,17 @@ namespace Android_Generator_v2
                         if (value.Equals("Id"))
                         {
                             reader.Read();
-                            element.setId(reader.Value.ToString());
+                            buttonElement.setId(reader.Value.ToString());
                         }
                         if (value.Equals("Text"))
                         {
                             reader.Read();
-                            element.addXmlAttr("text", reader.Value.ToString());
+                            buttonElement.addXmlAttr("text", reader.Value.ToString());
                         }
                         if (value.Equals("Link"))
                         {
                             reader.Read();
-                            element.addOnClickTransition(currentActivityName, reader.Value.ToString());
+                            buttonElement.addOnClickTransition(currentActivityName, reader.Value.ToString());
                         }
                         if (value.Equals("Inline"))
                         {
@@ -100,21 +104,82 @@ namespace Android_Generator_v2
                             String attrValue = reader.Value.ToString();
                             if (attrValue.Equals("No"))
                             {
-                                element.addXmlAttr("layout_width", "match_parent");
+                                buttonElement.addXmlAttr("layout_width", "match_parent");
                             }
                             else
                             {
-                                element.addXmlAttr("layout_width", "wrap_content");
+                                buttonElement.addXmlAttr("layout_width", "wrap_content");
                             }
                         }
                     }
                 }
             }
 
-            layoutBuilder.addElement(element.getXml());
-            activityBuider.addActionsToOnCreate(element.getOnCreateActions());
-            activityBuider.addImports(element.getImports());
-            activityBuider.addMethods(element.getOnClickSrc());
+            layoutBuilder.addElement(buttonElement.getXml());
+            activityBuider.addActionsToOnCreate(buttonElement.getOnCreateActions());
+            activityBuider.addImports(buttonElement.getImports());
+            activityBuider.addMethods(buttonElement.getOnClickSrc());
+        }
+
+        private static void parseInputElement()
+        {
+            InputElement inputElement = new InputElement();
+
+            while (!reader.TokenType.ToString().Equals("EndObject"))
+            {
+                reader.Read();
+                object value = reader.Value;
+                if (value != null)
+                {
+                    if (reader.TokenType.ToString().Equals("PropertyName"))
+                    {
+                        if (value.Equals("Id"))
+                        {
+                            reader.Read();
+                            inputElement.setId(reader.Value.ToString());
+                        }
+                        if (value.Equals("Inline"))
+                        {
+                            reader.Read();
+                            String attrValue = reader.Value.ToString();
+                            if (attrValue.Equals("No"))
+                            {
+                                inputElement.addXmlAttr("layout_width", "match_parent");
+                            }
+                            else
+                            {
+                                inputElement.addXmlAttr("layout_width", "wrap_content");
+                            }
+                        }
+                        if (value.Equals("Title"))
+                        {
+
+                        }
+                        if (value.Equals("Rounded corners"))
+                        {
+
+                        }
+                        if (value.Equals("Title"))
+                        {
+
+                        }
+                        if (value.Equals("Mini"))
+                        {
+
+                        }
+                        if (value.Equals("Theme"))
+                        {
+
+                        }
+                    }
+                }
+            }
+
+            layoutBuilder.addElement(inputElement.getXml());
+            activityBuider.addActionsToOnCreate(inputElement.getOnCreateActions());
+            activityBuider.addImports(inputElement.getImports());
+            activityBuider.addMethods(inputElement.getValueGetter());
+            activityBuider.addVariables(inputElement.getVariables());
         }
 
         private static JsonTextReader reader;

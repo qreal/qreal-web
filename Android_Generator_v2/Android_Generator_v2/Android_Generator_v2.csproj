@@ -66,6 +66,7 @@
     <Compile Include="AndroidManifestBuilder.cs" />
     <Compile Include="ButtonElement.cs" />
     <Compile Include="Element.cs" />
+    <Compile Include="InputElement.cs" />
     <Compile Include="LayoutBuilderInterface.cs" />
     <Compile Include="ManifestActivity.cs" />
     <Compile Include="DirectoryCopyManager.cs" />

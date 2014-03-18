@@ -12,6 +12,14 @@
 			"Text": "to Second",
 			"Link": "Second",
 			"Inline": "No"
+		},
+		"Input": {
+			"Id": "input1",
+			"Title" : "",
+			"Inline": "No",
+			"Rounded corners": "Yes",
+			"Mini": "No",
+			"Theme": ""
 		}
 	},
 	"Second": {

@@ -8,6 +8,8 @@ namespace Android_Generator_v2
 {
     interface Element
     {
+        void setId(String id);
+
         void addXmlAttr(String attr, String value);
 
         void addOnCreateActions(String actions);
@@ -17,5 +19,7 @@ namespace Android_Generator_v2
         String getOnCreateActions();
 
         HashSet<String> getImports();
+
+        String getVariables();
     }
 }
