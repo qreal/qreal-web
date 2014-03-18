@@ -1,20 +1,20 @@
 ﻿body, html {
-  height: 100%;
-}
-
-body {
-    margin-top: 60px;
+    height: 100%;
 }
 
 /* test full screnn widgets */
-.full-screen{
-    height:100%;
+.full-screen {
+    height: 100%;
+}
+
+.designer {
+    margin-top: 10px;
 }
 
 /* Propertyes */
 
-#properties{
-    height:100%;
+#properties {
+    height: 100%;
 }
 
 .property-table {
@@ -45,7 +45,6 @@ body {
 }
 
 .properties-panel {
-    margin-top: 40px;   
 }
 
 iframe.app-content-frame {
@@ -97,45 +96,45 @@ iframe.app-content-frame {
 }
 
 .tool-button {
-    background: url('/res/button.png') no-repeat transparent;
+    background: url('/Content/res/button.png') no-repeat transparent;
 }
 
 .tool-input {
-    background: url('/res/input.png') no-repeat transparent;
+    background: url('/Content/res/input.png') no-repeat transparent;
 }
 
 .tool-selection {
-    background: url('/res/selection.png') no-repeat transparent;
+    background: url('/Content/res/selection.png') no-repeat transparent;
 }
 
 .tool-checkbox {
-    background: url('/res/checkbox.png') no-repeat transparent;
+    background: url('/Content/res/checkbox.png') no-repeat transparent;
 }
 
 .tool-checkbox2 {
-    background: url('/res/checkbox2.png') no-repeat transparent;
+    background: url('/Content/res/checkbox2.png') no-repeat transparent;
 }
 
 .tool-header {
-    background: url('/res/header.png') no-repeat transparent;
+    background: url('/Content/res/header.png') no-repeat transparent;
 }
 
 .tool-header2 {
-    background: url('/res/header2.png') no-repeat transparent;
+    background: url('/Content/res/header2.png') no-repeat transparent;
 }
 
 .tool-footer {
-    background: url('/res/footer.png') no-repeat transparent;
+    background: url('/Content/res/footer.png') no-repeat transparent;
 }
 
 .tool-navbar {
-    background: url('/res/navbar.png') no-repeat transparent;
+    background: url('/Content/res/navbar.png') no-repeat transparent;
 }
 
 .tool-grid {
-    background: url('/res/grid.png') no-repeat transparent;
+    background: url('/Content/res/grid.png') no-repeat transparent;
 }
 
 .tool-controlgroup {
-    background: url('/res/controlgroup_widget.png') no-repeat transparent;
+    background: url('/Content/res/controlgroup_widget.png') no-repeat transparent;
 }

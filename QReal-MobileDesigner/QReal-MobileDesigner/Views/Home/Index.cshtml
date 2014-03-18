@@ -2,7 +2,7 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="container">
+<div class="container designer">
     <div class="row">
         <div class="col-md-4">
             <!-- pallete-->
@@ -121,5 +121,7 @@
 <script id="templatePageItem" type="text/x-jquery-tmpl">
     <a href="#" class="list-group-item" data-toggle="tab" data-pageid="${page_id}"><span class="glyphicon glyphicon-file"></span> ${name}</a>
 </script>
+
+@Styles.Render("~/Content/css/designer.css")
 
 <script data-main="/App/RequireJsConfigDesigner" src="/Scripts/require.js" type="text/javascript"></script>
