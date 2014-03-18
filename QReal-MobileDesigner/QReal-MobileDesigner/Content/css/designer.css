@@ -1,0 +1,141 @@
+﻿body, html {
+  height: 100%;
+}
+
+body {
+    margin-top: 60px;
+}
+
+/* test full screnn widgets */
+.full-screen{
+    height:100%;
+}
+
+/* Propertyes */
+
+#properties{
+    height:100%;
+}
+
+.property-table {
+    display: table;
+    border-spacing: 0px 10px;
+}
+
+.property-row {
+    display: table-row;
+}
+
+.property-cell {
+    display: table-cell;
+}
+
+.property-label {
+    font-weight: bold;
+    font-size: 14px;
+    text-align: right;
+    padding-right: 5px;
+}
+
+.property-title {
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.properties-panel {
+    margin-top: 40px;   
+}
+
+iframe.app-content-frame {
+    width: 100%;
+    height: 100%;
+}
+
+/* Page */
+
+.control-panel {
+    margin-top: 10px;
+}
+
+.pages-list {
+    height: 400px;
+    overflow-y: auto;
+}
+
+#addPage {
+}
+
+/** Controls **/
+
+.tool-item {
+    width: 100px;
+    background: #fbfbfb;
+    display: inline-block;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    margin: 2px;
+    padding: 5px;
+}
+
+    .tool-item * {
+        display: table;
+        margin: 0 auto;
+    }
+
+
+.tool-icon {
+    width: 75px;
+    height: 75px;
+}
+
+.tool-title {
+    margin-top: 5px;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.tool-button {
+    background: url('/res/button.png') no-repeat transparent;
+}
+
+.tool-input {
+    background: url('/res/input.png') no-repeat transparent;
+}
+
+.tool-selection {
+    background: url('/res/selection.png') no-repeat transparent;
+}
+
+.tool-checkbox {
+    background: url('/res/checkbox.png') no-repeat transparent;
+}
+
+.tool-checkbox2 {
+    background: url('/res/checkbox2.png') no-repeat transparent;
+}
+
+.tool-header {
+    background: url('/res/header.png') no-repeat transparent;
+}
+
+.tool-header2 {
+    background: url('/res/header2.png') no-repeat transparent;
+}
+
+.tool-footer {
+    background: url('/res/footer.png') no-repeat transparent;
+}
+
+.tool-navbar {
+    background: url('/res/navbar.png') no-repeat transparent;
+}
+
+.tool-grid {
+    background: url('/res/grid.png') no-repeat transparent;
+}
+
+.tool-controlgroup {
+    background: url('/res/controlgroup_widget.png') no-repeat transparent;
+}
