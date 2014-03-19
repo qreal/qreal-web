@@ -156,6 +156,9 @@ class ControlManager {
                     this.ChangeId(propertyId, newValue);
                 }
                 break;
+            case PropertyType.Title:
+                
+                break;
             case PropertyType.Mini:
                 var cond: boolean = newValue == "true";
                 //Not work

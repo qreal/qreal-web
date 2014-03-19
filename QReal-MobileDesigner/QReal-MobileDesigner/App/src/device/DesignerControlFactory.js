@@ -34,6 +34,7 @@
             });
 
             button.Element = $bt.button();
+            this.log.Debug("button:", button.Element);
             return button;
         };
 
@@ -60,7 +61,7 @@
             });
 
             this.log.Debug('input: ', $container);
-            $container.find('input').textinput({ theme: "a" });
+            $container.find('input').textinput();
             input.Element = $container;
             return input;
         };

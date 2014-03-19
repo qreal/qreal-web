@@ -32,7 +32,7 @@ namespace QReal_MobileDesigner
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication();
+            app.UseGoogleAuthentication();
         }
     }
 }
