@@ -163,7 +163,7 @@ class ControlManager {
                 break;
             case PropertyType.Theme:
                 //Not work
-                //$('#' + propertyId).textinput({ theme: newValue });
+                $('#' + propertyId).textinput({ theme: newValue });
                 break;
         }
     }

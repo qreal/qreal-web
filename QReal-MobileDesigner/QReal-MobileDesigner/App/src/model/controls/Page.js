@@ -18,9 +18,8 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
             var control = App.Instance.Device.ControlManager.CreateControl(controlId);
             this.Childrens.push(control);
             this.Element.append(control.Element);
-
             //control.Element.trigger('create');
-            $('#' + this.Properties.Id).trigger('create');
+            //$('#' + this.Properties.Id).trigger('create');
         };
 
         Page.prototype.OnDragOver = function (e) {

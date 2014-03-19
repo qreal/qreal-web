@@ -19,7 +19,6 @@ class DesignerControlFactory implements IControlFactory {
     }
 
     public CreatePage(id: string): Page {
-        //this.idList.push(pageId);
         var page = new Page(id);
         var $page = $('<div></div>');
         $page.data('role', 'page');
@@ -50,19 +49,28 @@ class DesignerControlFactory implements IControlFactory {
 
     public CreateInput(id: string): Input {
         var input = new Input(id);
-        var $input = $('<input />');
+       
+        var $container = $("<div data-role='fieldcontain'></div>");
+        var $label = $("<label></label>");
+        $label.text(input.Properties.Title);
+        $label.attr('for', input.Properties.Id);
 
+        var $input = $('<input />');
         $input.attr('type', 'text');
         $input.attr('id', input.Properties.Id);
         $input.attr('name', input.Properties.Name);
 
-        $input.on('click', event => {
+        $container.append($label);
+        $container.append($input);
+
+        $container.on('click', event => {
             this.log.Debug('input click');
             App.Instance.Designer.ShowProperty(input.Properties);
         });
 
-        this.log.Debug('input: ', $input);
-        input.Element = $input;
+        this.log.Debug('input: ', $container);
+        $container.find('input').textinput({ theme: "a" });
+        input.Element = $container;
         return input;
     }
 

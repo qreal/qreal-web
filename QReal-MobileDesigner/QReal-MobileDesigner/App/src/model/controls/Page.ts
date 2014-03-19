@@ -19,7 +19,7 @@ class Page extends BaseContainer<PageProperty> {
         this.Childrens.push(control);
         this.Element.append(control.Element);
         //control.Element.trigger('create');
-        $('#' + this.Properties.Id).trigger('create');
+        //$('#' + this.Properties.Id).trigger('create');
     }
 
     public OnDragOver(e) {

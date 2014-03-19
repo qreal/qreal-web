@@ -138,6 +138,8 @@
 
                     break;
                 case 5 /* Theme */:
+                    //Not work
+                    $('#' + propertyId).textinput({ theme: newValue });
                     break;
             }
         };
