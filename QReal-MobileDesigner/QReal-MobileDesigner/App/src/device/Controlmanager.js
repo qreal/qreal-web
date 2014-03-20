@@ -1,4 +1,4 @@
-﻿define(["require", "exports", "src/util/log/Log", "src/model/Enums", "src/device/DesignerControlFactory", "src/model/controls/BaseContainer"], function(require, exports, Log, Enums, DesignerControlFactory, BaseContainer) {
+﻿define(["require", "exports", "src/util/log/Log", "src/model/Enums", "src/device/DesignerControlFactory", "src/model/controls/DesignerControls"], function(require, exports, Log, Enums, DesignerControlFactory, DesignerControls) {
     var ControlManager = (function () {
         function ControlManager() {
             this.log = new Log("ControlManager");
@@ -103,7 +103,7 @@
             if (control.Properties.Id === id) {
                 return control;
             }
-            if (control instanceof BaseContainer) {
+            if (control instanceof DesignerControls.BaseContainer) {
                 var childrens = control.Childrens;
                 for (var i in childrens) {
                     var res = this.FindInContainer(id, childrens[i]);

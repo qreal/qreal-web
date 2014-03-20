@@ -10,11 +10,7 @@ import InputProperty = require("src/model/properties/InputProperty");
 
 import DesignerControlFactory = require("src/device/DesignerControlFactory");
 import IControlFactory = require("src/device/DesignerControlFactory");
-
-import BaseControl = require("src/model/controls/BaseControl");
-import BaseContainer = require("src/model/controls/BaseContainer");
-import Button = require("src/model/controls/Button");
-import Page = require("src/model/controls/Page");
+import DesignerControls = require("src/model/controls/DesignerControls");
 
 class ControlManager {
 
@@ -23,7 +19,7 @@ class ControlManager {
     private controlFactory: IControlFactory;
 
     private idIndex = 1;
-    private pages = new Array<Page>();
+    private pages = new Array<DesignerControls.Page>();
 
     constructor() {
         this.log.Debug("constructor");
@@ -57,7 +53,7 @@ class ControlManager {
     }
 
     /* Controls */
-    public CreateControl(controlId: string): BaseControl<Property> {
+    public CreateControl(controlId: string): DesignerControls.BaseControl<Property> {
         this.log.Debug("CreateControl: " + controlId);
         switch (controlId) {
             case "Button":
@@ -69,7 +65,7 @@ class ControlManager {
 
     }
 
-    private CreateButton(): Button {
+    private CreateButton(): DesignerControls.Button {
         return this.controlFactory.CreateButton(this.GetNewId('button'));
     }
 
@@ -111,7 +107,7 @@ class ControlManager {
         }
     }
 
-    private FindById(id: string): BaseControl<Property> {
+    private FindById(id: string): DesignerControls.BaseControl<Property> {
         for (var i in this.pages) {
             var control = this.FindInContainer(id, this.pages[i]);
             if (control) {
@@ -121,12 +117,12 @@ class ControlManager {
         return null;
     }
 
-    private FindInContainer(id: string, control: BaseControl<Property>): BaseControl<Property> {
+    private FindInContainer(id: string, control: DesignerControls.BaseControl<Property>): DesignerControls.BaseControl<Property> {
         if (control.Properties.Id === id) {
             return control;
         }
-        if (control instanceof BaseContainer) {
-            var childrens = (<BaseContainer<Property>>control).Childrens;
+        if (control instanceof DesignerControls.BaseContainer) {
+            var childrens = (<DesignerControls.BaseContainer<Property>>control).Childrens;
             for (var i in childrens) {
                 var res = this.FindInContainer(id, childrens[i]);
                 if (res) {

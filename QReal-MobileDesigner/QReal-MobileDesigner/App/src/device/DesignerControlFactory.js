@@ -1,10 +1,10 @@
-﻿define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/controls/Button", "src/model/controls/Input", "src/model/controls/Page"], function(require, exports, App, Log, Button, Input, Page) {
+﻿define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/controls/DesignerControls"], function(require, exports, App, Log, DesignerControls) {
     var DesignerControlFactory = (function () {
         function DesignerControlFactory() {
             this.log = new Log("DesignerControlFactory");
         }
         DesignerControlFactory.prototype.CreatePage = function (id) {
-            var page = new Page(id);
+            var page = new DesignerControls.Page(id);
             var $page = $('<div></div>');
             $page.data('role', 'page');
             $page.attr('id', id);
@@ -21,7 +21,7 @@
 
         DesignerControlFactory.prototype.CreateButton = function (id) {
             var _this = this;
-            var button = new Button(id);
+            var button = new DesignerControls.Button(id);
             var $bt = $('<a href="#"></a>');
 
             $bt.data('role', 'button');
@@ -40,7 +40,7 @@
 
         DesignerControlFactory.prototype.CreateInput = function (id) {
             var _this = this;
-            var input = new Input(id);
+            var input = new DesignerControls.Input(id);
 
             var $container = $("<div data-role='fieldcontain'></div>");
             var $label = $("<label></label>");

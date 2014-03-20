@@ -88,7 +88,7 @@
 
             $('#addPage').click(function (e) {
                 //TODO: create normal dialog
-                var pageName = prompt('New page', 'MyPage');
+                var pageName = prompt('New Page', 'MyPage');
                 if (pageName) {
                     self.AddNewPage(pageName);
                 }
@@ -118,7 +118,6 @@
         ToolsView.prototype.AddNewPage = function (pageName) {
             this.log.Debug("PageName: " + pageName);
             var pageId = pageName.trim().replace(' ', '_');
-            this.log.Debug("pageId: " + pageId);
             var result = App.Instance.Device.ControlManager.CreatePage(pageId);
             if (result) {
                 var pageItem = $('#templatePageItem').tmpl({

@@ -499,11 +499,6 @@
     <CodeAnalysisDictionary Include="App\src\device\Device.ts" />
     <CodeAnalysisDictionary Include="App\src\device\IControlFactory.ts" />
     <CodeAnalysisDictionary Include="App\src\device\Main.ts" />
-    <CodeAnalysisDictionary Include="App\src\model\controls\BaseContainer.ts" />
-    <CodeAnalysisDictionary Include="App\src\model\controls\BaseControl.ts" />
-    <CodeAnalysisDictionary Include="App\src\model\controls\Button.ts" />
-    <CodeAnalysisDictionary Include="App\src\model\controls\Input.ts" />
-    <CodeAnalysisDictionary Include="App\src\model\controls\Page.ts" />
     <CodeAnalysisDictionary Include="App\src\model\properties\ButtonProperty.ts" />
     <CodeAnalysisDictionary Include="App\src\model\properties\InputProperty.ts" />
     <CodeAnalysisDictionary Include="App\src\model\properties\PageProperty.ts" />
@@ -514,6 +509,7 @@
     <TypeScriptCompile Include="App\file1.ts" />
     <TypeScriptCompile Include="App\RequireJsConfigDesigner.ts" />
     <TypeScriptCompile Include="App\RequireJSConfigDevice.ts" />
+    <TypeScriptCompile Include="App\src\model\controls\DesignerControls.ts" />
     <TypeScriptCompile Include="App\src\model\Enums.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
     <CodeAnalysisDictionary Include="Scripts\typings\jquery.tmpl.d.ts" />

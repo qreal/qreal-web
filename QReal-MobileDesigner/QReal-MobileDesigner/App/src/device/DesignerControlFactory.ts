@@ -1,14 +1,10 @@
 ﻿import App = require("src/Application");
 import Log = require("src/util/log/Log");
 
+import DesignerControls = require("src/model/controls/DesignerControls");
 import Property = require("src/model/properties/Property");
 import ButtonProperty = require("src/model/properties/ButtonProperty");
 import InputProperty = require("src/model/properties/InputProperty");
-
-import Button = require("src/model/controls/Button");
-import Input = require("src/model/controls/Input");
-import Page = require("src/model/controls/Page");
-
 import IControlFactory = require("src/device/IControlFactory");
 
 class DesignerControlFactory implements IControlFactory {
@@ -18,8 +14,8 @@ class DesignerControlFactory implements IControlFactory {
     constructor() {
     }
 
-    public CreatePage(id: string): Page {
-        var page = new Page(id);
+    public CreatePage(id: string): DesignerControls.Page {
+        var page = new DesignerControls.Page(id);
         var $page = $('<div></div>');
         $page.data('role', 'page');
         $page.attr('id', id);
@@ -30,8 +26,8 @@ class DesignerControlFactory implements IControlFactory {
         return page;
     }
 
-    public CreateButton(id: string): Button {
-        var button = new Button(id);
+    public CreateButton(id: string): DesignerControls.Button {
+        var button = new DesignerControls.Button(id);
         var $bt = $('<a href="#"></a>');
 
         $bt.data('role', 'button');
@@ -48,8 +44,8 @@ class DesignerControlFactory implements IControlFactory {
         return button;
     }
 
-    public CreateInput(id: string): Input {
-        var input = new Input(id);
+    public CreateInput(id: string): DesignerControls.Input {
+        var input = new DesignerControls.Input(id);
        
         var $container = $("<div data-role='fieldcontain'></div>");
         var $label = $("<label></label>");
