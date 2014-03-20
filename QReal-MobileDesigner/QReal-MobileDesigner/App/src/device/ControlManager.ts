@@ -91,76 +91,22 @@ class ControlManager {
         return this.FindById(id) != null;
     }
 
-    public ChangeId(id: string, newId: string): void {
-        this.log.Debug("ChangeId, id=" + id + ", newId=" + newId);
-
-        if (this.ContainsId(newId)) {
-            //TODO: show notification
-            alert('Id already exists');
-        } else {
-            var element = this.FindById(id);
-            $('#' + id).attr('id', newId);
-            this.FindById(id).Properties.Id = newId;
-        }
-    }
-
     public ChangeProperty(propertyId: string, propertyType: Enums.PropertyType, controlType: Enums.ControlType, newValue: string): void {
         this.log.Debug("OnChangeProperty, propertyId: " + propertyId + " propertyType: " + propertyType + " controlType: " + controlType + " value: " + newValue);
+        if (propertyType == Enums.PropertyType.Id) {
+            if (this.ContainsId(newValue)) {
+                //TODO: show notification
+                alert('Id already exists');
+                return;
+            }
+        }
+
         switch (controlType) {
             case Enums.ControlType.Button:
-                (<Button>this.FindById(propertyId)).ChangeProperty(propertyId, propertyType, newValue);
+                this.FindById(propertyId).ChangeProperty(propertyId, propertyType, newValue);
                 break;
             case Enums.ControlType.Input:
-                this.ChangeInputProperty(propertyId, propertyType, newValue);
-                break;
-        }
-    }
-
-    private ChangeButtonProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string): void {
-        switch (propertyType) {
-            case Enums.PropertyType.Id:
-                this.ChangeId(propertyId, newValue);
-                break;
-            case Enums.PropertyType.Text:
-                $('#' + propertyId).children('.ui-btn-inner').children('.ui-btn-text').text(newValue);
-                break;
-            case Enums.PropertyType.Inline:
-                var cond: boolean = newValue == "true";
-                $('#' + propertyId).buttonMarkup({ inline: cond });
-                break;
-            case Enums.PropertyType.Corners:
-                var cond: boolean = newValue == "true";
-                $('#' + propertyId).buttonMarkup({ corners: cond });
-                break;
-            case Enums.PropertyType.Mini:
-                var cond: boolean = newValue == "true";
-                $('#' + propertyId).buttonMarkup({ mini: cond });
-                break;
-            case Enums.PropertyType.Theme:
-                $('#' + propertyId).buttonMarkup({ theme: newValue });
-                break;
-        }
-    }
-
-    private ChangeInputProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string): void {
-        this.log.Debug("ChangeInputProperty");
-        switch (propertyType) {
-            case Enums.PropertyType.Id:
-                this.ChangeId(propertyId, newValue);
-                break;
-            case Enums.PropertyType.Title:
-                var input = this.FindById(propertyId);
-                //input.
-                //input.Element.find('label').text(newValue);               
-                break;
-            case Enums.PropertyType.Mini:
-                var cond: boolean = newValue == "true";
-                //Not work
-                //$('#' + propertyId).buttonMarkup({ mini: cond });
-                break;
-            case Enums.PropertyType.Theme:
-                //Not work
-                $('#' + propertyId).textinput({ theme: newValue });
+                this.FindById(propertyId).ChangeProperty(propertyId, propertyType, newValue);
                 break;
         }
     }

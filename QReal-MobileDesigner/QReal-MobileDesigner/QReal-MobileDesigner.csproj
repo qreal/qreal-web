@@ -502,7 +502,6 @@
     <CodeAnalysisDictionary Include="App\src\model\controls\BaseContainer.ts" />
     <CodeAnalysisDictionary Include="App\src\model\controls\BaseControl.ts" />
     <CodeAnalysisDictionary Include="App\src\model\controls\Button.ts" />
-    <CodeAnalysisDictionary Include="App\src\model\controls\ContainerControl.ts" />
     <CodeAnalysisDictionary Include="App\src\model\controls\Input.ts" />
     <CodeAnalysisDictionary Include="App\src\model\controls\Page.ts" />
     <CodeAnalysisDictionary Include="App\src\model\properties\ButtonProperty.ts" />

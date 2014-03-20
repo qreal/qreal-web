@@ -69,74 +69,22 @@
             return this.FindById(id) != null;
         };
 
-        ControlManager.prototype.ChangeId = function (id, newId) {
-            this.log.Debug("ChangeId, id=" + id + ", newId=" + newId);
-
-            if (this.ContainsId(newId)) {
-                //TODO: show notification
-                alert('Id already exists');
-            } else {
-                var element = this.FindById(id);
-                $('#' + id).attr('id', newId);
-                this.FindById(id).Properties.Id = newId;
-            }
-        };
-
         ControlManager.prototype.ChangeProperty = function (propertyId, propertyType, controlType, newValue) {
             this.log.Debug("OnChangeProperty, propertyId: " + propertyId + " propertyType: " + propertyType + " controlType: " + controlType + " value: " + newValue);
+            if (propertyType == 1 /* Id */) {
+                if (this.ContainsId(newValue)) {
+                    //TODO: show notification
+                    alert('Id already exists');
+                    return;
+                }
+            }
+
             switch (controlType) {
                 case 1 /* Button */:
                     this.FindById(propertyId).ChangeProperty(propertyId, propertyType, newValue);
                     break;
                 case 2 /* Input */:
-                    this.ChangeInputProperty(propertyId, propertyType, newValue);
-                    break;
-            }
-        };
-
-        ControlManager.prototype.ChangeButtonProperty = function (propertyId, propertyType, newValue) {
-            switch (propertyType) {
-                case 1 /* Id */:
-                    this.ChangeId(propertyId, newValue);
-                    break;
-                case 0 /* Text */:
-                    $('#' + propertyId).children('.ui-btn-inner').children('.ui-btn-text').text(newValue);
-                    break;
-                case 2 /* Inline */:
-                    var cond = newValue == "true";
-                    $('#' + propertyId).buttonMarkup({ inline: cond });
-                    break;
-                case 3 /* Corners */:
-                    var cond = newValue == "true";
-                    $('#' + propertyId).buttonMarkup({ corners: cond });
-                    break;
-                case 4 /* Mini */:
-                    var cond = newValue == "true";
-                    $('#' + propertyId).buttonMarkup({ mini: cond });
-                    break;
-                case 5 /* Theme */:
-                    $('#' + propertyId).buttonMarkup({ theme: newValue });
-                    break;
-            }
-        };
-
-        ControlManager.prototype.ChangeInputProperty = function (propertyId, propertyType, newValue) {
-            this.log.Debug("ChangeInputProperty");
-            switch (propertyType) {
-                case 1 /* Id */:
-                    this.ChangeId(propertyId, newValue);
-                    break;
-                case 6 /* Title */:
-                    var input = this.FindById(propertyId);
-
-                    break;
-                case 4 /* Mini */:
-                    var cond = newValue == "true";
-
-                    break;
-                case 5 /* Theme */:
-                    //Not work
-                    $('#' + propertyId).textinput({ theme: newValue });
+                    this.FindById(propertyId).ChangeProperty(propertyId, propertyType, newValue);
                     break;
             }
         };

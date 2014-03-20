@@ -16,14 +16,8 @@ class Button extends BaseControl<ButtonProperty> {
     public ChangeProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string): void {
         switch (propertyType) {
             case Enums.PropertyType.Id:
-
-                if (App.Instance.Device.ControlManager.ContainsId(newValue)) {
-                    //TODO: show notification
-                    alert('Id already exists');
-                } else {
-                    $('#' + propertyId).attr('id', newValue);
-                    App.Instance.Device.ControlManager.ChangeId(propertyId, newValue);
-                }
+                this.Properties.Id = newValue;
+                this.Element.attr('id', newValue);
                 break;
             case Enums.PropertyType.Text:
                 this.log.Debug("Enums.PropertyType.Text:", this.Element);

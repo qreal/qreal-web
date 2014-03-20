@@ -13,8 +13,25 @@ class Input extends BaseControl<InputProperty> {
         this.log = new Log("Input");
     }
 
-
     public ChangeProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string) {
+        switch (propertyType) {
+            case Enums.PropertyType.Id:
+                this.Properties.Id = newValue;
+                this.Element.find('input').attr('id', newValue);
+                break;
+            case Enums.PropertyType.Title:               
+                this.Element.find('label').text(newValue);               
+                break;
+            case Enums.PropertyType.Mini:
+                var cond: boolean = newValue == "true";
+                //Not work
+                //$('#' + propertyId).buttonMarkup({ mini: cond });
+                break;
+            case Enums.PropertyType.Theme:
+                //Not work
+                //$('#' + propertyId).textinput({ theme: newValue });
+                break;
+        }
     }
 }
 
