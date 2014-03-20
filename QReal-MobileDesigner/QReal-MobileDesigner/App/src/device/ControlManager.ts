@@ -109,7 +109,7 @@ class ControlManager {
         }
     }
 
-    private FindById(id: string): DesignerControls.BaseControl<Property> {
+    public FindById(id: string): DesignerControls.BaseControl<Property> {
         for (var i in this.pages) {
             var control = this.FindInContainer(id, this.pages[i]);
             if (control) {

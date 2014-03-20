@@ -133,6 +133,10 @@
             var previous = element.closest(".list-group").children(".active");
             previous.removeClass('active'); // previous list-item
             element.addClass('active'); // activated list-item
+
+            var id = element.data('pageid');
+            var page = App.Instance.Device.ControlManager.FindById(id);
+            App.Instance.Designer.ShowProperty(page.Properties);
         };
         return ToolsView;
     })();

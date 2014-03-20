@@ -6,7 +6,7 @@ import EventManager = require("src/util/events/EventManager");
 import Property = require("src/model/properties/Property");
 import ButtonProperty = require("src/model/properties/ButtonProperty");
 import InputProperty = require("src/model/properties/InputProperty");
-
+import PageProperty = require("src/model/properties/PageProperty");
 
 
 class PropertiesView {
@@ -55,6 +55,9 @@ class PropertiesView {
                 break;
             case Enums.ControlType.Input:
                 this.ShowProperty_Input(<InputProperty>property);
+                break;
+            case Enums.ControlType.Page:
+                this.ShowProperty_Page(<PageProperty>property);
                 break;
         }
     }
@@ -233,6 +236,31 @@ class PropertiesView {
         dialogContent.append(cornersProperty);
         dialogContent.append(miniProperty);
         dialogContent.append(themeProperty);
+
+        propertyPanel.appendTo('#properties-widget');
+        propertyPanel.attr('id', 'propertyFor' + property.Id);
+        this.currentPropertyDiv = propertyPanel;
+    }
+
+    public ShowProperty_Page(property: PageProperty): void {
+        this.log.Debug("ShowProperty_Page");
+        var self = this;
+        var controlManager = App.Instance.Device.ControlManager;
+
+        var propertyPanel = $('#propertiesTmpl').tmpl({});
+        var panelContent = propertyPanel.children("#property-table");
+
+        var idProperty = $('#propertyTextTmpl').tmpl(
+            {
+                name: 'Id:',
+                value: property.Id
+            });
+        idProperty.find('input').change(function () {
+            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Id, Enums.ControlType.Page, $(this).val());
+        });
+
+        
+        panelContent.append(idProperty);       
 
         propertyPanel.appendTo('#properties-widget');
         propertyPanel.attr('id', 'propertyFor' + property.Id);

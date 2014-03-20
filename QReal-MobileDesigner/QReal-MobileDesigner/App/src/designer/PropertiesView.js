@@ -1,4 +1,4 @@
-define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/Enums"], function(require, exports, Log, App, Enums) {
+﻿define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/Enums"], function(require, exports, Log, App, Enums) {
     var PropertiesView = (function () {
         function PropertiesView() {
             this.log = new Log("PropertiesView");
@@ -39,6 +39,9 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
                     break;
                 case 3 /* Input */:
                     this.ShowProperty_Input(property);
+                    break;
+                case 0 /* Page */:
+                    this.ShowProperty_Page(property);
                     break;
             }
         };
@@ -201,6 +204,29 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             dialogContent.append(cornersProperty);
             dialogContent.append(miniProperty);
             dialogContent.append(themeProperty);
+
+            propertyPanel.appendTo('#properties-widget');
+            propertyPanel.attr('id', 'propertyFor' + property.Id);
+            this.currentPropertyDiv = propertyPanel;
+        };
+
+        PropertiesView.prototype.ShowProperty_Page = function (property) {
+            this.log.Debug("ShowProperty_Page");
+            var self = this;
+            var controlManager = App.Instance.Device.ControlManager;
+
+            var propertyPanel = $('#propertiesTmpl').tmpl({});
+            var panelContent = propertyPanel.children("#property-table");
+
+            var idProperty = $('#propertyTextTmpl').tmpl({
+                name: 'Id:',
+                value: property.Id
+            });
+            idProperty.find('input').change(function () {
+                controlManager.ChangeProperty(property.Id, 1 /* Id */, 0 /* Page */, $(this).val());
+            });
+
+            panelContent.append(idProperty);
 
             propertyPanel.appendTo('#properties-widget');
             propertyPanel.attr('id', 'propertyFor' + property.Id);
