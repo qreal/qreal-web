@@ -1,5 +1,5 @@
-﻿define(["require", "exports"], function(require, exports) {
-    var PropertyType;
+﻿var Enums;
+(function (Enums) {
     (function (PropertyType) {
         PropertyType[PropertyType["Text"] = 0] = "Text";
         PropertyType[PropertyType["Id"] = 1] = "Id";
@@ -9,9 +9,7 @@
         PropertyType[PropertyType["Theme"] = 5] = "Theme";
 
         PropertyType[PropertyType["Title"] = 6] = "Title";
-    })(PropertyType || (PropertyType = {}));
-
-    
-    return PropertyType;
-});
+    })(Enums.PropertyType || (Enums.PropertyType = {}));
+    var PropertyType = Enums.PropertyType;
+})(Enums || (Enums = {}));
 //# sourceMappingURL=PropertyType.js.map

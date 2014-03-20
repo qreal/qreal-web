@@ -1,6 +1,5 @@
 import Property = require("src/model/properties/Property");
-import ControlType = require("src/model/ControlType");
-import PropertyType = require("src/model/PropertyType");
+import Enums = require("src/model/Enums");
 
 class ButtonProperty extends Property {
 
@@ -51,7 +50,7 @@ class ButtonProperty extends Property {
     }
 
     constructor(id: string) {
-        super(ControlType.Button, id);
+        super(Enums.ControlType.Button, id);
         this.Text = "Button";
         this.Inline = false;
         this.Corners = true;

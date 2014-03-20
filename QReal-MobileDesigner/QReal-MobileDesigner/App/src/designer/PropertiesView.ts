@@ -1,7 +1,6 @@
 import Log = require("src/util/log/Log");
 import App = require("src/Application");
-import ControlType = require("src/model/ControlType");
-import PropertyType = require("src/model/PropertyType");
+import Enums = require("src/model/Enums");
 import Controller = require("src/designer/Designer");
 import EventManager = require("src/util/events/EventManager");
 import Property = require("src/model/properties/Property");
@@ -51,10 +50,10 @@ class PropertiesView {
         }
 
         switch (property.Type) {
-            case ControlType.Button:
+            case Enums.ControlType.Button:
                 this.ShowProperty_Button(<ButtonProperty>property);
                 break;
-            case ControlType.Input:
+            case Enums.ControlType.Input:
                 this.ShowProperty_Input(<InputProperty>property);
                 break;
         }
@@ -74,7 +73,7 @@ class PropertiesView {
                 value: property.Id
             });
         idProperty.find('input').change(function () {
-            controlManager.ChangeProperty(property.Id, PropertyType.Id, ControlType.Button, $(this).val());
+            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Id, Enums.ControlType.Button, $(this).val());
         });
 
         var textProperty = $('#propertyTextTmpl').tmpl(
@@ -84,7 +83,7 @@ class PropertiesView {
             });
 
         textProperty.find('input').change(function () {
-            controlManager.ChangeProperty(property.Id, PropertyType.Text, ControlType.Button, $(this).val());
+            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Text, Enums.ControlType.Button, $(this).val());
         });
 
         var inlineProperty = $('#propertySelectTmpl').tmpl(
@@ -97,7 +96,7 @@ class PropertiesView {
 
         inlineSelect.val(String(property.Inline));
         inlineSelect.change(function () {
-            controlManager.ChangeProperty(property.Id, PropertyType.Inline, ControlType.Button, $(this).val());
+            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Inline, Enums.ControlType.Button, $(this).val());
         });
         var cornersProperty = $('#propertySelectTmpl').tmpl(
             {
@@ -108,7 +107,7 @@ class PropertiesView {
 
         cornersSelect.val(String(property.Corners));
         cornersSelect.change(function () {
-            controlManager.ChangeProperty(property.Id, PropertyType.Corners, ControlType.Button, $(this).val());
+            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Corners, Enums.ControlType.Button, $(this).val());
         });
 
         var miniProperty = $('#propertySelectTmpl').tmpl(
@@ -120,7 +119,7 @@ class PropertiesView {
 
         miniSelect.val(String(property.Mini));
         miniSelect.change(function () {
-            controlManager.ChangeProperty(property.Id, PropertyType.Mini, ControlType.Button, $(this).val());
+            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Mini, Enums.ControlType.Button, $(this).val());
         });
 
 
@@ -134,7 +133,7 @@ class PropertiesView {
 
         themeSelect.val(property.Theme);
         themeSelect.change(function () {
-            controlManager.ChangeProperty(property.Id, PropertyType.Theme, ControlType.Button, $(this).val());
+            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Theme, Enums.ControlType.Button, $(this).val());
         });
 
 
@@ -164,7 +163,7 @@ class PropertiesView {
                 value: property.Id
             });
         idProperty.find('input').change(function () {
-            controlManager.ChangeProperty(property.Id, PropertyType.Id, ControlType.Input, $(this).val());
+            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Id, Enums.ControlType.Input, $(this).val());
         });
 
         var titleProperty = $('#propertyTextTmpl').tmpl(
@@ -174,7 +173,7 @@ class PropertiesView {
             });
 
         titleProperty.find('input').change(function () {
-            controlManager.ChangeProperty(property.Id, PropertyType.Title, ControlType.Input, $(this).val());
+            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Title, Enums.ControlType.Input, $(this).val());
         });
 
         var inlineProperty = $('#propertySelectTmpl').tmpl(
@@ -187,7 +186,7 @@ class PropertiesView {
 
         inlineSelect.val(String(property.Inline));
         inlineSelect.change(function () {
-            controlManager.ChangeProperty(property.Id, PropertyType.Inline, ControlType.Input, $(this).val());
+            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Inline, Enums.ControlType.Input, $(this).val());
         });
         var cornersProperty = $('#propertySelectTmpl').tmpl(
             {
@@ -198,7 +197,7 @@ class PropertiesView {
 
         cornersSelect.val(String(property.Corners));
         cornersSelect.change(function () {
-            controlManager.ChangeProperty(property.Id, PropertyType.Corners, ControlType.Input, $(this).val());
+            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Corners, Enums.ControlType.Input, $(this).val());
         });
 
         var miniProperty = $('#propertySelectTmpl').tmpl(
@@ -210,7 +209,7 @@ class PropertiesView {
 
         miniSelect.val(String(property.Mini));
         miniSelect.change(function () {
-            controlManager.ChangeProperty(property.Id, PropertyType.Mini, ControlType.Input, $(this).val());
+            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Mini, Enums.ControlType.Input, $(this).val());
         });
 
 
@@ -224,7 +223,7 @@ class PropertiesView {
 
         themeSelect.val(property.Theme);
         themeSelect.change(function () {
-            controlManager.ChangeProperty(property.Id, PropertyType.Theme, ControlType.Input, $(this).val());
+            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Theme, Enums.ControlType.Input, $(this).val());
         });
 
 

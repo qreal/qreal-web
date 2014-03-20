@@ -4,7 +4,7 @@
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "src/model/properties/Property", "src/model/ControlType"], function(require, exports, Property, ControlType) {
+define(["require", "exports", "src/model/properties/Property", "src/model/Enums"], function(require, exports, Property, Enums) {
     var PageProperty = (function (_super) {
         __extends(PageProperty, _super);
         function PageProperty(id) {

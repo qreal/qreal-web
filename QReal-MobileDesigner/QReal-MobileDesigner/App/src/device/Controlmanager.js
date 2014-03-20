@@ -1,4 +1,4 @@
-﻿define(["require", "exports", "src/util/log/Log", "src/model/ControlType", "src/model/PropertyType", "src/device/DesignerControlFactory", "src/model/controls/BaseContainer"], function(require, exports, Log, ControlType, PropertyType, DesignerControlFactory, BaseContainer) {
+﻿define(["require", "exports", "src/util/log/Log", "src/model/Enums", "src/device/DesignerControlFactory", "src/model/controls/BaseContainer"], function(require, exports, Log, Enums, DesignerControlFactory, BaseContainer) {
     var ControlManager = (function () {
         function ControlManager() {
             this.log = new Log("ControlManager");
@@ -72,9 +72,14 @@
         ControlManager.prototype.ChangeId = function (id, newId) {
             this.log.Debug("ChangeId, id=" + id + ", newId=" + newId);
 
-            //this.idList.push(newId);
-            //delete this.idList[this.idList.indexOf(id)];
-            this.FindById(id).Properties.Id = newId;
+            if (this.ContainsId(newId)) {
+                //TODO: show notification
+                alert('Id already exists');
+            } else {
+                var element = this.FindById(id);
+                $('#' + id).attr('id', newId);
+                this.FindById(id).Properties.Id = newId;
+            }
         };
 
         ControlManager.prototype.ChangeProperty = function (propertyId, propertyType, controlType, newValue) {
@@ -92,13 +97,7 @@
         ControlManager.prototype.ChangeButtonProperty = function (propertyId, propertyType, newValue) {
             switch (propertyType) {
                 case 1 /* Id */:
-                    if (this.ContainsId(newValue)) {
-                        //TODO: show notification
-                        alert('Id already exists');
-                    } else {
-                        $('#' + propertyId).attr('id', newValue);
-                        this.ChangeId(propertyId, newValue);
-                    }
+                    this.ChangeId(propertyId, newValue);
                     break;
                 case 0 /* Text */:
                     $('#' + propertyId).children('.ui-btn-inner').children('.ui-btn-text').text(newValue);
@@ -125,13 +124,11 @@
             this.log.Debug("ChangeInputProperty");
             switch (propertyType) {
                 case 1 /* Id */:
-                    if (this.ContainsId(newValue)) {
-                        //TODO: show notification
-                        alert('Id already exists');
-                    } else {
-                        $('#' + propertyId).attr('id', newValue);
-                        this.ChangeId(propertyId, newValue);
-                    }
+                    this.ChangeId(propertyId, newValue);
+                    break;
+                case 6 /* Title */:
+                    var input = this.FindById(propertyId);
+
                     break;
                 case 4 /* Mini */:
                     var cond = newValue == "true";
@@ -145,7 +142,6 @@
         };
 
         ControlManager.prototype.FindById = function (id) {
-            this.log.Debug("FindById: " + id, this.pages);
             for (var i in this.pages) {
                 var control = this.FindInContainer(id, this.pages[i]);
                 if (control) {
@@ -156,7 +152,6 @@
         };
 
         ControlManager.prototype.FindInContainer = function (id, control) {
-            this.log.Debug("FindInContainer: ", control);
             if (control.Properties.Id === id) {
                 return control;
             }

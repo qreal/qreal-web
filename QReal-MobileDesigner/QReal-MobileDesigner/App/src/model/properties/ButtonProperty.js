@@ -4,7 +4,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "src/model/properties/Property", "src/model/ControlType"], function(require, exports, Property, ControlType) {
+define(["require", "exports", "src/model/properties/Property", "src/model/Enums"], function(require, exports, Property, Enums) {
     var ButtonProperty = (function (_super) {
         __extends(ButtonProperty, _super);
         function ButtonProperty(id) {

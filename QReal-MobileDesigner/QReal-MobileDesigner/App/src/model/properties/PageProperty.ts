@@ -1,11 +1,10 @@
 ﻿import Property = require("src/model/properties/Property");
-import ControlType = require("src/model/ControlType");
-import PropertyType = require("src/model/PropertyType");
+import Enums = require("src/model/Enums");
 
 class PageProperty extends Property {    
     
     constructor(id: string) {
-        super(ControlType.Page, id);
+        super(Enums.ControlType.Page, id);
     }
 }
 

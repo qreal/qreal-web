@@ -1,15 +1,15 @@
-import ControlType = require("src/model/ControlType");
-import PropertyType = require("src/model/PropertyType");
+import Enums = require("src/model/Enums");
+
 
 class Property {
 
-    private type: ControlType;
+    private type: Enums.ControlType;
 
-    public get Type(): ControlType {
+    public get Type(): Enums.ControlType {
         return this.type;
     }
 
-    public set Type(value: ControlType) {
+    public set Type(value: Enums.ControlType) {
         this.type = value;
     }
 
@@ -23,7 +23,7 @@ class Property {
         this.id = value;
     }
 
-    constructor(type: ControlType, id:string) {
+    constructor(type: Enums.ControlType, id:string) {
         this.Type = type;
         this.Id = id;
     }

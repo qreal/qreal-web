@@ -1,7 +1,6 @@
 ﻿import App = require("src/Application");
 import Log = require("src/util/log/Log");
-import ControlType = require("src/model/ControlType");
-import PropertyType = require("src/model/PropertyType");
+import Enums = require("src/model/Enums");
 import Property = require("src/model/properties/Property");
 import ButtonProperty = require("src/model/properties/ButtonProperty");
 import BaseControl = require("src/model/controls/BaseControl");
@@ -14,9 +13,9 @@ class Button extends BaseControl<ButtonProperty> {
         this.log = new Log("Button");
     }
 
-    public ChangeProperty(propertyId: string, propertyType: PropertyType, newValue: string): void {
+    public ChangeProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string): void {
         switch (propertyType) {
-            case PropertyType.Id:
+            case Enums.PropertyType.Id:
 
                 if (App.Instance.Device.ControlManager.ContainsId(newValue)) {
                     //TODO: show notification
@@ -26,23 +25,23 @@ class Button extends BaseControl<ButtonProperty> {
                     App.Instance.Device.ControlManager.ChangeId(propertyId, newValue);
                 }
                 break;
-            case PropertyType.Text:
-                this.log.Debug("PropertyType.Text:", this.Element);
+            case Enums.PropertyType.Text:
+                this.log.Debug("Enums.PropertyType.Text:", this.Element);
                 this.Element.find('.ui-btn-text').text(newValue);
                 break;
-            case PropertyType.Inline:
+            case Enums.PropertyType.Inline:
                 var cond: boolean = newValue == "true";
                 this.Element.buttonMarkup({ inline: cond });
                 break;
-            case PropertyType.Corners:
+            case Enums.PropertyType.Corners:
                 var cond: boolean = newValue == "true";
                 this.Element.buttonMarkup({ corners: cond });
                 break;
-            case PropertyType.Mini:
+            case Enums.PropertyType.Mini:
                 var cond: boolean = newValue == "true";
                 this.Element.buttonMarkup({ mini: cond });
                 break;
-            case PropertyType.Theme:
+            case Enums.PropertyType.Theme:
                 this.Element.buttonMarkup({ theme: newValue });
                 break;
         }

@@ -1,6 +1,6 @@
 ﻿import Log = require("src/util/log/Log");
 import Property = require("src/model/properties/Property");
-import PropertyType = require("src/model/PropertyType");
+import Enums = require("src/model/Enums");
 
 class BaseControl<T extends Property> {
 
@@ -26,7 +26,7 @@ class BaseControl<T extends Property> {
         this.properties = properties;
     }
 
-    public ChangeProperty(propertyId: string, propertyType: PropertyType, newValue: string) {
+    public ChangeProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string) {
     }
 }  
 

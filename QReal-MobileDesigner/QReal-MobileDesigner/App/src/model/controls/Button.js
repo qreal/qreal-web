@@ -4,7 +4,7 @@
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/PropertyType", "src/model/properties/ButtonProperty", "src/model/controls/BaseControl"], function(require, exports, App, Log, PropertyType, ButtonProperty, BaseControl) {
+define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/Enums", "src/model/properties/ButtonProperty", "src/model/controls/BaseControl"], function(require, exports, App, Log, Enums, ButtonProperty, BaseControl) {
     var Button = (function (_super) {
         __extends(Button, _super);
         function Button(id) {
@@ -23,7 +23,7 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
                     }
                     break;
                 case 0 /* Text */:
-                    this.log.Debug("PropertyType.Text:", this.Element);
+                    this.log.Debug("Enums.PropertyType.Text:", this.Element);
                     this.Element.find('.ui-btn-text').text(newValue);
                     break;
                 case 2 /* Inline */:

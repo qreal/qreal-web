@@ -11,6 +11,8 @@ define(["require", "exports", "src/util/log/Log", "src/model/properties/InputPro
             _super.call(this, new InputProperty(id));
             this.log = new Log("Input");
         }
+        Input.prototype.ChangeProperty = function (propertyId, propertyType, newValue) {
+        };
         return Input;
     })(BaseControl);
 
