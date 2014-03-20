@@ -226,7 +226,16 @@
                 controlManager.ChangeProperty(property.Id, 1 /* Id */, 0 /* Page */, $(this).val());
             });
 
+            var headerProperty = $('#propertyCheckboxTmpl').tmpl({
+                name: 'Header:',
+                value: property.Id
+            });
+
+            //idProperty.find('input').change(function () {
+            //    controlManager.ChangeProperty(property.Id, Enums.PropertyType.Id, Enums.ControlType.Page, $(this).val());
+            // });
             panelContent.append(idProperty);
+            panelContent.append(headerProperty);
 
             propertyPanel.appendTo('#properties-widget');
             propertyPanel.attr('id', 'propertyFor' + property.Id);
