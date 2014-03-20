@@ -47,7 +47,7 @@ class ControlManager {
         return true;
     }
 
-    public SelectPage(pageId: string): void {
+    public SelectPage(pageId: string): void { 
         this.log.Debug("SelectPage: " + pageId);
         $.mobile.changePage('#' + pageId);
     }

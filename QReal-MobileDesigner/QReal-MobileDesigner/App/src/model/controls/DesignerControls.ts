@@ -75,7 +75,8 @@ module DesignerControls {
             var controlId = event.originalEvent.dataTransfer.getData("Text");
             var control = App.Instance.Device.ControlManager.CreateControl(controlId);
             this.Childrens.push(control);
-            this.Element.append(control.Element);
+            this.Element.append(control.Element).trigger("pagecreate");
+            //this.Element.trigger("pagecreate");
             //control.Element.trigger('create');
             //$('#' + this.Properties.Id).trigger('create');
         }
