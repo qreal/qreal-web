@@ -60,6 +60,8 @@ class ControlManager {
                 return this.CreateButton();
             case "Input":
                 return this.CreateInput();
+            case "Header":
+                return this.controlFactory.CreateHeader(this.GetNewId('header'));
             break
         }
 

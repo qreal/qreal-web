@@ -65,6 +65,14 @@
             input.Element = $container;
             return input;
         };
+
+        DesignerControlFactory.prototype.CreateHeader = function (id) {
+            var header = new DesignerControls.Header(id);
+            var $container = $("<div data-role='header'></div>");
+            $container.append($("<h1>Page Title</h1> "));
+            header.Element = $container;
+            return header;
+        };
         return DesignerControlFactory;
     })();
 

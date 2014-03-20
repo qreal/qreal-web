@@ -42,6 +42,8 @@
                     return this.CreateButton();
                 case "Input":
                     return this.CreateInput();
+                case "Header":
+                    return this.controlFactory.CreateHeader(this.GetNewId('header'));
                     break;
             }
         };
@@ -80,10 +82,10 @@
             }
 
             switch (controlType) {
-                case 1 /* Button */:
+                case 2 /* Button */:
                     this.FindById(propertyId).ChangeProperty(propertyId, propertyType, newValue);
                     break;
-                case 2 /* Input */:
+                case 3 /* Input */:
                     this.FindById(propertyId).ChangeProperty(propertyId, propertyType, newValue);
                     break;
             }

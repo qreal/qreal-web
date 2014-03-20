@@ -5,6 +5,7 @@ import Property = require("src/model/properties/Property");
 import ButtonProperty = require("src/model/properties/ButtonProperty");
 import InputProperty = require("src/model/properties/InputProperty");
 import PageProperty = require("src/model/properties/PageProperty");
+import HeaderProperty = require("src/model/properties/HeaderProperty");
 
 module DesignerControls {
 
@@ -85,6 +86,19 @@ module DesignerControls {
         }
     }
 
+    export class Header extends BaseContainer<HeaderProperty> {
+
+        constructor(id: string) {
+            super(new HeaderProperty(id));
+            this.log = new Log("Header");
+        }
+
+        public ChangeProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string) {
+
+        }
+    }
+
+
     export class Button extends BaseControl<ButtonProperty> {
 
         constructor(id: string) {
@@ -148,7 +162,7 @@ module DesignerControls {
                     break;
             }
         }
-    } 
-} 
+    }
+}
 
 export = DesignerControls;

@@ -8,7 +8,7 @@ define(["require", "exports", "src/model/properties/Property", "src/model/Enums"
     var ButtonProperty = (function (_super) {
         __extends(ButtonProperty, _super);
         function ButtonProperty(id) {
-            _super.call(this, 1 /* Button */, id);
+            _super.call(this, 2 /* Button */, id);
             this.Text = "Button";
             this.Inline = false;
             this.Corners = true;

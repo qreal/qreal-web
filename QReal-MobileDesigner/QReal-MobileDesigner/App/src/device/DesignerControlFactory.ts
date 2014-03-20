@@ -71,6 +71,14 @@ class DesignerControlFactory implements IControlFactory {
         return input;
     }
 
+    public CreateHeader(id: string): DesignerControls.Header {
+        var header = new DesignerControls.Header(id);
+        var $container = $("<div data-role='header'></div>");
+        $container.append($("<h1>Page Title</h1> "));
+        header.Element = $container;
+        return header;
+    }
+
 }
 
 export = DesignerControlFactory;

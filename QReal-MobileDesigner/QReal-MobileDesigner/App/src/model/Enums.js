@@ -3,8 +3,9 @@
     (function (Enums) {
         (function (ControlType) {
             ControlType[ControlType["Page"] = 0] = "Page";
-            ControlType[ControlType["Button"] = 1] = "Button";
-            ControlType[ControlType["Input"] = 2] = "Input";
+            ControlType[ControlType["Header"] = 1] = "Header";
+            ControlType[ControlType["Button"] = 2] = "Button";
+            ControlType[ControlType["Input"] = 3] = "Input";
         })(Enums.ControlType || (Enums.ControlType = {}));
         var ControlType = Enums.ControlType;
 

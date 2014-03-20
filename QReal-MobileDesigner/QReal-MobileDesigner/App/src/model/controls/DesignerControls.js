@@ -4,7 +4,7 @@
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/Enums", "src/model/properties/ButtonProperty", "src/model/properties/InputProperty", "src/model/properties/PageProperty"], function(require, exports, App, Log, Enums, ButtonProperty, InputProperty, PageProperty) {
+define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/Enums", "src/model/properties/ButtonProperty", "src/model/properties/InputProperty", "src/model/properties/PageProperty", "src/model/properties/HeaderProperty"], function(require, exports, App, Log, Enums, ButtonProperty, InputProperty, PageProperty, HeaderProperty) {
     var DesignerControls;
     (function (DesignerControls) {
         var BaseControl = (function () {
@@ -90,6 +90,18 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
             return Page;
         })(BaseContainer);
         DesignerControls.Page = Page;
+
+        var Header = (function (_super) {
+            __extends(Header, _super);
+            function Header(id) {
+                _super.call(this, new HeaderProperty(id));
+                this.log = new Log("Header");
+            }
+            Header.prototype.ChangeProperty = function (propertyId, propertyType, newValue) {
+            };
+            return Header;
+        })(BaseContainer);
+        DesignerControls.Header = Header;
 
         var Button = (function (_super) {
             __extends(Button, _super);

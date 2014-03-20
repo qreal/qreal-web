@@ -2,6 +2,7 @@
 
     export enum ControlType {
         Page,
+        Header,
         Button,
         Input
     }
