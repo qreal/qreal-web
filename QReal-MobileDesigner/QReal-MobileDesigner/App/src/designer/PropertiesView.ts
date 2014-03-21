@@ -274,7 +274,6 @@ class PropertiesView {
         panelContent.append(headerProperty);       
         propertyPanel.appendTo('#properties-widget');
         propertyPanel.attr('id', 'propertyFor' + property.Id);
-        (<any>headerProperty.find('input')).bootstrapSwitch();
         this.currentPropertyDiv = propertyPanel;
     }
 

@@ -238,7 +238,6 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             panelContent.append(headerProperty);
             propertyPanel.appendTo('#properties-widget');
             propertyPanel.attr('id', 'propertyFor' + property.Id);
-            headerProperty.find('input').bootstrapSwitch();
             this.currentPropertyDiv = propertyPanel;
         };
         return PropertiesView;
