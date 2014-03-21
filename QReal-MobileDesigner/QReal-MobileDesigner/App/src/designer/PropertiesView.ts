@@ -242,6 +242,7 @@ class PropertiesView {
         this.currentPropertyDiv = propertyPanel;
     }
 
+
     public ShowProperty_Page(property: PageProperty): void {
         this.log.Debug("ShowProperty_Page");
         var self = this;
@@ -271,9 +272,9 @@ class PropertiesView {
         
         panelContent.append(idProperty);       
         panelContent.append(headerProperty);       
-
         propertyPanel.appendTo('#properties-widget');
         propertyPanel.attr('id', 'propertyFor' + property.Id);
+        (<any>headerProperty.find('input')).bootstrapSwitch();
         this.currentPropertyDiv = propertyPanel;
     }
 
