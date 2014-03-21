@@ -24,6 +24,10 @@ class Designer {
         this.log.Debug("Init");
         this.toolsView.Init();
         this.propertiesView.Init();
+
+        $('#generate-apk').on('click', function (e) {
+        
+        });
     }
 
     public get EventManager(): EventManager {

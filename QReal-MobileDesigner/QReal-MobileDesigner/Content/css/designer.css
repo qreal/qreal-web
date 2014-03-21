@@ -13,10 +13,6 @@
 
 /* Propertyes */
 
-#properties {
-    height: 100%;
-}
-
 .property-table {
     display: table;
     border-spacing: 0px 10px;

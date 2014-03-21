@@ -88,10 +88,11 @@
 
             $('#addPage').click(function (e) {
                 //TODO: create normal dialog
-                var pageName = prompt('New Page', 'MyPage');
-                if (pageName) {
-                    self.AddNewPage(pageName);
-                }
+                bootbox.prompt("Enter a new page name:", function (pageName) {
+                    if (pageName) {
+                        self.AddNewPage(pageName);
+                    }
+                });
             });
 
             App.Instance.Designer.EventManager.AddSubscriber(EventManager.OnDeviceLoaded, {

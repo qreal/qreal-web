@@ -27,12 +27,7 @@ namespace QReal_MobileDesigner.Controllers
             return View();
         }
 
-        public ActionResult Device()
-        {
-            return View();
-        }
-
-        public ActionResult DeviceHtml()
+        public ActionResult Designer()
         {
             return View();
         }
