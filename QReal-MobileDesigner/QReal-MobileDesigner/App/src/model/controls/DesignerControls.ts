@@ -94,7 +94,7 @@ module DesignerControls {
                     if (newValue == 'yes') {
                         this.log.Debug('Yes');
                         var header = App.Instance.Device.ControlManager.CreateControl('Header');
-                        this.Element.append(header.Element);
+                        this.Element.prepend(header.Element);
                         this.Element.trigger('pagecreate');
                     } else {
                         this.log.Debug('No');

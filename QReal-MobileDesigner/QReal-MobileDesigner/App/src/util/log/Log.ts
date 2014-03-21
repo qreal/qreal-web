@@ -16,7 +16,7 @@ class Log {
     }
 
     public DebugObj(obj, tag = "Object: "): void {
-        if (this.logLevel < 1) {
+        if (this.logLevel < 1 || !window.console) {
             return;
         }
         this.Debug(tag + String.fromCharCode(9660));
@@ -32,7 +32,7 @@ class Log {
     }
 
     private Log(message: string, method: string): void {
-        if (this.logLevel < 1) {
+        if (this.logLevel < 1 || !window.console) {
             return;
         }
         var date = new Date();

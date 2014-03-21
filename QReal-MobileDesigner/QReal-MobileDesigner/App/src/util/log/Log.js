@@ -15,7 +15,7 @@ define(["require", "exports"], function(require, exports) {
 
         Log.prototype.DebugObj = function (obj, tag) {
             if (typeof tag === "undefined") { tag = "Object: "; }
-            if (this.logLevel < 1) {
+            if (this.logLevel < 1 || !window.console) {
                 return;
             }
             this.Debug(tag + String.fromCharCode(9660));
@@ -31,7 +31,7 @@ define(["require", "exports"], function(require, exports) {
         };
 
         Log.prototype.Log = function (message, method) {
-            if (this.logLevel < 1) {
+            if (this.logLevel < 1 || !window.console) {
                 return;
             }
             var date = new Date();
