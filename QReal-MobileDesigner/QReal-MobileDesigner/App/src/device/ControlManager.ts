@@ -106,6 +106,9 @@ class ControlManager {
             case Enums.ControlType.Input:
                 this.FindById(propertyId).ChangeProperty(propertyId, propertyType, newValue);
                 break;
+            case Enums.ControlType.Page:
+                this.FindById(propertyId).ChangeProperty(propertyId, propertyType, newValue);
+                break;
         }
     }
 

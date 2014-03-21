@@ -230,10 +230,10 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
                 name: 'Header:',
                 value: property.Id
             });
+            headerProperty.find('input').change(function () {
+                controlManager.ChangeProperty(property.Id, 7 /* Header */, 0 /* Page */, $(this).is(":checked") ? 'yes' : 'no');
+            });
 
-            //idProperty.find('input').change(function () {
-            //    controlManager.ChangeProperty(property.Id, Enums.PropertyType.Id, Enums.ControlType.Page, $(this).val());
-            // });
             panelContent.append(idProperty);
             panelContent.append(headerProperty);
             propertyPanel.appendTo('#properties-widget');

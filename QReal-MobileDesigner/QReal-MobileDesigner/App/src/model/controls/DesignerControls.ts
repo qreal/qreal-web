@@ -86,6 +86,23 @@ module DesignerControls {
             //this.log.Debug("OnDragOver");
             e.preventDefault();
         }
+
+        public ChangeProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string) {
+            this.log.Debug('ChangeProperty');
+            switch (propertyType) {
+                case Enums.PropertyType.Header:
+                    if (newValue == 'yes') {
+                        this.log.Debug('Yes');
+                        var header = App.Instance.Device.ControlManager.CreateControl('Header');
+                        this.Element.append(header.Element);
+                        this.Element.trigger('pagecreate');
+                    } else {
+                        this.log.Debug('No');
+                        this.Element.find('div[data-role="header"]').remove();
+                    }
+                    break;
+            }
+        }
     }
 
     export class Header extends BaseContainer<HeaderProperty> {

@@ -265,13 +265,13 @@ class PropertiesView {
                 name: 'Header:',
                 value: property.Id
             });
-        //idProperty.find('input').change(function () {
-        //    controlManager.ChangeProperty(property.Id, Enums.PropertyType.Id, Enums.ControlType.Page, $(this).val());
-       // });
+        headerProperty.find('input').change(function () {
+            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Header, Enums.ControlType.Page, $(this).is(":checked") ? 'yes' : 'no');
+        });
 
-        
-        panelContent.append(idProperty);       
-        panelContent.append(headerProperty);       
+
+        panelContent.append(idProperty);
+        panelContent.append(headerProperty);
         propertyPanel.appendTo('#properties-widget');
         propertyPanel.attr('id', 'propertyFor' + property.Id);
         this.currentPropertyDiv = propertyPanel;

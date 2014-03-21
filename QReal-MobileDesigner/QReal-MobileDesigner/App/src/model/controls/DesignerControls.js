@@ -89,6 +89,23 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
                 //this.log.Debug("OnDragOver");
                 e.preventDefault();
             };
+
+            Page.prototype.ChangeProperty = function (propertyId, propertyType, newValue) {
+                this.log.Debug('ChangeProperty');
+                switch (propertyType) {
+                    case 7 /* Header */:
+                        if (newValue == 'yes') {
+                            this.log.Debug('Yes');
+                            var header = App.Instance.Device.ControlManager.CreateControl('Header');
+                            this.Element.append(header.Element);
+                            this.Element.trigger('pagecreate');
+                        } else {
+                            this.log.Debug('No');
+                            this.Element.find('div[data-role="header"]').remove();
+                        }
+                        break;
+                }
+            };
             return Page;
         })(BaseContainer);
         DesignerControls.Page = Page;

@@ -88,6 +88,9 @@
                 case 3 /* Input */:
                     this.FindById(propertyId).ChangeProperty(propertyId, propertyType, newValue);
                     break;
+                case 0 /* Page */:
+                    this.FindById(propertyId).ChangeProperty(propertyId, propertyType, newValue);
+                    break;
             }
         };
 

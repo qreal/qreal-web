@@ -14,8 +14,8 @@
         Corners,
         Mini,
         Theme,
-
-        Title
+        Title,
+        Header
     }
 } 
 
