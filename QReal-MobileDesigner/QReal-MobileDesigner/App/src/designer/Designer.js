@@ -11,6 +11,14 @@ define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"
             this.log.Debug("Init");
             this.toolsView.Init();
             this.propertiesView.Init();
+
+            $('#generate-apk').on('click', function (e) {
+                jQuery.ajax('/UserProject/NewProject?project_name=hello&project_package=com.example.hello');
+                //var content = $('#templateNewProject').tmpl({});
+                //bootbox.alert(content[0].outerHTML, function (result) {
+                //    console.log($(this.message).find('#project_name').val());
+                //});
+            });
         };
 
         Object.defineProperty(Designer.prototype, "EventManager", {

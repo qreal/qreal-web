@@ -133,6 +133,37 @@
     <a href="#" class="list-group-item" data-toggle="tab" data-pageid="${page_id}"><span class="glyphicon glyphicon-file"></span> ${name}</a>
 </script>
 
-@Styles.Render("~/Content/css/designer.css")
+<script id="templateNewProject" type="text/x-jquery-tmpl">
+    <form class="form-horizontal" action="/UserProject/NewProject">
+        <fieldset>
 
+            <!-- Form Name -->
+            <legend>Create new project</legend>
+
+            <!-- Text input-->
+            <div class="control-group">
+                <label class="control-label" for="project-name">Project name:</label>
+                <div class="controls">
+                    <input id="project_name" name="project_name" type="text" placeholder="HelloWorld" class="input-xlarge" required="">
+
+                </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="control-group">
+                <label class="control-label" for="project-package">Package:</label>
+                <div class="controls">
+                    <input id="project_package" name="project_package" type="text" placeholder="com.example.hello" class="input-xlarge" required="">
+
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</script>
+
+
+@Styles.Render("~/Content/css/designer.css")
+@Styles.Render("~/Content/css/device-mockup/device-mockups2.css")
+
+@Scripts.Render("~/Scripts/jquery.tmpl.js")
 <script data-main="/App/RequireJsConfigDesigner" src="/Scripts/require.js" type="text/javascript"></script>
