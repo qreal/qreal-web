@@ -15,13 +15,8 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogManager", "src
 
             var dialog = this.dm;
             $('#generate-apk').on('click', function (e) {
-                //dialog.ShowProgress("Generating apk...");
-                //jQuery.ajax('/Projects/NewProject?project_name=hello&project_package=com.example.hello').done(function () {
-                //    window.location.href = "/Projects/DownloadApk?projectName=hello";
-                //    dialog.HideProgress();
-                //  });
                 var content = $('#templateNewProject').tmpl({});
-                content.find('input[type=submit]').on('click', function (e) {
+                content.find('button[type=submit]').on('click', function (e) {
                     content.modal('hide');
                     dialog.ShowProgress("Generating apk...");
                 });
