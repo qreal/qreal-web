@@ -482,6 +482,8 @@
     <Content Include="Scripts\jquery-2.1.0.min.js" />
     <Content Include="Scripts\jquery-2.1.0.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.form.js" />
+    <Content Include="Scripts\jquery.form.min.js" />
     <Content Include="Scripts\jquery.mobile-1.3.2.js" />
     <Content Include="Scripts\jquery.tmpl.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -574,6 +576,7 @@
     <TypeScriptCompile Include="App\src\util\DialogManager.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
     <CodeAnalysisDictionary Include="Scripts\typings\jquery.tmpl.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery.form\jquery.form.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquerymobile\jquerymobile.d.ts" />
     <CodeAnalysisDictionary Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\requirejs\require.d.ts" />

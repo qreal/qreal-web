@@ -15,15 +15,21 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogManager", "src
 
             var dialog = this.dm;
             $('#generate-apk').on('click', function (e) {
-                dialog.ShowProgress("Generating apk...");
-                jQuery.ajax('/Projects/NewProject?project_name=hello&project_package=com.example.hello').done(function () {
-                    window.location.href = "/Projects/DownloadApk?projectName=hello";
-                    dialog.HideProgress();
+                //dialog.ShowProgress("Generating apk...");
+                //jQuery.ajax('/Projects/NewProject?project_name=hello&project_package=com.example.hello').done(function () {
+                //    window.location.href = "/Projects/DownloadApk?projectName=hello";
+                //    dialog.HideProgress();
+                //  });
+                var content = $('#templateNewProject').tmpl({});
+                content.find('input[type=submit]').on('click', function (e) {
+                    content.modal('hide');
+                    dialog.ShowProgress("Generating apk...");
                 });
-                //var content = $('#templateNewProject').tmpl({});
-                //bootbox.alert(content[0].outerHTML, function (result) {
-                //    console.log($(this.message).find('#project_name').val());
-                //});
+                content.find('#ProjectForm').ajaxForm(function () {
+                    dialog.HideProgress();
+                    window.location.href = "/Projects/DownloadApk?projectName=hello";
+                });
+                content.modal();
             });
         };
 

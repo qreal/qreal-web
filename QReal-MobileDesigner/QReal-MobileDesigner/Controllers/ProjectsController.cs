@@ -17,13 +17,16 @@ namespace QReal_MobileDesigner.Controllers
     {
         private ProjectsEntities db = new ProjectsEntities();
 
+        [HttpPost]
         public string NewProject(string project_name, string project_package)
         {
             System.Diagnostics.Debug.WriteLine("test");
             Directory.CreateDirectory(@"D:\Projects\" + User.Identity.GetUserName());
             var psi = new ProcessStartInfo(@"D:\Projects\run.bat")
             {
-                WorkingDirectory = @"D:\Projects\" + User.Identity.GetUserName(),    
+                WorkingDirectory = @"D:\Projects\" + User.Identity.GetUserName(),   
+                CreateNoWindow = true,
+                UseShellExecute = false
             };
 
             using (var process = Process.Start(psi))
