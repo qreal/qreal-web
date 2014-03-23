@@ -8,12 +8,42 @@ using System.Web;
 using System.Web.Mvc;
 using QReal_MobileDesigner.Models;
 using Microsoft.AspNet.Identity;
+using System.Diagnostics;
+using System.IO;
 
 namespace QReal_MobileDesigner.Controllers
 {
     public class ProjectsController : Controller
     {
         private ProjectsEntities db = new ProjectsEntities();
+
+        public string NewProject(string project_name, string project_package)
+        {
+            System.Diagnostics.Debug.WriteLine("test");
+            Directory.CreateDirectory(@"D:\Projects\" + User.Identity.GetUserName());
+            var psi = new ProcessStartInfo(@"D:\Projects\run.bat")
+            {
+                WorkingDirectory = @"D:\Projects\" + User.Identity.GetUserName(),    
+            };
+
+            using (var process = Process.Start(psi))
+            {
+                process.WaitForExit();
+                System.Diagnostics.Debug.WriteLine("test2");
+                string filePath = @"D:\Projects\" + User.Identity.GetUserName() + @"\hello\platforms\android\ant-build\HelloWorld-debug.apk";
+                FileInfo file = new FileInfo(filePath);                   
+            }
+            return "{result:'success'}";     
+        }
+
+        public FileResult DownloadApk(string projectName)
+        {
+            //Parameters to file are
+            //1. The File Path on the File Server
+            //2. The content type MIME type
+            //3. The parameter for the file save by the browser
+            return File(@"D:\Projects\" + User.Identity.GetUserName() + @"\hello\platforms\android\ant-build\HelloWorld-debug.apk", "application/octet-stream", "HelloWorld-debug.apk");
+        }
 
         // GET: /Projects/
         public ActionResult Index()
@@ -47,11 +77,11 @@ namespace QReal_MobileDesigner.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="ID,Name,Package,Type")] Project project)
+        public ActionResult Create([Bind(Include = "ID,Name,Package,Type")] Project project)
         {
             if (ModelState.IsValid)
             {
-                db.Projects.Add(project);            
+                db.Projects.Add(project);
                 db.SaveChanges();
                 var userProject = new UserProject()
                 {
@@ -86,7 +116,7 @@ namespace QReal_MobileDesigner.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="ID,Name,Package,Type")] Project project)
+        public ActionResult Edit([Bind(Include = "ID,Name,Package,Type")] Project project)
         {
             if (ModelState.IsValid)
             {
@@ -131,5 +161,6 @@ namespace QReal_MobileDesigner.Controllers
             }
             base.Dispose(disposing);
         }
+
     }
 }

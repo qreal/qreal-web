@@ -13,7 +13,9 @@ define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"
             this.propertiesView.Init();
 
             $('#generate-apk').on('click', function (e) {
-                jQuery.ajax('/UserProject/NewProject?project_name=hello&project_package=com.example.hello');
+                jQuery.ajax('/Projects/NewProject?project_name=hello&project_package=com.example.hello').done(function () {
+                    window.location.href = "/Projects/DownloadApk?projectName=hello";
+                });
                 //var content = $('#templateNewProject').tmpl({});
                 //bootbox.alert(content[0].outerHTML, function (result) {
                 //    console.log($(this.message).find('#project_name').val());
