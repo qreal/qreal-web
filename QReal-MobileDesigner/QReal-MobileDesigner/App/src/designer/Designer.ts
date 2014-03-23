@@ -1,4 +1,5 @@
 import Log = require("src/util/log/Log");
+import DialogManager = require("src/util/DialogManager");
 import App = require("src/Application");
 import EventManager = require("src/util/events/EventManager");
 import ToolsView = require("src/designer/ToolsView");
@@ -10,6 +11,7 @@ declare var bootbox;
 class Designer {
 
     private log = new Log("Designer");
+    private dm: DialogManager = new DialogManager();
 
     private toolsView: ToolsView;
     private eventManager: EventManager;
@@ -27,10 +29,14 @@ class Designer {
         this.toolsView.Init();
         this.propertiesView.Init();
 
+        var dialog = this.dm;
         $('#generate-apk').on('click', function (e) {
+            dialog.ShowProgress("Generating apk...");
             jQuery.ajax('/Projects/NewProject?project_name=hello&project_package=com.example.hello').done(function () {
                 window.location.href = "/Projects/DownloadApk?projectName=hello";
+                dialog.HideProgress();
             });
+
             //var content = $('#templateNewProject').tmpl({});        
             //bootbox.alert(content[0].outerHTML, function (result) {
             //    console.log($(this.message).find('#project_name').val());

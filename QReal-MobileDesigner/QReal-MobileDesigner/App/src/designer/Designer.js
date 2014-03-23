@@ -1,7 +1,8 @@
-define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, Log, EventManager, ToolsView, PropertiesView) {
+define(["require", "exports", "src/util/log/Log", "src/util/DialogManager", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, Log, DialogManager, EventManager, ToolsView, PropertiesView) {
     var Designer = (function () {
         function Designer() {
             this.log = new Log("Designer");
+            this.dm = new DialogManager();
             this.log.Debug("constructor");
             this.toolsView = new ToolsView();
             this.propertiesView = new PropertiesView();
@@ -12,9 +13,12 @@ define(["require", "exports", "src/util/log/Log", "src/util/events/EventManager"
             this.toolsView.Init();
             this.propertiesView.Init();
 
+            var dialog = this.dm;
             $('#generate-apk').on('click', function (e) {
+                dialog.ShowProgress("Generating apk...");
                 jQuery.ajax('/Projects/NewProject?project_name=hello&project_package=com.example.hello').done(function () {
                     window.location.href = "/Projects/DownloadApk?projectName=hello";
+                    dialog.HideProgress();
                 });
                 //var content = $('#templateNewProject').tmpl({});
                 //bootbox.alert(content[0].outerHTML, function (result) {

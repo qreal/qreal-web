@@ -571,6 +571,7 @@
     <TypeScriptCompile Include="App\src\model\controls\DesignerControls.ts" />
     <TypeScriptCompile Include="App\src\model\Enums.ts" />
     <TypeScriptCompile Include="App\src\model\properties\HeaderProperty.ts" />
+    <TypeScriptCompile Include="App\src\util\DialogManager.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
     <CodeAnalysisDictionary Include="Scripts\typings\jquery.tmpl.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquerymobile\jquerymobile.d.ts" />
