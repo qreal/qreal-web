@@ -7,110 +7,118 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using QReal_MobileDesigner.Models;
+using Microsoft.AspNet.Identity;
 
 namespace QReal_MobileDesigner.Controllers
 {
-    public class UserProjectController : Controller
+    public class ProjectsController : Controller
     {
-        private QRealDesignerDBContext db = new QRealDesignerDBContext();
+        private ProjectsEntities db = new ProjectsEntities();
 
-        // GET: /UserProject/
+        // GET: /Projects/
         public ActionResult Index()
         {
-            return View(db.UserProject.ToList());
+            return View(db.Projects.ToList());
         }
 
-        // GET: /UserProject/Details/5
+        // GET: /Projects/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            UserProject userproject = db.UserProject.Find(id);
-            if (userproject == null)
+            Project project = db.Projects.Find(id);
+            if (project == null)
             {
                 return HttpNotFound();
             }
-            return View(userproject);
+            return View(project);
         }
 
-        // GET: /UserProject/Create
+        // GET: /Projects/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: /UserProject/Create
+        // POST: /Projects/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="ID,Name,Package,Type")] UserProject userproject)
+        public ActionResult Create([Bind(Include="ID,Name,Package,Type")] Project project)
         {
             if (ModelState.IsValid)
             {
-                db.UserProject.Add(userproject);
+                db.Projects.Add(project);            
+                db.SaveChanges();
+                var userProject = new UserProject()
+                {
+                    ProjectId = project.ID,
+                    UserId = User.Identity.GetUserId()
+                };
+                db.UserProjects.Add(userProject);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(userproject);
+            return View(project);
         }
 
-        // GET: /UserProject/Edit/5
+        // GET: /Projects/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            UserProject userproject = db.UserProject.Find(id);
-            if (userproject == null)
+            Project project = db.Projects.Find(id);
+            if (project == null)
             {
                 return HttpNotFound();
             }
-            return View(userproject);
+            return View(project);
         }
 
-        // POST: /UserProject/Edit/5
+        // POST: /Projects/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="ID,Name,Package,Type")] UserProject userproject)
+        public ActionResult Edit([Bind(Include="ID,Name,Package,Type")] Project project)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(userproject).State = EntityState.Modified;
+                db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(userproject);
+            return View(project);
         }
 
-        // GET: /UserProject/Delete/5
+        // GET: /Projects/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            UserProject userproject = db.UserProject.Find(id);
-            if (userproject == null)
+            Project project = db.Projects.Find(id);
+            if (project == null)
             {
                 return HttpNotFound();
             }
-            return View(userproject);
+            return View(project);
         }
 
-        // POST: /UserProject/Delete/5
+        // POST: /Projects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            UserProject userproject = db.UserProject.Find(id);
-            db.UserProject.Remove(userproject);
+            Project project = db.Projects.Find(id);
+            db.Projects.Remove(project);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

@@ -45,6 +45,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -162,24 +164,43 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\UserProjectController.cs" />
+    <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201403222311133_Projects.cs" />
+    <Compile Include="Migrations\201403222311133_Projects.Designer.cs">
+      <DependentUpon>201403222311133_Projects.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\UserProject.cs" />
+    <Compile Include="Models\Project.cs">
+      <DependentUpon>Projects.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Projects.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Projects.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Projects.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Projects.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Projects.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Projects.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserProject.cs">
+      <DependentUpon>Projects.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App\src\init.js" />
-    <Content Include="App_Data\aspnet-QReal-MobileDesigner-20140318045910.mdf" />
-    <Content Include="App_Data\aspnet-QReal-MobileDesigner-20140318045910_log.ldf">
-      <DependentUpon>aspnet-QReal-MobileDesigner-20140318045910.mdf</DependentUpon>
-    </Content>
-    <Content Include="App_Data\QRealDesigner.mdf" />
-    <Content Include="App_Data\QRealDesigner_log.ldf" />
     <Content Include="Content\bootstrap-switch\bootstrap-switch.css" />
     <Content Include="Content\bootstrap-switch\bootstrap-switch.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -433,6 +454,23 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <EntityDeploy Include="Models\Projects.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Projects.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Projects.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Projects.edmx</DependentUpon>
+      <LastGenOutput>Projects.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Projects.edmx.diagram">
+      <DependentUpon>Projects.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\Projects.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Projects.edmx</DependentUpon>
+      <LastGenOutput>Projects.cs</LastGenOutput>
+    </Content>
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootstrap-switch\bootstrap-switch.js" />
@@ -493,13 +531,17 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\Designer.cshtml" />
-    <Content Include="Views\UserProject\Create.cshtml" />
-    <Content Include="Views\UserProject\Delete.cshtml" />
-    <Content Include="Views\UserProject\Details.cshtml" />
-    <Content Include="Views\UserProject\Edit.cshtml" />
-    <Content Include="Views\UserProject\Index.cshtml" />
+    <Content Include="Views\Projects\Create.cshtml" />
+    <Content Include="Views\Projects\Delete.cshtml" />
+    <Content Include="Views\Projects\Details.cshtml" />
+    <Content Include="Views\Projects\Edit.cshtml" />
+    <Content Include="Views\Projects\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201403222311133_Projects.resx">
+      <DependentUpon>201403222311133_Projects.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
@@ -533,6 +575,12 @@
     <TypeScriptCompile Include="Scripts\typings\jquerymobile\jquerymobile.d.ts" />
     <CodeAnalysisDictionary Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\requirejs\require.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

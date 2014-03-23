@@ -12,12 +12,18 @@ namespace QReal_MobileDesigner.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class UserProject
+    public partial class Project
     {
-        public int ID { get; set; }
-        public string UserId { get; set; }
-        public Nullable<int> ProjectId { get; set; }
+        public Project()
+        {
+            this.UserProjects = new HashSet<UserProject>();
+        }
     
-        public virtual Project Project { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string Package { get; set; }
+        public string Type { get; set; }
+    
+        public virtual ICollection<UserProject> UserProjects { get; set; }
     }
 }

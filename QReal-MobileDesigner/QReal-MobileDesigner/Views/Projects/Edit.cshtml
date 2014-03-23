@@ -1,4 +1,4 @@
-﻿@model QReal_MobileDesigner.Models.UserProject
+﻿@model QReal_MobileDesigner.Models.Project
 
 @{
     ViewBag.Title = "Edit";
@@ -13,7 +13,7 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>UserProject</h4>
+        <h4>Project</h4>
         <hr />
         @Html.ValidationSummary(true)
         @Html.HiddenFor(model => model.ID)
