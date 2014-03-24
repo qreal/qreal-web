@@ -17,7 +17,7 @@ namespace QReal_MobileDesigner.Controllers
     {
         private ProjectsEntities db = new ProjectsEntities();
         //private static string projectsLocation = @"C:\Users\Nikita\PhoneGapProjects\";
-        private static string projectsLocation = @"C:\PhoneGapProjects\";
+        private static string projectsLocation = HttpRuntime.AppDomainAppPath + @"\PhoneGap\";// @"C:\PhoneGapProjects\";
         
 
         [HttpPost]
