@@ -16,11 +16,11 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogManager", "src
             var dialog = this.dm;
             $('#generate-apk').on('click', function (e) {
                 var content = $('#templateNewProject').tmpl({});
-                content.find('button[type=submit]').on('click', function (e) {
+                content.find('form').on('submit', function (e) {
                     content.modal('hide');
                     dialog.ShowProgress("Generating apk...");
                 });
-                content.find('#ProjectForm').ajaxForm(function () {
+                content.find('form').ajaxForm(function () {
                     dialog.HideProgress();
                     window.location.href = "/Projects/DownloadApk?projectName=hello";
                 });
