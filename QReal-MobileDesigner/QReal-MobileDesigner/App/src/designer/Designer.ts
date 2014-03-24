@@ -31,14 +31,16 @@ class Designer {
 
         var dialog = this.dm;
         $('#generate-apk').on('click', function (e) {
-            var content = $('#templateNewProject').tmpl({});   
+            var content = $('#templateNewProject').tmpl({});
             content.find('form').on('submit', function (e) {
                 content.modal('hide');
                 dialog.ShowProgress("Generating apk...");
-            });   
-            content.find('form').ajaxForm( function () {
-                dialog.HideProgress();       
-                window.location.href = "/Projects/DownloadApk?projectName=hello";        
+            });
+            content.find('form').ajaxForm(function (response) {
+                dialog.HideProgress();
+                console.log(response);
+                console.log(JSON.parse(response));
+                window.location.href = "/Projects/DownloadApk?projectName=" + JSON.parse(response).project_name;
             });
             content.modal();
         });

@@ -18,26 +18,25 @@ namespace QReal_MobileDesigner.Controllers
         private ProjectsEntities db = new ProjectsEntities();
         //private static string projectsLocation = @"C:\Users\Nikita\PhoneGapProjects\";
         private static string projectsLocation = HttpRuntime.AppDomainAppPath + @"\PhoneGap\";// @"C:\PhoneGapProjects\";
-        
+
 
         [HttpPost]
         public string NewProject(string project_name, string project_package)
-        {         
-            Directory.CreateDirectory(projectsLocation + User.Identity.GetUserName());
-            var psi = new ProcessStartInfo( "cmd.exe", "/c " + projectsLocation + "run.bat")
+        {
+            var username = User.Identity.GetUserName();
+            Directory.CreateDirectory(projectsLocation + username);
+            var psi = new ProcessStartInfo("cmd.exe", String.Format("/c {0}run.bat {1} {2} {3}", projectsLocation, project_name, project_package, project_name))
             {
-                WorkingDirectory = projectsLocation + User.Identity.GetUserName(),   
+                WorkingDirectory = projectsLocation + username,
                 CreateNoWindow = true,
-                UseShellExecute = false                
+                UseShellExecute = false
             };
 
             using (var process = Process.Start(psi))
             {
                 process.WaitForExit();
-                string filePath = projectsLocation + User.Identity.GetUserName() + @"\hello\platforms\android\ant-build\HelloWorld-debug.apk";
-                FileInfo file = new FileInfo(filePath);                   
             }
-            return "{result:'success'}";     
+            return "{ \"project_name\":\"" + project_name + "\" }";
         }
 
         public FileResult DownloadApk(string projectName)
@@ -46,7 +45,7 @@ namespace QReal_MobileDesigner.Controllers
             //1. The File Path on the File Server
             //2. The content type MIME type
             //3. The parameter for the file save by the browser
-            return File(projectsLocation + User.Identity.GetUserName() + @"\hello\platforms\android\ant-build\HelloWorld-debug.apk", "application/octet-stream", "HelloWorld-debug.apk");
+            return File(String.Format(@"{0}{1}\{2}\platforms\android\ant-build\{2}-debug.apk", projectsLocation, User.Identity.GetUserName(), projectName), "application/octet-stream", projectName + "-debug.apk");
         }
 
         // GET: /Projects/

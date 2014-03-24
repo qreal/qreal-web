@@ -20,9 +20,11 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogManager", "src
                     content.modal('hide');
                     dialog.ShowProgress("Generating apk...");
                 });
-                content.find('form').ajaxForm(function () {
+                content.find('form').ajaxForm(function (response) {
                     dialog.HideProgress();
-                    window.location.href = "/Projects/DownloadApk?projectName=hello";
+                    console.log(response);
+                    console.log(JSON.parse(response));
+                    window.location.href = "/Projects/DownloadApk?projectName=" + JSON.parse(response).project_name;
                 });
                 content.modal();
             });

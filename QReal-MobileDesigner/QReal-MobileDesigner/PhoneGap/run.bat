@@ -1,4 +1,7 @@
-call cordova create hello com.example.hello "HelloWorld"
-cd hello
+set folder=%1
+set package=%2
+set projectName=%3
+call cordova create %folder% %package% %projectName%
+cd %folder%
 call cordova platform add android
 call cordova build
