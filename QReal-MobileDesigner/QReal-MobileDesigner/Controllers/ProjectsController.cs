@@ -24,6 +24,9 @@ namespace QReal_MobileDesigner.Controllers
         public string NewProject(string project_name, string project_package)
         {
             var username = User.Identity.GetUserName();
+
+            string html = RenderRazorViewToString("~/Views/PhoneGapTemplate/index.cshtml", null);
+
             Directory.CreateDirectory(projectsLocation + username);
             var psi = new ProcessStartInfo("cmd.exe", String.Format("/c {0}run.bat {1} {2} {3}", projectsLocation, project_name, project_package, project_name))
             {
@@ -37,6 +40,19 @@ namespace QReal_MobileDesigner.Controllers
                 process.WaitForExit();
             }
             return "{ \"project_name\":\"" + project_name + "\" }";
+        }
+
+        public string RenderRazorViewToString(string viewName, object model)
+        {
+            ViewData.Model = model;
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+                viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
+                return sw.GetStringBuilder().ToString();
+            }
         }
 
         public FileResult DownloadApk(string projectName)
