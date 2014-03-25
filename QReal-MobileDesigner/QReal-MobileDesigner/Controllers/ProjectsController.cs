@@ -16,8 +16,7 @@ namespace QReal_MobileDesigner.Controllers
     public class ProjectsController : Controller
     {
         private ProjectsEntities db = new ProjectsEntities();
-        //private static string projectsLocation = @"C:\Users\Nikita\PhoneGapProjects\";
-        private static string projectsLocation = HttpRuntime.AppDomainAppPath + @"\PhoneGap\";// @"C:\PhoneGapProjects\";
+        private static string projectsLocation = HttpRuntime.AppDomainAppPath + @"\PhoneGap\";
 
 
         [HttpPost]
@@ -27,10 +26,10 @@ namespace QReal_MobileDesigner.Controllers
 
             string html = RenderRazorViewToString("~/Views/PhoneGapTemplate/index.cshtml", null);
 
-            Directory.CreateDirectory(projectsLocation + username);
+            Directory.CreateDirectory(projectsLocation + @"Projects\" + username);
             var psi = new ProcessStartInfo("cmd.exe", String.Format("/c {0}run.bat {1} {2} {3}", projectsLocation, project_name, project_package, project_name))
             {
-                WorkingDirectory = projectsLocation + username,
+                WorkingDirectory = projectsLocation + @"Projects\" + username,
                 CreateNoWindow = true,
                 UseShellExecute = false
             };
@@ -61,7 +60,7 @@ namespace QReal_MobileDesigner.Controllers
             //1. The File Path on the File Server
             //2. The content type MIME type
             //3. The parameter for the file save by the browser
-            return File(String.Format(@"{0}{1}\{2}\platforms\android\ant-build\{2}-debug.apk", projectsLocation, User.Identity.GetUserName(), projectName), "application/octet-stream", projectName + "-debug.apk");
+            return File(String.Format(@"{0}Projects\{1}\{2}\platforms\android\ant-build\{2}-debug.apk", projectsLocation, User.Identity.GetUserName(), projectName), "application/octet-stream", projectName + "-debug.apk");
         }
 
         // GET: /Projects/
