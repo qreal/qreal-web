@@ -10,6 +10,7 @@ using QReal_MobileDesigner.Models;
 using Microsoft.AspNet.Identity;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 
 namespace QReal_MobileDesigner.Controllers
 {
@@ -23,8 +24,8 @@ namespace QReal_MobileDesigner.Controllers
         public string NewProject(string project_name, string project_package)
         {
             var username = User.Identity.GetUserName();
-
-            string html = RenderRazorViewToString("~/Views/PhoneGapTemplate/index.cshtml", null);
+            var AppHtmlModel = new AppHtml() { Html = "<h1>Test</h1>" };
+            string html = RenderRazorViewToString(this, "~/Views/PhoneGapTemplate/index.cshtml", AppHtmlModel);
 
             Directory.CreateDirectory(projectsLocation + @"Projects\" + username);
             var psi = new ProcessStartInfo("cmd.exe", String.Format("/c {0}run.bat {1} {2} {3}", projectsLocation, project_name, project_package, project_name))
@@ -38,18 +39,26 @@ namespace QReal_MobileDesigner.Controllers
             {
                 process.WaitForExit();
             }
+
+            FileStream fcreate = new FileStream(String.Format(@"{0}Projects\{1}\{2}\www\index.html", projectsLocation, username, project_name), FileMode.Create);
+            StreamWriter swOverwrite = new StreamWriter(fcreate);
+            swOverwrite.Write(html);
+            swOverwrite.Close();
+            fcreate.Close();           
+
             return "{ \"project_name\":\"" + project_name + "\" }";
         }
 
-        public string RenderRazorViewToString(string viewName, object model)
+        public string RenderRazorViewToString(Controller controller, string viewName, object model)
         {
-            ViewData.Model = model;
+
+            controller.ViewData.Model = model;
             using (var sw = new StringWriter())
             {
-                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
-                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                var viewResult = ViewEngines.Engines.FindPartialView(controller.ControllerContext, viewName);
+                var viewContext = new ViewContext(controller.ControllerContext, viewResult.View, controller.ViewData, controller.TempData, sw);
                 viewResult.View.Render(viewContext, sw);
-                viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
+                viewResult.ViewEngine.ReleaseView(controller.ControllerContext, viewResult.View);
                 return sw.GetStringBuilder().ToString();
             }
         }
