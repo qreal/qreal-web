@@ -1,4 +1,4 @@
-﻿define(["require", "exports", "src/util/log/Log", "src/model/Enums", "src/device/DesignerControlFactory", "src/model/controls/DesignerControls"], function(require, exports, Log, Enums, DesignerControlFactory, DesignerControls) {
+﻿define(["require", "exports", "src/util/log/Log", "src/model/Enums", "src/model/properties/PageProperty", "src/model/properties/ButtonProperty", "src/model/properties/InputProperty", "src/device/DesignerControlFactory", "src/model/controls/DesignerControls"], function(require, exports, Log, Enums, PageProperty, ButtonProperty, InputProperty, DesignerControlFactory, DesignerControls) {
     var ControlManager = (function () {
         function ControlManager() {
             this.log = new Log("ControlManager");
@@ -22,7 +22,7 @@
                 return false;
             }
 
-            var page = this.controlFactory.CreatePage(pageId);
+            var page = this.controlFactory.CreatePage(new PageProperty(pageId));
             this.pages.push(page);
             $('body').append(page.Element);
             this.SelectPage(pageId);
@@ -49,11 +49,13 @@
         };
 
         ControlManager.prototype.CreateButton = function () {
-            return this.controlFactory.CreateButton(this.GetNewId('button'));
+            var property = new ButtonProperty(this.GetNewId('button'));
+            return this.controlFactory.CreateButton(property);
         };
 
         ControlManager.prototype.CreateInput = function () {
-            return this.controlFactory.CreateInput(this.GetNewId('input'));
+            var property = new InputProperty(this.GetNewId('input'));
+            return this.controlFactory.CreateInput(property);
         };
 
         /* Id */

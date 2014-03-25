@@ -8,9 +8,9 @@ import ButtonProperty = require("src/model/properties/ButtonProperty");
 import InputProperty = require("src/model/properties/InputProperty");
 
 
-class DesignerControlFactory implements IControlFactory {
+class AppControlFactory implements IControlFactory {
 
-    private log = new Log("DesignerControlFactory");
+    private log = new Log("AppControlFactory");
 
     constructor() {
     }
@@ -20,9 +20,6 @@ class DesignerControlFactory implements IControlFactory {
         var $page = $('<div></div>');
         $page.data('role', 'page');
         $page.attr('id', property.Id);
-
-        $page.on('drop', event => page.OnDrop(event));
-        $page.on('dragover', event => page.OnDragOver(event));
         page.Element = $page;
         return page;
     }
@@ -31,23 +28,16 @@ class DesignerControlFactory implements IControlFactory {
         var button = new DesignerControls.Button(property);
         var $bt = $('<a href="#"></a>');
 
-        $bt.data('role', 'button');
+        $bt.attr('data-role', 'button');
         $bt.attr('id', button.Properties.Id);
         $bt.text(button.Properties.Text);
-
-        $bt.on('click', event => {
-            this.log.Debug('bt click');
-            App.Instance.Designer.ShowProperty(button.Properties);
-        });
-
-        button.Element = $bt.button();
-        this.log.Debug("button:", button.Element);
+        button.Element = $bt;
         return button;
     }
 
     public CreateInput(property: InputProperty): DesignerControls.Input {
         var input = new DesignerControls.Input(property);
-       
+
         var $container = $("<div data-role='fieldcontain'></div>");
         var $label = $("<label></label>");
         $label.text(input.Properties.Title);
@@ -61,13 +51,6 @@ class DesignerControlFactory implements IControlFactory {
         $container.append($label);
         $container.append($input);
 
-        $container.on('click', event => {
-            this.log.Debug('input click');
-            App.Instance.Designer.ShowProperty(input.Properties);
-        });
-
-        this.log.Debug('input: ', $container);
-        $container.find('input').textinput();
         input.Element = $container;
         return input;
     }
@@ -83,4 +66,4 @@ class DesignerControlFactory implements IControlFactory {
 
 }
 
-export = DesignerControlFactory;
+export = AppControlFactory; 

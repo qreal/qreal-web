@@ -3,11 +3,11 @@
         function DesignerControlFactory() {
             this.log = new Log("DesignerControlFactory");
         }
-        DesignerControlFactory.prototype.CreatePage = function (id) {
-            var page = new DesignerControls.Page(id);
+        DesignerControlFactory.prototype.CreatePage = function (property) {
+            var page = new DesignerControls.Page(property);
             var $page = $('<div></div>');
             $page.data('role', 'page');
-            $page.attr('id', id);
+            $page.attr('id', property.Id);
 
             $page.on('drop', function (event) {
                 return page.OnDrop(event);
@@ -19,9 +19,9 @@
             return page;
         };
 
-        DesignerControlFactory.prototype.CreateButton = function (id) {
+        DesignerControlFactory.prototype.CreateButton = function (property) {
             var _this = this;
-            var button = new DesignerControls.Button(id);
+            var button = new DesignerControls.Button(property);
             var $bt = $('<a href="#"></a>');
 
             $bt.data('role', 'button');
@@ -38,9 +38,9 @@
             return button;
         };
 
-        DesignerControlFactory.prototype.CreateInput = function (id) {
+        DesignerControlFactory.prototype.CreateInput = function (property) {
             var _this = this;
-            var input = new DesignerControls.Input(id);
+            var input = new DesignerControls.Input(property);
 
             var $container = $("<div data-role='fieldcontain'></div>");
             var $label = $("<label></label>");
@@ -67,11 +67,12 @@
         };
 
         DesignerControlFactory.prototype.CreateHeader = function (id) {
-            var header = new DesignerControls.Header(id);
-            var $container = $("<div data-role='header'></div>");
-            $container.append($("<h1>Page Title</h1> "));
-            header.Element = $container;
-            return header;
+            //var header = new DesignerControls.Header(id);
+            //var $container = $("<div data-role='header'></div>");
+            //$container.append($("<h1>Page Title</h1> "));
+            //header.Element = $container;
+            //return header;
+            return null;
         };
         return DesignerControlFactory;
     })();

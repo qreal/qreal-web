@@ -577,9 +577,9 @@
     <CodeAnalysisDictionary Include="App\src\util\events\EventManager.ts" />
     <CodeAnalysisDictionary Include="App\src\util\events\IEventListener.ts" />
     <CodeAnalysisDictionary Include="App\src\util\log\Log.ts" />
-    <TypeScriptCompile Include="App\file1.ts" />
     <TypeScriptCompile Include="App\RequireJsConfigDesigner.ts" />
     <TypeScriptCompile Include="App\RequireJSConfigDevice.ts" />
+    <TypeScriptCompile Include="App\src\device\AppControlFactory.ts" />
     <TypeScriptCompile Include="App\src\model\controls\DesignerControls.ts" />
     <TypeScriptCompile Include="App\src\model\Enums.ts" />
     <TypeScriptCompile Include="App\src\model\properties\HeaderProperty.ts" />

@@ -4,7 +4,7 @@
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/Enums", "src/model/properties/ButtonProperty", "src/model/properties/InputProperty", "src/model/properties/PageProperty", "src/model/properties/HeaderProperty"], function(require, exports, App, Log, Enums, ButtonProperty, InputProperty, PageProperty, HeaderProperty) {
+define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/Enums"], function(require, exports, App, Log, Enums) {
     var DesignerControls;
     (function (DesignerControls) {
         var BaseControl = (function () {
@@ -68,8 +68,8 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
 
         var Page = (function (_super) {
             __extends(Page, _super);
-            function Page(id) {
-                _super.call(this, new PageProperty(id));
+            function Page(properties) {
+                _super.call(this, properties);
                 this.log = new Log("Page");
             }
             Page.prototype.OnDrop = function (event) {
@@ -79,14 +79,9 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
                 var control = App.Instance.Device.ControlManager.CreateControl(controlId);
                 this.Childrens.push(control);
                 this.Element.append(control.Element);
-                //this.Element.trigger("pagecreate");
-                //this.Element.trigger("create");
-                //control.Element.trigger('create');
-                //$('#' + this.Properties.Id).trigger('create');
             };
 
             Page.prototype.OnDragOver = function (e) {
-                //this.log.Debug("OnDragOver");
                 e.preventDefault();
             };
 
@@ -112,8 +107,8 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
 
         var Header = (function (_super) {
             __extends(Header, _super);
-            function Header(id) {
-                _super.call(this, new HeaderProperty(id));
+            function Header(properties) {
+                _super.call(this, properties);
                 this.log = new Log("Header");
             }
             Header.prototype.ChangeProperty = function (propertyId, propertyType, newValue) {
@@ -124,8 +119,8 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
 
         var Button = (function (_super) {
             __extends(Button, _super);
-            function Button(id) {
-                _super.call(this, new ButtonProperty(id));
+            function Button(properties) {
+                _super.call(this, properties);
                 this.log = new Log("Button");
             }
             Button.prototype.ChangeProperty = function (propertyId, propertyType, newValue) {
@@ -161,8 +156,8 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
 
         var Input = (function (_super) {
             __extends(Input, _super);
-            function Input(id) {
-                _super.call(this, new InputProperty(id));
+            function Input(properties) {
+                _super.call(this, properties);
                 this.log = new Log("Input");
             }
             Input.prototype.ChangeProperty = function (propertyId, propertyType, newValue) {

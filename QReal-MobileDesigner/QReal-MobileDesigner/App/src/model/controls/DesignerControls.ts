@@ -64,8 +64,8 @@ module DesignerControls {
 
     export class Page extends BaseContainer<PageProperty> {
 
-        constructor(id: string) {
-            super(new PageProperty(id));
+        constructor(properties: PageProperty) {
+            super(properties);
             this.log = new Log("Page");
         }
 
@@ -76,14 +76,9 @@ module DesignerControls {
             var control = App.Instance.Device.ControlManager.CreateControl(controlId);
             this.Childrens.push(control);
             this.Element.append(control.Element);
-            //this.Element.trigger("pagecreate");
-            //this.Element.trigger("create");
-            //control.Element.trigger('create');
-            //$('#' + this.Properties.Id).trigger('create');
         }
 
         public OnDragOver(e) {
-            //this.log.Debug("OnDragOver");
             e.preventDefault();
         }
 
@@ -107,8 +102,8 @@ module DesignerControls {
 
     export class Header extends BaseContainer<HeaderProperty> {
 
-        constructor(id: string) {
-            super(new HeaderProperty(id));
+        constructor(properties: HeaderProperty) {
+            super(properties);
             this.log = new Log("Header");
         }
 
@@ -120,8 +115,8 @@ module DesignerControls {
 
     export class Button extends BaseControl<ButtonProperty> {
 
-        constructor(id: string) {
-            super(new ButtonProperty(id));
+        constructor(properties: ButtonProperty) {
+            super(properties);
             this.log = new Log("Button");
         }
 
@@ -156,8 +151,8 @@ module DesignerControls {
 
     export class Input extends BaseControl<InputProperty> {
 
-        constructor(id: string) {
-            super(new InputProperty(id));
+        constructor(properties: InputProperty) {
+            super(properties);
             this.log = new Log("Input");
         }
 

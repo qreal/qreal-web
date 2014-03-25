@@ -5,6 +5,7 @@ import EventManager = require("src/util/events/EventManager");
 import IEventListener = require("src/util/events/IEventListener");
 import Enums = require("src/model/Enums");
 import Property = require("src/model/properties/Property");
+import PageProperty = require("src/model/properties/PageProperty");
 import ButtonProperty = require("src/model/properties/ButtonProperty");
 import InputProperty = require("src/model/properties/InputProperty");
 
@@ -40,7 +41,7 @@ class ControlManager {
             return false;
         }
 
-        var page = this.controlFactory.CreatePage(pageId);
+        var page = this.controlFactory.CreatePage(new PageProperty(pageId));
         this.pages.push(page);
         $('body').append(page.Element);
         this.SelectPage(pageId);
@@ -68,11 +69,13 @@ class ControlManager {
     }
 
     private CreateButton(): DesignerControls.Button {
-        return this.controlFactory.CreateButton(this.GetNewId('button'));
+        var property = new ButtonProperty(this.GetNewId('button'));
+        return this.controlFactory.CreateButton(property);
     }
 
     private CreateInput() {
-        return this.controlFactory.CreateInput(this.GetNewId('input'));
+        var property = new InputProperty(this.GetNewId('input'));
+        return this.controlFactory.CreateInput(property);
     }
 
     /* Id */
