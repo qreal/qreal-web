@@ -4,4 +4,3 @@ set projectName=%3
 call cordova create %folder% %package% %projectName%
 cd %folder%
 call cordova platform add android
-call cordova build

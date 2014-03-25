@@ -28,14 +28,14 @@ namespace QReal_MobileDesigner.Controllers
             string html = RenderRazorViewToString(this, "~/Views/PhoneGapTemplate/index.cshtml", AppHtmlModel);
 
             Directory.CreateDirectory(projectsLocation + @"Projects\" + username);
-            var psi = new ProcessStartInfo("cmd.exe", String.Format("/c {0}run.bat {1} {2} {3}", projectsLocation, project_name, project_package, project_name))
+            var create_psi = new ProcessStartInfo("cmd.exe", String.Format("/c {0}create.bat {1} {2} {3}", projectsLocation, project_name, project_package, project_name))
             {
                 WorkingDirectory = projectsLocation + @"Projects\" + username,
                 CreateNoWindow = true,
                 UseShellExecute = false
             };
 
-            using (var process = Process.Start(psi))
+            using (var process = Process.Start(create_psi))
             {
                 process.WaitForExit();
             }
@@ -44,7 +44,19 @@ namespace QReal_MobileDesigner.Controllers
             StreamWriter swOverwrite = new StreamWriter(fcreate);
             swOverwrite.Write(html);
             swOverwrite.Close();
-            fcreate.Close();           
+            fcreate.Close();
+
+            var build_psi = new ProcessStartInfo("cmd.exe", String.Format("/c {0}build.bat", projectsLocation))
+            {
+                WorkingDirectory = String.Format(@"{0}Projects\{1}\{2}", projectsLocation, username, project_name),
+                CreateNoWindow = true,
+                UseShellExecute = false
+            };
+
+            using (var process = Process.Start(build_psi))
+            {
+                process.WaitForExit();
+            }
 
             return "{ \"project_name\":\"" + project_name + "\" }";
         }

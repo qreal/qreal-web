@@ -479,7 +479,8 @@
       <DependentUpon>Projects.edmx</DependentUpon>
       <LastGenOutput>Projects.cs</LastGenOutput>
     </Content>
-    <Content Include="PhoneGap\run.bat" />
+    <Content Include="PhoneGap\build.bat" />
+    <Content Include="PhoneGap\create.bat" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootstrap-switch\bootstrap-switch.js" />
