@@ -1,4 +1,4 @@
-﻿define(["require", "exports", "src/util/log/Log", "src/model/controls/DesignerControls"], function(require, exports, Log, DesignerControls) {
+﻿define(["require", "exports", "src/util/log/Log", "src/model/DesignerControls"], function(require, exports, Log, DesignerControls) {
     var AppControlFactory = (function () {
         function AppControlFactory() {
             this.log = new Log("AppControlFactory");
@@ -41,15 +41,6 @@
 
             input.Element = $container;
             return input;
-        };
-
-        AppControlFactory.prototype.CreateHeader = function (id) {
-            //var header = new DesignerControls.Header(id);
-            //var $container = $("<div data-role='header'></div>");
-            //$container.append($("<h1>Page Title</h1> "));
-            //header.Element = $container;
-            //return header;
-            return null;
         };
         return AppControlFactory;
     })();

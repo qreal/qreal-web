@@ -1,4 +1,4 @@
-﻿define(["require", "exports", "src/util/log/Log", "src/model/Enums", "src/model/properties/PageProperty", "src/model/properties/ButtonProperty", "src/model/properties/InputProperty", "src/device/DesignerControlFactory", "src/model/controls/DesignerControls"], function(require, exports, Log, Enums, PageProperty, ButtonProperty, InputProperty, DesignerControlFactory, DesignerControls) {
+﻿define(["require", "exports", "src/util/log/Log", "src/model/Enums", "src/model/ControlProperty", "src/device/DesignerControlFactory", "src/device/AppControlFactory", "src/model/DesignerControls"], function(require, exports, Log, Enums, ControlProperty, DesignerControlFactory, AppControlFactory, DesignerControls) {
     var ControlManager = (function () {
         function ControlManager() {
             this.log = new Log("ControlManager");
@@ -6,6 +6,7 @@
             this.pages = new Array();
             this.log.Debug("constructor");
             this.controlFactory = new DesignerControlFactory();
+            this.appControlFactory = new AppControlFactory();
         }
         ControlManager.prototype.Init = function () {
             this.log.Debug("Init");
@@ -22,7 +23,7 @@
                 return false;
             }
 
-            var page = this.controlFactory.CreatePage(new PageProperty(pageId));
+            var page = this.controlFactory.CreatePage(new ControlProperty.PageProperty(pageId));
             this.pages.push(page);
             $('body').append(page.Element);
             this.SelectPage(pageId);
@@ -43,18 +44,17 @@
                 case "Input":
                     return this.CreateInput();
                 case "Header":
-                    return this.controlFactory.CreateHeader(this.GetNewId('header'));
                     break;
             }
         };
 
         ControlManager.prototype.CreateButton = function () {
-            var property = new ButtonProperty(this.GetNewId('button'));
+            var property = new ControlProperty.ButtonProperty(this.GetNewId('button'));
             return this.controlFactory.CreateButton(property);
         };
 
         ControlManager.prototype.CreateInput = function () {
-            var property = new InputProperty(this.GetNewId('input'));
+            var property = new ControlProperty.InputProperty(this.GetNewId('input'));
             return this.controlFactory.CreateInput(property);
         };
 
@@ -93,6 +93,13 @@
                 case 0 /* Page */:
                     this.FindById(propertyId).ChangeProperty(propertyId, propertyType, newValue);
                     break;
+            }
+        };
+
+        ControlManager.prototype.GenerateAppHtml = function () {
+            var result = "";
+            for (var i in this.pages) {
+                var page = this.pages[i];
             }
         };
 

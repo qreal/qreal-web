@@ -1,15 +1,11 @@
 ﻿import App = require("src/Application");
 import Log = require("src/util/log/Log");
 import Enums = require("src/model/Enums");
-import Property = require("src/model/properties/Property");
-import ButtonProperty = require("src/model/properties/ButtonProperty");
-import InputProperty = require("src/model/properties/InputProperty");
-import PageProperty = require("src/model/properties/PageProperty");
-import HeaderProperty = require("src/model/properties/HeaderProperty");
+import ControlProperty = require("src/model/ControlProperty");
 
 module DesignerControls {
 
-    export class BaseControl<T extends Property> {
+    export class BaseControl<T extends ControlProperty.Property> {
 
         public log = new Log("BaseControl");
 
@@ -37,7 +33,7 @@ module DesignerControls {
         }
     }
 
-    export class BaseContainer<T extends Property> extends BaseControl<T> {
+    export class BaseContainer<T extends ControlProperty.Property> extends BaseControl<T> {
 
         private childrens = [];
 
@@ -62,9 +58,9 @@ module DesignerControls {
 
     }
 
-    export class Page extends BaseContainer<PageProperty> {
+    export class Page extends BaseContainer<ControlProperty.PageProperty> {
 
-        constructor(properties: PageProperty) {
+        constructor(properties: ControlProperty.PageProperty) {
             super(properties);
             this.log = new Log("Page");
         }
@@ -100,22 +96,9 @@ module DesignerControls {
         }
     }
 
-    export class Header extends BaseContainer<HeaderProperty> {
+    export class Button extends BaseControl<ControlProperty.ButtonProperty> {
 
-        constructor(properties: HeaderProperty) {
-            super(properties);
-            this.log = new Log("Header");
-        }
-
-        public ChangeProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string) {
-
-        }
-    }
-
-
-    export class Button extends BaseControl<ButtonProperty> {
-
-        constructor(properties: ButtonProperty) {
+        constructor(properties: ControlProperty.ButtonProperty) {
             super(properties);
             this.log = new Log("Button");
         }
@@ -149,9 +132,9 @@ module DesignerControls {
         }
     }
 
-    export class Input extends BaseControl<InputProperty> {
+    export class Input extends BaseControl<ControlProperty.InputProperty> {
 
-        constructor(properties: InputProperty) {
+        constructor(properties: ControlProperty.InputProperty) {
             super(properties);
             this.log = new Log("Input");
         }

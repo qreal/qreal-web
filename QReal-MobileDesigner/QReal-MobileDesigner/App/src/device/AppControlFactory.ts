@@ -1,11 +1,8 @@
 ﻿import App = require("src/Application");
 import Log = require("src/util/log/Log");
 import IControlFactory = require("src/device/IControlFactory");
-import DesignerControls = require("src/model/controls/DesignerControls");
-import Property = require("src/model/properties/Property");
-import PageProperty = require("src/model/properties/PageProperty");
-import ButtonProperty = require("src/model/properties/ButtonProperty");
-import InputProperty = require("src/model/properties/InputProperty");
+import DesignerControls = require("src/model/DesignerControls");
+import ControlProperty = require("src/model/ControlProperty");
 
 
 class AppControlFactory implements IControlFactory {
@@ -15,7 +12,7 @@ class AppControlFactory implements IControlFactory {
     constructor() {
     }
 
-    public CreatePage(property: PageProperty): DesignerControls.Page {
+    public CreatePage(property: ControlProperty.PageProperty): DesignerControls.Page {
         var page = new DesignerControls.Page(property);
         var $page = $('<div></div>');
         $page.data('role', 'page');
@@ -24,7 +21,7 @@ class AppControlFactory implements IControlFactory {
         return page;
     }
 
-    public CreateButton(property: ButtonProperty): DesignerControls.Button {
+    public CreateButton(property: ControlProperty.ButtonProperty): DesignerControls.Button {
         var button = new DesignerControls.Button(property);
         var $bt = $('<a href="#"></a>');
 
@@ -35,7 +32,7 @@ class AppControlFactory implements IControlFactory {
         return button;
     }
 
-    public CreateInput(property: InputProperty): DesignerControls.Input {
+    public CreateInput(property: ControlProperty.InputProperty): DesignerControls.Input {
         var input = new DesignerControls.Input(property);
 
         var $container = $("<div data-role='fieldcontain'></div>");
@@ -54,16 +51,6 @@ class AppControlFactory implements IControlFactory {
         input.Element = $container;
         return input;
     }
-
-    public CreateHeader(id: string): DesignerControls.Header {
-        //var header = new DesignerControls.Header(id);
-        //var $container = $("<div data-role='header'></div>");
-        //$container.append($("<h1>Page Title</h1> "));
-        //header.Element = $container;
-        //return header;
-        return null;
-    }
-
 }
 
 export = AppControlFactory; 

@@ -1,15 +1,12 @@
-import Property = require("src/model/properties/Property");
-import PageProperty = require("src/model/properties/PageProperty");
-import ButtonProperty = require("src/model/properties/ButtonProperty");
-import InputProperty = require("src/model/properties/InputProperty");
+import ControlProperty = require("src/model/ControlProperty");
 
 interface IControlFactory {
 
-    CreatePage(property: PageProperty): any;
+    CreatePage(property: ControlProperty.PageProperty): any;
 
-    CreateButton(property: ButtonProperty): any;
+    CreateButton(property: ControlProperty.ButtonProperty): any;
 
-    CreateInput(property: InputProperty): any;
+    CreateInput(property: ControlProperty.InputProperty): any;
 }
 
 export = IControlFactory;

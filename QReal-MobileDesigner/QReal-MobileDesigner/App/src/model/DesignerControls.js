@@ -105,18 +105,6 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
         })(BaseContainer);
         DesignerControls.Page = Page;
 
-        var Header = (function (_super) {
-            __extends(Header, _super);
-            function Header(properties) {
-                _super.call(this, properties);
-                this.log = new Log("Header");
-            }
-            Header.prototype.ChangeProperty = function (propertyId, propertyType, newValue) {
-            };
-            return Header;
-        })(BaseContainer);
-        DesignerControls.Header = Header;
-
         var Button = (function (_super) {
             __extends(Button, _super);
             function Button(properties) {

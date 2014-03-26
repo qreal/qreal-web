@@ -3,10 +3,7 @@ import App = require("src/Application");
 import Enums = require("src/model/Enums");
 import Controller = require("src/designer/Designer");
 import EventManager = require("src/util/events/EventManager");
-import Property = require("src/model/properties/Property");
-import ButtonProperty = require("src/model/properties/ButtonProperty");
-import InputProperty = require("src/model/properties/InputProperty");
-import PageProperty = require("src/model/properties/PageProperty");
+import ControlProperty = require("src/model/ControlProperty");
 
 
 class PropertiesView {
@@ -35,7 +32,7 @@ class PropertiesView {
         this.log.Debug("Init");
     }
 
-    public ShowProperty(property: Property): void {
+    public ShowProperty(property: ControlProperty.Property): void {
         this.log.Debug('ShowProperty ' + property.Type);
 
         if (this.currentPropertyDiv) {
@@ -51,18 +48,18 @@ class PropertiesView {
 
         switch (property.Type) {
             case Enums.ControlType.Button:
-                this.ShowProperty_Button(<ButtonProperty>property);
+                this.ShowProperty_Button(<ControlProperty.ButtonProperty>property);
                 break;
             case Enums.ControlType.Input:
-                this.ShowProperty_Input(<InputProperty>property);
+                this.ShowProperty_Input(<ControlProperty.InputProperty>property);
                 break;
             case Enums.ControlType.Page:
-                this.ShowProperty_Page(<PageProperty>property);
+                this.ShowProperty_Page(<ControlProperty.PageProperty>property);
                 break;
         }
     }
 
-    public ShowProperty_Button(property: ButtonProperty): void {
+    public ShowProperty_Button(property: ControlProperty.ButtonProperty): void {
         this.log.Debug("ShowProperty_Button");
         var self = this;
         var controlManager = App.Instance.Device.ControlManager;
@@ -152,7 +149,7 @@ class PropertiesView {
         this.currentPropertyDiv = propertyPanel;
     }
 
-    public ShowProperty_Input(property: InputProperty): void {
+    public ShowProperty_Input(property: ControlProperty.InputProperty): void {
         this.log.Debug("ShowProperty_Input");
         var self = this;
         var controlManager = App.Instance.Device.ControlManager;
@@ -243,7 +240,7 @@ class PropertiesView {
     }
 
 
-    public ShowProperty_Page(property: PageProperty): void {
+    public ShowProperty_Page(property: ControlProperty.PageProperty): void {
         this.log.Debug("ShowProperty_Page");
         var self = this;
         var controlManager = App.Instance.Device.ControlManager;
