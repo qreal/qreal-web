@@ -30,7 +30,7 @@ class ControlManager {
         this.log.Debug("Init");
     }
 
-    /* Pages */
+    /*** Pages ***/
     public CreatePage(pageId: string): boolean {
         this.log.Debug("CreatePage: " + pageId);
         if (this.ContainsId(pageId)) {
@@ -52,7 +52,7 @@ class ControlManager {
         $.mobile.changePage('#' + pageId);
     }
 
-    /* Controls */
+    /*** Controls ***/
     public CreateControl(controlId: string): DesignerControls.BaseControl<ControlProperty.Property> {
         this.log.Debug("CreateControl: " + controlId);
         switch (controlId) {
@@ -91,6 +91,7 @@ class ControlManager {
         return this.FindById(id) != null;
     }
 
+    /*** Changing Property ***/
     public ChangeProperty(propertyId: string, propertyType: Enums.PropertyType, controlType: Enums.ControlType, newValue: string): void {
         this.log.Debug("OnChangeProperty, propertyId: " + propertyId + " propertyType: " + propertyType + " controlType: " + controlType + " value: " + newValue);
         if (propertyType == Enums.PropertyType.Id) {
