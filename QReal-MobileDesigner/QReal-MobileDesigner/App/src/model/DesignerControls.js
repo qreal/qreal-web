@@ -4,7 +4,7 @@
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/Enums"], function(require, exports, App, Log, Enums) {
+define(["require", "exports", "src/Application", "src/util/log/Log"], function(require, exports, App, Log) {
     var DesignerControls;
     (function (DesignerControls) {
         var BaseControl = (function () {
@@ -31,9 +31,6 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
                 configurable: true
             });
 
-
-            BaseControl.prototype.ChangeProperty = function (propertyId, propertyType, newValue) {
-            };
             return BaseControl;
         })();
         DesignerControls.BaseControl = BaseControl;
@@ -84,23 +81,6 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
             Page.prototype.OnDragOver = function (e) {
                 e.preventDefault();
             };
-
-            Page.prototype.ChangeProperty = function (propertyId, propertyType, newValue) {
-                this.log.Debug('ChangeProperty');
-                switch (propertyType) {
-                    case 7 /* Header */:
-                        if (newValue == 'yes') {
-                            this.log.Debug('Yes');
-                            var header = App.Instance.Device.ControlManager.CreateControl('Header');
-                            this.Element.prepend(header.Element);
-                            this.Element.trigger('pagecreate');
-                        } else {
-                            this.log.Debug('No');
-                            this.Element.find('div[data-role="header"]').remove();
-                        }
-                        break;
-                }
-            };
             return Page;
         })(BaseContainer);
         DesignerControls.Page = Page;
@@ -111,33 +91,6 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
                 _super.call(this, properties);
                 this.log = new Log("Button");
             }
-            Button.prototype.ChangeProperty = function (propertyId, propertyType, newValue) {
-                switch (propertyType) {
-                    case 1 /* Id */:
-                        this.Properties.Id = newValue;
-                        this.Element.attr('id', newValue);
-                        break;
-                    case 0 /* Text */:
-                        this.log.Debug("Enums.PropertyType.Text:", this.Element);
-                        this.Element.find('.ui-btn-text').text(newValue);
-                        break;
-                    case 2 /* Inline */:
-                        var cond = newValue == "true";
-                        this.Element.buttonMarkup({ inline: cond });
-                        break;
-                    case 3 /* Corners */:
-                        var cond = newValue == "true";
-                        this.Element.buttonMarkup({ corners: cond });
-                        break;
-                    case 4 /* Mini */:
-                        var cond = newValue == "true";
-                        this.Element.buttonMarkup({ mini: cond });
-                        break;
-                    case 5 /* Theme */:
-                        this.Element.buttonMarkup({ theme: newValue });
-                        break;
-                }
-            };
             return Button;
         })(BaseControl);
         DesignerControls.Button = Button;
@@ -148,23 +101,6 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
                 _super.call(this, properties);
                 this.log = new Log("Input");
             }
-            Input.prototype.ChangeProperty = function (propertyId, propertyType, newValue) {
-                switch (propertyType) {
-                    case 1 /* Id */:
-                        this.Properties.Id = newValue;
-                        this.Element.find('input').attr('id', newValue);
-                        break;
-                    case 6 /* Title */:
-                        this.Element.find('label').text(newValue);
-                        break;
-                    case 4 /* Mini */:
-                        var cond = newValue == "true";
-
-                        break;
-                    case 5 /* Theme */:
-                        break;
-                }
-            };
             return Input;
         })(BaseControl);
         DesignerControls.Input = Input;

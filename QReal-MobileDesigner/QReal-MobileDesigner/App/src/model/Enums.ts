@@ -1,6 +1,7 @@
 ﻿module Enums {
 
     export enum ControlType {
+        App,
         Page,
         Header,
         Button,
@@ -8,8 +9,8 @@
     }
 
     export enum PropertyType {
-        Text,
         Id,
+        Text,    
         Inline,
         Corners,
         Mini,

@@ -5,10 +5,11 @@ import EventManager = require("src/util/events/EventManager");
 import IEventListener = require("src/util/events/IEventListener");
 import Enums = require("src/model/Enums");
 import ControlProperty = require("src/model/ControlProperty");
+import DesignerControls = require("src/model/DesignerControls");
 import DesignerControlFactory = require("src/device/DesignerControlFactory");
 import AppControlFactory = require("src/device/AppControlFactory");
 import IControlFactory = require("src/device/IControlFactory");
-import DesignerControls = require("src/model/DesignerControls");
+
 
 class ControlManager {
 
@@ -18,7 +19,7 @@ class ControlManager {
     private appControlFactory: IControlFactory;
 
     private idIndex = 1;
-    private pages = new Array<DesignerControls.Page>();
+    private app = new DesignerControls.BaseContainer<ControlProperty.Property>(new ControlProperty.Property(Enums.ControlType.App, "AppName"));
 
     constructor() {
         this.log.Debug("constructor");
@@ -41,7 +42,7 @@ class ControlManager {
         }
 
         var page = this.controlFactory.CreatePage(new ControlProperty.PageProperty(pageId));
-        this.pages.push(page);
+        this.app.Childrens.push(page);
         $('body').append(page.Element);
         this.SelectPage(pageId);
         return true;
@@ -104,33 +105,91 @@ class ControlManager {
 
         switch (controlType) {
             case Enums.ControlType.Button:
-                this.FindById(propertyId).ChangeProperty(propertyId, propertyType, newValue);
+                this.ChangeButtonProperty(propertyId, propertyType, newValue);
                 break;
             case Enums.ControlType.Input:
-                this.FindById(propertyId).ChangeProperty(propertyId, propertyType, newValue);
+                this.ChangeInputProperty(propertyId, propertyType, newValue);
                 break;
             case Enums.ControlType.Page:
-                this.FindById(propertyId).ChangeProperty(propertyId, propertyType, newValue);
+                this.ChangePageProperty(propertyId, propertyType, newValue);
+                break;
+        }
+    }
+
+    public ChangePageProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string) {
+        this.log.Debug('ChangePageProperty');
+        var page = this.FindById(propertyId);
+        switch (propertyType) {
+            case Enums.PropertyType.Header:
+                if (newValue == 'yes') {
+                    var header = App.Instance.Device.ControlManager.CreateControl('Header');
+                    page.Element.prepend(header.Element);
+                    page.Element.trigger('pagecreate');
+                } else {
+                    page.Element.find('div[data-role="header"]').remove();
+                }
+                break;
+        }
+    }
+
+    public ChangeButtonProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string): void {
+        var button = this.FindById(propertyId);
+        switch (propertyType) {
+            case Enums.PropertyType.Id:
+                button.Properties.Id = newValue;
+                button.Element.attr('id', newValue);
+                break;
+            case Enums.PropertyType.Text:
+                this.log.Debug("Enums.PropertyType.Text:", button.Element);
+                button.Element.find('.ui-btn-text').text(newValue);
+                break;
+            case Enums.PropertyType.Inline:
+                var cond: boolean = newValue == "true";
+                button.Element.buttonMarkup({ inline: cond });
+                break;
+            case Enums.PropertyType.Corners:
+                var cond: boolean = newValue == "true";
+                button.Element.buttonMarkup({ corners: cond });
+                break;
+            case Enums.PropertyType.Mini:
+                var cond: boolean = newValue == "true";
+                button.Element.buttonMarkup({ mini: cond });
+                break;
+            case Enums.PropertyType.Theme:
+                button.Element.buttonMarkup({ theme: newValue });
+                break;
+        }
+    }
+
+    public ChangeInputProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string) {
+        var input = this.FindById(propertyId);
+        switch (propertyType) {
+            case Enums.PropertyType.Id:
+                input.Properties.Id = newValue;
+                input.Element.find('input').attr('id', newValue);
+                break;
+            case Enums.PropertyType.Title:
+                input.Element.find('label').text(newValue);
+                break;
+            case Enums.PropertyType.Mini:
+                var cond: boolean = newValue == "true";
+                //Not work
+                //$('#' + propertyId).buttonMarkup({ mini: cond });
+                break;
+            case Enums.PropertyType.Theme:
+                //Not work
+                //$('#' + propertyId).textinput({ theme: newValue });
                 break;
         }
     }
 
     public GenerateAppHtml() {
-        var result = "";
-        for (var i in this.pages) {
-            var page = this.pages[i];
-
-        }
+   
     }
 
-    public FindById(id: string): DesignerControls.BaseControl<ControlProperty.Property> {
-        for (var i in this.pages) {
-            var control = this.FindInContainer(id, this.pages[i]);
-            if (control) {
-                return control;
-            }
-        }
-        return null;
+    public FindById(id: string): DesignerControls.BaseControl<ControlProperty.Property> { 
+        this.log.Debug("FindById: "+id);  
+        return this.FindInContainer(id, this.app);
     }
 
     private FindInContainer(id: string, control: DesignerControls.BaseControl<ControlProperty.Property>): DesignerControls.BaseControl<ControlProperty.Property> {

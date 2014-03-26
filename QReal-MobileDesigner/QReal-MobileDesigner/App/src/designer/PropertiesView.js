@@ -34,13 +34,13 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             }
 
             switch (property.Type) {
-                case 2 /* Button */:
+                case 3 /* Button */:
                     this.ShowProperty_Button(property);
                     break;
-                case 3 /* Input */:
+                case 4 /* Input */:
                     this.ShowProperty_Input(property);
                     break;
-                case 0 /* Page */:
+                case 1 /* Page */:
                     this.ShowProperty_Page(property);
                     break;
             }
@@ -59,7 +59,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
                 value: property.Id
             });
             idProperty.find('input').change(function () {
-                controlManager.ChangeProperty(property.Id, 1 /* Id */, 2 /* Button */, $(this).val());
+                controlManager.ChangeProperty(property.Id, 0 /* Id */, 3 /* Button */, $(this).val());
             });
 
             var textProperty = $('#propertyTextTmpl').tmpl({
@@ -68,7 +68,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             });
 
             textProperty.find('input').change(function () {
-                controlManager.ChangeProperty(property.Id, 0 /* Text */, 2 /* Button */, $(this).val());
+                controlManager.ChangeProperty(property.Id, 1 /* Text */, 3 /* Button */, $(this).val());
             });
 
             var inlineProperty = $('#propertySelectTmpl').tmpl({
@@ -80,7 +80,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
 
             inlineSelect.val(String(property.Inline));
             inlineSelect.change(function () {
-                controlManager.ChangeProperty(property.Id, 2 /* Inline */, 2 /* Button */, $(this).val());
+                controlManager.ChangeProperty(property.Id, 2 /* Inline */, 3 /* Button */, $(this).val());
             });
             var cornersProperty = $('#propertySelectTmpl').tmpl({
                 name: 'Rounded corners:'
@@ -90,7 +90,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
 
             cornersSelect.val(String(property.Corners));
             cornersSelect.change(function () {
-                controlManager.ChangeProperty(property.Id, 3 /* Corners */, 2 /* Button */, $(this).val());
+                controlManager.ChangeProperty(property.Id, 3 /* Corners */, 3 /* Button */, $(this).val());
             });
 
             var miniProperty = $('#propertySelectTmpl').tmpl({
@@ -101,7 +101,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
 
             miniSelect.val(String(property.Mini));
             miniSelect.change(function () {
-                controlManager.ChangeProperty(property.Id, 4 /* Mini */, 2 /* Button */, $(this).val());
+                controlManager.ChangeProperty(property.Id, 4 /* Mini */, 3 /* Button */, $(this).val());
             });
 
             var themeProperty = $('#propertySelectTmpl').tmpl({
@@ -113,7 +113,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
 
             themeSelect.val(property.Theme);
             themeSelect.change(function () {
-                controlManager.ChangeProperty(property.Id, 5 /* Theme */, 2 /* Button */, $(this).val());
+                controlManager.ChangeProperty(property.Id, 5 /* Theme */, 3 /* Button */, $(this).val());
             });
 
             dialogContent.append(idProperty);
@@ -141,7 +141,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
                 value: property.Id
             });
             idProperty.find('input').change(function () {
-                controlManager.ChangeProperty(property.Id, 1 /* Id */, 3 /* Input */, $(this).val());
+                controlManager.ChangeProperty(property.Id, 0 /* Id */, 4 /* Input */, $(this).val());
             });
 
             var titleProperty = $('#propertyTextTmpl').tmpl({
@@ -150,7 +150,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             });
 
             titleProperty.find('input').change(function () {
-                controlManager.ChangeProperty(property.Id, 6 /* Title */, 3 /* Input */, $(this).val());
+                controlManager.ChangeProperty(property.Id, 6 /* Title */, 4 /* Input */, $(this).val());
             });
 
             var inlineProperty = $('#propertySelectTmpl').tmpl({
@@ -162,7 +162,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
 
             inlineSelect.val(String(property.Inline));
             inlineSelect.change(function () {
-                controlManager.ChangeProperty(property.Id, 2 /* Inline */, 3 /* Input */, $(this).val());
+                controlManager.ChangeProperty(property.Id, 2 /* Inline */, 4 /* Input */, $(this).val());
             });
             var cornersProperty = $('#propertySelectTmpl').tmpl({
                 name: 'Rounded corners:'
@@ -172,7 +172,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
 
             cornersSelect.val(String(property.Corners));
             cornersSelect.change(function () {
-                controlManager.ChangeProperty(property.Id, 3 /* Corners */, 3 /* Input */, $(this).val());
+                controlManager.ChangeProperty(property.Id, 3 /* Corners */, 4 /* Input */, $(this).val());
             });
 
             var miniProperty = $('#propertySelectTmpl').tmpl({
@@ -183,7 +183,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
 
             miniSelect.val(String(property.Mini));
             miniSelect.change(function () {
-                controlManager.ChangeProperty(property.Id, 4 /* Mini */, 3 /* Input */, $(this).val());
+                controlManager.ChangeProperty(property.Id, 4 /* Mini */, 4 /* Input */, $(this).val());
             });
 
             var themeProperty = $('#propertySelectTmpl').tmpl({
@@ -195,7 +195,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
 
             themeSelect.val(property.Theme);
             themeSelect.change(function () {
-                controlManager.ChangeProperty(property.Id, 5 /* Theme */, 3 /* Input */, $(this).val());
+                controlManager.ChangeProperty(property.Id, 5 /* Theme */, 4 /* Input */, $(this).val());
             });
 
             dialogContent.append(idProperty);
@@ -223,7 +223,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
                 value: property.Id
             });
             idProperty.find('input').change(function () {
-                controlManager.ChangeProperty(property.Id, 1 /* Id */, 0 /* Page */, $(this).val());
+                controlManager.ChangeProperty(property.Id, 0 /* Id */, 1 /* Page */, $(this).val());
             });
 
             var headerProperty = $('#propertyCheckboxTmpl').tmpl({
@@ -231,7 +231,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
                 value: property.Id
             });
             headerProperty.find('input').change(function () {
-                controlManager.ChangeProperty(property.Id, 7 /* Header */, 0 /* Page */, $(this).is(":checked") ? 'yes' : 'no');
+                controlManager.ChangeProperty(property.Id, 7 /* Header */, 1 /* Page */, $(this).is(":checked") ? 'yes' : 'no');
             });
 
             panelContent.append(idProperty);

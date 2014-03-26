@@ -42,7 +42,7 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
         var PageProperty = (function (_super) {
             __extends(PageProperty, _super);
             function PageProperty(id) {
-                _super.call(this, 0 /* Page */, id);
+                _super.call(this, 1 /* Page */, id);
             }
             return PageProperty;
         })(Property);
@@ -51,7 +51,7 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
         var ButtonProperty = (function (_super) {
             __extends(ButtonProperty, _super);
             function ButtonProperty(id) {
-                _super.call(this, 2 /* Button */, id);
+                _super.call(this, 3 /* Button */, id);
                 this.Text = "Button";
                 this.Inline = false;
                 this.Corners = true;
@@ -124,7 +124,7 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
         var InputProperty = (function (_super) {
             __extends(InputProperty, _super);
             function InputProperty(id) {
-                _super.call(this, 3 /* Input */, id);
+                _super.call(this, 4 /* Input */, id);
                 this.Title = "Title";
                 this.Inline = false;
                 this.Corners = true;

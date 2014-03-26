@@ -2,16 +2,17 @@
     var Enums;
     (function (Enums) {
         (function (ControlType) {
-            ControlType[ControlType["Page"] = 0] = "Page";
-            ControlType[ControlType["Header"] = 1] = "Header";
-            ControlType[ControlType["Button"] = 2] = "Button";
-            ControlType[ControlType["Input"] = 3] = "Input";
+            ControlType[ControlType["App"] = 0] = "App";
+            ControlType[ControlType["Page"] = 1] = "Page";
+            ControlType[ControlType["Header"] = 2] = "Header";
+            ControlType[ControlType["Button"] = 3] = "Button";
+            ControlType[ControlType["Input"] = 4] = "Input";
         })(Enums.ControlType || (Enums.ControlType = {}));
         var ControlType = Enums.ControlType;
 
         (function (PropertyType) {
-            PropertyType[PropertyType["Text"] = 0] = "Text";
-            PropertyType[PropertyType["Id"] = 1] = "Id";
+            PropertyType[PropertyType["Id"] = 0] = "Id";
+            PropertyType[PropertyType["Text"] = 1] = "Text";
             PropertyType[PropertyType["Inline"] = 2] = "Inline";
             PropertyType[PropertyType["Corners"] = 3] = "Corners";
             PropertyType[PropertyType["Mini"] = 4] = "Mini";
