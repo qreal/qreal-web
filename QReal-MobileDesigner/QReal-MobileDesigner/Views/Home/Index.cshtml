@@ -1,0 +1,15 @@
+﻿@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Home";
+}
+
+<h1>Home Page! :)</h1>
+@if (@User.Identity.GetUserName().Equals(""))
+{
+   <p>Login first for creating projects</p>
+}
+else
+{
+    <a class="btn btn-default" href="/Home/Designer">Designer</a>    
+    <a class="btn btn-default" href="/Projects/Create">Create Project</a>
+}
