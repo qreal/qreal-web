@@ -17,22 +17,23 @@ namespace QReal_MobileDesigner.Controllers
     public class ProjectsController : Controller
     {
         private ProjectsEntities db = new ProjectsEntities();
-        private static string projectsLocation = HttpRuntime.AppDomainAppPath + @"\PhoneGap\";
+        private static string phonegapLocation = String.Format(@"{0}PhoneGap\", HttpRuntime.AppDomainAppPath);
 
 
         [HttpPost]
         public string NewProject(string project_name, string project_package, string appHtml, string appJs)
         {
             var username = User.Identity.GetUserName();
-            Directory.CreateDirectory(projectsLocation + @"Projects\" + username);
-            var create_psi = new ProcessStartInfo("cmd.exe", String.Format("/c {0}create.bat {1} {2} {3}", projectsLocation, project_name, project_package, project_name))
+            var workingDir = String.Format(@"{0}Projects\{1}", phonegapLocation, username);
+            Directory.CreateDirectory(workingDir);
+            var createPsi = new ProcessStartInfo("cmd.exe", String.Format("/c {0}create.bat {1} {2} {3}", phonegapLocation, project_name, project_package, project_name))
             {
-                WorkingDirectory = projectsLocation + @"Projects\" + username,
+                WorkingDirectory = workingDir,
                 CreateNoWindow = true,
                 UseShellExecute = false
             };
 
-            using (var process = Process.Start(create_psi))
+            using (var process = Process.Start(createPsi))
             {
                 process.WaitForExit();
             }
@@ -49,22 +50,22 @@ namespace QReal_MobileDesigner.Controllers
             };
             string html = RenderRazorViewToString(this, "~/Views/PhoneGapTemplate/index.cshtml", AppHtmlModel);
 
-            XCopy(String.Format(@"{0}MobileAppTemplate\www", HttpRuntime.AppDomainAppPath), String.Format(@"{0}Projects\{1}\{2}\www", projectsLocation, username, project_name), true);
+            XCopy(String.Format(@"{0}MobileAppTemplate\www", HttpRuntime.AppDomainAppPath), String.Format(@"{0}Projects\{1}\{2}\www", phonegapLocation, username, project_name), true);
 
-            FileStream fcreate = new FileStream(String.Format(@"{0}Projects\{1}\{2}\www\index.html", projectsLocation, username, project_name), FileMode.Create);
-            StreamWriter swOverwrite = new StreamWriter(fcreate);
-            swOverwrite.Write(html);
-            swOverwrite.Close();
-            fcreate.Close();
+            FileStream fIndexHtml = new FileStream(String.Format(@"{0}Projects\{1}\{2}\www\index.html", phonegapLocation, username, project_name), FileMode.Create);
+            StreamWriter swIndexhtml = new StreamWriter(fIndexHtml);
+            swIndexhtml.Write(html);
+            swIndexhtml.Close();
+            fIndexHtml.Close();
 
-            var build_psi = new ProcessStartInfo("cmd.exe", String.Format("/c {0}build.bat", projectsLocation))
+            var buildPsi = new ProcessStartInfo("cmd.exe", String.Format("/c {0}build.bat", phonegapLocation))
             {
-                WorkingDirectory = String.Format(@"{0}Projects\{1}\{2}", projectsLocation, username, project_name),
+                WorkingDirectory = String.Format(@"{0}Projects\{1}\{2}", phonegapLocation, username, project_name),
                 CreateNoWindow = true,
                 UseShellExecute = false
             };
 
-            using (var process = Process.Start(build_psi))
+            using (var process = Process.Start(buildPsi))
             {
                 process.WaitForExit();
             }
@@ -86,33 +87,9 @@ namespace QReal_MobileDesigner.Controllers
             }
         }
 
-        private void XCopy(String src, String dest, Boolean isOverwrite)
-        {
-            DirectoryInfo currentDirectory;
-            currentDirectory = new DirectoryInfo(src);
-            if (!Directory.Exists(dest))
-            {
-                Directory.CreateDirectory(dest);
-            }
-            foreach (FileInfo filein in currentDirectory.GetFiles())
-            {
-                filein.CopyTo(System.IO.Path.Combine(dest, filein.Name), true);
-                // To move files uncomment following line  
-                // filein.Delete();  
-            }
-            foreach (DirectoryInfo dr in currentDirectory.GetDirectories())
-            {
-                XCopy(dr.FullName, Path.Combine(dest, dr.Name), isOverwrite);
-            }
-        }
-
         public FileResult DownloadApk(string projectName)
         {
-            //Parameters to file are
-            //1. The File Path on the File Server
-            //2. The content type MIME type
-            //3. The parameter for the file save by the browser
-            return File(String.Format(@"{0}Projects\{1}\{2}\platforms\android\ant-build\{2}-debug.apk", projectsLocation, User.Identity.GetUserName(), projectName), "application/octet-stream", projectName + "-debug.apk");
+            return File(String.Format(@"{0}Projects\{1}\{2}\platforms\android\ant-build\{2}-debug.apk", phonegapLocation, User.Identity.GetUserName(), projectName), "application/octet-stream", projectName + "-debug.apk");
         }
 
         [HttpPost]
@@ -236,6 +213,28 @@ namespace QReal_MobileDesigner.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        //TODO: move to util
+
+        private void XCopy(String src, String dest, Boolean isOverwrite)
+        {
+            DirectoryInfo currentDirectory;
+            currentDirectory = new DirectoryInfo(src);
+            if (!Directory.Exists(dest))
+            {
+                Directory.CreateDirectory(dest);
+            }
+            foreach (FileInfo filein in currentDirectory.GetFiles())
+            {
+                filein.CopyTo(System.IO.Path.Combine(dest, filein.Name), true);
+                // To move files uncomment following line  
+                // filein.Delete();  
+            }
+            foreach (DirectoryInfo dr in currentDirectory.GetDirectories())
+            {
+                XCopy(dr.FullName, Path.Combine(dest, dr.Name), isOverwrite);
+            }
         }
 
     }
