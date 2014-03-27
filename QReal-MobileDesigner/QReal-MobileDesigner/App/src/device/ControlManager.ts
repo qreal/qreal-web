@@ -16,7 +16,7 @@ class ControlManager {
     private log = new Log("ControlManager");
 
     private controlFactory: IControlFactory;
-    private appControlFactory: IControlFactory;
+    private appControlFactory: AppControlFactory;
 
     private idIndex = 1;
     private app = new DesignerControls.BaseContainer<ControlProperty.Property>(new ControlProperty.Property(Enums.ControlType.App, "AppName"));
@@ -25,6 +25,7 @@ class ControlManager {
         this.log.Debug("constructor");
         this.controlFactory = new DesignerControlFactory();
         this.appControlFactory = new AppControlFactory();
+        this.app.Element = $("<div></div>");
     }
 
     public Init(): void {
@@ -48,7 +49,7 @@ class ControlManager {
         return true;
     }
 
-    public SelectPage(pageId: string): void { 
+    public SelectPage(pageId: string): void {
         this.log.Debug("SelectPage: " + pageId);
         $.mobile.changePage('#' + pageId);
     }
@@ -133,7 +134,7 @@ class ControlManager {
     }
 
     public ChangeButtonProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string): void {
-        var button = this.FindById(propertyId);
+        var button = <DesignerControls.Button>this.FindById(propertyId);
         switch (propertyType) {
             case Enums.PropertyType.Id:
                 button.Properties.Id = newValue;
@@ -142,27 +143,32 @@ class ControlManager {
             case Enums.PropertyType.Text:
                 this.log.Debug("Enums.PropertyType.Text:", button.Element);
                 button.Element.find('.ui-btn-text').text(newValue);
+                button.Properties.Text = newValue;
                 break;
             case Enums.PropertyType.Inline:
                 var cond: boolean = newValue == "true";
                 button.Element.buttonMarkup({ inline: cond });
+                button.Properties.Inline = cond;
                 break;
             case Enums.PropertyType.Corners:
                 var cond: boolean = newValue == "true";
                 button.Element.buttonMarkup({ corners: cond });
+                button.Properties.Corners = cond;
                 break;
             case Enums.PropertyType.Mini:
                 var cond: boolean = newValue == "true";
                 button.Element.buttonMarkup({ mini: cond });
+                button.Properties.Mini = cond;
                 break;
             case Enums.PropertyType.Theme:
                 button.Element.buttonMarkup({ theme: newValue });
+                button.Properties.Theme = newValue;
                 break;
         }
     }
 
     public ChangeInputProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string) {
-        var input = this.FindById(propertyId);
+        var input = <DesignerControls.Input>this.FindById(propertyId);
         switch (propertyType) {
             case Enums.PropertyType.Id:
                 input.Properties.Id = newValue;
@@ -170,25 +176,51 @@ class ControlManager {
                 break;
             case Enums.PropertyType.Title:
                 input.Element.find('label').text(newValue);
+                input.Properties.Title = newValue;
                 break;
             case Enums.PropertyType.Mini:
                 var cond: boolean = newValue == "true";
-                //Not work
-                //$('#' + propertyId).buttonMarkup({ mini: cond });
                 break;
             case Enums.PropertyType.Theme:
-                //Not work
-                //$('#' + propertyId).textinput({ theme: newValue });
                 break;
         }
     }
 
-    public GenerateAppHtml() {
-   
+    /*** Generation App ***/
+    public GenerateAppHtml(): string {
+        return this.GenerateHtml(this.app).html();
     }
 
-    public FindById(id: string): DesignerControls.BaseControl<ControlProperty.Property> { 
-        this.log.Debug("FindById: "+id);  
+    private GenerateHtml(element: DesignerControls.BaseControl<ControlProperty.Property>): JQuery {
+        var $html;
+        switch (element.Properties.Type) {
+            case Enums.ControlType.App:
+                $html = this.appControlFactory.CreateApp(element.Properties);
+                var app = <DesignerControls.BaseContainer<ControlProperty.Property>>element;
+                for (var i in app.Childrens) {
+                    $html.append(this.GenerateHtml(app.Childrens[i]))
+                }
+                break;
+            case Enums.ControlType.Page:
+                $html = this.appControlFactory.CreatePage(element.Properties);
+                var page = <DesignerControls.BaseContainer<ControlProperty.Property>>element;
+                for (var i in page.Childrens) {
+                    $html.append(this.GenerateHtml(page.Childrens[i]))
+                }
+                break;
+            case Enums.ControlType.Button:
+                $html = this.appControlFactory.CreateButton(<ControlProperty.ButtonProperty>element.Properties);
+                break;
+            case Enums.ControlType.Input:
+                $html = this.appControlFactory.CreateInput(<ControlProperty.InputProperty>element.Properties);
+                break;
+
+        }
+        return $html;
+    }
+
+    public FindById(id: string): DesignerControls.BaseControl<ControlProperty.Property> {
+        this.log.Debug("FindById: " + id);
         return this.FindInContainer(id, this.app);
     }
 

@@ -7,6 +7,7 @@
             this.log.Debug("constructor");
             this.controlFactory = new DesignerControlFactory();
             this.appControlFactory = new AppControlFactory();
+            this.app.Element = $("<div></div>");
         }
         ControlManager.prototype.Init = function () {
             this.log.Debug("Init");
@@ -123,21 +124,26 @@
                 case 1 /* Text */:
                     this.log.Debug("Enums.PropertyType.Text:", button.Element);
                     button.Element.find('.ui-btn-text').text(newValue);
+                    button.Properties.Text = newValue;
                     break;
                 case 2 /* Inline */:
                     var cond = newValue == "true";
                     button.Element.buttonMarkup({ inline: cond });
+                    button.Properties.Inline = cond;
                     break;
                 case 3 /* Corners */:
                     var cond = newValue == "true";
                     button.Element.buttonMarkup({ corners: cond });
+                    button.Properties.Corners = cond;
                     break;
                 case 4 /* Mini */:
                     var cond = newValue == "true";
                     button.Element.buttonMarkup({ mini: cond });
+                    button.Properties.Mini = cond;
                     break;
                 case 5 /* Theme */:
                     button.Element.buttonMarkup({ theme: newValue });
+                    button.Properties.Theme = newValue;
                     break;
             }
         };
@@ -151,17 +157,46 @@
                     break;
                 case 6 /* Title */:
                     input.Element.find('label').text(newValue);
+                    input.Properties.Title = newValue;
                     break;
                 case 4 /* Mini */:
                     var cond = newValue == "true";
-
                     break;
                 case 5 /* Theme */:
                     break;
             }
         };
 
+        /*** Generation App ***/
         ControlManager.prototype.GenerateAppHtml = function () {
+            return this.GenerateHtml(this.app).html();
+        };
+
+        ControlManager.prototype.GenerateHtml = function (element) {
+            var $html;
+            switch (element.Properties.Type) {
+                case 0 /* App */:
+                    $html = this.appControlFactory.CreateApp(element.Properties);
+                    var app = element;
+                    for (var i in app.Childrens) {
+                        $html.append(this.GenerateHtml(app.Childrens[i]));
+                    }
+                    break;
+                case 1 /* Page */:
+                    $html = this.appControlFactory.CreatePage(element.Properties);
+                    var page = element;
+                    for (var i in page.Childrens) {
+                        $html.append(this.GenerateHtml(page.Childrens[i]));
+                    }
+                    break;
+                case 3 /* Button */:
+                    $html = this.appControlFactory.CreateButton(element.Properties);
+                    break;
+                case 4 /* Input */:
+                    $html = this.appControlFactory.CreateInput(element.Properties);
+                    break;
+            }
+            return $html;
         };
 
         ControlManager.prototype.FindById = function (id) {

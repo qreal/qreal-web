@@ -21,12 +21,9 @@ namespace QReal_MobileDesigner.Controllers
 
 
         [HttpPost]
-        public string NewProject(string project_name, string project_package)
+        public string NewProject(string project_name, string project_package, string appHtml, string appJs)
         {
             var username = User.Identity.GetUserName();
-            var AppHtmlModel = new AppHtml() { Html = "<h1>Test</h1>" };
-            string html = RenderRazorViewToString(this, "~/Views/PhoneGapTemplate/index.cshtml", AppHtmlModel);
-
             Directory.CreateDirectory(projectsLocation + @"Projects\" + username);
             var create_psi = new ProcessStartInfo("cmd.exe", String.Format("/c {0}create.bat {1} {2} {3}", projectsLocation, project_name, project_package, project_name))
             {
@@ -39,6 +36,20 @@ namespace QReal_MobileDesigner.Controllers
             {
                 process.WaitForExit();
             }
+            return "{ \"project_name\":\"" + project_name + "\" }";
+        }
+
+        [HttpPost]
+        public string BuildProject(string project_name, string appHtml, string appJs, string appCss)
+        {
+            var username = User.Identity.GetUserName();
+            var AppHtmlModel = new AppHtml()
+            {
+                Html = appHtml
+            };
+            string html = RenderRazorViewToString(this, "~/Views/PhoneGapTemplate/index.cshtml", AppHtmlModel);
+
+            XCopy(String.Format(@"{0}MobileAppTemplate\www", HttpRuntime.AppDomainAppPath), String.Format(@"{0}Projects\{1}\{2}\www", projectsLocation, username, project_name), true);
 
             FileStream fcreate = new FileStream(String.Format(@"{0}Projects\{1}\{2}\www\index.html", projectsLocation, username, project_name), FileMode.Create);
             StreamWriter swOverwrite = new StreamWriter(fcreate);
@@ -61,9 +72,9 @@ namespace QReal_MobileDesigner.Controllers
             return "{ \"project_name\":\"" + project_name + "\" }";
         }
 
+
         public string RenderRazorViewToString(Controller controller, string viewName, object model)
         {
-
             controller.ViewData.Model = model;
             using (var sw = new StringWriter())
             {
@@ -75,6 +86,26 @@ namespace QReal_MobileDesigner.Controllers
             }
         }
 
+        private void XCopy(String src, String dest, Boolean isOverwrite)
+        {
+            DirectoryInfo currentDirectory;
+            currentDirectory = new DirectoryInfo(src);
+            if (!Directory.Exists(dest))
+            {
+                Directory.CreateDirectory(dest);
+            }
+            foreach (FileInfo filein in currentDirectory.GetFiles())
+            {
+                filein.CopyTo(System.IO.Path.Combine(dest, filein.Name), true);
+                // To move files uncomment following line  
+                // filein.Delete();  
+            }
+            foreach (DirectoryInfo dr in currentDirectory.GetDirectories())
+            {
+                XCopy(dr.FullName, Path.Combine(dest, dr.Name), isOverwrite);
+            }
+        }
+
         public FileResult DownloadApk(string projectName)
         {
             //Parameters to file are
@@ -82,6 +113,12 @@ namespace QReal_MobileDesigner.Controllers
             //2. The content type MIME type
             //3. The parameter for the file save by the browser
             return File(String.Format(@"{0}Projects\{1}\{2}\platforms\android\ant-build\{2}-debug.apk", projectsLocation, User.Identity.GetUserName(), projectName), "application/octet-stream", projectName + "-debug.apk");
+        }
+
+        [HttpPost]
+        public void TestHtml(string appHtml)
+        {
+            Console.WriteLine(appHtml);
         }
 
         // GET: /Projects/

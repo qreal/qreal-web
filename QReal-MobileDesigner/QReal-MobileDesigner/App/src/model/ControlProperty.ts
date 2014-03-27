@@ -57,6 +57,10 @@ module ControlProperty {
             return this.inline;
         }
 
+        public get InlineString(): string {
+            return this.inline ? "true" : "false";
+        }
+
         public set Inline(value: boolean) {
             this.inline = value;
         }
@@ -65,12 +69,20 @@ module ControlProperty {
             return this.corners;
         }
 
+        public get CornersString(): string {
+            return this.corners ? "true" : "false";
+        }
+
         public set Corners(value: boolean) {
             this.corners = value;
         }
 
         public get Mini(): boolean {
             return this.mini;
+        }
+
+        public get MiniString(): string {
+            return this.mini ? "true" : "false";
         }
 
         public set Mini(value: boolean) {

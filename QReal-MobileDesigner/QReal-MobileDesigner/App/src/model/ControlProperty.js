@@ -81,6 +81,14 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
                 configurable: true
             });
 
+            Object.defineProperty(ButtonProperty.prototype, "InlineString", {
+                get: function () {
+                    return this.inline ? "true" : "false";
+                },
+                enumerable: true,
+                configurable: true
+            });
+
 
             Object.defineProperty(ButtonProperty.prototype, "Corners", {
                 get: function () {
@@ -93,6 +101,14 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
                 configurable: true
             });
 
+            Object.defineProperty(ButtonProperty.prototype, "CornersString", {
+                get: function () {
+                    return this.corners ? "true" : "false";
+                },
+                enumerable: true,
+                configurable: true
+            });
+
 
             Object.defineProperty(ButtonProperty.prototype, "Mini", {
                 get: function () {
@@ -100,6 +116,14 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
                 },
                 set: function (value) {
                     this.mini = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Object.defineProperty(ButtonProperty.prototype, "MiniString", {
+                get: function () {
+                    return this.mini ? "true" : "false";
                 },
                 enumerable: true,
                 configurable: true

@@ -11,7 +11,6 @@ module DesignerControls {
 
         private properties: T;
 
-
         public get Properties(): T {
             return this.properties
         }
@@ -81,9 +80,7 @@ module DesignerControls {
         constructor(properties: ControlProperty.ButtonProperty) {
             super(properties);
             this.log = new Log("Button");
-        }
-
-       
+        }       
     }
 
     export class Input extends BaseControl<ControlProperty.InputProperty> {

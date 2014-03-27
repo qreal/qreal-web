@@ -1,55 +1,56 @@
 ﻿import App = require("src/Application");
 import Log = require("src/util/log/Log");
-import IControlFactory = require("src/device/IControlFactory");
 import DesignerControls = require("src/model/DesignerControls");
 import ControlProperty = require("src/model/ControlProperty");
 
 
-class AppControlFactory implements IControlFactory {
+class AppControlFactory{
 
     private log = new Log("AppControlFactory");
 
     constructor() {
     }
 
-    public CreatePage(property: ControlProperty.PageProperty): DesignerControls.Page {
-        var page = new DesignerControls.Page(property);
+    public CreateApp(property: ControlProperty.Property): JQuery {
+        var $app = $('<div></div>');
+        return $app;
+    }
+
+    public CreatePage(property: ControlProperty.PageProperty): JQuery {
         var $page = $('<div></div>');
         $page.data('role', 'page');
         $page.attr('id', property.Id);
-        page.Element = $page;
-        return page;
+        return $page;
     }
 
-    public CreateButton(property: ControlProperty.ButtonProperty): DesignerControls.Button {
-        var button = new DesignerControls.Button(property);
+    public CreateButton(property: ControlProperty.ButtonProperty): JQuery {
         var $bt = $('<a href="#"></a>');
-
         $bt.attr('data-role', 'button');
-        $bt.attr('id', button.Properties.Id);
-        $bt.text(button.Properties.Text);
-        button.Element = $bt;
-        return button;
+        $bt.attr('id', property.Id);
+        $bt.text(property.Text);
+        $bt.attr('data-mini', property.MiniString);
+        $bt.attr('data-corners', property.CornersString);
+        $bt.attr('data-inline', property.InlineString);
+        $bt.attr('data-theme', property.Theme);
+        return $bt;
     }
 
-    public CreateInput(property: ControlProperty.InputProperty): DesignerControls.Input {
-        var input = new DesignerControls.Input(property);
+    public CreateInput(property: ControlProperty.InputProperty): JQuery {
+        var $container = $("<div></div>");
+        $container.attr('data-role', 'fieldcontain');
 
-        var $container = $("<div data-role='fieldcontain'></div>");
         var $label = $("<label></label>");
-        $label.text(input.Properties.Title);
-        $label.attr('for', input.Properties.Id);
+        $label.text(property.Title);
+        $label.attr('for', property.Id);
 
         var $input = $('<input />');
         $input.attr('type', 'text');
-        $input.attr('id', input.Properties.Id);
-        $input.attr('name', input.Properties.Name);
+        $input.attr('id', property.Id);
+        $input.attr('name', property.Name);
 
         $container.append($label);
         $container.append($input);
-
-        input.Element = $container;
-        return input;
+        return $container;
     }
 }
 
