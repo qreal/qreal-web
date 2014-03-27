@@ -153,28 +153,6 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
                 controlManager.ChangeProperty(property.Id, 6 /* Title */, 4 /* Input */, $(this).val());
             });
 
-            var inlineProperty = $('#propertySelectTmpl').tmpl({
-                name: 'Inline:'
-            });
-
-            var inlineSelect = inlineProperty.find('select');
-            $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(inlineSelect);
-
-            inlineSelect.val(String(property.Inline));
-            inlineSelect.change(function () {
-                controlManager.ChangeProperty(property.Id, 2 /* Inline */, 4 /* Input */, $(this).val());
-            });
-            var cornersProperty = $('#propertySelectTmpl').tmpl({
-                name: 'Rounded corners:'
-            });
-            var cornersSelect = cornersProperty.find('select');
-            $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(cornersSelect);
-
-            cornersSelect.val(String(property.Corners));
-            cornersSelect.change(function () {
-                controlManager.ChangeProperty(property.Id, 3 /* Corners */, 4 /* Input */, $(this).val());
-            });
-
             var miniProperty = $('#propertySelectTmpl').tmpl({
                 name: 'Mini:'
             });
@@ -200,8 +178,6 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
 
             dialogContent.append(idProperty);
             dialogContent.append(titleProperty);
-            dialogContent.append(inlineProperty);
-            dialogContent.append(cornersProperty);
             dialogContent.append(miniProperty);
             dialogContent.append(themeProperty);
 

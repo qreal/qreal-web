@@ -176,30 +176,6 @@ class PropertiesView {
             controlManager.ChangeProperty(property.Id, Enums.PropertyType.Title, Enums.ControlType.Input, $(this).val());
         });
 
-        var inlineProperty = $('#propertySelectTmpl').tmpl(
-            {
-                name: 'Inline:'
-            });
-
-        var inlineSelect = inlineProperty.find('select');
-        $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(inlineSelect);
-
-        inlineSelect.val(String(property.Inline));
-        inlineSelect.change(function () {
-            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Inline, Enums.ControlType.Input, $(this).val());
-        });
-        var cornersProperty = $('#propertySelectTmpl').tmpl(
-            {
-                name: 'Rounded corners:'
-            });
-        var cornersSelect = cornersProperty.find('select');
-        $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(cornersSelect);
-
-        cornersSelect.val(String(property.Corners));
-        cornersSelect.change(function () {
-            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Corners, Enums.ControlType.Input, $(this).val());
-        });
-
         var miniProperty = $('#propertySelectTmpl').tmpl(
             {
                 name: 'Mini:'
@@ -211,7 +187,6 @@ class PropertiesView {
         miniSelect.change(function () {
             controlManager.ChangeProperty(property.Id, Enums.PropertyType.Mini, Enums.ControlType.Input, $(this).val());
         });
-
 
         var themeProperty = $('#propertySelectTmpl').tmpl(
             {
@@ -229,8 +204,6 @@ class PropertiesView {
 
         dialogContent.append(idProperty);
         dialogContent.append(titleProperty);
-        dialogContent.append(inlineProperty);
-        dialogContent.append(cornersProperty);
         dialogContent.append(miniProperty);
         dialogContent.append(themeProperty);
 
