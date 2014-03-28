@@ -24,6 +24,24 @@ namespace QReal_MobileDesigner.Controllers
         public string NewProject(string project_name, string project_package, string appHtml, string appJs)
         {
             var username = User.Identity.GetUserName();
+
+            var project = new Project()
+            {
+                Name = project_name,
+                Package = project_package,
+                Type = "Android"
+            };
+
+            db.Projects.Add(project);
+            db.SaveChanges();
+            var userProject = new UserProject()
+            {
+                ProjectId = project.ID,
+                UserId = User.Identity.GetUserId()
+            };
+            db.UserProjects.Add(userProject);
+            db.SaveChanges();
+
             var workingDir = String.Format(@"{0}Projects\{1}", phonegapLocation, username);
             Directory.CreateDirectory(workingDir);
             var createPsi = new ProcessStartInfo("cmd.exe", String.Format("/c {0}create.bat {1} {2} {3}", phonegapLocation, project_name, project_package, project_name))

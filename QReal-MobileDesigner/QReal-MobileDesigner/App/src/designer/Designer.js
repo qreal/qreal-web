@@ -16,37 +16,27 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogManager", "src
             var dialog = this.dm;
             var self = this;
             $('#generate-apk').on('click', function (e) {
-                var content = $('#templateNewProject').tmpl({});
+                self.log.Debug("My project name: " + projectName);
                 var appHtml = App.Instance.Device.ControlManager.GenerateAppHtml();
-                self.log.Debug("appHtml", appHtml);
-                content.find('form').on('submit', function (e) {
-                    content.modal('hide');
-                    dialog.ShowProgress("Generating apk...");
+                dialog.ShowProgress("Generating apk...");
+                var dataToSend = JSON.stringify({
+                    project_name: projectName,
+                    appHtml: appHtml,
+                    appJs: "",
+                    appCss: ""
                 });
-                content.find('form').ajaxForm({
-                    success: function (response) {
-                        var projectName = JSON.parse(response).project_name;
-                        var dataToSend = JSON.stringify({
-                            project_name: projectName,
-                            appHtml: appHtml,
-                            appJs: "",
-                            appCss: ""
-                        });
-                        self.log.Debug("dataToSend:", dataToSend);
-                        $.ajax({
-                            type: "POST",
-                            url: "/Projects/BuildProject",
-                            contentType: "application/json; charset=utf-8",
-                            dataType: "json",
-                            data: dataToSend,
-                            success: function (result) {
-                                window.location.href = "/Projects/DownloadApk?projectName=" + projectName;
-                                dialog.HideProgress();
-                            }
-                        });
+                self.log.Debug("dataToSend:", dataToSend);
+                $.ajax({
+                    type: "POST",
+                    url: "/Projects/BuildProject",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: dataToSend,
+                    success: function (result) {
+                        window.location.href = "/Projects/DownloadApk?projectName=" + projectName;
+                        dialog.HideProgress();
                     }
                 });
-                content.modal();
             });
         };
 
