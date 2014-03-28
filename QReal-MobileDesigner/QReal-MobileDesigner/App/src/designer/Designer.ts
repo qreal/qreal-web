@@ -7,7 +7,7 @@ import PropertiesView = require("src/designer/PropertiesView");
 import ControlProperty = require("src/model/ControlProperty");
 
 declare var bootbox;
-declare var projectName
+declare var projectName;
 
 class Designer {
 

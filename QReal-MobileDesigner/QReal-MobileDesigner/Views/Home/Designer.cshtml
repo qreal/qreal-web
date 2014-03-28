@@ -1,0 +1,217 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Designer";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - QReal</title>
+    @Styles.Render("~/bundles/designercss")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <script type="text/javascript">
+        var projectName = @Html.Raw(Json.Encode(ViewBag.ProjectName))
+    </script>
+    @Scripts.Render("~/bundles/designerjs")
+    <script data-main="/App/RequireJsConfigDesigner" src="/Scripts/require.js" type="text/javascript"></script>
+
+</head>
+<body>
+
+    <div class="container designer">
+        <div class="row">
+            <div class="col-md-4">
+                <!-- pallete-->
+                <ul class="nav nav-tabs" id="controlPaneltabs">
+                    <li class="active"><a href="#controls">Controls</a></li>
+                    <li><a href="#pages">Pages</a></li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="controls">
+                        <!-- Controls -->
+                        <div class="panel panel-default control-panel">
+                            <div class="panel-body" id="controls-widget">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="pages">
+                        <!-- Pages -->
+                        <div class="panel panel-default control-panel">
+                            <div class="panel-body">
+                                <div class="pages-list list-group"></div>
+                            </div>
+                            <div class="panel-footer">
+                                <button id="addPage" class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-plus"></span> Add page</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <!-- device -->
+                <div class="device-mockup" data-device="s3" data-orientation="portrait" data-color="white">
+                    <div class="device">
+                        <div class="screen" style="background: #fff">
+                            <iframe class="app-content-frame" src="/Static/device.html"></iframe>
+                        </div>
+                        <div class="button">
+                            <!-- You can hook the "home button" to some JavaScript events or just remove it -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-default" id="generate-apk">Generate apk</button>
+                <button class="btn btn-default" id="download-src">Download sources</button>
+                <div class="panel panel-default properties-panel" style="margin-top:10px;">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Properties</h3>
+                    </div>
+                    <div class="panel-body" id="properties-widget">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('#controlPaneltabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+
+        $(function () {
+            $.fn.exists = function () {
+                return this.length !== 0;
+            };
+        });
+    </script>
+
+
+
+    <!-- Templates -->
+
+    <script id="toolTmpl" type="text/x-jquery-tmpl">
+        <div class="tool-item" id="${id}" draggable="true">
+            <div class="tool-icon tool-${tool}"></div>
+            <label class="tool-title">${title}</label>
+        </div>
+    </script>
+
+    <script id="propertiesTmpl" type="text/x-jquery-tmpl">
+        <div class="property-panel">
+            <div id="property-table" class="property-table"></div>
+        </div>
+    </script>
+
+    <script id="propertyTextTmpl" type="text/x-jquery-tmpl">
+        <div class="property-row">
+            <div class="property-cell property-label">${name}</div>
+            <div class="property-cell">
+                <input type="text" class="form-control" value="${value}" />
+            </div>
+        </div>
+    </script>
+
+    <script id="propertyNumberTmpl" type="text/x-jquery-tmpl">
+        <div class="property-row">
+            <div class="property-cell property-label">${name}</div>
+            <div class="property-cell">
+                <input type="number" class="form-control" value="${value}" />
+            </div>
+        </div>
+    </script>
+
+    <script id="propertySelectTmpl" type="text/x-jquery-tmpl">
+        <div class="property-row">
+            <div class="property-cell property-label">${name}</div>
+            <div class="property-cell">
+                <select class="form-control"></select>
+            </div>
+        </div>
+    </script>
+
+    <script id="propertyCheckboxTmpl" type="text/x-jquery-tmpl">
+        <div class="property-row">
+            <div class="property-cell property-label">${name}</div>
+            <div class="property-cell">
+                <input type="checkbox" data-size="small" data-animate="false">
+            </div>
+        </div>
+    </script>
+
+    <script id="templateOptionItem" type="text/x-jquery-tmpl">
+        <option value='{{= Value}}'>{{= Text}}</option>
+    </script>
+
+    <script id="templatePageItem" type="text/x-jquery-tmpl">
+        <a href="#" class="list-group-item" data-toggle="tab" data-pageid="${page_id}"><span class="glyphicon glyphicon-file"></span> ${name}</a>
+    </script>
+
+    <script id="templateNewProject" type="text/x-jquery-tmpl">
+        <div class="modal fade" id="newProjectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="ProjectForm" role="form" class="form-horizontal" action="/Projects/NewProject" method="post">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Create new project</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <fieldset>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label" for="project_name">Project name:</label>
+                                    <div class="col-sm-8">
+                                        <input id="project_name" name="project_name" type="text" placeholder="HelloWorld" class="form-control" required="">
+                                    </div>
+                                </div>
+
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label" for="project_package">Package:</label>
+                                    <div class="col-sm-8">
+                                        <input id="project_package" name="project_package" type="text" placeholder="com.example.hello" class="form-control" required="">
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </script>
+
+    <script id="templateProgressDialog" type="text/x-jquery-tmpl">
+        <div class="modal fade" id="pleaseWaitDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>${title}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="progress progress-striped active">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                <span class="sr-only">45% Complete</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+</body>
+</html>

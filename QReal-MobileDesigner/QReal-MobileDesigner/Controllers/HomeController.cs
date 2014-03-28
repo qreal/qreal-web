@@ -27,9 +27,9 @@ namespace QReal_MobileDesigner.Controllers
             return View();
         }
 
-        public ActionResult Designer(string projectName)
+        public ActionResult Designer(string projectId = "HelloWorld")
         {
-            ViewBag.ProjectName = projectName;
+            ViewBag.ProjectName = projectId;
             return View();
         }
  
