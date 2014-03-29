@@ -11,6 +11,7 @@ namespace Android_Generator_v2
         public ButtonElement()
         {
             imports.Add("import android.widget.Button;");
+            imports.Add("import android.view.View;");
         }
 
         public void setId(String id)
@@ -36,7 +37,6 @@ namespace Android_Generator_v2
                 startActivity(intent);", to);
             onClickActions.Append(transitionSrc);
             imports.Add("import android.content.Intent;");
-            imports.Add("import android.view.View;");
         }
 
         public String getXml()

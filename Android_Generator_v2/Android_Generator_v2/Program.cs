@@ -12,7 +12,7 @@ namespace Android_Generator_v2
     {
         static int Main(string[] args)
         {
-            if (args.Length > 1)
+            /**if (args.Length > 1)
             {
                 Console.WriteLine("Too much arguments.");
                 return 1;
@@ -22,9 +22,22 @@ namespace Android_Generator_v2
                 Console.WriteLine("Please enter an application name.");
                 return 2;
             }
-            String appName = args[0];
-             
-            String appDirectory = appName; 
+            String appName = args[0];**/
+
+            JsonParser parser = new JsonParser("test.txt");
+
+            String appName;
+            try
+            {
+                appName = parser.getProjectName();
+            }
+            catch (NotFoundElementException e)
+            {
+                Console.WriteLine(e.Message);
+                return 4;
+            }
+
+            String appDirectory = appName;
             Directory.CreateDirectory(appDirectory);
 
             Directory.CreateDirectory(Path.Combine(appDirectory, "libs"));
@@ -46,7 +59,20 @@ namespace Android_Generator_v2
 
             String layoutDirectory = Path.Combine(appDirectory, @"res\layout");
 
-            JsonParser.parse("test.txt", appDirectory, srcDirectory, layoutDirectory);
+            try
+            {
+                parser.parseToEnd(appDirectory, srcDirectory, layoutDirectory);
+            }
+            catch (NotFoundElementException e)
+            {
+                Console.WriteLine(e.Message);
+                return 4;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return 4;
+            }
 
             // create strings.xml
             String strings = File.ReadAllText(Path.Combine("Templates", "stringsTemplate.xml"));

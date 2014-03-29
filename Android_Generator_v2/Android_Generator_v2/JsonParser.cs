@@ -8,30 +8,80 @@ using System.IO;
 
 namespace Android_Generator_v2
 {
-    class JsonParser { 
-        public static void parse(String filename, String appDirectory, String srcDirectory, String layoutDirectory)
+    class JsonParser {
+        public JsonParser(String filename)
         {
+            this.filename = filename;
             StreamReader streamReader = File.OpenText(filename);
             reader = new JsonTextReader(streamReader);
+        }
+
+        public String getProjectName()
+        {
+            while (reader.Read())
+            {
+                if (reader.TokenType.ToString().Equals("PropertyName") && reader.Value.Equals("type"))
+                {
+                    reader.Read();
+                    if (reader.Value.Equals("App"))
+                    {
+                        // next two reads need to get project id
+                        reader.Read();
+                        reader.Read();
+                        return reader.Value.ToString();
+                    }
+                }
+            }
+            throw new NotFoundElementException("Project id");
+        } 
+
+        public void parseToEnd(String appDirectory, String srcDirectory, String layoutDirectory)
+        {     
             while (reader.Read())
             {
                 object value = reader.Value;
                 if (value != null)
                 {
-                    if (reader.TokenType.ToString().Equals("PropertyName") && reader.Depth == 1)
+                    if (reader.TokenType.ToString().Equals("PropertyName") && reader.Value.Equals("Pages"))
                     {
-                        currentActivityName = reader.Value.ToString();
-                        activityBuider = new AndroidActivityBuilder(currentActivityName);
-                        layoutBuilder = new AndroidLayoutBuilder();
+                        parsePages(srcDirectory, layoutDirectory);
                     }
-                    else
+                }
+                else
+                {
+                    if ((reader.Depth == 0 && reader.TokenType.ToString().Equals("EndObject")))
                     {
-                        if (reader.TokenType.ToString().Equals("PropertyName")) 
+                        File.WriteAllText(Path.Combine(appDirectory, "AndroidManifest.xml"), 
+                            manifestBuilder.build());
+                    }
+                }
+            }
+        }
+
+        private void parsePages(String srcDirectory, String layoutDirectory)
+        {
+            String currentActivityName = null;
+            int pagesCount = 0;
+            while (reader.Read())
+            {
+                object value = reader.Value;
+                if (value != null)
+                {
+                    if (reader.TokenType.ToString().Equals("PropertyName"))
+                    {
+                        if (reader.Value.Equals("type") && reader.Depth == 3) 
                         {
-                            if (value.Equals("Main"))
+                            reader.Read();
+                            if (reader.Value.Equals("Page"))
                             {
+                                // next two reads need to get page id
                                 reader.Read();
-                                if ((Boolean)reader.Value)
+                                reader.Read();
+                                currentActivityName = reader.Value.ToString();
+                                activityBuider = new AndroidActivityBuilder(currentActivityName);
+                                layoutBuilder = new AndroidLayoutBuilder();
+                                pagesCount++;
+                                if (pagesCount == 1)
                                 {
                                     manifestBuilder.addActivity(ManifestActivity.
                                         createNewManifestActivity(currentActivityName, true));
@@ -42,36 +92,66 @@ namespace Android_Generator_v2
                                         createNewManifestActivity(currentActivityName, false));
                                 }
                             }
-                            if (value.Equals("Button")) 
-                            { 
-                                parseButtonElement();
-                            }
-                            if (value.Equals("Input"))
+                            else
                             {
-                                parseInputElement();
+                                throw new NotFoundElementException("Project id");
                             }
+                        }
+                        if (reader.Value.Equals("Controls"))
+                        {
+                            parseControls(currentActivityName);
                         }
                     }
                 }
                 else
                 {
-                    if (reader.Depth == 1 && reader.TokenType.ToString().Equals("EndObject"))
+                    if (reader.Depth == 2 && reader.TokenType.ToString().Equals("EndObject"))
                     {
                         File.WriteAllText(Path.Combine(srcDirectory, currentActivityName + ".java"),
                             activityBuider.build());
                         File.WriteAllText(Path.Combine(layoutDirectory, currentActivityName.ToLower() + "_layout.xml"),
                             layoutBuilder.build());
                     }
-                    if ((reader.Depth == 0 && reader.TokenType.ToString().Equals("EndObject")))
+                    if (reader.Depth == 1 && reader.TokenType.ToString().Equals("EndArray"))
                     {
-                        File.WriteAllText(Path.Combine(appDirectory, "AndroidManifest.xml"), 
-                            manifestBuilder.build());
+                        return;
                     }
                 }
             }
         }
 
-        private static void parseButtonElement()
+        private void parseControls(String currentActivityName)
+        {
+            while (reader.Read())
+            {
+                object value = reader.Value;
+                if (value != null)
+                {
+                    if (reader.TokenType.ToString().Equals("PropertyName") && reader.Value.Equals("type"))
+                    {
+                        // read for get type value
+                        reader.Read();
+                        if (reader.Value.Equals("Button"))
+                        {
+                            parseButtonElement(currentActivityName);
+                        }               
+                        else if (reader.Value.Equals("Input"))
+                        {
+                            parseInputElement();
+                        }
+                    }
+                }
+                else
+                {
+                    if (reader.Depth == 3 && reader.TokenType.ToString().Equals("EndArray"))
+                    {
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void parseButtonElement(String currentActivityName)
         {
             ButtonElement buttonElement = new ButtonElement();
 
@@ -83,26 +163,20 @@ namespace Android_Generator_v2
                 {
                     if (reader.TokenType.ToString().Equals("PropertyName"))
                     {
-                        if (value.Equals("Id"))
+                        if (value.Equals("id"))
                         {
                             reader.Read();
                             buttonElement.setId(reader.Value.ToString());
                         }
-                        if (value.Equals("Text"))
+                        if (value.Equals("text"))
                         {
                             reader.Read();
                             buttonElement.addXmlAttr("text", reader.Value.ToString());
                         }
-                        if (value.Equals("Link"))
+                        if (value.Equals("inline"))
                         {
                             reader.Read();
-                            buttonElement.addOnClickTransition(currentActivityName, reader.Value.ToString());
-                        }
-                        if (value.Equals("Inline"))
-                        {
-                            reader.Read();
-                            String attrValue = reader.Value.ToString();
-                            if (attrValue.Equals("No"))
+                            if (!(Boolean)reader.Value)
                             {
                                 buttonElement.addXmlAttr("layout_width", "match_parent");
                             }
@@ -110,6 +184,18 @@ namespace Android_Generator_v2
                             {
                                 buttonElement.addXmlAttr("layout_width", "wrap_content");
                             }
+                        }
+                        if (value.Equals("corners"))
+                        {
+
+                        }
+                        if (value.Equals("mini"))
+                        {
+
+                        }
+                        if (value.Equals("theme"))
+                        {
+
                         }
                     }
                 }
@@ -121,7 +207,7 @@ namespace Android_Generator_v2
             activityBuider.addMethods(buttonElement.getOnClickSrc());
         }
 
-        private static void parseInputElement()
+        private void parseInputElement()
         {
             InputElement inputElement = new InputElement();
 
@@ -133,16 +219,19 @@ namespace Android_Generator_v2
                 {
                     if (reader.TokenType.ToString().Equals("PropertyName"))
                     {
-                        if (value.Equals("Id"))
+                        if (value.Equals("id"))
                         {
                             reader.Read();
                             inputElement.setId(reader.Value.ToString());
                         }
-                        if (value.Equals("Inline"))
+                        if (value.Equals("title"))
+                        {
+
+                        }
+                        if (value.Equals("inline"))
                         {
                             reader.Read();
-                            String attrValue = reader.Value.ToString();
-                            if (attrValue.Equals("No"))
+                            if (!(Boolean)reader.Value)
                             {
                                 inputElement.addXmlAttr("layout_width", "match_parent");
                             }
@@ -151,23 +240,11 @@ namespace Android_Generator_v2
                                 inputElement.addXmlAttr("layout_width", "wrap_content");
                             }
                         }
-                        if (value.Equals("Title"))
+                        if (value.Equals("mini"))
                         {
 
                         }
-                        if (value.Equals("Rounded corners"))
-                        {
-
-                        }
-                        if (value.Equals("Title"))
-                        {
-
-                        }
-                        if (value.Equals("Mini"))
-                        {
-
-                        }
-                        if (value.Equals("Theme"))
+                        if (value.Equals("theme"))
                         {
 
                         }
@@ -182,10 +259,10 @@ namespace Android_Generator_v2
             activityBuider.addVariables(inputElement.getVariables());
         }
 
-        private static JsonTextReader reader;
-        private static ActivityBuilderInterface activityBuider = null;
-        private static LayoutBuilderInterface layoutBuilder = null;
-        private static ManifestBuilderInterface manifestBuilder = new AndroidManifestBuilder();
-        private static String currentActivityName;
+        private String filename;
+        private JsonTextReader reader;
+        private ActivityBuilderInterface activityBuider = null;
+        private LayoutBuilderInterface layoutBuilder = null;
+        private ManifestBuilderInterface manifestBuilder = new AndroidManifestBuilder();
     }
 }

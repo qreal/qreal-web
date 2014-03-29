@@ -1,30 +1,37 @@
 {
-	"MainActivity": {
-		"Main": true,
-		"Button": {
-			"Id": "test_btn",
-			"Text": "push",
-			"Link": "Second",
-			"Inline": "No"
-		},
-		"Button": {
-			"Id": "second_btn",
-			"Text": "to Second",
-			"Link": "Second",
-			"Inline": "No"
-		},
-		"Input": {
-			"Id": "input1",
-			"Title" : "",
-			"Inline": "No",
-			"Rounded corners": "Yes",
-			"Mini": "No",
-			"Theme": ""
-		}
-	},
-	"Second": {
-		"Main": false
-	}
+  "type": "App",
+  "id": "AppName",
+  "Pages": [
+    {
+      "type": "Page",
+      "id": "Main_Page",
+      "Controls": [
+        {
+          "type": "Button",
+          "id": "button1",
+          "text": "Button",
+          "inline": false,
+          "corners": true,
+          "mini": false,
+          "theme": "c"
+        },
+        {
+          "type": "Input",
+          "id": "input2",
+          "title": "Title",
+          "inline": false,
+          "corners": true,
+          "mini": false,
+          "theme": "c",
+          "placeholder": "",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "Page",
+      "id": "Second",
+      "Controls": []
+    }
+  ]
 }
-			
-			
