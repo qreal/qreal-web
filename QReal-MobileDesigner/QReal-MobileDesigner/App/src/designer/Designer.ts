@@ -41,7 +41,7 @@ class Designer {
                 appHtml: appHtml,
                 appJs: "",
                 appCss: ""
-            });
+            }, null, 2);
             self.log.Debug("dataToSend:", dataToSend);
             $.ajax({
                 type: "POST",
@@ -54,8 +54,18 @@ class Designer {
                     dialog.HideProgress();
                 }
             });
-
         });
+
+        $('#serialize').on('click', function (e) {
+            self.Download('test.txt', App.Instance.Device.ControlManager.Serialize());
+        });
+    }
+
+    public Download(filename, text) {
+        var pom = document.createElement('a');
+        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        pom.setAttribute('download', filename);
+        pom.click();
     }
 
     public get EventManager(): EventManager {

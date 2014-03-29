@@ -31,9 +31,9 @@ module DesignerControls {
 
     export class BaseContainer<T extends ControlProperty.Property> extends BaseControl<T> {
 
-        private childrens = [];
+        private childrens: BaseControl<ControlProperty.Property>[] = [];
 
-        public get Childrens() {
+        public get Childrens(): BaseControl<ControlProperty.Property>[] {
             return this.childrens;
         }
 

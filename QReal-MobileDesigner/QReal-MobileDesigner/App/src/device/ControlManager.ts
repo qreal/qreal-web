@@ -219,6 +219,40 @@ class ControlManager {
         return $html;
     }
 
+    public Serialize(): string {
+        var obj = this.CreateGeneralProperty(this.app);
+        this.log.Debug("App obj:", obj);
+        return JSON.stringify(obj, null, 2);
+    }
+
+    private CreateGeneralProperty(element: DesignerControls.BaseControl<ControlProperty.Property>):any {
+        var obj;
+        var self = this;
+        switch (element.Properties.Type) {
+            case Enums.ControlType.App:
+                obj = element.Properties;
+                var app = <DesignerControls.BaseContainer<ControlProperty.Property>>element;
+                obj["Pages"] = [];
+                app.Childrens.forEach(function (el) {
+                    obj["Pages"].push(self.CreateGeneralProperty(el));
+                });           
+                break;
+            case Enums.ControlType.Page:
+                obj = element.Properties;
+                var page = <DesignerControls.BaseContainer<ControlProperty.Property>>element;
+                obj["Controls"] = [];
+                page.Childrens.forEach(function (el) {
+                    obj["Controls"].push(self.CreateGeneralProperty(el));
+                });
+                break;
+            case Enums.ControlType.Button:
+            case Enums.ControlType.Input:
+                obj = element.Properties;
+                break;
+        }
+        return obj;
+    }
+
     public FindById(id: string): DesignerControls.BaseControl<ControlProperty.Property> {
         this.log.Debug("FindById: " + id);
         return this.FindInContainer(id, this.app);

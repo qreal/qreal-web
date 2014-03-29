@@ -199,6 +199,40 @@
             return $html;
         };
 
+        ControlManager.prototype.Serialize = function () {
+            var obj = this.CreateGeneralProperty(this.app);
+            this.log.Debug("App obj:", obj);
+            return JSON.stringify(obj, null, 2);
+        };
+
+        ControlManager.prototype.CreateGeneralProperty = function (element) {
+            var obj;
+            var self = this;
+            switch (element.Properties.Type) {
+                case 0 /* App */:
+                    obj = element.Properties;
+                    var app = element;
+                    obj["Pages"] = [];
+                    app.Childrens.forEach(function (el) {
+                        obj["Pages"].push(self.CreateGeneralProperty(el));
+                    });
+                    break;
+                case 1 /* Page */:
+                    obj = element.Properties;
+                    var page = element;
+                    obj["Controls"] = [];
+                    page.Childrens.forEach(function (el) {
+                        obj["Controls"].push(self.CreateGeneralProperty(el));
+                    });
+                    break;
+                case 3 /* Button */:
+                case 4 /* Input */:
+                    obj = element.Properties;
+                    break;
+            }
+            return obj;
+        };
+
         ControlManager.prototype.FindById = function (id) {
             this.log.Debug("FindById: " + id);
             return this.FindInContainer(id, this.app);

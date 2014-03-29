@@ -24,7 +24,7 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogManager", "src
                     appHtml: appHtml,
                     appJs: "",
                     appCss: ""
-                });
+                }, null, 2);
                 self.log.Debug("dataToSend:", dataToSend);
                 $.ajax({
                     type: "POST",
@@ -38,6 +38,17 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogManager", "src
                     }
                 });
             });
+
+            $('#serialize').on('click', function (e) {
+                self.Download('test.txt', App.Instance.Device.ControlManager.Serialize());
+            });
+        };
+
+        Designer.prototype.Download = function (filename, text) {
+            var pom = document.createElement('a');
+            pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            pom.setAttribute('download', filename);
+            pom.click();
         };
 
         Object.defineProperty(Designer.prototype, "EventManager", {
