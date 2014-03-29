@@ -172,6 +172,10 @@
     <Compile Include="Migrations\201403222311133_Projects.Designer.cs">
       <DependentUpon>201403222311133_Projects.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201403291547073_DelProject.cs" />
+    <Compile Include="Migrations\201403291547073_DelProject.Designer.cs">
+      <DependentUpon>201403291547073_DelProject.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppHtml.cs" />
@@ -557,6 +561,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201403222311133_Projects.resx">
       <DependentUpon>201403222311133_Projects.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201403291547073_DelProject.resx">
+      <DependentUpon>201403291547073_DelProject.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

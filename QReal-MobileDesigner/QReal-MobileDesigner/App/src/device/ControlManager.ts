@@ -10,7 +10,6 @@ import DesignerControlFactory = require("src/device/DesignerControlFactory");
 import AppControlFactory = require("src/device/AppControlFactory");
 import IControlFactory = require("src/device/IControlFactory");
 
-
 class ControlManager {
 
     private log = new Log("ControlManager");
@@ -19,17 +18,18 @@ class ControlManager {
     private appControlFactory: AppControlFactory;
 
     private idIndex = 1;
-    private app = new DesignerControls.BaseContainer<ControlProperty.Property>(new ControlProperty.Property(Enums.ControlType.App, "AppName"));
+    private app;
 
     constructor() {
         this.log.Debug("constructor");
         this.controlFactory = new DesignerControlFactory();
         this.appControlFactory = new AppControlFactory();
-        this.app.Element = $("<div></div>");
     }
 
     public Init(): void {
         this.log.Debug("Init");
+        this.app = new DesignerControls.BaseContainer<ControlProperty.AppProperty>(new ControlProperty.AppProperty((<any>parent).projectName, (<any>parent).projectPackage));
+        this.app.Element = $("<div></div>");
     }
 
     /*** Pages ***/

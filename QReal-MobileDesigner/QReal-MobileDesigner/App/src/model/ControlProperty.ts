@@ -30,6 +30,35 @@ module ControlProperty {
         }
     }
 
+    export class AppProperty extends Property {
+
+        private name: string;
+
+        public get Name(): string {
+            return this.name;
+        }
+
+        public set Name(value: string) {
+            this.name = value;
+        }
+
+        private projectPackage: string;
+
+        public get ProjectPackage(): string {
+            return this.projectPackage;
+        }
+
+        public set ProjectPackage(value: string) {
+            this.projectPackage = value;
+        }
+
+        constructor(name: string, projectPackage: string) {
+            this.Name = name;
+            this.ProjectPackage = projectPackage;
+            super(Enums.ControlType.App, "");
+        }
+    }
+
     export class PageProperty extends Property {
 
         constructor(id: string) {

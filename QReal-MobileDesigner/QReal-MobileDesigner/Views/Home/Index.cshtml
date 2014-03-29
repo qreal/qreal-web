@@ -16,7 +16,7 @@
             Create new project
         </button>
 
-    <a href="/Projects/Designer/HelloWorld" class="btn btn-default">Try Demo</a>
+    <a href="/Projects/Designer" class="btn btn-default">Try Demo</a>
     }
 
 </div>
@@ -79,8 +79,8 @@
 <script>
     $('#newProjectModal').ajaxForm({
         success: function (response) {
-            var projectName = JSON.parse(response).project_name;
-            window.location.href = "/Projects/Designer/" + projectName;
+            var project_id = JSON.parse(response).project_id;
+            window.location.href = "/Projects/Designer/" + project_id;
         }
     });
 

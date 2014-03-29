@@ -3,14 +3,14 @@
         function ControlManager() {
             this.log = new Log("ControlManager");
             this.idIndex = 1;
-            this.app = new DesignerControls.BaseContainer(new ControlProperty.Property(0 /* App */, "AppName"));
             this.log.Debug("constructor");
             this.controlFactory = new DesignerControlFactory();
             this.appControlFactory = new AppControlFactory();
-            this.app.Element = $("<div></div>");
         }
         ControlManager.prototype.Init = function () {
             this.log.Debug("Init");
+            this.app = new DesignerControls.BaseContainer(new ControlProperty.AppProperty(parent.projectName, parent.projectPackage));
+            this.app.Element = $("<div></div>");
         };
 
         /*** Pages ***/

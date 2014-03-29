@@ -20,23 +20,28 @@ namespace QReal_MobileDesigner.Controllers
         private ApplicationDbContext usersDb = new ApplicationDbContext();
         private static string phonegapLocation = String.Format(@"{0}PhoneGap\", HttpRuntime.AppDomainAppPath);
 
-        public ActionResult Designer(string projectId = "HelloWorld")
+        public ActionResult Designer(int projectId = -1)
         {
-            //var query = from p in db.Projects join u in usersDb.Users on p.  where p.Name == projectId select new { p.Name, p.Package};
+            if (projectId == -1)
+            {
+                ViewBag.ProjectName = "HelloWorld";
+                ViewBag.Package = "com.example.hello";
+            }
+            else
+            {
+                var userId = User.Identity.GetUserId();
+                var project = (from up in db.UserProjects
+                               where up.UserId == userId && up.Project.ID == projectId
+                               select up.Project).Single();
 
-            //foreach (var p in query)
-            //{
-            //    Console.WriteLine(p);
-            //}
-
-            //var project = db.Projects.Include("Name").Single(p => p.Name == projectId);
-            ViewBag.ProjectName = projectId;
-            //ViewBag.Package = project.Package;
+                ViewBag.ProjectName = project.Name;
+                ViewBag.Package = project.Package;
+            }
             return View();
         }
 
         [HttpPost]
-        public string NewProject(string project_name, string project_package, string appHtml, string appJs)
+        public string NewProject(string project_name, string project_package)
         {
             var username = User.Identity.GetUserName();
 
@@ -70,7 +75,7 @@ namespace QReal_MobileDesigner.Controllers
             {
                 process.WaitForExit();
             }
-            return "{ \"project_name\":\"" + project_name + "\" }";
+            return "{ \"project_id\":\"" + project.ID + "\" }";
         }
 
         [HttpPost]

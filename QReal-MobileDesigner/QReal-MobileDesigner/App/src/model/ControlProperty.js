@@ -39,6 +39,40 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
         })();
         ControlProperty.Property = Property;
 
+        var AppProperty = (function (_super) {
+            __extends(AppProperty, _super);
+            function AppProperty(name, projectPackage) {
+                this.Name = name;
+                this.ProjectPackage = projectPackage;
+                _super.call(this, 0 /* App */, "");
+            }
+            Object.defineProperty(AppProperty.prototype, "Name", {
+                get: function () {
+                    return this.name;
+                },
+                set: function (value) {
+                    this.name = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+
+            Object.defineProperty(AppProperty.prototype, "ProjectPackage", {
+                get: function () {
+                    return this.projectPackage;
+                },
+                set: function (value) {
+                    this.projectPackage = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            return AppProperty;
+        })(Property);
+        ControlProperty.AppProperty = AppProperty;
+
         var PageProperty = (function (_super) {
             __extends(PageProperty, _super);
             function PageProperty(id) {
