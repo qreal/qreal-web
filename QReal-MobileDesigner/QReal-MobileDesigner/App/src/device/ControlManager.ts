@@ -222,7 +222,7 @@ class ControlManager {
     public Serialize(): string {
         var obj = this.CreateGeneralProperty(this.app);
         this.log.Debug("App obj:", obj);
-        return JSON.stringify(obj, null, 2);
+        return JSON.stringify(obj, null, 4);
     }
 
     private CreateGeneralProperty(element: DesignerControls.BaseControl<ControlProperty.Property>):any {

@@ -15,8 +15,8 @@ namespace QReal_MobileDesigner
 
             routes.MapRoute(
                 "Designer",
-                "Home/Designer/{projectId}",
-                new { controller = "Home", action = "Designer" }
+                "Projects/Designer/{projectId}",
+                new { controller = "Projects", action = "Designer" }
             );
 
             routes.MapRoute(

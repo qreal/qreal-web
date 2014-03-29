@@ -19,6 +19,11 @@ namespace QReal_MobileDesigner.Controllers
         private ProjectsEntities db = new ProjectsEntities();
         private static string phonegapLocation = String.Format(@"{0}PhoneGap\", HttpRuntime.AppDomainAppPath);
 
+        public ActionResult Designer(string projectId = "HelloWorld")
+        {
+            ViewBag.ProjectName = projectId;
+            return View();
+        }
 
         [HttpPost]
         public string NewProject(string project_name, string project_package, string appHtml, string appJs)

@@ -519,7 +519,7 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Static\device.html" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\Designer.cshtml" />
+    <Content Include="Views\Projects\Designer.cshtml" />
     <None Include="Views\PhoneGapTemplate\index.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

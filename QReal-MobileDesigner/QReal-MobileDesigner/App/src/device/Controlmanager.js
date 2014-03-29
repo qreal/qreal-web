@@ -202,7 +202,7 @@
         ControlManager.prototype.Serialize = function () {
             var obj = this.CreateGeneralProperty(this.app);
             this.log.Debug("App obj:", obj);
-            return JSON.stringify(obj, null, 2);
+            return JSON.stringify(obj, null, 4);
         };
 
         ControlManager.prototype.CreateGeneralProperty = function (element) {
