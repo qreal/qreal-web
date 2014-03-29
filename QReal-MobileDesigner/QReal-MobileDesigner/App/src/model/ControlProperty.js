@@ -42,9 +42,9 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
         var AppProperty = (function (_super) {
             __extends(AppProperty, _super);
             function AppProperty(name, projectPackage) {
+                _super.call(this, 0 /* App */, "");
                 this.Name = name;
                 this.ProjectPackage = projectPackage;
-                _super.call(this, 0 /* App */, "");
             }
             Object.defineProperty(AppProperty.prototype, "Name", {
                 get: function () {

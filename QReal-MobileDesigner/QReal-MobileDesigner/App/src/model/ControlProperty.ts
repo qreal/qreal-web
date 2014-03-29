@@ -33,6 +33,7 @@ module ControlProperty {
     export class AppProperty extends Property {
 
         private name: string;
+        private projectPackage: string;
 
         public get Name(): string {
             return this.name;
@@ -41,8 +42,6 @@ module ControlProperty {
         public set Name(value: string) {
             this.name = value;
         }
-
-        private projectPackage: string;
 
         public get ProjectPackage(): string {
             return this.projectPackage;
@@ -53,9 +52,9 @@ module ControlProperty {
         }
 
         constructor(name: string, projectPackage: string) {
-            this.Name = name;
-            this.ProjectPackage = projectPackage;
             super(Enums.ControlType.App, "");
+            this.Name = name;
+            this.ProjectPackage = projectPackage;           
         }
     }
 
