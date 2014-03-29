@@ -202,6 +202,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App\src\init.js" />
+    <Content Include="App_Data\aspnet-QReal-MobileDesigner-20140318045910.mdf" />
+    <Content Include="App_Data\aspnet-QReal-MobileDesigner-20140318045910_log.ldf">
+      <DependentUpon>aspnet-QReal-MobileDesigner-20140318045910.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap-switch\bootstrap-switch.css" />
     <Content Include="Content\bootstrap-switch\bootstrap-switch.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -590,9 +594,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

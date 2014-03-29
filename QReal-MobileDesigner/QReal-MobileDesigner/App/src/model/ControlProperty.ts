@@ -4,14 +4,14 @@ module ControlProperty {
 
     export class Property {
 
-        private type: Enums.ControlType;
+        private type:string;
 
         public get Type(): Enums.ControlType {
-            return this.type;
+            return Enums.ControlType[this.type];
         }
 
         public set Type(value: Enums.ControlType) {
-            this.type = value;
+            this.type = Enums.ControlType[value];
         }
 
         private id: string;

@@ -14,10 +14,10 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
             }
             Object.defineProperty(Property.prototype, "Type", {
                 get: function () {
-                    return this.type;
+                    return Enums.ControlType[this.type];
                 },
                 set: function (value) {
-                    this.type = value;
+                    this.type = Enums.ControlType[value];
                 },
                 enumerable: true,
                 configurable: true
