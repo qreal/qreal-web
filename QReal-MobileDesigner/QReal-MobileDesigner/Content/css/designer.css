@@ -1,5 +1,6 @@
-﻿body, html {
-    height: 100%;
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
 }
 
 /* test full screnn widgets */
