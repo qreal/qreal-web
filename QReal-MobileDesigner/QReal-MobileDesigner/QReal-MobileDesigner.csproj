@@ -467,13 +467,13 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Projects.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="MobileAppTemplate\www\css\index.css" />
-    <Content Include="MobileAppTemplate\www\css\jquery.mobile-1.4.2.min.css" />
-    <Content Include="MobileAppTemplate\www\img\logo.png" />
-    <Content Include="MobileAppTemplate\www\index.html" />
-    <Content Include="MobileAppTemplate\www\js\index.js" />
-    <Content Include="MobileAppTemplate\www\js\jquery-1.11.0.min.js" />
-    <Content Include="MobileAppTemplate\www\js\jquery.mobile-1.4.2.min.js" />
+    <Content Include="MobileAppTemplate\css\index.css" />
+    <Content Include="MobileAppTemplate\css\jquery.mobile-1.4.2.min.css" />
+    <Content Include="MobileAppTemplate\img\logo.png" />
+    <Content Include="MobileAppTemplate\index.html" />
+    <Content Include="MobileAppTemplate\js\index.js" />
+    <Content Include="MobileAppTemplate\js\jquery-1.11.0.min.js" />
+    <Content Include="MobileAppTemplate\js\jquery.mobile-1.4.2.min.js" />
     <Content Include="Models\Projects.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Projects.edmx</DependentUpon>
@@ -557,6 +557,7 @@
     <Content Include="Views\Projects\Details.cshtml" />
     <Content Include="Views\Projects\Edit.cshtml" />
     <Content Include="Views\Projects\Index.cshtml" />
+    <Content Include="Views\Projects\Emulator.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201403222311133_Projects.resx">

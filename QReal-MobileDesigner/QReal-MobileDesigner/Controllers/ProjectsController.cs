@@ -111,6 +111,21 @@ namespace QReal_MobileDesigner.Controllers
             return "{ \"project_name\":\"" + project_name + "\" }";
         }
 
+        public ActionResult Emulator()
+        {
+            var username = User.Identity.GetUserName();
+            ViewBag.Html = html;
+            return View();
+        }
+
+        private static string html;
+
+        [HttpPost]
+        public string EmulatorData(string project_name, string appHtml, string appJs, string appCss)
+        {         
+            html = appHtml;
+            return "ok";
+        }
 
         public string RenderRazorViewToString(Controller controller, string viewName, object model)
         {
