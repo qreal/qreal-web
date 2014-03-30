@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Android_Generator_v2
 {
@@ -27,15 +28,20 @@ namespace Android_Generator_v2
             JsonParser parser = new JsonParser("test.txt");
 
             String appName;
+            String packageName;
             try
             {
                 appName = parser.getProjectName();
+                packageName = parser.getProjectPackage();
             }
             catch (NotFoundElementException e)
             {
                 Console.WriteLine(e.Message);
                 return 4;
             }
+
+            Regex rgx = new Regex("\\.");
+            String packagePath = rgx.Replace(packageName, "\\");
 
             String appDirectory = appName;
             Directory.CreateDirectory(appDirectory);
@@ -54,7 +60,7 @@ namespace Android_Generator_v2
                 return 3;
             }
 
-            String srcDirectory = Path.Combine(appDirectory, @"src\com\example\test");
+            String srcDirectory = Path.Combine(appDirectory, Path.Combine("src", packagePath));
             Directory.CreateDirectory(srcDirectory);
 
             String layoutDirectory = Path.Combine(appDirectory, @"res\layout");

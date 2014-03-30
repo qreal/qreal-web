@@ -16,7 +16,12 @@ namespace Android_Generator_v2
 
         public String build()
         {
-            return String.Format(template, permissionsBuilder.ToString(), activitiesBuilder.ToString());
+            return String.Format(template, package, permissionsBuilder.ToString(), activitiesBuilder.ToString());
+        }
+
+        public void setPackage(String package)
+        {
+            this.package = package;
         }
 
         public void addPermissions(String permissions)
@@ -30,6 +35,7 @@ namespace Android_Generator_v2
         }
 
         private String template;
+        private String package;
         private StringBuilder permissionsBuilder = new StringBuilder();
         private StringBuilder activitiesBuilder = new StringBuilder();
     }

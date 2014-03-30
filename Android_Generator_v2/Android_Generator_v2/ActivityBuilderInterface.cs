@@ -9,6 +9,7 @@ namespace Android_Generator_v2
     interface ActivityBuilderInterface
     {
         String build();
+        void setPackage(String package);
         void addImports(HashSet<String> imports);
         void addMethods(String method);
         void addVariables(String variable);

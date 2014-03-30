@@ -16,8 +16,13 @@ namespace Android_Generator_v2
 
         public String build()
         {
-            return String.Format(template, importsToString(), name, onCreateActions.ToString(),
-                methods.ToString(), variables.ToString());
+            return String.Format(template, package, importsToString(), name, 
+                onCreateActions.ToString(), methods.ToString(), variables.ToString());
+        }
+
+        public void setPackage(String package)
+        {
+            this.package = package;
         }
 
         public void addImports(HashSet<String> newImports)
@@ -51,26 +56,27 @@ namespace Android_Generator_v2
         }
 
         private String name;
+        private String package;
         private HashSet<String> imports = new HashSet<String>();
         private StringBuilder onCreateActions = new StringBuilder();
         private StringBuilder methods = new StringBuilder();
         private StringBuilder variables = new StringBuilder();
 
         private static String template = @"
-            package com.example.test;
+            package {0};
             import android.os.Bundle;
             import android.app.Activity;
-            {0}
+            {1}
 
-            public class {1} extends Activity {{
+            public class {2} extends Activity {{
 
                 @Override
                 protected void onCreate(Bundle savedInstanceState) {{
                     super.onCreate(savedInstanceState);
-                    {2}
+                    {3}
                 }}
-                {3}
                 {4}
+                {5}
             }}";
     }
 }
