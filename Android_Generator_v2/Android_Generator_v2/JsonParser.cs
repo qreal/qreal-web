@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.IO;
 
 namespace Android_Generator_v2
@@ -12,28 +13,37 @@ namespace Android_Generator_v2
         public JsonParser(String filename)
         {
             this.filename = filename;
+            projectObj = (JObject)JToken.ReadFrom(new JsonTextReader(File.OpenText(filename)));  
             StreamReader streamReader = File.OpenText(filename);
             reader = new JsonTextReader(streamReader);
+            reader.Read();
         }
 
         public String getProjectName()
         {
-            while (reader.Read())
+            try
             {
-                if (reader.TokenType.ToString().Equals("PropertyName") && reader.Value.Equals("type"))
-                {
-                    reader.Read();
-                    if (reader.Value.Equals("App"))
-                    {
-                        // next two reads need to get project id
-                        reader.Read();
-                        reader.Read();
-                        return reader.Value.ToString();
-                    }
-                }
+                return projectObj.GetValue("name").ToString();
             }
-            throw new NotFoundElementException("Project id");
-        } 
+            catch (NullReferenceException e)
+            {
+                throw new NotFoundElementException("Project name");
+            }
+        }
+
+        public String getProjectPackage()
+        {
+            try
+            {
+                package = projectObj.GetValue("projectPackage").ToString();
+                manifestBuilder.setPackage(package);
+                return package;
+            }
+            catch (NullReferenceException e)
+            {
+                throw new NotFoundElementException("Project package");
+            }
+        }
 
         public void parseToEnd(String appDirectory, String srcDirectory, String layoutDirectory)
         {     
@@ -79,6 +89,7 @@ namespace Android_Generator_v2
                                 reader.Read();
                                 currentActivityName = reader.Value.ToString();
                                 activityBuider = new AndroidActivityBuilder(currentActivityName);
+                                activityBuider.setPackage(package);
                                 layoutBuilder = new AndroidLayoutBuilder();
                                 pagesCount++;
                                 if (pagesCount == 1)
@@ -259,6 +270,8 @@ namespace Android_Generator_v2
             activityBuider.addVariables(inputElement.getVariables());
         }
 
+        private String package;
+        private JObject projectObj;
         private String filename;
         private JsonTextReader reader;
         private ActivityBuilderInterface activityBuider = null;

@@ -9,6 +9,7 @@ namespace Android_Generator_v2
     interface ManifestBuilderInterface
     {
         String build();
+        void setPackage(String package);
         void addPermissions(String permission);
         void addActivity(String activity);
     }
