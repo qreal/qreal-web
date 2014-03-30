@@ -19,11 +19,13 @@ namespace QReal_MobileDesigner
                "~/Scripts/jquery-{version}.js",
                "~/Scripts/jquery.form.min.js",
                "~/Scripts/jquery.tmpl.js",
+               "~/Scripts/jquery-ui-1.10.4.custom.min.js",
               "~/Scripts/bootstrap.js",
                "~/Scripts/respond.js",
                "~/Scripts/bootbox.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/designercss").Include(
+               "~/Content/jquery-ui/jquery-ui-1.10.4.custom.min.css",
                "~/Content/bootstrap.css",
                 "~/Content/css/designer.css",
                 "~/Content/css/device-mockup/device-mockups2.css"));

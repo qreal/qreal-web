@@ -1,4 +1,4 @@
-﻿define(["require", "exports", "src/util/log/Log", "src/util/DialogManager", "src/Application", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, Log, DialogManager, App, EventManager, ToolsView, PropertiesView) {
+define(["require", "exports", "src/util/log/Log", "src/util/DialogManager", "src/Application", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, Log, DialogManager, App, EventManager, ToolsView, PropertiesView) {
     var Designer = (function () {
         function Designer() {
             this.log = new Log("Designer");

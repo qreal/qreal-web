@@ -35,6 +35,7 @@ class ControlManager {
     /*** Pages ***/
     public CreatePage(pageId: string): boolean {
         this.log.Debug("CreatePage: " + pageId);
+        var self = this;
         if (this.ContainsId(pageId)) {
             this.log.Warn("Page id alredy exists");
             //TODO: show notification
@@ -46,6 +47,45 @@ class ControlManager {
         this.app.Childrens.push(page);
         $('body').append(page.Element);
         this.SelectPage(pageId);
+        (<any>$('.sortcontainer')).sortable(
+            {
+
+                forcePlaceholderSize: true,
+                containment: "parent",
+                stop: function (e, ui) {
+                    console.log("sort called");
+                    self.log.Debug("e:", e);
+                    self.log.Debug("ui:", ui);
+                    var idsInOrder = (<any>$("#"+pageId)).sortable("toArray");
+                    //-----------------^^^^
+                    console.log(idsInOrder);
+                },
+
+            });
+        /*
+            .sortable({
+
+            helper: "clone",
+            axis: "y",
+
+            revert: 100,
+            distance: 0,
+            forceHelperSize: true,
+            forcePlaceholderSize: true,
+            scrollSensitivity: 0,
+            start: function (event, ui) {
+                ui.placeholder.width(ui.helper.width());
+            },
+            cancel: '.nondraggable',
+            stop: function (event, ui) {
+
+            },
+            change: function (e, ui) {
+                console.log("sort called");
+            },
+            tolerance: "pointer"
+        });
+    */
         return true;
     }
 
@@ -225,7 +265,7 @@ class ControlManager {
         return JSON.stringify(obj, null, 4);
     }
 
-    private CreateGeneralProperty(element: DesignerControls.BaseControl<ControlProperty.Property>):any {
+    private CreateGeneralProperty(element: DesignerControls.BaseControl<ControlProperty.Property>): any {
         var obj;
         var self = this;
         switch (element.Properties.Type) {
@@ -235,7 +275,7 @@ class ControlManager {
                 obj["Pages"] = [];
                 app.Childrens.forEach(function (el) {
                     obj["Pages"].push(self.CreateGeneralProperty(el));
-                });           
+                });
                 break;
             case Enums.ControlType.Page:
                 obj = element.Properties;
