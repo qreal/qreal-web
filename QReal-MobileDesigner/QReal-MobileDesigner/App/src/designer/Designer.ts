@@ -57,7 +57,7 @@ class Designer {
         });
 
         $('#serialize').on('click', function (e) {
-            self.Download('test.txt', App.Instance.Device.ControlManager.Serialize());
+            self.Download('app.json', App.Instance.Device.ControlManager.Serialize());
         });
 
         $('#run').on('click', function (e) {
