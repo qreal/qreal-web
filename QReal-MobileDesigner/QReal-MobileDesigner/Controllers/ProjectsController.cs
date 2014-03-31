@@ -88,7 +88,7 @@ namespace QReal_MobileDesigner.Controllers
             };
             string html = RenderRazorViewToString(this, "~/Views/PhoneGapTemplate/index.cshtml", AppHtmlModel);
 
-            XCopy(String.Format(@"{0}MobileAppTemplate\www", HttpRuntime.AppDomainAppPath), String.Format(@"{0}Projects\{1}\{2}\www", phonegapLocation, username, project_name), true);
+            XCopy(String.Format(@"{0}MobileAppTemplate", HttpRuntime.AppDomainAppPath), String.Format(@"{0}Projects\{1}\{2}\www", phonegapLocation, username, project_name), true);
 
             FileStream fIndexHtml = new FileStream(String.Format(@"{0}Projects\{1}\{2}\www\index.html", phonegapLocation, username, project_name), FileMode.Create);
             StreamWriter swIndexhtml = new StreamWriter(fIndexHtml);
