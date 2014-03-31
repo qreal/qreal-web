@@ -47,18 +47,18 @@ class DesignerControlFactory implements IControlFactory {
 
     public CreateInput(property: ControlProperty.InputProperty): DesignerControls.Input {
         var input = new DesignerControls.Input(property);
-       
+
         var $container = $("<div data-role='fieldcontain'></div>");
         $container.attr('id', input.Properties.Id);
         var $label = $("<label></label>");
         $label.text(input.Properties.Title);
-        //$label.attr('for', input.Properties.Id);
+        $label.attr('for', 'input_' + input.Properties.Id);
 
         var $input = $('<input />');
         $input.attr('type', 'text');
-       
-        $input.attr('name', input.Properties.Name);
 
+        $input.attr('name', input.Properties.Name);
+        $input.attr('id', 'input_' + input.Properties.Id);
         $container.append($label);
         $container.append($input);
 

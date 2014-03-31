@@ -1,5 +1,5 @@
 import Log = require("src/util/log/Log");
-import DialogManager = require("src/util/DialogManager");
+import DialogHelper = require("src/util/DialogHelper");
 import App = require("src/Application");
 import EventManager = require("src/util/events/EventManager");
 import ToolsView = require("src/designer/ToolsView");
@@ -12,7 +12,7 @@ declare var projectName;
 class Designer {
 
     private log = new Log("Designer");
-    private dm: DialogManager = new DialogManager();
+    private dh: DialogHelper = new DialogHelper();
 
     private toolsView: ToolsView;
     private eventManager: EventManager;
@@ -30,7 +30,7 @@ class Designer {
         this.toolsView.Init();
         this.propertiesView.Init();
 
-        var dialog = this.dm;
+        var dialog = this.dh;
         var self = this;
         $('#generate-apk').on('click', function (e) {
             self.log.Debug("My project name: " + projectName);

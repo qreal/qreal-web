@@ -1,8 +1,8 @@
-define(["require", "exports", "src/util/log/Log", "src/util/DialogManager", "src/Application", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, Log, DialogManager, App, EventManager, ToolsView, PropertiesView) {
+define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/Application", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, Log, DialogHelper, App, EventManager, ToolsView, PropertiesView) {
     var Designer = (function () {
         function Designer() {
             this.log = new Log("Designer");
-            this.dm = new DialogManager();
+            this.dh = new DialogHelper();
             this.log.Debug("constructor");
             this.toolsView = new ToolsView();
             this.propertiesView = new PropertiesView();
@@ -13,7 +13,7 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogManager", "src
             this.toolsView.Init();
             this.propertiesView.Init();
 
-            var dialog = this.dm;
+            var dialog = this.dh;
             var self = this;
             $('#generate-apk').on('click', function (e) {
                 self.log.Debug("My project name: " + projectName);

@@ -1,4 +1,4 @@
-class DialogManager {
+class DialogHelper {
 
     private progressDialog: JQuery;
 
@@ -16,4 +16,4 @@ class DialogManager {
     }
 }
 
-export = DialogManager;
+export = DialogHelper;

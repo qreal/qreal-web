@@ -1,5 +1,6 @@
 ﻿import App = require("src/Application");
 import Log = require("src/util/log/Log");
+import Helper = require("src/util/Helper");
 import Device = require("src/device/Device");
 import EventManager = require("src/util/events/EventManager");
 import IEventListener = require("src/util/events/IEventListener");
@@ -14,7 +15,7 @@ class ControlManager {
 
     private log = new Log("ControlManager");
 
-    private controlFactory: IControlFactory;
+    private controlFactory: DesignerControlFactory;
     private appControlFactory: AppControlFactory;
 
     private idIndex = 1;
@@ -49,16 +50,14 @@ class ControlManager {
         this.SelectPage(pageId);
         (<any>$('.sortcontainer')).sortable(
             {
-
                 forcePlaceholderSize: true,
-                containment: "parent",
+                containment: "parent",                
+                start: function (event, ui) {
+                    ui.item.startPos = ui.item.index();
+                },
                 stop: function (e, ui) {
-                    console.log("sort called");
-                    self.log.Debug("e:", e);
-                    self.log.Debug("ui:", ui);
-                    var idsInOrder = (<any>$("#"+pageId)).sortable("toArray");
-                    //-----------------^^^^
-                    console.log(idsInOrder);
+                    var container = <DesignerControls.BaseContainer<ControlProperty.Property>>self.FindById(e.target.id);
+                    Helper.ArrayMove(container.Childrens, ui.item.startPos, ui.item.index());
                 },
 
             });
@@ -299,6 +298,7 @@ class ControlManager {
     }
 
     private FindInContainer(id: string, control: DesignerControls.BaseControl<ControlProperty.Property>): DesignerControls.BaseControl<ControlProperty.Property> {
+        this.log.Debug("FindInContainer: " + id, control);
         if (control.Properties.Id === id) {
             return control;
         }

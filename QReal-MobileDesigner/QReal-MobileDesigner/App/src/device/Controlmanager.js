@@ -1,4 +1,4 @@
-﻿define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/Enums", "src/model/ControlProperty", "src/model/DesignerControls", "src/device/DesignerControlFactory", "src/device/AppControlFactory"], function(require, exports, App, Log, Enums, ControlProperty, DesignerControls, DesignerControlFactory, AppControlFactory) {
+﻿define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/Helper", "src/model/Enums", "src/model/ControlProperty", "src/model/DesignerControls", "src/device/DesignerControlFactory", "src/device/AppControlFactory"], function(require, exports, App, Log, Helper, Enums, ControlProperty, DesignerControls, DesignerControlFactory, AppControlFactory) {
     var ControlManager = (function () {
         function ControlManager() {
             this.log = new Log("ControlManager");
@@ -32,14 +32,12 @@
             $('.sortcontainer').sortable({
                 forcePlaceholderSize: true,
                 containment: "parent",
+                start: function (event, ui) {
+                    ui.item.startPos = ui.item.index();
+                },
                 stop: function (e, ui) {
-                    console.log("sort called");
-                    self.log.Debug("e:", e);
-                    self.log.Debug("ui:", ui);
-                    var idsInOrder = $("#" + pageId).sortable("toArray");
-
-                    //-----------------^^^^
-                    console.log(idsInOrder);
+                    var container = self.FindById(e.target.id);
+                    Helper.ArrayMove(container.Childrens, ui.item.startPos, ui.item.index());
                 }
             });
 
@@ -278,6 +276,7 @@
         };
 
         ControlManager.prototype.FindInContainer = function (id, control) {
+            this.log.Debug("FindInContainer: " + id, control);
             if (control.Properties.Id === id) {
                 return control;
             }
