@@ -1,0 +1,25 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    line-height: 1.4em;
+    background: #eaeaea url('bg.png');
+    color: #4d4d4d;
+    /*width: 550px;*/
+    /*margin: 0 auto;*/
+}
+
+#paper {
+    width: 600px;
+    height: 320px;
+    border: 1px solid gray;
+}
+
+#toleft {
+    padding: 0;
+    margin-left: 20px;
+}
