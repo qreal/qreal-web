@@ -51,7 +51,8 @@ class ControlManager {
         (<any>$('.sortcontainer')).sortable(
             {
                 forcePlaceholderSize: true,
-                containment: "parent",                
+                containment: "parent",
+                cancel: '.nondraggable',
                 start: function (event, ui) {
                     ui.item.startPos = ui.item.index();
                 },
@@ -153,21 +154,40 @@ class ControlManager {
             case Enums.ControlType.Page:
                 this.ChangePageProperty(propertyId, propertyType, newValue);
                 break;
+            case Enums.ControlType.Header:
+                this.ChangeHeaderProperty(propertyId, propertyType, newValue);
+                break;
         }
     }
 
     public ChangePageProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string) {
         this.log.Debug('ChangePageProperty');
-        var page = this.FindById(propertyId);
+        var page = <DesignerControls.Page>this.FindById(propertyId);
+        var $page = $(page.Properties.$Id);
         switch (propertyType) {
             case Enums.PropertyType.Header:
-                if (newValue == 'yes') {
-                    var header = App.Instance.Device.ControlManager.CreateControl('Header');
-                    page.Element.prepend(header.Element);
-                    page.Element.trigger('pagecreate');
+                page.Properties.Header = newValue == 'yes';
+                if (newValue == 'yes') {                    
+                    var headerProp = new ControlProperty.HeaderProperty(propertyId + '_header');
+                    var header = this.controlFactory.CreateHeader(headerProp);
+                    page.Childrens.push(header);
+                    $page.prepend(header.Element);
+                    $page.trigger('pagecreate');
                 } else {
-                    page.Element.find('div[data-role="header"]').remove();
+                    $page.find('div[data-role="header"]').remove();
                 }
+                break;
+        }
+    }
+
+    public ChangeHeaderProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string) {
+        this.log.Debug('ChangeHeaderProperty');
+        var header = <DesignerControls.Header>this.FindById(propertyId);
+        var $header = $(header.Properties.$Id);
+        switch (propertyType) {
+            case Enums.PropertyType.Title:
+                header.Properties.Title = newValue;
+                $header.find('h1').text(newValue);
                 break;
         }
     }
@@ -241,17 +261,23 @@ class ControlManager {
                 }
                 break;
             case Enums.ControlType.Page:
-                $html = this.appControlFactory.CreatePage(element.Properties);
-                var page = <DesignerControls.BaseContainer<ControlProperty.Property>>element;
+                var page = <DesignerControls.Page>element;
+                $html = this.appControlFactory.CreatePage(page.Properties);
                 for (var i in page.Childrens) {
                     $html.append(this.GenerateHtml(page.Childrens[i]))
                 }
                 break;
             case Enums.ControlType.Button:
-                $html = this.appControlFactory.CreateButton(<ControlProperty.ButtonProperty>element.Properties);
+                var button = <DesignerControls.Button>element;
+                $html = this.appControlFactory.CreateButton(button.Properties);
                 break;
             case Enums.ControlType.Input:
-                $html = this.appControlFactory.CreateInput(<ControlProperty.InputProperty>element.Properties);
+                var input = <DesignerControls.Input>element;
+                $html = this.appControlFactory.CreateInput(input.Properties);
+                break;
+            case Enums.ControlType.Header:
+                var header = <DesignerControls.Header>element;
+                $html = this.appControlFactory.CreateHeader(header.Properties);
                 break;
 
         }
@@ -259,12 +285,11 @@ class ControlManager {
     }
 
     public Serialize(): string {
-        var obj = this.CreateGeneralProperty(this.app);
-        this.log.Debug("App obj:", obj);
+        var obj = this.AppToSerializeObj(this.app);
         return JSON.stringify(obj, null, 4);
     }
 
-    private CreateGeneralProperty(element: DesignerControls.BaseControl<ControlProperty.Property>): any {
+    private AppToSerializeObj(element: DesignerControls.BaseControl<ControlProperty.Property>): any {
         var obj;
         var self = this;
         switch (element.Properties.Type) {
@@ -273,7 +298,7 @@ class ControlManager {
                 var app = <DesignerControls.BaseContainer<ControlProperty.Property>>element;
                 obj["Pages"] = [];
                 app.Childrens.forEach(function (el) {
-                    obj["Pages"].push(self.CreateGeneralProperty(el));
+                    obj["Pages"].push(self.AppToSerializeObj(el));
                 });
                 break;
             case Enums.ControlType.Page:
@@ -281,11 +306,12 @@ class ControlManager {
                 var page = <DesignerControls.BaseContainer<ControlProperty.Property>>element;
                 obj["Controls"] = [];
                 page.Childrens.forEach(function (el) {
-                    obj["Controls"].push(self.CreateGeneralProperty(el));
+                    obj["Controls"].push(self.AppToSerializeObj(el));
                 });
                 break;
             case Enums.ControlType.Button:
             case Enums.ControlType.Input:
+            case Enums.ControlType.Header:
                 obj = element.Properties;
                 break;
         }
@@ -293,12 +319,12 @@ class ControlManager {
     }
 
     public FindById(id: string): DesignerControls.BaseControl<ControlProperty.Property> {
-        this.log.Debug("FindById: " + id);
+        //this.log.Debug("FindById: " + id);
         return this.FindInContainer(id, this.app);
     }
 
     private FindInContainer(id: string, control: DesignerControls.BaseControl<ControlProperty.Property>): DesignerControls.BaseControl<ControlProperty.Property> {
-        this.log.Debug("FindInContainer: " + id, control);
+        //this.log.Debug("FindInContainer: " + id, control);
         if (control.Properties.Id === id) {
             return control;
         }

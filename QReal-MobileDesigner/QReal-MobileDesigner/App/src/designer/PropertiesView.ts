@@ -5,7 +5,6 @@ import Controller = require("src/designer/Designer");
 import EventManager = require("src/util/events/EventManager");
 import ControlProperty = require("src/model/ControlProperty");
 
-
 class PropertiesView {
 
     private log = new Log("PropertiesView");
@@ -55,6 +54,9 @@ class PropertiesView {
                 break;
             case Enums.ControlType.Page:
                 this.ShowProperty_Page(<ControlProperty.PageProperty>property);
+                break;
+            case Enums.ControlType.Header:
+                this.ShowProperty_Header(<ControlProperty.HeaderProperty>property);
                 break;
         }
     }
@@ -136,7 +138,6 @@ class PropertiesView {
             controlManager.ChangeProperty(property.Id, Enums.PropertyType.Theme, Enums.ControlType.Button, $(this).val());
         });
 
-
         dialogContent.append(idProperty);
         dialogContent.append(textProperty);
         dialogContent.append(inlineProperty);
@@ -201,7 +202,6 @@ class PropertiesView {
             controlManager.ChangeProperty(property.Id, Enums.PropertyType.Theme, Enums.ControlType.Input, $(this).val());
         });
 
-
         dialogContent.append(idProperty);
         dialogContent.append(titleProperty);
         dialogContent.append(miniProperty);
@@ -219,7 +219,7 @@ class PropertiesView {
         var controlManager = App.Instance.Device.ControlManager;
 
         var propertyPanel = $('#propertiesTmpl').tmpl({});
-        var panelContent = propertyPanel.children("#property-table");
+        var content = propertyPanel.children("#property-table");
 
         var idProperty = $('#propertyTextTmpl').tmpl(
             {
@@ -228,7 +228,7 @@ class PropertiesView {
             });
         idProperty.find('input').change(function () {
             controlManager.ChangeProperty(property.Id, Enums.PropertyType.Id, Enums.ControlType.Page, $(this).val());
-        });
+        });        
 
         var headerProperty = $('#propertyCheckboxTmpl').tmpl(
             {
@@ -240,8 +240,31 @@ class PropertiesView {
         });
 
 
-        panelContent.append(idProperty);
-        panelContent.append(headerProperty);
+        content.append(idProperty);
+        content.append(headerProperty);
+        propertyPanel.appendTo('#properties-widget');
+        propertyPanel.attr('id', 'propertyFor' + property.Id);
+        this.currentPropertyDiv = propertyPanel;
+    }
+
+    public ShowProperty_Header(property: ControlProperty.HeaderProperty): void {
+        this.log.Debug("ShowProperty_Page");
+        var self = this;
+        var controlManager = App.Instance.Device.ControlManager;
+
+        var propertyPanel = $('#propertiesTmpl').tmpl({});
+        var content = propertyPanel.children("#property-table");
+
+        var titleProperty = $('#propertyTextTmpl').tmpl(
+            {
+                name: 'Title:',
+                value: property.Title
+            });
+        titleProperty.find('input').change(function () {
+            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Title, Enums.ControlType.Header, $(this).val());
+        });
+
+        content.append(titleProperty);
         propertyPanel.appendTo('#properties-widget');
         propertyPanel.attr('id', 'propertyFor' + property.Id);
         this.currentPropertyDiv = propertyPanel;

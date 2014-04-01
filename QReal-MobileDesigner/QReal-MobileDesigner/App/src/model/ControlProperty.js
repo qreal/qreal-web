@@ -35,6 +35,14 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
                 configurable: true
             });
 
+
+            Object.defineProperty(Property.prototype, "$Id", {
+                get: function () {
+                    return '#' + this.Id;
+                },
+                enumerable: true,
+                configurable: true
+            });
             return Property;
         })();
         ControlProperty.Property = Property;
@@ -78,9 +86,41 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
             function PageProperty(id) {
                 _super.call(this, 1 /* Page */, id);
             }
+            Object.defineProperty(PageProperty.prototype, "Header", {
+                get: function () {
+                    return this.header;
+                },
+                set: function (value) {
+                    this.header = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
             return PageProperty;
         })(Property);
         ControlProperty.PageProperty = PageProperty;
+
+        var HeaderProperty = (function (_super) {
+            __extends(HeaderProperty, _super);
+            function HeaderProperty(id) {
+                _super.call(this, 2 /* Header */, id);
+                this.Title = 'Header';
+            }
+            Object.defineProperty(HeaderProperty.prototype, "Title", {
+                get: function () {
+                    return this.title;
+                },
+                set: function (value) {
+                    this.title = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            return HeaderProperty;
+        })(Property);
+        ControlProperty.HeaderProperty = HeaderProperty;
 
         var ButtonProperty = (function (_super) {
             __extends(ButtonProperty, _super);

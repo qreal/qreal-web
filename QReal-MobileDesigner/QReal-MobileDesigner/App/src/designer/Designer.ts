@@ -81,10 +81,6 @@ class Designer {
                     window.open("/Projects/Emulator", "_blank", "location=yes,height=480,width=320,scrollbars=yes,status=yes");
                 }
             });
-
-            
-            
-            //self.PostOpen('POST', '/Projects/Emulator', JSON.stringify({ project_name: projectName, appHtml: appHtml }), '_blank')
         });
     }
 

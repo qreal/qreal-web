@@ -1,4 +1,4 @@
-define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/Enums"], function(require, exports, Log, App, Enums) {
+﻿define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/Enums"], function(require, exports, Log, App, Enums) {
     var PropertiesView = (function () {
         function PropertiesView() {
             this.log = new Log("PropertiesView");
@@ -42,6 +42,9 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
                     break;
                 case 1 /* Page */:
                     this.ShowProperty_Page(property);
+                    break;
+                case 2 /* Header */:
+                    this.ShowProperty_Header(property);
                     break;
             }
         };
@@ -192,7 +195,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             var controlManager = App.Instance.Device.ControlManager;
 
             var propertyPanel = $('#propertiesTmpl').tmpl({});
-            var panelContent = propertyPanel.children("#property-table");
+            var content = propertyPanel.children("#property-table");
 
             var idProperty = $('#propertyTextTmpl').tmpl({
                 name: 'Id:',
@@ -210,8 +213,30 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
                 controlManager.ChangeProperty(property.Id, 7 /* Header */, 1 /* Page */, $(this).is(":checked") ? 'yes' : 'no');
             });
 
-            panelContent.append(idProperty);
-            panelContent.append(headerProperty);
+            content.append(idProperty);
+            content.append(headerProperty);
+            propertyPanel.appendTo('#properties-widget');
+            propertyPanel.attr('id', 'propertyFor' + property.Id);
+            this.currentPropertyDiv = propertyPanel;
+        };
+
+        PropertiesView.prototype.ShowProperty_Header = function (property) {
+            this.log.Debug("ShowProperty_Page");
+            var self = this;
+            var controlManager = App.Instance.Device.ControlManager;
+
+            var propertyPanel = $('#propertiesTmpl').tmpl({});
+            var content = propertyPanel.children("#property-table");
+
+            var titleProperty = $('#propertyTextTmpl').tmpl({
+                name: 'Title:',
+                value: property.Title
+            });
+            titleProperty.find('input').change(function () {
+                controlManager.ChangeProperty(property.Id, 6 /* Title */, 2 /* Header */, $(this).val());
+            });
+
+            content.append(titleProperty);
             propertyPanel.appendTo('#properties-widget');
             propertyPanel.attr('id', 'propertyFor' + property.Id);
             this.currentPropertyDiv = propertyPanel;

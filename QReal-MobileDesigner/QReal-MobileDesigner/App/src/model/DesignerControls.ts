@@ -75,6 +75,15 @@ module DesignerControls {
         }       
     }
 
+
+    export class Header extends BaseContainer<ControlProperty.HeaderProperty> {
+
+        constructor(properties: ControlProperty.HeaderProperty) {
+            super(properties);
+            this.log = new Log("Header");
+        }
+    }
+
     export class Button extends BaseControl<ControlProperty.ButtonProperty> {
 
         constructor(properties: ControlProperty.ButtonProperty) {

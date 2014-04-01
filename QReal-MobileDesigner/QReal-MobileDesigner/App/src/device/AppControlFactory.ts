@@ -52,6 +52,16 @@ class AppControlFactory{
         $container.append($input);
         return $container;
     }
+
+    public CreateHeader(property: ControlProperty.HeaderProperty): JQuery {
+        var $header = $('<div></div>');
+        $header.attr('id', property.Id);
+        $header.attr('data-role', 'header');
+        var $title = $('<h1></h1>');
+        $title.text(property.Title);
+        $header.append($title);
+        return $header;
+    }
 }
 
 export = AppControlFactory; 
