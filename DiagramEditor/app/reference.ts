@@ -1,3 +1,4 @@
+/// <reference path="services/services.ts" />
 /// <reference path="models/Shape.ts" />
 /// <reference path="controllers/diagramCtrl.ts" />
 /// <reference path="main.ts" />
@@ -8,6 +9,8 @@
 /// <reference path="models/FinalNode.ts" />
 /// <reference path="models/InitialNode.ts" />
 /// <reference path="models/ShapesFactory.ts" />
+/// <reference path="services/Edge.ts" />
+/// <reference path="services/ValidateService.ts" />
 /// <reference path="vendor.d.ts" />
 //grunt-end
 

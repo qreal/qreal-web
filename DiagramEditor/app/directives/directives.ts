@@ -1,3 +1,3 @@
 /// <reference path="../reference.ts" />
 
-var directives = angular.module('directives',[]);
+var directives = angular.module('directives', []);
