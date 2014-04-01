@@ -52,6 +52,7 @@ class ControlManager {
             {
                 forcePlaceholderSize: true,
                 containment: "parent",
+                cancel: '.nondraggable',
                 start: function (event, ui) {
                     ui.item.startPos = ui.item.index();
                 },
@@ -167,9 +168,10 @@ class ControlManager {
             case Enums.PropertyType.Header:
                 page.Properties.Header = newValue == 'yes';
                 if (newValue == 'yes') {                    
-                    var headerProp = new ControlProperty.HeaderProperty('header_for_' + propertyId);
-                    headerProp.Title = 'Header';
-                    $page.prepend(this.controlFactory.CreateHeader(headerProp).Element);
+                    var headerProp = new ControlProperty.HeaderProperty(propertyId + '_header');
+                    var header = this.controlFactory.CreateHeader(headerProp);
+                    page.Childrens.push(header);
+                    $page.prepend(header.Element);
                     $page.trigger('pagecreate');
                 } else {
                     $page.find('div[data-role="header"]').remove();
@@ -185,7 +187,7 @@ class ControlManager {
         switch (propertyType) {
             case Enums.PropertyType.Title:
                 header.Properties.Title = newValue;
-                $header.find('div[data-role=header] h1').text(newValue);
+                $header.find('h1').text(newValue);
                 break;
         }
     }
@@ -273,6 +275,10 @@ class ControlManager {
                 var input = <DesignerControls.Input>element;
                 $html = this.appControlFactory.CreateInput(input.Properties);
                 break;
+            case Enums.ControlType.Header:
+                var header = <DesignerControls.Header>element;
+                $html = this.appControlFactory.CreateHeader(header.Properties);
+                break;
 
         }
         return $html;
@@ -305,6 +311,7 @@ class ControlManager {
                 break;
             case Enums.ControlType.Button:
             case Enums.ControlType.Input:
+            case Enums.ControlType.Header:
                 obj = element.Properties;
                 break;
         }

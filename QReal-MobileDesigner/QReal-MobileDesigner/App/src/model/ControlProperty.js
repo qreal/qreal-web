@@ -105,6 +105,7 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
             __extends(HeaderProperty, _super);
             function HeaderProperty(id) {
                 _super.call(this, 2 /* Header */, id);
+                this.Title = 'Header';
             }
             Object.defineProperty(HeaderProperty.prototype, "Title", {
                 get: function () {

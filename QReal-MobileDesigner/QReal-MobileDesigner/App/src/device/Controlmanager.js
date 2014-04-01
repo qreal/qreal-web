@@ -32,6 +32,7 @@
             $('.sortcontainer').sortable({
                 forcePlaceholderSize: true,
                 containment: "parent",
+                cancel: '.nondraggable',
                 start: function (event, ui) {
                     ui.item.startPos = ui.item.index();
                 },
@@ -146,9 +147,10 @@
                 case 7 /* Header */:
                     page.Properties.Header = newValue == 'yes';
                     if (newValue == 'yes') {
-                        var headerProp = new ControlProperty.HeaderProperty('header_for_' + propertyId);
-                        headerProp.Title = 'Header';
-                        $page.prepend(this.controlFactory.CreateHeader(headerProp).Element);
+                        var headerProp = new ControlProperty.HeaderProperty(propertyId + '_header');
+                        var header = this.controlFactory.CreateHeader(headerProp);
+                        page.Childrens.push(header);
+                        $page.prepend(header.Element);
                         $page.trigger('pagecreate');
                     } else {
                         $page.find('div[data-role="header"]').remove();
@@ -164,7 +166,7 @@
             switch (propertyType) {
                 case 6 /* Title */:
                     header.Properties.Title = newValue;
-                    $header.find('div[data-role=header] h1').text(newValue);
+                    $header.find('h1').text(newValue);
                     break;
             }
         };
@@ -252,6 +254,10 @@
                     var input = element;
                     $html = this.appControlFactory.CreateInput(input.Properties);
                     break;
+                case 2 /* Header */:
+                    var header = element;
+                    $html = this.appControlFactory.CreateHeader(header.Properties);
+                    break;
             }
             return $html;
         };
@@ -283,6 +289,7 @@
                     break;
                 case 3 /* Button */:
                 case 4 /* Input */:
+                case 2 /* Header */:
                     obj = element.Properties;
                     break;
             }

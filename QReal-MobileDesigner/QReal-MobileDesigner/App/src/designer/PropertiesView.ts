@@ -55,6 +55,9 @@ class PropertiesView {
             case Enums.ControlType.Page:
                 this.ShowProperty_Page(<ControlProperty.PageProperty>property);
                 break;
+            case Enums.ControlType.Header:
+                this.ShowProperty_Header(<ControlProperty.HeaderProperty>property);
+                break;
         }
     }
 
@@ -258,7 +261,7 @@ class PropertiesView {
                 value: property.Title
             });
         titleProperty.find('input').change(function () {
-            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Title, Enums.ControlType.Page, $(this).val());
+            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Title, Enums.ControlType.Header, $(this).val());
         });
 
         content.append(titleProperty);

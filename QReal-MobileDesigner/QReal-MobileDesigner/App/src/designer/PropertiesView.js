@@ -43,6 +43,9 @@
                 case 1 /* Page */:
                     this.ShowProperty_Page(property);
                     break;
+                case 2 /* Header */:
+                    this.ShowProperty_Header(property);
+                    break;
             }
         };
 
@@ -230,7 +233,7 @@
                 value: property.Title
             });
             titleProperty.find('input').change(function () {
-                controlManager.ChangeProperty(property.Id, 6 /* Title */, 1 /* Page */, $(this).val());
+                controlManager.ChangeProperty(property.Id, 6 /* Title */, 2 /* Header */, $(this).val());
             });
 
             content.append(titleProperty);

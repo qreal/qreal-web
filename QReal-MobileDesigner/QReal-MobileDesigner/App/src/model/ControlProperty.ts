@@ -94,6 +94,7 @@ module ControlProperty {
 
         constructor(id: string) {
             super(Enums.ControlType.Header, id);
+            this.Title = 'Header';
         }
     }
 

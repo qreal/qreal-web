@@ -28,11 +28,20 @@ class DesignerControlFactory implements IControlFactory {
     public CreateHeader(property: ControlProperty.HeaderProperty): DesignerControls.Header {
         var header = new DesignerControls.Header(property);
         var $header = $('<div></div>');
+        $header.attr('id', property.Id);
         $header.attr('data-role', 'header');
+        $header.addClass('nondraggable');
         var $title = $('<h1></h1>');
         $title.text(property.Title);
         $header.append($title);
         header.Element = $header;
+
+        $header.on('click', event => {
+            event.preventDefault();
+            this.log.Debug('bt click');
+            App.Instance.Designer.ShowProperty(header.Properties);
+        });
+
         return header;
     }
 

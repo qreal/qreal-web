@@ -44,6 +44,16 @@
             $container.append($input);
             return $container;
         };
+
+        AppControlFactory.prototype.CreateHeader = function (property) {
+            var $header = $('<div></div>');
+            $header.attr('id', property.Id);
+            $header.attr('data-role', 'header');
+            var $title = $('<h1></h1>');
+            $title.text(property.Title);
+            $header.append($title);
+            return $header;
+        };
         return AppControlFactory;
     })();
 
