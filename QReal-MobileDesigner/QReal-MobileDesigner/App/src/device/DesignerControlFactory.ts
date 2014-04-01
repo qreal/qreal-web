@@ -25,6 +25,17 @@ class DesignerControlFactory implements IControlFactory {
         return page;
     }
 
+    public CreateHeader(property: ControlProperty.HeaderProperty): DesignerControls.Header {
+        var header = new DesignerControls.Header(property);
+        var $header = $('<div></div>');
+        $header.attr('data-role', 'header');
+        var $title = $('<h1></h1>');
+        $title.text(property.Title);
+        $header.append($title);
+        header.Element = $header;
+        return header;
+    }
+
     public CreateButton(property: ControlProperty.ButtonProperty): DesignerControls.Button {
         var button = new DesignerControls.Button(property);
         var $bt = $('<a href="#"></a>');
@@ -48,17 +59,17 @@ class DesignerControlFactory implements IControlFactory {
     public CreateInput(property: ControlProperty.InputProperty): DesignerControls.Input {
         var input = new DesignerControls.Input(property);
 
-        var $container = $("<div data-role='fieldcontain'></div>");
-        $container.attr('id', input.Properties.Id);
+        var $container = $("<div></div>");
+        $container.attr('data-role', 'fieldcontain');
         var $label = $("<label></label>");
         $label.text(input.Properties.Title);
-        $label.attr('for', 'input_' + input.Properties.Id);
+        $label.attr('for', input.Properties.Id);
 
         var $input = $('<input />');
         $input.attr('type', 'text');
 
         $input.attr('name', input.Properties.Name);
-        $input.attr('id', 'input_' + input.Properties.Id);
+        $input.attr('id', input.Properties.Id);
         $container.append($label);
         $container.append($input);
 

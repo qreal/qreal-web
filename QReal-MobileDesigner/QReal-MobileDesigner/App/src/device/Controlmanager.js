@@ -1,4 +1,4 @@
-﻿define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/Helper", "src/model/Enums", "src/model/ControlProperty", "src/model/DesignerControls", "src/device/DesignerControlFactory", "src/device/AppControlFactory"], function(require, exports, App, Log, Helper, Enums, ControlProperty, DesignerControls, DesignerControlFactory, AppControlFactory) {
+﻿define(["require", "exports", "src/util/log/Log", "src/util/Helper", "src/model/Enums", "src/model/ControlProperty", "src/model/DesignerControls", "src/device/DesignerControlFactory", "src/device/AppControlFactory"], function(require, exports, Log, Helper, Enums, ControlProperty, DesignerControls, DesignerControlFactory, AppControlFactory) {
     var ControlManager = (function () {
         function ControlManager() {
             this.log = new Log("ControlManager");
@@ -132,21 +132,39 @@
                 case 1 /* Page */:
                     this.ChangePageProperty(propertyId, propertyType, newValue);
                     break;
+                case 2 /* Header */:
+                    this.ChangeHeaderProperty(propertyId, propertyType, newValue);
+                    break;
             }
         };
 
         ControlManager.prototype.ChangePageProperty = function (propertyId, propertyType, newValue) {
             this.log.Debug('ChangePageProperty');
             var page = this.FindById(propertyId);
+            var $page = $(page.Properties.$Id);
             switch (propertyType) {
                 case 7 /* Header */:
+                    page.Properties.Header = newValue == 'yes';
                     if (newValue == 'yes') {
-                        var header = App.Instance.Device.ControlManager.CreateControl('Header');
-                        page.Element.prepend(header.Element);
-                        page.Element.trigger('pagecreate');
+                        var headerProp = new ControlProperty.HeaderProperty('header_for_' + propertyId);
+                        headerProp.Title = 'Header';
+                        $page.prepend(this.controlFactory.CreateHeader(headerProp).Element);
+                        $page.trigger('pagecreate');
                     } else {
-                        page.Element.find('div[data-role="header"]').remove();
+                        $page.find('div[data-role="header"]').remove();
                     }
+                    break;
+            }
+        };
+
+        ControlManager.prototype.ChangeHeaderProperty = function (propertyId, propertyType, newValue) {
+            this.log.Debug('ChangeHeaderProperty');
+            var header = this.FindById(propertyId);
+            var $header = $(header.Properties.$Id);
+            switch (propertyType) {
+                case 6 /* Title */:
+                    header.Properties.Title = newValue;
+                    $header.find('div[data-role=header] h1').text(newValue);
                     break;
             }
         };
@@ -220,29 +238,30 @@
                     }
                     break;
                 case 1 /* Page */:
-                    $html = this.appControlFactory.CreatePage(element.Properties);
                     var page = element;
+                    $html = this.appControlFactory.CreatePage(page.Properties);
                     for (var i in page.Childrens) {
                         $html.append(this.GenerateHtml(page.Childrens[i]));
                     }
                     break;
                 case 3 /* Button */:
-                    $html = this.appControlFactory.CreateButton(element.Properties);
+                    var button = element;
+                    $html = this.appControlFactory.CreateButton(button.Properties);
                     break;
                 case 4 /* Input */:
-                    $html = this.appControlFactory.CreateInput(element.Properties);
+                    var input = element;
+                    $html = this.appControlFactory.CreateInput(input.Properties);
                     break;
             }
             return $html;
         };
 
         ControlManager.prototype.Serialize = function () {
-            var obj = this.CreateGeneralProperty(this.app);
-            this.log.Debug("App obj:", obj);
+            var obj = this.AppToSerializeObj(this.app);
             return JSON.stringify(obj, null, 4);
         };
 
-        ControlManager.prototype.CreateGeneralProperty = function (element) {
+        ControlManager.prototype.AppToSerializeObj = function (element) {
             var obj;
             var self = this;
             switch (element.Properties.Type) {
@@ -251,7 +270,7 @@
                     var app = element;
                     obj["Pages"] = [];
                     app.Childrens.forEach(function (el) {
-                        obj["Pages"].push(self.CreateGeneralProperty(el));
+                        obj["Pages"].push(self.AppToSerializeObj(el));
                     });
                     break;
                 case 1 /* Page */:
@@ -259,7 +278,7 @@
                     var page = element;
                     obj["Controls"] = [];
                     page.Childrens.forEach(function (el) {
-                        obj["Controls"].push(self.CreateGeneralProperty(el));
+                        obj["Controls"].push(self.AppToSerializeObj(el));
                     });
                     break;
                 case 3 /* Button */:
@@ -271,12 +290,12 @@
         };
 
         ControlManager.prototype.FindById = function (id) {
-            this.log.Debug("FindById: " + id);
+            //this.log.Debug("FindById: " + id);
             return this.FindInContainer(id, this.app);
         };
 
         ControlManager.prototype.FindInContainer = function (id, control) {
-            this.log.Debug("FindInContainer: " + id, control);
+            //this.log.Debug("FindInContainer: " + id, control);
             if (control.Properties.Id === id) {
                 return control;
             }

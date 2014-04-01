@@ -4,7 +4,7 @@ module ControlProperty {
 
     export class Property {
 
-        private type:string;
+        private type: string;
 
         public get Type(): Enums.ControlType {
             return Enums.ControlType[this.type];
@@ -23,6 +23,11 @@ module ControlProperty {
         public set Id(value: string) {
             this.id = value;
         }
+
+        public get $Id(): string {
+            return '#' + this.Id;
+        }
+
 
         constructor(type: Enums.ControlType, id: string) {
             this.Type = type;
@@ -54,14 +59,41 @@ module ControlProperty {
         constructor(name: string, projectPackage: string) {
             super(Enums.ControlType.App, "");
             this.Name = name;
-            this.ProjectPackage = projectPackage;           
+            this.ProjectPackage = projectPackage;
         }
     }
 
     export class PageProperty extends Property {
 
+        private header: boolean;
+
+        public get Header(): boolean {
+            return this.header;
+        }
+
+        public set Header(value: boolean) {
+            this.header = value;
+        }
+
         constructor(id: string) {
             super(Enums.ControlType.Page, id);
+        }
+    }
+
+    export class HeaderProperty extends Property {
+
+        private title: string;
+
+        public get Title(): string {
+            return this.title;
+        }
+
+        public set Title(value: string) {
+            this.title = value;
+        }
+
+        constructor(id: string) {
+            super(Enums.ControlType.Header, id);
         }
     }
 
