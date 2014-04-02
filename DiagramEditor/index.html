@@ -25,13 +25,18 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
+            <button type="button" class="btn btn-default" ng-click="vm.createInitialNode()">Initial</button>
             <button type="button" class="btn btn-default" ng-click="vm.createActionNode()">Action</button>
-            <button type="button" class="btn btn-default" ng-click="vm.createFinalNode()">Final Node</button>
-            <button type="button" class="btn btn-default" ng-click="vm.createInitialNode()">Initial Node</button>
-            <button type="button" class="btn btn-default" ng-click="vm.createConditionNode()">Condition Node</button>
-            <button type="button" class="btn btn-default" ng-click="vm.clear()">CLEAR</button>
+            <button type="button" class="btn btn-default" ng-click="vm.createConditionNode()">Condition</button>
+            <button type="button" class="btn btn-default" ng-click="vm.createFinalNode()">Final</button>
+            <button type="button" class="btn btn-default" ng-click="vm.clear()">Clear</button>
+
 
             <div id="paper"></div>
+            <div class="pull-right">
+                <button type="button" class="btn btn-link" ng-click="vm.validate()">Validate</button>
+            </div>
+
         </div>
         <div id="properties" class="col-md-6 hidden">
             <div id="toleft">
@@ -62,7 +67,6 @@
 
                 </form>
             </div>
-
         </div>
     </div>
 </div>

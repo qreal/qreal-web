@@ -198,7 +198,8 @@ namespace Android_Generator_v2
                         }
                         if (value.Equals("corners"))
                         {
-
+                            reader.Read();
+                            buttonElement.setRoundValue((Boolean)reader.Value);
                         }
                         if (value.Equals("mini"))
                         {
@@ -206,7 +207,8 @@ namespace Android_Generator_v2
                         }
                         if (value.Equals("theme"))
                         {
-
+                            reader.Read();
+                            buttonElement.setTheme(reader.Value.ToString());
                         }
                     }
                 }

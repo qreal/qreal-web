@@ -31,6 +31,8 @@ declare module joint {
             disconnectLinks(cell:Cell);
 
             removeLinks(cell:Cell);
+
+            getLinks();
         }
 
         class Cell extends Backbone.Model {
@@ -146,12 +148,6 @@ declare module joint {
 
             class Path extends Generic {
             }
-
-            class Model extends Generic {
-            }
-
-            class Ellipse extends Generic {
-            }
         }
 
         module devs {
@@ -165,6 +161,9 @@ declare module joint {
             }
 
             class RectWithPorts extends Model {
+            }
+
+            class Diamond extends Generic {
             }
         }
 

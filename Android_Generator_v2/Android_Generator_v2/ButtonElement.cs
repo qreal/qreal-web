@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Android_Generator_v2
 {
@@ -39,6 +40,23 @@ namespace Android_Generator_v2
             imports.Add("import android.content.Intent;");
         }
 
+        public void setRoundValue(Boolean isRounded) 
+        {
+            this.isRounded = isRounded;
+        }
+
+        public void setTheme(String themeChar)
+        {
+            if (isRounded)
+            {
+                xmlAttrs.Append(@"style=""@style/Button_Theme_" + themeChar + @"_Rounded""");
+            }
+            else
+            {
+                xmlAttrs.Append(@"style=""@style/Button_Theme_" + themeChar + "\"");
+            }
+        }
+
         public String getXml()
         {
             return String.Format(xmlTemplate, id, xmlAttrs.ToString());
@@ -73,6 +91,7 @@ namespace Android_Generator_v2
         private StringBuilder xmlAttrs = new StringBuilder();
         private HashSet<String> imports = new HashSet<String>();
         private String id;
+        private Boolean isRounded;
         private static String xmlTemplate = @"
             <Button 
                 android:layout_height=""wrap_content""

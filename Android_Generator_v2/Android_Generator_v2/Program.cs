@@ -13,19 +13,7 @@ namespace Android_Generator_v2
     {
         static int Main(string[] args)
         {
-            /**if (args.Length > 1)
-            {
-                Console.WriteLine("Too much arguments.");
-                return 1;
-            }
-            if (args.Length == 0)
-            {
-                Console.WriteLine("Please enter an application name.");
-                return 2;
-            }
-            String appName = args[0];**/
-
-            JsonParser parser = new JsonParser("test.txt");
+            JsonParser parser = new JsonParser("app.json");
 
             String appName;
             String packageName;
