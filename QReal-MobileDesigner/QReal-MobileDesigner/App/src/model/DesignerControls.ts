@@ -40,17 +40,7 @@ module DesignerControls {
         constructor(properties: T) {
             super(properties);
             this.log = new Log("BaseContainer");
-        }
-
-        public Create(): JQuery {
-            this.log.Error("This method should not be used");
-            return $("");
-        }
-
-        public CreateForDesigner(): JQuery {
-            this.log.Error("This method should not be used");
-            return $("");
-        }
+        }   
 
     }
 

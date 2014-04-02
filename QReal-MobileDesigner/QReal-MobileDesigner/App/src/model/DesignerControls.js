@@ -49,16 +49,6 @@ define(["require", "exports", "src/Application", "src/util/log/Log"], function(r
                 enumerable: true,
                 configurable: true
             });
-
-            BaseContainer.prototype.Create = function () {
-                this.log.Error("This method should not be used");
-                return $("");
-            };
-
-            BaseContainer.prototype.CreateForDesigner = function () {
-                this.log.Error("This method should not be used");
-                return $("");
-            };
             return BaseContainer;
         })(BaseControl);
         DesignerControls.BaseContainer = BaseContainer;

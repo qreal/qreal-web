@@ -149,11 +149,12 @@
                     if (newValue == 'yes') {
                         var headerProp = new ControlProperty.HeaderProperty(propertyId + '_header');
                         var header = this.controlFactory.CreateHeader(headerProp);
-                        page.Childrens.push(header);
+                        page.Childrens.unshift(header);
                         $page.prepend(header.Element);
                         $page.trigger('pagecreate');
                     } else {
                         $page.find('div[data-role="header"]').remove();
+                        page.Childrens.splice(0, 1);
                     }
                     break;
             }
