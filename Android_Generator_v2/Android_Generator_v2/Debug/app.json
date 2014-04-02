@@ -1,8 +1,8 @@
 {
     "type": "App",
     "id": "",
-    "name": "Hello",
-    "projectPackage": "com.example.example",
+    "name": "HelloThemeE",
+    "projectPackage": "com.example.themee",
     "Pages": [
         {
             "type": "Page",
@@ -15,7 +15,7 @@
                     "inline": false,
                     "corners": true,
                     "mini": false,
-                    "theme": "c"
+                    "theme": "b"
                 },
                 {
                     "type": "Input",
@@ -33,18 +33,18 @@
                     "id": "button3",
                     "text": "Push me!",
                     "inline": false,
-                    "corners": true,
+                    "corners": false,
                     "mini": false,
-                    "theme": "c"
+                    "theme": "e"
                 },
                 {
                     "type": "Button",
                     "id": "button4",
                     "text": "Button",
                     "inline": false,
-                    "corners": true,
+                    "corners": false,
                     "mini": false,
-                    "theme": "c"
+                    "theme": "a"
                 }
             ]
         },
