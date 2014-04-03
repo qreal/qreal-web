@@ -203,7 +203,16 @@ namespace Android_Generator_v2
                         }
                         if (value.Equals("mini"))
                         {
-
+                            reader.Read();
+                            if (!(Boolean)reader.Value)
+                            {
+                                buttonElement.addXmlAttr("layout_height", "wrap_content");
+                            }
+                            else
+                            {
+                                buttonElement.addXmlAttr("layout_height", "28dp");
+                                buttonElement.addXmlAttr("textSize", "11sp");
+                            }
                         }
                         if (value.Equals("theme"))
                         {

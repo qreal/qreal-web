@@ -94,7 +94,6 @@ namespace Android_Generator_v2
         private Boolean isRounded;
         private static String xmlTemplate = @"
             <Button 
-                android:layout_height=""wrap_content""
                 android:onClick=""onClick{0}""
                 {1}
                 >

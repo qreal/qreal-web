@@ -14,7 +14,7 @@
                     "text": "Button",
                     "inline": false,
                     "corners": true,
-                    "mini": false,
+                    "mini": true,
                     "theme": "b"
                 },
                 {
@@ -43,7 +43,7 @@
                     "text": "Button",
                     "inline": false,
                     "corners": false,
-                    "mini": false,
+                    "mini": true,
                     "theme": "a"
                 }
             ]
