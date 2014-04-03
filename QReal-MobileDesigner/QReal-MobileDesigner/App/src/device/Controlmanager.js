@@ -1,4 +1,4 @@
-﻿define(["require", "exports", "src/util/log/Log", "src/util/Helper", "src/model/Enums", "src/model/ControlProperty", "src/model/DesignerControls", "src/device/DesignerControlFactory", "src/device/AppControlFactory"], function(require, exports, Log, Helper, Enums, ControlProperty, DesignerControls, DesignerControlFactory, AppControlFactory) {
+﻿define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/Helper", "src/model/Enums", "src/model/ControlProperty", "src/model/DesignerControls", "src/device/DesignerControlFactory", "src/device/AppControlFactory"], function(require, exports, App, Log, Helper, Enums, ControlProperty, DesignerControls, DesignerControlFactory, AppControlFactory) {
     var ControlManager = (function () {
         function ControlManager() {
             this.log = new Log("ControlManager");
@@ -15,6 +15,7 @@
 
         /*** Pages ***/
         ControlManager.prototype.CreatePage = function (pageId) {
+            var _this = this;
             this.log.Debug("CreatePage: " + pageId);
             var self = this;
             if (this.ContainsId(pageId)) {
@@ -25,9 +26,16 @@
                 return false;
             }
 
-            var page = this.controlFactory.CreatePage(new ControlProperty.PageProperty(pageId));
+            var page = new DesignerControls.Page(new ControlProperty.PageProperty(pageId));
+            var $page = this.controlFactory.CreatePage(page.Properties);
+            $page.on('drop', function (event) {
+                return _this.OnDrop(event);
+            });
+            $page.on('dragover', function (event) {
+                return _this.OnDragOver(event);
+            });
             this.app.Childrens.push(page);
-            $('body').append(page.Element);
+            $('body').append($page);
             this.SelectPage(pageId);
             $('.sortcontainer').sortable({
                 forcePlaceholderSize: true,
@@ -79,22 +87,14 @@
             this.log.Debug("CreateControl: " + controlId);
             switch (controlId) {
                 case "Button":
-                    return this.CreateButton();
+                    var btProperty = new ControlProperty.ButtonProperty(this.GetNewId('button'));
+                    return new DesignerControls.Button(btProperty);
                 case "Input":
-                    return this.CreateInput();
+                    var inputProperty = new ControlProperty.InputProperty(this.GetNewId('input'));
+                    return new DesignerControls.Input(inputProperty);
                 case "Header":
                     break;
             }
-        };
-
-        ControlManager.prototype.CreateButton = function () {
-            var property = new ControlProperty.ButtonProperty(this.GetNewId('button'));
-            return this.controlFactory.CreateButton(property);
-        };
-
-        ControlManager.prototype.CreateInput = function () {
-            var property = new ControlProperty.InputProperty(this.GetNewId('input'));
-            return this.controlFactory.CreateInput(property);
         };
 
         /* Id */
@@ -295,6 +295,20 @@
                     break;
             }
             return obj;
+        };
+
+        ControlManager.prototype.OnDrop = function (event) {
+            this.log.Debug("OnDrop, event: ", event);
+            event.preventDefault();
+            var controlId = event.originalEvent.dataTransfer.getData("Text");
+            var control = App.Instance.Device.ControlManager.CreateControl(controlId);
+            var $control = new AppControlFactory().this.Childrens.push(control);
+            $(this.Properties.$Id).append(control.Element);
+            this.Element.append(control.Element);
+        };
+
+        ControlManager.prototype.OnDragOver = function (e) {
+            e.preventDefault();
         };
 
         ControlManager.prototype.FindById = function (id) {

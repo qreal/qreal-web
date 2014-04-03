@@ -9,7 +9,6 @@ import ControlProperty = require("src/model/ControlProperty");
 import DesignerControls = require("src/model/DesignerControls");
 import DesignerControlFactory = require("src/device/DesignerControlFactory");
 import AppControlFactory = require("src/device/AppControlFactory");
-import IControlFactory = require("src/device/IControlFactory");
 
 class ControlManager {
 
@@ -44,9 +43,12 @@ class ControlManager {
             return false;
         }
 
-        var page = this.controlFactory.CreatePage(new ControlProperty.PageProperty(pageId));
+        var page = new DesignerControls.Page(new ControlProperty.PageProperty(pageId));
+        var $page = this.controlFactory.CreatePage(page.Properties);
+        $page.on('drop', event => this.OnDrop(event));
+        $page.on('dragover', event => this.OnDragOver(event));
         this.app.Childrens.push(page);
-        $('body').append(page.Element);
+        $('body').append($page);
         this.SelectPage(pageId);
         (<any>$('.sortcontainer')).sortable(
             {
@@ -99,24 +101,16 @@ class ControlManager {
         this.log.Debug("CreateControl: " + controlId);
         switch (controlId) {
             case "Button":
-                return this.CreateButton();
+                var btProperty = new ControlProperty.ButtonProperty(this.GetNewId('button'));
+                return new DesignerControls.Button(btProperty);
             case "Input":
-                return this.CreateInput();
+                var inputProperty = new ControlProperty.InputProperty(this.GetNewId('input'));
+                return new DesignerControls.Input(inputProperty);
             case "Header":
                 //return this.controlFactory.CreateHeader(this.GetNewId('header'));
             break
         }
 
-    }
-
-    private CreateButton(): DesignerControls.Button {
-        var property = new ControlProperty.ButtonProperty(this.GetNewId('button'));
-        return this.controlFactory.CreateButton(property);
-    }
-
-    private CreateInput() {
-        var property = new ControlProperty.InputProperty(this.GetNewId('input'));
-        return this.controlFactory.CreateInput(property);
     }
 
     /* Id */
@@ -318,6 +312,21 @@ class ControlManager {
         }
         return obj;
     }
+
+    public OnDrop(event) {
+        this.log.Debug("OnDrop, event: ", event);
+        event.preventDefault();
+        var controlId = event.originalEvent.dataTransfer.getData("Text");
+        var control = App.Instance.Device.ControlManager.CreateControl(controlId);
+        var $control = new AppControlFactory().
+            this.Childrens.push(control);
+        $(this.Properties.$Id).append(control.Element);
+        this.Element.append(control.Element);
+    }
+
+    public OnDragOver(e) {
+        e.preventDefault();
+    }       
 
     public FindById(id: string): DesignerControls.BaseControl<ControlProperty.Property> {
         //this.log.Debug("FindById: " + id);

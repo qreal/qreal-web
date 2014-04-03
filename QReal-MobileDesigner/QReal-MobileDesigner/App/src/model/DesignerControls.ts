@@ -2,6 +2,7 @@
 import Log = require("src/util/log/Log");
 import Enums = require("src/model/Enums");
 import ControlProperty = require("src/model/ControlProperty");
+import AppControlFactory = require("src/device/AppControlFactory");
 
 module DesignerControls {
 
@@ -15,6 +16,7 @@ module DesignerControls {
             return this.properties
         }
 
+        /*
         private element: JQuery;
         public get Element(): JQuery {
             return this.element;
@@ -23,7 +25,7 @@ module DesignerControls {
         public set Element(value: JQuery) {
             this.element = value;
         }
-
+        */
         constructor(properties: T) {
             this.properties = properties;
         }
@@ -50,19 +52,6 @@ module DesignerControls {
             super(properties);
             this.log = new Log("Page");
         }
-
-        public OnDrop(event) {
-            this.log.Debug("OnDrop, event: ", event);
-            event.preventDefault();
-            var controlId = event.originalEvent.dataTransfer.getData("Text");
-            var control = App.Instance.Device.ControlManager.CreateControl(controlId);
-            this.Childrens.push(control);
-            this.Element.append(control.Element);
-        }
-
-        public OnDragOver(e) {
-            e.preventDefault();
-        }       
     }
 
 
