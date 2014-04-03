@@ -1,8 +1,28 @@
-﻿define(["require", "exports", "src/util/log/Log"], function(require, exports, Log) {
+﻿define(["require", "exports", "src/util/log/Log", "src/model/Enums"], function(require, exports, Log, Enums) {
     var AppControlFactory = (function () {
         function AppControlFactory() {
             this.log = new Log("AppControlFactory");
         }
+        AppControlFactory.prototype.CreateControl = function (property) {
+            switch (property.Type) {
+                case 0 /* App */:
+                    return this.CreateApp(property);
+                    break;
+                case 1 /* Page */:
+                    return this.CreatePage(property);
+                    break;
+                case 2 /* Header */:
+                    return this.CreateHeader(property);
+                    break;
+                case 3 /* Button */:
+                    return this.CreateButton(property);
+                    break;
+                case 4 /* Input */:
+                    return this.CreateInput(property);
+                    break;
+            }
+        };
+
         AppControlFactory.prototype.CreateApp = function (property) {
             var $app = $('<div></div>');
             return $app;

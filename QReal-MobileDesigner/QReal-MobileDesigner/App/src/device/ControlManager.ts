@@ -45,7 +45,7 @@ class ControlManager {
 
         var page = new DesignerControls.Page(new ControlProperty.PageProperty(pageId));
         var $page = this.controlFactory.CreatePage(page.Properties);
-        $page.on('drop', event => this.OnDrop(event));
+        $page.on('drop', event => this.OnDrop(event, page));
         $page.on('dragover', event => this.OnDragOver(event));
         this.app.Childrens.push(page);
         $('body').append($page);
@@ -163,9 +163,10 @@ class ControlManager {
                 page.Properties.Header = newValue == 'yes';
                 if (newValue == 'yes') {
                     var headerProp = new ControlProperty.HeaderProperty(propertyId + '_header');
-                    var header = this.controlFactory.CreateHeader(headerProp);
+                    var header = new DesignerControls.Header(headerProp);
+                    var $header = this.controlFactory.CreateHeader(headerProp);
                     page.Childrens.unshift(header);
-                    $page.prepend(header.Element);
+                    $page.prepend($header);
                     $page.trigger('pagecreate');
                 } else {
                     $page.find('div[data-role="header"]').remove();
@@ -191,31 +192,30 @@ class ControlManager {
         var button = <DesignerControls.Button>this.FindById(propertyId);
         switch (propertyType) {
             case Enums.PropertyType.Id:
-                button.Properties.Id = newValue;
-                button.Element.attr('id', newValue);
+                $(button.Properties.$Id).attr('id', newValue);
+                button.Properties.Id = newValue;                
                 break;
             case Enums.PropertyType.Text:
-                this.log.Debug("Enums.PropertyType.Text:", button.Element);
-                button.Element.find('.ui-btn-text').text(newValue);
+                $(button.Properties.$Id).find('.ui-btn-text').text(newValue);
                 button.Properties.Text = newValue;
                 break;
             case Enums.PropertyType.Inline:
                 var cond: boolean = newValue == "true";
-                button.Element.buttonMarkup({ inline: cond });
+                $(button.Properties.$Id).buttonMarkup({ inline: cond });
                 button.Properties.Inline = cond;
                 break;
             case Enums.PropertyType.Corners:
                 var cond: boolean = newValue == "true";
-                button.Element.buttonMarkup({ corners: cond });
+                $(button.Properties.$Id).buttonMarkup({ corners: cond });
                 button.Properties.Corners = cond;
                 break;
             case Enums.PropertyType.Mini:
                 var cond: boolean = newValue == "true";
-                button.Element.buttonMarkup({ mini: cond });
+                $(button.Properties.$Id).buttonMarkup({ mini: cond });
                 button.Properties.Mini = cond;
                 break;
             case Enums.PropertyType.Theme:
-                button.Element.buttonMarkup({ theme: newValue });
+                $(button.Properties.$Id).buttonMarkup({ theme: newValue });
                 button.Properties.Theme = newValue;
                 break;
         }
@@ -225,11 +225,11 @@ class ControlManager {
         var input = <DesignerControls.Input>this.FindById(propertyId);
         switch (propertyType) {
             case Enums.PropertyType.Id:
-                input.Properties.Id = newValue;
-                input.Element.find('input').attr('id', newValue);
+                $(input.Properties.$Id).find('input').attr('id', newValue);
+                input.Properties.Id = newValue;                
                 break;
             case Enums.PropertyType.Title:
-                input.Element.find('label').text(newValue);
+                $(input.Properties.$Id).parent().parent().find('label').text(newValue);
                 input.Properties.Title = newValue;
                 break;
             case Enums.PropertyType.Mini:
@@ -313,15 +313,14 @@ class ControlManager {
         return obj;
     }
 
-    public OnDrop(event) {
+    public OnDrop(event, page:DesignerControls.BaseContainer<ControlProperty.Property>) {
         this.log.Debug("OnDrop, event: ", event);
         event.preventDefault();
         var controlId = event.originalEvent.dataTransfer.getData("Text");
         var control = App.Instance.Device.ControlManager.CreateControl(controlId);
-        var $control = new AppControlFactory().
-            this.Childrens.push(control);
-        $(this.Properties.$Id).append(control.Element);
-        this.Element.append(control.Element);
+        var $control = this.controlFactory.CreateControl(control.Properties);
+        page.Childrens.push(control);
+        $(page.Properties.$Id).append($control);
     }
 
     public OnDragOver(e) {

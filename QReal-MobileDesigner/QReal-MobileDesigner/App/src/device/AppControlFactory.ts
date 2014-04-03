@@ -1,5 +1,6 @@
 ﻿import App = require("src/Application");
 import Log = require("src/util/log/Log");
+import Enums = require("src/model/Enums");
 import DesignerControls = require("src/model/DesignerControls");
 import ControlProperty = require("src/model/ControlProperty");
 
@@ -9,6 +10,26 @@ class AppControlFactory{
     private log = new Log("AppControlFactory");
 
     constructor() {
+    }
+
+    public CreateControl(property: ControlProperty.Property): JQuery {
+        switch (property.Type) {
+            case Enums.ControlType.App:
+                return this.CreateApp(property);
+                break;
+            case Enums.ControlType.Page:
+                return this.CreatePage(<any>property);
+                break;
+            case Enums.ControlType.Header:
+                return this.CreateHeader(<any>property);
+                break;
+            case Enums.ControlType.Button:
+                return this.CreateButton(<any>property);
+                break;
+            case Enums.ControlType.Input:
+                return this.CreateInput(<any>property);
+                break;
+        }
     }
 
     public CreateApp(property: ControlProperty.Property): JQuery {

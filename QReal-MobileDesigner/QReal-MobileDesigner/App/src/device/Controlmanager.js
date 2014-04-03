@@ -29,7 +29,7 @@
             var page = new DesignerControls.Page(new ControlProperty.PageProperty(pageId));
             var $page = this.controlFactory.CreatePage(page.Properties);
             $page.on('drop', function (event) {
-                return _this.OnDrop(event);
+                return _this.OnDrop(event, page);
             });
             $page.on('dragover', function (event) {
                 return _this.OnDragOver(event);
@@ -148,9 +148,10 @@
                     page.Properties.Header = newValue == 'yes';
                     if (newValue == 'yes') {
                         var headerProp = new ControlProperty.HeaderProperty(propertyId + '_header');
-                        var header = this.controlFactory.CreateHeader(headerProp);
+                        var header = new DesignerControls.Header(headerProp);
+                        var $header = this.controlFactory.CreateHeader(headerProp);
                         page.Childrens.unshift(header);
-                        $page.prepend(header.Element);
+                        $page.prepend($header);
                         $page.trigger('pagecreate');
                     } else {
                         $page.find('div[data-role="header"]').remove();
@@ -176,31 +177,30 @@
             var button = this.FindById(propertyId);
             switch (propertyType) {
                 case 0 /* Id */:
+                    $(button.Properties.$Id).attr('id', newValue);
                     button.Properties.Id = newValue;
-                    button.Element.attr('id', newValue);
                     break;
                 case 1 /* Text */:
-                    this.log.Debug("Enums.PropertyType.Text:", button.Element);
-                    button.Element.find('.ui-btn-text').text(newValue);
+                    $(button.Properties.$Id).find('.ui-btn-text').text(newValue);
                     button.Properties.Text = newValue;
                     break;
                 case 2 /* Inline */:
                     var cond = newValue == "true";
-                    button.Element.buttonMarkup({ inline: cond });
+                    $(button.Properties.$Id).buttonMarkup({ inline: cond });
                     button.Properties.Inline = cond;
                     break;
                 case 3 /* Corners */:
                     var cond = newValue == "true";
-                    button.Element.buttonMarkup({ corners: cond });
+                    $(button.Properties.$Id).buttonMarkup({ corners: cond });
                     button.Properties.Corners = cond;
                     break;
                 case 4 /* Mini */:
                     var cond = newValue == "true";
-                    button.Element.buttonMarkup({ mini: cond });
+                    $(button.Properties.$Id).buttonMarkup({ mini: cond });
                     button.Properties.Mini = cond;
                     break;
                 case 5 /* Theme */:
-                    button.Element.buttonMarkup({ theme: newValue });
+                    $(button.Properties.$Id).buttonMarkup({ theme: newValue });
                     button.Properties.Theme = newValue;
                     break;
             }
@@ -210,11 +210,11 @@
             var input = this.FindById(propertyId);
             switch (propertyType) {
                 case 0 /* Id */:
+                    $(input.Properties.$Id).find('input').attr('id', newValue);
                     input.Properties.Id = newValue;
-                    input.Element.find('input').attr('id', newValue);
                     break;
                 case 6 /* Title */:
-                    input.Element.find('label').text(newValue);
+                    $(input.Properties.$Id).parent().parent().find('label').text(newValue);
                     input.Properties.Title = newValue;
                     break;
                 case 4 /* Mini */:
@@ -297,14 +297,14 @@
             return obj;
         };
 
-        ControlManager.prototype.OnDrop = function (event) {
+        ControlManager.prototype.OnDrop = function (event, page) {
             this.log.Debug("OnDrop, event: ", event);
             event.preventDefault();
             var controlId = event.originalEvent.dataTransfer.getData("Text");
             var control = App.Instance.Device.ControlManager.CreateControl(controlId);
-            var $control = new AppControlFactory().this.Childrens.push(control);
-            $(this.Properties.$Id).append(control.Element);
-            this.Element.append(control.Element);
+            var $control = this.controlFactory.CreateControl(control.Properties);
+            page.Childrens.push(control);
+            $(page.Properties.$Id).append($control);
         };
 
         ControlManager.prototype.OnDragOver = function (e) {

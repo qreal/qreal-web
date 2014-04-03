@@ -1,8 +1,25 @@
-﻿define(["require", "exports", "src/Application", "src/util/log/Log"], function(require, exports, App, Log) {
+﻿define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/Enums"], function(require, exports, App, Log, Enums) {
     var DesignerControlFactory = (function () {
         function DesignerControlFactory() {
             this.log = new Log("DesignerControlFactory");
         }
+        DesignerControlFactory.prototype.CreateControl = function (property) {
+            switch (property.Type) {
+                case 1 /* Page */:
+                    return this.CreatePage(property);
+                    break;
+                case 2 /* Header */:
+                    return this.CreateHeader(property);
+                    break;
+                case 3 /* Button */:
+                    return this.CreateButton(property);
+                    break;
+                case 4 /* Input */:
+                    return this.CreateInput(property);
+                    break;
+            }
+        };
+
         DesignerControlFactory.prototype.CreatePage = function (property) {
             var $page = $('<div></div>');
             $page.data('role', 'page');
@@ -45,7 +62,7 @@
                 _this.log.Debug('bt click');
                 App.Instance.Designer.ShowProperty(property);
             });
-            return $bt;
+            return $bt.button();
         };
 
         DesignerControlFactory.prototype.CreateInput = function (property) {
