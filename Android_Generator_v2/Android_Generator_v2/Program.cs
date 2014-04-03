@@ -39,6 +39,8 @@ namespace Android_Generator_v2
             String pathToAndroidSup4 = @"libs\android-support-v4.jar";
             File.Copy(Path.Combine("Templates", pathToAndroidSup4), Path.Combine(appDirectory, pathToAndroidSup4), true);
 
+            Directory.CreateDirectory(Path.Combine("Templates", @"res\layout"));
+
             try {
                 DirectoryCopyManager.DirectoryCopy(Path.Combine("Templates", "res"), Path.Combine(appDirectory, "res"), true);
             }
