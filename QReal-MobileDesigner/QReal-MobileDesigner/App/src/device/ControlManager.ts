@@ -62,7 +62,7 @@ class ControlManager {
                     var container = <DesignerControls.BaseContainer<ControlProperty.Property>>self.FindById(e.target.id);
                     Helper.ArrayMove(container.Childrens, ui.item.startPos, ui.item.index());
                 },
-
+                delay: 100
             });
         /*
             .sortable({

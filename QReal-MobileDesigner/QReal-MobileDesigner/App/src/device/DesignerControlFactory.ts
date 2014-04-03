@@ -3,14 +3,14 @@ import Log = require("src/util/log/Log");
 import Enums = require("src/model/Enums");
 import DesignerControls = require("src/model/DesignerControls");
 import ControlProperty = require("src/model/ControlProperty");
-import AppControlFactory = require("src/device/DesignerControlFactory");
+import AppControlFactory = require("src/device/AppControlFactory");
 
 
-class DesignerControlFactory {
-
-    private log = new Log("DesignerControlFactory");
+class DesignerControlFactory extends AppControlFactory {
 
     constructor() {
+        super();
+        this.log = new Log("DesignerControlFactory");;
     }
 
     public CreateControl(property: ControlProperty.Property): JQuery {
@@ -31,22 +31,15 @@ class DesignerControlFactory {
     }
 
     public CreatePage(property: ControlProperty.PageProperty): JQuery {
-        var $page = $('<div></div>');
-        $page.data('role', 'page');
-        $page.attr('id', property.Id);
+        var $page = super.CreatePage(property);
         $page.attr('class', 'sortcontainer');
  
         return $page;
     }
 
     public CreateHeader(property: ControlProperty.HeaderProperty): JQuery {
-        var $header = $('<div></div>');
-        $header.attr('id', property.Id);
-        $header.attr('data-role', 'header');
+        var $header = super.CreateHeader(property);
         $header.addClass('nondraggable');
-        var $title = $('<h1></h1>');
-        $title.text(property.Title);
-        $header.append($title);
 
         $header.on('click', event => {
             event.preventDefault();
@@ -58,12 +51,7 @@ class DesignerControlFactory {
     }
 
     public CreateButton(property: ControlProperty.ButtonProperty): JQuery {
-        var $bt = $('<a href="#"></a>');
-
-        $bt.attr('data-role', 'button');
-        $bt.attr('id', property.Id);
-        $bt.attr('class', 'item');
-        $bt.text(property.Text);
+        var $bt = super.CreateButton(property);
 
         $bt.on('click', event => {
             event.preventDefault();
@@ -74,29 +62,15 @@ class DesignerControlFactory {
     }
 
     public CreateInput(property: ControlProperty.InputProperty): JQuery {
-        var $container = $("<div></div>");
-        $container.attr('data-role', 'fieldcontain');
-        var $label = $("<label></label>");
-        $label.text(property.Title);
-        $label.attr('for', property.Id);
+        var $input = super.CreateInput(property);
 
-        var $input = $('<input />');
-        $input.attr('type', 'text');
-
-        $input.attr('name', property.Name);
-        $input.attr('id', property.Id);
-        $container.append($label);
-        $container.append($input);
-
-        $container.on('click', event => {
+        $input.on('click', event => {
             event.preventDefault();
-            this.log.Debug('input click');
             App.Instance.Designer.ShowProperty(property);
         });
 
-        this.log.Debug('input: ', $container);
-        $container.find('input').textinput();
-        return $container;
+        $input.find('input').textinput();
+        return $input;
     }
 }
 

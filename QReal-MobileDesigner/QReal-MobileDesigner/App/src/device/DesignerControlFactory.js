@@ -1,7 +1,16 @@
-﻿define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/Enums"], function(require, exports, App, Log, Enums) {
-    var DesignerControlFactory = (function () {
+﻿var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/Enums", "src/device/AppControlFactory"], function(require, exports, App, Log, Enums, AppControlFactory) {
+    var DesignerControlFactory = (function (_super) {
+        __extends(DesignerControlFactory, _super);
         function DesignerControlFactory() {
+            _super.call(this);
             this.log = new Log("DesignerControlFactory");
+            ;
         }
         DesignerControlFactory.prototype.CreateControl = function (property) {
             switch (property.Type) {
@@ -21,9 +30,7 @@
         };
 
         DesignerControlFactory.prototype.CreatePage = function (property) {
-            var $page = $('<div></div>');
-            $page.data('role', 'page');
-            $page.attr('id', property.Id);
+            var $page = _super.prototype.CreatePage.call(this, property);
             $page.attr('class', 'sortcontainer');
 
             return $page;
@@ -31,13 +38,8 @@
 
         DesignerControlFactory.prototype.CreateHeader = function (property) {
             var _this = this;
-            var $header = $('<div></div>');
-            $header.attr('id', property.Id);
-            $header.attr('data-role', 'header');
+            var $header = _super.prototype.CreateHeader.call(this, property);
             $header.addClass('nondraggable');
-            var $title = $('<h1></h1>');
-            $title.text(property.Title);
-            $header.append($title);
 
             $header.on('click', function (event) {
                 event.preventDefault();
@@ -50,12 +52,7 @@
 
         DesignerControlFactory.prototype.CreateButton = function (property) {
             var _this = this;
-            var $bt = $('<a href="#"></a>');
-
-            $bt.attr('data-role', 'button');
-            $bt.attr('id', property.Id);
-            $bt.attr('class', 'item');
-            $bt.text(property.Text);
+            var $bt = _super.prototype.CreateButton.call(this, property);
 
             $bt.on('click', function (event) {
                 event.preventDefault();
@@ -66,33 +63,18 @@
         };
 
         DesignerControlFactory.prototype.CreateInput = function (property) {
-            var _this = this;
-            var $container = $("<div></div>");
-            $container.attr('data-role', 'fieldcontain');
-            var $label = $("<label></label>");
-            $label.text(property.Title);
-            $label.attr('for', property.Id);
+            var $input = _super.prototype.CreateInput.call(this, property);
 
-            var $input = $('<input />');
-            $input.attr('type', 'text');
-
-            $input.attr('name', property.Name);
-            $input.attr('id', property.Id);
-            $container.append($label);
-            $container.append($input);
-
-            $container.on('click', function (event) {
+            $input.on('click', function (event) {
                 event.preventDefault();
-                _this.log.Debug('input click');
                 App.Instance.Designer.ShowProperty(property);
             });
 
-            this.log.Debug('input: ', $container);
-            $container.find('input').textinput();
-            return $container;
+            $input.find('input').textinput();
+            return $input;
         };
         return DesignerControlFactory;
-    })();
+    })(AppControlFactory);
 
     
     return DesignerControlFactory;

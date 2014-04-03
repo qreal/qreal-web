@@ -7,7 +7,7 @@ import ControlProperty = require("src/model/ControlProperty");
 
 class AppControlFactory{
 
-    private log = new Log("AppControlFactory");
+    log = new Log("AppControlFactory");
 
     constructor() {
     }
