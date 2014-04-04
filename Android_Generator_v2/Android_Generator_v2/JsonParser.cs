@@ -142,7 +142,11 @@ namespace Android_Generator_v2
                     {
                         // read for get type value
                         reader.Read();
-                        if (reader.Value.Equals("Button"))
+                        if (reader.Value.Equals("Header"))
+                        {
+                            parseHeaderElement();
+                        }
+                        else if (reader.Value.Equals("Button"))
                         {
                             parseButtonElement(currentActivityName);
                         }               
@@ -160,6 +164,34 @@ namespace Android_Generator_v2
                     }
                 }
             }
+        }
+
+        private void parseHeaderElement()
+        {
+            HeaderElement headerElement = new HeaderElement();
+            while (!reader.TokenType.ToString().Equals("EndObject"))
+            {
+                reader.Read();
+                object value = reader.Value;
+                if (value != null)
+                {
+                    if (reader.TokenType.ToString().Equals("PropertyName"))
+                    {
+                        if (value.Equals("id"))
+                        {
+                            reader.Read();
+                            headerElement.setId(reader.Value.ToString());
+                        }
+                        if (value.Equals("title"))
+                        {
+                            reader.Read();
+                            headerElement.setTitle(reader.Value.ToString());
+                        }
+                    }
+                }
+            }
+
+            layoutBuilder.addElement(headerElement.getXml());
         }
 
         private void parseButtonElement(String currentActivityName)
