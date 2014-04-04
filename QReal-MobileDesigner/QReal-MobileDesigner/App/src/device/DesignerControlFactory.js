@@ -31,8 +31,7 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
 
         DesignerControlFactory.prototype.CreatePage = function (property) {
             var $page = _super.prototype.CreatePage.call(this, property);
-            $page.attr('class', 'sortcontainer');
-
+            $page.attr('class', 'sortcontainer connectedSortable');
             return $page;
         };
 

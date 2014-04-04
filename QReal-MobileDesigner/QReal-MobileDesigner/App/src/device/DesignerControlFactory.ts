@@ -32,8 +32,7 @@ class DesignerControlFactory extends AppControlFactory {
 
     public CreatePage(property: ControlProperty.PageProperty): JQuery {
         var $page = super.CreatePage(property);
-        $page.attr('class', 'sortcontainer');
- 
+        $page.attr('class', 'sortcontainer connectedSortable');
         return $page;
     }
 

@@ -39,7 +39,7 @@
             this.SelectPage(pageId);
             $('.sortcontainer').sortable({
                 forcePlaceholderSize: true,
-                containment: "parent",
+                containment: "document",
                 cancel: '.nondraggable',
                 start: function (event, ui) {
                     ui.placeholder.height(ui.item.height());
@@ -153,6 +153,8 @@
                         var headerProp = new ControlProperty.HeaderProperty(propertyId + '_header');
                         var header = new DesignerControls.Header(headerProp);
                         var $header = this.controlFactory.CreateHeader(headerProp);
+
+                        $header.attr('class', 'sortcontainer connectedSortable');
                         page.Childrens.unshift(header);
                         $page.prepend($header);
                         $page.trigger('pagecreate');
