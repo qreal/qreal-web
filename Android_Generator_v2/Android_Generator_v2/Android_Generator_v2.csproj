@@ -60,23 +60,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActivityBuilderInterface.cs" />
-    <Compile Include="AndroidActivityBuilder.cs" />
-    <Compile Include="AndroidLayoutBuilder.cs" />
-    <Compile Include="AndroidManifestBuilder.cs" />
-    <Compile Include="ButtonElement.cs" />
-    <Compile Include="Element.cs" />
-    <Compile Include="HeaderElement.cs" />
-    <Compile Include="InputElement.cs" />
-    <Compile Include="LayoutBuilderInterface.cs" />
+    <Compile Include="BuildersInterfaces\ActivityBuilderInterface.cs" />
+    <Compile Include="Builders\AndroidActivityBuilder.cs" />
+    <Compile Include="Builders\AndroidLayoutBuilder.cs" />
+    <Compile Include="Builders\AndroidManifestBuilder.cs" />
+    <Compile Include="Elements\ButtonElement.cs" />
+    <Compile Include="Elements\Element.cs" />
+    <Compile Include="Elements\HeaderElement.cs" />
+    <Compile Include="Elements\InputElement.cs" />
+    <Compile Include="BuildersInterfaces\LayoutBuilderInterface.cs" />
     <Compile Include="ManifestActivity.cs" />
     <Compile Include="DirectoryCopyManager.cs" />
     <Compile Include="JsonParser.cs" />
-    <Compile Include="ManifestBuilderInterface.cs" />
+    <Compile Include="BuildersInterfaces\ManifestBuilderInterface.cs" />
     <Compile Include="NotFoundElementException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TextElement.cs" />
+    <Compile Include="Elements\TextElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
