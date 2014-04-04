@@ -95,6 +95,8 @@ namespace Android_Generator_v2
         private static String xmlTemplate = @"
             <Button 
                 android:onClick=""onClick{0}""
+                android:layout_marginBottom=""2dp""
+                android:layout_marginTop=""2dp""
                 {1}
                 >
             </Button>";

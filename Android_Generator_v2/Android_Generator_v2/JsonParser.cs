@@ -248,7 +248,8 @@ namespace Android_Generator_v2
                         }
                         if (value.Equals("title"))
                         {
-
+                            reader.Read();
+                            inputElement.setTitle(reader.Value.ToString());
                         }
                         if (value.Equals("inline"))
                         {

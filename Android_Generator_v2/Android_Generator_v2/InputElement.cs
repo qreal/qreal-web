@@ -20,6 +20,11 @@ namespace Android_Generator_v2
             addOnCreateActions(init);
         }
 
+        public void setTitle(String title)
+        {
+            this.title = title;
+        }
+
         public void addXmlAttr(String attr, String value)
         {
             xmlAttrs.Append(String.Format(@"android:{0}=""{1}""
@@ -33,7 +38,7 @@ namespace Android_Generator_v2
 
         public String getXml()
         {
-            return String.Format(xmlTemplate, id, xmlAttrs.ToString());
+            return String.Format(xmlTemplate, id, xmlAttrs.ToString(), title);
         }
 
         public String getOnCreateActions()
@@ -59,14 +64,23 @@ namespace Android_Generator_v2
         private StringBuilder xmlAttrs = new StringBuilder();
         private HashSet<String> imports = new HashSet<String>();
         private String id;
+        private String title;
         private static String valueGetterTemplate = @"
             private String get{0}Value() {{
     	        return {0}.getText().toString();
         }}";
         private static String xmlTemplate = @"
+            <TextView 
+                android:layout_width=""match_parent""
+                android:layout_height=""wrap_content""
+                android:gravity=""left""
+                android:text=""{2}""/>
+
             <EditText 
                 android:id=""@+id/{0}""
                 android:layout_height=""wrap_content""
+                android:layout_marginBottom=""2dp""
+                android:layout_marginTop=""2dp""
                 {1}
                 >
             </EditText>";
