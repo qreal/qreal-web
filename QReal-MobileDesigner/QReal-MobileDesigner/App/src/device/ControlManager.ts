@@ -56,13 +56,15 @@ class ControlManager {
                 containment: "parent",
                 cancel: '.nondraggable',
                 start: function (event, ui) {
+                    ui.placeholder.height(ui.item.height());
                     ui.item.startPos = ui.item.index();
                 },
                 stop: function (e, ui) {
                     var container = <DesignerControls.BaseContainer<ControlProperty.Property>>self.FindById(e.target.id);
                     Helper.ArrayMove(container.Childrens, ui.item.startPos, ui.item.index());
                 },
-                delay: 100
+                delay: 100,
+                placeholder: "ui-state-highlight"
             });
         /*
             .sortable({
