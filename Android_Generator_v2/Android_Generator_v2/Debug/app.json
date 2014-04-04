@@ -1,26 +1,23 @@
 {
     "type": "App",
     "id": "",
-    "name": "HelloThemeE",
-    "projectPackage": "com.example.themee",
+    "name": "HeaderTest",
+    "projectPackage": "com.example.headertest",
     "Pages": [
         {
             "type": "Page",
             "id": "Main_Page",
+            "header": true,
             "Controls": [
                 {
-                    "type": "Button",
-                    "id": "button1",
-                    "text": "Button",
-                    "inline": false,
-                    "corners": true,
-                    "mini": true,
-                    "theme": "b"
+                    "type": "Header",
+                    "id": "Main_Page_header",
+                    "title": "Ololo"
                 },
                 {
                     "type": "Input",
-                    "id": "input2",
-                    "title": "Ololo",
+                    "id": "input1",
+                    "title": "Hello",
                     "inline": false,
                     "corners": true,
                     "mini": false,
@@ -30,78 +27,21 @@
                 },
                 {
                     "type": "Button",
-                    "id": "button3",
-                    "text": "Push me!",
+                    "id": "button2",
+                    "text": "Button",
                     "inline": false,
-                    "corners": false,
+                    "corners": true,
                     "mini": false,
-                    "theme": "e"
+                    "theme": "b"
                 },
                 {
                     "type": "Button",
-                    "id": "button4",
+                    "id": "button3",
                     "text": "Button",
                     "inline": false,
                     "corners": false,
                     "mini": true,
                     "theme": "a"
-                }
-            ]
-        },
-        {
-            "type": "Page",
-            "id": "SecondPage",
-            "Controls": [
-                {
-                    "type": "Button",
-                    "id": "button5",
-                    "text": "Button",
-                    "inline": false,
-                    "corners": true,
-                    "mini": false,
-                    "theme": "c"
-                },
-                {
-                    "type": "Input",
-                    "id": "input6",
-                    "title": "Title",
-                    "inline": false,
-                    "corners": true,
-                    "mini": false,
-                    "theme": "c",
-                    "placeholder": "",
-                    "name": ""
-                },
-                {
-                    "type": "Button",
-                    "id": "button7",
-                    "text": "Button",
-                    "inline": false,
-                    "corners": true,
-                    "mini": false,
-                    "theme": "c"
-                },
-                {
-                    "type": "Input",
-                    "id": "input8",
-                    "title": "Title",
-                    "inline": false,
-                    "corners": true,
-                    "mini": false,
-                    "theme": "c",
-                    "placeholder": "",
-                    "name": ""
-                },
-                {
-                    "type": "Input",
-                    "id": "input9",
-                    "title": "Title",
-                    "inline": false,
-                    "corners": true,
-                    "mini": false,
-                    "theme": "c",
-                    "placeholder": "",
-                    "name": ""
                 }
             ]
         }
