@@ -205,6 +205,8 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
                 controlManager.ChangeProperty(property.Id, 0 /* Id */, 1 /* Page */, $(this).val());
             });
 
+            var $themeProperty = this.CreateThemeSelect(property);
+
             var headerProperty = $('#propertyCheckboxTmpl').tmpl({
                 name: 'Header:',
                 value: property.Id
@@ -214,6 +216,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             });
 
             content.append(idProperty);
+            content.append($themeProperty);
             content.append(headerProperty);
             propertyPanel.appendTo('#properties-widget');
             propertyPanel.attr('id', 'propertyFor' + property.Id);
@@ -240,6 +243,22 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             propertyPanel.appendTo('#properties-widget');
             propertyPanel.attr('id', 'propertyFor' + property.Id);
             this.currentPropertyDiv = propertyPanel;
+        };
+
+        PropertiesView.prototype.CreateThemeSelect = function (property) {
+            var controlManager = App.Instance.Device.ControlManager;
+            var $themeProperty = $('#propertySelectTmpl').tmpl({
+                name: 'Theme:'
+            });
+
+            var themeSelect = $themeProperty.find('select');
+            $("#templateOptionItem").tmpl(this.themes).appendTo(themeSelect);
+
+            themeSelect.val(property.Theme);
+            themeSelect.change(function () {
+                controlManager.ChangeProperty(property.Id, 5 /* Theme */, property.Type, $(this).val());
+            });
+            return $themeProperty;
         };
         return PropertiesView;
     })();

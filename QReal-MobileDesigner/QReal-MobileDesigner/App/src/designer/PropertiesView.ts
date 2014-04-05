@@ -230,6 +230,8 @@ class PropertiesView {
             controlManager.ChangeProperty(property.Id, Enums.PropertyType.Id, Enums.ControlType.Page, $(this).val());
         });        
 
+        var $themeProperty = this.CreateThemeSelect(property);
+
         var headerProperty = $('#propertyCheckboxTmpl').tmpl(
             {
                 name: 'Header:',
@@ -241,6 +243,7 @@ class PropertiesView {
 
 
         content.append(idProperty);
+        content.append($themeProperty);
         content.append(headerProperty);
         propertyPanel.appendTo('#properties-widget');
         propertyPanel.attr('id', 'propertyFor' + property.Id);
@@ -268,6 +271,23 @@ class PropertiesView {
         propertyPanel.appendTo('#properties-widget');
         propertyPanel.attr('id', 'propertyFor' + property.Id);
         this.currentPropertyDiv = propertyPanel;
+    }
+
+    private CreateThemeSelect(property: any): JQuery {
+        var controlManager = App.Instance.Device.ControlManager;
+        var $themeProperty = $('#propertySelectTmpl').tmpl(
+            {
+                name: 'Theme:'
+            });
+
+        var themeSelect = $themeProperty.find('select');
+        $("#templateOptionItem").tmpl(this.themes).appendTo(themeSelect);
+
+        themeSelect.val(property.Theme);
+        themeSelect.change(function () {
+            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Theme, property.Type, $(this).val());
+        });
+        return $themeProperty;
     }
 
 }

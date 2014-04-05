@@ -29,7 +29,6 @@ class ControlManager {
     public Init(): void {
         this.log.Debug("Init");
         this.app = new DesignerControls.BaseContainer<ControlProperty.AppProperty>(new ControlProperty.AppProperty((<any>parent).projectName, (<any>parent).projectPackage));
-        this.app.Element = $("<div></div>");
     }
 
     /*** Pages ***/
@@ -176,6 +175,24 @@ class ControlManager {
                     $page.find('div[data-role="header"]').remove();
                     page.Childrens.splice(0, 1);
                 }
+                break;
+            case Enums.PropertyType.Theme:
+                var theme = newValue;
+                $.mobile.activePage.find('.ui-btn')
+                    .removeClass('ui-btn-up-a ui-btn-up-b ui-btn-up-c ui-btn-up-d ui-btn-up-e ui-btn-hover-a ui-btn-hover-b ui-btn-hover-c ui-btn-hover-d ui-btn-hover-e')
+                    .addClass('ui-btn-up-' + theme)
+                    .attr('data-theme', theme);
+
+                //reset the header/footer widgets
+                $.mobile.activePage.find('.ui-header, .ui-footer')
+                    .removeClass('ui-bar-a ui-bar-b ui-bar-c ui-bar-d ui-bar-e')
+                    .addClass('ui-bar-' + theme)
+                    .attr('data-theme', theme);
+
+                //reset the page widget
+                $.mobile.activePage.removeClass('ui-body-a ui-body-b ui-body-c ui-body-d ui-body-e')
+                    .addClass('ui-body-' + theme)
+                    .attr('data-theme', theme);
                 break;
         }
     }

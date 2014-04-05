@@ -66,6 +66,7 @@ module ControlProperty {
     export class PageProperty extends Property {
 
         private header: boolean;
+        private theme: string;
 
         public get Header(): boolean {
             return this.header;
@@ -75,8 +76,18 @@ module ControlProperty {
             this.header = value;
         }
 
+        public get Theme(): string {
+            return this.theme;
+        }
+
+        public set Theme(value: string) {
+            this.theme = value;
+        }
+
         constructor(id: string) {
             super(Enums.ControlType.Page, id);
+            this.header = false;
+            this.theme = 'c';
         }
     }
 

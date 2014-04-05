@@ -85,6 +85,8 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
             __extends(PageProperty, _super);
             function PageProperty(id) {
                 _super.call(this, 1 /* Page */, id);
+                this.header = false;
+                this.theme = 'c';
             }
             Object.defineProperty(PageProperty.prototype, "Header", {
                 get: function () {
@@ -92,6 +94,18 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
                 },
                 set: function (value) {
                     this.header = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+
+            Object.defineProperty(PageProperty.prototype, "Theme", {
+                get: function () {
+                    return this.theme;
+                },
+                set: function (value) {
+                    this.theme = value;
                 },
                 enumerable: true,
                 configurable: true
