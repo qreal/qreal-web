@@ -57,13 +57,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             var propertyPanel = $('#propertiesTmpl').tmpl({});
             var dialogContent = propertyPanel.children("#property-table");
 
-            var idProperty = $('#propertyTextTmpl').tmpl({
-                name: 'Id:',
-                value: property.Id
-            });
-            idProperty.find('input').change(function () {
-                controlManager.ChangeProperty(property.Id, 0 /* Id */, 3 /* Button */, $(this).val());
-            });
+            var $idProperty = this.CreateIdRow(property);
 
             var textProperty = $('#propertyTextTmpl').tmpl({
                 name: 'Text:',
@@ -107,24 +101,14 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
                 controlManager.ChangeProperty(property.Id, 4 /* Mini */, 3 /* Button */, $(this).val());
             });
 
-            var themeProperty = $('#propertySelectTmpl').tmpl({
-                name: 'Theme:'
-            });
+            var $themeProperty = this.CreateThemeRow(property);
 
-            var themeSelect = themeProperty.find('select');
-            $("#templateOptionItem").tmpl(this.themes).appendTo(themeSelect);
-
-            themeSelect.val(property.Theme);
-            themeSelect.change(function () {
-                controlManager.ChangeProperty(property.Id, 5 /* Theme */, 3 /* Button */, $(this).val());
-            });
-
-            dialogContent.append(idProperty);
+            dialogContent.append($idProperty);
             dialogContent.append(textProperty);
             dialogContent.append(inlineProperty);
             dialogContent.append(cornersProperty);
             dialogContent.append(miniProperty);
-            dialogContent.append(themeProperty);
+            dialogContent.append($themeProperty);
 
             propertyPanel.appendTo('#properties-widget');
             propertyPanel.attr('id', 'propertyFor' + property.Id);
@@ -139,13 +123,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             var propertyPanel = $('#propertiesTmpl').tmpl({});
             var dialogContent = propertyPanel.children("#property-table");
 
-            var idProperty = $('#propertyTextTmpl').tmpl({
-                name: 'Id:',
-                value: property.Id
-            });
-            idProperty.find('input').change(function () {
-                controlManager.ChangeProperty(property.Id, 0 /* Id */, 4 /* Input */, $(this).val());
-            });
+            var $idProperty = this.CreateIdRow(property);
 
             var titleProperty = $('#propertyTextTmpl').tmpl({
                 name: 'Title:',
@@ -167,22 +145,12 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
                 controlManager.ChangeProperty(property.Id, 4 /* Mini */, 4 /* Input */, $(this).val());
             });
 
-            var themeProperty = $('#propertySelectTmpl').tmpl({
-                name: 'Theme:'
-            });
+            var $themeProperty = this.CreateThemeRow(property);
 
-            var themeSelect = themeProperty.find('select');
-            $("#templateOptionItem").tmpl(this.themes).appendTo(themeSelect);
-
-            themeSelect.val(property.Theme);
-            themeSelect.change(function () {
-                controlManager.ChangeProperty(property.Id, 5 /* Theme */, 4 /* Input */, $(this).val());
-            });
-
-            dialogContent.append(idProperty);
+            dialogContent.append($idProperty);
             dialogContent.append(titleProperty);
             dialogContent.append(miniProperty);
-            dialogContent.append(themeProperty);
+            dialogContent.append($themeProperty);
 
             propertyPanel.appendTo('#properties-widget');
             propertyPanel.attr('id', 'propertyFor' + property.Id);
@@ -197,27 +165,19 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             var propertyPanel = $('#propertiesTmpl').tmpl({});
             var content = propertyPanel.children("#property-table");
 
-            var idProperty = $('#propertyTextTmpl').tmpl({
-                name: 'Id:',
-                value: property.Id
-            });
-            idProperty.find('input').change(function () {
-                controlManager.ChangeProperty(property.Id, 0 /* Id */, 1 /* Page */, $(this).val());
-            });
-
-            var $themeProperty = this.CreateThemeSelect(property);
-
-            var headerProperty = $('#propertyCheckboxTmpl').tmpl({
+            var $idProperty = this.CreateIdRow(property);
+            var $themeProperty = this.CreateThemeRow(property);
+            var $headerProperty = $('#propertyCheckboxTmpl').tmpl({
                 name: 'Header:',
                 value: property.Id
             });
-            headerProperty.find('input').change(function () {
+            $headerProperty.find('input').change(function () {
                 controlManager.ChangeProperty(property.Id, 7 /* Header */, 1 /* Page */, $(this).is(":checked") ? 'yes' : 'no');
             });
 
-            content.append(idProperty);
+            content.append($idProperty);
             content.append($themeProperty);
-            content.append(headerProperty);
+            content.append($headerProperty);
             propertyPanel.appendTo('#properties-widget');
             propertyPanel.attr('id', 'propertyFor' + property.Id);
             this.currentPropertyDiv = propertyPanel;
@@ -231,13 +191,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             var propertyPanel = $('#propertiesTmpl').tmpl({});
             var content = propertyPanel.children("#property-table");
 
-            var titleProperty = $('#propertyTextTmpl').tmpl({
-                name: 'Title:',
-                value: property.Title
-            });
-            titleProperty.find('input').change(function () {
-                controlManager.ChangeProperty(property.Id, 6 /* Title */, 2 /* Header */, $(this).val());
-            });
+            var titleProperty = this.CreateTitleRow(property);
 
             content.append(titleProperty);
             propertyPanel.appendTo('#properties-widget');
@@ -245,18 +199,45 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             this.currentPropertyDiv = propertyPanel;
         };
 
-        PropertiesView.prototype.CreateThemeSelect = function (property) {
+        PropertiesView.prototype.CreateThemeRow = function (property) {
+            return this.CreateSelectRow('Theme:', property.Theme, 5 /* Theme */, property);
+        };
+
+        PropertiesView.prototype.CreateIdRow = function (property) {
+            return this.CreateTextRow('Id:', property.Id, 0 /* Id */, property);
+        };
+
+        PropertiesView.prototype.CreateTitleRow = function (property) {
+            return this.CreateTextRow('Title:', property.Title, 6 /* Title */, property);
+        };
+
+        //private CreateHeaderRow(property: any): JQuery {
+        //    return this.CreateTextRow('Header:', property.Header, Enums.PropertyType.Header, property);
+        //}
+        PropertiesView.prototype.CreateTextRow = function (name, value, propertyType, property) {
+            var controlManager = App.Instance.Device.ControlManager;
+            var $textProperty = $('#propertyTextTmpl').tmpl({
+                name: name,
+                value: value
+            });
+            $textProperty.find('input').change(function () {
+                controlManager.ChangeProperty(property.Id, propertyType, property.Type, $(this).val());
+            });
+            return $textProperty;
+        };
+
+        PropertiesView.prototype.CreateSelectRow = function (name, value, propertyType, property) {
             var controlManager = App.Instance.Device.ControlManager;
             var $themeProperty = $('#propertySelectTmpl').tmpl({
-                name: 'Theme:'
+                name: name
             });
 
             var themeSelect = $themeProperty.find('select');
             $("#templateOptionItem").tmpl(this.themes).appendTo(themeSelect);
 
-            themeSelect.val(property.Theme);
+            themeSelect.val(value);
             themeSelect.change(function () {
-                controlManager.ChangeProperty(property.Id, 5 /* Theme */, property.Type, $(this).val());
+                controlManager.ChangeProperty(property.Id, propertyType, property.Type, $(this).val());
             });
             return $themeProperty;
         };
