@@ -147,8 +147,9 @@
             var $page = $(page.Properties.$Id);
             switch (propertyType) {
                 case 7 /* Header */:
-                    page.Properties.Header = newValue == 'yes';
-                    if (newValue == 'yes') {
+                    var cond = newValue == "true";
+                    page.Properties.Header = cond;
+                    if (cond) {
                         var headerProp = new ControlProperty.HeaderProperty(propertyId + '_header');
                         var header = new DesignerControls.Header(headerProp);
                         var $header = this.controlFactory.CreateHeader(headerProp);

@@ -58,56 +58,17 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             var dialogContent = propertyPanel.children("#property-table");
 
             var $idProperty = this.CreateIdRow(property);
-
-            var textProperty = $('#propertyTextTmpl').tmpl({
-                name: 'Text:',
-                value: property.Text
-            });
-
-            textProperty.find('input').change(function () {
-                controlManager.ChangeProperty(property.Id, 1 /* Text */, 3 /* Button */, $(this).val());
-            });
-
-            var inlineProperty = $('#propertySelectTmpl').tmpl({
-                name: 'Inline:'
-            });
-
-            var inlineSelect = inlineProperty.find('select');
-            $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(inlineSelect);
-
-            inlineSelect.val(String(property.Inline));
-            inlineSelect.change(function () {
-                controlManager.ChangeProperty(property.Id, 2 /* Inline */, 3 /* Button */, $(this).val());
-            });
-            var cornersProperty = $('#propertySelectTmpl').tmpl({
-                name: 'Rounded corners:'
-            });
-            var cornersSelect = cornersProperty.find('select');
-            $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(cornersSelect);
-
-            cornersSelect.val(String(property.Corners));
-            cornersSelect.change(function () {
-                controlManager.ChangeProperty(property.Id, 3 /* Corners */, 3 /* Button */, $(this).val());
-            });
-
-            var miniProperty = $('#propertySelectTmpl').tmpl({
-                name: 'Mini:'
-            });
-            var miniSelect = miniProperty.find('select');
-            $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(miniSelect);
-
-            miniSelect.val(String(property.Mini));
-            miniSelect.change(function () {
-                controlManager.ChangeProperty(property.Id, 4 /* Mini */, 3 /* Button */, $(this).val());
-            });
-
+            var $textProperty = this.CreateInnerTextRow(property);
+            var $inlineProperty = this.CreateInlineRow(property);
+            var $cornersProperty = this.CreateRoundCornersRow(property);
+            var $miniProperty = this.CreateMiniRow(property);
             var $themeProperty = this.CreateThemeRow(property);
 
             dialogContent.append($idProperty);
-            dialogContent.append(textProperty);
-            dialogContent.append(inlineProperty);
-            dialogContent.append(cornersProperty);
-            dialogContent.append(miniProperty);
+            dialogContent.append($textProperty);
+            dialogContent.append($inlineProperty);
+            dialogContent.append($cornersProperty);
+            dialogContent.append($miniProperty);
             dialogContent.append($themeProperty);
 
             propertyPanel.appendTo('#properties-widget');
@@ -120,41 +81,22 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             var self = this;
             var controlManager = App.Instance.Device.ControlManager;
 
-            var propertyPanel = $('#propertiesTmpl').tmpl({});
-            var dialogContent = propertyPanel.children("#property-table");
+            var $propertyPanel = $('#propertiesTmpl').tmpl({});
+            var $dialogContent = $propertyPanel.children("#property-table");
 
             var $idProperty = this.CreateIdRow(property);
-
-            var titleProperty = $('#propertyTextTmpl').tmpl({
-                name: 'Title:',
-                value: property.Title
-            });
-
-            titleProperty.find('input').change(function () {
-                controlManager.ChangeProperty(property.Id, 6 /* Title */, 4 /* Input */, $(this).val());
-            });
-
-            var miniProperty = $('#propertySelectTmpl').tmpl({
-                name: 'Mini:'
-            });
-            var miniSelect = miniProperty.find('select');
-            $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(miniSelect);
-
-            miniSelect.val(String(property.Mini));
-            miniSelect.change(function () {
-                controlManager.ChangeProperty(property.Id, 4 /* Mini */, 4 /* Input */, $(this).val());
-            });
-
+            var $titleProperty = this.CreateTitleRow(property);
+            var $miniProperty = this.CreateMiniRow(property);
             var $themeProperty = this.CreateThemeRow(property);
 
-            dialogContent.append($idProperty);
-            dialogContent.append(titleProperty);
-            dialogContent.append(miniProperty);
-            dialogContent.append($themeProperty);
+            $dialogContent.append($idProperty);
+            $dialogContent.append($titleProperty);
+            $dialogContent.append($miniProperty);
+            $dialogContent.append($themeProperty);
 
-            propertyPanel.appendTo('#properties-widget');
-            propertyPanel.attr('id', 'propertyFor' + property.Id);
-            this.currentPropertyDiv = propertyPanel;
+            $propertyPanel.appendTo('#properties-widget');
+            $propertyPanel.attr('id', 'propertyFor' + property.Id);
+            this.currentPropertyDiv = $propertyPanel;
         };
 
         PropertiesView.prototype.ShowProperty_Page = function (property) {
@@ -167,13 +109,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
 
             var $idProperty = this.CreateIdRow(property);
             var $themeProperty = this.CreateThemeRow(property);
-            var $headerProperty = $('#propertyCheckboxTmpl').tmpl({
-                name: 'Header:',
-                value: property.Id
-            });
-            $headerProperty.find('input').change(function () {
-                controlManager.ChangeProperty(property.Id, 7 /* Header */, 1 /* Page */, $(this).is(":checked") ? 'yes' : 'no');
-            });
+            var $headerProperty = this.CreateHeaderRow(property);
 
             content.append($idProperty);
             content.append($themeProperty);
@@ -199,16 +135,36 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             this.currentPropertyDiv = propertyPanel;
         };
 
-        PropertiesView.prototype.CreateThemeRow = function (property) {
-            return this.CreateSelectRow('Theme:', property.Theme, 5 /* Theme */, property);
-        };
-
         PropertiesView.prototype.CreateIdRow = function (property) {
             return this.CreateTextRow('Id:', property.Id, 0 /* Id */, property);
         };
 
+        PropertiesView.prototype.CreateInnerTextRow = function (property) {
+            return this.CreateTextRow('Text:', property.Text, 1 /* Text */, property);
+        };
+
+        PropertiesView.prototype.CreateThemeRow = function (property) {
+            return this.CreateSelectRow('Theme:', property.Theme, 5 /* Theme */, this.themes, property);
+        };
+
         PropertiesView.prototype.CreateTitleRow = function (property) {
             return this.CreateTextRow('Title:', property.Title, 6 /* Title */, property);
+        };
+
+        PropertiesView.prototype.CreateMiniRow = function (property) {
+            return this.CreateTrueFalseSelectRow('Mini:', String(property.Mini), 4 /* Mini */, property);
+        };
+
+        PropertiesView.prototype.CreateRoundCornersRow = function (property) {
+            return this.CreateTrueFalseSelectRow('Rounded corners:', String(property.Corners), 3 /* Corners */, property);
+        };
+
+        PropertiesView.prototype.CreateInlineRow = function (property) {
+            return this.CreateTrueFalseSelectRow('Inline:', String(property.Inline), 2 /* Inline */, property);
+        };
+
+        PropertiesView.prototype.CreateHeaderRow = function (property) {
+            return this.CreateTrueFalseSelectRow('Header:', String(property.Header), 7 /* Header */, property);
         };
 
         //private CreateHeaderRow(property: any): JQuery {
@@ -226,14 +182,30 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             return $textProperty;
         };
 
-        PropertiesView.prototype.CreateSelectRow = function (name, value, propertyType, property) {
+        PropertiesView.prototype.CreateSelectRow = function (name, value, propertyType, options, property) {
             var controlManager = App.Instance.Device.ControlManager;
             var $themeProperty = $('#propertySelectTmpl').tmpl({
                 name: name
             });
 
             var themeSelect = $themeProperty.find('select');
-            $("#templateOptionItem").tmpl(this.themes).appendTo(themeSelect);
+            $("#templateOptionItem").tmpl(options).appendTo(themeSelect);
+
+            themeSelect.val(value);
+            themeSelect.change(function () {
+                controlManager.ChangeProperty(property.Id, propertyType, property.Type, $(this).val());
+            });
+            return $themeProperty;
+        };
+
+        PropertiesView.prototype.CreateTrueFalseSelectRow = function (name, value, propertyType, property) {
+            var controlManager = App.Instance.Device.ControlManager;
+            var $themeProperty = $('#propertySelectTmpl').tmpl({
+                name: name
+            });
+
+            var themeSelect = $themeProperty.find('select');
+            $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(themeSelect);
 
             themeSelect.val(value);
             themeSelect.change(function () {
