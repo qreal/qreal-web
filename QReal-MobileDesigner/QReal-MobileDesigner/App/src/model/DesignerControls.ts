@@ -48,6 +48,17 @@ module DesignerControls {
 
     export class Page extends BaseContainer<ControlProperty.PageProperty> {
 
+        private header: Header;
+        //private footer: BaseContainer<ControlProperty.HeaderProperty>;
+
+        public get Header(): Header {
+            return this.header;
+        }
+
+        public set Header(value: Header) {
+            this.header = value;
+        }
+
         constructor(properties: ControlProperty.PageProperty) {
             super(properties);
             this.log = new Log("Page");

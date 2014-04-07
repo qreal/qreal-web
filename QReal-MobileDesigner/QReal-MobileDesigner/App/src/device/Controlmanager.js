@@ -134,8 +134,8 @@
                         var header = new DesignerControls.Header(headerProp);
                         var $header = this.controlFactory.CreateHeader(headerProp);
 
-                        $header.attr('class', 'sortcontainer connectedSortable');
-                        page.Childrens.unshift(header);
+                        //$header.attr('class', 'sortcontainer connectedSortable');
+                        page.Header = header;
                         $page.prepend($header);
                         $page.trigger('pagecreate');
                     } else {
@@ -238,6 +238,10 @@
                 case 1 /* Page */:
                     var page = element;
                     $html = this.appControlFactory.CreatePage(page.Properties);
+                    if (page.Header) {
+                        var $header = this.appControlFactory.CreateHeader(page.Header.Properties);
+                        $html.prepend($header);
+                    }
                     for (var i in page.Childrens) {
                         $html.find('div[data-role=content]').append(this.GenerateHtml(page.Childrens[i]));
                     }
@@ -278,6 +282,7 @@
                 case 1 /* Page */:
                     obj = element.Properties;
                     var page = element;
+                    obj['Header'] = page.Header.Properties;
                     obj["Controls"] = [];
                     page.Childrens.forEach(function (el) {
                         obj["Controls"].push(self.AppToSerializeObj(el));
@@ -313,10 +318,21 @@
         };
 
         ControlManager.prototype.FindInContainer = function (id, control) {
-            //this.log.Debug("FindInContainer: " + id, control);
+            this.log.Debug("FindInContainer: " + id, control);
+            if (!control) {
+                return null;
+            }
             if (control.Properties.Id === id) {
                 return control;
             }
+            if (control instanceof DesignerControls.Page) {
+                var page = control;
+                var res = this.FindInContainer(id, page.Header);
+                if (res) {
+                    return res;
+                }
+            }
+
             if (control instanceof DesignerControls.BaseContainer) {
                 var childrens = control.Childrens;
                 for (var i in childrens) {

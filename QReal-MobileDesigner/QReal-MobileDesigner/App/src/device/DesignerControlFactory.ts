@@ -43,12 +43,13 @@ class DesignerControlFactory extends AppControlFactory {
                 forcePlaceholderSize: true,
                 containment: "document",
                 cancel: '.nondraggable',
-                start: function (event, ui) {
+                start: function (event, ui) {                   
                     ui.placeholder.height(ui.item.height());
                     ui.item.startPos = ui.item.index();
                 },
                 stop: function (e, ui) {
-                    var container = <DesignerControls.BaseContainer<ControlProperty.Property>>controlManager.FindById(e.target.id);
+                     console.log
+                    var container = <DesignerControls.BaseContainer<ControlProperty.Property>>controlManager.FindById(property.Id);
                     Helper.ArrayMove(container.Childrens, ui.item.startPos, ui.item.index());
                 },
                 delay: 100,

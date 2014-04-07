@@ -46,7 +46,7 @@ class ControlManager {
         var $page = this.controlFactory.CreatePage(page.Properties);
         $page.trigger('pagecreate');
         $('body').append($page);
-       
+
         this.app.Childrens.push(page);
         this.SelectPage(pageId);
         /*
@@ -152,8 +152,8 @@ class ControlManager {
                     var header = new DesignerControls.Header(headerProp);
                     var $header = this.controlFactory.CreateHeader(headerProp);
 
-                    $header.attr('class', 'sortcontainer connectedSortable');
-                    page.Childrens.unshift(header);
+                    //$header.attr('class', 'sortcontainer connectedSortable');
+                    page.Header = header;
                     $page.prepend($header);
                     $page.trigger('pagecreate');
                 } else {
@@ -199,7 +199,7 @@ class ControlManager {
         switch (propertyType) {
             case Enums.PropertyType.Id:
                 $(button.Properties.$Id).attr('id', newValue);
-                button.Properties.Id = newValue;                
+                button.Properties.Id = newValue;
                 break;
             case Enums.PropertyType.Text:
                 $(button.Properties.$Id).find('.ui-btn-text').text(newValue);
@@ -232,7 +232,7 @@ class ControlManager {
         switch (propertyType) {
             case Enums.PropertyType.Id:
                 $(input.Properties.$Id).find('input').attr('id', newValue);
-                input.Properties.Id = newValue;                
+                input.Properties.Id = newValue;
                 break;
             case Enums.PropertyType.Title:
                 $(input.Properties.$Id).parent().parent().find('label').text(newValue);
@@ -252,7 +252,7 @@ class ControlManager {
     }
 
     private GenerateHtml(element: DesignerControls.BaseControl<ControlProperty.Property>): JQuery {
-        var $html;
+        var $html: JQuery;
         switch (element.Properties.Type) {
             case Enums.ControlType.App:
                 $html = this.appControlFactory.CreateApp(element.Properties);
@@ -264,6 +264,10 @@ class ControlManager {
             case Enums.ControlType.Page:
                 var page = <DesignerControls.Page>element;
                 $html = this.appControlFactory.CreatePage(page.Properties);
+                if (page.Header) {
+                    var $header = this.appControlFactory.CreateHeader(page.Header.Properties);
+                    $html.prepend($header)
+                }
                 for (var i in page.Childrens) {
                     $html.find('div[data-role=content]').append(this.GenerateHtml(page.Childrens[i]))
                 }
@@ -304,7 +308,8 @@ class ControlManager {
                 break;
             case Enums.ControlType.Page:
                 obj = element.Properties;
-                var page = <DesignerControls.BaseContainer<ControlProperty.Property>>element;
+                var page = <DesignerControls.Page>element;
+                obj['Header'] = page.Header.Properties;
                 obj["Controls"] = [];
                 page.Childrens.forEach(function (el) {
                     obj["Controls"].push(self.AppToSerializeObj(el));
@@ -332,7 +337,7 @@ class ControlManager {
 
     public OnDragOver(e) {
         e.preventDefault();
-    }       
+    }
 
     public FindById(id: string): DesignerControls.BaseControl<ControlProperty.Property> {
         //this.log.Debug("FindById: " + id);
@@ -340,10 +345,21 @@ class ControlManager {
     }
 
     private FindInContainer(id: string, control: DesignerControls.BaseControl<ControlProperty.Property>): DesignerControls.BaseControl<ControlProperty.Property> {
-        //this.log.Debug("FindInContainer: " + id, control);
+        this.log.Debug("FindInContainer: " + id, control);
+        if (!control) {
+            return null;
+        }
         if (control.Properties.Id === id) {
             return control;
         }
+        if (control instanceof DesignerControls.Page) {
+            var page = <DesignerControls.Page> control;          
+            var res = this.FindInContainer(id, page.Header);
+            if (res) {
+                return res;
+            }
+        }
+
         if (control instanceof DesignerControls.BaseContainer) {
             var childrens = (<DesignerControls.BaseContainer<ControlProperty.Property>>control).Childrens;
             for (var i in childrens) {

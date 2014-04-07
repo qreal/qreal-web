@@ -57,6 +57,18 @@ define(["require", "exports", "src/util/log/Log"], function(require, exports, Lo
                 _super.call(this, properties);
                 this.log = new Log("Page");
             }
+            Object.defineProperty(Page.prototype, "Header", {
+                //private footer: BaseContainer<ControlProperty.HeaderProperty>;
+                get: function () {
+                    return this.header;
+                },
+                set: function (value) {
+                    this.header = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
             return Page;
         })(BaseContainer);
         DesignerControls.Page = Page;

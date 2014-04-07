@@ -49,7 +49,8 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
                     ui.item.startPos = ui.item.index();
                 },
                 stop: function (e, ui) {
-                    var container = controlManager.FindById(e.target.id);
+                    console.log;
+                    var container = controlManager.FindById(property.Id);
                     Helper.ArrayMove(container.Childrens, ui.item.startPos, ui.item.index());
                 },
                 delay: 100,
