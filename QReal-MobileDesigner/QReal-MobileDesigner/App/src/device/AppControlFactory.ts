@@ -5,7 +5,7 @@ import DesignerControls = require("src/model/DesignerControls");
 import ControlProperty = require("src/model/ControlProperty");
 
 
-class AppControlFactory{
+class AppControlFactory {
 
     log = new Log("AppControlFactory");
 
@@ -38,10 +38,26 @@ class AppControlFactory{
     }
 
     public CreatePage(property: ControlProperty.PageProperty): JQuery {
-        var $page = $('<div>');
-        $page.attr('data-role', 'page');
-        $page.attr('data-theme', property.Theme);
-        $page.attr('id', property.Id);
+        var $page = $('<div>', {
+            'id': property.Id,
+            'data-role': 'page',
+            'data-theme': property.Theme       
+        });        
+        var $header = $('<div/>', {
+            'data-role': 'header',
+            'data-position': 'fixed'
+        });
+        $('<h1>sdfgdsfg</h1>').appendTo($header);
+        var $content = $('<div/>', {
+            'data-role': 'content'
+        });
+        var $footer = $('<div/>', {
+            'data-role': 'footer',
+            'data-position': 'fixed'
+        });
+        //$page.append($header);
+        $page.append($content);
+        //$page.append($footer);
         return $page;
     }
 

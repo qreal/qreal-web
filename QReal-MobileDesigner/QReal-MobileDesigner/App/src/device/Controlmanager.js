@@ -1,4 +1,4 @@
-﻿define(["require", "exports", "src/Application", "src/util/log/Log", "src/util/Helper", "src/model/Enums", "src/model/ControlProperty", "src/model/DesignerControls", "src/device/DesignerControlFactory", "src/device/AppControlFactory"], function(require, exports, App, Log, Helper, Enums, ControlProperty, DesignerControls, DesignerControlFactory, AppControlFactory) {
+﻿define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/Enums", "src/model/ControlProperty", "src/model/DesignerControls", "src/device/DesignerControlFactory", "src/device/AppControlFactory"], function(require, exports, App, Log, Enums, ControlProperty, DesignerControls, DesignerControlFactory, AppControlFactory) {
     var ControlManager = (function () {
         function ControlManager() {
             this.log = new Log("ControlManager");
@@ -14,7 +14,6 @@
 
         /*** Pages ***/
         ControlManager.prototype.CreatePage = function (pageId) {
-            var _this = this;
             this.log.Debug("CreatePage: " + pageId);
             var self = this;
             if (this.ContainsId(pageId)) {
@@ -27,30 +26,11 @@
 
             var page = new DesignerControls.Page(new ControlProperty.PageProperty(pageId));
             var $page = this.controlFactory.CreatePage(page.Properties);
-            $page.on('drop', function (event) {
-                return _this.OnDrop(event, page);
-            });
-            $page.on('dragover', function (event) {
-                return _this.OnDragOver(event);
-            });
-            this.app.Childrens.push(page);
+            $page.trigger('pagecreate');
             $('body').append($page);
+
+            this.app.Childrens.push(page);
             this.SelectPage(pageId);
-            $('.sortcontainer').sortable({
-                forcePlaceholderSize: true,
-                containment: "document",
-                cancel: '.nondraggable',
-                start: function (event, ui) {
-                    ui.placeholder.height(ui.item.height());
-                    ui.item.startPos = ui.item.index();
-                },
-                stop: function (e, ui) {
-                    var container = self.FindById(e.target.id);
-                    Helper.ArrayMove(container.Childrens, ui.item.startPos, ui.item.index());
-                },
-                delay: 100,
-                placeholder: "ui-state-highlight"
-            });
 
             /*
             .sortable({
@@ -259,7 +239,7 @@
                     var page = element;
                     $html = this.appControlFactory.CreatePage(page.Properties);
                     for (var i in page.Childrens) {
-                        $html.append(this.GenerateHtml(page.Childrens[i]));
+                        $html.find('div[data-role=content]').append(this.GenerateHtml(page.Childrens[i]));
                     }
                     break;
                 case 3 /* Button */:
@@ -312,14 +292,15 @@
             return obj;
         };
 
-        ControlManager.prototype.OnDrop = function (event, page) {
+        ControlManager.prototype.OnDrop = function (event, pageId) {
             this.log.Debug("OnDrop, event: ", event);
             event.preventDefault();
             var controlId = event.originalEvent.dataTransfer.getData("Text");
             var control = App.Instance.Device.ControlManager.CreateControl(controlId);
             var $control = this.controlFactory.CreateControl(control.Properties);
+            var page = this.FindById(pageId);
             page.Childrens.push(control);
-            $(page.Properties.$Id).append($control);
+            $(page.Properties.$Id).find('div[data-role=content]').append($control);
         };
 
         ControlManager.prototype.OnDragOver = function (e) {

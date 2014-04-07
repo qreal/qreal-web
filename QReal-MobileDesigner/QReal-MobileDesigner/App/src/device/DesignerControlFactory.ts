@@ -1,6 +1,7 @@
 ﻿import App = require("src/Application");
 import Log = require("src/util/log/Log");
 import Enums = require("src/model/Enums");
+import Helper = require("src/util/Helper");
 import DesignerControls = require("src/model/DesignerControls");
 import ControlProperty = require("src/model/ControlProperty");
 import AppControlFactory = require("src/device/AppControlFactory");
@@ -32,7 +33,28 @@ class DesignerControlFactory extends AppControlFactory {
 
     public CreatePage(property: ControlProperty.PageProperty): JQuery {
         var $page = super.CreatePage(property);
-        $page.attr('class', 'sortcontainer connectedSortable');
+        var $content = $page.find('div[data-role=content]');
+        var controlManager = App.Instance.Device.ControlManager;
+        $page.on('drop', event => controlManager.OnDrop(event, property.Id));
+        $page.on('dragover', event => controlManager.OnDragOver(event));
+
+        (<any>$content).sortable(
+            {
+                forcePlaceholderSize: true,
+                containment: "document",
+                cancel: '.nondraggable',
+                start: function (event, ui) {
+                    ui.placeholder.height(ui.item.height());
+                    ui.item.startPos = ui.item.index();
+                },
+                stop: function (e, ui) {
+                    var container = <DesignerControls.BaseContainer<ControlProperty.Property>>controlManager.FindById(e.target.id);
+                    Helper.ArrayMove(container.Childrens, ui.item.startPos, ui.item.index());
+                },
+                delay: 100,
+                placeholder: "ui-state-highlight"
+            });
+        //$page.attr('class', 'sortcontainer');
         return $page;
     }
 

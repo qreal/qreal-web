@@ -44,27 +44,11 @@ class ControlManager {
 
         var page = new DesignerControls.Page(new ControlProperty.PageProperty(pageId));
         var $page = this.controlFactory.CreatePage(page.Properties);
-        $page.on('drop', event => this.OnDrop(event, page));
-        $page.on('dragover', event => this.OnDragOver(event));
-        this.app.Childrens.push(page);
+        $page.trigger('pagecreate');
         $('body').append($page);
+       
+        this.app.Childrens.push(page);
         this.SelectPage(pageId);
-        (<any>$('.sortcontainer')).sortable(
-            {
-                forcePlaceholderSize: true,
-                containment: "document",
-                cancel: '.nondraggable',
-                start: function (event, ui) {
-                    ui.placeholder.height(ui.item.height());
-                    ui.item.startPos = ui.item.index();
-                },
-                stop: function (e, ui) {
-                    var container = <DesignerControls.BaseContainer<ControlProperty.Property>>self.FindById(e.target.id);
-                    Helper.ArrayMove(container.Childrens, ui.item.startPos, ui.item.index());
-                },
-                delay: 100,
-                placeholder: "ui-state-highlight"
-            });
         /*
             .sortable({
 
@@ -281,7 +265,7 @@ class ControlManager {
                 var page = <DesignerControls.Page>element;
                 $html = this.appControlFactory.CreatePage(page.Properties);
                 for (var i in page.Childrens) {
-                    $html.append(this.GenerateHtml(page.Childrens[i]))
+                    $html.find('div[data-role=content]').append(this.GenerateHtml(page.Childrens[i]))
                 }
                 break;
             case Enums.ControlType.Button:
@@ -335,14 +319,15 @@ class ControlManager {
         return obj;
     }
 
-    public OnDrop(event, page:DesignerControls.BaseContainer<ControlProperty.Property>) {
+    public OnDrop(event, pageId) {
         this.log.Debug("OnDrop, event: ", event);
         event.preventDefault();
         var controlId = event.originalEvent.dataTransfer.getData("Text");
         var control = App.Instance.Device.ControlManager.CreateControl(controlId);
         var $control = this.controlFactory.CreateControl(control.Properties);
+        var page = <DesignerControls.BaseContainer<ControlProperty.Property>>this.FindById(pageId);
         page.Childrens.push(control);
-        $(page.Properties.$Id).append($control);
+        $(page.Properties.$Id).find('div[data-role=content]').append($control);
     }
 
     public OnDragOver(e) {

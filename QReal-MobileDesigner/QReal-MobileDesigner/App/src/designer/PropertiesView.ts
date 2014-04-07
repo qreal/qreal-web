@@ -121,10 +121,12 @@ class PropertiesView {
         var content = propertyPanel.children("#property-table");
 
         var $idProperty = this.CreateIdRow(property);
+        var $paddingProperty = this.CreatePaddingRow(property);
         var $themeProperty = this.CreateThemeRow(property);
         var $headerProperty = this.CreateHeaderRow(property);
 
         content.append($idProperty);
+        content.append($paddingProperty);
         content.append($themeProperty);
         content.append($headerProperty);
         propertyPanel.appendTo('#properties-widget');
@@ -180,11 +182,29 @@ class PropertiesView {
         return this.CreateTrueFalseSelectRow('Header:', String(property.Header), Enums.PropertyType.Header, property);
     }
 
+    private CreatePaddingRow(property: any): JQuery {
+        return this.CreateSizeInputRow('Padding:', String(property.Padding), Enums.PropertyType.Padding, property);
+    }
+
     //private CreateHeaderRow(property: any): JQuery {
     //    return this.CreateTextRow('Header:', property.Header, Enums.PropertyType.Header, property);
     //}
 
     private CreateTextRow(name: string, value: string, propertyType: Enums.PropertyType, property: any): JQuery {
+        var controlManager = App.Instance.Device.ControlManager;
+        var $textProperty = $('#propertyTextTmpl').tmpl(
+            {
+                name: name,
+                value: value
+            });
+        $textProperty.find('input').change(function () {
+            controlManager.ChangeProperty(property.Id, propertyType, property.Type, $(this).val());
+        });
+        return $textProperty;
+    }
+
+    //TODO: add check
+    private CreateSizeInputRow(name: string, value: string, propertyType: Enums.PropertyType, property: any): JQuery {
         var controlManager = App.Instance.Device.ControlManager;
         var $textProperty = $('#propertyTextTmpl').tmpl(
             {

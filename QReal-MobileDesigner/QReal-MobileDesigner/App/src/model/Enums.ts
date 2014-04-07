@@ -16,7 +16,9 @@
         Mini,
         Theme,
         Title,
-        Header
+        Header,
+        Size,
+        Padding
     }
 } 
 

@@ -4,7 +4,7 @@
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/Enums", "src/device/AppControlFactory"], function(require, exports, App, Log, Enums, AppControlFactory) {
+define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/Enums", "src/util/Helper", "src/device/AppControlFactory"], function(require, exports, App, Log, Enums, Helper, AppControlFactory) {
     var DesignerControlFactory = (function (_super) {
         __extends(DesignerControlFactory, _super);
         function DesignerControlFactory() {
@@ -31,7 +31,32 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
 
         DesignerControlFactory.prototype.CreatePage = function (property) {
             var $page = _super.prototype.CreatePage.call(this, property);
-            $page.attr('class', 'sortcontainer connectedSortable');
+            var $content = $page.find('div[data-role=content]');
+            var controlManager = App.Instance.Device.ControlManager;
+            $page.on('drop', function (event) {
+                return controlManager.OnDrop(event, property.Id);
+            });
+            $page.on('dragover', function (event) {
+                return controlManager.OnDragOver(event);
+            });
+
+            $content.sortable({
+                forcePlaceholderSize: true,
+                containment: "document",
+                cancel: '.nondraggable',
+                start: function (event, ui) {
+                    ui.placeholder.height(ui.item.height());
+                    ui.item.startPos = ui.item.index();
+                },
+                stop: function (e, ui) {
+                    var container = controlManager.FindById(e.target.id);
+                    Helper.ArrayMove(container.Childrens, ui.item.startPos, ui.item.index());
+                },
+                delay: 100,
+                placeholder: "ui-state-highlight"
+            });
+
+            //$page.attr('class', 'sortcontainer');
             return $page;
         };
 

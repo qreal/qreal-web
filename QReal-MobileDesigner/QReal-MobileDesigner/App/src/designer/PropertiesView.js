@@ -1,4 +1,4 @@
-define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/Enums"], function(require, exports, Log, App, Enums) {
+﻿define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/Enums"], function(require, exports, Log, App, Enums) {
     var PropertiesView = (function () {
         function PropertiesView() {
             this.log = new Log("PropertiesView");
@@ -108,10 +108,12 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             var content = propertyPanel.children("#property-table");
 
             var $idProperty = this.CreateIdRow(property);
+            var $paddingProperty = this.CreatePaddingRow(property);
             var $themeProperty = this.CreateThemeRow(property);
             var $headerProperty = this.CreateHeaderRow(property);
 
             content.append($idProperty);
+            content.append($paddingProperty);
             content.append($themeProperty);
             content.append($headerProperty);
             propertyPanel.appendTo('#properties-widget');
@@ -167,10 +169,27 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             return this.CreateTrueFalseSelectRow('Header:', String(property.Header), 7 /* Header */, property);
         };
 
+        PropertiesView.prototype.CreatePaddingRow = function (property) {
+            return this.CreateSizeInputRow('Padding:', String(property.Padding), 9 /* Padding */, property);
+        };
+
         //private CreateHeaderRow(property: any): JQuery {
         //    return this.CreateTextRow('Header:', property.Header, Enums.PropertyType.Header, property);
         //}
         PropertiesView.prototype.CreateTextRow = function (name, value, propertyType, property) {
+            var controlManager = App.Instance.Device.ControlManager;
+            var $textProperty = $('#propertyTextTmpl').tmpl({
+                name: name,
+                value: value
+            });
+            $textProperty.find('input').change(function () {
+                controlManager.ChangeProperty(property.Id, propertyType, property.Type, $(this).val());
+            });
+            return $textProperty;
+        };
+
+        //TODO: add check
+        PropertiesView.prototype.CreateSizeInputRow = function (name, value, propertyType, property) {
             var controlManager = App.Instance.Device.ControlManager;
             var $textProperty = $('#propertyTextTmpl').tmpl({
                 name: name,

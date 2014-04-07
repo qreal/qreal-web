@@ -87,7 +87,20 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
                 _super.call(this, 1 /* Page */, id);
                 this.header = false;
                 this.theme = 'c';
+                this.padding = '10px';
             }
+            Object.defineProperty(PageProperty.prototype, "Padding", {
+                get: function () {
+                    return this.padding;
+                },
+                set: function (value) {
+                    this.padding = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+
             Object.defineProperty(PageProperty.prototype, "Header", {
                 get: function () {
                     return this.header;

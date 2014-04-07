@@ -67,6 +67,15 @@ module ControlProperty {
 
         private header: boolean;
         private theme: string;
+        private padding: string;
+
+        public get Padding(): string {
+            return this.padding;
+        }
+
+        public set Padding(value: string) {
+            this.padding = value;
+        }
 
         public get Header(): boolean {
             return this.header;
@@ -88,6 +97,7 @@ module ControlProperty {
             super(Enums.ControlType.Page, id);
             this.header = false;
             this.theme = 'c';
+            this.padding = '10px';
         }
     }
 
