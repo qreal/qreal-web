@@ -69,7 +69,7 @@ class AppControlFactory {
         $bt.attr('data-mini', property.MiniString);
         $bt.attr('data-corners', property.CornersString);
         $bt.attr('data-inline', property.InlineString);
-        //$bt.attr('data-theme', property.Theme);
+        $bt.attr('data-theme', property.Theme);
         return $bt;
     }
 

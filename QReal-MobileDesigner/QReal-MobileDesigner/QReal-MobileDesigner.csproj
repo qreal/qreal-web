@@ -438,6 +438,8 @@
     <Content Include="Content\css\images\icons-svg\user-white.svg" />
     <Content Include="Content\css\images\icons-svg\video-black.svg" />
     <Content Include="Content\css\images\icons-svg\video-white.svg" />
+    <Content Include="Content\jquery-mobile\jquery.mobile-1.4.2.min.css" />
+    <Content Include="Content\jquery-mobile\jquery.mobile-1.4.2.min.js" />
     <Content Include="Content\jquery-ui\images\animated-overlay.gif" />
     <Content Include="Content\jquery-ui\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\jquery-ui\images\ui-bg_flat_75_ffffff_40x100.png" />

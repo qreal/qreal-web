@@ -140,7 +140,8 @@
                         $page.trigger('pagecreate');
                     } else {
                         $page.find('div[data-role="header"]').remove();
-                        page.Childrens.splice(0, 1);
+                        page.Header = null;
+                        //page.Childrens.splice(0, 1);
                     }
                     break;
                 case 5 /* Theme */:
