@@ -72,19 +72,21 @@ class AppControlFactory {
 
     public CreateInput(property: ControlProperty.InputProperty): JQuery {
         var $container = $("<div>");
-        $container.attr('data-role', 'fieldcontain');
+        $container.addClass('ui-field-contain');
 
-        var $label = $("<label>");
+        var $label = $("<label>", {
+            'for': property.Id
+        });
         $label.text(property.Title);
-        $label.attr('for', property.Id);
 
-        var $input = $('<input />');
-        $input.attr('type', 'text');
-        $input.attr('id', property.Id);
-        $input.attr('name', property.Name);
+        var $input = $('<input>', {
+            'id': property.Id,
+            'type': 'text',
+            'data-mini': property.Mini   
+        });
 
         $container.append($label);
-        $container.append($input);
+        $container.append($input);     
         return $container;
     }
 

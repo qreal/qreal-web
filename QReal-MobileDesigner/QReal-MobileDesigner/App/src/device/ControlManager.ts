@@ -218,6 +218,7 @@ class ControlManager {
         switch (propertyType) {
             case Enums.PropertyType.Id:
                 $(input.Properties.$Id).find('input').attr('id', newValue);
+                $(input.Properties.$Id).find('label').attr('for', newValue);
                 input.Properties.Id = newValue;
                 break;
             case Enums.PropertyType.Title:
@@ -225,7 +226,9 @@ class ControlManager {
                 input.Properties.Title = newValue;
                 break;
             case Enums.PropertyType.Mini:
-                var cond: boolean = newValue == "true";
+                var cond: boolean = newValue == "true";              
+               // $(input.Properties.$Id).textinput({ 'data-mini': cond});
+                input.Properties.Mini = cond;
                 break;
             case Enums.PropertyType.Theme:
                 break;

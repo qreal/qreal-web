@@ -200,6 +200,7 @@
             switch (propertyType) {
                 case 0 /* Id */:
                     $(input.Properties.$Id).find('input').attr('id', newValue);
+                    $(input.Properties.$Id).find('label').attr('for', newValue);
                     input.Properties.Id = newValue;
                     break;
                 case 6 /* Title */:
@@ -208,6 +209,9 @@
                     break;
                 case 4 /* Mini */:
                     var cond = newValue == "true";
+
+                    // $(input.Properties.$Id).textinput({ 'data-mini': cond});
+                    input.Properties.Mini = cond;
                     break;
                 case 5 /* Theme */:
                     break;

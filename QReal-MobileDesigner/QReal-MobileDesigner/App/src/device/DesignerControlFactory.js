@@ -87,13 +87,12 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
 
         DesignerControlFactory.prototype.CreateInput = function (property) {
             var $input = _super.prototype.CreateInput.call(this, property);
-
+            $input.find('input').textinput();
             $input.on('click', function (event) {
                 event.preventDefault();
                 App.Instance.Designer.ShowProperty(property);
             });
 
-            $input.find('input').textinput();
             return $input;
         };
         return DesignerControlFactory;

@@ -84,13 +84,12 @@ class DesignerControlFactory extends AppControlFactory {
 
     public CreateInput(property: ControlProperty.InputProperty): JQuery {
         var $input = super.CreateInput(property);
-
+        $input.find('input').textinput();
         $input.on('click', event => {
             event.preventDefault();
             App.Instance.Designer.ShowProperty(property);
         });
 
-        $input.find('input').textinput();
         return $input;
     }
 }
