@@ -82,7 +82,7 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
                 _this.log.Debug('bt click');
                 App.Instance.Designer.ShowProperty(property);
             });
-            return $bt.button();
+            return $bt;
         };
 
         DesignerControlFactory.prototype.CreateInput = function (property) {

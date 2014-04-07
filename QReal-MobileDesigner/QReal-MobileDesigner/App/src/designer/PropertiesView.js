@@ -1,4 +1,4 @@
-define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/Enums"], function(require, exports, Log, App, Enums) {
+﻿define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/Enums"], function(require, exports, Log, App, Enums) {
     var PropertiesView = (function () {
         function PropertiesView() {
             this.log = new Log("PropertiesView");
@@ -7,11 +7,8 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
                 { Text: "Yes", Value: true }
             ];
             this.themes = [
-                { Text: "Theme A", Value: "a" },
-                { Text: "Theme B", Value: "b" },
-                { Text: "Theme C", Value: "c" },
-                { Text: "Theme D", Value: "d" },
-                { Text: "Theme E", Value: "e" }
+                { Text: "Light", Value: "a" },
+                { Text: "Dark", Value: "b" }
             ];
             this.log.Debug("constructor");
         }

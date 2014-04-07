@@ -162,23 +162,7 @@ class ControlManager {
                     //page.Childrens.splice(0, 1);
                 }
                 break;
-            case Enums.PropertyType.Theme:
-                var theme = newValue;
-                $.mobile.activePage.find('.ui-btn')
-                    .removeClass('ui-btn-up-a ui-btn-up-b ui-btn-up-c ui-btn-up-d ui-btn-up-e ui-btn-hover-a ui-btn-hover-b ui-btn-hover-c ui-btn-hover-d ui-btn-hover-e')
-                    .addClass('ui-btn-up-' + theme)
-                    .attr('data-theme', theme);
-
-                //reset the header/footer widgets
-                $.mobile.activePage.find('.ui-header, .ui-footer')
-                    .removeClass('ui-bar-a ui-bar-b ui-bar-c ui-bar-d ui-bar-e')
-                    .addClass('ui-bar-' + theme)
-                    .attr('data-theme', theme);
-
-                //reset the page widget
-                $.mobile.activePage.removeClass('ui-body-a ui-body-b ui-body-c ui-body-d ui-body-e')
-                    .addClass('ui-body-' + theme)
-                    .attr('data-theme', theme);
+            case Enums.PropertyType.Theme:            
                 break;
         }
     }
@@ -203,26 +187,27 @@ class ControlManager {
                 button.Properties.Id = newValue;
                 break;
             case Enums.PropertyType.Text:
-                $(button.Properties.$Id).find('.ui-btn-text').text(newValue);
+                $(button.Properties.$Id).text(newValue);
                 button.Properties.Text = newValue;
                 break;
             case Enums.PropertyType.Inline:
                 var cond: boolean = newValue == "true";
-                $(button.Properties.$Id).buttonMarkup({ inline: cond });
+                this.ToogleClass(button.Properties.$Id, 'ui-btn-inline', cond);
                 button.Properties.Inline = cond;
                 break;
             case Enums.PropertyType.Corners:
                 var cond: boolean = newValue == "true";
-                $(button.Properties.$Id).buttonMarkup({ corners: cond });
+                this.ToogleClass(button.Properties.$Id, 'ui-corner-all', cond);
                 button.Properties.Corners = cond;
                 break;
             case Enums.PropertyType.Mini:
                 var cond: boolean = newValue == "true";
-                $(button.Properties.$Id).buttonMarkup({ mini: cond });
+                this.ToogleClass(button.Properties.$Id, 'ui-mini', cond);
                 button.Properties.Mini = cond;
                 break;
             case Enums.PropertyType.Theme:
-                $(button.Properties.$Id).buttonMarkup({ theme: newValue });
+                $(button.Properties.$Id).removeClass("ui-btn-a ui-btn-b");
+                $(button.Properties.$Id).addClass('ui-btn-' + newValue);
                 button.Properties.Theme = newValue;
                 break;
         }
@@ -325,6 +310,14 @@ class ControlManager {
                 break;
         }
         return obj;
+    }
+
+    private ToogleClass(id: string, cssclass: string, add: boolean) {
+        if (add) {
+            $(id).addClass(cssclass);
+        } else {
+            $(id).removeClass(cssclass);
+        }
     }
 
     public OnDrop(event, pageId) {

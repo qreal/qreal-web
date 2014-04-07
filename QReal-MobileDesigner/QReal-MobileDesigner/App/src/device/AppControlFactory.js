@@ -43,7 +43,7 @@
         };
 
         AppControlFactory.prototype.CreateButton = function (property) {
-            var $bt = $('<a href="#">', {
+            var $bt = $('<a>', {
                 'id': property.Id
             });
             $bt.text(property.Text);

@@ -14,11 +14,8 @@ class PropertiesView {
         { Text: "Yes", Value: true }
     ];
     private themes = [
-        { Text: "Theme A", Value: "a" },
-        { Text: "Theme B", Value: "b" },
-        { Text: "Theme C", Value: "c" },
-        { Text: "Theme D", Value: "d" },
-        { Text: "Theme E", Value: "e" },
+        { Text: "Light", Value: "a" },
+        { Text: "Dark", Value: "b" },
     ];
 
     private currentPropertyDiv: JQuery;

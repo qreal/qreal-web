@@ -79,7 +79,7 @@ class DesignerControlFactory extends AppControlFactory {
             this.log.Debug('bt click');
             App.Instance.Designer.ShowProperty(property);
         });
-        return $bt.button();
+        return $bt;
     }
 
     public CreateInput(property: ControlProperty.InputProperty): JQuery {

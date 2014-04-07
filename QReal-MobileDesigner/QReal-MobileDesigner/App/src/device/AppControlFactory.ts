@@ -52,7 +52,7 @@ class AppControlFactory {
     }
 
     public CreateButton(property: ControlProperty.ButtonProperty): JQuery {
-        var $bt = $('<a href="#">', {
+        var $bt = $('<a>', {
             'id': property.Id
         });
         $bt.text(property.Text);
