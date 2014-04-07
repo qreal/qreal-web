@@ -31,7 +31,7 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
 
         DesignerControlFactory.prototype.CreatePage = function (property) {
             var $page = _super.prototype.CreatePage.call(this, property);
-            var $content = $page.find('div[data-role=content]');
+            var $content = $page.find('div[role=main]');
             var controlManager = App.Instance.Device.ControlManager;
             $page.on('drop', function (event) {
                 return controlManager.OnDrop(event, property.Id);

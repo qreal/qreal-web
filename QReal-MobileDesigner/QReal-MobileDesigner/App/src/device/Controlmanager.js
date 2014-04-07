@@ -209,8 +209,7 @@
                     break;
                 case 4 /* Mini */:
                     var cond = newValue == "true";
-
-                    // $(input.Properties.$Id).textinput({ 'data-mini': cond});
+                    this.ToogleClass(input.Properties.$Id, 'ui-mini', cond);
                     input.Properties.Mini = cond;
                     break;
                 case 5 /* Theme */:

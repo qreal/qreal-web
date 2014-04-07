@@ -33,7 +33,7 @@ class DesignerControlFactory extends AppControlFactory {
 
     public CreatePage(property: ControlProperty.PageProperty): JQuery {
         var $page = super.CreatePage(property);
-        var $content = $page.find('div[data-role=content]');
+        var $content = $page.find('div[role=main]');
         var controlManager = App.Instance.Device.ControlManager;
         $page.on('drop', event => controlManager.OnDrop(event, property.Id));
         $page.on('dragover', event => controlManager.OnDragOver(event));

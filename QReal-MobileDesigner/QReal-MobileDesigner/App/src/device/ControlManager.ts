@@ -162,7 +162,7 @@ class ControlManager {
                     //page.Childrens.splice(0, 1);
                 }
                 break;
-            case Enums.PropertyType.Theme:            
+            case Enums.PropertyType.Theme:
                 break;
         }
     }
@@ -226,8 +226,8 @@ class ControlManager {
                 input.Properties.Title = newValue;
                 break;
             case Enums.PropertyType.Mini:
-                var cond: boolean = newValue == "true";              
-               // $(input.Properties.$Id).textinput({ 'data-mini': cond});
+                var cond: boolean = newValue == "true";
+                this.ToogleClass(input.Properties.$Id, 'ui-mini', cond);
                 input.Properties.Mini = cond;
                 break;
             case Enums.PropertyType.Theme:

@@ -91,9 +91,10 @@ class AppControlFactory {
     }
 
     public CreateHeader(property: ControlProperty.HeaderProperty): JQuery {
-        var $header = $('<div>');
-        $header.attr('id', property.Id);
-        $header.attr('data-role', 'header');
+        var $header = $('<div>', {
+            'id': property.Id,
+            'data-role': 'header'
+        });
         var $title = $('<h1>');
         $title.text(property.Title);
         $header.append($title);
