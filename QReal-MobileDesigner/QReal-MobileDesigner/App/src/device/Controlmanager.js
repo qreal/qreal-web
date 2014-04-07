@@ -137,7 +137,7 @@
                         //$header.attr('class', 'sortcontainer connectedSortable');
                         page.Header = header;
                         $page.prepend($header);
-                        $page.trigger('pagecreate');
+                        //(<any>$page.find("[data-role='header'], [data-role='footer']")).toolbar();
                     } else {
                         $page.find('div[data-role="header"]').remove();
                         page.Header = null;
@@ -244,7 +244,7 @@
                         $html.prepend($header);
                     }
                     for (var i in page.Childrens) {
-                        $html.find('div[data-role=content]').append(this.GenerateHtml(page.Childrens[i]));
+                        $html.find('div[role=main]').append(this.GenerateHtml(page.Childrens[i]));
                     }
                     break;
                 case 3 /* Button */:
@@ -283,7 +283,9 @@
                 case 1 /* Page */:
                     obj = element.Properties;
                     var page = element;
-                    obj['Header'] = page.Header.Properties;
+                    if (page.Header) {
+                        obj['Header'] = page.Header.Properties;
+                    }
                     obj["Controls"] = [];
                     page.Childrens.forEach(function (el) {
                         obj["Controls"].push(self.AppToSerializeObj(el));
@@ -306,7 +308,7 @@
             var $control = this.controlFactory.CreateControl(control.Properties);
             var page = this.FindById(pageId);
             page.Childrens.push(control);
-            $(page.Properties.$Id).find('div[data-role=content]').append($control);
+            $(page.Properties.$Id).find('div[role=main]').append($control);
         };
 
         ControlManager.prototype.OnDragOver = function (e) {

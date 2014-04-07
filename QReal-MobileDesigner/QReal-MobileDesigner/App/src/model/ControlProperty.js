@@ -86,7 +86,7 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
             function PageProperty(id) {
                 _super.call(this, 1 /* Page */, id);
                 this.header = false;
-                this.theme = 'c';
+                this.theme = 'a';
                 this.padding = '10px';
             }
             Object.defineProperty(PageProperty.prototype, "Padding", {
@@ -157,7 +157,7 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
                 this.Inline = false;
                 this.Corners = true;
                 this.Mini = false;
-                this.Theme = 'c';
+                this.Theme = 'a';
             }
             Object.defineProperty(ButtonProperty.prototype, "Text", {
                 get: function () {
@@ -254,7 +254,7 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
                 this.Inline = false;
                 this.Corners = true;
                 this.Mini = false;
-                this.Theme = 'c';
+                this.Theme = 'a';
                 this.Placeholder = '';
                 this.Name = '';
             }

@@ -545,7 +545,7 @@
     <Content Include="Content\res\navbar.png" />
     <Content Include="Content\res\selection.png" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Static\device.html" />
+    <Content Include="Content\device.html" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Projects\Designer.cshtml" />
     <None Include="Views\PhoneGapTemplate\index.cshtml" />

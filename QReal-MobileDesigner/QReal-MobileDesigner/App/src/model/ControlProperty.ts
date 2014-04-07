@@ -96,7 +96,7 @@ module ControlProperty {
         constructor(id: string) {
             super(Enums.ControlType.Page, id);
             this.header = false;
-            this.theme = 'c';
+            this.theme = 'a';
             this.padding = '10px';
         }
     }
@@ -185,7 +185,7 @@ module ControlProperty {
             this.Inline = false;
             this.Corners = true;
             this.Mini = false;
-            this.Theme = 'c';
+            this.Theme = 'a';
         }
 
     }
@@ -262,7 +262,7 @@ module ControlProperty {
             this.Inline = false;
             this.Corners = true;
             this.Mini = false;
-            this.Theme = 'c';
+            this.Theme = 'a';
             this.Placeholder = '';
             this.Name = '';
         }

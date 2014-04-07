@@ -155,7 +155,7 @@ class ControlManager {
                     //$header.attr('class', 'sortcontainer connectedSortable');
                     page.Header = header;
                     $page.prepend($header);
-                    $page.trigger('pagecreate');
+                    //(<any>$page.find("[data-role='header'], [data-role='footer']")).toolbar();
                 } else {
                     $page.find('div[data-role="header"]').remove();
                     page.Header = null;
@@ -270,7 +270,7 @@ class ControlManager {
                     $html.prepend($header)
                 }
                 for (var i in page.Childrens) {
-                    $html.find('div[data-role=content]').append(this.GenerateHtml(page.Childrens[i]))
+                    $html.find('div[role=main]').append(this.GenerateHtml(page.Childrens[i]))
                 }
                 break;
             case Enums.ControlType.Button:
@@ -310,7 +310,9 @@ class ControlManager {
             case Enums.ControlType.Page:
                 obj = element.Properties;
                 var page = <DesignerControls.Page>element;
-                obj['Header'] = page.Header.Properties;
+                if (page.Header) {
+                    obj['Header'] = page.Header.Properties;
+                }
                 obj["Controls"] = [];
                 page.Childrens.forEach(function (el) {
                     obj["Controls"].push(self.AppToSerializeObj(el));
@@ -333,7 +335,7 @@ class ControlManager {
         var $control = this.controlFactory.CreateControl(control.Properties);
         var page = <DesignerControls.BaseContainer<ControlProperty.Property>>this.FindById(pageId);
         page.Childrens.push(control);
-        $(page.Properties.$Id).find('div[data-role=content]').append($control);
+        $(page.Properties.$Id).find('div[role=main]').append($control);
     }
 
     public OnDragOver(e) {
@@ -354,7 +356,7 @@ class ControlManager {
             return control;
         }
         if (control instanceof DesignerControls.Page) {
-            var page = <DesignerControls.Page> control;          
+            var page = <DesignerControls.Page> control;
             var res = this.FindInContainer(id, page.Header);
             if (res) {
                 return res;

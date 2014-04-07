@@ -62,13 +62,11 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
         };
 
         DesignerControlFactory.prototype.CreateHeader = function (property) {
-            var _this = this;
             var $header = _super.prototype.CreateHeader.call(this, property);
             $header.addClass('nondraggable');
 
             $header.on('click', function (event) {
                 event.preventDefault();
-                _this.log.Debug('bt click');
                 App.Instance.Designer.ShowProperty(property);
             });
 

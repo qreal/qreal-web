@@ -34,35 +34,30 @@
                 'data-role': 'page',
                 'data-theme': property.Theme
             });
-            var $header = $('<div/>', {
-                'data-role': 'header',
-                'data-position': 'fixed'
+            var $main = $('<div/>', {
+                'role': 'main'
             });
-            $('<h1>sdfgdsfg</h1>').appendTo($header);
-            var $content = $('<div/>', {
-                'data-role': 'content'
-            });
-            var $footer = $('<div/>', {
-                'data-role': 'footer',
-                'data-position': 'fixed'
-            });
-
-            //$page.append($header);
-            $page.append($content);
-
-            //$page.append($footer);
+            $main.addClass('ui-content');
+            $page.append($main);
             return $page;
         };
 
         AppControlFactory.prototype.CreateButton = function (property) {
-            var $bt = $('<a href="#">');
-            $bt.attr('data-role', 'button');
-            $bt.attr('id', property.Id);
+            var $bt = $('<a href="#">', {
+                'id': property.Id
+            });
             $bt.text(property.Text);
-            $bt.attr('data-mini', property.MiniString);
-            $bt.attr('data-corners', property.CornersString);
-            $bt.attr('data-inline', property.InlineString);
-            $bt.attr('data-theme', property.Theme);
+            $bt.addClass('ui-btn');
+            if (property.Corners) {
+                $bt.addClass('ui-corner-all');
+            }
+            if (property.Inline) {
+                $bt.addClass('ui-btn-inline');
+            }
+            if (property.Mini) {
+                $bt.addClass('ui-mini');
+            }
+            $bt.addClass('ui-btn-' + property.Theme);
             return $bt;
         };
 
@@ -91,7 +86,7 @@
             var $title = $('<h1>');
             $title.text(property.Title);
             $header.append($title);
-            return $header;
+            return $header.toolbar();
         };
         return AppControlFactory;
     })();

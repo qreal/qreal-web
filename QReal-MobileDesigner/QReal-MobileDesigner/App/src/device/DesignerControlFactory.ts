@@ -60,12 +60,11 @@ class DesignerControlFactory extends AppControlFactory {
     }
 
     public CreateHeader(property: ControlProperty.HeaderProperty): JQuery {
-        var $header = super.CreateHeader(property);
+        var $header = super.CreateHeader(property);       
         $header.addClass('nondraggable');
 
         $header.on('click', event => {
             event.preventDefault();
-            this.log.Debug('bt click');
             App.Instance.Designer.ShowProperty(property);
         });
 
