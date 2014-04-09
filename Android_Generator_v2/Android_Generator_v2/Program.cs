@@ -13,19 +13,7 @@ namespace Android_Generator_v2
     {
         static int Main(string[] args)
         {
-            /**if (args.Length > 1)
-            {
-                Console.WriteLine("Too much arguments.");
-                return 1;
-            }
-            if (args.Length == 0)
-            {
-                Console.WriteLine("Please enter an application name.");
-                return 2;
-            }
-            String appName = args[0];**/
-
-            JsonParser parser = new JsonParser("test.txt");
+            JsonParser parser = new JsonParser("app.json");
 
             String appName;
             String packageName;
@@ -50,6 +38,8 @@ namespace Android_Generator_v2
 
             String pathToAndroidSup4 = @"libs\android-support-v4.jar";
             File.Copy(Path.Combine("Templates", pathToAndroidSup4), Path.Combine(appDirectory, pathToAndroidSup4), true);
+
+            Directory.CreateDirectory(Path.Combine("Templates", @"res\layout"));
 
             try {
                 DirectoryCopyManager.DirectoryCopy(Path.Combine("Templates", "res"), Path.Combine(appDirectory, "res"), true);

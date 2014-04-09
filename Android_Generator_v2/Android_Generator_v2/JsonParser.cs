@@ -142,7 +142,11 @@ namespace Android_Generator_v2
                     {
                         // read for get type value
                         reader.Read();
-                        if (reader.Value.Equals("Button"))
+                        if (reader.Value.Equals("Header"))
+                        {
+                            parseHeaderElement();
+                        }
+                        else if (reader.Value.Equals("Button"))
                         {
                             parseButtonElement(currentActivityName);
                         }               
@@ -160,6 +164,34 @@ namespace Android_Generator_v2
                     }
                 }
             }
+        }
+
+        private void parseHeaderElement()
+        {
+            HeaderElement headerElement = new HeaderElement();
+            while (!reader.TokenType.ToString().Equals("EndObject"))
+            {
+                reader.Read();
+                object value = reader.Value;
+                if (value != null)
+                {
+                    if (reader.TokenType.ToString().Equals("PropertyName"))
+                    {
+                        if (value.Equals("id"))
+                        {
+                            reader.Read();
+                            headerElement.setId(reader.Value.ToString());
+                        }
+                        if (value.Equals("title"))
+                        {
+                            reader.Read();
+                            headerElement.setTitle(reader.Value.ToString());
+                        }
+                    }
+                }
+            }
+
+            layoutBuilder.addElement(headerElement.getXml());
         }
 
         private void parseButtonElement(String currentActivityName)
@@ -198,15 +230,26 @@ namespace Android_Generator_v2
                         }
                         if (value.Equals("corners"))
                         {
-
+                            reader.Read();
+                            buttonElement.setRoundValue((Boolean)reader.Value);
                         }
                         if (value.Equals("mini"))
                         {
-
+                            reader.Read();
+                            if (!(Boolean)reader.Value)
+                            {
+                                buttonElement.addXmlAttr("layout_height", "wrap_content");
+                            }
+                            else
+                            {
+                                buttonElement.addXmlAttr("layout_height", "28dp");
+                                buttonElement.addXmlAttr("textSize", "11sp");
+                            }
                         }
                         if (value.Equals("theme"))
                         {
-
+                            reader.Read();
+                            buttonElement.setTheme(reader.Value.ToString());
                         }
                     }
                 }
@@ -237,7 +280,8 @@ namespace Android_Generator_v2
                         }
                         if (value.Equals("title"))
                         {
-
+                            reader.Read();
+                            inputElement.setTitle(reader.Value.ToString());
                         }
                         if (value.Equals("inline"))
                         {

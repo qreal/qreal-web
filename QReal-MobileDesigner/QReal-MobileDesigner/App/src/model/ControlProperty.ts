@@ -66,6 +66,16 @@ module ControlProperty {
     export class PageProperty extends Property {
 
         private header: boolean;
+        private theme: string;
+        private padding: string;
+
+        public get Padding(): string {
+            return this.padding;
+        }
+
+        public set Padding(value: string) {
+            this.padding = value;
+        }
 
         public get Header(): boolean {
             return this.header;
@@ -75,8 +85,19 @@ module ControlProperty {
             this.header = value;
         }
 
+        public get Theme(): string {
+            return this.theme;
+        }
+
+        public set Theme(value: string) {
+            this.theme = value;
+        }
+
         constructor(id: string) {
             super(Enums.ControlType.Page, id);
+            this.header = false;
+            this.theme = 'a';
+            this.padding = '10px';
         }
     }
 
@@ -164,7 +185,7 @@ module ControlProperty {
             this.Inline = false;
             this.Corners = true;
             this.Mini = false;
-            this.Theme = 'c';
+            this.Theme = 'a';
         }
 
     }
@@ -241,7 +262,7 @@ module ControlProperty {
             this.Inline = false;
             this.Corners = true;
             this.Mini = false;
-            this.Theme = 'c';
+            this.Theme = 'a';
             this.Placeholder = '';
             this.Name = '';
         }

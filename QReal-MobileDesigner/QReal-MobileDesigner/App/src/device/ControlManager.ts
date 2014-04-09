@@ -9,7 +9,6 @@ import ControlProperty = require("src/model/ControlProperty");
 import DesignerControls = require("src/model/DesignerControls");
 import DesignerControlFactory = require("src/device/DesignerControlFactory");
 import AppControlFactory = require("src/device/AppControlFactory");
-import IControlFactory = require("src/device/IControlFactory");
 
 class ControlManager {
 
@@ -30,7 +29,6 @@ class ControlManager {
     public Init(): void {
         this.log.Debug("Init");
         this.app = new DesignerControls.BaseContainer<ControlProperty.AppProperty>(new ControlProperty.AppProperty((<any>parent).projectName, (<any>parent).projectPackage));
-        this.app.Element = $("<div></div>");
     }
 
     /*** Pages ***/
@@ -44,24 +42,13 @@ class ControlManager {
             return false;
         }
 
-        var page = this.controlFactory.CreatePage(new ControlProperty.PageProperty(pageId));
-        this.app.Childrens.push(page);
-        $('body').append(page.Element);
-        this.SelectPage(pageId);
-        (<any>$('.sortcontainer')).sortable(
-            {
-                forcePlaceholderSize: true,
-                containment: "parent",
-                cancel: '.nondraggable',
-                start: function (event, ui) {
-                    ui.item.startPos = ui.item.index();
-                },
-                stop: function (e, ui) {
-                    var container = <DesignerControls.BaseContainer<ControlProperty.Property>>self.FindById(e.target.id);
-                    Helper.ArrayMove(container.Childrens, ui.item.startPos, ui.item.index());
-                },
+        var page = new DesignerControls.Page(new ControlProperty.PageProperty(pageId));
+        var $page = this.controlFactory.CreatePage(page.Properties);
+        $page.trigger('pagecreate');
+        $('body').append($page);
 
-            });
+        this.app.Childrens.push(page);
+        this.SelectPage(pageId);
         /*
             .sortable({
 
@@ -99,24 +86,16 @@ class ControlManager {
         this.log.Debug("CreateControl: " + controlId);
         switch (controlId) {
             case "Button":
-                return this.CreateButton();
+                var btProperty = new ControlProperty.ButtonProperty(this.GetNewId('button'));
+                return new DesignerControls.Button(btProperty);
             case "Input":
-                return this.CreateInput();
+                var inputProperty = new ControlProperty.InputProperty(this.GetNewId('input'));
+                return new DesignerControls.Input(inputProperty);
             case "Header":
                 //return this.controlFactory.CreateHeader(this.GetNewId('header'));
             break
         }
 
-    }
-
-    private CreateButton(): DesignerControls.Button {
-        var property = new ControlProperty.ButtonProperty(this.GetNewId('button'));
-        return this.controlFactory.CreateButton(property);
-    }
-
-    private CreateInput() {
-        var property = new ControlProperty.InputProperty(this.GetNewId('input'));
-        return this.controlFactory.CreateInput(property);
     }
 
     /* Id */
@@ -166,16 +145,24 @@ class ControlManager {
         var $page = $(page.Properties.$Id);
         switch (propertyType) {
             case Enums.PropertyType.Header:
-                page.Properties.Header = newValue == 'yes';
-                if (newValue == 'yes') {                    
+                var cond: boolean = newValue == "true";
+                page.Properties.Header = cond;
+                if (cond) {
                     var headerProp = new ControlProperty.HeaderProperty(propertyId + '_header');
-                    var header = this.controlFactory.CreateHeader(headerProp);
-                    page.Childrens.push(header);
-                    $page.prepend(header.Element);
-                    $page.trigger('pagecreate');
+                    var header = new DesignerControls.Header(headerProp);
+                    var $header = this.controlFactory.CreateHeader(headerProp);
+
+                    //$header.attr('class', 'sortcontainer connectedSortable');
+                    page.Header = header;
+                    $page.prepend($header);
+                    //(<any>$page.find("[data-role='header'], [data-role='footer']")).toolbar();
                 } else {
                     $page.find('div[data-role="header"]').remove();
+                    page.Header = null;
+                    //page.Childrens.splice(0, 1);
                 }
+                break;
+            case Enums.PropertyType.Theme:
                 break;
         }
     }
@@ -196,31 +183,31 @@ class ControlManager {
         var button = <DesignerControls.Button>this.FindById(propertyId);
         switch (propertyType) {
             case Enums.PropertyType.Id:
+                $(button.Properties.$Id).attr('id', newValue);
                 button.Properties.Id = newValue;
-                button.Element.attr('id', newValue);
                 break;
             case Enums.PropertyType.Text:
-                this.log.Debug("Enums.PropertyType.Text:", button.Element);
-                button.Element.find('.ui-btn-text').text(newValue);
+                $(button.Properties.$Id).text(newValue);
                 button.Properties.Text = newValue;
                 break;
             case Enums.PropertyType.Inline:
                 var cond: boolean = newValue == "true";
-                button.Element.buttonMarkup({ inline: cond });
+                this.ToogleClass(button.Properties.$Id, 'ui-btn-inline', cond);
                 button.Properties.Inline = cond;
                 break;
             case Enums.PropertyType.Corners:
                 var cond: boolean = newValue == "true";
-                button.Element.buttonMarkup({ corners: cond });
+                this.ToogleClass(button.Properties.$Id, 'ui-corner-all', cond);
                 button.Properties.Corners = cond;
                 break;
             case Enums.PropertyType.Mini:
                 var cond: boolean = newValue == "true";
-                button.Element.buttonMarkup({ mini: cond });
+                this.ToogleClass(button.Properties.$Id, 'ui-mini', cond);
                 button.Properties.Mini = cond;
                 break;
             case Enums.PropertyType.Theme:
-                button.Element.buttonMarkup({ theme: newValue });
+                $(button.Properties.$Id).removeClass("ui-btn-a ui-btn-b");
+                $(button.Properties.$Id).addClass('ui-btn-' + newValue);
                 button.Properties.Theme = newValue;
                 break;
         }
@@ -230,15 +217,18 @@ class ControlManager {
         var input = <DesignerControls.Input>this.FindById(propertyId);
         switch (propertyType) {
             case Enums.PropertyType.Id:
+                $(input.Properties.$Id).find('input').attr('id', newValue);
+                $(input.Properties.$Id).find('label').attr('for', newValue);
                 input.Properties.Id = newValue;
-                input.Element.find('input').attr('id', newValue);
                 break;
             case Enums.PropertyType.Title:
-                input.Element.find('label').text(newValue);
+                $(input.Properties.$Id).parent().parent().find('label').text(newValue);
                 input.Properties.Title = newValue;
                 break;
             case Enums.PropertyType.Mini:
                 var cond: boolean = newValue == "true";
+                this.ToogleClass(input.Properties.$Id, 'ui-mini', cond);
+                input.Properties.Mini = cond;
                 break;
             case Enums.PropertyType.Theme:
                 break;
@@ -251,7 +241,7 @@ class ControlManager {
     }
 
     private GenerateHtml(element: DesignerControls.BaseControl<ControlProperty.Property>): JQuery {
-        var $html;
+        var $html: JQuery;
         switch (element.Properties.Type) {
             case Enums.ControlType.App:
                 $html = this.appControlFactory.CreateApp(element.Properties);
@@ -263,8 +253,12 @@ class ControlManager {
             case Enums.ControlType.Page:
                 var page = <DesignerControls.Page>element;
                 $html = this.appControlFactory.CreatePage(page.Properties);
+                if (page.Header) {
+                    var $header = this.appControlFactory.CreateHeader(page.Header.Properties);
+                    $html.prepend($header)
+                }
                 for (var i in page.Childrens) {
-                    $html.append(this.GenerateHtml(page.Childrens[i]))
+                    $html.find('div[role=main]').append(this.GenerateHtml(page.Childrens[i]))
                 }
                 break;
             case Enums.ControlType.Button:
@@ -303,7 +297,10 @@ class ControlManager {
                 break;
             case Enums.ControlType.Page:
                 obj = element.Properties;
-                var page = <DesignerControls.BaseContainer<ControlProperty.Property>>element;
+                var page = <DesignerControls.Page>element;
+                if (page.Header) {
+                    obj['Header'] = page.Header.Properties;
+                }
                 obj["Controls"] = [];
                 page.Childrens.forEach(function (el) {
                     obj["Controls"].push(self.AppToSerializeObj(el));
@@ -318,16 +315,50 @@ class ControlManager {
         return obj;
     }
 
+    private ToogleClass(id: string, cssclass: string, add: boolean) {
+        if (add) {
+            $(id).addClass(cssclass);
+        } else {
+            $(id).removeClass(cssclass);
+        }
+    }
+
+    public OnDrop(event, pageId) {
+        this.log.Debug("OnDrop, event: ", event);
+        event.preventDefault();
+        var controlId = event.originalEvent.dataTransfer.getData("Text");
+        var control = App.Instance.Device.ControlManager.CreateControl(controlId);
+        var $control = this.controlFactory.CreateControl(control.Properties);
+        var page = <DesignerControls.BaseContainer<ControlProperty.Property>>this.FindById(pageId);
+        page.Childrens.push(control);
+        $(page.Properties.$Id).find('div[role=main]').append($control);
+    }
+
+    public OnDragOver(e) {
+        e.preventDefault();
+    }
+
     public FindById(id: string): DesignerControls.BaseControl<ControlProperty.Property> {
         //this.log.Debug("FindById: " + id);
         return this.FindInContainer(id, this.app);
     }
 
     private FindInContainer(id: string, control: DesignerControls.BaseControl<ControlProperty.Property>): DesignerControls.BaseControl<ControlProperty.Property> {
-        //this.log.Debug("FindInContainer: " + id, control);
+        this.log.Debug("FindInContainer: " + id, control);
+        if (!control) {
+            return null;
+        }
         if (control.Properties.Id === id) {
             return control;
         }
+        if (control instanceof DesignerControls.Page) {
+            var page = <DesignerControls.Page> control;
+            var res = this.FindInContainer(id, page.Header);
+            if (res) {
+                return res;
+            }
+        }
+
         if (control instanceof DesignerControls.BaseContainer) {
             var childrens = (<DesignerControls.BaseContainer<ControlProperty.Property>>control).Childrens;
             for (var i in childrens) {

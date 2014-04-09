@@ -1,97 +1,96 @@
 ﻿import App = require("src/Application");
 import Log = require("src/util/log/Log");
-import IControlFactory = require("src/device/IControlFactory");
+import Enums = require("src/model/Enums");
+import Helper = require("src/util/Helper");
 import DesignerControls = require("src/model/DesignerControls");
 import ControlProperty = require("src/model/ControlProperty");
+import AppControlFactory = require("src/device/AppControlFactory");
 
 
-class DesignerControlFactory implements IControlFactory {
-
-    private log = new Log("DesignerControlFactory");
+class DesignerControlFactory extends AppControlFactory {
 
     constructor() {
+        super();
+        this.log = new Log("DesignerControlFactory");;
     }
 
-    public CreatePage(property: ControlProperty.PageProperty): DesignerControls.Page {
-        var page = new DesignerControls.Page(property);
-        var $page = $('<div></div>');
-        $page.data('role', 'page');
-        $page.attr('id', property.Id);
-        $page.attr('class', 'sortcontainer');
-
-        $page.on('drop', event => page.OnDrop(event));
-        $page.on('dragover', event => page.OnDragOver(event));
-        page.Element = $page;
-        return page;
+    public CreateControl(property: ControlProperty.Property): JQuery {
+        switch (property.Type) {
+            case Enums.ControlType.Page:
+                return this.CreatePage(<any>property);
+                break;
+            case Enums.ControlType.Header:
+                return this.CreateHeader(<any>property);
+                break;
+            case Enums.ControlType.Button:
+                return this.CreateButton(<any>property);
+                break;
+            case Enums.ControlType.Input:
+                return this.CreateInput(<any>property);
+                break;
+        }
     }
 
-    public CreateHeader(property: ControlProperty.HeaderProperty): DesignerControls.Header {
-        var header = new DesignerControls.Header(property);
-        var $header = $('<div></div>');
-        $header.attr('id', property.Id);
-        $header.attr('data-role', 'header');
+    public CreatePage(property: ControlProperty.PageProperty): JQuery {
+        var $page = super.CreatePage(property);
+        var $content = $page.find('div[role=main]');
+        var controlManager = App.Instance.Device.ControlManager;
+        $page.on('drop', event => controlManager.OnDrop(event, property.Id));
+        $page.on('dragover', event => controlManager.OnDragOver(event));
+
+        (<any>$content).sortable(
+            {
+                forcePlaceholderSize: true,
+                containment: "document",
+                cancel: '.nondraggable',
+                start: function (event, ui) {                   
+                    ui.placeholder.height(ui.item.height());
+                    ui.item.startPos = ui.item.index();
+                },
+                stop: function (e, ui) {
+                     console.log
+                    var container = <DesignerControls.BaseContainer<ControlProperty.Property>>controlManager.FindById(property.Id);
+                    Helper.ArrayMove(container.Childrens, ui.item.startPos, ui.item.index());
+                },
+                delay: 100,
+                placeholder: "ui-state-highlight"
+            });
+        //$page.attr('class', 'sortcontainer');
+        return $page;
+    }
+
+    public CreateHeader(property: ControlProperty.HeaderProperty): JQuery {
+        var $header = super.CreateHeader(property);       
         $header.addClass('nondraggable');
-        var $title = $('<h1></h1>');
-        $title.text(property.Title);
-        $header.append($title);
-        header.Element = $header;
 
         $header.on('click', event => {
             event.preventDefault();
-            this.log.Debug('bt click');
-            App.Instance.Designer.ShowProperty(header.Properties);
+            App.Instance.Designer.ShowProperty(property);
         });
 
-        return header;
+        return $header;
     }
 
-    public CreateButton(property: ControlProperty.ButtonProperty): DesignerControls.Button {
-        var button = new DesignerControls.Button(property);
-        var $bt = $('<a href="#"></a>');
-
-        $bt.attr('data-role', 'button');
-        $bt.attr('id', button.Properties.Id);
-        $bt.attr('class', 'item');
-        $bt.text(button.Properties.Text);
+    public CreateButton(property: ControlProperty.ButtonProperty): JQuery {
+        var $bt = super.CreateButton(property);
 
         $bt.on('click', event => {
             event.preventDefault();
             this.log.Debug('bt click');
-            App.Instance.Designer.ShowProperty(button.Properties);
+            App.Instance.Designer.ShowProperty(property);
         });
-
-        button.Element = $bt.button();
-        this.log.Debug("button:", button.Element);
-        return button;
+        return $bt;
     }
 
-    public CreateInput(property: ControlProperty.InputProperty): DesignerControls.Input {
-        var input = new DesignerControls.Input(property);
-
-        var $container = $("<div></div>");
-        $container.attr('data-role', 'fieldcontain');
-        var $label = $("<label></label>");
-        $label.text(input.Properties.Title);
-        $label.attr('for', input.Properties.Id);
-
-        var $input = $('<input />');
-        $input.attr('type', 'text');
-
-        $input.attr('name', input.Properties.Name);
-        $input.attr('id', input.Properties.Id);
-        $container.append($label);
-        $container.append($input);
-
-        $container.on('click', event => {
+    public CreateInput(property: ControlProperty.InputProperty): JQuery {
+        var $input = super.CreateInput(property);
+        $input.find('input').textinput();
+        $input.on('click', event => {
             event.preventDefault();
-            this.log.Debug('input click');
-            App.Instance.Designer.ShowProperty(input.Properties);
+            App.Instance.Designer.ShowProperty(property);
         });
 
-        this.log.Debug('input: ', $container);
-        $container.find('input').textinput();
-        input.Element = $container;
-        return input;
+        return $input;
     }
 }
 

@@ -4,10 +4,20 @@
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", "src/Application", "src/util/log/Log"], function(require, exports, App, Log) {
+define(["require", "exports", "src/util/log/Log"], function(require, exports, Log) {
     var DesignerControls;
     (function (DesignerControls) {
         var BaseControl = (function () {
+            /*
+            private element: JQuery;
+            public get Element(): JQuery {
+            return this.element;
+            }
+            
+            public set Element(value: JQuery) {
+            this.element = value;
+            }
+            */
             function BaseControl(properties) {
                 this.log = new Log("BaseControl");
                 this.properties = properties;
@@ -19,18 +29,6 @@ define(["require", "exports", "src/Application", "src/util/log/Log"], function(r
                 enumerable: true,
                 configurable: true
             });
-
-            Object.defineProperty(BaseControl.prototype, "Element", {
-                get: function () {
-                    return this.element;
-                },
-                set: function (value) {
-                    this.element = value;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
             return BaseControl;
         })();
         DesignerControls.BaseControl = BaseControl;
@@ -49,16 +47,6 @@ define(["require", "exports", "src/Application", "src/util/log/Log"], function(r
                 enumerable: true,
                 configurable: true
             });
-
-            BaseContainer.prototype.Create = function () {
-                this.log.Error("This method should not be used");
-                return $("");
-            };
-
-            BaseContainer.prototype.CreateForDesigner = function () {
-                this.log.Error("This method should not be used");
-                return $("");
-            };
             return BaseContainer;
         })(BaseControl);
         DesignerControls.BaseContainer = BaseContainer;
@@ -69,18 +57,18 @@ define(["require", "exports", "src/Application", "src/util/log/Log"], function(r
                 _super.call(this, properties);
                 this.log = new Log("Page");
             }
-            Page.prototype.OnDrop = function (event) {
-                this.log.Debug("OnDrop, event: ", event);
-                event.preventDefault();
-                var controlId = event.originalEvent.dataTransfer.getData("Text");
-                var control = App.Instance.Device.ControlManager.CreateControl(controlId);
-                this.Childrens.push(control);
-                this.Element.append(control.Element);
-            };
+            Object.defineProperty(Page.prototype, "Header", {
+                //private footer: BaseContainer<ControlProperty.HeaderProperty>;
+                get: function () {
+                    return this.header;
+                },
+                set: function (value) {
+                    this.header = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
 
-            Page.prototype.OnDragOver = function (e) {
-                e.preventDefault();
-            };
             return Page;
         })(BaseContainer);
         DesignerControls.Page = Page;

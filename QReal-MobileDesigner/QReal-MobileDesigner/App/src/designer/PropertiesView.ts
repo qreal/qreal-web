@@ -14,11 +14,8 @@ class PropertiesView {
         { Text: "Yes", Value: true }
     ];
     private themes = [
-        { Text: "Theme A", Value: "a" },
-        { Text: "Theme B", Value: "b" },
-        { Text: "Theme C", Value: "c" },
-        { Text: "Theme D", Value: "d" },
-        { Text: "Theme E", Value: "e" },
+        { Text: "Light", Value: "a" },
+        { Text: "Dark", Value: "b" },
     ];
 
     private currentPropertyDiv: JQuery;
@@ -69,81 +66,19 @@ class PropertiesView {
         var propertyPanel = $('#propertiesTmpl').tmpl({});
         var dialogContent = propertyPanel.children("#property-table");
 
-        var idProperty = $('#propertyTextTmpl').tmpl(
-            {
-                name: 'Id:',
-                value: property.Id
-            });
-        idProperty.find('input').change(function () {
-            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Id, Enums.ControlType.Button, $(this).val());
-        });
+        var $idProperty = this.CreateIdRow(property);
+        var $textProperty = this.CreateInnerTextRow(property);
+        var $inlineProperty = this.CreateInlineRow(property);
+        var $cornersProperty = this.CreateRoundCornersRow(property);
+        var $miniProperty = this.CreateMiniRow(property);
+        var $themeProperty = this.CreateThemeRow(property);
 
-        var textProperty = $('#propertyTextTmpl').tmpl(
-            {
-                name: 'Text:',
-                value: property.Text
-            });
-
-        textProperty.find('input').change(function () {
-            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Text, Enums.ControlType.Button, $(this).val());
-        });
-
-        var inlineProperty = $('#propertySelectTmpl').tmpl(
-            {
-                name: 'Inline:'
-            });
-
-        var inlineSelect = inlineProperty.find('select');
-        $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(inlineSelect);
-
-        inlineSelect.val(String(property.Inline));
-        inlineSelect.change(function () {
-            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Inline, Enums.ControlType.Button, $(this).val());
-        });
-        var cornersProperty = $('#propertySelectTmpl').tmpl(
-            {
-                name: 'Rounded corners:'
-            });
-        var cornersSelect = cornersProperty.find('select');
-        $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(cornersSelect);
-
-        cornersSelect.val(String(property.Corners));
-        cornersSelect.change(function () {
-            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Corners, Enums.ControlType.Button, $(this).val());
-        });
-
-        var miniProperty = $('#propertySelectTmpl').tmpl(
-            {
-                name: 'Mini:'
-            });
-        var miniSelect = miniProperty.find('select');
-        $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(miniSelect);
-
-        miniSelect.val(String(property.Mini));
-        miniSelect.change(function () {
-            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Mini, Enums.ControlType.Button, $(this).val());
-        });
-
-
-        var themeProperty = $('#propertySelectTmpl').tmpl(
-            {
-                name: 'Theme:'
-            });
-
-        var themeSelect = themeProperty.find('select');
-        $("#templateOptionItem").tmpl(this.themes).appendTo(themeSelect);
-
-        themeSelect.val(property.Theme);
-        themeSelect.change(function () {
-            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Theme, Enums.ControlType.Button, $(this).val());
-        });
-
-        dialogContent.append(idProperty);
-        dialogContent.append(textProperty);
-        dialogContent.append(inlineProperty);
-        dialogContent.append(cornersProperty);
-        dialogContent.append(miniProperty);
-        dialogContent.append(themeProperty);
+        dialogContent.append($idProperty);
+        dialogContent.append($textProperty);
+        dialogContent.append($inlineProperty);
+        dialogContent.append($cornersProperty);
+        dialogContent.append($miniProperty);
+        dialogContent.append($themeProperty);
 
         propertyPanel.appendTo('#properties-widget');
         propertyPanel.attr('id', 'propertyFor' + property.Id);
@@ -155,61 +90,22 @@ class PropertiesView {
         var self = this;
         var controlManager = App.Instance.Device.ControlManager;
 
-        var propertyPanel = $('#propertiesTmpl').tmpl({});
-        var dialogContent = propertyPanel.children("#property-table");
+        var $propertyPanel = $('#propertiesTmpl').tmpl({});
+        var $dialogContent = $propertyPanel.children("#property-table");
 
-        var idProperty = $('#propertyTextTmpl').tmpl(
-            {
-                name: 'Id:',
-                value: property.Id
-            });
-        idProperty.find('input').change(function () {
-            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Id, Enums.ControlType.Input, $(this).val());
-        });
+        var $idProperty = this.CreateIdRow(property);
+        var $titleProperty = this.CreateTitleRow(property);
+        var $miniProperty = this.CreateMiniRow(property);
+        var $themeProperty = this.CreateThemeRow(property);
 
-        var titleProperty = $('#propertyTextTmpl').tmpl(
-            {
-                name: 'Title:',
-                value: property.Title
-            });
+        $dialogContent.append($idProperty);
+        $dialogContent.append($titleProperty);
+        $dialogContent.append($miniProperty);
+        $dialogContent.append($themeProperty);
 
-        titleProperty.find('input').change(function () {
-            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Title, Enums.ControlType.Input, $(this).val());
-        });
-
-        var miniProperty = $('#propertySelectTmpl').tmpl(
-            {
-                name: 'Mini:'
-            });
-        var miniSelect = miniProperty.find('select');
-        $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(miniSelect);
-
-        miniSelect.val(String(property.Mini));
-        miniSelect.change(function () {
-            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Mini, Enums.ControlType.Input, $(this).val());
-        });
-
-        var themeProperty = $('#propertySelectTmpl').tmpl(
-            {
-                name: 'Theme:'
-            });
-
-        var themeSelect = themeProperty.find('select');
-        $("#templateOptionItem").tmpl(this.themes).appendTo(themeSelect);
-
-        themeSelect.val(property.Theme);
-        themeSelect.change(function () {
-            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Theme, Enums.ControlType.Input, $(this).val());
-        });
-
-        dialogContent.append(idProperty);
-        dialogContent.append(titleProperty);
-        dialogContent.append(miniProperty);
-        dialogContent.append(themeProperty);
-
-        propertyPanel.appendTo('#properties-widget');
-        propertyPanel.attr('id', 'propertyFor' + property.Id);
-        this.currentPropertyDiv = propertyPanel;
+        $propertyPanel.appendTo('#properties-widget');
+        $propertyPanel.attr('id', 'propertyFor' + property.Id);
+        this.currentPropertyDiv = $propertyPanel;
     }
 
 
@@ -221,27 +117,15 @@ class PropertiesView {
         var propertyPanel = $('#propertiesTmpl').tmpl({});
         var content = propertyPanel.children("#property-table");
 
-        var idProperty = $('#propertyTextTmpl').tmpl(
-            {
-                name: 'Id:',
-                value: property.Id
-            });
-        idProperty.find('input').change(function () {
-            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Id, Enums.ControlType.Page, $(this).val());
-        });        
+        var $idProperty = this.CreateIdRow(property);
+        var $paddingProperty = this.CreatePaddingRow(property);
+        var $themeProperty = this.CreateThemeRow(property);
+        var $headerProperty = this.CreateHeaderRow(property);
 
-        var headerProperty = $('#propertyCheckboxTmpl').tmpl(
-            {
-                name: 'Header:',
-                value: property.Id
-            });
-        headerProperty.find('input').change(function () {
-            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Header, Enums.ControlType.Page, $(this).is(":checked") ? 'yes' : 'no');
-        });
-
-
-        content.append(idProperty);
-        content.append(headerProperty);
+        content.append($idProperty);
+        content.append($paddingProperty);
+        content.append($themeProperty);
+        content.append($headerProperty);
         propertyPanel.appendTo('#properties-widget');
         propertyPanel.attr('id', 'propertyFor' + property.Id);
         this.currentPropertyDiv = propertyPanel;
@@ -255,19 +139,113 @@ class PropertiesView {
         var propertyPanel = $('#propertiesTmpl').tmpl({});
         var content = propertyPanel.children("#property-table");
 
-        var titleProperty = $('#propertyTextTmpl').tmpl(
-            {
-                name: 'Title:',
-                value: property.Title
-            });
-        titleProperty.find('input').change(function () {
-            controlManager.ChangeProperty(property.Id, Enums.PropertyType.Title, Enums.ControlType.Header, $(this).val());
-        });
+        var titleProperty = this.CreateTitleRow(property);
 
         content.append(titleProperty);
         propertyPanel.appendTo('#properties-widget');
         propertyPanel.attr('id', 'propertyFor' + property.Id);
         this.currentPropertyDiv = propertyPanel;
+    }
+
+    private CreateIdRow(property: any): JQuery {
+        return this.CreateTextRow('Id:', property.Id, Enums.PropertyType.Id, property);
+    }
+
+    private CreateInnerTextRow(property: any): JQuery {
+        return this.CreateTextRow('Text:', property.Text, Enums.PropertyType.Text, property);
+    }
+
+    private CreateThemeRow(property: any): JQuery {     
+        return this.CreateSelectRow('Theme:', property.Theme, Enums.PropertyType.Theme, this.themes, property);
+    }
+
+    private CreateTitleRow(property: any): JQuery {
+        return this.CreateTextRow('Title:', property.Title, Enums.PropertyType.Title, property);
+    }
+
+    private CreateMiniRow(property: any): JQuery {
+        return this.CreateTrueFalseSelectRow('Mini:', String(property.Mini), Enums.PropertyType.Mini, property);
+    }
+
+    private CreateRoundCornersRow(property: any): JQuery {
+        return this.CreateTrueFalseSelectRow('Rounded corners:', String(property.Corners), Enums.PropertyType.Corners, property);
+    }
+
+    private CreateInlineRow(property: any): JQuery {
+        return this.CreateTrueFalseSelectRow('Inline:', String(property.Inline), Enums.PropertyType.Inline, property);
+    }
+
+    private CreateHeaderRow(property: any): JQuery {
+        return this.CreateTrueFalseSelectRow('Header:', String(property.Header), Enums.PropertyType.Header, property);
+    }
+
+    private CreatePaddingRow(property: any): JQuery {
+        return this.CreateSizeInputRow('Padding:', String(property.Padding), Enums.PropertyType.Padding, property);
+    }
+
+    //private CreateHeaderRow(property: any): JQuery {
+    //    return this.CreateTextRow('Header:', property.Header, Enums.PropertyType.Header, property);
+    //}
+
+    private CreateTextRow(name: string, value: string, propertyType: Enums.PropertyType, property: any): JQuery {
+        var controlManager = App.Instance.Device.ControlManager;
+        var $textProperty = $('#propertyTextTmpl').tmpl(
+            {
+                name: name,
+                value: value
+            });
+        $textProperty.find('input').change(function () {
+            controlManager.ChangeProperty(property.Id, propertyType, property.Type, $(this).val());
+        });
+        return $textProperty;
+    }
+
+    //TODO: add check
+    private CreateSizeInputRow(name: string, value: string, propertyType: Enums.PropertyType, property: any): JQuery {
+        var controlManager = App.Instance.Device.ControlManager;
+        var $textProperty = $('#propertyTextTmpl').tmpl(
+            {
+                name: name,
+                value: value
+            });
+        $textProperty.find('input').change(function () {
+            controlManager.ChangeProperty(property.Id, propertyType, property.Type, $(this).val());
+        });
+        return $textProperty;
+    }
+
+    private CreateSelectRow(name: string, value: string, propertyType: Enums.PropertyType, options:any, property: any): JQuery {
+        var controlManager = App.Instance.Device.ControlManager;
+        var $themeProperty = $('#propertySelectTmpl').tmpl(
+            {
+                name: name
+            });
+
+        var themeSelect = $themeProperty.find('select');
+        $("#templateOptionItem").tmpl(options).appendTo(themeSelect);
+
+        themeSelect.val(value);
+        themeSelect.change(function () {
+            controlManager.ChangeProperty(property.Id, propertyType, property.Type, $(this).val());
+        });
+        return $themeProperty;
+    }
+
+    private CreateTrueFalseSelectRow(name: string, value: string, propertyType: Enums.PropertyType, property: any): JQuery {
+        var controlManager = App.Instance.Device.ControlManager;
+        var $themeProperty = $('#propertySelectTmpl').tmpl(
+            {
+                name: name
+            });
+
+        var themeSelect = $themeProperty.find('select');
+        $("#templateOptionItem").tmpl(this.trueFalseOptions).appendTo(themeSelect);
+
+        themeSelect.val(value);
+        themeSelect.change(function () {
+            controlManager.ChangeProperty(property.Id, propertyType, property.Type, $(this).val());
+        });
+        return $themeProperty;
     }
 
 }

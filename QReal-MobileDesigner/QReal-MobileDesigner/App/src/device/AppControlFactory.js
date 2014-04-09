@@ -1,44 +1,80 @@
-﻿define(["require", "exports", "src/util/log/Log"], function(require, exports, Log) {
+﻿define(["require", "exports", "src/util/log/Log", "src/model/Enums"], function(require, exports, Log, Enums) {
     var AppControlFactory = (function () {
         function AppControlFactory() {
             this.log = new Log("AppControlFactory");
         }
+        AppControlFactory.prototype.CreateControl = function (property) {
+            switch (property.Type) {
+                case 0 /* App */:
+                    return this.CreateApp(property);
+                    break;
+                case 1 /* Page */:
+                    return this.CreatePage(property);
+                    break;
+                case 2 /* Header */:
+                    return this.CreateHeader(property);
+                    break;
+                case 3 /* Button */:
+                    return this.CreateButton(property);
+                    break;
+                case 4 /* Input */:
+                    return this.CreateInput(property);
+                    break;
+            }
+        };
+
         AppControlFactory.prototype.CreateApp = function (property) {
-            var $app = $('<div></div>');
+            var $app = $('<div>');
             return $app;
         };
 
         AppControlFactory.prototype.CreatePage = function (property) {
-            var $page = $('<div></div>');
-            $page.data('role', 'page');
-            $page.attr('id', property.Id);
+            var $page = $('<div>', {
+                'id': property.Id,
+                'data-role': 'page',
+                'data-theme': property.Theme
+            });
+            var $main = $('<div/>', {
+                'role': 'main'
+            });
+            $main.addClass('ui-content');
+            $page.append($main);
             return $page;
         };
 
         AppControlFactory.prototype.CreateButton = function (property) {
-            var $bt = $('<a href="#"></a>');
-            $bt.attr('data-role', 'button');
-            $bt.attr('id', property.Id);
+            var $bt = $('<a>', {
+                'id': property.Id
+            });
             $bt.text(property.Text);
-            $bt.attr('data-mini', property.MiniString);
-            $bt.attr('data-corners', property.CornersString);
-            $bt.attr('data-inline', property.InlineString);
-            $bt.attr('data-theme', property.Theme);
+            $bt.addClass('ui-btn');
+            if (property.Corners) {
+                $bt.addClass('ui-corner-all');
+            }
+            if (property.Inline) {
+                $bt.addClass('ui-btn-inline');
+            }
+            if (property.Mini) {
+                $bt.addClass('ui-mini');
+            }
+            $bt.addClass('ui-btn-' + property.Theme);
             return $bt;
         };
 
         AppControlFactory.prototype.CreateInput = function (property) {
-            var $container = $("<div></div>");
-            $container.attr('data-role', 'fieldcontain');
+            var $container = $("<div>");
+            $container.addClass('ui-field-contain');
 
-            var $label = $("<label></label>");
+            var $label = $("<label>", {
+                'for': property.Id
+            });
             $label.text(property.Title);
-            $label.attr('for', property.Id);
 
-            var $input = $('<input />');
-            $input.attr('type', 'text');
-            $input.attr('id', property.Id);
-            $input.attr('name', property.Name);
+            var $input = $('<input>', {
+                'id': property.Id,
+                'type': 'text',
+                'data-mini': property.Mini
+            });
 
             $container.append($label);
             $container.append($input);
@@ -46,13 +82,14 @@
         };
 
         AppControlFactory.prototype.CreateHeader = function (property) {
-            var $header = $('<div></div>');
-            $header.attr('id', property.Id);
-            $header.attr('data-role', 'header');
-            var $title = $('<h1></h1>');
+            var $header = $('<div>', {
+                'id': property.Id,
+                'data-role': 'header'
+            });
+            var $title = $('<h1>');
             $title.text(property.Title);
             $header.append($title);
-            return $header;
+            return $header.toolbar();
         };
         return AppControlFactory;
     })();

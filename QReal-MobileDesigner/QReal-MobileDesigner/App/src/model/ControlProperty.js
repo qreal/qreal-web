@@ -85,13 +85,40 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
             __extends(PageProperty, _super);
             function PageProperty(id) {
                 _super.call(this, 1 /* Page */, id);
+                this.header = false;
+                this.theme = 'a';
+                this.padding = '10px';
             }
+            Object.defineProperty(PageProperty.prototype, "Padding", {
+                get: function () {
+                    return this.padding;
+                },
+                set: function (value) {
+                    this.padding = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+
             Object.defineProperty(PageProperty.prototype, "Header", {
                 get: function () {
                     return this.header;
                 },
                 set: function (value) {
                     this.header = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+
+            Object.defineProperty(PageProperty.prototype, "Theme", {
+                get: function () {
+                    return this.theme;
+                },
+                set: function (value) {
+                    this.theme = value;
                 },
                 enumerable: true,
                 configurable: true
@@ -130,7 +157,7 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
                 this.Inline = false;
                 this.Corners = true;
                 this.Mini = false;
-                this.Theme = 'c';
+                this.Theme = 'a';
             }
             Object.defineProperty(ButtonProperty.prototype, "Text", {
                 get: function () {
@@ -227,7 +254,7 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
                 this.Inline = false;
                 this.Corners = true;
                 this.Mini = false;
-                this.Theme = 'c';
+                this.Theme = 'a';
                 this.Placeholder = '';
                 this.Name = '';
             }

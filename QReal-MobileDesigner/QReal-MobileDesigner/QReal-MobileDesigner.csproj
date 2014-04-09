@@ -21,7 +21,6 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
-    <TypeScriptToolsVersion>0.9</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -439,6 +438,8 @@
     <Content Include="Content\css\images\icons-svg\user-white.svg" />
     <Content Include="Content\css\images\icons-svg\video-black.svg" />
     <Content Include="Content\css\images\icons-svg\video-white.svg" />
+    <Content Include="Content\jquery-mobile\jquery.mobile-1.4.2.min.css" />
+    <Content Include="Content\jquery-mobile\jquery.mobile-1.4.2.min.js" />
     <Content Include="Content\jquery-ui\images\animated-overlay.gif" />
     <Content Include="Content\jquery-ui\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\jquery-ui\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -544,7 +545,7 @@
     <Content Include="Content\res\navbar.png" />
     <Content Include="Content\res\selection.png" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Static\device.html" />
+    <Content Include="Content\device.html" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Projects\Designer.cshtml" />
     <None Include="Views\PhoneGapTemplate\index.cshtml" />
@@ -599,7 +600,6 @@
     <CodeAnalysisDictionary Include="App\src\device\ControlManager.ts" />
     <CodeAnalysisDictionary Include="App\src\device\DesignerControlFactory.ts" />
     <CodeAnalysisDictionary Include="App\src\device\Device.ts" />
-    <CodeAnalysisDictionary Include="App\src\device\IControlFactory.ts" />
     <CodeAnalysisDictionary Include="App\src\device\Main.ts" />
     <CodeAnalysisDictionary Include="App\src\util\events\EventManager.ts" />
     <CodeAnalysisDictionary Include="App\src\util\events\IEventListener.ts" />
@@ -628,6 +628,9 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptModuleKind>amd</TypeScriptModuleKind>
+  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />

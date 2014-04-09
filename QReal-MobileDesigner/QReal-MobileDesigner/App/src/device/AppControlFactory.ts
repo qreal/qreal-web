@@ -1,66 +1,104 @@
 ﻿import App = require("src/Application");
 import Log = require("src/util/log/Log");
+import Enums = require("src/model/Enums");
 import DesignerControls = require("src/model/DesignerControls");
 import ControlProperty = require("src/model/ControlProperty");
 
 
-class AppControlFactory{
+class AppControlFactory {
 
-    private log = new Log("AppControlFactory");
+    log = new Log("AppControlFactory");
 
     constructor() {
     }
 
+    public CreateControl(property: ControlProperty.Property): JQuery {
+        switch (property.Type) {
+            case Enums.ControlType.App:
+                return this.CreateApp(property);
+                break;
+            case Enums.ControlType.Page:
+                return this.CreatePage(<any>property);
+                break;
+            case Enums.ControlType.Header:
+                return this.CreateHeader(<any>property);
+                break;
+            case Enums.ControlType.Button:
+                return this.CreateButton(<any>property);
+                break;
+            case Enums.ControlType.Input:
+                return this.CreateInput(<any>property);
+                break;
+        }
+    }
+
     public CreateApp(property: ControlProperty.Property): JQuery {
-        var $app = $('<div></div>');
+        var $app = $('<div>');
         return $app;
     }
 
     public CreatePage(property: ControlProperty.PageProperty): JQuery {
-        var $page = $('<div></div>');
-        $page.data('role', 'page');
-        $page.attr('id', property.Id);
+        var $page = $('<div>', {
+            'id': property.Id,
+            'data-role': 'page',
+            'data-theme': property.Theme
+        });
+        var $main = $('<div/>', {
+            'role': 'main'
+        });
+        $main.addClass('ui-content');
+        $page.append($main);
         return $page;
     }
 
     public CreateButton(property: ControlProperty.ButtonProperty): JQuery {
-        var $bt = $('<a href="#"></a>');
-        $bt.attr('data-role', 'button');
-        $bt.attr('id', property.Id);
+        var $bt = $('<a>', {
+            'id': property.Id
+        });
         $bt.text(property.Text);
-        $bt.attr('data-mini', property.MiniString);
-        $bt.attr('data-corners', property.CornersString);
-        $bt.attr('data-inline', property.InlineString);
-        $bt.attr('data-theme', property.Theme);
+        $bt.addClass('ui-btn');
+        if (property.Corners) {
+            $bt.addClass('ui-corner-all');
+        }
+        if (property.Inline) {
+            $bt.addClass('ui-btn-inline');
+        }
+        if (property.Mini) {
+            $bt.addClass('ui-mini');
+        }
+        $bt.addClass('ui-btn-' + property.Theme);
         return $bt;
     }
 
     public CreateInput(property: ControlProperty.InputProperty): JQuery {
-        var $container = $("<div></div>");
-        $container.attr('data-role', 'fieldcontain');
+        var $container = $("<div>");
+        $container.addClass('ui-field-contain');
 
-        var $label = $("<label></label>");
+        var $label = $("<label>", {
+            'for': property.Id
+        });
         $label.text(property.Title);
-        $label.attr('for', property.Id);
 
-        var $input = $('<input />');
-        $input.attr('type', 'text');
-        $input.attr('id', property.Id);
-        $input.attr('name', property.Name);
+        var $input = $('<input>', {
+            'id': property.Id,
+            'type': 'text',
+            'data-mini': property.Mini   
+        });
 
         $container.append($label);
-        $container.append($input);
+        $container.append($input);     
         return $container;
     }
 
     public CreateHeader(property: ControlProperty.HeaderProperty): JQuery {
-        var $header = $('<div></div>');
-        $header.attr('id', property.Id);
-        $header.attr('data-role', 'header');
-        var $title = $('<h1></h1>');
+        var $header = $('<div>', {
+            'id': property.Id,
+            'data-role': 'header'
+        });
+        var $title = $('<h1>');
         $title.text(property.Title);
         $header.append($title);
-        return $header;
+        return (<any>$header).toolbar();
     }
 }
 
