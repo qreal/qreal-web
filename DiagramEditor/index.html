@@ -25,17 +25,14 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <button type="button" class="btn btn-default" ng-click="vm.createInitialNode()">Initial</button>
-            <button type="button" class="btn btn-default" ng-click="vm.createActionNode()">Action</button>
-            <button type="button" class="btn btn-default" ng-click="vm.createConditionNode()">Condition</button>
-            <button type="button" class="btn btn-default" ng-click="vm.createFinalNode()">Final</button>
+            <button type="button" class="btn btn-primary" ng-click="vm.uploadFromFile()">Generate from JSON</button>
+            <button type="button" class="btn btn-default" ng-click="vm.createButton()">Button</button>
+            <button type="button" class="btn btn-default" ng-click="vm.createLabel()">Label</button>
+            <button type="button" class="btn btn-default" ng-click="vm.createInput()">Input</button>
             <button type="button" class="btn btn-default" ng-click="vm.clear()">Clear</button>
 
 
             <div id="paper"></div>
-            <div class="pull-right">
-                <button type="button" class="btn btn-link" ng-click="vm.validate()">Validate</button>
-            </div>
 
         </div>
         <div id="properties" class="col-md-6 hidden">
@@ -45,6 +42,11 @@
                         <button type="button" class="close" aria-hidden="true" ng-click="vm.close()">&times;</button>
                     </h2>
                     <p>you can write property of diagram node</p>
+
+                    <div class="form-group">
+                        <input id="id" name="id" class="form-control" required>
+                        <label for="id">Node id</label>
+                    </div>
 
                     <div class="form-group">
                         <input id="text" name="text" type="text" class="form-control" required>
@@ -57,6 +59,9 @@
                     <div class="form-group">
                         <input id="property2" name="property2" class="form-control" required>
                         <label for="property2">Node abstract property 2</label>
+                    </div>
+                    <div id="action" class="form-group">
+
                     </div>
                     <div class="pull-right">
                         <button type="button" class="btn btn-primary btn-xs" ng-click="vm.updateValues()">Submit

@@ -1,0 +1,54 @@
+{
+    "nodes": [
+        {
+            "id": "button1",
+            "type": "Button",
+            "name": "name",
+            "action": "Click"
+        },
+        {
+            "id": "label1",
+            "type": "Label",
+            "name": "name",
+            "text": "text"
+        },
+        {
+            "id": "input1",
+            "type": "Input",
+            "name": "name",
+            "action": "Submit"
+        },
+        {
+            "id": "input2",
+            "type": "Input",
+            "name": "name",
+            "action": "Submit"
+        },
+
+        {
+            "id": "button2",
+            "type": "Button",
+            "name": "name",
+            "action": "Click"
+        },
+        {
+            "id": "label2",
+            "type": "Label",
+            "name": "name",
+            "text": "text"
+        },
+        {
+            "id": "input3",
+            "type": "Input",
+            "name": "name",
+            "action": "Submit"
+        },
+        {
+            "id": "input4",
+            "type": "Input",
+            "name": "name",
+            "action": "Submit"
+        }
+    ]
+}
+

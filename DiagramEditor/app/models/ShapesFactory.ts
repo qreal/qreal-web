@@ -1,6 +1,6 @@
 class ShapesFactory {
 
-    static createFinalNode(graph:joint.dia.Graph) {
+    static createInput(graph:joint.dia.Graph, id:string, action:string) {
         var el = new joint.shapes.devs.EllipseWithPorts({
             position: { x: 20, y: 20 },
             inPorts: [''],
@@ -19,8 +19,12 @@ class ShapesFactory {
             }
         });
         graph.addCell(el);
-        var node = new FinalNode(el);
-        node.setText("final");
+
+        if (id == null) {
+            id = el.id;
+        }
+        var node = new Input(el, id, action);
+        node.setText("Input");
         return node;
     }
 
@@ -47,23 +51,24 @@ class ShapesFactory {
         return node;
     }
 
-    static createActionNode(graph:joint.dia.Graph) {
+    static createButton(graph:joint.dia.Graph, id:string, action:string) {
         var el = new joint.shapes.devs.RectWithPorts({
             position: { x: 20, y: 20 },
-            inPorts: ['', ''],
-            outPorts: ['', '']
+            outPorts: ['']
         });
         graph.addCell(el);
-        var node = new ActionNode(el);
-        node.setText("process");
+        if (id == null) {
+            id = el.id;
+        }
+        var node = new Button(el, id, action);
+        node.setText("Button");
         return node;
     }
 
-    static createConditionNode(graph:joint.dia.Graph) {
+    static createLabel(graph:joint.dia.Graph, id:string) {
         var el = new joint.shapes.devs.Diamond({
             position: { x: 20, y: 20 },
-            inPorts: ['', ''],
-            outPorts: ['', ''],
+            inPorts: [''],
             attrs: {
                 '.outer': {
                     stroke: '#000000', 'stroke-width': 1,
@@ -73,11 +78,13 @@ class ShapesFactory {
             }
         });
 
-
+        if (id == null) {
+            id = el.id;
+        }
         el.rotate(45, 0);
         graph.addCell(el);
-        var node = new ConditionNode(el);
-        node.setText("123");
+        var node = new Label(el, id);
+        node.setText("Label");
         return node;
     }
 }

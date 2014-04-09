@@ -3,13 +3,7 @@ interface Shape {
     property2:string;
     text:string;
     type : NodeType;
+    id :string;
     setText(text:string);
     getElement();
-}
-
-enum NodeType {
-    Action,
-    Condition,
-    Final,
-    Initial
 }
