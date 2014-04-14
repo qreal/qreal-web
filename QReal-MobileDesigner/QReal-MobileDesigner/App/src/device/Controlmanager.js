@@ -134,17 +134,16 @@
                         var header = new DesignerControls.Header(headerProp);
                         var $header = this.controlFactory.CreateHeader(headerProp);
 
-                        //$header.attr('class', 'sortcontainer connectedSortable');
                         page.Header = header;
                         $page.prepend($header);
-                        //(<any>$page.find("[data-role='header'], [data-role='footer']")).toolbar();
                     } else {
                         $page.find('div[data-role="header"]').remove();
                         page.Header = null;
-                        //page.Childrens.splice(0, 1);
                     }
                     break;
                 case 5 /* Theme */:
+                    var themeClass = newValue;
+                    $page.removeClass("ui-page-theme-a ui-page-theme-b").addClass("ui-page-theme-" + newValue);
                     break;
             }
         };
@@ -157,6 +156,11 @@
                 case 6 /* Title */:
                     header.Properties.Title = newValue;
                     $header.find('h1').text(newValue);
+                    break;
+                case 5 /* Theme */:
+                    //$header.find('h1').text(newValue);
+                    header.Properties.Theme = newValue;
+                    $header.removeClass("ui-bar-a ui-bar-b ui-bar-inherit").addClass("ui-bar-" + newValue);
                     break;
             }
         };

@@ -5,6 +5,8 @@ module ControlProperty {
     export class Property {
 
         private type: string;
+        private cssClass: string;
+        private id: string;
 
         public get Type(): Enums.ControlType {
             return Enums.ControlType[this.type];
@@ -13,8 +15,6 @@ module ControlProperty {
         public set Type(value: Enums.ControlType) {
             this.type = Enums.ControlType[value];
         }
-
-        private id: string;
 
         public get Id(): string {
             return this.id;
@@ -28,6 +28,13 @@ module ControlProperty {
             return '#' + this.Id;
         }
 
+        public get Class(): string {
+            return this.cssClass;
+        }
+
+        public set Class(value: string) {
+            this.cssClass = value;
+        }
 
         constructor(type: Enums.ControlType, id: string) {
             this.Type = type;
@@ -96,7 +103,7 @@ module ControlProperty {
         constructor(id: string) {
             super(Enums.ControlType.Page, id);
             this.header = false;
-            this.theme = 'a';
+            this.theme = 'default';
             this.padding = '10px';
         }
     }
@@ -104,6 +111,7 @@ module ControlProperty {
     export class HeaderProperty extends Property {
 
         private title: string;
+        private theme: string;
 
         public get Title(): string {
             return this.title;
@@ -111,6 +119,14 @@ module ControlProperty {
 
         public set Title(value: string) {
             this.title = value;
+        }
+
+        public get Theme(): string {
+            return this.theme;
+        }
+
+        public set Theme(value: string) {
+            this.theme = value;
         }
 
         constructor(id: string) {
@@ -185,9 +201,8 @@ module ControlProperty {
             this.Inline = false;
             this.Corners = true;
             this.Mini = false;
-            this.Theme = 'a';
+            this.Theme = 'default';
         }
-
     }
 
     export class InputProperty extends Property {
@@ -262,12 +277,11 @@ module ControlProperty {
             this.Inline = false;
             this.Corners = true;
             this.Mini = false;
-            this.Theme = 'a';
+            this.Theme = 'default';
             this.Placeholder = '';
             this.Name = '';
         }
     }
-
 }
 
 export =  ControlProperty;

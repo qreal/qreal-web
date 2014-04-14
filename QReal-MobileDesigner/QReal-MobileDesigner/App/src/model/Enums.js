@@ -21,6 +21,7 @@
             PropertyType[PropertyType["Header"] = 7] = "Header";
             PropertyType[PropertyType["Size"] = 8] = "Size";
             PropertyType[PropertyType["Padding"] = 9] = "Padding";
+            PropertyType[PropertyType["Placeholder"] = 10] = "Placeholder";
         })(Enums.PropertyType || (Enums.PropertyType = {}));
         var PropertyType = Enums.PropertyType;
     })(Enums || (Enums = {}));

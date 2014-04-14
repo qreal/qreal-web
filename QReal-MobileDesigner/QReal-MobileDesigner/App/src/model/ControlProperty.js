@@ -43,6 +43,18 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
                 enumerable: true,
                 configurable: true
             });
+
+            Object.defineProperty(Property.prototype, "Class", {
+                get: function () {
+                    return this.cssClass;
+                },
+                set: function (value) {
+                    this.cssClass = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
             return Property;
         })();
         ControlProperty.Property = Property;
@@ -86,7 +98,7 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
             function PageProperty(id) {
                 _super.call(this, 1 /* Page */, id);
                 this.header = false;
-                this.theme = 'a';
+                this.theme = 'default';
                 this.padding = '10px';
             }
             Object.defineProperty(PageProperty.prototype, "Padding", {
@@ -145,6 +157,18 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
                 configurable: true
             });
 
+
+            Object.defineProperty(HeaderProperty.prototype, "Theme", {
+                get: function () {
+                    return this.theme;
+                },
+                set: function (value) {
+                    this.theme = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
             return HeaderProperty;
         })(Property);
         ControlProperty.HeaderProperty = HeaderProperty;
@@ -157,7 +181,7 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
                 this.Inline = false;
                 this.Corners = true;
                 this.Mini = false;
-                this.Theme = 'a';
+                this.Theme = 'default';
             }
             Object.defineProperty(ButtonProperty.prototype, "Text", {
                 get: function () {
@@ -254,7 +278,7 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
                 this.Inline = false;
                 this.Corners = true;
                 this.Mini = false;
-                this.Theme = 'a';
+                this.Theme = 'default';
                 this.Placeholder = '';
                 this.Name = '';
             }
