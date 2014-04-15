@@ -107,12 +107,10 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             var content = propertyPanel.children("#property-table");
 
             var $idProperty = this.CreateIdRow(property);
-            var $paddingProperty = this.CreatePaddingRow(property);
             var $themeProperty = this.CreateThemeRow(property);
             var $headerProperty = this.CreateHeaderRow(property);
 
             content.append($idProperty);
-            content.append($paddingProperty);
             content.append($themeProperty);
             content.append($headerProperty);
             propertyPanel.appendTo('#properties-widget');

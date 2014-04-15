@@ -1,6 +1,11 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿html {
+  position: relative;
+  height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
 }
 
 /* test full screnn widgets */
@@ -9,7 +14,7 @@
 }
 
 .designer {
-    margin-top: 10px;
+    margin-top: 65px;
 }
 
 /* Propertyes */
@@ -60,7 +65,13 @@ iframe.app-content-frame {
     overflow-y: auto;
 }
 
-#addPage {
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
 }
 
 /** Controls **/
