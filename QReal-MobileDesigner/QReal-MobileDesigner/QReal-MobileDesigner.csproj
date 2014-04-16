@@ -211,8 +211,6 @@
     </Content>
     <Content Include="Content\bootstrap-switch\bootstrap-switch.css" />
     <Content Include="Content\bootstrap-switch\bootstrap-switch.min.css" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\designer.css" />
@@ -478,7 +476,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <EntityDeploy Include="Models\Projects.edmx">
       <Generator>EntityModelCodeGenerator</Generator>

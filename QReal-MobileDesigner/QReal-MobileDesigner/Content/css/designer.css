@@ -8,7 +8,7 @@
 }
 
 .dleft {
-    float: none;
+    float: left;
     width: 361px;
     position: fixed;
     margin-left: 25px;
@@ -16,7 +16,7 @@
 
 .dright {
     float: left;
-    width: 350px;
+    width: 300px;
     position: fixed;
     right: 0;
     top: 60px;
@@ -24,10 +24,10 @@
 }
 
 .dcenter {
-    width: 500px;
-    padding: 0 20px;
-    margin: 0 auto;
-    overflow-y: auto;
+    width: calc(100% - 680px);
+    margin-left: 370px;
+    margin-right:310px;
+    overflow:auto;
 }
 
 .device-mockup {
@@ -59,6 +59,7 @@
     font-size: 14px;
     text-align: right;
     padding-right: 5px;
+    width: 30%;
 }
 
 .property-title {
@@ -93,7 +94,7 @@ iframe.app-content-frame {
     bottom: 0;
     width: 100%;
     height: 30px;
-    background-color: #000000;
+    background-color: #101010;
 }
 
 /** Controls **/

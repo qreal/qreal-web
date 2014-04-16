@@ -26,7 +26,7 @@ namespace QReal_MobileDesigner
 
             bundles.Add(new ScriptBundle("~/bundles/designercss").Include(
                "~/Content/jquery-ui/jquery-ui-1.10.4.custom.min.css",
-               "~/Content/bootstrap.css",
+               "~/Content/bootstrap.min.css",
                 "~/Content/css/designer.css",
                 "~/Content/css/device-mockup/device-mockups2.css"));
 
@@ -40,7 +40,7 @@ namespace QReal_MobileDesigner
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
+                      "~/Content/bootstrap.min.css",
                       "~/Content/site.css"));
         }
     }
