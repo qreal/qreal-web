@@ -76,12 +76,28 @@ class Designer {
                 data: dataToSend,
                 success: function (result) {
                     self.log.Debug('post result:', result);
-                   // $('#emulatorIframe').modal();
-                   // $('#emulatorIframe').find('iframe').attr('src', "/Projects/Emulator")
+                    // $('#emulatorIframe').modal();
+                    // $('#emulatorIframe').find('iframe').attr('src', "/Projects/Emulator")
                     window.open("/Projects/Emulator", "_blank", "location=yes,height=480,width=320,scrollbars=yes,status=yes");
                 }
             });
         });
+
+        $(document).ready(function () {
+            /**
+             * Maximize the real estate available to the portal contents
+             */
+            self.ResizeContent();
+            $(window).resize(self.ResizeContent);
+        });
+    }
+
+    private ResizeContent() {
+        var propertyHeight = $(window).height() - 100;
+        $(".properties-panel").height(propertyHeight);
+        var controlsHeight = $(window).height() - 155;
+        $(".dleft .panel").height(controlsHeight);
+        $(".dcenter").height(propertyHeight);
     }
 
     public Download(filename, text) {

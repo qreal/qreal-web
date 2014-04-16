@@ -1,4 +1,4 @@
-define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/Application", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, Log, DialogHelper, App, EventManager, ToolsView, PropertiesView) {
+﻿define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/Application", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, Log, DialogHelper, App, EventManager, ToolsView, PropertiesView) {
     var Designer = (function () {
         function Designer() {
             this.log = new Log("Designer");
@@ -66,6 +66,22 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
                     }
                 });
             });
+
+            $(document).ready(function () {
+                /**
+                * Maximize the real estate available to the portal contents
+                */
+                self.ResizeContent();
+                $(window).resize(self.ResizeContent);
+            });
+        };
+
+        Designer.prototype.ResizeContent = function () {
+            var propertyHeight = $(window).height() - 100;
+            $(".properties-panel").height(propertyHeight);
+            var controlsHeight = $(window).height() - 155;
+            $(".dleft .panel").height(controlsHeight);
+            $(".dcenter").height(propertyHeight);
         };
 
         Designer.prototype.Download = function (filename, text) {
