@@ -160,8 +160,13 @@ class ControlManager {
                 }
                 break;
             case Enums.PropertyType.Theme:
-                var themeClass = newValue;
-                $page.removeClass("ui-page-theme-a ui-page-theme-b").addClass("ui-page-theme-" + newValue);
+                $page.removeClass("ui-page-theme-a ui-page-theme-b");
+                page.Properties.Theme = newValue;
+                if (newValue == 'default') {
+                    $page.addClass("ui-page-theme-a");
+                } else {
+                    $page.addClass("ui-page-theme-" + newValue);
+                }
                 break;
         }
     }
