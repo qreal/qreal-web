@@ -1,4 +1,4 @@
-define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/Application", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, Log, DialogHelper, App, EventManager, ToolsView, PropertiesView) {
+﻿define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/Application", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, Log, DialogHelper, App, EventManager, ToolsView, PropertiesView) {
     var Designer = (function () {
         function Designer() {
             this.log = new Log("Designer");
@@ -65,6 +65,14 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
                         window.open("/Projects/Emulator", "_blank", "location=yes,height=480,width=320,scrollbars=yes,status=yes");
                     }
                 });
+            });
+
+            var editor = ace.edit("editor");
+            editor.setTheme("ace/theme/Chrome");
+            editor.getSession().setMode("ace/mode/javascript");
+
+            $('#code').on('click', function (e) {
+                $('#codeEditor').modal();
             });
 
             $(document).ready(function () {

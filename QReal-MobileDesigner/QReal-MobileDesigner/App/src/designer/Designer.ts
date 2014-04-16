@@ -8,6 +8,7 @@ import ControlProperty = require("src/model/ControlProperty");
 
 declare var bootbox;
 declare var projectName;
+declare var ace;
 
 class Designer {
 
@@ -81,6 +82,14 @@ class Designer {
                     window.open("/Projects/Emulator", "_blank", "location=yes,height=480,width=320,scrollbars=yes,status=yes");
                 }
             });
+        });
+
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/Chrome");
+        editor.getSession().setMode("ace/mode/javascript");
+
+        $('#code').on('click', e => {
+            $('#codeEditor').modal();
         });
 
         $(document).ready(function () {
