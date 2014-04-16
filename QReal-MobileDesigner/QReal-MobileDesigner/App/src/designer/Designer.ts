@@ -86,10 +86,15 @@ class Designer {
 
         var editor = ace.edit("editor");
         editor.setTheme("ace/theme/Chrome");
-        editor.getSession().setMode("ace/mode/javascript");
+        editor.getSession().setMode("ace/mode/html");
 
         $('#code').on('click', e => {
             $('#codeEditor').modal();
+            var code = App.Instance.Device.ControlManager.GenerateAppHtml();
+            var formatCode = (<any>jQuery).htmlClean(code, {
+                format: true,
+                allowedAttributes: [["all"]]});
+            editor.setValue(code);
         });
 
         $(document).ready(function () {

@@ -737,6 +737,8 @@
     <Content Include="Content\jquery-ui\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\jquery-ui\jquery-ui-1.10.4.custom.css" />
     <Content Include="Content\jquery-ui\jquery-ui-1.10.4.custom.min.css" />
+    <Content Include="Content\jQuery.htmlClean_1.4.0\jquery.htmlClean.js" />
+    <Content Include="Content\jQuery.htmlClean_1.4.0\jquery.htmlClean.min.js" />
     <Content Include="Content\jquery.mobile-1.3.2.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
