@@ -15,13 +15,13 @@
     @Scripts.Render("~/bundles/modernizr")
 
     <style type="text/css" media="screen">
-        #editor {
+        #html_editor {
             position: absolute;
-            top: 0;
+            top: 50px;
             right: 0;
             bottom: 0;
             left: 0;
-            margin:20px;
+            margin: 20px;
         }
     </style>
 
@@ -94,13 +94,12 @@
                         <div class="panel-body">
                             <div class="pages-list list-group"></div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="dcenter">
+        <div class="dcenter" style="overflow:scroll;">
             <div style="margin: 0 auto; width: 450px;">
                 <!-- device -->
                 <div class="device-mockup" data-device="s3" data-orientation="portrait" data-color="white">
@@ -130,7 +129,6 @@
     <!-- Footer -->
     <div id="footer">
         <div class="container">
-
         </div>
     </div>
 
@@ -138,7 +136,7 @@
         $('#controlPaneltabs a').click(function (e) {
             e.preventDefault();
             $(this).tab('show');
-        });
+        });    
 
         $(function () {
             $.fn.exists = function () {
@@ -267,11 +265,21 @@
     <div id="codeEditor" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h4>Code editor</h4>
-                </div>
                 <div class="modal-body" style="height:500px;">
-                    <div id="editor"></div>
+                    <ul class="nav nav-tabs" id="editorsTabs">
+                        <li class="active"><a href="#html_tab">HTML</a></li>
+                        <li><a href="#css_tab">CSS</a></li>
+                        <li><a href="#js_tab">JS</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="html_tab">
+                            <div id="html_editor"></div>
+                        </div>
+                        <div class="tab-pane" id="css_tab">
+                        </div>
+                        <div class="tab-pane" id="js_tab">
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

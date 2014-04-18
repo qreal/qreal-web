@@ -1,4 +1,4 @@
-﻿define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/Application", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, Log, DialogHelper, App, EventManager, ToolsView, PropertiesView) {
+define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/Application", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, Log, DialogHelper, App, EventManager, ToolsView, PropertiesView) {
     var Designer = (function () {
         function Designer() {
             this.log = new Log("Designer");
@@ -67,16 +67,20 @@
                 });
             });
 
-            var editor = ace.edit("editor");
+            var editor = ace.edit("html_editor");
             editor.setTheme("ace/theme/Chrome");
             editor.getSession().setMode("ace/mode/html");
 
             $('#code').on('click', function (e) {
                 $('#codeEditor').modal();
+                $('#editorsTabs a').click(function (e) {
+                    e.preventDefault();
+                    $(this).tab('show');
+                });
                 var code = App.Instance.Device.ControlManager.GenerateAppHtml();
                 var formatCode = jQuery.htmlClean(code, {
-                    format: true,
-                    allowedAttributes: [["all"]] });
+                    format: true
+                });
                 editor.setValue(code);
             });
 
@@ -94,7 +98,7 @@
             $(".properties-panel").height(propertyHeight);
             var controlsHeight = $(window).height() - 155;
             $(".dleft .panel").height(controlsHeight);
-            $(".dcenter").height(propertyHeight);
+            $(".dcenter").height(propertyHeight + 20);
         };
 
         Designer.prototype.Download = function (filename, text) {
