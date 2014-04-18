@@ -1,4 +1,4 @@
-define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/Application", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, Log, DialogHelper, App, EventManager, ToolsView, PropertiesView) {
+﻿define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/Application", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, Log, DialogHelper, App, EventManager, ToolsView, PropertiesView) {
     var Designer = (function () {
         function Designer() {
             this.log = new Log("Designer");
@@ -71,6 +71,10 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
             editor.setTheme("ace/theme/Chrome");
             editor.getSession().setMode("ace/mode/html");
 
+            var csseditor = ace.edit("css_editor");
+            editor.setTheme("ace/theme/Chrome");
+            editor.getSession().setMode("ace/mode/html");
+
             $('#code').on('click', function (e) {
                 $('#codeEditor').modal();
                 $('#editorsTabs a').click(function (e) {
@@ -82,6 +86,10 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
                     format: true
                 });
                 editor.setValue(code);
+            });
+
+            $('#codeEditor').on('show.bs.modal', function () {
+                $('.modal-content .modal-body').css('height', $(window).height() * 0.8);
             });
 
             $(document).ready(function () {

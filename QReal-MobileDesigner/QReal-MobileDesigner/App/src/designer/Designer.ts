@@ -88,6 +88,10 @@ class Designer {
         editor.setTheme("ace/theme/Chrome");
         editor.getSession().setMode("ace/mode/html");
 
+        var csseditor = ace.edit("css_editor");
+        editor.setTheme("ace/theme/Chrome");
+        editor.getSession().setMode("ace/mode/html");
+
         $('#code').on('click', e => {
             $('#codeEditor').modal();
             $('#editorsTabs a').click(function (e) {
@@ -99,6 +103,10 @@ class Designer {
                 format: true
             });
             editor.setValue(code);
+        });
+
+        $('#codeEditor').on('show.bs.modal', function () {
+            $('.modal-content .modal-body').css('height', $(window).height() * 0.8);
         });
 
         $(document).ready(function () {
