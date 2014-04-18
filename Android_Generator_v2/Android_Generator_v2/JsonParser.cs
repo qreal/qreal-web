@@ -102,11 +102,22 @@ namespace Android_Generator_v2
                                     manifestBuilder.addActivity(ManifestActivity.
                                         createNewManifestActivity(currentActivityName, false));
                                 }
+                                continue;
                             }
                             else
                             {
                                 throw new NotFoundElementException("Project id");
                             }
+                        }
+                        if (reader.Value.Equals("header"))
+                        {
+                            parseHeaderElement();
+                            continue;
+                        }
+                        if (reader.Value.Equals("padding"))
+                        {
+                            reader.Read();
+                            layoutBuilder.setPadding(reader.Value.ToString());
                         }
                         if (reader.Value.Equals("Controls"))
                         {
@@ -142,11 +153,7 @@ namespace Android_Generator_v2
                     {
                         // read for get type value
                         reader.Read();
-                        if (reader.Value.Equals("Header"))
-                        {
-                            parseHeaderElement();
-                        }
-                        else if (reader.Value.Equals("Button"))
+                        if (reader.Value.Equals("Button"))
                         {
                             parseButtonElement(currentActivityName);
                         }               
@@ -191,7 +198,7 @@ namespace Android_Generator_v2
                 }
             }
 
-            layoutBuilder.addElement(headerElement.getXml());
+            layoutBuilder.addElementToHeader(headerElement.getXml());
         }
 
         private void parseButtonElement(String currentActivityName)
@@ -255,7 +262,7 @@ namespace Android_Generator_v2
                 }
             }
 
-            layoutBuilder.addElement(buttonElement.getXml());
+            layoutBuilder.addElementToBody(buttonElement.getXml());
             activityBuider.addActionsToOnCreate(buttonElement.getOnCreateActions());
             activityBuider.addImports(buttonElement.getImports());
             activityBuider.addMethods(buttonElement.getOnClickSrc());
@@ -307,7 +314,7 @@ namespace Android_Generator_v2
                 }
             }
 
-            layoutBuilder.addElement(inputElement.getXml());
+            layoutBuilder.addElementToBody(inputElement.getXml());
             activityBuider.addActionsToOnCreate(inputElement.getOnCreateActions());
             activityBuider.addImports(inputElement.getImports());
             activityBuider.addMethods(inputElement.getValueGetter());

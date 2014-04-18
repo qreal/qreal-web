@@ -45,15 +45,15 @@ namespace Android_Generator_v2
             this.isRounded = isRounded;
         }
 
-        public void setTheme(String themeChar)
+        public void setTheme(String themeName)
         {
             if (isRounded)
             {
-                xmlAttrs.Append(@"style=""@style/Button_Theme_" + themeChar + @"_Rounded""");
+                xmlAttrs.Append(@"style=""@style/Button_Theme_" + themeName + @"_Rounded""");
             }
             else
             {
-                xmlAttrs.Append(@"style=""@style/Button_Theme_" + themeChar + "\"");
+                xmlAttrs.Append(@"style=""@style/Button_Theme_" + themeName + "\"");
             }
         }
 
