@@ -228,11 +228,22 @@ namespace Android_Generator_v2
                             reader.Read();
                             if (!(Boolean)reader.Value)
                             {
+                                if (isNowInline)
+                                {
+                                    writeAndClearInline();
+                                }
                                 buttonElement.addXmlAttr("layout_width", "match_parent");
                             }
                             else
                             {
+                                if (!isNowInline)
+                                {
+                                    inlineLayout = new InlineLayoutElement();
+                                    isNowInline = true;
+                                }
                                 buttonElement.addXmlAttr("layout_width", "wrap_content");
+                                buttonElement.addXmlAttr("layout_marginLeft", "2dp");
+                                buttonElement.addXmlAttr("layout_marginRight", "2dp");
                             }
                         }
                         if (value.Equals("corners"))
@@ -262,7 +273,14 @@ namespace Android_Generator_v2
                 }
             }
 
-            layoutBuilder.addElementToBody(buttonElement.getXml());
+            if (isNowInline)
+            {
+                inlineLayout.addElement(buttonElement.getXml());
+            }
+            else 
+            {
+                layoutBuilder.addElementToBody(buttonElement.getXml());
+            }
             activityBuider.addActionsToOnCreate(buttonElement.getOnCreateActions());
             activityBuider.addImports(buttonElement.getImports());
             activityBuider.addMethods(buttonElement.getOnClickSrc());
@@ -270,6 +288,10 @@ namespace Android_Generator_v2
 
         private void parseInputElement()
         {
+            if (isNowInline)
+            {
+                writeAndClearInline();
+            }
             InputElement inputElement = new InputElement();
 
             while (!reader.TokenType.ToString().Equals("EndObject"))
@@ -321,6 +343,12 @@ namespace Android_Generator_v2
             activityBuider.addVariables(inputElement.getVariables());
         }
 
+        private void writeAndClearInline()
+        {
+            layoutBuilder.addElementToBody(inlineLayout.getXml());
+            isNowInline = false;
+        }
+
         private String package;
         private JObject projectObj;
         private String filename;
@@ -328,5 +356,7 @@ namespace Android_Generator_v2
         private ActivityBuilderInterface activityBuider = null;
         private LayoutBuilderInterface layoutBuilder = null;
         private ManifestBuilderInterface manifestBuilder = new AndroidManifestBuilder();
+        private InlineLayoutElement inlineLayout;
+        private bool isNowInline = false;
     }
 }

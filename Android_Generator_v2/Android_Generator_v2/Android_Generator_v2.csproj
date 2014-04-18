@@ -67,6 +67,7 @@
     <Compile Include="Elements\ButtonElement.cs" />
     <Compile Include="Elements\Element.cs" />
     <Compile Include="Elements\HeaderElement.cs" />
+    <Compile Include="Elements\InlineLayoutElement.cs" />
     <Compile Include="Elements\InputElement.cs" />
     <Compile Include="BuildersInterfaces\LayoutBuilderInterface.cs" />
     <Compile Include="ManifestActivity.cs" />
