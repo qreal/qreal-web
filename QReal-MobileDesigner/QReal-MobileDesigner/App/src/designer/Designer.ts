@@ -84,17 +84,29 @@ class Designer {
             });
         });
 
-        var editor = ace.edit("editor");
+        var editor = ace.edit("html_editor");
+        editor.setTheme("ace/theme/Chrome");
+        editor.getSession().setMode("ace/mode/html");
+
+        var csseditor = ace.edit("css_editor");
         editor.setTheme("ace/theme/Chrome");
         editor.getSession().setMode("ace/mode/html");
 
         $('#code').on('click', e => {
             $('#codeEditor').modal();
+            $('#editorsTabs a').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+            });
             var code = App.Instance.Device.ControlManager.GenerateAppHtml();
             var formatCode = (<any>jQuery).htmlClean(code, {
-                format: true,
-                allowedAttributes: [["all"]]});
+                format: true
+            });
             editor.setValue(code);
+        });
+
+        $('#codeEditor').on('show.bs.modal', function () {
+            $('.modal-content .modal-body').css('height', $(window).height() * 0.8);
         });
 
         $(document).ready(function () {
@@ -111,7 +123,7 @@ class Designer {
         $(".properties-panel").height(propertyHeight);
         var controlsHeight = $(window).height() - 155;
         $(".dleft .panel").height(controlsHeight);
-        $(".dcenter").height(propertyHeight);
+        $(".dcenter").height(propertyHeight + 20);
     }
 
     public Download(filename, text) {

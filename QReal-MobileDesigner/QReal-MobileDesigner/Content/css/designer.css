@@ -3,8 +3,7 @@
 
 .designer {
     margin-top: 60px;
-    height: auto;
-    overflow: hidden;
+    overflow:hidden;
 }
 
 .dleft {
@@ -27,7 +26,6 @@
     width: calc(100% - 680px);
     margin-left: 370px;
     margin-right:310px;
-    overflow:auto;
 }
 
 .device-mockup {
