@@ -36,6 +36,11 @@
     overflow-y: auto;
 }
 
+.relative{
+    position: relative;
+    height: 100%;
+}
+
 
 /* Propertyes */
 

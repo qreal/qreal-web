@@ -15,7 +15,7 @@
     @Scripts.Render("~/bundles/modernizr")
 
     <style type="text/css" media="screen">
-        #html_editor, css_editor {
+        #editor {
             position: absolute;
             top: 50px;
             right: 0;
@@ -136,7 +136,7 @@
         $('#controlPaneltabs a').click(function (e) {
             e.preventDefault();
             $(this).tab('show');
-        });    
+        });
 
         $(function () {
             $.fn.exists = function () {
@@ -265,23 +265,13 @@
     <div id="codeEditor" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-body" style="height:500px;">
-                    <ul class="nav nav-tabs" id="editorsTabs">
-                        <li class="active"><a href="#html_tab">HTML</a></li>
-                        <li><a href="#css_tab">CSS</a></li>
-                        <li><a href="#js_tab">JS</a></li>
+                <div class="modal-body">
+                    <ul class="nav nav-pills" id="editor_pills">
+                        <li class="active"><a href="#">Html</a></li>
+                        <li><a href="#">JavaScript</a></li>
+                        <li><a href="#">CSS</a></li>
                     </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="html_tab">
-                            <div id="html_editor"></div>
-                        </div>
-                        <div class="tab-pane" id="css_tab">
-                            <div id="css_editor"></div>
-                        </div>
-                        <div class="tab-pane" id="js_tab">
-                            <div id="js_editor"></div>
-                        </div>
-                    </div>
+                    <div id="editor"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

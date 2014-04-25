@@ -84,29 +84,43 @@ class Designer {
             });
         });
 
-        var editor = ace.edit("html_editor");
+        var editor = ace.edit("editor");
         editor.setTheme("ace/theme/Chrome");
         editor.getSession().setMode("ace/mode/html");
 
-        var csseditor = ace.edit("css_editor");
-        editor.setTheme("ace/theme/Chrome");
-        editor.getSession().setMode("ace/mode/html");
+        //var csseditor = ace.edit("css_editor");
+        //editor.setTheme("ace/theme/Chrome");
+        //editor.getSession().setMode("ace/mode/html");
 
         $('#code').on('click', e => {
             $('#codeEditor').modal();
-            $('#editorsTabs a').click(function (e) {
-                e.preventDefault();
-                $(this).tab('show');
-            });
             var code = App.Instance.Device.ControlManager.GenerateAppHtml();
             var formatCode = (<any>jQuery).htmlClean(code, {
                 format: true
             });
-            editor.setValue(code);
+            editor.setValue(formatCode);
         });
 
         $('#codeEditor').on('show.bs.modal', function () {
             $('.modal-content .modal-body').css('height', $(window).height() * 0.8);
+        });
+
+        $('#editor_pills a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+            switch ($(this).text()) {
+                case "JavaScript":
+                    editor.getSession().setMode("ace/mode/javascript");
+                    editor.setValue("var width = 123;");
+                    break;
+                case "CSS":
+                    editor.getSession().setMode("ace/mode/css");
+                    editor.setValue("width: 100%;");
+                    break;
+                case "Html":
+                    editor.getSession().setMode("ace/mode/html");
+                    break;
+            }
         });
 
         $(document).ready(function () {
