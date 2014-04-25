@@ -1,8 +1,8 @@
 {
     "type": "App",
     "id": "",
-    "name": "Header",
-    "projectPackage": "com.example.header",
+    "name": "Inline",
+    "projectPackage": "com.example.inline",
     "Pages": [
         {
             "type": "Page",
@@ -35,6 +35,96 @@
                     "theme": "default",
                     "placeholder": "",
                     "name": ""
+                },
+                {
+                    "type": "Button",
+                    "id": "button3",
+                    "text": "Button1",
+                    "inline": true,
+                    "corners": true,
+                    "mini": false,
+                    "theme": "default"
+                },
+                {
+                    "type": "Button",
+                    "id": "button4",
+                    "text": "Button2",
+                    "inline": true,
+                    "corners": true,
+                    "mini": false,
+                    "theme": "default"
+                },
+                {
+                    "type": "Button",
+                    "id": "button5",
+                    "text": "Button3",
+                    "inline": true,
+                    "corners": true,
+                    "mini": false,
+                    "theme": "default"
+                },
+                {
+                    "type": "Button",
+                    "id": "button6",
+                    "text": "Button4",
+                    "inline": true,
+                    "corners": true,
+                    "mini": false,
+                    "theme": "default"
+                },
+                {
+                    "type": "Button",
+                    "id": "button7",
+                    "text": "Button5",
+                    "inline": true,
+                    "corners": true,
+                    "mini": false,
+                    "theme": "default"
+                },
+                {
+                    "type": "Button",
+                    "id": "button8",
+                    "text": "Button",
+                    "inline": false,
+                    "corners": true,
+                    "mini": false,
+                    "theme": "default"
+                },
+                {
+                    "type": "Button",
+                    "id": "button9",
+                    "text": "Button6",
+                    "inline": true,
+                    "corners": true,
+                    "mini": false,
+                    "theme": "default"
+                },
+                {
+                    "type": "Button",
+                    "id": "button10",
+                    "text": "Button7",
+                    "inline": true,
+                    "corners": true,
+                    "mini": false,
+                    "theme": "default"
+                },
+                {
+                    "type": "Button",
+                    "id": "button11",
+                    "text": "Button8",
+                    "inline": true,
+                    "corners": true,
+                    "mini": false,
+                    "theme": "default"
+                },
+                {
+                    "type": "Button",
+                    "id": "button12",
+                    "text": "Button",
+                    "inline": false,
+                    "corners": true,
+                    "mini": false,
+                    "theme": "default"
                 }
             ]
         }
