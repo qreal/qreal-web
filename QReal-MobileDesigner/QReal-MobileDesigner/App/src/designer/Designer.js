@@ -1,8 +1,13 @@
-﻿define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/Application", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, Log, DialogHelper, App, EventManager, ToolsView, PropertiesView) {
+define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/Application", "src/util/events/EventManager", "src/designer/ToolsView", "src/designer/PropertiesView"], function(require, exports, Log, DialogHelper, App, EventManager, ToolsView, PropertiesView) {
     var Designer = (function () {
         function Designer() {
             this.log = new Log("Designer");
             this.dh = new DialogHelper();
+            this.code = {
+                html: "",
+                js: "",
+                css: ""
+            };
             this.log.Debug("constructor");
             this.toolsView = new ToolsView();
             this.propertiesView = new PropertiesView();
@@ -71,16 +76,8 @@
             editor.setTheme("ace/theme/Chrome");
             editor.getSession().setMode("ace/mode/html");
 
-            //var csseditor = ace.edit("css_editor");
-            //editor.setTheme("ace/theme/Chrome");
-            //editor.getSession().setMode("ace/mode/html");
             $('#code').on('click', function (e) {
                 $('#codeEditor').modal();
-                var code = App.Instance.Device.ControlManager.GenerateAppHtml();
-                var formatCode = jQuery.htmlClean(code, {
-                    format: true
-                });
-                editor.setValue(formatCode);
             });
 
             $('#codeEditor').on('show.bs.modal', function () {
@@ -90,17 +87,34 @@
             $('#editor_pills a').click(function (e) {
                 e.preventDefault();
                 $(this).tab('show');
+                switch (editor.getSession().getMode().$id) {
+                    case "ace/mode/javascript":
+                        self.code.js = editor.getValue();
+                        break;
+                    case "ace/mode/css":
+                        self.code.css = editor.getValue();
+                        break;
+                    case "ace/mode/html":
+                        self.code.html = editor.getValue();
+                        break;
+                }
                 switch ($(this).text()) {
                     case "JavaScript":
                         editor.getSession().setMode("ace/mode/javascript");
-                        editor.setValue("var width = 123;");
+                        editor.setValue(self.code.js);
                         break;
                     case "CSS":
                         editor.getSession().setMode("ace/mode/css");
-                        editor.setValue("width: 100%;");
+                        editor.setValue(self.code.css);
                         break;
                     case "Html":
                         editor.getSession().setMode("ace/mode/html");
+                        var code = App.Instance.Device.ControlManager.GenerateAppHtml();
+                        var formatCode = jQuery.htmlClean(code, {
+                            format: true
+                        });
+                        self.code.html = formatCode;
+                        editor.setValue(self.code.html);
                         break;
                 }
             });

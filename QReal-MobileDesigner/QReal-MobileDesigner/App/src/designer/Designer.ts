@@ -18,6 +18,11 @@ class Designer {
     private toolsView: ToolsView;
     private eventManager: EventManager;
     private propertiesView: PropertiesView;
+    private code = {
+        html: "",
+        js: "",
+        css: ""
+    }
 
     constructor() {
         this.log.Debug("constructor");
@@ -88,17 +93,8 @@ class Designer {
         editor.setTheme("ace/theme/Chrome");
         editor.getSession().setMode("ace/mode/html");
 
-        //var csseditor = ace.edit("css_editor");
-        //editor.setTheme("ace/theme/Chrome");
-        //editor.getSession().setMode("ace/mode/html");
-
         $('#code').on('click', e => {
             $('#codeEditor').modal();
-            var code = App.Instance.Device.ControlManager.GenerateAppHtml();
-            var formatCode = (<any>jQuery).htmlClean(code, {
-                format: true
-            });
-            editor.setValue(formatCode);
         });
 
         $('#codeEditor').on('show.bs.modal', function () {
@@ -108,17 +104,35 @@ class Designer {
         $('#editor_pills a').click(function (e) {
             e.preventDefault();
             $(this).tab('show');
+            switch (editor.getSession().getMode().$id) {
+                case "ace/mode/javascript":
+                    self.code.js = editor.getValue();                   
+                    break;
+                case "ace/mode/css":
+                    self.code.css = editor.getValue();
+                    break;
+                case "ace/mode/html":
+                    self.code.html = editor.getValue();
+                    break;
+            }
             switch ($(this).text()) {
                 case "JavaScript":
-                    editor.getSession().setMode("ace/mode/javascript");
-                    editor.setValue("var width = 123;");
+                   
+                    editor.getSession().setMode("ace/mode/javascript");                  
+                    editor.setValue(self.code.js);
                     break;
                 case "CSS":
                     editor.getSession().setMode("ace/mode/css");
-                    editor.setValue("width: 100%;");
+                    editor.setValue(self.code.css);
                     break;
                 case "Html":
                     editor.getSession().setMode("ace/mode/html");
+                    var code = App.Instance.Device.ControlManager.GenerateAppHtml();
+                    var formatCode = (<any>jQuery).htmlClean(code, {
+                        format: true
+                    });
+                    self.code.html = formatCode;
+                    editor.setValue(self.code.html);
                     break;
             }
         });
