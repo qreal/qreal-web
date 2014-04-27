@@ -33,15 +33,20 @@ class Designer {
 
     public Init(): void {
         this.log.Debug("Init");
+
+        var self = this;
+      
         this.toolsView.Init();
         this.propertiesView.Init();
 
-        var dialog = this.dh;
-        var self = this;
+        jQuery.get('/MobileAppTemplate/js/index.js', function (data) {
+            self.code.js = data;
+        });
+     
         $('#generate-apk').on('click', function (e) {
             self.log.Debug("My project name: " + projectName);
             var appHtml = App.Instance.Device.ControlManager.GenerateAppHtml();
-            dialog.ShowProgress("Generating apk...");
+            self.dh.ShowProgress("Generating apk...");
             var dataToSend = JSON.stringify({
                 project_name: projectName,
                 appHtml: appHtml,
@@ -57,7 +62,7 @@ class Designer {
                 data: dataToSend,
                 success: function (result) {
                     window.location.href = "/Projects/DownloadApk?projectName=" + projectName;
-                    dialog.HideProgress();
+                    self.dh.HideProgress();
                 }
             });
         });
@@ -67,7 +72,7 @@ class Designer {
         });
 
         $('#run').on('click', function (e) {
-            var appHtml = App.Instance.Device.ControlManager.GenerateAppHtml();
+            var appHtml = self.FormatHtml(App.Instance.Device.ControlManager.GenerateAppHtml());
             var dataToSend = JSON.stringify({
                 project_name: projectName,
                 appHtml: appHtml,
@@ -95,18 +100,25 @@ class Designer {
 
         $('#code').on('click', e => {
             $('#codeEditor').modal();
-        });
 
-        $('#codeEditor').on('show.bs.modal', function () {
-            $('.modal-content .modal-body').css('height', $(window).height() * 0.8);
-        });
+            $.post({
+                type: "POST",
+                url: "/Projects/EmulatorData",
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                data: dataToSend,
+                success: function (result) {
+                    self.log.Debug('post result:', result);
+                    // $('#emulatorIframe').modal();
+                    // $('#emulatorIframe').find('iframe').attr('src', "/Projects/Emulator")
+                    window.open("/Projects/Emulator", "_blank", "location=yes,height=480,width=320,scrollbars=yes,status=yes");
+                }
+            });
 
-        $('#editor_pills a').click(function (e) {
-            e.preventDefault();
-            $(this).tab('show');
+
             switch (editor.getSession().getMode().$id) {
                 case "ace/mode/javascript":
-                    self.code.js = editor.getValue();                   
+                    self.code.js = editor.getValue();
                     break;
                 case "ace/mode/css":
                     self.code.css = editor.getValue();
@@ -115,10 +127,18 @@ class Designer {
                     self.code.html = editor.getValue();
                     break;
             }
+        });
+
+        $('#codeEditor').on('show.bs.modal', function () {
+            $('.modal-content .modal-body').css('height', $(window).height() * 0.8);
+        });
+
+        $('#editor_pills a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');          
             switch ($(this).text()) {
                 case "JavaScript":
-                   
-                    editor.getSession().setMode("ace/mode/javascript");                  
+                    editor.getSession().setMode("ace/mode/javascript");
                     editor.setValue(self.code.js);
                     break;
                 case "CSS":
@@ -127,11 +147,7 @@ class Designer {
                     break;
                 case "Html":
                     editor.getSession().setMode("ace/mode/html");
-                    var code = App.Instance.Device.ControlManager.GenerateAppHtml();
-                    var formatCode = (<any>jQuery).htmlClean(code, {
-                        format: true
-                    });
-                    self.code.html = formatCode;
+                    self.code.html = self.FormatHtml(App.Instance.Device.ControlManager.GenerateAppHtml());
                     editor.setValue(self.code.html);
                     break;
             }
@@ -177,6 +193,12 @@ class Designer {
         form.style.display = 'none';
         document.body.appendChild(form);
         form.submit();
+    }
+
+    private FormatHtml(html: string): string {
+        return (<any>jQuery).htmlClean(html, {
+            format: true
+        });
     }
 
     public get EventManager(): EventManager {

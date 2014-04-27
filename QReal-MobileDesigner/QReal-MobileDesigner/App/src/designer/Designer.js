@@ -15,15 +15,20 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
         }
         Designer.prototype.Init = function () {
             this.log.Debug("Init");
+
+            var self = this;
+
             this.toolsView.Init();
             this.propertiesView.Init();
 
-            var dialog = this.dh;
-            var self = this;
+            jQuery.get('/MobileAppTemplate/js/index.js', function (data) {
+                self.code.js = data;
+            });
+
             $('#generate-apk').on('click', function (e) {
                 self.log.Debug("My project name: " + projectName);
                 var appHtml = App.Instance.Device.ControlManager.GenerateAppHtml();
-                dialog.ShowProgress("Generating apk...");
+                self.dh.ShowProgress("Generating apk...");
                 var dataToSend = JSON.stringify({
                     project_name: projectName,
                     appHtml: appHtml,
@@ -39,7 +44,7 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
                     data: dataToSend,
                     success: function (result) {
                         window.location.href = "/Projects/DownloadApk?projectName=" + projectName;
-                        dialog.HideProgress();
+                        self.dh.HideProgress();
                     }
                 });
             });
@@ -49,7 +54,7 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
             });
 
             $('#run').on('click', function (e) {
-                var appHtml = App.Instance.Device.ControlManager.GenerateAppHtml();
+                var appHtml = self.FormatHtml(App.Instance.Device.ControlManager.GenerateAppHtml());
                 var dataToSend = JSON.stringify({
                     project_name: projectName,
                     appHtml: appHtml,
@@ -109,11 +114,7 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
                         break;
                     case "Html":
                         editor.getSession().setMode("ace/mode/html");
-                        var code = App.Instance.Device.ControlManager.GenerateAppHtml();
-                        var formatCode = jQuery.htmlClean(code, {
-                            format: true
-                        });
-                        self.code.html = formatCode;
+                        self.code.html = self.FormatHtml(App.Instance.Device.ControlManager.GenerateAppHtml());
                         editor.setValue(self.code.html);
                         break;
                 }
@@ -159,6 +160,12 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
             form.style.display = 'none';
             document.body.appendChild(form);
             form.submit();
+        };
+
+        Designer.prototype.FormatHtml = function (html) {
+            return jQuery.htmlClean(html, {
+                format: true
+            });
         };
 
         Object.defineProperty(Designer.prototype, "EventManager", {

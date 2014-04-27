@@ -106,11 +106,11 @@ Use and distibution http://www.opensource.org/licenses/bsd-license.php
                         }
                     }
 
-                    if (tag.allowedAttributes != null
-                            && (tag.allowedAttributes.length == 0
-                            || $.inArray(attrMatch[1], tag.allowedAttributes) > -1)) {
+                    //if (tag.allowedAttributes != null
+                    //        && (tag.allowedAttributes.length == 0
+                    //        || $.inArray(attrMatch[1], tag.allowedAttributes) > -1)) {
                         element.attributes.push(new Attribute(attrMatch[1], attrMatch[2]));
-                    }
+                    //}
                 }
                 // add required empty ones
                 $.each(tag.requiredAttributes, function () {
