@@ -21,10 +21,10 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
             this.toolsView.Init();
             this.propertiesView.Init();
 
-            jQuery.get('/MobileAppTemplate/js/index.js', function (data) {
-                self.code.js = data;
-            });
-
+            //jQuery.get('/MobileAppTemplate/js/index.js', function (data) {
+            //    self.code.js = data;
+            //});
+            //return;
             $('#generate-apk').on('click', function (e) {
                 self.log.Debug("My project name: " + projectName);
                 var appHtml = App.Instance.Device.ControlManager.GenerateAppHtml();
@@ -83,15 +83,7 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
 
             $('#code').on('click', function (e) {
                 $('#codeEditor').modal();
-            });
 
-            $('#codeEditor').on('show.bs.modal', function () {
-                $('.modal-content .modal-body').css('height', $(window).height() * 0.8);
-            });
-
-            $('#editor_pills a').click(function (e) {
-                e.preventDefault();
-                $(this).tab('show');
                 switch (editor.getSession().getMode().$id) {
                     case "ace/mode/javascript":
                         self.code.js = editor.getValue();
@@ -103,6 +95,15 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
                         self.code.html = editor.getValue();
                         break;
                 }
+            });
+
+            $('#codeEditor').on('show.bs.modal', function () {
+                $('.modal-content .modal-body').css('height', $(window).height() * 0.8);
+            });
+
+            $('#editor_pills a').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show');
                 switch ($(this).text()) {
                     case "JavaScript":
                         editor.getSession().setMode("ace/mode/javascript");

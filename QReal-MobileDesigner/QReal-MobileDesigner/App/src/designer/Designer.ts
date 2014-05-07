@@ -39,10 +39,12 @@ class Designer {
         this.toolsView.Init();
         this.propertiesView.Init();
 
-        jQuery.get('/MobileAppTemplate/js/index.js', function (data) {
-            self.code.js = data;
-        });
+        
+        //jQuery.get('/MobileAppTemplate/js/index.js', function (data) {
+        //    self.code.js = data;
+        //});
      
+        //return;
         $('#generate-apk').on('click', function (e) {
             self.log.Debug("My project name: " + projectName);
             var appHtml = App.Instance.Device.ControlManager.GenerateAppHtml();
@@ -100,21 +102,6 @@ class Designer {
 
         $('#code').on('click', e => {
             $('#codeEditor').modal();
-
-            $.post({
-                type: "POST",
-                url: "/Projects/EmulatorData",
-                contentType: "application/json; charset=utf-8",
-                dataType: "text",
-                data: dataToSend,
-                success: function (result) {
-                    self.log.Debug('post result:', result);
-                    // $('#emulatorIframe').modal();
-                    // $('#emulatorIframe').find('iframe').attr('src', "/Projects/Emulator")
-                    window.open("/Projects/Emulator", "_blank", "location=yes,height=480,width=320,scrollbars=yes,status=yes");
-                }
-            });
-
 
             switch (editor.getSession().getMode().$id) {
                 case "ace/mode/javascript":
