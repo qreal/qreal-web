@@ -1,15 +1,13 @@
 class Input implements Shape {
     id:string;
-    type:NodeType;
-    property1:string;
-    property2:string;
+    type;
     text:string;
     el:joint.shapes.devs.EllipseWithPorts;
     action : InputAction;
 
     constructor(el:joint.shapes.devs.EllipseWithPorts, id:string, action:string) {
         this.el = el;
-        this.type = NodeType.Input;
+        this.type = NodeType[NodeType.Input];
         this.id = id;
         this.action = InputAction[action];
     }

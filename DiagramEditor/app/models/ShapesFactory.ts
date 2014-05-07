@@ -87,4 +87,48 @@ class ShapesFactory {
         node.setText("Label");
         return node;
     }
+
+
+    static createNavigationService(graph:joint.dia.Graph, id:string) {
+        var el = new joint.shapes.devs.RectWithPorts({
+            position: { x: 20, y: 20 },
+            inPorts: [''],
+            size : {width : 120, height : 120},
+        });
+        el.attr({
+                '.label': {'ref-x': .0, 'ref-y': .0 },
+                '.outer' : { fill : '#42aaff' }
+            }
+        )
+        graph.addCell(el);
+        if (id == null) {
+            id = el.id;
+        }
+
+        var service = new NavigationService(el, id);
+        service.setText("Navigation Service")
+        return service;
+    }
+
+    static createGeolocationService(graph:joint.dia.Graph, id:string) {
+        var el = new joint.shapes.devs.RectWithPorts({
+            position: { x: 20, y: 20 },
+            inPorts: [''],
+            size : {width : 120, height : 120},
+        });
+        el.attr({
+                '.label': {'ref-x': .0, 'ref-y': .0 },
+                '.outer' : { fill : '#fadadd' }
+            }
+        )
+        graph.addCell(el);
+        if (id == null) {
+            id = el.id;
+        }
+
+        var service = new GeolocationService(el, id);
+        service.setText("Geolocation Service")
+        return service;
+
+    }
 }

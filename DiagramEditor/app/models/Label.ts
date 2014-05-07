@@ -1,8 +1,6 @@
 class Label implements Shape {
     id:string;
     type:NodeType;
-    property1:string;
-    property2:string;
     text:string;
     el:joint.shapes.devs.Diamond;
 

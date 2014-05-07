@@ -1,16 +1,16 @@
-class Button implements Shape {
-    id:string;
+class NavigationService implements Shape {
     type;
-    el:joint.shapes.devs.RectWithPorts;
+    id:string;
+    activity : string;
+    el = new joint.shapes.devs.RectWithPorts;
     text:string;
-    action;
 
-    constructor(el:joint.shapes.devs.RectWithPorts, id : string, action : string) {
+    constructor(el:joint.shapes.devs.RectWithPorts, id:string) {
         this.el = el;
-        this.type = NodeType[NodeType.Button];
+        this.type = ServiceType[ServiceType.NavigationService];
         this.id = id;
-        this.action = action;
     }
+
 
     setText(text:string) {
         this.text = text;
@@ -19,6 +19,8 @@ class Button implements Shape {
             }
         )
     }
+
+
     getElement() {
         return this.el;
     }
