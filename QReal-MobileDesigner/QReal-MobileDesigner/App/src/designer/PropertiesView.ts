@@ -14,6 +14,7 @@ class PropertiesView {
         { Text: "Yes", Value: true }
     ];
     private themes = [
+        { Text: "Default", Value: "default" },
         { Text: "Light", Value: "a" },
         { Text: "Dark", Value: "b" },
     ];
@@ -95,6 +96,7 @@ class PropertiesView {
 
         var $idProperty = this.CreateIdRow(property);
         var $titleProperty = this.CreateTitleRow(property);
+        var $placeholderProperty = this.CreatePlaceholderRow(property);
         var $miniProperty = this.CreateMiniRow(property);
         var $themeProperty = this.CreateThemeRow(property);
 
@@ -118,12 +120,10 @@ class PropertiesView {
         var content = propertyPanel.children("#property-table");
 
         var $idProperty = this.CreateIdRow(property);
-        var $paddingProperty = this.CreatePaddingRow(property);
         var $themeProperty = this.CreateThemeRow(property);
         var $headerProperty = this.CreateHeaderRow(property);
 
         content.append($idProperty);
-        content.append($paddingProperty);
         content.append($themeProperty);
         content.append($headerProperty);
         propertyPanel.appendTo('#properties-widget');
@@ -139,9 +139,11 @@ class PropertiesView {
         var propertyPanel = $('#propertiesTmpl').tmpl({});
         var content = propertyPanel.children("#property-table");
 
-        var titleProperty = this.CreateTitleRow(property);
+        var $titleProperty = this.CreateTitleRow(property);
+        var $themeProperty = this.CreateThemeRow(property);
 
-        content.append(titleProperty);
+        content.append($titleProperty);
+        content.append($themeProperty);
         propertyPanel.appendTo('#properties-widget');
         propertyPanel.attr('id', 'propertyFor' + property.Id);
         this.currentPropertyDiv = propertyPanel;
@@ -161,6 +163,10 @@ class PropertiesView {
 
     private CreateTitleRow(property: any): JQuery {
         return this.CreateTextRow('Title:', property.Title, Enums.PropertyType.Title, property);
+    }
+
+    private CreatePlaceholderRow(property: any): JQuery {
+        return this.CreateTextRow('Placeholder:', property.Placeholder, Enums.PropertyType.Placeholder, property);
     }
 
     private CreateMiniRow(property: any): JQuery {

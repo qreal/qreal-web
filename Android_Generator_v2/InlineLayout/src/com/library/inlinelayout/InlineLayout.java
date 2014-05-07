@@ -108,6 +108,7 @@ public class InlineLayout extends ViewGroup {
         int leftPos = getPaddingLeft();
         int parentTop = getPaddingTop();
         int parentBottom = bottom - top - getPaddingBottom();
+        int parentRight = right - left - getPaddingRight();
         
         int maxLineHeight = 0;
 
@@ -119,20 +120,20 @@ public class InlineLayout extends ViewGroup {
                 final int width = child.getMeasuredWidth();
                 final int height = child.getMeasuredHeight();
                 
-                maxLineHeight = Math.max(maxLineHeight, height);
+                maxLineHeight = Math.max(maxLineHeight, height + lp.topMargin + lp.bottomMargin);
 
-                if (leftPos + width + lp.rightMargin > right) {
+                if (leftPos + width + lp.leftMargin + lp.rightMargin > parentRight) {
                 	parentBottom += maxLineHeight;
                 	parentTop += maxLineHeight;
                 	leftPos = getPaddingLeft();
                 	maxLineHeight = height;
                 } 
                 mTmpContainerRect.left = leftPos + lp.leftMargin;
-                mTmpContainerRect.right = leftPos + width + lp.rightMargin;
+                mTmpContainerRect.right = leftPos + width + lp.leftMargin + lp.rightMargin;
                 leftPos = mTmpContainerRect.right;
                 
-                mTmpContainerRect.top = parentTop + lp.topMargin;
-                mTmpContainerRect.bottom = parentBottom - lp.bottomMargin;
+                mTmpContainerRect.top = parentTop;
+                mTmpContainerRect.bottom = parentBottom;
 
                 // Use the child's gravity and size to determine its final
                 // frame within its container.

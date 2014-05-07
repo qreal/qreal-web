@@ -7,6 +7,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
                 { Text: "Yes", Value: true }
             ];
             this.themes = [
+                { Text: "Default", Value: "default" },
                 { Text: "Light", Value: "a" },
                 { Text: "Dark", Value: "b" }
             ];
@@ -83,6 +84,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
 
             var $idProperty = this.CreateIdRow(property);
             var $titleProperty = this.CreateTitleRow(property);
+            var $placeholderProperty = this.CreatePlaceholderRow(property);
             var $miniProperty = this.CreateMiniRow(property);
             var $themeProperty = this.CreateThemeRow(property);
 
@@ -105,12 +107,10 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             var content = propertyPanel.children("#property-table");
 
             var $idProperty = this.CreateIdRow(property);
-            var $paddingProperty = this.CreatePaddingRow(property);
             var $themeProperty = this.CreateThemeRow(property);
             var $headerProperty = this.CreateHeaderRow(property);
 
             content.append($idProperty);
-            content.append($paddingProperty);
             content.append($themeProperty);
             content.append($headerProperty);
             propertyPanel.appendTo('#properties-widget');
@@ -126,9 +126,11 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             var propertyPanel = $('#propertiesTmpl').tmpl({});
             var content = propertyPanel.children("#property-table");
 
-            var titleProperty = this.CreateTitleRow(property);
+            var $titleProperty = this.CreateTitleRow(property);
+            var $themeProperty = this.CreateThemeRow(property);
 
-            content.append(titleProperty);
+            content.append($titleProperty);
+            content.append($themeProperty);
             propertyPanel.appendTo('#properties-widget');
             propertyPanel.attr('id', 'propertyFor' + property.Id);
             this.currentPropertyDiv = propertyPanel;
@@ -148,6 +150,10 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
 
         PropertiesView.prototype.CreateTitleRow = function (property) {
             return this.CreateTextRow('Title:', property.Title, 6 /* Title */, property);
+        };
+
+        PropertiesView.prototype.CreatePlaceholderRow = function (property) {
+            return this.CreateTextRow('Placeholder:', property.Placeholder, 10 /* Placeholder */, property);
         };
 
         PropertiesView.prototype.CreateMiniRow = function (property) {

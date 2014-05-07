@@ -40,9 +40,11 @@ class AppControlFactory {
     public CreatePage(property: ControlProperty.PageProperty): JQuery {
         var $page = $('<div>', {
             'id': property.Id,
-            'data-role': 'page',
-            'data-theme': property.Theme
+            'data-role': 'page'           
         });
+        if (property.Theme != 'default') {
+            $page.attr('data-theme', property.Theme);
+        }
         var $main = $('<div/>', {
             'role': 'main'
         });
@@ -66,7 +68,9 @@ class AppControlFactory {
         if (property.Mini) {
             $bt.addClass('ui-mini');
         }
-        $bt.addClass('ui-btn-' + property.Theme);
+        if (property.Theme != 'default') {
+            $bt.addClass('ui-btn-' + property.Theme);
+        }
         return $bt;
     }
 
@@ -95,6 +99,9 @@ class AppControlFactory {
             'id': property.Id,
             'data-role': 'header'
         });
+        if (property.Theme) {
+            $header.attr('data-theme', property.Theme);
+        }
         var $title = $('<h1>');
         $title.text(property.Title);
         $header.append($title);

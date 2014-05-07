@@ -9,6 +9,9 @@ namespace Android_Generator_v2
     interface LayoutBuilderInterface
     {
         String build();
-        void addElement(String element);
+        void addElementToHeader(String element);
+        void addElementToBody(String element);
+        void addElementToFooter(String element);
+        void setPadding(String value);
     }
 }

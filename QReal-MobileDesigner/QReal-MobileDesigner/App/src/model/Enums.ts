@@ -18,7 +18,8 @@
         Title,
         Header,
         Size,
-        Padding
+        Padding,
+        Placeholder
     }
 } 
 
