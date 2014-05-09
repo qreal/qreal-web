@@ -23,7 +23,9 @@ namespace Android_Generator_v2
         private static String xmlTemplate = @"
             <com.library.inlinelayout.InlineLayout
 	            android:layout_width=""match_parent""
-	            android:layout_height=""wrap_content"">
+	            android:layout_height=""wrap_content""
+                android:layout_marginTop=""5dp""
+                android:layout_marginBottom=""5dp"">
 
                     {0}
 

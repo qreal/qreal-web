@@ -10,9 +10,11 @@ using System.IO;
 namespace Android_Generator_v2
 {
     class JsonParser {
-        public JsonParser(String filename)
+        public JsonParser(String filename, String packageName)
         {
             this.filename = filename;
+            this.package = packageName;
+            manifestBuilder.setPackage(package);
             projectObj = (JObject)JToken.ReadFrom(new JsonTextReader(File.OpenText(filename)));  
             StreamReader streamReader = File.OpenText(filename);
             reader = new JsonTextReader(streamReader);
