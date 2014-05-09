@@ -97,7 +97,7 @@ namespace Android_Generator_v2
 
             String appDirectory = Path.Combine(folderPath, appName);
 
-            JsonParser parser = new JsonParser(Path.Combine(appDirectory, "app.json"), packageName);
+            JsonParser parser = new JsonParser(appDirectory, packageName);
 
             String srcDirectory = Path.Combine(appDirectory, Path.Combine("src", packagePath));
             String layoutDirectory = Path.Combine(appDirectory, @"res\layout");

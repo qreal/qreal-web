@@ -10,41 +10,15 @@ using System.IO;
 namespace Android_Generator_v2
 {
     class JsonParser {
-        public JsonParser(String filename, String packageName)
+        public JsonParser(String appDirectory, String packageName)
         {
-            this.filename = filename;
+            this.appDirectory = appDirectory;
             this.package = packageName;
             manifestBuilder.setPackage(package);
-            projectObj = (JObject)JToken.ReadFrom(new JsonTextReader(File.OpenText(filename)));  
-            StreamReader streamReader = File.OpenText(filename);
+            parseLogicFile();
+            StreamReader streamReader = File.OpenText(Path.Combine(appDirectory, "app.json"));
             reader = new JsonTextReader(streamReader);
             reader.Read();
-        }
-
-        public String getProjectName()
-        {
-            try
-            {
-                return projectObj.GetValue("name").ToString();
-            }
-            catch (NullReferenceException e)
-            {
-                throw new NotFoundElementException("Project name");
-            }
-        }
-
-        public String getProjectPackage()
-        {
-            try
-            {
-                package = projectObj.GetValue("projectPackage").ToString();
-                manifestBuilder.setPackage(package);
-                return package;
-            }
-            catch (NullReferenceException e)
-            {
-                throw new NotFoundElementException("Project package");
-            }
         }
 
         public void parseToEnd(String appDirectory, String srcDirectory, String layoutDirectory)
@@ -218,7 +192,24 @@ namespace Android_Generator_v2
                         if (value.Equals("id"))
                         {
                             reader.Read();
-                            buttonElement.setId(reader.Value.ToString());
+                            String id = reader.Value.ToString();
+                            buttonElement.setId(id);
+                            string target = "";
+                            if (linksDictionary.TryGetValue(id, out target))
+                            {
+                                JObject targetObj = targetsDictionary[target];
+                                switch (targetObj.GetValue("type").ToString())
+                                {
+                                    case "NavigationService":
+                                        buttonElement.addOnClickTransition(currentActivityName,
+                                            targetObj.GetValue("activity").ToString());
+                                        break;
+                                    case "GeolocationService":
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
                         }
                         if (value.Equals("text"))
                         {
@@ -345,6 +336,25 @@ namespace Android_Generator_v2
             activityBuider.addVariables(inputElement.getVariables());
         }
 
+        private void parseLogicFile()
+        {
+            String filename = "example1.json";
+            StreamReader streamReader = File.OpenText(Path.Combine(appDirectory, filename));
+            JObject logicJSON = JObject.Parse(streamReader.ReadToEnd());
+            JArray links = (JArray) logicJSON["links"];
+            JArray services = (JArray) logicJSON["services"];
+
+            foreach (JObject link in links)
+            {
+                linksDictionary.Add(link.GetValue("source").ToString(), link.GetValue("target").ToString());
+            }
+
+            foreach (JObject service in services)
+            {
+                targetsDictionary.Add(service.GetValue("id").ToString(), service);
+            }
+        }
+
         private void writeAndClearInline()
         {
             layoutBuilder.addElementToBody(inlineLayout.getXml());
@@ -352,13 +362,14 @@ namespace Android_Generator_v2
         }
 
         private String package;
-        private JObject projectObj;
-        private String filename;
+        private String appDirectory;
         private JsonTextReader reader;
         private ActivityBuilderInterface activityBuider = null;
         private LayoutBuilderInterface layoutBuilder = null;
         private ManifestBuilderInterface manifestBuilder = new AndroidManifestBuilder();
         private InlineLayoutElement inlineLayout;
         private bool isNowInline = false;
+        private Dictionary<String, String> linksDictionary = new Dictionary<String, String>();
+        private Dictionary<String, JObject> targetsDictionary = new Dictionary<String,JObject>();
     }
 }
