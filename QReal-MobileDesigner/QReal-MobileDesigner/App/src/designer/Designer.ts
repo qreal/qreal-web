@@ -35,16 +35,14 @@ class Designer {
         this.log.Debug("Init");
 
         var self = this;
-      
+
         this.toolsView.Init();
         this.propertiesView.Init();
 
-        
-        //jQuery.get('/MobileAppTemplate/js/index.js', function (data) {
-        //    self.code.js = data;
-        //});
-     
-        //return;
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/Chrome");
+        editor.getSession().setMode("ace/mode/html");
+
         $('#generate-apk').on('click', function (e) {
             self.log.Debug("My project name: " + projectName);
             var appHtml = App.Instance.Device.ControlManager.GenerateAppHtml();
@@ -52,8 +50,8 @@ class Designer {
             var dataToSend = JSON.stringify({
                 project_name: projectName,
                 appHtml: appHtml,
-                appJs: "",
-                appCss: ""
+                appJs: self.code.js,
+                appCss: self.code.css
             }, null, 2);
             self.log.Debug("dataToSend:", dataToSend);
             $.ajax({
@@ -96,10 +94,6 @@ class Designer {
             });
         });
 
-        var editor = ace.edit("editor");
-        editor.setTheme("ace/theme/Chrome");
-        editor.getSession().setMode("ace/mode/html");
-
         $('#code').on('click', e => {
             $('#codeEditor').modal();
 
@@ -122,7 +116,7 @@ class Designer {
 
         $('#editor_pills a').click(function (e) {
             e.preventDefault();
-            $(this).tab('show');          
+            $(this).tab('show');
             switch ($(this).text()) {
                 case "JavaScript":
                     editor.getSession().setMode("ace/mode/javascript");
@@ -146,13 +140,20 @@ class Designer {
              */
             self.ResizeContent();
             $(window).resize(self.ResizeContent);
+
+            //jQuery.get('/MobileAppTemplate/js/index.js', function (data) {
+            //     //alert(data);
+            //     self.code.js = data;
+            // });
         });
+
+
     }
 
     private ResizeContent() {
-        var propertyHeight = $(window).height() - 100;
+        var propertyHeight = $(window).height() - 70;
         $(".properties-panel").height(propertyHeight);
-        var controlsHeight = $(window).height() - 155;
+        var controlsHeight = $(window).height() - 125;
         $(".dleft .panel").height(controlsHeight);
         $(".dcenter").height(propertyHeight + 20);
     }

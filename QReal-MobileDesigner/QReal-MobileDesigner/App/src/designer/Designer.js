@@ -21,10 +21,10 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
             this.toolsView.Init();
             this.propertiesView.Init();
 
-            //jQuery.get('/MobileAppTemplate/js/index.js', function (data) {
-            //    self.code.js = data;
-            //});
-            //return;
+            var editor = ace.edit("editor");
+            editor.setTheme("ace/theme/Chrome");
+            editor.getSession().setMode("ace/mode/html");
+
             $('#generate-apk').on('click', function (e) {
                 self.log.Debug("My project name: " + projectName);
                 var appHtml = App.Instance.Device.ControlManager.GenerateAppHtml();
@@ -32,8 +32,8 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
                 var dataToSend = JSON.stringify({
                     project_name: projectName,
                     appHtml: appHtml,
-                    appJs: "",
-                    appCss: ""
+                    appJs: self.code.js,
+                    appCss: self.code.css
                 }, null, 2);
                 self.log.Debug("dataToSend:", dataToSend);
                 $.ajax({
@@ -76,10 +76,6 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
                     }
                 });
             });
-
-            var editor = ace.edit("editor");
-            editor.setTheme("ace/theme/Chrome");
-            editor.getSession().setMode("ace/mode/html");
 
             $('#code').on('click', function (e) {
                 $('#codeEditor').modal();
@@ -127,13 +123,17 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
                 */
                 self.ResizeContent();
                 $(window).resize(self.ResizeContent);
+                //jQuery.get('/MobileAppTemplate/js/index.js', function (data) {
+                //     //alert(data);
+                //     self.code.js = data;
+                // });
             });
         };
 
         Designer.prototype.ResizeContent = function () {
-            var propertyHeight = $(window).height() - 100;
+            var propertyHeight = $(window).height() - 70;
             $(".properties-panel").height(propertyHeight);
-            var controlsHeight = $(window).height() - 155;
+            var controlsHeight = $(window).height() - 125;
             $(".dleft .panel").height(controlsHeight);
             $(".dcenter").height(propertyHeight + 20);
         };
