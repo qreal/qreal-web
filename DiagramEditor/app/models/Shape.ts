@@ -1,8 +1,6 @@
 interface Shape {
-    property1:string;
-    property2:string;
     text:string;
-    type : NodeType;
+    type;
     id :string;
     setText(text:string);
     getElement();

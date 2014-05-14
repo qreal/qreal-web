@@ -1,8 +1,8 @@
 {
     "type": "App",
     "id": "",
-    "name": "Inline",
-    "projectPackage": "com.example.inline",
+    "name": "HelloWorld",
+    "projectPackage": "com.example.hello",
     "Pages": [
         {
             "type": "Page",
@@ -10,7 +10,7 @@
             "header": {
                 "type": "Header",
                 "id": "Main_Page_header",
-                "title": "Header",
+                "title": "Main",
                 "theme": "b"
             },
             "theme": "default",
@@ -19,114 +19,26 @@
                 {
                     "type": "Button",
                     "id": "button1",
-                    "text": "Button",
-                    "inline": false,
-                    "corners": true,
-                    "mini": false,
-                    "theme": "default"
-                },
-                {
-                    "type": "Input",
-                    "id": "input2",
-                    "title": "Title",
-                    "inline": false,
-                    "corners": true,
-                    "mini": false,
-                    "theme": "default",
-                    "placeholder": "",
-                    "name": ""
-                },
-                {
-                    "type": "Button",
-                    "id": "button3",
-                    "text": "Button1",
-                    "inline": true,
-                    "corners": true,
-                    "mini": false,
-                    "theme": "default"
-                },
-                {
-                    "type": "Button",
-                    "id": "button4",
-                    "text": "Button2",
-                    "inline": true,
-                    "corners": true,
-                    "mini": false,
-                    "theme": "default"
-                },
-                {
-                    "type": "Button",
-                    "id": "button5",
-                    "text": "Button3",
-                    "inline": true,
-                    "corners": true,
-                    "mini": false,
-                    "theme": "default"
-                },
-                {
-                    "type": "Button",
-                    "id": "button6",
-                    "text": "Button4",
-                    "inline": true,
-                    "corners": true,
-                    "mini": false,
-                    "theme": "default"
-                },
-                {
-                    "type": "Button",
-                    "id": "button7",
-                    "text": "Button5",
-                    "inline": true,
-                    "corners": true,
-                    "mini": false,
-                    "theme": "default"
-                },
-                {
-                    "type": "Button",
-                    "id": "button8",
-                    "text": "Button",
-                    "inline": false,
-                    "corners": true,
-                    "mini": false,
-                    "theme": "default"
-                },
-                {
-                    "type": "Button",
-                    "id": "button9",
-                    "text": "Button6",
-                    "inline": true,
-                    "corners": true,
-                    "mini": false,
-                    "theme": "default"
-                },
-                {
-                    "type": "Button",
-                    "id": "button10",
-                    "text": "Button7",
-                    "inline": true,
-                    "corners": true,
-                    "mini": false,
-                    "theme": "default"
-                },
-                {
-                    "type": "Button",
-                    "id": "button11",
-                    "text": "Button8",
-                    "inline": true,
-                    "corners": true,
-                    "mini": false,
-                    "theme": "default"
-                },
-                {
-                    "type": "Button",
-                    "id": "button12",
-                    "text": "Button",
+                    "text": "To second",
                     "inline": false,
                     "corners": true,
                     "mini": false,
                     "theme": "default"
                 }
             ]
+        },
+        {
+            "type": "Page",
+            "id": "SecondPage",
+            "header": {
+                "type": "Header",
+                "id": "SecondPage_header",
+                "title": "Second",
+                "theme": "b"
+            },
+            "theme": "default",
+            "padding": "10px",
+            "Controls": []
         }
     ]
 }

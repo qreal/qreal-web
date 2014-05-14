@@ -13,30 +13,48 @@ namespace Android_Generator_v2
     {
         static int Main(string[] args)
         {
-            JsonParser parser = new JsonParser("app.json");
+            if (args.Length == 0)
+            {
+                Console.WriteLine("Too few arguments.");
+                return 1;
+            }
 
-            String appName;
-            String packageName;
-            try
+            switch (args[0])
             {
-                appName = parser.getProjectName();
-                packageName = parser.getProjectPackage();
+                case "-c":
+                    {
+                        return createProject(args);
+                    }
+                case "-b":
+                    {
+                        return build(args);
+                    }
+                default:
+                    Console.WriteLine("Invalid arguments.");
+                    return 2;
             }
-            catch (NotFoundElementException e)
+        }
+
+        private static int createProject(string[] args)
+        {
+            if (args.Length != 4)
             {
-                Console.WriteLine(e.Message);
-                return 4;
+                Console.WriteLine("Invalid arguments.");
+                return 2;
             }
+
+            String folderPath = args[1];
+            String appName = args[2];
+            String packageName = args[3];
 
             Regex rgx = new Regex("\\.");
             String packagePath = rgx.Replace(packageName, "\\");
 
-            String appDirectory = appName;
+            String appDirectory = Path.Combine(folderPath, appName);
             Directory.CreateDirectory(appDirectory);
 
-            Directory.CreateDirectory(Path.Combine("Templates", @"res\layout"));
-
-            try {
+            try
+            {
                 DirectoryCopyManager.DirectoryCopy(Path.Combine("Templates", "res"), Path.Combine(appDirectory, "res"), true);
                 DirectoryCopyManager.DirectoryCopy(Path.Combine("Templates", "libs"), Path.Combine(appDirectory, "libs"), true);
             }
@@ -46,9 +64,42 @@ namespace Android_Generator_v2
                 return 3;
             }
 
+            Directory.CreateDirectory(Path.Combine(appDirectory, @"res\layout"));
+
             String srcDirectory = Path.Combine(appDirectory, Path.Combine("src", packagePath));
             Directory.CreateDirectory(srcDirectory);
 
+            String layoutDirectory = Path.Combine(appDirectory, @"res\layout");
+
+            // create strings.xml
+            String strings = File.ReadAllText(Path.Combine("Templates", "stringsTemplate.xml"));
+            strings = String.Format(strings, appName, "");
+            File.WriteAllText(Path.Combine(appDirectory, @"res\values\strings.xml"), strings);
+
+            return 0;
+        }
+
+        private static int build(string[] args)
+        {
+            if (args.Length != 4)
+            {
+                Console.WriteLine("Invalid arguments.");
+                return 2;
+            }
+
+            String folderPath = args[1];
+            String appName = args[2];
+            String packageName = args[3];
+
+
+            Regex rgx = new Regex("\\.");
+            String packagePath = rgx.Replace(packageName, "\\");
+
+            String appDirectory = Path.Combine(folderPath, appName);
+
+            JsonParser parser = new JsonParser(appDirectory, packageName);
+
+            String srcDirectory = Path.Combine(appDirectory, Path.Combine("src", packagePath));
             String layoutDirectory = Path.Combine(appDirectory, @"res\layout");
 
             try
@@ -66,16 +117,12 @@ namespace Android_Generator_v2
                 return 4;
             }
 
-            // create strings.xml
-            String strings = File.ReadAllText(Path.Combine("Templates", "stringsTemplate.xml"));
-            strings = String.Format(strings, appName, "");
-            File.WriteAllText(Path.Combine(appDirectory, @"res\values\strings.xml"), strings);
-
             // build an application
             Process process = new Process();
             process.StartInfo.FileName = "run.bat";
-            process.StartInfo.Arguments = appName;
+            process.StartInfo.Arguments = String.Format("/c {0} \"{1}\"", appName, appDirectory);
             process.Start();
+
             return 0;
         }
     }
