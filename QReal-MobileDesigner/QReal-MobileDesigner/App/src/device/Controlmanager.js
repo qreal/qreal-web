@@ -76,6 +76,10 @@
                     return new DesignerControls.Input(inputProperty);
                 case "Header":
                     break;
+                case "Grid":
+                    var mapProperty = new ControlProperty.MapProperty(this.GetNewId('map'));
+                    return new DesignerControls.Map(mapProperty);
+                    break;
             }
         };
 
@@ -264,6 +268,10 @@
                     var header = element;
                     $html = this.appControlFactory.CreateHeader(header.Properties);
                     break;
+                case 5 /* Map */:
+                    var map = element;
+                    $html = this.appControlFactory.CreateMap(map.Properties);
+                    break;
             }
             return $html;
         };
@@ -299,6 +307,7 @@
                 case 3 /* Button */:
                 case 4 /* Input */:
                 case 2 /* Header */:
+                case 5 /* Map */:
                     obj = element.Properties;
                     break;
             }

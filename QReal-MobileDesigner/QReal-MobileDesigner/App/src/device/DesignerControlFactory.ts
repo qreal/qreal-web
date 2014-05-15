@@ -28,6 +28,9 @@ class DesignerControlFactory extends AppControlFactory {
             case Enums.ControlType.Input:
                 return this.CreateInput(<any>property);
                 break;
+            case Enums.ControlType.Map:
+                return this.CreateMap(<any>property);
+                break;
         }
     }
 
@@ -91,6 +94,16 @@ class DesignerControlFactory extends AppControlFactory {
         });
 
         return $input;
+    }
+
+    public CreateMap(property: ControlProperty.MapProperty): JQuery {
+        var $map = super.CreateMap(property);   
+        $map.css('background-color', '#aaa');
+        $map.on('click', event => {
+            event.preventDefault();
+            App.Instance.Designer.ShowProperty(property);
+        });
+        return $map;
     }
 }
 

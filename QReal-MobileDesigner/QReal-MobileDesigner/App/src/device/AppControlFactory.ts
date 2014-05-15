@@ -4,6 +4,8 @@ import Enums = require("src/model/Enums");
 import DesignerControls = require("src/model/DesignerControls");
 import ControlProperty = require("src/model/ControlProperty");
 
+declare var google;
+
 
 class AppControlFactory {
 
@@ -28,6 +30,9 @@ class AppControlFactory {
                 break;
             case Enums.ControlType.Input:
                 return this.CreateInput(<any>property);
+                break;
+            case Enums.ControlType.Map:
+                return this.CreateMap(<any>property);
                 break;
         }
     }
@@ -106,6 +111,15 @@ class AppControlFactory {
         $title.text(property.Title);
         $header.append($title);
         return (<any>$header).toolbar();
+    }
+
+
+    public CreateMap(property: ControlProperty.MapProperty): JQuery {
+        var $map = $("<div>");
+        $map.css('width', "100%");
+        $map.css('height', "300px");
+        $map.attr('id', property.Id);       
+        return $map;
     }
 }
 

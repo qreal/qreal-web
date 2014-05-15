@@ -102,6 +102,16 @@ define(["require", "exports", "src/util/log/Log"], function(require, exports, Lo
             return Input;
         })(BaseControl);
         DesignerControls.Input = Input;
+
+        var Map = (function (_super) {
+            __extends(Map, _super);
+            function Map(properties) {
+                _super.call(this, properties);
+                this.log = new Log("Map");
+            }
+            return Map;
+        })(BaseControl);
+        DesignerControls.Map = Map;
     })(DesignerControls || (DesignerControls = {}));
 
     

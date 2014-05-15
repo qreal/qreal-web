@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diagram Editor</title>
+
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="vendor/css/joint.css"/>
+    <link rel="stylesheet" href="vendor/css/base.css"/>
+
+    <style>
+
+    </style>
+
+    <!--Scripts-->
+    <script src="vendor/js/jquery-1.11.0.min.js"></script>
+    <script src="vendor/js/angular.js"></script>
+    <script src="vendor/js/joint.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!--our code -->
+    <script src="app/out.js"></script>
+</head>
+<body ng-app="diagram" ng-controller="diagramCtrl">
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <button type="button" class="btn btn-primary" ng-click="vm.uploadFromFile()">Generate from JSON</button>
+            <button type="button" class="btn btn-default" ng-click="vm.createNavigationService()">Navigation Service</button>
+            <button type="button" class="btn btn-default" ng-click="vm.createGeolocationService()">Geolocation Service</button>
+            <button type="button" class="btn btn-default" ng-click="vm.export()">Export</button>
+
+            <div id="paper"></div>
+        </div>
+        <div id="properties" class="col-md-6 hidden">
+            <div id="toleft">
+                <form name="myForm" role="form" class="col-md-9 go-right">
+                    <h2>Property Form
+                        <button type="button" class="close" aria-hidden="true" ng-click="vm.close()">&times;</button>
+                    </h2>
+                    <p>you can write property of diagram node</p>
+
+                    <div class="form-group">
+                        <input id="id" name="id" class="form-control" required>
+                        <label for="id">Button id</label>
+                    </div>
+
+                    <div class="form-group">
+                        <input id="text" name="text" type="text" class="form-control" required>
+                        <label for="text">Button text</label>
+                    </div>
+
+                    <div id="action" class="form-group">
+
+                    </div>
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-primary btn-xs" ng-click="vm.updateValues()">Submit
+                        </button>
+                    </div>
+                    <div id="alertblock" class="col-md-6">
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

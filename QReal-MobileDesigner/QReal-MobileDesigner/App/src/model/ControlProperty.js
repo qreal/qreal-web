@@ -368,6 +368,15 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
             return InputProperty;
         })(Property);
         ControlProperty.InputProperty = InputProperty;
+
+        var MapProperty = (function (_super) {
+            __extends(MapProperty, _super);
+            function MapProperty(id) {
+                _super.call(this, 5 /* Map */, id);
+            }
+            return MapProperty;
+        })(Property);
+        ControlProperty.MapProperty = MapProperty;
     })(ControlProperty || (ControlProperty = {}));
 
     

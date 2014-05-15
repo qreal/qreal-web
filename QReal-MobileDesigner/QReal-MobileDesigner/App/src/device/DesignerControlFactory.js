@@ -26,6 +26,9 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
                 case 4 /* Input */:
                     return this.CreateInput(property);
                     break;
+                case 5 /* Map */:
+                    return this.CreateMap(property);
+                    break;
             }
         };
 
@@ -94,6 +97,16 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
             });
 
             return $input;
+        };
+
+        DesignerControlFactory.prototype.CreateMap = function (property) {
+            var $map = _super.prototype.CreateMap.call(this, property);
+            $map.css('background-color', '#aaa');
+            $map.on('click', function (event) {
+                event.preventDefault();
+                App.Instance.Designer.ShowProperty(property);
+            });
+            return $map;
         };
         return DesignerControlFactory;
     })(AppControlFactory);

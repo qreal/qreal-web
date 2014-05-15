@@ -93,7 +93,11 @@ class ControlManager {
                 return new DesignerControls.Input(inputProperty);
             case "Header":
                 //return this.controlFactory.CreateHeader(this.GetNewId('header'));
-            break
+                break;
+            case "Grid":
+                var mapProperty = new ControlProperty.MapProperty(this.GetNewId('map'));
+                return new DesignerControls.Map(mapProperty);
+                break;
         }
 
     }
@@ -282,7 +286,10 @@ class ControlManager {
                 var header = <DesignerControls.Header>element;
                 $html = this.appControlFactory.CreateHeader(header.Properties);
                 break;
-
+            case Enums.ControlType.Map:
+                var map = <DesignerControls.Map>element;
+                $html = this.appControlFactory.CreateMap(map.Properties);
+                break;
         }
         return $html;
     }
@@ -318,6 +325,7 @@ class ControlManager {
             case Enums.ControlType.Button:
             case Enums.ControlType.Input:
             case Enums.ControlType.Header:
+            case Enums.ControlType.Map:
                 obj = element.Properties;
                 break;
         }

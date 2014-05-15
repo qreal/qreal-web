@@ -26,19 +26,9 @@ class ToolsView {
             tool: 'selection'
         },
         {
-            id: 'Checkbox',
-            title: 'Checkbox',
-            tool: 'checkbox'
-        },
-        {
             id: 'Checkbox2',
             title: 'Checkbox2',
             tool: 'checkbox2'
-        },
-        {
-            id: 'Header',
-            title: 'Header',
-            tool: 'header'
         },
         {
             id: 'Header2',

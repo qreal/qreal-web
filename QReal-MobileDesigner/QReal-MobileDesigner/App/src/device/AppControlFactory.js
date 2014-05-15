@@ -20,6 +20,9 @@
                 case 4 /* Input */:
                     return this.CreateInput(property);
                     break;
+                case 5 /* Map */:
+                    return this.CreateMap(property);
+                    break;
             }
         };
 
@@ -97,6 +100,14 @@
             $title.text(property.Title);
             $header.append($title);
             return $header.toolbar();
+        };
+
+        AppControlFactory.prototype.CreateMap = function (property) {
+            var $map = $("<div>");
+            $map.css('width', "100%");
+            $map.css('height', "300px");
+            $map.attr('id', property.Id);
+            return $map;
         };
         return AppControlFactory;
     })();

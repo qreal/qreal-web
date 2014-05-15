@@ -4,8 +4,11 @@
 /// <reference path="main.ts" />
 //grunt-start
 /// <reference path="directives/directives.ts" />
+/// <reference path="models/ActionNode.ts" />
 /// <reference path="models/Actions.ts" />
 /// <reference path="models/Button.ts" />
+/// <reference path="models/ConditionNode.ts" />
+/// <reference path="models/FinalNode.ts" />
 /// <reference path="models/GeolocationService.ts" />
 /// <reference path="models/InitialNode.ts" />
 /// <reference path="models/Input.ts" />

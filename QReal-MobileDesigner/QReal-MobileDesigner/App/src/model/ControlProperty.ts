@@ -282,6 +282,14 @@ module ControlProperty {
             this.Name = '';
         }
     }
+
+    export class MapProperty extends Property {
+
+        constructor(id: string) {
+            super(Enums.ControlType.Map, id);
+          
+        }
+    }
 }
 
 export =  ControlProperty;

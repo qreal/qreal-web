@@ -5,7 +5,8 @@
         Page,
         Header,
         Button,
-        Input
+        Input,
+        Map
     }
 
     export enum PropertyType {
