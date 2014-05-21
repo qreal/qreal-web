@@ -212,6 +212,12 @@ namespace Android_Generator_v2
                                             targetObj.GetValue("activity").ToString());
                                         break;
                                     case "GeolocationService":
+                                        string map = "";
+                                        if (linksDictionary.TryGetValue(target, out map))
+                                        {
+                                            buttonElement.addOnClickActions(
+                                                String.Format("getLocation{0}();", map));
+                                        }
                                         break;
                                     default:
                                         break;

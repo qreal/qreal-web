@@ -3,12 +3,24 @@
         "id": "button2",
         "type": "Button",
         "name": "name",
-        "action": "DoubleClick"
-    }
-], "activities": [
+        "action": "Click"
+    },
     {
-        "name": "Main_Page"
+        "id": "map1",
+        "type": "Map"
     }
 ], "services": [
+    {
+        "id": "geoloc1",
+        "type": "GeolocationService"
+    }
 ], "links": [
+    {
+        "source": "button2",
+        "target": "geoloc1"
+    },
+    {
+        "source": "geoloc1",
+        "target": "map1"
+    }
 ]}

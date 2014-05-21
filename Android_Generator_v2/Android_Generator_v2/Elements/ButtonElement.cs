@@ -31,12 +31,17 @@ namespace Android_Generator_v2
             onCreateActions.Append(actions);
         }
 
+        public void addOnClickActions(String actions)
+        {
+            onClickActions.Append(actions);
+        }
+
         public void addOnClickTransition(String from, String to)
         {
             String transitionSrc = String.Format(@"
                 Intent intent = new Intent(this, {0}.class);
                 startActivity(intent);", to);
-            onClickActions.Append(transitionSrc);
+            addOnClickActions(transitionSrc);
             imports.Add("import android.content.Intent;");
         }
 
