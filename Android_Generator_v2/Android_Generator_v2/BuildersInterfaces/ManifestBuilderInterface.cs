@@ -10,7 +10,8 @@ namespace Android_Generator_v2
     {
         String build();
         void setPackage(String package);
-        void addPermissions(String permission);
+        void addPermission(String permission);
         void addActivity(String activity);
+        void addFeature(String feature);
     }
 }

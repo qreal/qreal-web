@@ -1,6 +1,6 @@
 {"nodes": [
     {
-        "id": "button1",
+        "id": "button2",
         "type": "Button",
         "name": "name",
         "action": "DoubleClick"
@@ -8,19 +8,7 @@
 ], "activities": [
     {
         "name": "Main_Page"
-    },
-    {
-        "name": "SecondPage"
     }
 ], "services": [
-    {
-        "id": "navService1",
-        "type": "NavigationService",
-        "activity": "SecondPage"
-    }
 ], "links": [
-    {
-        "source": "button1",
-        "target": "navService1"
-    }
 ]}

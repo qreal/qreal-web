@@ -87,7 +87,10 @@ namespace Android_Generator_v2
                         }
                         if (reader.Value.Equals("header"))
                         {
-                            parseHeaderElement();
+                            reader.Read();
+                            if (!reader.TokenType.Equals(JsonToken.Boolean)) {
+                                parseHeaderElement();
+                            }
                             continue;
                         }
                         if (reader.Value.Equals("padding"))
@@ -136,6 +139,10 @@ namespace Android_Generator_v2
                         else if (reader.Value.Equals("Input"))
                         {
                             parseInputElement();
+                        }
+                        else if (reader.Value.Equals("Map"))
+                        {
+                            parseMapElement();
                         }
                     }
                 }
@@ -334,6 +341,48 @@ namespace Android_Generator_v2
             activityBuider.addImports(inputElement.getImports());
             activityBuider.addMethods(inputElement.getValueGetter());
             activityBuider.addVariables(inputElement.getVariables());
+        }
+
+        private void parseMapElement()
+        {
+            if (isNowInline)
+            {
+                writeAndClearInline();
+            }
+            MapElement mapElement = new MapElement();
+
+            while (!reader.TokenType.ToString().Equals("EndObject"))
+            {
+                reader.Read();
+                object value = reader.Value;
+                if (value != null)
+                {
+                    if (reader.TokenType.ToString().Equals("PropertyName"))
+                    {
+                        if (value.Equals("id"))
+                        {
+                            reader.Read();
+                            mapElement.setId(reader.Value.ToString());
+                        }
+                    }
+                }
+            }
+
+            layoutBuilder.addElementToBody(mapElement.getXml());
+            activityBuider.addActionsToOnCreate(mapElement.getOnCreateActions());
+            activityBuider.addImports(mapElement.getImports());
+            activityBuider.addMethods(mapElement.getGeolocationMethod());
+            activityBuider.addVariables(mapElement.getVariables());
+            manifestBuilder.addPermission(@"<uses-permission android:name=""android.permission.ACCESS_COARSE_LOCATION""/>""");
+            manifestBuilder.addPermission(@"<uses-permission android:name=""android.permission.ACCESS_FINE_LOCATION""/>""");
+            manifestBuilder.addPermission(@"<uses-permission android:name=""android.permission.ACCESS_WIFI_STATE"" />""");
+            manifestBuilder.addPermission(@"<uses-permission android:name=""android.permission.ACCESS_NETWORK_STATE"" />""");
+            manifestBuilder.addPermission(@"<uses-permission android:name=""android.permission.INTERNET"" />""");
+            manifestBuilder.addPermission(@"<uses-permission android:name=""android.permission.WRITE_EXTERNAL_STORAGE"" />""");
+            
+            manifestBuilder.addFeature(@"<uses-feature android:name=""android.hardware.location.network"" />""");
+            manifestBuilder.addFeature(@"<uses-feature android:name=""android.hardware.location.gps"" />""");
+            manifestBuilder.addFeature(@"<uses-feature android:name=""android.hardware.wifi"" />""");
         }
 
         private void parseLogicFile()

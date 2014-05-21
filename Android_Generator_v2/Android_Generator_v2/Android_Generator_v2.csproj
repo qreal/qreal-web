@@ -70,6 +70,7 @@
     <Compile Include="Elements\InlineLayoutElement.cs" />
     <Compile Include="Elements\InputElement.cs" />
     <Compile Include="BuildersInterfaces\LayoutBuilderInterface.cs" />
+    <Compile Include="Elements\MapElement.cs" />
     <Compile Include="ManifestActivity.cs" />
     <Compile Include="DirectoryCopyManager.cs" />
     <Compile Include="JsonParser.cs" />
