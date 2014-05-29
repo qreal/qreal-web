@@ -135,6 +135,11 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
 
             $('#codeEditor').on('show.bs.modal', function () {
                 $('.modal-content .modal-body').css('height', $(window).height() * 0.8);
+                $('#editor_pills li').removeClass('active');
+                $('#editor_pills li').first().addClass('active');
+                editor.getSession().setMode("ace/mode/html");
+                self.code.html = self.FormatHtml(App.Instance.Device.ControlManager.GenerateAppHtml());
+                editor.setValue(self.code.html);
             });
 
             $('#editor_pills a').click(function (e) {

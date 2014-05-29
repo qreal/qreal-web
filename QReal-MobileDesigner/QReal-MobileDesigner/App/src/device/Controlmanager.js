@@ -380,6 +380,10 @@
                     var image = element;
                     $html = this.appControlFactory.CreateImage(image.Properties);
                     break;
+                case 8 /* WebView */:
+                    var webView = element;
+                    $html = this.appControlFactory.CreateWebView(webView.Properties);
+                    break;
             }
             return $html;
         };

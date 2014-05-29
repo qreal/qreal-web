@@ -398,6 +398,10 @@ class ControlManager {
                 var image = <DesignerControls.Image>element;
                 $html = this.appControlFactory.CreateImage(image.Properties);
                 break;
+            case Enums.ControlType.WebView:
+                var webView = <DesignerControls.WebView>element;
+                $html = this.appControlFactory.CreateWebView(webView.Properties);
+                break;
         }
         return $html;
     }
