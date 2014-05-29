@@ -29,6 +29,9 @@
                 case 5 /* Map */:
                     return this.CreateMap(property);
                     break;
+                case 8 /* WebView */:
+                    return this.CreateWebView(property);
+                    break;
             }
         };
 
@@ -136,6 +139,21 @@
                 'margin-right': 'auto'
             });
             return $image;
+        };
+
+        AppControlFactory.prototype.CreateWebView = function (property) {
+            var $webView = $("<iframe>");
+            $webView.attr('id', property.Id);
+            $webView.attr('src', property.Url);
+            $webView.attr('frameBorder', '0');
+            $webView.css({
+                'width': property.Width,
+                'height': property.Height,
+                'display': 'block',
+                'margin-left': 'auto',
+                'margin-right': 'auto'
+            });
+            return $webView;
         };
         return AppControlFactory;
     })();

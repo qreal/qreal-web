@@ -53,6 +53,9 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
                 case 5 /* Map */:
                     this.ShowProperty_Map(property);
                     break;
+                case 8 /* WebView */:
+                    this.ShowProperty_WebView(property);
+                    break;
             }
         };
 
@@ -188,7 +191,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
         };
 
         PropertiesView.prototype.ShowProperty_Map = function (property) {
-            this.log.Debug("ShowProperty_Image");
+            this.log.Debug("ShowProperty_Map");
             var self = this;
             var controlManager = App.Instance.Device.ControlManager;
 
@@ -200,6 +203,28 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             var $heightProperty = this.CreateHeightRow(property);
 
             content.append($idProperty);
+            content.append($widthProperty);
+            content.append($heightProperty);
+            propertyPanel.appendTo('#properties-widget');
+            propertyPanel.attr('id', 'propertyFor' + property.Id);
+            this.currentPropertyDiv = propertyPanel;
+        };
+
+        PropertiesView.prototype.ShowProperty_WebView = function (property) {
+            this.log.Debug("ShowProperty_WebView");
+            var self = this;
+            var controlManager = App.Instance.Device.ControlManager;
+
+            var propertyPanel = $('#propertiesTmpl').tmpl({});
+            var content = propertyPanel.children("#property-table");
+
+            var $idProperty = this.CreateIdRow(property);
+            var $urlProperty = this.CreateUrlRow(property);
+            var $widthProperty = this.CreateWidthRow(property);
+            var $heightProperty = this.CreateHeightRow(property);
+
+            content.append($idProperty);
+            content.append($urlProperty);
             content.append($widthProperty);
             content.append($heightProperty);
             propertyPanel.appendTo('#properties-widget');

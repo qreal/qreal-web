@@ -113,6 +113,16 @@ define(["require", "exports", "src/util/log/Log"], function(require, exports, Lo
         })(BaseControl);
         DesignerControls.Map = Map;
 
+        var WebView = (function (_super) {
+            __extends(WebView, _super);
+            function WebView(properties) {
+                _super.call(this, properties);
+                this.log = new Log("WebView");
+            }
+            return WebView;
+        })(BaseControl);
+        DesignerControls.WebView = WebView;
+
         var Label = (function (_super) {
             __extends(Label, _super);
             function Label(properties) {

@@ -76,7 +76,7 @@
                     return new DesignerControls.Input(inputProperty);
                 case "Header":
                     break;
-                case "Grid":
+                case "Map":
                     var mapProperty = new ControlProperty.MapProperty(this.GetNewId('map'));
                     return new DesignerControls.Map(mapProperty);
                 case "Label":
@@ -85,6 +85,9 @@
                 case "Image":
                     var imageProperty = new ControlProperty.ImageProperty(this.GetNewId('img'));
                     return new DesignerControls.Image(imageProperty);
+                case "WebView":
+                    var webViewProperty = new ControlProperty.WebViewProperty(this.GetNewId('webview'));
+                    return new DesignerControls.WebView(webViewProperty);
             }
         };
 
@@ -132,6 +135,9 @@
                     break;
                 case 7 /* Image */:
                     this.ChangeImageProperty(propertyId, propertyType, newValue);
+                    break;
+                case 8 /* WebView */:
+                    this.ChangeWebViewProperty(propertyId, propertyType, newValue);
                     break;
             }
         };
@@ -297,6 +303,29 @@
                 case 12 /* Height */:
                     $(map.Properties.$Id).css('height', newValue);
                     map.Properties.Height = newValue;
+                    break;
+            }
+        };
+
+        ControlManager.prototype.ChangeWebViewProperty = function (propertyId, propertyType, newValue) {
+            this.log.Debug('ChangeMapProperty');
+            var webView = this.FindById(propertyId);
+            switch (propertyType) {
+                case 0 /* Id */:
+                    $(webView.Properties.$Id).attr('id', newValue);
+                    webView.Properties.Id = newValue;
+                    break;
+                case 13 /* Url */:
+                    $($(webView.Properties.$Id).children('div').get(1)).text('Url: ' + newValue);
+                    webView.Properties.Url = newValue;
+                    break;
+                case 11 /* Width */:
+                    $(webView.Properties.$Id).css('width', newValue);
+                    webView.Properties.Width = newValue;
+                    break;
+                case 12 /* Height */:
+                    $(webView.Properties.$Id).css('height', newValue);
+                    webView.Properties.Height = newValue;
                     break;
             }
         };

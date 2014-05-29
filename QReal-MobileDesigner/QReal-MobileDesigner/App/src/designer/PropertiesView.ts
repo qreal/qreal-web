@@ -65,6 +65,9 @@ class PropertiesView {
             case Enums.ControlType.Map:
                 this.ShowProperty_Map(<ControlProperty.MapProperty>property);
                 break;
+            case Enums.ControlType.WebView:
+                this.ShowProperty_WebView(<ControlProperty.WebViewProperty>property);
+                break;
         }
     }
 
@@ -201,7 +204,7 @@ class PropertiesView {
     }
 
     public ShowProperty_Map(property: ControlProperty.MapProperty): void {
-        this.log.Debug("ShowProperty_Image");
+        this.log.Debug("ShowProperty_Map");
         var self = this;
         var controlManager = App.Instance.Device.ControlManager;
 
@@ -213,6 +216,28 @@ class PropertiesView {
         var $heightProperty = this.CreateHeightRow(property);
 
         content.append($idProperty);
+        content.append($widthProperty);
+        content.append($heightProperty);
+        propertyPanel.appendTo('#properties-widget');
+        propertyPanel.attr('id', 'propertyFor' + property.Id);
+        this.currentPropertyDiv = propertyPanel;
+    }
+
+    public ShowProperty_WebView(property: ControlProperty.WebViewProperty): void {
+        this.log.Debug("ShowProperty_WebView");
+        var self = this;
+        var controlManager = App.Instance.Device.ControlManager;
+
+        var propertyPanel = $('#propertiesTmpl').tmpl({});
+        var content = propertyPanel.children("#property-table");
+
+        var $idProperty = this.CreateIdRow(property);
+        var $urlProperty = this.CreateUrlRow(property);
+        var $widthProperty = this.CreateWidthRow(property);
+        var $heightProperty = this.CreateHeightRow(property);
+
+        content.append($idProperty);
+        content.append($urlProperty);
         content.append($widthProperty);
         content.append($heightProperty);
         propertyPanel.appendTo('#properties-widget');

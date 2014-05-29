@@ -483,6 +483,53 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
             return MapProperty;
         })(Property);
         ControlProperty.MapProperty = MapProperty;
+
+        var WebViewProperty = (function (_super) {
+            __extends(WebViewProperty, _super);
+            function WebViewProperty(id) {
+                _super.call(this, 8 /* WebView */, id);
+                this.Url = "http://qreal.ru/";
+                this.Width = '100%';
+                this.Height = '300px';
+            }
+            Object.defineProperty(WebViewProperty.prototype, "Url", {
+                get: function () {
+                    return this.url;
+                },
+                set: function (value) {
+                    this.url = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+
+            Object.defineProperty(WebViewProperty.prototype, "Width", {
+                get: function () {
+                    return this.width;
+                },
+                set: function (value) {
+                    this.width = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+
+            Object.defineProperty(WebViewProperty.prototype, "Height", {
+                get: function () {
+                    return this.height;
+                },
+                set: function (value) {
+                    this.height = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            return WebViewProperty;
+        })(Property);
+        ControlProperty.WebViewProperty = WebViewProperty;
     })(ControlProperty || (ControlProperty = {}));
 
     

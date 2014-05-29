@@ -10,6 +10,7 @@
             ControlType[ControlType["Map"] = 5] = "Map";
             ControlType[ControlType["Label"] = 6] = "Label";
             ControlType[ControlType["Image"] = 7] = "Image";
+            ControlType[ControlType["WebView"] = 8] = "WebView";
         })(Enums.ControlType || (Enums.ControlType = {}));
         var ControlType = Enums.ControlType;
 

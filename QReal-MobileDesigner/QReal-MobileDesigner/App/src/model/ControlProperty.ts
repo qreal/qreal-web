@@ -377,6 +377,44 @@ module ControlProperty {
             this.Height = '300px';
         }
     }
+
+    export class WebViewProperty extends Property {
+
+        private url: string;
+        private width: string;
+        private height: string;
+
+        public get Url(): string {
+            return this.url;
+        }
+
+        public set Url(value: string) {
+            this.url = value;
+        }
+
+        public get Width(): string {
+            return this.width;
+        }
+
+        public set Width(value: string) {
+            this.width = value;
+        }
+
+        public get Height(): string {
+            return this.height;
+        }
+
+        public set Height(value: string) {
+            this.height = value;
+        }
+
+        constructor(id: string) {
+            super(Enums.ControlType.WebView, id);
+            this.Url = "http://qreal.ru/"
+            this.Width = '100%';
+            this.Height = '300px';
+        }
+    }
 }
 
 export =  ControlProperty;

@@ -94,7 +94,7 @@ class ControlManager {
             case "Header":
                 //return this.controlFactory.CreateHeader(this.GetNewId('header'));
                 break;
-            case "Grid":
+            case "Map":
                 var mapProperty = new ControlProperty.MapProperty(this.GetNewId('map'));
                 return new DesignerControls.Map(mapProperty);
             case "Label":
@@ -103,6 +103,9 @@ class ControlManager {
             case "Image":
                 var imageProperty = new ControlProperty.ImageProperty(this.GetNewId('img'));
                 return new DesignerControls.Image(imageProperty);
+            case "WebView":
+                var webViewProperty = new ControlProperty.WebViewProperty(this.GetNewId('webview'));
+                return new DesignerControls.WebView(webViewProperty);
         }
 
     }
@@ -150,6 +153,9 @@ class ControlManager {
                 break;
             case Enums.ControlType.Image:
                 this.ChangeImageProperty(propertyId, propertyType, newValue);
+                break;
+            case Enums.ControlType.WebView:
+                this.ChangeWebViewProperty(propertyId, propertyType, newValue);
                 break;
         }
     }
@@ -315,6 +321,29 @@ class ControlManager {
             case Enums.PropertyType.Height:
                 $(map.Properties.$Id).css('height', newValue);
                 map.Properties.Height = newValue;
+                break;
+        }
+    }
+
+    public ChangeWebViewProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string) {
+        this.log.Debug('ChangeMapProperty');
+        var webView = <DesignerControls.WebView>this.FindById(propertyId);
+        switch (propertyType) {
+            case Enums.PropertyType.Id:
+                $(webView.Properties.$Id).attr('id', newValue);
+                webView.Properties.Id = newValue;
+                break;
+            case Enums.PropertyType.Url:
+                $($(webView.Properties.$Id).children('div').get(1)).text('Url: ' + newValue);
+                webView.Properties.Url = newValue;
+                break;
+            case Enums.PropertyType.Width:
+                $(webView.Properties.$Id).css('width', newValue);
+                webView.Properties.Width = newValue;
+                break;
+            case Enums.PropertyType.Height:
+                $(webView.Properties.$Id).css('height', newValue);
+                webView.Properties.Height = newValue;
                 break;
         }
     }

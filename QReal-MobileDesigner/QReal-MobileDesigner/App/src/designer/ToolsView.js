@@ -57,6 +57,16 @@
                     id: 'Image',
                     title: 'Image',
                     tool: ''
+                },
+                {
+                    id: 'Map',
+                    title: 'Map',
+                    tool: ''
+                },
+                {
+                    id: 'WebView',
+                    title: 'WebView',
+                    tool: ''
                 }
             ];
         }

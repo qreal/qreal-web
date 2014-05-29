@@ -36,6 +36,9 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
                 case 5 /* Map */:
                     return this.CreateMap(property);
                     break;
+                case 8 /* WebView */:
+                    return this.CreateWebView(property);
+                    break;
             }
         };
 
@@ -132,6 +135,33 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
                 App.Instance.Designer.ShowProperty(property);
             });
             return $img;
+        };
+
+        DesignerControlFactory.prototype.CreateWebView = function (property) {
+            var $webView = $("<div>");
+            $webView.attr('id', property.Id);
+            $webView.css({
+                'width': property.Width,
+                'height': property.Height,
+                'display': 'block',
+                'margin-left': 'auto',
+                'margin-right': 'auto',
+                'border': '1px solid gray'
+            });
+            var $label = $('<div>');
+            $label.css({
+                'text-align': 'center',
+                'margin-top': '10px'
+            });
+            $label.clone().text('WebView').appendTo($webView);
+            $label.clone().text('Url:' + property.Url).appendTo($webView);
+
+            $webView.bind('click', function (event) {
+                event.preventDefault();
+                App.Instance.Designer.ShowProperty(property);
+            });
+
+            return $webView;
         };
         return DesignerControlFactory;
     })(AppControlFactory);

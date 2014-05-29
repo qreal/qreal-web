@@ -64,6 +64,16 @@ class ToolsView {
             id: 'Image',
             title: 'Image',
             tool: ''
+        },
+        {
+            id: 'Map',
+            title: 'Map',
+            tool: ''
+        },
+        {
+            id: 'WebView',
+            title: 'WebView',
+            tool: ''
         }
     ];
 
@@ -95,7 +105,7 @@ class ToolsView {
                     self.AddNewPage(pageName);
                 }
             });
-            
+
         });
 
         App.Instance.Designer.EventManager.AddSubscriber(EventManager.OnDeviceLoaded, {

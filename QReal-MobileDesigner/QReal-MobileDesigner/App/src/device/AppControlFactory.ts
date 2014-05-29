@@ -40,6 +40,9 @@ class AppControlFactory {
             case Enums.ControlType.Map:
                 return this.CreateMap(<any>property);
                 break;
+            case Enums.ControlType.WebView:
+                return this.CreateWebView(<any>property);
+                break;
         }
     }
 
@@ -148,6 +151,21 @@ class AppControlFactory {
             'margin-right': 'auto'
         });
         return $image;
+    }
+
+    public CreateWebView(property: ControlProperty.WebViewProperty): JQuery {
+        var $webView = $("<iframe>");
+        $webView.attr('id', property.Id);
+        $webView.attr('src', property.Url);
+        $webView.attr('frameBorder', '0');
+        $webView.css({
+            'width': property.Width,
+            'height': property.Height,
+            'display': 'block',
+            'margin-left': 'auto',
+            'margin-right': 'auto'
+        });
+        return $webView;
     }
 }
 

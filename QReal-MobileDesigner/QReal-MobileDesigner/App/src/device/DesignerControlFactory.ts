@@ -38,6 +38,9 @@ class DesignerControlFactory extends AppControlFactory {
             case Enums.ControlType.Map:
                 return this.CreateMap(<any>property);
                 break;
+            case Enums.ControlType.WebView:
+                return this.CreateWebView(<any>property);
+                break;
         }
     }
 
@@ -53,12 +56,12 @@ class DesignerControlFactory extends AppControlFactory {
                 forcePlaceholderSize: true,
                 containment: "document",
                 cancel: '.nondraggable',
-                start: function (event, ui) {                   
+                start: function (event, ui) {
                     ui.placeholder.height(ui.item.height());
                     ui.item.startPos = ui.item.index();
                 },
                 stop: function (e, ui) {
-                     console.log
+                    console.log
                     var container = <DesignerControls.BaseContainer<ControlProperty.Property>>controlManager.FindById(property.Id);
                     Helper.ArrayMove(container.Childrens, ui.item.startPos, ui.item.index());
                 },
@@ -70,7 +73,7 @@ class DesignerControlFactory extends AppControlFactory {
     }
 
     public CreateHeader(property: ControlProperty.HeaderProperty): JQuery {
-        var $header = super.CreateHeader(property);       
+        var $header = super.CreateHeader(property);
         $header.addClass('nondraggable');
 
         $header.on('click', event => {
@@ -104,7 +107,7 @@ class DesignerControlFactory extends AppControlFactory {
     }
 
     public CreateMap(property: ControlProperty.MapProperty): JQuery {
-        var $map = super.CreateMap(property);   
+        var $map = super.CreateMap(property);
         $map.css('background-color', '#aaa');
         $map.on('click', event => {
             event.preventDefault();
@@ -129,6 +132,33 @@ class DesignerControlFactory extends AppControlFactory {
             App.Instance.Designer.ShowProperty(property);
         });
         return $img;
+    }
+
+    public CreateWebView(property: ControlProperty.WebViewProperty): JQuery {
+        var $webView = $("<div>");
+        $webView.attr('id', property.Id);
+        $webView.css({
+            'width': property.Width,
+            'height': property.Height,
+            'display': 'block',
+            'margin-left': 'auto',
+            'margin-right': 'auto',
+            'border': '1px solid gray'
+        });
+        var $label = $('<div>');
+        $label.css({
+            'text-align': 'center',
+            'margin-top': '10px'
+        })
+        $label.clone().text('WebView').appendTo($webView);
+        $label.clone().text('Url:' + property.Url).appendTo($webView);
+
+        $webView.bind('click', event => {
+            event.preventDefault();
+            App.Instance.Designer.ShowProperty(property);
+        });
+
+        return $webView;
     }
 }
 

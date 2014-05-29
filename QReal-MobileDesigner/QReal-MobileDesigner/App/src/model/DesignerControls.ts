@@ -98,6 +98,14 @@ module DesignerControls {
         }
     }
 
+    export class WebView extends BaseControl<ControlProperty.WebViewProperty> {
+
+        constructor(properties: ControlProperty.WebViewProperty) {
+            super(properties);
+            this.log = new Log("WebView");
+        }
+    }
+
     export class Label extends BaseControl<ControlProperty.LabelProperty> {
 
         constructor(properties: ControlProperty.LabelProperty) {

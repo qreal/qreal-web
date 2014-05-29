@@ -8,7 +8,8 @@
         Input,
         Map,
         Label,
-        Image
+        Image,
+        WebView
     }
 
     export enum PropertyType {
