@@ -16,7 +16,8 @@ namespace Android_Generator_v2
 
         public String build()
         {
-            return String.Format(template, package, permissionsBuilder.ToString(), activitiesBuilder.ToString());
+            return String.Format(template, package, setToString(permissions),
+                setToString(features), activitiesBuilder.ToString());
         }
 
         public void setPackage(String package)
@@ -24,9 +25,14 @@ namespace Android_Generator_v2
             this.package = package;
         }
 
-        public void addPermissions(String permissions)
+        public void addPermission(String permissionString)
         {
-            permissionsBuilder.Append(permissions);
+            permissions.Add(permissionString);
+        }
+
+        public void addFeature(String featureString)
+        {
+            features.Add(featureString);
         }
 
         public void addActivity(String activity)
@@ -34,9 +40,21 @@ namespace Android_Generator_v2
             activitiesBuilder.Append(activity);
         }
 
+        private String setToString(HashSet<String> set)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (String str in set)
+            {
+                stringBuilder.Append(str);
+                stringBuilder.Append("\n");
+            }
+            return stringBuilder.ToString();
+        }
+
         private String template;
         private String package;
-        private StringBuilder permissionsBuilder = new StringBuilder();
+        private HashSet<String> permissions = new HashSet<String>();
+        private HashSet<String> features = new HashSet<String>();
         private StringBuilder activitiesBuilder = new StringBuilder();
     }
 }

@@ -1,44 +1,30 @@
 {
     "type": "App",
     "id": "",
-    "name": "HelloWorld",
-    "projectPackage": "com.example.hello",
+    "name": "testName",
+    "projectPackage": "example.testpackage",
     "Pages": [
         {
             "type": "Page",
             "id": "Main_Page",
-            "header": {
-                "type": "Header",
-                "id": "Main_Page_header",
-                "title": "Main",
-                "theme": "b"
-            },
+            "header": false,
             "theme": "default",
             "padding": "10px",
             "Controls": [
                 {
                     "type": "Button",
-                    "id": "button1",
-                    "text": "To second",
+                    "id": "button2",
+                    "text": "Refresh",
                     "inline": false,
-                    "corners": true,
+                    "corners": false,
                     "mini": false,
                     "theme": "default"
+                },
+                {
+                    "type": "Map",
+                    "id": "map1"
                 }
             ]
-        },
-        {
-            "type": "Page",
-            "id": "SecondPage",
-            "header": {
-                "type": "Header",
-                "id": "SecondPage_header",
-                "title": "Second",
-                "theme": "b"
-            },
-            "theme": "default",
-            "padding": "10px",
-            "Controls": []
         }
     ]
 }
