@@ -374,6 +374,7 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
             function LabelProperty(id) {
                 _super.call(this, 6 /* Label */, id);
                 this.Text = "Label";
+                this.TextSize = '150%';
             }
             Object.defineProperty(LabelProperty.prototype, "Text", {
                 get: function () {
@@ -401,6 +402,53 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
             return LabelProperty;
         })(Property);
         ControlProperty.LabelProperty = LabelProperty;
+
+        var ImageProperty = (function (_super) {
+            __extends(ImageProperty, _super);
+            function ImageProperty(id) {
+                _super.call(this, 7 /* Image */, id);
+                this.Url = "/Content/noimage.png";
+                this.Width = '150px';
+                this.Height = '150px';
+            }
+            Object.defineProperty(ImageProperty.prototype, "Url", {
+                get: function () {
+                    return this.url;
+                },
+                set: function (value) {
+                    this.url = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+
+            Object.defineProperty(ImageProperty.prototype, "Width", {
+                get: function () {
+                    return this.width;
+                },
+                set: function (value) {
+                    this.width = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+
+            Object.defineProperty(ImageProperty.prototype, "Height", {
+                get: function () {
+                    return this.height;
+                },
+                set: function (value) {
+                    this.height = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            return ImageProperty;
+        })(Property);
+        ControlProperty.ImageProperty = ImageProperty;
 
         var MapProperty = (function (_super) {
             __extends(MapProperty, _super);

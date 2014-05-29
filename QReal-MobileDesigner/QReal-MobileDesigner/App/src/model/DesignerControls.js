@@ -122,6 +122,16 @@ define(["require", "exports", "src/util/log/Log"], function(require, exports, Lo
             return Label;
         })(BaseControl);
         DesignerControls.Label = Label;
+
+        var Image = (function (_super) {
+            __extends(Image, _super);
+            function Image(properties) {
+                _super.call(this, properties);
+                this.log = new Log("Image");
+            }
+            return Image;
+        })(BaseControl);
+        DesignerControls.Image = Image;
     })(DesignerControls || (DesignerControls = {}));
 
     

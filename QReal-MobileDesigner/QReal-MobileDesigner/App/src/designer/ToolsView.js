@@ -52,6 +52,11 @@
                     id: 'Label',
                     title: 'Label',
                     tool: ''
+                },
+                {
+                    id: 'Image',
+                    title: 'Image',
+                    tool: ''
                 }
             ];
         }

@@ -9,6 +9,7 @@
             ControlType[ControlType["Input"] = 4] = "Input";
             ControlType[ControlType["Map"] = 5] = "Map";
             ControlType[ControlType["Label"] = 6] = "Label";
+            ControlType[ControlType["Image"] = 7] = "Image";
         })(Enums.ControlType || (Enums.ControlType = {}));
         var ControlType = Enums.ControlType;
 
@@ -24,6 +25,9 @@
             PropertyType[PropertyType["Size"] = 8] = "Size";
             PropertyType[PropertyType["Padding"] = 9] = "Padding";
             PropertyType[PropertyType["Placeholder"] = 10] = "Placeholder";
+            PropertyType[PropertyType["Width"] = 11] = "Width";
+            PropertyType[PropertyType["Height"] = 12] = "Height";
+            PropertyType[PropertyType["Url"] = 13] = "Url";
         })(Enums.PropertyType || (Enums.PropertyType = {}));
         var PropertyType = Enums.PropertyType;
     })(Enums || (Enums = {}));

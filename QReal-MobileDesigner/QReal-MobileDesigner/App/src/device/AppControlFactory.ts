@@ -34,6 +34,9 @@ class AppControlFactory {
             case Enums.ControlType.Label:
                 return this.CreateLabel(<any>property);
                 break;
+            case Enums.ControlType.Image:
+                return this.CreateImage(<any>property);
+                break;
             case Enums.ControlType.Map:
                 return this.CreateMap(<any>property);
                 break;
@@ -131,6 +134,17 @@ class AppControlFactory {
         $label.attr('id', property.Id);
         $label.css('font-size', property.TextSize);
         return $label;
+    }
+
+    public CreateImage(property: ControlProperty.ImageProperty): JQuery {
+        var $image = $("<img>");
+        $image.attr('id', property.Id);
+        $image.attr('src', property.Url);
+        $image.css({
+            'width': property.Width,
+            'height': property.Height
+        });
+        return $image;
     }
 }
 

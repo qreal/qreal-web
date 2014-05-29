@@ -105,6 +105,14 @@ module DesignerControls {
             this.log = new Log("Label");
         }
     }
+
+    export class Image extends BaseControl<ControlProperty.ImageProperty> {
+
+        constructor(properties: ControlProperty.ImageProperty) {
+            super(properties);
+            this.log = new Log("Image");
+        }
+    }
 }
 
 export = DesignerControls;

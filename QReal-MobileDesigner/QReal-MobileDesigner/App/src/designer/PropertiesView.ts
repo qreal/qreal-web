@@ -59,6 +59,9 @@ class PropertiesView {
             case Enums.ControlType.Label:
                 this.ShowProperty_Label(<ControlProperty.LabelProperty>property);
                 break;
+            case Enums.ControlType.Image:
+                this.ShowProperty_Image(<ControlProperty.ImageProperty>property);
+                break;
         }
     }
 
@@ -170,6 +173,28 @@ class PropertiesView {
         this.currentPropertyDiv = propertyPanel;
     }
 
+    public ShowProperty_Image(property: ControlProperty.ImageProperty): void {
+        this.log.Debug("ShowProperty_Image");
+        var self = this;
+        var controlManager = App.Instance.Device.ControlManager;
+
+        var propertyPanel = $('#propertiesTmpl').tmpl({});
+        var content = propertyPanel.children("#property-table");
+
+        var $idProperty = this.CreateIdRow(property);
+        var $urlProperty = this.CreateUrlRow(property);
+        var $widthProperty = this.CreateWidthRow(property);
+        var $heightProperty = this.CreateHeightRow(property);
+
+        content.append($idProperty);
+        content.append($urlProperty);
+        content.append($widthProperty);
+        content.append($heightProperty);
+        propertyPanel.appendTo('#properties-widget');
+        propertyPanel.attr('id', 'propertyFor' + property.Id);
+        this.currentPropertyDiv = propertyPanel;
+    }
+
 
     private CreateIdRow(property: any): JQuery {
         return this.CreateTextRow('Id:', property.Id, Enums.PropertyType.Id, property);
@@ -189,6 +214,10 @@ class PropertiesView {
 
     private CreateTextTextRow(property: any): JQuery {
         return this.CreateTextRow('Text:', property.Text, Enums.PropertyType.Text, property);
+    }
+
+    private CreateUrlRow(property: any): JQuery {
+        return this.CreateTextRow('Url:', property.Url, Enums.PropertyType.Url, property);
     }
 
     private CreatePlaceholderRow(property: any): JQuery {
@@ -213,6 +242,14 @@ class PropertiesView {
 
     private CreatePaddingRow(property: any): JQuery {
         return this.CreateSizeInputRow('Padding:', String(property.Padding), Enums.PropertyType.Padding, property);
+    }
+
+    private CreateWidthRow(property: any): JQuery {
+        return this.CreateSizeInputRow('Width:', String(property.Width), Enums.PropertyType.Width, property);
+    }
+    
+    private CreateHeightRow(property: any): JQuery {
+        return this.CreateSizeInputRow('Height:', String(property.Height), Enums.PropertyType.Height, property);
     }
 
     //private CreateHeaderRow(property: any): JQuery {

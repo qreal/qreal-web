@@ -98,9 +98,11 @@ class ControlManager {
                 var mapProperty = new ControlProperty.MapProperty(this.GetNewId('map'));
                 return new DesignerControls.Map(mapProperty);
             case "Label":
-                console.log('label');
                 var labelProperty = new ControlProperty.LabelProperty(this.GetNewId('label'));
                 return new DesignerControls.Label(labelProperty);
+            case "Image":
+                var imageProperty = new ControlProperty.ImageProperty(this.GetNewId('img'));
+                return new DesignerControls.Image(imageProperty);
         }
 
     }
@@ -145,6 +147,9 @@ class ControlManager {
                 break;
             case Enums.ControlType.Label:
                 this.ChangeLabelProperty(propertyId, propertyType, newValue);
+                break;
+            case Enums.ControlType.Image:
+                this.ChangeImageProperty(propertyId, propertyType, newValue);
                 break;
         }
     }
@@ -255,7 +260,7 @@ class ControlManager {
     }
 
     public ChangeLabelProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string) {
-        var label = <DesignerControls.Input>this.FindById(propertyId);
+        var label = <DesignerControls.Label>this.FindById(propertyId);
         switch (propertyType) {
             case Enums.PropertyType.Id:
                 $(label.Properties.$Id).attr('id', newValue);
@@ -263,7 +268,32 @@ class ControlManager {
                 break;
             case Enums.PropertyType.Text:
                 $(label.Properties.$Id).text(newValue);
-                label.Properties.Title = newValue;
+                label.Properties.Text = newValue;
+                break;
+        }
+    }
+
+    public ChangeImageProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string) {
+        this.log.Debug('ChangeImageProperty');
+        var image = <DesignerControls.Image>this.FindById(propertyId);
+        switch (propertyType) {
+            case Enums.PropertyType.Id:
+                $(image.Properties.$Id).attr('id', newValue);
+                image.Properties.Id = newValue;
+                break;
+            case Enums.PropertyType.Url:
+                $(image.Properties.$Id).attr('src', newValue);
+                image.Properties.Url = newValue;
+                break;
+            case Enums.PropertyType.Width:
+                this.log.Debug(' Enums.PropertyType.Width: ' + newValue);
+                this.log.DebugObj($(image.Properties.$Id));
+                $(image.Properties.$Id).css('width', newValue);
+                image.Properties.Width = newValue;
+                break;
+            case Enums.PropertyType.Height:
+                $(image.Properties.$Id).css('height', newValue);
+                image.Properties.Height = newValue;
                 break;
         }
     }
@@ -313,6 +343,10 @@ class ControlManager {
             case Enums.ControlType.Label:
                 var label = <DesignerControls.Label>element;
                 $html = this.appControlFactory.CreateLabel(label.Properties);
+                break;
+            case Enums.ControlType.Image:
+                var image = <DesignerControls.Image>element;
+                $html = this.appControlFactory.CreateImage(image.Properties);
                 break;
         }
         return $html;

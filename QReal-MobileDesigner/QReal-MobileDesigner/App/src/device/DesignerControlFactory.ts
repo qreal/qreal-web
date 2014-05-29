@@ -32,6 +32,9 @@ class DesignerControlFactory extends AppControlFactory {
             case Enums.ControlType.Label:
                 return this.CreateLabel(<any>property);
                 break;
+            case Enums.ControlType.Image:
+                return this.CreateImage(<any>property);
+                break;
             case Enums.ControlType.Map:
                 return this.CreateMap(<any>property);
                 break;
@@ -117,6 +120,15 @@ class DesignerControlFactory extends AppControlFactory {
             App.Instance.Designer.ShowProperty(property);
         });
         return $label;
+    }
+
+    public CreateImage(property: ControlProperty.ImageProperty): JQuery {
+        var $img = super.CreateImage(property);
+        $img.on('click', event => {
+            event.preventDefault();
+            App.Instance.Designer.ShowProperty(property);
+        });
+        return $img;
     }
 }
 

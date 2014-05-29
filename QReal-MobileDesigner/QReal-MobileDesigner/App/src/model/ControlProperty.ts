@@ -312,6 +312,44 @@ module ControlProperty {
         }
     }
 
+    export class ImageProperty extends Property {
+
+        private url: string;
+        private width: string;
+        private height: string;
+
+        public get Url(): string {
+            return this.url;
+        }
+
+        public set Url(value: string) {
+            this.url = value;
+        }
+
+        public get Width(): string {
+            return this.width;
+        }
+
+        public set Width(value: string) {
+            this.width = value;
+        }
+        
+        public get Height(): string {
+            return this.height;
+        }
+
+        public set Height(value: string) {
+            this.height = value;
+        }
+
+        constructor(id: string) {
+            super(Enums.ControlType.Image, id);
+            this.Url = "/Content/noimage.png";
+            this.Width = '150px';
+            this.Height = '150px'
+        }
+    }
+
     export class MapProperty extends Property {
 
         constructor(id: string) {

@@ -30,6 +30,9 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
                 case 6 /* Label */:
                     return this.CreateLabel(property);
                     break;
+                case 7 /* Image */:
+                    return this.CreateImage(property);
+                    break;
                 case 5 /* Map */:
                     return this.CreateMap(property);
                     break;
@@ -120,6 +123,15 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
                 App.Instance.Designer.ShowProperty(property);
             });
             return $label;
+        };
+
+        DesignerControlFactory.prototype.CreateImage = function (property) {
+            var $img = _super.prototype.CreateImage.call(this, property);
+            $img.on('click', function (event) {
+                event.preventDefault();
+                App.Instance.Designer.ShowProperty(property);
+            });
+            return $img;
         };
         return DesignerControlFactory;
     })(AppControlFactory);

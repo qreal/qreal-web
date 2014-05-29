@@ -47,6 +47,9 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
                 case 6 /* Label */:
                     this.ShowProperty_Label(property);
                     break;
+                case 7 /* Image */:
+                    this.ShowProperty_Image(property);
+                    break;
             }
         };
 
@@ -157,6 +160,28 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
             this.currentPropertyDiv = propertyPanel;
         };
 
+        PropertiesView.prototype.ShowProperty_Image = function (property) {
+            this.log.Debug("ShowProperty_Image");
+            var self = this;
+            var controlManager = App.Instance.Device.ControlManager;
+
+            var propertyPanel = $('#propertiesTmpl').tmpl({});
+            var content = propertyPanel.children("#property-table");
+
+            var $idProperty = this.CreateIdRow(property);
+            var $urlProperty = this.CreateUrlRow(property);
+            var $widthProperty = this.CreateWidthRow(property);
+            var $heightProperty = this.CreateHeightRow(property);
+
+            content.append($idProperty);
+            content.append($urlProperty);
+            content.append($widthProperty);
+            content.append($heightProperty);
+            propertyPanel.appendTo('#properties-widget');
+            propertyPanel.attr('id', 'propertyFor' + property.Id);
+            this.currentPropertyDiv = propertyPanel;
+        };
+
         PropertiesView.prototype.CreateIdRow = function (property) {
             return this.CreateTextRow('Id:', property.Id, 0 /* Id */, property);
         };
@@ -175,6 +200,10 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
 
         PropertiesView.prototype.CreateTextTextRow = function (property) {
             return this.CreateTextRow('Text:', property.Text, 1 /* Text */, property);
+        };
+
+        PropertiesView.prototype.CreateUrlRow = function (property) {
+            return this.CreateTextRow('Url:', property.Url, Enums.PropertyType.Url, property);
         };
 
         PropertiesView.prototype.CreatePlaceholderRow = function (property) {
@@ -199,6 +228,14 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
 
         PropertiesView.prototype.CreatePaddingRow = function (property) {
             return this.CreateSizeInputRow('Padding:', String(property.Padding), 9 /* Padding */, property);
+        };
+
+        PropertiesView.prototype.CreateWidthRow = function (property) {
+            return this.CreateSizeInputRow('Width:', String(property.Width), 11 /* Width */, property);
+        };
+
+        PropertiesView.prototype.CreateHeightRow = function (property) {
+            return this.CreateSizeInputRow('Height:', String(property.Height), 12 /* Height */, property);
         };
 
         //private CreateHeaderRow(property: any): JQuery {

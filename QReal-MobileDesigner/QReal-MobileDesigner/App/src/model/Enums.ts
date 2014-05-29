@@ -7,7 +7,8 @@
         Button,
         Input,
         Map,
-        Label
+        Label,
+        Image
     }
 
     export enum PropertyType {
@@ -21,7 +22,10 @@
         Header,
         Size,
         Padding,
-        Placeholder
+        Placeholder,
+        Width,
+        Height,
+        Url
     }
 } 
 

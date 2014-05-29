@@ -80,9 +80,11 @@
                     var mapProperty = new ControlProperty.MapProperty(this.GetNewId('map'));
                     return new DesignerControls.Map(mapProperty);
                 case "Label":
-                    console.log('label');
                     var labelProperty = new ControlProperty.LabelProperty(this.GetNewId('label'));
                     return new DesignerControls.Label(labelProperty);
+                case "Image":
+                    var imageProperty = new ControlProperty.ImageProperty(this.GetNewId('img'));
+                    return new DesignerControls.Image(imageProperty);
             }
         };
 
@@ -127,6 +129,9 @@
                     break;
                 case 6 /* Label */:
                     this.ChangeLabelProperty(propertyId, propertyType, newValue);
+                    break;
+                case 7 /* Image */:
+                    this.ChangeImageProperty(propertyId, propertyType, newValue);
                     break;
             }
         };
@@ -245,7 +250,32 @@
                     break;
                 case 1 /* Text */:
                     $(label.Properties.$Id).text(newValue);
-                    label.Properties.Title = newValue;
+                    label.Properties.Text = newValue;
+                    break;
+            }
+        };
+
+        ControlManager.prototype.ChangeImageProperty = function (propertyId, propertyType, newValue) {
+            this.log.Debug('ChangeImageProperty');
+            var image = this.FindById(propertyId);
+            switch (propertyType) {
+                case 0 /* Id */:
+                    $(image.Properties.$Id).attr('id', newValue);
+                    image.Properties.Id = newValue;
+                    break;
+                case 13 /* Url */:
+                    $(image.Properties.$Id).attr('src', newValue);
+                    image.Properties.Url = newValue;
+                    break;
+                case 11 /* Width */:
+                    this.log.Debug(' Enums.PropertyType.Width: ' + newValue);
+                    this.log.DebugObj($(image.Properties.$Id));
+                    $(image.Properties.$Id).css('width', newValue);
+                    image.Properties.Width = newValue;
+                    break;
+                case 12 /* Height */:
+                    $(image.Properties.$Id).css('height', newValue);
+                    image.Properties.Height = newValue;
                     break;
             }
         };
@@ -295,6 +325,10 @@
                 case 6 /* Label */:
                     var label = element;
                     $html = this.appControlFactory.CreateLabel(label.Properties);
+                    break;
+                case 7 /* Image */:
+                    var image = element;
+                    $html = this.appControlFactory.CreateImage(image.Properties);
                     break;
             }
             return $html;

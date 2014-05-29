@@ -23,6 +23,9 @@
                 case 6 /* Label */:
                     return this.CreateLabel(property);
                     break;
+                case 7 /* Image */:
+                    return this.CreateImage(property);
+                    break;
                 case 5 /* Map */:
                     return this.CreateMap(property);
                     break;
@@ -119,6 +122,17 @@
             $label.attr('id', property.Id);
             $label.css('font-size', property.TextSize);
             return $label;
+        };
+
+        AppControlFactory.prototype.CreateImage = function (property) {
+            var $image = $("<img>");
+            $image.attr('id', property.Id);
+            $image.attr('src', property.Url);
+            $image.css({
+                'width': property.Width,
+                'height': property.Height
+            });
+            return $image;
         };
         return AppControlFactory;
     })();
