@@ -20,6 +20,9 @@
                 case 4 /* Input */:
                     return this.CreateInput(property);
                     break;
+                case 6 /* Label */:
+                    return this.CreateLabel(property);
+                    break;
                 case 5 /* Map */:
                     return this.CreateMap(property);
                     break;
@@ -108,6 +111,14 @@
             $map.css('height', "300px");
             $map.attr('id', property.Id);
             return $map;
+        };
+
+        AppControlFactory.prototype.CreateLabel = function (property) {
+            var $label = $("<label>");
+            $label.text(property.Text);
+            $label.attr('id', property.Id);
+            $label.css('font-size', property.TextSize);
+            return $label;
         };
         return AppControlFactory;
     })();

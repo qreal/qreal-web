@@ -369,6 +369,39 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
         })(Property);
         ControlProperty.InputProperty = InputProperty;
 
+        var LabelProperty = (function (_super) {
+            __extends(LabelProperty, _super);
+            function LabelProperty(id) {
+                _super.call(this, 6 /* Label */, id);
+                this.Text = "Label";
+            }
+            Object.defineProperty(LabelProperty.prototype, "Text", {
+                get: function () {
+                    return this.text;
+                },
+                set: function (value) {
+                    this.text = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+
+            Object.defineProperty(LabelProperty.prototype, "TextSize", {
+                get: function () {
+                    return this.textSize;
+                },
+                set: function (value) {
+                    this.textSize = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            return LabelProperty;
+        })(Property);
+        ControlProperty.LabelProperty = LabelProperty;
+
         var MapProperty = (function (_super) {
             __extends(MapProperty, _super);
             function MapProperty(id) {

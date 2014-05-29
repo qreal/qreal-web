@@ -15,6 +15,7 @@ class DesignerControlFactory extends AppControlFactory {
     }
 
     public CreateControl(property: ControlProperty.Property): JQuery {
+        console.log('CreateControl', property)
         switch (property.Type) {
             case Enums.ControlType.Page:
                 return this.CreatePage(<any>property);
@@ -27,6 +28,9 @@ class DesignerControlFactory extends AppControlFactory {
                 break;
             case Enums.ControlType.Input:
                 return this.CreateInput(<any>property);
+                break;
+            case Enums.ControlType.Label:
+                return this.CreateLabel(<any>property);
                 break;
             case Enums.ControlType.Map:
                 return this.CreateMap(<any>property);
@@ -104,6 +108,15 @@ class DesignerControlFactory extends AppControlFactory {
             App.Instance.Designer.ShowProperty(property);
         });
         return $map;
+    }
+
+    public CreateLabel(property: ControlProperty.LabelProperty): JQuery {
+        var $label = super.CreateLabel(property);
+        $label.on('click', event => {
+            event.preventDefault();
+            App.Instance.Designer.ShowProperty(property);
+        });
+        return $label;
     }
 }
 

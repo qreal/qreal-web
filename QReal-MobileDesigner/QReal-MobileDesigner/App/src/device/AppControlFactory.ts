@@ -31,6 +31,9 @@ class AppControlFactory {
             case Enums.ControlType.Input:
                 return this.CreateInput(<any>property);
                 break;
+            case Enums.ControlType.Label:
+                return this.CreateLabel(<any>property);
+                break;
             case Enums.ControlType.Map:
                 return this.CreateMap(<any>property);
                 break;
@@ -45,7 +48,7 @@ class AppControlFactory {
     public CreatePage(property: ControlProperty.PageProperty): JQuery {
         var $page = $('<div>', {
             'id': property.Id,
-            'data-role': 'page'           
+            'data-role': 'page'
         });
         if (property.Theme != 'default') {
             $page.attr('data-theme', property.Theme);
@@ -91,11 +94,11 @@ class AppControlFactory {
         var $input = $('<input>', {
             'id': property.Id,
             'type': 'text',
-            'data-mini': property.Mini   
+            'data-mini': property.Mini
         });
 
         $container.append($label);
-        $container.append($input);     
+        $container.append($input);
         return $container;
     }
 
@@ -118,8 +121,16 @@ class AppControlFactory {
         var $map = $("<div>");
         $map.css('width', "100%");
         $map.css('height', "300px");
-        $map.attr('id', property.Id);       
+        $map.attr('id', property.Id);
         return $map;
+    }
+
+    public CreateLabel(property: ControlProperty.LabelProperty): JQuery {
+        var $label = $("<label>");
+        $label.text(property.Text);
+        $label.attr('id', property.Id);
+        $label.css('font-size', property.TextSize);
+        return $label;
     }
 }
 

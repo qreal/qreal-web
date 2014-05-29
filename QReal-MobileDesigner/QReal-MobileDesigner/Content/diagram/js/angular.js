@@ -8522,7 +8522,7 @@
                  * </pre>
                  *
                  *
-                 * @param {Object.<string, function()>=} providers Map of service factory which need to be provided
+                 * @param {Object.<string, function()>=} providers Maps of service factory which need to be provided
                  *     for the current scope. Defaults to {@link ng}.
                  * @param {Object.<string, *>=} instanceCache Provides pre-instantiated services which should
                  *     append/override services provided by `providers`. This is handy when unit-testing and having
@@ -10014,10 +10014,10 @@
                  *
                  *    - **method** – `{string}` – HTTP method (e.g. 'GET', 'POST', etc)
                  *    - **url** – `{string}` – Absolute or relative URL of the resource that is being requested.
-                 *    - **params** – `{Object.<string|Object>}` – Map of strings or objects which will be turned to
+                 *    - **params** – `{Object.<string|Object>}` – Maps of strings or objects which will be turned to
                  *      `?key1=value1&key2=value2` after the url. If the value is not a string, it will be JSONified.
                  *    - **data** – `{string|Object}` – Data to be sent as the request message data.
-                 *    - **headers** – `{Object}` – Map of strings representing HTTP headers to send to the server.
+                 *    - **headers** – `{Object}` – Maps of strings representing HTTP headers to send to the server.
                  *    - **xsrfHeaderName** – `{string}` – Name of HTTP header to populate with the XSRF token.
                  *    - **xsrfCookieName** – `{string}` – Name of cookie containing the XSRF token.
                  *    - **transformRequest** – `{function(data, headersGetter)|Array.<function(data, headersGetter)>}` –

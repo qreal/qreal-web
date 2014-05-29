@@ -8,6 +8,7 @@ import ControlProperty = require("src/model/ControlProperty");
 
 declare var bootbox;
 declare var projectName;
+declare var projectPackage;
 declare var ace;
 
 class Designer {
@@ -43,32 +44,58 @@ class Designer {
         editor.setTheme("ace/theme/Chrome");
         editor.getSession().setMode("ace/mode/html");
 
-        $('#generate-apk').on('click', function (e) {
-            self.log.Debug("My project name: " + projectName);
-            var appHtml = App.Instance.Device.ControlManager.GenerateAppHtml();
-            self.dh.ShowProgress("Generating apk...");
-            var dataToSend = JSON.stringify({
-                project_name: projectName,
-                appHtml: appHtml,
-                appJs: self.code.js,
-                appCss: self.code.css
-            }, null, 2);
-            self.log.Debug("dataToSend:", dataToSend);
-            $.ajax({
-                type: "POST",
-                url: "/Projects/BuildProject",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                data: dataToSend,
-                success: function (result) {
-                    window.location.href = "/Projects/DownloadApk?projectName=" + projectName;
-                    self.dh.HideProgress();
-                }
+        //TODO: switch type of app 
+        if (true) {
+            $('#generate-apk').on('click', function (e) {
+                self.log.Debug("My project name: " + projectName);
+                self.dh.ShowProgress("Generating apk...");
+                var dataToSend = JSON.stringify({
+                    project_name: projectName,
+                    pproject_package: projectPackage
+                }, null, 2);
+                self.log.Debug("dataToSend:", dataToSend);
+                $.ajax({
+                    type: "POST",
+                    url: "/Projects/BuildAndroidProject",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: dataToSend,
+                    success: function (result) {
+                        window.location.href = "/Projects/DownloadApk?projectName=" + projectName;
+                        self.dh.HideProgress();
+                    }
+                });
             });
-        });
+        } else {
+            $('#generate-apk').on('click', function (e) {
+                self.log.Debug("My project name: " + projectName);
+                var appHtml = App.Instance.Device.ControlManager.GenerateAppHtml();
+                self.dh.ShowProgress("Generating apk...");
+                var dataToSend = JSON.stringify({
+                    project_name: projectName,
+                    appHtml: appHtml,
+                    appJs: self.code.js,
+                    appCss: self.code.css
+                }, null, 2);
+                self.log.Debug("dataToSend:", dataToSend);
+                $.ajax({
+                    type: "POST",
+                    url: "/Projects/BuildProject",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: dataToSend,
+                    success: function (result) {
+                        window.location.href = "/Projects/DownloadApk?projectName=" + projectName;
+                        self.dh.HideProgress();
+                    }
+                });
+            });
+        }
+
 
         $('#serialize').on('click', function (e) {
-            self.Download('app.json', App.Instance.Device.ControlManager.Serialize());
+            //self.Download('app.json', App.Instance.Device.ControlManager.Serialize());
+            self.Download('app.json', App.Instance.Device.ControlManager.Serialize2DiagramEditor());
         });
 
         $('#run').on('click', function (e) {
@@ -108,6 +135,21 @@ class Designer {
                     self.code.html = editor.getValue();
                     break;
             }
+        });
+
+        $('#diagram').on('click', e => {
+            $('#diagramEditor').modal();
+
+            (<any>window).importJSON(App.Instance.Device.ControlManager.Serialize2DiagramEditor());
+            //$.getJSON("/Content/diagram-editor-master/example1.txt").done(function (json) {
+            //    
+            //    (<any>window).importJSON(json);
+            //});
+        });
+
+        $('#saveDiagram').on('click', e => {
+            var result = (<any>window).exportJSON();
+            console.log(result);
         });
 
         $('#codeEditor').on('show.bs.modal', function () {

@@ -8,6 +8,7 @@
             ControlType[ControlType["Button"] = 3] = "Button";
             ControlType[ControlType["Input"] = 4] = "Input";
             ControlType[ControlType["Map"] = 5] = "Map";
+            ControlType[ControlType["Label"] = 6] = "Label";
         })(Enums.ControlType || (Enums.ControlType = {}));
         var ControlType = Enums.ControlType;
 

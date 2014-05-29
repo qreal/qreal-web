@@ -112,6 +112,16 @@ define(["require", "exports", "src/util/log/Log"], function(require, exports, Lo
             return Map;
         })(BaseControl);
         DesignerControls.Map = Map;
+
+        var Label = (function (_super) {
+            __extends(Label, _super);
+            function Label(properties) {
+                _super.call(this, properties);
+                this.log = new Log("Label");
+            }
+            return Label;
+        })(BaseControl);
+        DesignerControls.Label = Label;
     })(DesignerControls || (DesignerControls = {}));
 
     

@@ -71,10 +71,23 @@ namespace QReal_MobileDesigner.Controllers
                 UseShellExecute = false
             };
 
-            using (var process = Process.Start(createPsi))
+            // using (var process = Process.Start(createPsi))
+            // {
+            //     process.WaitForExit();
+            // }
+
+            var createPsiAndroid = new ProcessStartInfo("cmd.exe", String.Format("/c {0}new.bat {1} {2} {3}", @"C:\Android\", workingDir + @"\" + project_name + @"\android", project_name, project_package))
+            {
+                WorkingDirectory = @"C:\Android\",
+                //CreateNoWindow = true,
+                //UseShellExecute = false
+            };
+
+            using (var process = Process.Start(createPsiAndroid))
             {
                 process.WaitForExit();
             }
+
             return "{ \"project_id\":\"" + project.ID + "\" }";
         }
 
@@ -111,6 +124,26 @@ namespace QReal_MobileDesigner.Controllers
             return "{ \"project_name\":\"" + project_name + "\" }";
         }
 
+        [HttpPost]
+        public string BuildAndroidProject(string project_name, string project_package)
+        {
+            var username = User.Identity.GetUserName();
+            var workingDir = String.Format(@"{0}Projects\{1}", phonegapLocation, username);
+            var createPsiAndroid = new ProcessStartInfo("cmd.exe", String.Format("/c {0}build.bat {1} {2} {3}", @"C:\Android\", workingDir + @"\" + project_name + @"\android", project_name, project_package))
+            {
+                WorkingDirectory = @"C:\Android\",
+                //CreateNoWindow = true,
+                //UseShellExecute = false
+            };
+
+            using (var process = Process.Start(createPsiAndroid))
+            {
+                process.WaitForExit();
+            }
+
+            return "{ \"project_name\":\"" + project_name + "\" }";
+        }
+
         public ActionResult Emulator()
         {
             var username = User.Identity.GetUserName();
@@ -122,7 +155,7 @@ namespace QReal_MobileDesigner.Controllers
 
         [HttpPost]
         public string EmulatorData(string project_name, string appHtml, string appJs, string appCss)
-        {         
+        {
             html = appHtml;
             return "ok";
         }
@@ -141,6 +174,11 @@ namespace QReal_MobileDesigner.Controllers
         }
 
         public FileResult DownloadApk(string projectName)
+        {
+            return File(String.Format(@"{0}Projects\{1}\{2}\platforms\android\ant-build\{2}-debug.apk", phonegapLocation, User.Identity.GetUserName(), projectName), "application/octet-stream", projectName + "-debug.apk");
+        }
+
+        public FileResult DownloadAndroidApk(string projectName)
         {
             return File(String.Format(@"{0}Projects\{1}\{2}\platforms\android\ant-build\{2}-debug.apk", phonegapLocation, User.Identity.GetUserName(), projectName), "application/octet-stream", projectName + "-debug.apk");
         }

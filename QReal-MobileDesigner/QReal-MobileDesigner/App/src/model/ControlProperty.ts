@@ -283,6 +283,35 @@ module ControlProperty {
         }
     }
 
+    export class LabelProperty extends Property {
+
+        private text: string;
+        private textSize: string;
+
+        public get Text(): string {
+            return this.text;
+        }
+
+        public set Text(value: string) {
+            this.text = value;
+        }
+
+        public get TextSize(): string {
+            return this.textSize;
+        }
+
+        public set TextSize(value: string) {
+            this.textSize = value;
+        }
+                          
+
+        constructor(id: string) {
+            super(Enums.ControlType.Label, id);
+            this.Text = "Label";
+            this.TextSize = '150%'
+        }
+    }
+
     export class MapProperty extends Property {
 
         constructor(id: string) {

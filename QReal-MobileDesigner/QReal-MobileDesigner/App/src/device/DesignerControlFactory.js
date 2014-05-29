@@ -13,6 +13,7 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
             ;
         }
         DesignerControlFactory.prototype.CreateControl = function (property) {
+            console.log('CreateControl', property);
             switch (property.Type) {
                 case 1 /* Page */:
                     return this.CreatePage(property);
@@ -25,6 +26,9 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
                     break;
                 case 4 /* Input */:
                     return this.CreateInput(property);
+                    break;
+                case 6 /* Label */:
+                    return this.CreateLabel(property);
                     break;
                 case 5 /* Map */:
                     return this.CreateMap(property);
@@ -107,6 +111,15 @@ define(["require", "exports", "src/Application", "src/util/log/Log", "src/model/
                 App.Instance.Designer.ShowProperty(property);
             });
             return $map;
+        };
+
+        DesignerControlFactory.prototype.CreateLabel = function (property) {
+            var $label = _super.prototype.CreateLabel.call(this, property);
+            $label.on('click', function (event) {
+                event.preventDefault();
+                App.Instance.Designer.ShowProperty(property);
+            });
+            return $label;
         };
         return DesignerControlFactory;
     })(AppControlFactory);

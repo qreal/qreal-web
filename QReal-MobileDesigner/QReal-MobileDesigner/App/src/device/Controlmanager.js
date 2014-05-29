@@ -79,7 +79,10 @@
                 case "Grid":
                     var mapProperty = new ControlProperty.MapProperty(this.GetNewId('map'));
                     return new DesignerControls.Map(mapProperty);
-                    break;
+                case "Label":
+                    console.log('label');
+                    var labelProperty = new ControlProperty.LabelProperty(this.GetNewId('label'));
+                    return new DesignerControls.Label(labelProperty);
             }
         };
 
@@ -121,6 +124,9 @@
                     break;
                 case 2 /* Header */:
                     this.ChangeHeaderProperty(propertyId, propertyType, newValue);
+                    break;
+                case 6 /* Label */:
+                    this.ChangeLabelProperty(propertyId, propertyType, newValue);
                     break;
             }
         };
@@ -230,6 +236,20 @@
             }
         };
 
+        ControlManager.prototype.ChangeLabelProperty = function (propertyId, propertyType, newValue) {
+            var label = this.FindById(propertyId);
+            switch (propertyType) {
+                case 0 /* Id */:
+                    $(label.Properties.$Id).attr('id', newValue);
+                    label.Properties.Id = newValue;
+                    break;
+                case 1 /* Text */:
+                    $(label.Properties.$Id).text(newValue);
+                    label.Properties.Title = newValue;
+                    break;
+            }
+        };
+
         /*** Generation App ***/
         ControlManager.prototype.GenerateAppHtml = function () {
             return this.GenerateHtml(this.app).html();
@@ -271,6 +291,10 @@
                 case 5 /* Map */:
                     var map = element;
                     $html = this.appControlFactory.CreateMap(map.Properties);
+                    break;
+                case 6 /* Label */:
+                    var label = element;
+                    $html = this.appControlFactory.CreateLabel(label.Properties);
                     break;
             }
             return $html;
@@ -314,6 +338,62 @@
             return obj;
         };
 
+        ControlManager.prototype.Serialize2DiagramEditor = function () {
+            var obj = {
+                'nodes': [],
+                'activities': []
+            };
+            this.App2Obj4DiagramEditor(obj, this.app);
+            return obj;
+        };
+
+        ControlManager.prototype.App2Obj4DiagramEditor = function (obj, element) {
+            var self = this;
+            switch (element.Properties.Type) {
+                case 0 /* App */:
+                    var app = element;
+                    app.Childrens.forEach(function (el) {
+                        self.App2Obj4DiagramEditor(obj, el);
+                    });
+                    break;
+                case 1 /* Page */:
+                    var page = element;
+                    obj['activities'].push({
+                        'name': page.Properties.Id
+                    });
+                    page.Childrens.forEach(function (el) {
+                        self.App2Obj4DiagramEditor(obj, el);
+                    });
+                    break;
+                case 3 /* Button */:
+                    var button = element;
+                    obj["nodes"].push({
+                        'id': button.Properties.Id,
+                        'type': 'Button',
+                        "name": button.Properties.Text,
+                        "action": "click"
+                    });
+                    break;
+                case 4 /* Input */:
+                    var input = element;
+                    obj["nodes"].push({
+                        'id': input.Properties.Id,
+                        'type': 'Input',
+                        "name": 'name',
+                        "action": "submit"
+                    });
+                    break;
+                case 2 /* Header */:
+                    break;
+                case 5 /* Map */:
+                    obj["nodes"].push({
+                        'id': element.Properties.Id,
+                        'type': 'Map'
+                    });
+                    break;
+            }
+        };
+
         ControlManager.prototype.ToogleClass = function (id, cssclass, add) {
             if (add) {
                 $(id).addClass(cssclass);
@@ -328,6 +408,7 @@
             var controlId = event.originalEvent.dataTransfer.getData("Text");
             var control = App.Instance.Device.ControlManager.CreateControl(controlId);
             var $control = this.controlFactory.CreateControl(control.Properties);
+            console.log($control);
             var page = this.FindById(pageId);
             page.Childrens.push(control);
             $(page.Properties.$Id).find('div[role=main]').append($control);
@@ -343,7 +424,7 @@
         };
 
         ControlManager.prototype.FindInContainer = function (id, control) {
-            this.log.Debug("FindInContainer: " + id, control);
+            //this.log.Debug("FindInContainer: " + id, control);
             if (!control) {
                 return null;
             }

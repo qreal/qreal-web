@@ -97,6 +97,14 @@ module DesignerControls {
             this.log = new Log("Map");
         }
     }
+
+    export class Label extends BaseControl<ControlProperty.LabelProperty> {
+
+        constructor(properties: ControlProperty.LabelProperty) {
+            super(properties);
+            this.log = new Log("Label");
+        }
+    }
 }
 
 export = DesignerControls;

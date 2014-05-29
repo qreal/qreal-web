@@ -1208,7 +1208,7 @@
     var noXhrPatch =
         typeof window !== 'undefined' && !!window.ActiveXObject && !(window.XMLHttpRequest && (new XMLHttpRequest).dispatchEvent);
 
-    // Map from CRUD to HTTP for our default `Backbone.sync` implementation.
+    // Maps from CRUD to HTTP for our default `Backbone.sync` implementation.
     var methodMap = {
         'create': 'POST',
         'update': 'PUT',

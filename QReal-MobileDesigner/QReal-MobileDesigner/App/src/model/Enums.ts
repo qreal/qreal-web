@@ -6,7 +6,8 @@
         Header,
         Button,
         Input,
-        Map
+        Map,
+        Label
     }
 
     export enum PropertyType {

@@ -47,6 +47,11 @@
                     id: 'ControlGroup',
                     title: 'Control group',
                     tool: 'controlgroup'
+                },
+                {
+                    id: 'Label',
+                    title: 'Label',
+                    tool: ''
                 }
             ];
         }
@@ -77,7 +82,6 @@
             });
 
             $('#addPage').click(function (e) {
-                //TODO: create normal dialog
                 bootbox.prompt("Enter a new page name:", function (pageName) {
                     if (pageName) {
                         self.AddNewPage(pageName);

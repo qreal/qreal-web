@@ -16,6 +16,14 @@ var Controllers;
             $scope.vm = this;
             this.validateService = validateService;
 
+            window["importJSON"] = function (json) {
+                $scope.vm.import(json);
+            };
+
+            window["exportJSON"] = function () {
+                return $scope.vm.export();
+            };
+
             this.paper.on('cell:pointerdblclick', function (cellView, evt, x, y) {
                 $('#my-select').remove();
                 $('#properties').attr("class", "col-md-6");
@@ -35,7 +43,6 @@ var Controllers;
                             });
                         }
                         if (shape.type == ServiceType[ServiceType.GeolocationService]) {
-                            console.log("GEOLOC");
                         }
                         if (shape.type == NodeType[NodeType.Button]) {
                             $('#action').append($("<select>").attr("class", "form-control").attr("id", "my-select"));
@@ -98,8 +105,8 @@ var Controllers;
             this.nodesList.push(ShapesFactory.createInitialNode(this.graph));
         };
 
-        diagramCtrl.prototype.createLabel = function () {
-            this.nodesList.push(ShapesFactory.createLabel(this.graph, null));
+        diagramCtrl.prototype.createMap = function () {
+            this.nodesList.push(ShapesFactory.createMap(this.graph, null));
         };
 
         diagramCtrl.prototype.createNavigationService = function () {
@@ -151,6 +158,10 @@ var Controllers;
             });
         };
 
+        diagramCtrl.prototype.import = function (json) {
+            this.generateGraph(json, this.graph);
+        };
+
         diagramCtrl.prototype.generateGraph = function (json, graph) {
             var graph = this.graph;
             this.json = json;
@@ -174,13 +185,13 @@ var Controllers;
                         input.el.translate(90 * dx, 100 * dy);
                         th.nodesList.push(input);
                         break;
-                    case "Label":
-                        var label = ShapesFactory.createLabel(graph, node.id);
-                        label.el.translate(90 * dx, 100 * dy);
-                        th.nodesList.push(label);
+                    case "Map":
+                        var map = ShapesFactory.createMap(graph, node.id);
+                        map.el.translate(90 * dx, 100 * dy);
+                        th.nodesList.push(map);
                         break;
                     default:
-                        alert('Unknown type');
+                        alert('Unknown type ' + node.type);
                 }
                 cnt++;
                 dx++;
@@ -215,6 +226,15 @@ var Controllers;
                     th.json.services[cnt] = service;
                     cnt++;
                 }
+                if (shape.type == ServiceType[ServiceType.GeolocationService]) {
+                    var geolocService = th.anyTypeConvecter(shape);
+                    var gservice = {
+                        id: geolocService.id,
+                        type: geolocService.type
+                    };
+                    th.json.services[cnt] = gservice;
+                    cnt++;
+                }
             });
 
             cnt = 0;
@@ -227,9 +247,10 @@ var Controllers;
                     target: trgt.id
                 };
                 th.json.links[cnt] = newLink;
+                cnt++;
             });
 
-            alert(JSON.stringify(this.json));
+            return th.json;
         };
 
         diagramCtrl.prototype.getNodeById = function (id) {
@@ -249,22 +270,6 @@ var Controllers;
 })(Controllers || (Controllers = {}));
 angular.module('diagram', ['controllers', 'services', 'directives']);
 var directives = angular.module('directives', []);
-var ActionNode = (function () {
-    function ActionNode(el) {
-        this.el = el;
-        this.type = NodeType.Action;
-    }
-    ActionNode.prototype.setText = function (text) {
-        this.text = text;
-        this.el.attr({
-            '.label': { text: text, 'ref-x': .2, 'ref-y': .9 / 2 }
-        });
-    };
-    ActionNode.prototype.getElement = function () {
-        return this.el;
-    };
-    return ActionNode;
-})();
 var ButtonAction;
 (function (ButtonAction) {
     ButtonAction[ButtonAction["Unknown"] = 0] = "Unknown";
@@ -294,38 +299,6 @@ var Button = (function () {
         return this.el;
     };
     return Button;
-})();
-var ConditionNode = (function () {
-    function ConditionNode(el) {
-        this.el = el;
-        this.type = NodeType.Condition;
-    }
-    ConditionNode.prototype.setText = function (text) {
-        this.text = text;
-        this.el.attr({
-            '.label': { text: text, 'ref-x': .3, 'ref-y': .4 }
-        });
-    };
-    ConditionNode.prototype.getElement = function () {
-        return this.el;
-    };
-    return ConditionNode;
-})();
-var FinalNode = (function () {
-    function FinalNode(el) {
-        this.el = el;
-        this.type = NodeType.Final;
-    }
-    FinalNode.prototype.setText = function (text) {
-        this.text = text;
-        this.el.attr({
-            '.label': { text: text, 'ref-x': .7 / 2, 'ref-y': .4 }
-        });
-    };
-    FinalNode.prototype.getElement = function () {
-        return this.el;
-    };
-    return FinalNode;
 })();
 var GeolocationService = (function () {
     function GeolocationService(el, id) {
@@ -381,22 +354,22 @@ var Input = (function () {
     };
     return Input;
 })();
-var Label = (function () {
-    function Label(el, id) {
+var MapNode = (function () {
+    function MapNode(el, id) {
         this.el = el;
-        this.type = NodeType.Label;
+        this.type = NodeType.Map;
         this.id = id;
     }
-    Label.prototype.setText = function (text) {
+    MapNode.prototype.setText = function (text) {
         this.text = text;
         this.el.attr({
             '.label': { text: text, 'ref-x': .3, 'ref-y': .4 }
         });
     };
-    Label.prototype.getElement = function () {
+    MapNode.prototype.getElement = function () {
         return this.el;
     };
-    return Label;
+    return MapNode;
 })();
 var NavigationService = (function () {
     function NavigationService(el, id) {
@@ -420,7 +393,7 @@ var NavigationService = (function () {
 var NodeType;
 (function (NodeType) {
     NodeType[NodeType["Button"] = 0] = "Button";
-    NodeType[NodeType["Label"] = 1] = "Label";
+    NodeType[NodeType["Map"] = 1] = "Map";
     NodeType[NodeType["Input"] = 2] = "Input";
     NodeType[NodeType["Initial"] = 3] = "Initial";
 })(NodeType || (NodeType = {}));
@@ -501,8 +474,8 @@ var ShapesFactory = (function () {
         return node;
     };
 
-    ShapesFactory.createLabel = function (graph, id) {
-        var el = new joint.shapes.devs.Diamond({
+    ShapesFactory.createMap = function (graph, id) {
+        var el = new joint.shapes.devs.EllipseWithPorts({
             position: { x: 20, y: 20 },
             inPorts: [''],
             attrs: {
@@ -510,7 +483,13 @@ var ShapesFactory = (function () {
                     stroke: '#000000',
                     'stroke-width': 1,
                     'stroke-style': 'solid',
+                    rx: 500,
+                    ry: 250,
                     fill: '#f8f8f8'
+                },
+                '.label': {
+                    'ref-x': .7 / 2,
+                    'ref-y': .4
                 }
             }
         });
@@ -518,10 +497,9 @@ var ShapesFactory = (function () {
         if (id == null) {
             id = el.id;
         }
-        el.rotate(45, 0);
         graph.addCell(el);
-        var node = new Label(el, id);
-        node.setText("Label");
+        var node = new MapNode(el, id);
+        node.setText("Map");
         return node;
     };
 
@@ -549,6 +527,7 @@ var ShapesFactory = (function () {
         var el = new joint.shapes.devs.RectWithPorts({
             position: { x: 20, y: 20 },
             inPorts: [''],
+            outPorts: [''],
             size: { width: 120, height: 120 }
         });
         el.attr({
@@ -577,18 +556,9 @@ var ValidateService = (function () {
     function ValidateService() {
         this.possibleEdges = [];
 
-        this.possibleEdges.push(new Edge(NodeType.Label, NodeType.Label));
-        this.possibleEdges.push(new Edge(NodeType.Label, NodeType.Button));
-        this.possibleEdges.push(new Edge(NodeType.Label, NodeType.Input));
-
-        this.possibleEdges.push(new Edge(NodeType.Initial, NodeType.Label));
-        this.possibleEdges.push(new Edge(NodeType.Initial, NodeType.Input));
-        this.possibleEdges.push(new Edge(NodeType.Initial, NodeType.Button));
-
-        this.possibleEdges.push(new Edge(NodeType.Button, NodeType.Label));
-        this.possibleEdges.push(new Edge(NodeType.Button, NodeType.Input));
-        this.possibleEdges.push(new Edge(NodeType.Button, NodeType.Initial));
-        this.possibleEdges.push(new Edge(NodeType.Button, NodeType.Button));
+        this.possibleEdges.push(new Edge(NodeType.Button, ServiceType.GeolocationService));
+        this.possibleEdges.push(new Edge(NodeType.Button, ServiceType.NavigationService));
+        this.possibleEdges.push(new Edge(ServiceType.GeolocationService, NodeType.Map));
     }
     ValidateService.prototype.validate = function (shapes, graph) {
         var links = graph.getLinks();
@@ -608,7 +578,7 @@ var ValidateService = (function () {
                 }
             });
             if (!find) {
-                res = "Cant accept edge from " + NodeType[sourceType] + " to " + NodeType[targetType];
+                res = "Cant accept edge from " + NodeType[NodeType[sourceType]] + " to " + NodeType[targetType];
             }
         });
 

@@ -41,10 +41,10 @@
         document = window.document,
         docElem = document.documentElement,
 
-    // Map over jQuery in case of overwrite
+    // Maps over jQuery in case of overwrite
         _jQuery = window.jQuery,
 
-    // Map over the $ in case of overwrite
+    // Maps over the $ in case of overwrite
         _$ = window.$,
 
     // [[Class]] -> type pairs
@@ -16430,7 +16430,7 @@
         return xhr;
     };
 
-    // Map from CRUD to HTTP for our default `Backbone.sync` implementation.
+    // Maps from CRUD to HTTP for our default `Backbone.sync` implementation.
     var methodMap = {
         'create': 'POST',
         'update': 'PUT',

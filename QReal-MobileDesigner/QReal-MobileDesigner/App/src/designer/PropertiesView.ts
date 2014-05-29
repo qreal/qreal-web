@@ -56,6 +56,9 @@ class PropertiesView {
             case Enums.ControlType.Header:
                 this.ShowProperty_Header(<ControlProperty.HeaderProperty>property);
                 break;
+            case Enums.ControlType.Label:
+                this.ShowProperty_Label(<ControlProperty.LabelProperty>property);
+                break;
         }
     }
 
@@ -132,7 +135,7 @@ class PropertiesView {
     }
 
     public ShowProperty_Header(property: ControlProperty.HeaderProperty): void {
-        this.log.Debug("ShowProperty_Page");
+        this.log.Debug("ShowProperty_Header");
         var self = this;
         var controlManager = App.Instance.Device.ControlManager;
 
@@ -149,6 +152,25 @@ class PropertiesView {
         this.currentPropertyDiv = propertyPanel;
     }
 
+    public ShowProperty_Label(property: ControlProperty.LabelProperty): void {
+        this.log.Debug("ShowProperty_Label");
+        var self = this;
+        var controlManager = App.Instance.Device.ControlManager;
+
+        var propertyPanel = $('#propertiesTmpl').tmpl({});
+        var content = propertyPanel.children("#property-table");
+
+        var $idProperty = this.CreateIdRow(property);
+        var $textProperty = this.CreateTextTextRow(property);
+       
+        content.append($idProperty);
+        content.append($textProperty);      
+        propertyPanel.appendTo('#properties-widget');
+        propertyPanel.attr('id', 'propertyFor' + property.Id);
+        this.currentPropertyDiv = propertyPanel;
+    }
+
+
     private CreateIdRow(property: any): JQuery {
         return this.CreateTextRow('Id:', property.Id, Enums.PropertyType.Id, property);
     }
@@ -163,6 +185,10 @@ class PropertiesView {
 
     private CreateTitleRow(property: any): JQuery {
         return this.CreateTextRow('Title:', property.Title, Enums.PropertyType.Title, property);
+    }
+
+    private CreateTextTextRow(property: any): JQuery {
+        return this.CreateTextRow('Text:', property.Text, Enums.PropertyType.Text, property);
     }
 
     private CreatePlaceholderRow(property: any): JQuery {

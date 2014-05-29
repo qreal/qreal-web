@@ -97,7 +97,10 @@ class ControlManager {
             case "Grid":
                 var mapProperty = new ControlProperty.MapProperty(this.GetNewId('map'));
                 return new DesignerControls.Map(mapProperty);
-                break;
+            case "Label":
+                console.log('label');
+                var labelProperty = new ControlProperty.LabelProperty(this.GetNewId('label'));
+                return new DesignerControls.Label(labelProperty);
         }
 
     }
@@ -139,6 +142,9 @@ class ControlManager {
                 break;
             case Enums.ControlType.Header:
                 this.ChangeHeaderProperty(propertyId, propertyType, newValue);
+                break;
+            case Enums.ControlType.Label:
+                this.ChangeLabelProperty(propertyId, propertyType, newValue);
                 break;
         }
     }
@@ -248,6 +254,20 @@ class ControlManager {
         }
     }
 
+    public ChangeLabelProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string) {
+        var label = <DesignerControls.Input>this.FindById(propertyId);
+        switch (propertyType) {
+            case Enums.PropertyType.Id:
+                $(label.Properties.$Id).attr('id', newValue);
+                label.Properties.Id = newValue;
+                break;
+            case Enums.PropertyType.Text:
+                $(label.Properties.$Id).text(newValue);
+                label.Properties.Title = newValue;
+                break;
+        }
+    }
+
     /*** Generation App ***/
     public GenerateAppHtml(): string {
         return this.GenerateHtml(this.app).html();
@@ -289,6 +309,10 @@ class ControlManager {
             case Enums.ControlType.Map:
                 var map = <DesignerControls.Map>element;
                 $html = this.appControlFactory.CreateMap(map.Properties);
+                break;
+            case Enums.ControlType.Label:
+                var label = <DesignerControls.Label>element;
+                $html = this.appControlFactory.CreateLabel(label.Properties);
                 break;
         }
         return $html;
@@ -332,6 +356,62 @@ class ControlManager {
         return obj;
     }
 
+    public Serialize2DiagramEditor(): any {
+        var obj = {
+            'nodes': [],
+            'activities': []
+        };
+        this.App2Obj4DiagramEditor(obj, this.app);
+        return obj;
+    }
+
+    private App2Obj4DiagramEditor(obj: any, element: DesignerControls.BaseControl<ControlProperty.Property>) {
+        var self = this;
+        switch (element.Properties.Type) {
+            case Enums.ControlType.App:
+                var app = <DesignerControls.BaseContainer<ControlProperty.Property>>element;
+                app.Childrens.forEach(function (el) {
+                    self.App2Obj4DiagramEditor(obj, el);
+                });
+                break;
+            case Enums.ControlType.Page:
+                var page = <DesignerControls.Page>element;
+                obj['activities'].push({
+                    'name': page.Properties.Id
+                });
+                page.Childrens.forEach(function (el) {
+                    self.App2Obj4DiagramEditor(obj, el);
+                });
+                break;
+            case Enums.ControlType.Button:
+                var button = <DesignerControls.Button>element;
+                obj["nodes"].push({
+                    'id': button.Properties.Id,
+                    'type': 'Button',
+                    "name": button.Properties.Text,
+                    "action": "click"
+                });
+                break;
+            case Enums.ControlType.Input:
+                var input = <DesignerControls.Input>element;
+                obj["nodes"].push({
+                    'id': input.Properties.Id,
+                    'type': 'Input',
+                    "name": 'name',
+                    "action": "submit"
+                });
+                break;
+            case Enums.ControlType.Header:
+                break;
+            case Enums.ControlType.Map:
+                obj["nodes"].push({
+                    'id': element.Properties.Id,
+                    'type': 'Map'
+                });
+                break;
+        }
+    }
+
     private ToogleClass(id: string, cssclass: string, add: boolean) {
         if (add) {
             $(id).addClass(cssclass);
@@ -346,6 +426,7 @@ class ControlManager {
         var controlId = event.originalEvent.dataTransfer.getData("Text");
         var control = App.Instance.Device.ControlManager.CreateControl(controlId);
         var $control = this.controlFactory.CreateControl(control.Properties);
+        console.log($control);
         var page = <DesignerControls.BaseContainer<ControlProperty.Property>>this.FindById(pageId);
         page.Childrens.push(control);
         $(page.Properties.$Id).find('div[role=main]').append($control);
@@ -361,7 +442,7 @@ class ControlManager {
     }
 
     private FindInContainer(id: string, control: DesignerControls.BaseControl<ControlProperty.Property>): DesignerControls.BaseControl<ControlProperty.Property> {
-        this.log.Debug("FindInContainer: " + id, control);
+        //this.log.Debug("FindInContainer: " + id, control);
         if (!control) {
             return null;
         }

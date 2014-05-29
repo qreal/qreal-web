@@ -44,6 +44,9 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
                 case 2 /* Header */:
                     this.ShowProperty_Header(property);
                     break;
+                case 6 /* Label */:
+                    this.ShowProperty_Label(property);
+                    break;
             }
         };
 
@@ -119,7 +122,7 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
         };
 
         PropertiesView.prototype.ShowProperty_Header = function (property) {
-            this.log.Debug("ShowProperty_Page");
+            this.log.Debug("ShowProperty_Header");
             var self = this;
             var controlManager = App.Instance.Device.ControlManager;
 
@@ -131,6 +134,24 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
 
             content.append($titleProperty);
             content.append($themeProperty);
+            propertyPanel.appendTo('#properties-widget');
+            propertyPanel.attr('id', 'propertyFor' + property.Id);
+            this.currentPropertyDiv = propertyPanel;
+        };
+
+        PropertiesView.prototype.ShowProperty_Label = function (property) {
+            this.log.Debug("ShowProperty_Label");
+            var self = this;
+            var controlManager = App.Instance.Device.ControlManager;
+
+            var propertyPanel = $('#propertiesTmpl').tmpl({});
+            var content = propertyPanel.children("#property-table");
+
+            var $idProperty = this.CreateIdRow(property);
+            var $textProperty = this.CreateTextTextRow(property);
+
+            content.append($idProperty);
+            content.append($textProperty);
             propertyPanel.appendTo('#properties-widget');
             propertyPanel.attr('id', 'propertyFor' + property.Id);
             this.currentPropertyDiv = propertyPanel;
@@ -150,6 +171,10 @@ define(["require", "exports", "src/util/log/Log", "src/Application", "src/model/
 
         PropertiesView.prototype.CreateTitleRow = function (property) {
             return this.CreateTextRow('Title:', property.Title, 6 /* Title */, property);
+        };
+
+        PropertiesView.prototype.CreateTextTextRow = function (property) {
+            return this.CreateTextRow('Text:', property.Text, 1 /* Text */, property);
         };
 
         PropertiesView.prototype.CreatePlaceholderRow = function (property) {
