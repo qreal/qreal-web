@@ -270,6 +270,10 @@ class ControlManager {
                 $(label.Properties.$Id).text(newValue);
                 label.Properties.Text = newValue;
                 break;
+            case Enums.PropertyType.TextSize:
+                $(label.Properties.$Id).css('font-size', newValue);
+                label.Properties.TextSize = newValue;
+                break;
         }
     }
 
@@ -286,14 +290,31 @@ class ControlManager {
                 image.Properties.Url = newValue;
                 break;
             case Enums.PropertyType.Width:
-                this.log.Debug(' Enums.PropertyType.Width: ' + newValue);
-                this.log.DebugObj($(image.Properties.$Id));
                 $(image.Properties.$Id).css('width', newValue);
                 image.Properties.Width = newValue;
                 break;
             case Enums.PropertyType.Height:
                 $(image.Properties.$Id).css('height', newValue);
                 image.Properties.Height = newValue;
+                break;
+        }
+    }
+
+    public ChangeMapProperty(propertyId: string, propertyType: Enums.PropertyType, newValue: string) {
+        this.log.Debug('ChangeMapProperty');
+        var map = <DesignerControls.Image>this.FindById(propertyId);
+        switch (propertyType) {
+            case Enums.PropertyType.Id:
+                $(map.Properties.$Id).attr('id', newValue);
+                map.Properties.Id = newValue;
+                break;
+            case Enums.PropertyType.Width:
+                $(map.Properties.$Id).css('width', newValue);
+                map.Properties.Width = newValue;
+                break;
+            case Enums.PropertyType.Height:
+                $(map.Properties.$Id).css('height', newValue);
+                map.Properties.Height = newValue;
                 break;
         }
     }

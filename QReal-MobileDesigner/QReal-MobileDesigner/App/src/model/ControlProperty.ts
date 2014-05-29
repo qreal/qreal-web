@@ -345,16 +345,36 @@ module ControlProperty {
         constructor(id: string) {
             super(Enums.ControlType.Image, id);
             this.Url = "/Content/noimage.png";
-            this.Width = '150px';
-            this.Height = '150px'
+            this.Width = '200px';
+            this.Height = '200px';
         }
     }
 
     export class MapProperty extends Property {
 
+        private width: string;
+        private height: string;
+
+        public get Width(): string {
+            return this.width;
+        }
+
+        public set Width(value: string) {
+            this.width = value;
+        }
+
+        public get Height(): string {
+            return this.height;
+        }
+
+        public set Height(value: string) {
+            this.height = value;
+        }
+
         constructor(id: string) {
             super(Enums.ControlType.Map, id);
-          
+            this.Width = '100%';
+            this.Height = '300px';
         }
     }
 }

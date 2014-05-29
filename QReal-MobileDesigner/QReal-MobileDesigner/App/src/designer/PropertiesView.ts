@@ -62,6 +62,9 @@ class PropertiesView {
             case Enums.ControlType.Image:
                 this.ShowProperty_Image(<ControlProperty.ImageProperty>property);
                 break;
+            case Enums.ControlType.Map:
+                this.ShowProperty_Map(<ControlProperty.MapProperty>property);
+                break;
         }
     }
 
@@ -164,9 +167,11 @@ class PropertiesView {
         var content = propertyPanel.children("#property-table");
 
         var $idProperty = this.CreateIdRow(property);
+        var $textSizeProperty = this.CreateTextSizeRow(property);
         var $textProperty = this.CreateTextTextRow(property);
        
         content.append($idProperty);
+        content.append($textSizeProperty);
         content.append($textProperty);      
         propertyPanel.appendTo('#properties-widget');
         propertyPanel.attr('id', 'propertyFor' + property.Id);
@@ -195,6 +200,25 @@ class PropertiesView {
         this.currentPropertyDiv = propertyPanel;
     }
 
+    public ShowProperty_Map(property: ControlProperty.MapProperty): void {
+        this.log.Debug("ShowProperty_Image");
+        var self = this;
+        var controlManager = App.Instance.Device.ControlManager;
+
+        var propertyPanel = $('#propertiesTmpl').tmpl({});
+        var content = propertyPanel.children("#property-table");
+
+        var $idProperty = this.CreateIdRow(property);
+        var $widthProperty = this.CreateWidthRow(property);
+        var $heightProperty = this.CreateHeightRow(property);
+
+        content.append($idProperty);
+        content.append($widthProperty);
+        content.append($heightProperty);
+        propertyPanel.appendTo('#properties-widget');
+        propertyPanel.attr('id', 'propertyFor' + property.Id);
+        this.currentPropertyDiv = propertyPanel;
+    }
 
     private CreateIdRow(property: any): JQuery {
         return this.CreateTextRow('Id:', property.Id, Enums.PropertyType.Id, property);
@@ -250,6 +274,10 @@ class PropertiesView {
     
     private CreateHeightRow(property: any): JQuery {
         return this.CreateSizeInputRow('Height:', String(property.Height), Enums.PropertyType.Height, property);
+    }
+
+    private CreateTextSizeRow(property: any): JQuery {
+        return this.CreateSizeInputRow('Font Size:', String(property.TextSize), Enums.PropertyType.TextSize, property);
     }
 
     //private CreateHeaderRow(property: any): JQuery {

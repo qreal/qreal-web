@@ -28,6 +28,7 @@
             PropertyType[PropertyType["Width"] = 11] = "Width";
             PropertyType[PropertyType["Height"] = 12] = "Height";
             PropertyType[PropertyType["Url"] = 13] = "Url";
+            PropertyType[PropertyType["TextSize"] = 14] = "TextSize";
         })(Enums.PropertyType || (Enums.PropertyType = {}));
         var PropertyType = Enums.PropertyType;
     })(Enums || (Enums = {}));

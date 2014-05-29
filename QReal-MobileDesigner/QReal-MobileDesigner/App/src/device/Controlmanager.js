@@ -252,6 +252,10 @@
                     $(label.Properties.$Id).text(newValue);
                     label.Properties.Text = newValue;
                     break;
+                case 14 /* TextSize */:
+                    $(label.Properties.$Id).css('font-size', newValue);
+                    label.Properties.TextSize = newValue;
+                    break;
             }
         };
 
@@ -268,14 +272,31 @@
                     image.Properties.Url = newValue;
                     break;
                 case 11 /* Width */:
-                    this.log.Debug(' Enums.PropertyType.Width: ' + newValue);
-                    this.log.DebugObj($(image.Properties.$Id));
                     $(image.Properties.$Id).css('width', newValue);
                     image.Properties.Width = newValue;
                     break;
                 case 12 /* Height */:
                     $(image.Properties.$Id).css('height', newValue);
                     image.Properties.Height = newValue;
+                    break;
+            }
+        };
+
+        ControlManager.prototype.ChangeMapProperty = function (propertyId, propertyType, newValue) {
+            this.log.Debug('ChangeMapProperty');
+            var map = this.FindById(propertyId);
+            switch (propertyType) {
+                case 0 /* Id */:
+                    $(map.Properties.$Id).attr('id', newValue);
+                    map.Properties.Id = newValue;
+                    break;
+                case 11 /* Width */:
+                    $(map.Properties.$Id).css('width', newValue);
+                    map.Properties.Width = newValue;
+                    break;
+                case 12 /* Height */:
+                    $(map.Properties.$Id).css('height', newValue);
+                    map.Properties.Height = newValue;
                     break;
             }
         };

@@ -110,8 +110,8 @@
 
         AppControlFactory.prototype.CreateMap = function (property) {
             var $map = $("<div>");
-            $map.css('width', "100%");
-            $map.css('height', "300px");
+            $map.css('width', property.Width);
+            $map.css('height', property.Height);
             $map.attr('id', property.Id);
             return $map;
         };
@@ -130,7 +130,10 @@
             $image.attr('src', property.Url);
             $image.css({
                 'width': property.Width,
-                'height': property.Height
+                'height': property.Height,
+                'display': 'block',
+                'margin-left': 'auto',
+                'margin-right': 'auto'
             });
             return $image;
         };

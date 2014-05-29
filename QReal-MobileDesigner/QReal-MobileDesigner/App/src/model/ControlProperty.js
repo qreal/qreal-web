@@ -408,8 +408,8 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
             function ImageProperty(id) {
                 _super.call(this, 7 /* Image */, id);
                 this.Url = "/Content/noimage.png";
-                this.Width = '150px';
-                this.Height = '150px';
+                this.Width = '200px';
+                this.Height = '200px';
             }
             Object.defineProperty(ImageProperty.prototype, "Url", {
                 get: function () {
@@ -454,7 +454,32 @@ define(["require", "exports", "src/model/Enums"], function(require, exports, Enu
             __extends(MapProperty, _super);
             function MapProperty(id) {
                 _super.call(this, 5 /* Map */, id);
+                this.Width = '100%';
+                this.Height = '300px';
             }
+            Object.defineProperty(MapProperty.prototype, "Width", {
+                get: function () {
+                    return this.width;
+                },
+                set: function (value) {
+                    this.width = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+
+            Object.defineProperty(MapProperty.prototype, "Height", {
+                get: function () {
+                    return this.height;
+                },
+                set: function (value) {
+                    this.height = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
             return MapProperty;
         })(Property);
         ControlProperty.MapProperty = MapProperty;

@@ -25,7 +25,8 @@
         Placeholder,
         Width,
         Height,
-        Url
+        Url,
+        TextSize
     }
 } 
 
