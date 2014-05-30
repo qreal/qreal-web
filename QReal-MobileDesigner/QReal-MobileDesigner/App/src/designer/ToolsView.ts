@@ -31,6 +31,26 @@ class ToolsView {
             tool: 'checkbox2'
         },
         {
+            id: 'Label',
+            title: 'Label',
+            tool: ''
+        },
+        {
+            id: 'Image',
+            title: 'Image',
+            tool: ''
+        },
+        {
+            id: 'Map',
+            title: 'Map',
+            tool: ''
+        },
+        {
+            id: 'WebView',
+            title: 'WebView',
+            tool: ''
+        },
+        {
             id: 'Header2',
             title: 'Header2',
             tool: 'header2'
@@ -54,26 +74,6 @@ class ToolsView {
             id: 'ControlGroup',
             title: 'Control group',
             tool: 'controlgroup'
-        },
-        {
-            id: 'Label',
-            title: 'Label',
-            tool: ''
-        },
-        {
-            id: 'Image',
-            title: 'Image',
-            tool: ''
-        },
-        {
-            id: 'Map',
-            title: 'Map',
-            tool: ''
-        },
-        {
-            id: 'WebView',
-            title: 'WebView',
-            tool: ''
         }
     ];
 

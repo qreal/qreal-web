@@ -337,6 +337,7 @@
 
         ControlManager.prototype.GenerateHtml = function (element) {
             var $html;
+            console.log("GenerateHtml:" + element.Properties.Type);
             switch (element.Properties.Type) {
                 case 0 /* App */:
                     $html = this.appControlFactory.CreateApp(element.Properties);

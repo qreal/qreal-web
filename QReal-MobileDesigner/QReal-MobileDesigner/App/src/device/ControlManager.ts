@@ -355,12 +355,13 @@ class ControlManager {
 
     private GenerateHtml(element: DesignerControls.BaseControl<ControlProperty.Property>): JQuery {
         var $html: JQuery;
+        console.log("GenerateHtml:" + element.Properties.Type);
         switch (element.Properties.Type) {
             case Enums.ControlType.App:
                 $html = this.appControlFactory.CreateApp(element.Properties);
                 var app = <DesignerControls.BaseContainer<ControlProperty.Property>>element;
                 for (var i in app.Childrens) {
-                    $html.append(this.GenerateHtml(app.Childrens[i]))
+                    $html.append(this.GenerateHtml(app.Childrens[i]));
                 }
                 break;
             case Enums.ControlType.Page:
@@ -371,7 +372,7 @@ class ControlManager {
                     $html.prepend($header)
                 }
                 for (var i in page.Childrens) {
-                    $html.find('div[role=main]').append(this.GenerateHtml(page.Childrens[i]))
+                    $html.find('div[role=main]').append(this.GenerateHtml(page.Childrens[i]));
                 }
                 break;
             case Enums.ControlType.Button:

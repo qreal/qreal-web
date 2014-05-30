@@ -187,7 +187,7 @@ Use and distibution http://www.opensource.org/licenses/bsd-license.php
         // only allow tags in this array, (white list), contents still rendered
         allowedTags: [],
         // remove tags in this array, (black list), contents still rendered
-        removeTags: ["basefont", "center", "dir", "font", "frame", "frameset", "iframe", "isindex", "menu", "noframes", "s", "strike", "u"],
+        removeTags: ["basefont", "center", "dir", "font", "frame", "frameset", "isindex", "menu", "noframes", "s", "strike", "u"],
         // array of [attributeName], [optional array of allowed on elements] e.g. [["id"], ["style", ["p", "dl"]]] // allow all elements to have id and allow style on 'p' and 'dl'
         allowedAttributes: [],
         // array of attribute names to remove on all elements in addition to those not in tagAttributes e.g ["width", "height"]
