@@ -9,6 +9,7 @@ import ControlProperty = require("src/model/ControlProperty");
 declare var bootbox;
 declare var projectName;
 declare var projectPackage;
+declare var projectType;
 declare var ace;
 
 class Designer {
@@ -45,13 +46,13 @@ class Designer {
         editor.getSession().setMode("ace/mode/html");
 
         //TODO: switch type of app 
-        if (true) {
+        if (projectType != "Android (PhoneGap)") {
             $('#generate-apk').on('click', function (e) {
                 self.log.Debug("My project name: " + projectName);
                 self.dh.ShowProgress("Generating apk...");
                 var dataToSend = JSON.stringify({
                     project_name: projectName,
-                    pproject_package: projectPackage
+                    project_package: projectPackage
                 }, null, 2);
                 self.log.Debug("dataToSend:", dataToSend);
                 $.ajax({
@@ -61,7 +62,7 @@ class Designer {
                     dataType: "json",
                     data: dataToSend,
                     success: function (result) {
-                        window.location.href = "/Projects/DownloadApk?projectName=" + projectName;
+                        window.location.href = "/Projects/DownloadAndroidApk?projectName=" + projectName;
                         self.dh.HideProgress();
                     }
                 });

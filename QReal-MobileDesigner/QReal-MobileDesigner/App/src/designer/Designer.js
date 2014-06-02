@@ -26,13 +26,13 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
             editor.getSession().setMode("ace/mode/html");
 
             //TODO: switch type of app
-            if (true) {
+            if (projectType != "Android (PhoneGap)") {
                 $('#generate-apk').on('click', function (e) {
                     self.log.Debug("My project name: " + projectName);
                     self.dh.ShowProgress("Generating apk...");
                     var dataToSend = JSON.stringify({
                         project_name: projectName,
-                        pproject_package: projectPackage
+                        project_package: projectPackage
                     }, null, 2);
                     self.log.Debug("dataToSend:", dataToSend);
                     $.ajax({
@@ -42,7 +42,7 @@ define(["require", "exports", "src/util/log/Log", "src/util/DialogHelper", "src/
                         dataType: "json",
                         data: dataToSend,
                         success: function (result) {
-                            window.location.href = "/Projects/DownloadApk?projectName=" + projectName;
+                            window.location.href = "/Projects/DownloadAndroidApk?projectName=" + projectName;
                             self.dh.HideProgress();
                         }
                     });

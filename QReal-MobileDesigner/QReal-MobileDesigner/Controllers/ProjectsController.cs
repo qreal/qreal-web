@@ -36,12 +36,13 @@ namespace QReal_MobileDesigner.Controllers
 
                 ViewBag.ProjectName = project.Name;
                 ViewBag.Package = project.Package;
+                ViewBag.Type = project.Type;
             }
             return View();
         }
 
         [HttpPost]
-        public string NewProject(string project_name, string project_package)
+        public string NewProject(string project_name, string project_package, string project_type)
         {
             var username = User.Identity.GetUserName();
 
@@ -49,11 +50,14 @@ namespace QReal_MobileDesigner.Controllers
             {
                 Name = project_name,
                 Package = project_package,
-                Type = "Android"
+                Type = project_type
             };
 
             db.Projects.Add(project);
             db.SaveChanges();
+
+
+
             var userProject = new UserProject()
             {
                 ProjectId = project.ID,
@@ -63,30 +67,38 @@ namespace QReal_MobileDesigner.Controllers
             db.SaveChanges();
 
             var workingDir = String.Format(@"{0}Projects\{1}", phonegapLocation, username);
-            Directory.CreateDirectory(workingDir);
-            var createPsi = new ProcessStartInfo("cmd.exe", String.Format("/c {0}create.bat {1} {2} {3}", phonegapLocation, project_name, project_package, project_name))
-            {
-                WorkingDirectory = workingDir,
-                CreateNoWindow = true,
-                UseShellExecute = false
-            };
 
-            // using (var process = Process.Start(createPsi))
-            // {
-            //     process.WaitForExit();
-            // }
+            if (project_type == "Android (PhoneGap)")
+            {    
+                Directory.CreateDirectory(workingDir);
+                var createPsi = new ProcessStartInfo("cmd.exe", String.Format("/c {0}create.bat {1} {2} {3}", phonegapLocation, project_name, project_package, project_name))
+                {
+                    WorkingDirectory = workingDir,
+                    CreateNoWindow = true,
+                    UseShellExecute = false
+                };
 
-            var createPsiAndroid = new ProcessStartInfo("cmd.exe", String.Format("/c {0}new.bat {1} {2} {3}", @"C:\Android\", workingDir + @"\" + project_name + @"\android", project_name, project_package))
-            {
-                WorkingDirectory = @"C:\Android\",
-                //CreateNoWindow = true,
-                //UseShellExecute = false
-            };
+                using (var process = Process.Start(createPsi))
+                {
+                    process.WaitForExit();
+                }
 
-            using (var process = Process.Start(createPsiAndroid))
-            {
-                process.WaitForExit();
             }
+            else
+            {
+                var createPsiAndroid = new ProcessStartInfo("cmd.exe", String.Format("/c {0}new.bat {1} {2} {3}", @"C:\Android\", workingDir + @"\" + project_name + @"\android", project_name, project_package))
+                {
+                    WorkingDirectory = @"C:\Android\",
+                    CreateNoWindow = true,
+                    UseShellExecute = false
+                };
+
+                using (var process = Process.Start(createPsiAndroid))
+                {
+                    process.WaitForExit();
+                }
+            }
+
 
             return "{ \"project_id\":\"" + project.ID + "\" }";
         }
@@ -128,12 +140,13 @@ namespace QReal_MobileDesigner.Controllers
         public string BuildAndroidProject(string project_name, string project_package)
         {
             var username = User.Identity.GetUserName();
+            XCopy(String.Format(@"{0}AndroidTmpl", HttpRuntime.AppDomainAppPath), String.Format(@"{0}Projects\{1}\{2}\android\{2}\", phonegapLocation, username, project_name), true);
             var workingDir = String.Format(@"{0}Projects\{1}", phonegapLocation, username);
             var createPsiAndroid = new ProcessStartInfo("cmd.exe", String.Format("/c {0}build.bat {1} {2} {3}", @"C:\Android\", workingDir + @"\" + project_name + @"\android", project_name, project_package))
             {
                 WorkingDirectory = @"C:\Android\",
-                //CreateNoWindow = true,
-                //UseShellExecute = false
+                CreateNoWindow = true,
+                UseShellExecute = false
             };
 
             using (var process = Process.Start(createPsiAndroid))
@@ -180,7 +193,7 @@ namespace QReal_MobileDesigner.Controllers
 
         public FileResult DownloadAndroidApk(string projectName)
         {
-            return File(String.Format(@"{0}Projects\{1}\{2}\platforms\android\ant-build\{2}-debug.apk", phonegapLocation, User.Identity.GetUserName(), projectName), "application/octet-stream", projectName + "-debug.apk");
+            return File(String.Format(@"{0}Projects\{1}\{2}\android\{2}\bin\", phonegapLocation, User.Identity.GetUserName(), projectName), "application/octet-stream", projectName + "-debug.apk");
         }
 
         [HttpPost]

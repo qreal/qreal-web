@@ -868,6 +868,8 @@
     <Content Include="Content\android\Templates\res\drawable-hdpi\Thumbs.db" />
     <Content Include="Content\android\Templates\res\drawable-mdpi\Thumbs.db" />
     <Content Include="Content\android\Templates\res\drawable-xhdpi\Thumbs.db" />
+    <Content Include="AndroidTmpl\app.json" />
+    <Content Include="AndroidTmpl\example1.json" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootstrap-switch\bootstrap-switch.js" />

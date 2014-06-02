@@ -1,0 +1,35 @@
+{
+    "type": "App",
+    "id": "",
+    "name": "testName",
+    "projectPackage": "example.testpackage",
+    "Pages": [
+        {
+            "type": "Page",
+            "id": "Main_Page",
+            "header": {
+                "type": "Header",
+                "id": "Main_Page_header",
+                "title": "Map Page",
+                "theme": "b"
+            },
+            "theme": "default",
+            "padding": "10px",
+            "Controls": [
+                {
+                    "type": "Button",
+                    "id": "button2",
+                    "text": "Refresh",
+                    "inline": false,
+                    "corners": false,
+                    "mini": false,
+                    "theme": "default"
+                },
+                {
+                    "type": "Map",
+                    "id": "map1"
+                }
+            ]
+        }
+    ]
+}
