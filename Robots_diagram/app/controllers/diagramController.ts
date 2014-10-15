@@ -27,27 +27,7 @@ module Controllers {
 
         constructor($scope, $compile) {
             $scope.vm = this;
-
-            var xmlDoc = this.loadXMLDoc("configs/properties.xml") // Path to the XML file;
-            var elements = xmlDoc.getElementsByTagName("Element");
-            var content = '';
-            for (var i = 0; i < elements.length; i++) {
-                content += '<p><button type="button" class="btn btn-default" ng-click="vm.createDefaultNode({';
-                var elementProperties = elements[i].getElementsByTagName("Property");
-
-                for (var j = 0; j < elementProperties.length; j++) {
-                    content += '\'' + elementProperties[j].getAttribute('name') + '\' : ';
-                    content += '\'' + elementProperties[j].childNodes[0].nodeValue + '\'';
-                    if (j != elementProperties.length - 1) {
-                        content += ',';
-                    }
-                }
-                content += '}, \'';
-                content += elements[i].getElementsByTagName("Image")[0].getAttribute('src') + '\'';
-                content += ')">' + elements[i].getAttribute('name') + '</button></p>';
-            }
-
-            $('#right-menu').append($compile(content)($scope));
+            $scope.vm.loadElementsFromXml("configs/elements.xml", $scope, $compile);
 
             this.paper.on('cell:pointerdown',
                 function (cellView, evt, x, y) {
@@ -75,6 +55,29 @@ module Controllers {
                 var value = $(this).val();
                 $scope.vm.currentNode.setProperty(name, value);
             });
+        }
+
+        loadElementsFromXml(pathToXML : string, $scope, $compile) {
+            var xmlDoc = this.loadXMLDoc(pathToXML);
+            var elements = xmlDoc.getElementsByTagName("Element");
+            var content = '';
+            for (var i = 0; i < elements.length; i++) {
+                content += '<p><button type="button" class="btn btn-default" ng-click="vm.createDefaultNode({';
+                var elementProperties = elements[i].getElementsByTagName("Property");
+
+                for (var j = 0; j < elementProperties.length; j++) {
+                    content += '\'' + elementProperties[j].getAttribute('name') + '\' : ';
+                    content += '\'' + elementProperties[j].childNodes[0].nodeValue + '\'';
+                    if (j != elementProperties.length - 1) {
+                        content += ',';
+                    }
+                }
+                content += '}, \'';
+                content += elements[i].getElementsByTagName("Image")[0].getAttribute('src') + '\'';
+                content += ')">' + elements[i].getAttribute('name') + '</button></p>';
+            }
+
+            $('#right-menu').append($compile(content)($scope));
         }
 
         setNodeProperties(node:DiagramNode) {
