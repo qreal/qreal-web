@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Elements>
+	<Element name="Initial">
+		<Image src="images/initialBlock.svg"/>
+	</Element>
+	<Element name="Final">
+		<Image src="images/finalBlock.svg"/>
+	</Element>
+	<Element name="Engines forward">
+		<Property name="Ports">M1, M3</Property>
+		<Property name="Power (%)">100</Property>
+		<Image src="images/enginesForwardBlock.svg"/>
+	</Element>
+	<Element name="Engines backward">
+		<Property name="Ports">M1, M3</Property>
+		<Property name="Power (%)">100</Property>
+		<Image src="images/enginesBackwardBlock.svg"/>
+	</Element>
+</Elements>
