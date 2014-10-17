@@ -22288,7 +22288,11 @@ joint.shapes.devs.ImageWithPorts = joint.shapes.basic.Generic.extend(_.extend({}
                 magnet: true,
                 stroke: 'black'
             },
-            '.outPorts text': { x: 15, dy: 4 }
+            '.outPorts circle': {
+                type: "output",
+                'ref-x': 0.5,
+                'ref-y': 0.5
+            }
         }
     }, joint.shapes.basic.Generic.prototype.defaults),
 
@@ -22304,10 +22308,6 @@ joint.shapes.devs.ImageWithPorts = joint.shapes.basic.Generic.extend(_.extend({}
         attrs[portTextSelector] = { text: portName };
         attrs[portCircleSelector] = { port: { id: portName || _.uniqueId(type), type: type } };
         attrs[portSelector] = { ref: 'rect', 'ref-x': (index + 0.5) * (1 / total) };
-
-        if (selector === '.outPorts') {
-            attrs[portSelector]['ref-dy'] = 0;
-        }
 
         return attrs;
     }

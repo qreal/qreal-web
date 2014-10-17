@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Elements>
-	<Element name="Initial">
-		<Image src="images/initialBlock.svg"/>
-	</Element>
-	<Element name="Final">
-		<Image src="images/finalBlock.svg"/>
-	</Element>
-	<Element name="Engines forward">
-		<Property name="Ports">M1, M3</Property>
-		<Property name="Power (%)">100</Property>
-		<Image src="images/enginesForwardBlock.svg"/>
-	</Element>
-	<Element name="Engines backward">
-		<Property name="Ports">M1, M3</Property>
-		<Property name="Power (%)">100</Property>
-		<Image src="images/enginesBackwardBlock.svg"/>
-	</Element>
+	<Category name="Algorithms">
+		<Element name="Initial Node">
+			<Image src="images/initialBlock.svg"/>
+		</Element>
+		<Element name="Final Node">
+			<Image src="images/finalBlock.svg"/>
+		</Element>
+		<Element name="Function">
+			<Property name="Body"></Property>
+			<Property name="Initialization"></Property>
+			<Image src="images/functionBlock.svg"/>
+		</Element>
+		<Element name="Condition">
+			<Property name="Condition">0</Property>
+			<Image src="images/ifBlock.svg"/>
+		</Element>
+	</Category>
+	<Category name="Actions">
+		<Element name="Motors Forward">
+			<Property name="Ports">M3, M4</Property>
+			<Property name="Power (%)">100</Property>
+			<Image src="images/enginesForwardBlock.svg"/>
+		</Element>
+		<Element name="Motors Backward">
+			<Property name="Ports">M3, M4</Property>
+			<Property name="Power (%)">100</Property>
+			<Image src="images/enginesBackwardBlock.svg"/>
+		</Element>
+	</Category>
 </Elements>

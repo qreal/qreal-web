@@ -7,7 +7,7 @@ module Controllers {
             width: $('#paper').width(),
             height: $('#paper').height(),
             model: this.graph,
-            gridSize: 1,
+            gridSize: 25,
             defaultLink: new joint.dia.Link({
                 attrs: {
                     '.connection': { stroke: 'black' },
@@ -55,29 +55,47 @@ module Controllers {
                 var value = $(this).val();
                 $scope.vm.currentNode.setProperty(name, value);
             });
+
         }
 
         loadElementsFromXml(pathToXML : string, $scope, $compile) {
             var xmlDoc = this.loadXMLDoc(pathToXML);
-            var elements = xmlDoc.getElementsByTagName("Element");
             var content = '';
-            for (var i = 0; i < elements.length; i++) {
-                content += '<p><button type="button" class="btn btn-default" ng-click="vm.createDefaultNode({';
-                var elementProperties = elements[i].getElementsByTagName("Property");
+            var categories = xmlDoc.getElementsByTagName("Category");
+            for (var k = 0; k < categories.length; k++) {
+                content += '<li><p>' + categories[k].getAttribute('name') + '</p><ul>';
+                var elements = categories[k].getElementsByTagName("Element");
 
-                for (var j = 0; j < elementProperties.length; j++) {
-                    content += '\'' + elementProperties[j].getAttribute('name') + '\' : ';
-                    content += '\'' + elementProperties[j].childNodes[0].nodeValue + '\'';
-                    if (j != elementProperties.length - 1) {
-                        content += ',';
+                for (var i = 0; i < elements.length; i++) {
+                    content += '<li><div class="tree_element" ng-click="vm.createDefaultNode({';
+
+                    var elementProperties = elements[i].getElementsByTagName("Property");
+
+                    for (var j = 0; j < elementProperties.length; j++) {
+                        content += '\'' + elementProperties[j].getAttribute('name') + '\' : ';
+                        if (elementProperties[j].childNodes[0]) {
+                            content += '\'' + elementProperties[j].childNodes[0].nodeValue + '\'';
+                        } else {
+                            content += '\'\'';
+                        }
+                        if (j != elementProperties.length - 1) {
+                            content += ',';
+                        }
                     }
+                    content += '}, \'';
+                    var image = elements[i].getElementsByTagName("Image")[0].getAttribute('src');
+                    content +=  image + '\'';
+                    content += ')">';
+                    content += '<img src="' + image + '" width="30" height="30" /> ';
+                    content += elements[i].getAttribute('name');
+                    content += '</div></li>';
                 }
-                content += '}, \'';
-                content += elements[i].getElementsByTagName("Image")[0].getAttribute('src') + '\'';
-                content += ')">' + elements[i].getAttribute('name') + '</button></p>';
+
+                content += '</ul></li>';
             }
 
-            $('#right-menu').append($compile(content)($scope));
+
+            $('#navigation').append($compile(content)($scope));
         }
 
         setNodeProperties(node:DiagramNode) {

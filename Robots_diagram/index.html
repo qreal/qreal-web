@@ -12,6 +12,11 @@
     <script src="vendor/js/joint.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
+
+    <link rel="stylesheet" href="vendor/treeview/jquery.treeview.css"/>
+    <script type="text/javascript" src="vendor/treeview/jquery.treeview.js"></script>
+
+
     <script src="app/out.js"></script>
 </head>
 
@@ -36,7 +41,19 @@
 
 		<div id="right-menu">
             <legend style="padding: 10px">Palette</legend>
+            <div id="elements_tree">
+                <ul id="navigation">
+                </ul>
+            </div>
 		</div>
 	</div>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#navigation").treeview({
+                persist: "location"
+            });
+        });
+    </script>
 </body>
 </html>

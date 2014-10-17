@@ -9,7 +9,7 @@ class DefaultDiagramNode implements DiagramNode {
     constructor(properties, image : string) {
         this.text = 'Default';
         this.element = new joint.shapes.devs.ImageWithPorts({
-            position: { x: 100, y: 30 },
+            position: { x: 100, y: 50 },
             size: { width: 50, height: 50 },
             outPorts: [''],
             attrs: {
