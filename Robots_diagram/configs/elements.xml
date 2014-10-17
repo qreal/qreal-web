@@ -16,6 +16,18 @@
 			<Property name="Condition">0</Property>
 			<Image src="images/ifBlock.svg"/>
 		</Element>
+		<Element name="Loop">
+			<Property name="Iterations">10</Property>
+			<Image src="images/loopBlock.svg"/>
+		</Element>
+		<Element name="Fork">
+			<Image src="images/forkBlock.svg"/>
+		</Element>
+		<Element name="Variable Initialization">
+			<Property name="Value">0</Property>
+			<Property name="Variable">x</Property>
+			<Image src="images/variableInitBlock.svg"/>
+		</Element>
 	</Category>
 	<Category name="Actions">
 		<Element name="Motors Forward">
@@ -27,6 +39,52 @@
 			<Property name="Ports">M3, M4</Property>
 			<Property name="Power (%)">100</Property>
 			<Image src="images/enginesBackwardBlock.svg"/>
+		</Element>
+		<Element name="Stop Motors">
+			<Property name="Ports">M1, M2, M3, M4</Property>
+			<Image src="images/enginesStopBlock.svg"/>
+		</Element>
+
+		<Element name="Clear Encoder">
+			<Property name="Ports">B1, B2, B3, B4</Property>
+			<Image src="images/nullificationEncoderBlock.svg"/>
+		</Element>
+
+		<Element name="Angular Servo">
+			<Property name="Ports">E1</Property>
+			<Property name="Angle (degrees)">0</Property>
+			<Image src="images/angularServoBlock.svg"/>
+		</Element>
+
+		<Element name="Led">
+			<Property name="Color">red</Property>
+			<Image src="images/ledBlock.svg"/>
+		</Element>
+	</Category>
+	<Category name="Wait">
+		<Element name="Timer">
+			<Property name="Delay (ms)">1000</Property>
+			<Image src="images/timerBlock.svg"/>
+		</Element>
+		<Element name="Wait for Light">
+			<Property name="Percents">0</Property>
+			<Property name="Port">A1</Property>
+			<Property name="Sign">greater</Property>
+			<Image src="images/waitForLightBlock.svg"/>
+		</Element>
+	</Category>
+	<Category name="Drawing">
+		<Element name="Draw Pixel">
+			<Property name="X">0</Property>
+			<Property name="Y">0</Property>
+			<Image src="images/drawPixelBlock.svg"/>
+		</Element>
+		<Element name="Smile">
+			<Image src="images/smileBlock.svg"/>
+		</Element>
+		<Element name="Background Color">
+			<Property name="Color">white</Property>
+			<Image src="images/setBackgroundBlock.svg"/>
 		</Element>
 	</Category>
 </Elements>
