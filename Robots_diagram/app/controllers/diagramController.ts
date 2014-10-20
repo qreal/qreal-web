@@ -153,6 +153,7 @@ module Controllers {
                 console.log("Node " + this.currentNodeIndex + " was deleted");
                 this.currentNode.getElement().remove();
                 this.nodesList.splice(this.currentNodeIndex, 1);
+                $(".property").remove();
                 this.currentNode = undefined;
                 this.currentNodeIndex = -1;
             }
