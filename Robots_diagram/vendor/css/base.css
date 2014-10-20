@@ -76,3 +76,15 @@ body {
     height: 90%;
     overflow: auto;
 }
+
+.white, .white a {
+    color: #fff;
+}
+
+#remove {
+    cursor: pointer;
+}
+
+#remove:active {
+    color: #808080;
+}

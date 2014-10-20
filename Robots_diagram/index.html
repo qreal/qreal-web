@@ -12,10 +12,8 @@
     <script src="vendor/js/joint.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
-
     <link rel="stylesheet" href="vendor/treeview/jquery.treeview.css"/>
     <script type="text/javascript" src="vendor/treeview/jquery.treeview.js"></script>
-
 
     <script src="app/out.js"></script>
 </head>
@@ -33,6 +31,9 @@
                         </ul>
                     </li>
                 </ul>
+                <p class="navbar-text" ng-click="vm.removeCurrentElement()">
+                    <span id="remove" class="glyphicon glyphicon-trash white"></span>
+                </P>
             </div><!--/.nav-collapse -->
         </div>
     </div>

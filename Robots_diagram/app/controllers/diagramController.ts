@@ -24,6 +24,7 @@ module Controllers {
 
         nodesList:DiagramNode[] = [];
         currentNode:DiagramNode;
+        currentNodeIndex:number = -1;
 
         constructor($scope, $compile) {
             $scope.vm = this;
@@ -33,11 +34,14 @@ module Controllers {
                 function (cellView, evt, x, y) {
                     console.log('cell view ' + cellView.model.id + ' was clicked');
 
+                    var i = 0;
                     $scope.vm.nodesList.forEach(function (node) {
                         if (node.getElement().id == cellView.model.id) {
                             $scope.vm.currentNode = node;
                             $scope.vm.setNodeProperties(node);
+                            $scope.vm.currentNodeIndex = i;
                         }
+                        i++;
                     });
                 }
             );
@@ -46,6 +50,7 @@ module Controllers {
                     console.log('blank was clicked');
                     $(".property").remove();
                     $scope.vm.currentNode = undefined;
+                    $scope.vm.currentNodeIndex = -1;
                 }
             );
 
@@ -94,7 +99,6 @@ module Controllers {
                 content += '</ul></li>';
             }
 
-
             $('#navigation').append($compile(content)($scope));
         }
 
@@ -142,6 +146,15 @@ module Controllers {
             }
             alert("Error loading document!");
             return null;
+        }
+
+        removeCurrentElement() {
+            if (this.currentNode) {
+                this.currentNode.getElement().remove();
+                this.nodesList.splice(this.currentNodeIndex, 1);
+                this.currentNode = undefined;
+                this.currentNodeIndex = -1;
+            }
         }
     }
 }
