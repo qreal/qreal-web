@@ -77,14 +77,10 @@ body {
     overflow: auto;
 }
 
-.white, .white a {
-    color: #fff;
-}
-
 #remove {
     cursor: pointer;
 }
 
 #remove:active {
-    color: #808080;
+    color: #ffffff;
 }
