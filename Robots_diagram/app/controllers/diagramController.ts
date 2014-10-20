@@ -150,6 +150,7 @@ module Controllers {
 
         removeCurrentElement() {
             if (this.currentNode) {
+                console.log("Node " + this.currentNodeIndex + " was deleted");
                 this.currentNode.getElement().remove();
                 this.nodesList.splice(this.currentNodeIndex, 1);
                 this.currentNode = undefined;
