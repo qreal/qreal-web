@@ -1,21 +1,21 @@
-<!DOCTYPE html>
+<%@ include file="include.jsp" %>
 <html>
 <head>
     <title>Robots Diagram</title>
 
-    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="vendor/css/joint.css"/>
-    <link rel="stylesheet" href="vendor/css/base.css"/>
+    <link rel="stylesheet" href="<c:url value='/resources/bootstrap/css/bootstrap.min.css' />" />
+    <link rel="stylesheet" href="<c:url value='/resources/css/joint.css' />" />
+    <link rel="stylesheet" href="<c:url value='/resources/css/base.css' />" />
 
-    <script src="vendor/js/jquery-1.11.0.min.js"></script>
-    <script src="vendor/js/angular.js"></script>
-    <script src="vendor/js/joint.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<c:url value='/resources/js/jquery-1.11.0.min.js' />"></script>
+    <script src="<c:url value='/resources/js/angular.js' />"></script>
+    <script src="<c:url value='/resources/js/joint.js' />"></script>
+    <script src="<c:url value='/resources/bootstrap/js/bootstrap.min.js' />"></script>
 
-    <link rel="stylesheet" href="vendor/treeview/jquery.treeview.css"/>
-    <script type="text/javascript" src="vendor/treeview/jquery.treeview.js"></script>
+    <link rel="stylesheet" href="<c:url value='/resources/treeview/jquery.treeview.css' />" />
+    <script type="text/javascript" src="<c:url value='/resources/treeview/jquery.treeview.js' />"></script>
 
-    <script src="app/out.js"></script>
+    <script src="<c:url value='/app/out.js' />"></script>
 </head>
 
 <body ng-app="diagram" ng-controller="diagramController">

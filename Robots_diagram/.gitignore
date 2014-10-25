@@ -1,7 +1,9 @@
 .idea/
-node_modules/
+src/main/webapp/node_modules/
+src/main/webapp/app/out.js
+src/main/webapp/app/*.js
+src/main/webapp/app/*/*.js
+src/main/webapp/app/*/*/*.js
+target/
 *.map
-app/out.js
-app/*.js
-app/*/*.js
-app/*/*/*.js
+*.iml
