@@ -1,4 +1,4 @@
-package com.qreal.robots.diagram;
+package com.qreal.robots.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
