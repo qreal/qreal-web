@@ -158,5 +158,27 @@ module Controllers {
                 this.currentNodeIndex = -1;
             }
         }
+
+        saveDiagram() {
+            $.ajax({
+                type: 'POST',
+                url: 'save.html',
+                data: ({name : "save"}),
+                success: function(data) {
+                    alert("Save " + data);
+                }
+            });
+        }
+
+        openDiagram() {
+            $.ajax({
+                type: 'POST',
+                url: 'open.html',
+                data: ({name : "open"}),
+                success: function(data) {
+                    alert("Open " + data);
+                }
+            });
+        }
     }
 }

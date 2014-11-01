@@ -19,6 +19,8 @@
 </head>
 
 <body ng-app="diagram" ng-controller="diagramController">
+
+${message}
     <div class="navbar navbar-inverse" role="navigation">
         <div class="container-fluid">
             <div class="navbar-collapse collapse">
@@ -26,8 +28,8 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="">Save</a></li>
-                            <li><a href="">Open</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.saveDiagram()">Save</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.openDiagram()">Open</a></li>
                         </ul>
                     </li>
                 </ul>
