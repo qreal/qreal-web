@@ -69,7 +69,7 @@ module Controllers {
                 var elements = categories[k].getElementsByTagName("Element");
 
                 for (var i = 0; i < elements.length; i++) {
-                    content += '<li><div class="tree_element" ng-click="vm.createDefaultNode({';
+                    content += '<li><div class="tree_element" ng-click="vm.createDefaultNode(100, 50, {';
 
                     var elementProperties = elements[i].getElementsByTagName("Property");
 
@@ -117,10 +117,10 @@ module Controllers {
             return content;
         }
 
-        createDefaultNode(properties, image : string) {
+        createDefaultNode(x : number, y : number, properties, image : string) {
             this.nodeIndex++;
             var id = "Node" + this.nodeIndex;
-            var node:DefaultDiagramNode = new DefaultDiagramNode(id, properties, image);
+            var node:DefaultDiagramNode = new DefaultDiagramNode(id, x, y, properties, image);
             this.nodesList[node.getElement().id] = node;
             this.graph.addCell(node.getElement());
         }
@@ -199,6 +199,8 @@ module Controllers {
                     var node = this.nodesList[id];
                     var newNode = {
                         'id' : node.getId(),
+                        'x' : node.getX(),
+                        'y' : node.getY(),
                         'image' : node.getImagePath(),
                         'properties' : []
                     };

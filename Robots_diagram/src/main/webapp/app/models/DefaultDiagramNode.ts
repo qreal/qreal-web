@@ -2,17 +2,18 @@
  * Created by vladzx on 10.10.14.
  */
 class DefaultDiagramNode implements DiagramNode {
-    id : string;
+    id:string;
     element:joint.shapes.devs.RectWithPorts;
     text:string;
-    properties: { [name: string]: string; };
-    image : string;
+    properties:{ [name: string]: string; };
+    image:string;
 
-    constructor(id : string, properties, image : string) {
+    constructor(id:string, x:number, y:number, properties, image:string) {
         this.id = id;
         this.text = 'Default';
+
         this.element = new joint.shapes.devs.ImageWithPorts({
-            position: { x: 100, y: 50 },
+            position: { x: x, y: y },
             size: { width: 50, height: 50 },
             outPorts: [''],
             attrs: {
@@ -33,6 +34,14 @@ class DefaultDiagramNode implements DiagramNode {
         return this.id;
     }
 
+    getX() {
+        return (this.element.get("position"))['x'];
+    }
+
+    getY() {
+        return (this.element.get("position"))['y'];
+    }
+
     getImagePath() {
         return this.image;
     }
@@ -41,7 +50,7 @@ class DefaultDiagramNode implements DiagramNode {
         return this.element;
     }
 
-    setProperty(name: string, value: string) {
+    setProperty(name:string, value:string) {
         this.properties[name] = value;
     }
 

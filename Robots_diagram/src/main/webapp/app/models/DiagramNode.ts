@@ -5,9 +5,11 @@ interface DiagramNode {
     id : string;
     text : string;
     properties : { [name: string]: string; };
-    image : string
+    image : string;
     setText(text:string);
     getId();
+    getX();
+    getY();
     getImagePath();
     getElement();
     setProperty(name:string, value:string);
