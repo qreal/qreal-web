@@ -2,10 +2,14 @@
  * Created by vladzx on 10.10.14.
  */
 interface DiagramNode {
-    text:string;
-    properties: { [name: string]: string; };
+    id : string;
+    text : string;
+    properties : { [name: string]: string; };
+    image : string
     setText(text:string);
+    getId();
+    getImagePath();
     getElement();
-    setProperty(name: string, value: string);
+    setProperty(name:string, value:string);
     getProperties();
 }
