@@ -22,9 +22,8 @@ module Controllers {
             }
         });
 
-        nodesList:DiagramNode[] = [];
-        currentNode:DiagramNode;
-        currentNodeIndex:number = -1;
+        nodesList =  {};
+        currentNode : DiagramNode;
 
         constructor($scope, $compile) {
             $scope.vm = this;
@@ -34,15 +33,13 @@ module Controllers {
                 function (cellView, evt, x, y) {
                     console.log('cell view ' + cellView.model.id + ' was clicked');
 
-                    var i = 0;
-                    $scope.vm.nodesList.forEach(function (node) {
-                        if (node.getElement().id == cellView.model.id) {
-                            $scope.vm.currentNode = node;
-                            $scope.vm.setNodeProperties(node);
-                            $scope.vm.currentNodeIndex = i;
-                        }
-                        i++;
-                    });
+                    var node : DiagramNode = $scope.vm.nodesList[cellView.model.id];
+                    if (node) {
+                        $scope.vm.currentNode = node;
+                        $scope.vm.setNodeProperties(node);
+                    } else {
+                        $scope.vm.currentNode = undefined;
+                    }
                 }
             );
             this.paper.on('blank:pointerdown',
@@ -50,7 +47,6 @@ module Controllers {
                     console.log('blank was clicked');
                     $(".property").remove();
                     $scope.vm.currentNode = undefined;
-                    $scope.vm.currentNodeIndex = -1;
                 }
             );
 
@@ -122,7 +118,7 @@ module Controllers {
 
         createDefaultNode(properties, image : string) {
             var node:DefaultDiagramNode = new DefaultDiagramNode(properties, image);
-            this.nodesList.push(node);
+            this.nodesList[node.getElement().id] = node;
             this.graph.addCell(node.getElement());
         }
 
@@ -150,16 +146,17 @@ module Controllers {
 
         removeCurrentElement() {
             if (this.currentNode) {
-                console.log("Node " + this.currentNodeIndex + " was deleted");
+                console.log("Node was deleted");
+                delete this.nodesList[this.currentNode.getElement().id];
                 this.currentNode.getElement().remove();
-                this.nodesList.splice(this.currentNodeIndex, 1);
                 $(".property").remove();
                 this.currentNode = undefined;
-                this.currentNodeIndex = -1;
+                console.log(this.nodesList);
             }
         }
 
         saveDiagram() {
+            this.export();
             $.ajax({
                 type: 'POST',
                 url: 'save.html',
@@ -179,6 +176,33 @@ module Controllers {
                     alert("Open " + data);
                 }
             });
+        }
+
+        export() {
+            var json = {
+                'nodes' : [],
+                'links' : []
+            };
+            for (var id in this.nodesList){
+                if (this.nodesList.hasOwnProperty(id)) {
+                    var newNode = {
+                        'id' : id
+                    };
+                    json.nodes.push(newNode);
+                }
+            }
+
+            this.graph.getLinks().forEach(function (link) {
+                var src = link.get('source').id;
+                var target = link.get('target').id;
+                var newLink = {
+                    'source' : src,
+                    'target' : target
+                };
+                json.links.push(newLink);
+            });
+
+            alert(JSON.stringify(json));
         }
     }
 }
