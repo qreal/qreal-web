@@ -125,6 +125,14 @@ module Controllers {
             this.graph.addCell(node.getElement());
         }
 
+        createLink(sourceId : string, targetId : string) {
+            var link = new joint.dia.Link({
+                source: { id: sourceId },
+                target: { id: targetId }
+            });
+            this.graph.addCell(link);
+        }
+
         clear() {
             this.graph.clear();
         }
