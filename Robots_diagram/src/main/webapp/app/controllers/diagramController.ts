@@ -24,6 +24,7 @@ module Controllers {
 
         nodesList =  {};
         currentNode : DiagramNode;
+        nodeIndex = -1;
 
         constructor($scope, $compile) {
             $scope.vm = this;
@@ -117,7 +118,9 @@ module Controllers {
         }
 
         createDefaultNode(properties, image : string) {
-            var node:DefaultDiagramNode = new DefaultDiagramNode(properties, image);
+            this.nodeIndex++;
+            var id = "Node" + this.nodeIndex;
+            var node:DefaultDiagramNode = new DefaultDiagramNode(id, properties, image);
             this.nodesList[node.getElement().id] = node;
             this.graph.addCell(node.getElement());
         }
@@ -156,7 +159,7 @@ module Controllers {
         }
 
         saveDiagram() {
-            this.export();
+            alert(this.exportToJSON());
             $.ajax({
                 type: 'POST',
                 url: 'save.html',
@@ -178,23 +181,38 @@ module Controllers {
             });
         }
 
-        export() {
+        exportToJSON() {
             var json = {
                 'nodes' : [],
                 'links' : []
             };
             for (var id in this.nodesList){
                 if (this.nodesList.hasOwnProperty(id)) {
+                    var node = this.nodesList[id];
                     var newNode = {
-                        'id' : id
+                        'id' : node.getId(),
+                        'image' : node.getImagePath(),
+                        'properties' : []
                     };
+
+                    var properties = node.getProperties();
+                    for (var name in properties) {
+                        var property = {
+                            'name' : name,
+                            'value' : properties[name]
+                        };
+                        newNode.properties.push(property);
+                    }
+
                     json.nodes.push(newNode);
                 }
             }
 
+            var nodes = this.nodesList;
+
             this.graph.getLinks().forEach(function (link) {
-                var src = link.get('source').id;
-                var target = link.get('target').id;
+                var src = nodes[link.get('source').id].getId();
+                var target = nodes[link.get('target').id].getId();
                 var newLink = {
                     'source' : src,
                     'target' : target
@@ -202,7 +220,7 @@ module Controllers {
                 json.links.push(newLink);
             });
 
-            alert(JSON.stringify(json));
+            return JSON.stringify(json);
         }
     }
 }
