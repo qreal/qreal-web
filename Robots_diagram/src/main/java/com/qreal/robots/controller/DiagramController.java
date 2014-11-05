@@ -1,14 +1,11 @@
 package com.qreal.robots.controller;
 
+import com.qreal.robots.model.DefaultDiagramNode;
+import com.qreal.robots.model.Diagram;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.Date;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by vladzx on 25.10.14.
@@ -31,10 +28,14 @@ public class DiagramController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public
     @ResponseBody
-    String save(@RequestParam String name) {
+    String save(@RequestBody Diagram diagram) {
         log.info("save diagram");
-        String result = "OK";
-        return result;
+
+        for (DefaultDiagramNode node : diagram.getNodes()) {
+            log.info(node.getId());
+        }
+
+        return "{\"message\":\"OK\"}";
     }
 
     @RequestMapping(value = "/open", method = RequestMethod.POST)

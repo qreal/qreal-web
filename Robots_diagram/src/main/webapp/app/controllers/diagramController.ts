@@ -22,8 +22,8 @@ module Controllers {
             }
         });
 
-        nodesList =  {};
-        currentNode : DiagramNode;
+        nodesList = {};
+        currentNode:DiagramNode;
         nodeIndex = -1;
 
         constructor($scope, $compile) {
@@ -34,7 +34,7 @@ module Controllers {
                 function (cellView, evt, x, y) {
                     console.log('cell view ' + cellView.model.id + ' was clicked');
 
-                    var node : DiagramNode = $scope.vm.nodesList[cellView.model.id];
+                    var node:DiagramNode = $scope.vm.nodesList[cellView.model.id];
                     if (node) {
                         $scope.vm.currentNode = node;
                         $scope.vm.setNodeProperties(node);
@@ -60,7 +60,7 @@ module Controllers {
 
         }
 
-        loadElementsFromXml(pathToXML : string, $scope, $compile) {
+        loadElementsFromXml(pathToXML:string, $scope, $compile) {
             var xmlDoc = this.loadXMLDoc(pathToXML);
             var content = '';
             var categories = xmlDoc.getElementsByTagName("Category");
@@ -86,7 +86,7 @@ module Controllers {
                     }
                     content += '}, \'';
                     var image = elements[i].getElementsByTagName("Image")[0].getAttribute('src');
-                    content +=  image + '\'';
+                    content += image + '\'';
                     content += ')">';
                     content += '<img src="' + image + '" width="30" height="30" /> ';
                     content += elements[i].getAttribute('name');
@@ -117,7 +117,7 @@ module Controllers {
             return content;
         }
 
-        createDefaultNode(x : number, y : number, properties, image : string) {
+        createDefaultNode(x:number, y:number, properties, image:string) {
             this.nodeIndex++;
             var id = "Node" + this.nodeIndex;
             var node:DefaultDiagramNode = new DefaultDiagramNode(id, x, y, properties, image);
@@ -125,7 +125,7 @@ module Controllers {
             this.graph.addCell(node.getElement());
         }
 
-        createLink(sourceId : string, targetId : string) {
+        createLink(sourceId:string, targetId:string) {
             var link = new joint.dia.Link({
                 source: { id: sourceId },
                 target: { id: targetId }
@@ -167,13 +167,18 @@ module Controllers {
         }
 
         saveDiagram() {
-            alert(this.exportToJSON());
+            console.log(this.exportToJSON());
             $.ajax({
                 type: 'POST',
                 url: 'save.html',
-                data: ({name : "save"}),
-                success: function(data) {
-                    alert("Save " + data);
+                dataType: 'json',
+                contentType: 'application/json',
+                data: (this.exportToJSON()),
+                success: function (response) {
+                    console.log(response.message);
+                },
+                error: function (response, status, error) {
+                    console.log("error: " + status + " " + error + " " + response.message);
                 }
             });
         }
@@ -182,34 +187,39 @@ module Controllers {
             $.ajax({
                 type: 'POST',
                 url: 'open.html',
-                data: ({name : "open"}),
-                success: function(data) {
-                    alert("Open " + data);
+                data: ({name: "open"}),
+                success: function (response) {
+                    var jsonData = JSON.parse(response);
+                    for (var i = 0; i < jsonData.links.length; i++) {
+                        var link = jsonData.links[i];
+                        console.log(link.source);
+                    }
+                    alert(response);
                 }
             });
         }
 
         exportToJSON() {
             var json = {
-                'nodes' : [],
-                'links' : []
+                'nodes': [],
+                'links': []
             };
-            for (var id in this.nodesList){
+            for (var id in this.nodesList) {
                 if (this.nodesList.hasOwnProperty(id)) {
                     var node = this.nodesList[id];
                     var newNode = {
-                        'id' : node.getId(),
-                        'x' : node.getX(),
-                        'y' : node.getY(),
-                        'image' : node.getImagePath(),
-                        'properties' : []
+                        'id': node.getId(),
+                        'x': node.getX(),
+                        'y': node.getY(),
+                        'image': node.getImagePath(),
+                        'properties': []
                     };
 
                     var properties = node.getProperties();
                     for (var name in properties) {
                         var property = {
-                            'name' : name,
-                            'value' : properties[name]
+                            'name': name,
+                            'value': properties[name]
                         };
                         newNode.properties.push(property);
                     }
@@ -224,13 +234,17 @@ module Controllers {
                 var src = nodes[link.get('source').id].getId();
                 var target = nodes[link.get('target').id].getId();
                 var newLink = {
-                    'source' : src,
-                    'target' : target
+                    'source': src,
+                    'target': target
                 };
                 json.links.push(newLink);
             });
 
             return JSON.stringify(json);
+        }
+
+        importFromJSON(json:string) {
+            this.clear();
         }
     }
 }
