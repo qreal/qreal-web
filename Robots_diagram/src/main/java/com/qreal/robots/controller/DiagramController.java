@@ -32,7 +32,7 @@ public class DiagramController {
         log.info("save diagram");
         log.info("nodeInex" + diagram.getNodeIndex());
         for (DefaultDiagramNode node : diagram.getNodes()) {
-            log.info(node.getId());
+            log.info(node.getName());
         }
 
         return "{\"message\":\"OK\"}";

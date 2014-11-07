@@ -119,8 +119,8 @@ module Controllers {
 
         createDefaultNode(x:number, y:number, properties, image:string) {
             this.nodeIndex++;
-            var id = "Node" + this.nodeIndex;
-            var node:DefaultDiagramNode = new DefaultDiagramNode(id, x, y, properties, image);
+            var name = "Node" + this.nodeIndex;
+            var node:DefaultDiagramNode = new DefaultDiagramNode(name, x, y, properties, image);
             this.nodesList[node.getElement().id] = node;
             this.graph.addCell(node.getElement());
         }
@@ -209,7 +209,7 @@ module Controllers {
                 if (this.nodesList.hasOwnProperty(id)) {
                     var node = this.nodesList[id];
                     var newNode = {
-                        'id': node.getId(),
+                        'name': node.getName(),
                         'x': node.getX(),
                         'y': node.getY(),
                         'image': node.getImagePath(),
@@ -232,8 +232,8 @@ module Controllers {
             var nodes = this.nodesList;
 
             this.graph.getLinks().forEach(function (link) {
-                var src = nodes[link.get('source').id].getId();
-                var target = nodes[link.get('target').id].getId();
+                var src = nodes[link.get('source').id].getName();
+                var target = nodes[link.get('target').id].getName();
                 var newLink = {
                     'source': src,
                     'target': target

@@ -7,19 +7,27 @@ import java.util.ArrayList;
  * Created by vladzx on 31.10.14.
  */
 public class DefaultDiagramNode {
-
-    private String id;
+    private long nodeId;
+    private String name;
     private double x;
     private double y;
     private String image;
     private ArrayList<Property> properties;
 
-    public String getId() {
-        return id;
+    public long getNodeId() {
+        return nodeId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setNodeId(long nodeId) {
+        this.nodeId = nodeId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public double getX() {

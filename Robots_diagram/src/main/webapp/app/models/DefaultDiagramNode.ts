@@ -2,14 +2,14 @@
  * Created by vladzx on 10.10.14.
  */
 class DefaultDiagramNode implements DiagramNode {
-    id:string;
+    name:string;
     element:joint.shapes.devs.RectWithPorts;
     text:string;
     properties:{ [name: string]: string; };
     image:string;
 
-    constructor(id:string, x:number, y:number, properties, image:string) {
-        this.id = id;
+    constructor(name:string, x:number, y:number, properties, image:string) {
+        this.name = name;
         this.text = 'Default';
 
         this.element = new joint.shapes.devs.ImageWithPorts({
@@ -30,8 +30,8 @@ class DefaultDiagramNode implements DiagramNode {
         this.text = text;
     }
 
-    getId() {
-        return this.id;
+    getName() {
+        return this.name;
     }
 
     getX() {

@@ -2,12 +2,12 @@
  * Created by vladzx on 10.10.14.
  */
 interface DiagramNode {
-    id : string;
+    name : string;
     text : string;
     properties : { [name: string]: string; };
     image : string;
     setText(text:string);
-    getId();
+    getName();
     getX();
     getY();
     getImagePath();
