@@ -6,8 +6,17 @@ import java.util.ArrayList;
  * Created by vladzx on 05.11.14.
  */
 public class Diagram {
+    private long nodeIndex;
     private ArrayList<DefaultDiagramNode> nodes;
     private ArrayList<Link> links;
+
+    public long getNodeIndex() {
+        return nodeIndex;
+    }
+
+    public void setNodeIndex(long nodeIndex) {
+        this.nodeIndex = nodeIndex;
+    }
 
     public ArrayList<DefaultDiagramNode> getNodes() {
         return nodes;

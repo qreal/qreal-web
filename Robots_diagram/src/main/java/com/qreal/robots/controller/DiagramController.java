@@ -30,7 +30,7 @@ public class DiagramController {
     @ResponseBody
     String save(@RequestBody Diagram diagram) {
         log.info("save diagram");
-
+        log.info("nodeInex" + diagram.getNodeIndex());
         for (DefaultDiagramNode node : diagram.getNodes()) {
             log.info(node.getId());
         }

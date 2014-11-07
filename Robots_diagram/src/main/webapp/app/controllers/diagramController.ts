@@ -170,7 +170,7 @@ module Controllers {
             console.log(this.exportToJSON());
             $.ajax({
                 type: 'POST',
-                url: 'save.html',
+                url: 'save',
                 dataType: 'json',
                 contentType: 'application/json',
                 data: (this.exportToJSON()),
@@ -186,7 +186,7 @@ module Controllers {
         openDiagram() {
             $.ajax({
                 type: 'POST',
-                url: 'open.html',
+                url: 'open',
                 data: ({name: "open"}),
                 success: function (response) {
                     var jsonData = JSON.parse(response);
@@ -201,6 +201,7 @@ module Controllers {
 
         exportToJSON() {
             var json = {
+                'nodeIndex': this.nodeIndex,
                 'nodes': [],
                 'links': []
             };
