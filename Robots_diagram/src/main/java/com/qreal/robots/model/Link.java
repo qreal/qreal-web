@@ -1,18 +1,28 @@
 package com.qreal.robots.model;
 
+import javax.persistence.*;
+import java.io.Serializable;
+
 /**
  * Created by vladzx on 31.10.14.
  */
-public class Link {
-    private long linkId;
+@Entity
+@Table(name = "links")
+public class Link implements Serializable {
+    @Id
+    @Column(name = "link_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long linkId;
+    @Column(name = "source")
     private String source;
+    @Column(name = "target")
     private String target;
 
-    public long getLinkId() {
+    public Long getLinkId() {
         return linkId;
     }
 
-    public void setLinkId(long linkId) {
+    public void setLinkId(Long linkId) {
         this.linkId = linkId;
     }
 

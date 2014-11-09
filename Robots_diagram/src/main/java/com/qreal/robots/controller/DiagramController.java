@@ -1,11 +1,16 @@
 package com.qreal.robots.controller;
 
+import com.qreal.robots.dao.DiagramDAO;
 import com.qreal.robots.model.DefaultDiagramNode;
 import com.qreal.robots.model.Diagram;
+import com.qreal.robots.model.Property;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 /**
  * Created by vladzx on 25.10.14.
@@ -13,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class DiagramController {
     private static final Logger log = Logger.getLogger(DiagramController.class);
+
+    @Autowired
+    private DiagramDAO diagramDAO;
 
     @RequestMapping("/")
     public String home() {
@@ -30,11 +38,7 @@ public class DiagramController {
     @ResponseBody
     String save(@RequestBody Diagram diagram) {
         log.info("save diagram");
-        log.info("nodeInex" + diagram.getNodeIndex());
-        for (DefaultDiagramNode node : diagram.getNodes()) {
-            log.info(node.getName());
-        }
-
+        diagramDAO.save(diagram);
         return "{\"message\":\"OK\"}";
     }
 

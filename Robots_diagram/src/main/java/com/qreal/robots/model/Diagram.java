@@ -1,45 +1,59 @@
 package com.qreal.robots.model;
 
-import java.util.ArrayList;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Created by vladzx on 05.11.14.
  */
-public class Diagram {
-    private long diagramId;
-    private long nodeIndex;
-    private ArrayList<DefaultDiagramNode> nodes;
-    private ArrayList<Link> links;
+@Entity
+@Table(name = "diagrams")
+public class Diagram implements Serializable {
+    @Id
+    @Column(name = "diagram_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long diagramId;
+    @Column(name = "node_index")
+    private Long nodeIndex;
 
-    public long getDiagramId() {
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "diagram_id", referencedColumnName = "diagram_id")
+    private Set<DefaultDiagramNode> nodes;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "diagram_id", referencedColumnName = "diagram_id")
+    private Set<Link> links;
+
+    public Long getDiagramId() {
         return diagramId;
     }
 
-    public void setDiagramId(long diagramId) {
+    public void setDiagramId(Long diagramId) {
         this.diagramId = diagramId;
     }
 
-    public long getNodeIndex() {
+    public Long getNodeIndex() {
         return nodeIndex;
     }
 
-    public void setNodeIndex(long nodeIndex) {
+    public void setNodeIndex(Long nodeIndex) {
         this.nodeIndex = nodeIndex;
     }
 
-    public ArrayList<DefaultDiagramNode> getNodes() {
+    public Set<DefaultDiagramNode> getNodes() {
         return nodes;
     }
 
-    public ArrayList<Link> getLinks() {
+    public Set<Link> getLinks() {
         return links;
     }
 
-    public void setNodes(ArrayList<DefaultDiagramNode> nodes) {
+    public void setNodes(Set<DefaultDiagramNode> nodes) {
         this.nodes = nodes;
     }
 
-    public void setLinks(ArrayList<Link> links) {
+    public void setLinks(Set<Link> links) {
         this.links = links;
     }
 }
