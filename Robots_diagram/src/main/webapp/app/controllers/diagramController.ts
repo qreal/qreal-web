@@ -180,12 +180,13 @@ module Controllers {
 
         openDiagram() {
             var controller = this;
+            var id = parseInt(prompt("input id"));
             $.ajax({
                 type: 'POST',
                 url: 'open',
                 dataType: 'json',
                 contentType: 'application/json',
-                data: (JSON.stringify({diagramId: 2})),
+                data: (JSON.stringify({diagramId: id})),
                 success: function (response) {
                     controller.import(response);
                     console.log(response.nodeIndex);
