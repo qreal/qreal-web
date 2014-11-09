@@ -125,16 +125,11 @@ module Controllers {
             this.graph.addCell(node.getElement());
         }
 
-        createLink(sourceId:string, targetId:string) {
-            var link = new joint.dia.Link({
-                source: { id: sourceId },
-                target: { id: targetId }
-            });
-            this.graph.addCell(link);
-        }
-
         clear() {
             this.graph.clear();
+            this.nodeIndex = -1;
+            this.nodesList = {};
+            this.currentNode = undefined;
         }
 
         loadXMLDoc(name:string) {
@@ -184,13 +179,15 @@ module Controllers {
         }
 
         openDiagram() {
+            var controller = this;
             $.ajax({
                 type: 'POST',
                 url: 'open',
                 dataType: 'json',
                 contentType: 'application/json',
-                data: (JSON.stringify({diagramId: 1})),
+                data: (JSON.stringify({diagramId: 2})),
                 success: function (response) {
+                    controller.import(response);
                     console.log(response.nodeIndex);
                 },
                 error: function (response, status, error) {
@@ -244,8 +241,59 @@ module Controllers {
             return JSON.stringify(json);
         }
 
-        importFromJSON(json:string) {
+        import(response) {
+            console.log("import diagram");
             this.clear();
+            this.nodeIndex = response.nodeIndex;
+            for (var i = 0; i < response.nodes.length; i++) {
+                var node = response.nodes[i];
+
+                var properties = {}
+                var propertiesObject = node.properties;
+
+                for (var j = 0; j < propertiesObject.length; j++) {
+                    properties[propertiesObject[j].name] = propertiesObject[j].value;
+                }
+
+                this.importNode(node.name, node.x, node.y, properties, node.image);
+            }
+
+            for (var i = 0; i < response.links.length; i++) {
+                var link = response.links[i];
+                this.importLink(link.source, link.target);
+            }
+        }
+
+        importNode(name:string, x:number, y:number, properties, image:string) {
+            var node:DefaultDiagramNode = new DefaultDiagramNode(name, x, y, properties, image);
+            this.nodesList[node.getElement().id] = node;
+            this.graph.addCell(node.getElement());
+        }
+
+        importLink(sourceNodeId:string, targetNodeId:string) {
+            var sourceId = this.getElementIdByNodeId(sourceNodeId);
+            var targetId = this.getElementIdByNodeId(targetNodeId);
+            var link = new joint.dia.Link({
+                attrs: {
+                    '.connection': { stroke: 'black' },
+                    '.marker-target': { fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z' }
+                },
+                source: { id: sourceId },
+                target: { id: targetId }
+            });
+            this.graph.addCell(link);
+        }
+
+        getElementIdByNodeId(nodeId:string) {
+            for (var id in this.nodesList) {
+                if (this.nodesList.hasOwnProperty(id)) {
+                    var node = this.nodesList[id];
+                    if (node.getName() === nodeId) {
+                        return id;
+                    }
+                }
+            }
+            return undefined;
         }
     }
 }
