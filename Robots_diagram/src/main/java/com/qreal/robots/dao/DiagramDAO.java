@@ -27,4 +27,14 @@ public class DiagramDAO {
         session.save(diagram);
         transaction.commit();
     }
+
+    @Transactional
+    public Diagram openById(Long diagramId) {
+        log.debug("open diagram");
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+        Diagram diagram = (Diagram) session.get(Diagram.class, diagramId);
+        transaction.commit();
+        return diagram;
+    }
 }

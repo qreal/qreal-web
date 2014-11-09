@@ -3,6 +3,7 @@ package com.qreal.robots.controller;
 import com.qreal.robots.dao.DiagramDAO;
 import com.qreal.robots.model.DefaultDiagramNode;
 import com.qreal.robots.model.Diagram;
+import com.qreal.robots.model.OpenRequest;
 import com.qreal.robots.model.Property;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Set;
 
 /**
  * Created by vladzx on 25.10.14.
@@ -45,9 +47,8 @@ public class DiagramController {
     @RequestMapping(value = "/open", method = RequestMethod.POST)
     public
     @ResponseBody
-    String open(@RequestParam String name) {
+    Diagram open(@RequestBody OpenRequest request) {
         log.info("open diagram");
-        String result = "OK";
-        return result;
+        return diagramDAO.openById(request.getDiagramId());
     }
 }

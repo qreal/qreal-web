@@ -187,14 +187,14 @@ module Controllers {
             $.ajax({
                 type: 'POST',
                 url: 'open',
-                data: ({name: "open"}),
+                dataType: 'json',
+                contentType: 'application/json',
+                data: (JSON.stringify({diagramId: 1})),
                 success: function (response) {
-                    var jsonData = JSON.parse(response);
-                    for (var i = 0; i < jsonData.links.length; i++) {
-                        var link = jsonData.links[i];
-                        console.log(link.source);
-                    }
-                    alert(response);
+                    console.log(response.nodeIndex);
+                },
+                error: function (response, status, error) {
+                    console.log("error: " + status + " " + error);
                 }
             });
         }
