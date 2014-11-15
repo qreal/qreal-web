@@ -19,6 +19,7 @@
 
 ## Инструкция по сборке ##
 
+* установить Apache Maven
 * установить mysql-server, mysql-client
 * создать нового пользвотеля user с паролем user
 * зайти в mysql, выполнить скрипт setup.sql из папки /Robots_diagram
