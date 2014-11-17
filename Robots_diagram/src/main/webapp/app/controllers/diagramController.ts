@@ -264,7 +264,7 @@ module Controllers {
             return JSON.stringify(json);
         }
 
-        exportVertices(vertices:Array) {
+        exportVertices(vertices) {
             var count = 1;
             var newVertices = [];
             vertices.forEach(function (vertex) {
@@ -309,7 +309,7 @@ module Controllers {
             this.graph.addCell(node.getElement());
         }
 
-        importLink(sourceNodeId:string, targetNodeId:string, vertices:Array) {
+        importLink(sourceNodeId:string, targetNodeId:string, vertices) {
             var sourceId = this.getElementIdByNodeId(sourceNodeId);
             var targetId = this.getElementIdByNodeId(targetNodeId);
             var newVertices = this.importVertices(vertices);
@@ -325,7 +325,7 @@ module Controllers {
             this.graph.addCell(link);
         }
 
-        importVertices(vertices:Array) {
+        importVertices(vertices) {
             var newVertices = [];
             vertices.forEach(function (vertex) {
                 newVertices.push(
