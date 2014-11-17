@@ -11,6 +11,7 @@
     <script src="<c:url value='/resources/js/angular.js' />"></script>
     <script src="<c:url value='/resources/js/joint.js' />"></script>
     <script src="<c:url value='/resources/bootstrap/js/bootstrap.min.js' />"></script>
+    <script src="<c:url value='/resources/js/jquery-ui.min.js' />"></script>
 
     <link rel="stylesheet" href="<c:url value='/resources/treeview/jquery.treeview.css' />" />
     <script type="text/javascript" src="<c:url value='/resources/treeview/jquery.treeview.js' />"></script>
@@ -19,8 +20,6 @@
 </head>
 
 <body ng-app="diagram" ng-controller="diagramController">
-
-${message}
     <div class="navbar navbar-inverse" role="navigation">
         <div class="container-fluid">
             <div class="navbar-collapse collapse">
@@ -36,7 +35,7 @@ ${message}
                 <p class="navbar-text" ng-click="vm.removeCurrentElement()">
                     <span id="remove" class="glyphicon glyphicon-trash"></span>
                 </P>
-            </div><!--/.nav-collapse -->
+            </div>
         </div>
     </div>
 

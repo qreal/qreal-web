@@ -21,6 +21,7 @@ module Controllers {
                 return magnet.getAttribute('magnet') !== 'passive';
             }
         });
+        elementsList = {};
 
         nodesList = {};
         currentNode:DiagramNode;
@@ -58,6 +59,24 @@ module Controllers {
                 $scope.vm.currentNode.setProperty(name, value);
             });
 
+            $(".tree_element").draggable({
+                helper: function () {
+                    return $(this).find('.elementImg').clone();
+                },
+                revert:"invalid"
+            });
+
+            $("#paper").droppable({
+                drop: function(event, ui) {
+                    var paperPos = $("#paper").position();
+                    var top = ui.position.top - paperPos.top;   //new left position of cloned/dragged image
+                    var left = ui.position.left - paperPos.left; //new top position of cloned/dragged image
+                    var element = $(ui.draggable.context).text();
+                    var image = $scope.vm.elementsList[element]['image'];
+                    var properties = $scope.vm.elementsList[element]['properties'];
+                    $scope.vm.createDefaultNode(left, top, properties, image);
+                }
+            });
         }
 
         loadElementsFromXml(pathToXML:string, $scope, $compile) {
@@ -69,27 +88,27 @@ module Controllers {
                 var elements = categories[k].getElementsByTagName("Element");
 
                 for (var i = 0; i < elements.length; i++) {
-                    content += '<li><div class="tree_element" ng-click="vm.createDefaultNode(100, 50, {';
+                    var name = elements[i].getAttribute('name');
+                    this.elementsList[name] = {};
+                    content += '<li><div class="tree_element">';
 
                     var elementProperties = elements[i].getElementsByTagName("Property");
-
+                    var properties = {};
                     for (var j = 0; j < elementProperties.length; j++) {
-                        content += '\'' + elementProperties[j].getAttribute('name') + '\' : ';
+                        var propertyName : string = elementProperties[j].getAttribute('name');
+                        var propertyValue : string;
                         if (elementProperties[j].childNodes[0]) {
-                            content += '\'' + elementProperties[j].childNodes[0].nodeValue + '\'';
+                            propertyValue = elementProperties[j].childNodes[0].nodeValue;
                         } else {
-                            content += '\'\'';
+                            propertyValue = '';
                         }
-                        if (j != elementProperties.length - 1) {
-                            content += ',';
-                        }
+                        properties[propertyName] = propertyValue;
                     }
-                    content += '}, \'';
                     var image = elements[i].getElementsByTagName("Image")[0].getAttribute('src');
-                    content += image + '\'';
-                    content += ')">';
-                    content += '<img src="' + image + '" width="30" height="30" /> ';
-                    content += elements[i].getAttribute('name');
+                    this.elementsList[name]['image'] = image;
+                    this.elementsList[name]['properties'] = properties;
+                    content += '<img class="elementImg" src="' + image + '" width="30" height="30"' + '/>';
+                    content += name;
                     content += '</div></li>';
                 }
 

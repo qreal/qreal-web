@@ -84,3 +84,7 @@ body {
 #remove:active {
     color: #ffffff;
 }
+
+.elementImg {
+    padding-right: 5px;
+}
