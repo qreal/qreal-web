@@ -247,18 +247,37 @@ module Controllers {
             }
 
             var nodes = this.nodesList;
+            var controller = this;
 
             this.graph.getLinks().forEach(function (link) {
                 var src = nodes[link.get('source').id].getName();
                 var target = nodes[link.get('target').id].getName();
+                var vertices = controller.exportVertices(link.get('vertices'))
                 var newLink = {
-                    'source': src,
-                    'target': target
+                    'source' : src,
+                    'target' : target,
+                    'vertices' : vertices
                 };
                 json.links.push(newLink);
             });
 
             return JSON.stringify(json);
+        }
+
+        exportVertices(vertices:Array) {
+            var count = 1;
+            var newVertices = [];
+            vertices.forEach(function (vertex) {
+                newVertices.push(
+                    {
+                        x : vertex.x,
+                        y : vertex.y,
+                        number : count
+                    }
+                )
+                count++;
+            });
+            return newVertices;
         }
 
         import(response) {
@@ -280,7 +299,7 @@ module Controllers {
 
             for (var i = 0; i < response.links.length; i++) {
                 var link = response.links[i];
-                this.importLink(link.source, link.target);
+                this.importLink(link.source, link.target, link.vertices);
             }
         }
 
@@ -290,18 +309,33 @@ module Controllers {
             this.graph.addCell(node.getElement());
         }
 
-        importLink(sourceNodeId:string, targetNodeId:string) {
+        importLink(sourceNodeId:string, targetNodeId:string, vertices:Array) {
             var sourceId = this.getElementIdByNodeId(sourceNodeId);
             var targetId = this.getElementIdByNodeId(targetNodeId);
+            var newVertices = this.importVertices(vertices);
             var link = new joint.dia.Link({
                 attrs: {
                     '.connection': { stroke: 'black' },
                     '.marker-target': { fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z' }
                 },
                 source: { id: sourceId },
-                target: { id: targetId }
+                target: { id: targetId },
+                vertices: newVertices
             });
             this.graph.addCell(link);
+        }
+
+        importVertices(vertices:Array) {
+            var newVertices = [];
+            vertices.forEach(function (vertex) {
+                newVertices.push(
+                    {
+                        x : vertex.x,
+                        y : vertex.y
+                    }
+                )
+            });
+            return newVertices;
         }
 
         getElementIdByNodeId(nodeId:string) {

@@ -2,6 +2,7 @@ package com.qreal.robots.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Created by vladzx on 31.10.14.
@@ -9,14 +10,22 @@ import java.io.Serializable;
 @Entity
 @Table(name = "links")
 public class Link implements Serializable {
+
     @Id
     @Column(name = "link_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long linkId;
+
     @Column(name = "source")
     private String source;
+
     @Column(name = "target")
     private String target;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "link_id", referencedColumnName = "link_id")
+    @OrderBy("number")
+    private Set<LinkVertex> vertices;
 
     public Long getLinkId() {
         return linkId;
@@ -40,5 +49,13 @@ public class Link implements Serializable {
 
     public void setTarget(String target) {
         this.target = target;
+    }
+
+    public Set<LinkVertex> getVertices() {
+        return vertices;
+    }
+
+    public void setVertices(Set<LinkVertex> vertices) {
+        this.vertices = vertices;
     }
 }

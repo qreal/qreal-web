@@ -11,16 +11,21 @@ import java.util.Set;
 @Entity
 @Table(name = "nodes")
 public class DefaultDiagramNode implements Serializable {
+
     @Id
     @Column(name = "node_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long nodeId;
+
     @Column(name = "name")
     private String name;
+
     @Column(name = "x")
     private double x;
+
     @Column(name = "y")
     private double y;
+
     @Column(name = "image")
     private String image;
 

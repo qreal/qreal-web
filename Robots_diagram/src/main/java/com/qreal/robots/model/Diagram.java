@@ -10,10 +10,12 @@ import java.util.Set;
 @Entity
 @Table(name = "diagrams")
 public class Diagram implements Serializable {
+
     @Id
     @Column(name = "diagram_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long diagramId;
+
     @Column(name = "node_index")
     private Long nodeIndex;
 

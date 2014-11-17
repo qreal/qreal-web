@@ -9,12 +9,15 @@ import java.io.Serializable;
 @Entity
 @Table(name = "properties")
 public class Property implements Serializable {
+
     @Id
     @Column(name = "property_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long propertyId;
+
     @Column(name = "name")
     private String name;
+
     @Column(name = "value")
     private String value;
 
