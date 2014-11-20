@@ -66,16 +66,16 @@ module Controllers {
         }
 
         setNodeProperties(node: DiagramNode): void {
-            var properties = node.getProperties();
-            var content = '';
+            var properties: PropertiesMap = node.getProperties();
+            var content: string = '';
             for (var property in properties) {
                 content += this.getPropertyHtml(property, properties[property]);
             }
             $('#property_table tbody').html(content);
         }
 
-        getPropertyHtml(name:string, value:string) {
-            var content = '<tr class="property">';
+        getPropertyHtml(name:string, value:string): string {
+            var content: string = '<tr class="property">';
             content += '<td class="vert-align">' + name + '</td>';
             content += '<td class="vert-align"><div class="input-group">';
             content += '<input type="text" class="form-control" value="' + value + '">';
@@ -83,33 +83,32 @@ module Controllers {
             return content;
         }
 
-        createDefaultNode(x:number, y:number, properties: PropertiesMap, image:string) {
+        createDefaultNode(x:number, y:number, properties: PropertiesMap, image:string): void {
             this.nodeIndex++;
-            var name = "Node" + this.nodeIndex;
-            var node:DefaultDiagramNode = new DefaultDiagramNode(name, x, y, properties, image);
+            var name: string = "Node" + this.nodeIndex;
+            var node: DefaultDiagramNode = new DefaultDiagramNode(name, x, y, properties, image);
             this.nodesList[node.getElement().id] = node;
             this.graph.addCell(node.getElement());
         }
 
-        clear() {
+        clear(): void {
             this.graph.clear();
             this.nodeIndex = -1;
             this.nodesList = {};
             this.currentNode = undefined;
         }
 
-        removeCurrentElement() {
+        removeCurrentElement(): void {
             if (this.currentNode) {
                 console.log("Node was deleted");
                 delete this.nodesList[this.currentNode.getElement().id];
                 this.currentNode.getElement().remove();
                 $(".property").remove();
                 this.currentNode = undefined;
-                console.log(this.nodesList);
             }
         }
 
-        saveDiagram() {
+        saveDiagram(): void {
             console.log(this.exportToJSON());
             $.ajax({
                 type: 'POST',
@@ -126,9 +125,9 @@ module Controllers {
             });
         }
 
-        openDiagram() {
+        openDiagram(): void {
             var controller = this;
-            var id = parseInt(prompt("input id"));
+            var id: number = parseInt(prompt("input id"));
             $.ajax({
                 type: 'POST',
                 url: 'open',
@@ -145,7 +144,7 @@ module Controllers {
             });
         }
 
-        exportToJSON() {
+        exportToJSON(): string {
             var json = {
                 'nodeIndex': this.nodeIndex,
                 'nodes': [],
@@ -153,7 +152,7 @@ module Controllers {
             };
             for (var id in this.nodesList) {
                 if (this.nodesList.hasOwnProperty(id)) {
-                    var node = this.nodesList[id];
+                    var node: DiagramNode = this.nodesList[id];
                     var newNode = {
                         'name': node.getName(),
                         'x': node.getX(),
@@ -162,7 +161,7 @@ module Controllers {
                         'properties': []
                     };
 
-                    var properties = node.getProperties();
+                    var properties: PropertiesMap = node.getProperties();
                     for (var name in properties) {
                         var property = {
                             'name': name,
@@ -175,12 +174,11 @@ module Controllers {
                 }
             }
 
-            var nodes = this.nodesList;
-            var controller = this;
+            var controller: DiagramController = this;
 
             this.graph.getLinks().forEach(function (link) {
-                var src = nodes[link.get('source').id].getName();
-                var target = nodes[link.get('target').id].getName();
+                var src: string = controller.nodesList[link.get('source').id].getName();
+                var target: string = controller.nodesList[link.get('target').id].getName();
                 var vertices = controller.exportVertices(link.get('vertices'))
                 var newLink = {
                     'source' : src,
@@ -194,7 +192,7 @@ module Controllers {
         }
 
         exportVertices(vertices) {
-            var count = 1;
+            var count: number = 1;
             var newVertices = [];
             vertices.forEach(function (vertex) {
                 newVertices.push(
@@ -209,40 +207,40 @@ module Controllers {
             return newVertices;
         }
 
-        import(response) {
+        import(response): void {
             console.log("import diagram");
             this.clear();
             this.nodeIndex = response.nodeIndex;
             for (var i = 0; i < response.nodes.length; i++) {
-                var node = response.nodes[i];
+                var nodeObject = response.nodes[i];
 
-                var properties = {}
-                var propertiesObject = node.properties;
+                var properties: PropertiesMap = {}
+                var propertiesObject = nodeObject.properties;
 
                 for (var j = 0; j < propertiesObject.length; j++) {
                     properties[propertiesObject[j].name] = propertiesObject[j].value;
                 }
 
-                this.importNode(node.name, node.x, node.y, properties, node.image);
+                this.importNode(nodeObject.name, nodeObject.x, nodeObject.y, properties, nodeObject.image);
             }
 
             for (var i = 0; i < response.links.length; i++) {
-                var link = response.links[i];
-                this.importLink(link.source, link.target, link.vertices);
+                var linkObject = response.links[i];
+                this.importLink(linkObject.source, linkObject.target, linkObject.vertices);
             }
         }
 
-        importNode(name:string, x:number, y:number, properties, image:string) {
-            var node:DefaultDiagramNode = new DefaultDiagramNode(name, x, y, properties, image);
+        importNode(name:string, x:number, y:number, properties, image:string): void {
+            var node: DefaultDiagramNode = new DefaultDiagramNode(name, x, y, properties, image);
             this.nodesList[node.getElement().id] = node;
             this.graph.addCell(node.getElement());
         }
 
-        importLink(sourceNodeId:string, targetNodeId:string, vertices) {
-            var sourceId = this.getElementIdByNodeId(sourceNodeId);
-            var targetId = this.getElementIdByNodeId(targetNodeId);
+        importLink(sourceNodeId:string, targetNodeId:string, vertices): void {
+            var sourceId: string = this.getElementIdByNodeId(sourceNodeId);
+            var targetId: string = this.getElementIdByNodeId(targetNodeId);
             var newVertices = this.importVertices(vertices);
-            var link = new joint.dia.Link({
+            var link: joint.dia.Link = new joint.dia.Link({
                 attrs: {
                     '.connection': { stroke: 'black' },
                     '.marker-target': { fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z' }
@@ -267,7 +265,7 @@ module Controllers {
             return newVertices;
         }
 
-        getElementIdByNodeId(nodeId:string) {
+        getElementIdByNodeId(nodeId:string): string {
             for (var id in this.nodesList) {
                 if (this.nodesList.hasOwnProperty(id)) {
                     var node = this.nodesList[id];
