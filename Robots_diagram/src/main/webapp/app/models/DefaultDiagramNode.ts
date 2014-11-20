@@ -2,13 +2,13 @@
  * Created by vladzx on 10.10.14.
  */
 class DefaultDiagramNode implements DiagramNode {
-    name:string;
-    element:joint.shapes.devs.RectWithPorts;
-    text:string;
-    properties:{ [name: string]: string; };
-    image:string;
+    name: string;
+    element: joint.shapes.devs.ImageWithPorts;
+    text: string;
+    properties: PropertiesMap;
+    image: string;
 
-    constructor(name:string, x:number, y:number, properties, image:string) {
+    constructor(name: string, x: number, y: number, properties: PropertiesMap, image: string) {
         this.name = name;
         this.text = 'Default';
 
@@ -26,23 +26,23 @@ class DefaultDiagramNode implements DiagramNode {
         this.image = image;
     }
 
-    setText(text:string) {
+    setText(text:string): void {
         this.text = text;
     }
 
-    getName() {
+    getName(): string {
         return this.name;
     }
 
-    getX() {
+    getX(): number {
         return (this.element.get("position"))['x'];
     }
 
-    getY() {
+    getY(): number {
         return (this.element.get("position"))['y'];
     }
 
-    getImagePath() {
+    getImagePath(): string {
         return this.image;
     }
 
@@ -50,11 +50,11 @@ class DefaultDiagramNode implements DiagramNode {
         return this.element;
     }
 
-    setProperty(name:string, value:string) {
+    setProperty(name:string, value:string): void {
         this.properties[name] = value;
     }
 
-    getProperties() {
+    getProperties(): PropertiesMap {
         return this.properties;
     }
 }

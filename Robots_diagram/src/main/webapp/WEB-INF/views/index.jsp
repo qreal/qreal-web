@@ -19,7 +19,7 @@
     <script src="<c:url value='/app/out.js' />"></script>
 </head>
 
-<body ng-app="diagram" ng-controller="diagramController">
+<body ng-app="diagram" ng-controller="DiagramController">
     <div class="navbar navbar-inverse" role="navigation">
         <div class="container-fluid">
             <div class="navbar-collapse collapse">

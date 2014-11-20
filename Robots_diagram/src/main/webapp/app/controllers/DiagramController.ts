@@ -1,28 +1,29 @@
 module Controllers {
 
-    export class diagramController {
+    export class DiagramController {
         private graph: joint.dia.Graph = new joint.dia.Graph;
         private paper: DiagramPaper = new DiagramPaper(this.graph);
 
-        private elementsList = {};
+        private nodeTypeList: NodeTypesMap = {};
         private nodesList = {};
         private currentNode: DiagramNode;
         private nodeIndex: number = -1;
 
         constructor($scope, $compile) {
-            $scope.vm = this;
+            var controller: DiagramController = this;
+            $scope.vm = controller;
             this.loadElementsFromXml("configs/elements.xml", $scope, $compile);
 
             this.paper.on('cell:pointerdown',
                 function (cellView, evt, x, y) {
                     console.log('cell view ' + cellView.model.id + ' was clicked');
 
-                    var node:DiagramNode = $scope.vm.nodesList[cellView.model.id];
+                    var node:DiagramNode = controller.nodesList[cellView.model.id];
                     if (node) {
-                        $scope.vm.currentNode = node;
-                        $scope.vm.setNodeProperties(node);
+                        controller.currentNode = node;
+                        controller.setNodeProperties(node);
                     } else {
-                        $scope.vm.currentNode = undefined;
+                        controller.currentNode = undefined;
                     }
                 }
             );
@@ -30,7 +31,7 @@ module Controllers {
                 function (evt, x, y) {
                     console.log('blank was clicked');
                     $(".property").remove();
-                    $scope.vm.currentNode = undefined;
+                    controller.currentNode = undefined;
                 }
             );
 
@@ -38,7 +39,7 @@ module Controllers {
                 var tr = $(this).closest('tr');
                 var name = tr.find('td:first').html();
                 var value = $(this).val();
-                $scope.vm.currentNode.setProperty(name, value);
+                controller.currentNode.setProperty(name, value);
             });
 
             $(".tree_element").draggable({
@@ -51,34 +52,34 @@ module Controllers {
             $("#paper").droppable({
                 drop: function(event, ui) {
                     var paperPos = $("#paper").position();
-                    var top = ui.position.top - paperPos.top;   //new left position of cloned/dragged image
-                    var left = ui.position.left - paperPos.left; //new top position of cloned/dragged image
-                    var gridSize: number = $scope.vm.paper.getGridSizeValue();
+                    var top: number = ui.position.top - paperPos.top;   //new left position of cloned/dragged image
+                    var left: number = ui.position.left - paperPos.left; //new top position of cloned/dragged image
+                    var gridSize: number = controller.paper.getGridSizeValue();
                     top += (gridSize - top % gridSize);
                     left += (gridSize - left % gridSize);
-                    var element = $(ui.draggable.context).text();
-                    var image = $scope.vm.elementsList[element]['image'];
-                    var properties = $scope.vm.elementsList[element]['properties'];
-                    $scope.vm.createDefaultNode(left, top, properties, image);
+                    var element: string = $(ui.draggable.context).text();
+                    var image: string = controller.nodeTypeList[element].image;
+                    var properties: PropertiesMap = controller.nodeTypeList[element].properties;
+                    controller.createDefaultNode(left, top, properties, image);
                 }
             });
         }
 
         loadElementsFromXml(pathToXML: string, $scope, $compile): void {
             var xmlDoc = this.loadXMLDoc(pathToXML);
-            var content = '';
+            var content: string = '';
             var categories = xmlDoc.getElementsByTagName("Category");
             for (var k = 0; k < categories.length; k++) {
                 content += '<li><p>' + categories[k].getAttribute('name') + '</p><ul>';
                 var elements = categories[k].getElementsByTagName("Element");
 
                 for (var i = 0; i < elements.length; i++) {
-                    var name = elements[i].getAttribute('name');
-                    this.elementsList[name] = {};
+                    var typeName = elements[i].getAttribute('name');
+                    this.nodeTypeList[typeName] = new NodeType();
                     content += '<li><div class="tree_element">';
 
                     var elementProperties = elements[i].getElementsByTagName("Property");
-                    var properties = {};
+                    var properties: PropertiesMap = {};
                     for (var j = 0; j < elementProperties.length; j++) {
                         var propertyName : string = elementProperties[j].getAttribute('name');
                         var propertyValue : string;
@@ -89,11 +90,13 @@ module Controllers {
                         }
                         properties[propertyName] = propertyValue;
                     }
-                    var image = elements[i].getElementsByTagName("Image")[0].getAttribute('src');
-                    this.elementsList[name]['image'] = image;
-                    this.elementsList[name]['properties'] = properties;
+
+                    var image: string = elements[i].getElementsByTagName("Image")[0].getAttribute('src');
+                    this.nodeTypeList[typeName].image = image;
+                    this.nodeTypeList[typeName].properties = properties;
+
                     content += '<img class="elementImg" src="' + image + '" width="30" height="30"' + '/>';
-                    content += name;
+                    content += typeName;
                     content += '</div></li>';
                 }
 
@@ -121,7 +124,7 @@ module Controllers {
             return content;
         }
 
-        createDefaultNode(x:number, y:number, properties, image:string) {
+        createDefaultNode(x:number, y:number, properties: PropertiesMap, image:string) {
             this.nodeIndex++;
             var name = "Node" + this.nodeIndex;
             var node:DefaultDiagramNode = new DefaultDiagramNode(name, x, y, properties, image);
