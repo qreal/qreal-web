@@ -4,7 +4,7 @@ module Controllers {
         private graph: joint.dia.Graph = new joint.dia.Graph;
         private paper: DiagramPaper = new DiagramPaper(this.graph);
 
-        private nodeTypeList: NodeTypesMap = {};
+        private nodeTypesMap: NodeTypesMap = {};
         private nodesList = {};
         private currentNode: DiagramNode;
         private nodeIndex: number = -1;
@@ -12,7 +12,7 @@ module Controllers {
         constructor($scope, $compile) {
             var controller: DiagramController = this;
             $scope.vm = controller;
-            this.loadElementsFromXml("configs/elements.xml", $scope, $compile);
+            controller.nodeTypesMap = XmlManager.loadElementsFromXml("configs/elements.xml", $scope, $compile);
 
             this.paper.on('cell:pointerdown',
                 function (cellView, evt, x, y) {
@@ -58,52 +58,11 @@ module Controllers {
                     top += (gridSize - top % gridSize);
                     left += (gridSize - left % gridSize);
                     var element: string = $(ui.draggable.context).text();
-                    var image: string = controller.nodeTypeList[element].image;
-                    var properties: PropertiesMap = controller.nodeTypeList[element].properties;
+                    var image: string = controller.nodeTypesMap[element].image;
+                    var properties: PropertiesMap = controller.nodeTypesMap[element].properties;
                     controller.createDefaultNode(left, top, properties, image);
                 }
             });
-        }
-
-        loadElementsFromXml(pathToXML: string, $scope, $compile): void {
-            var xmlDoc = this.loadXMLDoc(pathToXML);
-            var content: string = '';
-            var categories = xmlDoc.getElementsByTagName("Category");
-            for (var k = 0; k < categories.length; k++) {
-                content += '<li><p>' + categories[k].getAttribute('name') + '</p><ul>';
-                var elements = categories[k].getElementsByTagName("Element");
-
-                for (var i = 0; i < elements.length; i++) {
-                    var typeName = elements[i].getAttribute('name');
-                    this.nodeTypeList[typeName] = new NodeType();
-                    content += '<li><div class="tree_element">';
-
-                    var elementProperties = elements[i].getElementsByTagName("Property");
-                    var properties: PropertiesMap = {};
-                    for (var j = 0; j < elementProperties.length; j++) {
-                        var propertyName : string = elementProperties[j].getAttribute('name');
-                        var propertyValue : string;
-                        if (elementProperties[j].childNodes[0]) {
-                            propertyValue = elementProperties[j].childNodes[0].nodeValue;
-                        } else {
-                            propertyValue = '';
-                        }
-                        properties[propertyName] = propertyValue;
-                    }
-
-                    var image: string = elements[i].getElementsByTagName("Image")[0].getAttribute('src');
-                    this.nodeTypeList[typeName].image = image;
-                    this.nodeTypeList[typeName].properties = properties;
-
-                    content += '<img class="elementImg" src="' + image + '" width="30" height="30"' + '/>';
-                    content += typeName;
-                    content += '</div></li>';
-                }
-
-                content += '</ul></li>';
-            }
-
-            $('#navigation').append($compile(content)($scope));
         }
 
         setNodeProperties(node: DiagramNode): void {
@@ -137,24 +96,6 @@ module Controllers {
             this.nodeIndex = -1;
             this.nodesList = {};
             this.currentNode = undefined;
-        }
-
-        loadXMLDoc(name:string) {
-            var xmlDoc;
-            if (XMLHttpRequest) {
-                xmlDoc = new XMLHttpRequest();
-                xmlDoc.open("GET", name, false);
-                xmlDoc.send("");
-                return xmlDoc.responseXML;
-            }
-            if (ActiveXObject("Microsoft.XMLDOM")) {
-                xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-                xmlDoc.async = false;
-                xmlDoc.load(name);
-                return xmlDoc;
-            }
-            alert("Error loading document!");
-            return null;
         }
 
         removeCurrentElement() {
