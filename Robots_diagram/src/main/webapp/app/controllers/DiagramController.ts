@@ -109,13 +109,13 @@ module Controllers {
         }
 
         saveDiagram(): void {
-            console.log(this.exportToJSON());
+            console.log(ExportManager.exportDiagramStateToJSON(this.graph, this.nodeIndex, this.nodesList));
             $.ajax({
                 type: 'POST',
                 url: 'save',
                 dataType: 'json',
                 contentType: 'application/json',
-                data: (this.exportToJSON()),
+                data: (ExportManager.exportDiagramStateToJSON(this.graph, this.nodeIndex, this.nodesList)),
                 success: function (response) {
                     console.log(response.message);
                 },
@@ -135,146 +135,14 @@ module Controllers {
                 contentType: 'application/json',
                 data: (JSON.stringify({diagramId: id})),
                 success: function (response) {
-                    controller.import(response);
+                    controller.clear();
+                    controller.nodeIndex = ImportManager.import(response, controller.graph, controller.nodesList);
                     console.log(response.nodeIndex);
                 },
                 error: function (response, status, error) {
                     console.log("error: " + status + " " + error);
                 }
             });
-        }
-
-        exportToJSON(): string {
-            var json = {
-                'nodeIndex': this.nodeIndex,
-                'nodes': [],
-                'links': []
-            };
-            for (var id in this.nodesList) {
-                if (this.nodesList.hasOwnProperty(id)) {
-                    var node: DiagramNode = this.nodesList[id];
-                    var newNode = {
-                        'name': node.getName(),
-                        'x': node.getX(),
-                        'y': node.getY(),
-                        'image': node.getImagePath(),
-                        'properties': []
-                    };
-
-                    var properties: PropertiesMap = node.getProperties();
-                    for (var name in properties) {
-                        var property = {
-                            'name': name,
-                            'value': properties[name]
-                        };
-                        newNode.properties.push(property);
-                    }
-
-                    json.nodes.push(newNode);
-                }
-            }
-
-            var controller: DiagramController = this;
-
-            this.graph.getLinks().forEach(function (link) {
-                var src: string = controller.nodesList[link.get('source').id].getName();
-                var target: string = controller.nodesList[link.get('target').id].getName();
-                var vertices = controller.exportVertices(link.get('vertices'))
-                var newLink = {
-                    'source' : src,
-                    'target' : target,
-                    'vertices' : vertices
-                };
-                json.links.push(newLink);
-            });
-
-            return JSON.stringify(json);
-        }
-
-        exportVertices(vertices) {
-            var count: number = 1;
-            var newVertices = [];
-            vertices.forEach(function (vertex) {
-                newVertices.push(
-                    {
-                        x : vertex.x,
-                        y : vertex.y,
-                        number : count
-                    }
-                )
-                count++;
-            });
-            return newVertices;
-        }
-
-        import(response): void {
-            console.log("import diagram");
-            this.clear();
-            this.nodeIndex = response.nodeIndex;
-            for (var i = 0; i < response.nodes.length; i++) {
-                var nodeObject = response.nodes[i];
-
-                var properties: PropertiesMap = {}
-                var propertiesObject = nodeObject.properties;
-
-                for (var j = 0; j < propertiesObject.length; j++) {
-                    properties[propertiesObject[j].name] = propertiesObject[j].value;
-                }
-
-                this.importNode(nodeObject.name, nodeObject.x, nodeObject.y, properties, nodeObject.image);
-            }
-
-            for (var i = 0; i < response.links.length; i++) {
-                var linkObject = response.links[i];
-                this.importLink(linkObject.source, linkObject.target, linkObject.vertices);
-            }
-        }
-
-        importNode(name:string, x:number, y:number, properties, image:string): void {
-            var node: DefaultDiagramNode = new DefaultDiagramNode(name, x, y, properties, image);
-            this.nodesList[node.getElement().id] = node;
-            this.graph.addCell(node.getElement());
-        }
-
-        importLink(sourceNodeId:string, targetNodeId:string, vertices): void {
-            var sourceId: string = this.getElementIdByNodeId(sourceNodeId);
-            var targetId: string = this.getElementIdByNodeId(targetNodeId);
-            var newVertices = this.importVertices(vertices);
-            var link: joint.dia.Link = new joint.dia.Link({
-                attrs: {
-                    '.connection': { stroke: 'black' },
-                    '.marker-target': { fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z' }
-                },
-                source: { id: sourceId },
-                target: { id: targetId },
-                vertices: newVertices
-            });
-            this.graph.addCell(link);
-        }
-
-        importVertices(vertices) {
-            var newVertices = [];
-            vertices.forEach(function (vertex) {
-                newVertices.push(
-                    {
-                        x : vertex.x,
-                        y : vertex.y
-                    }
-                )
-            });
-            return newVertices;
-        }
-
-        getElementIdByNodeId(nodeId:string): string {
-            for (var id in this.nodesList) {
-                if (this.nodesList.hasOwnProperty(id)) {
-                    var node = this.nodesList[id];
-                    if (node.getName() === nodeId) {
-                        return id;
-                    }
-                }
-            }
-            return undefined;
         }
     }
 }

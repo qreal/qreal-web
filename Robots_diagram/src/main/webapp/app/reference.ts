@@ -2,6 +2,8 @@
 //grunt-start
 /// <reference path="controllers/DiagramController.ts" />
 /// <reference path="controllers/controllers.ts" />
+/// <reference path="managers/ExportManager.ts" />
+/// <reference path="managers/ImportManager.ts" />
 /// <reference path="managers/XmlManager.ts" />
 /// <reference path="models/DefaultDiagramNode.ts" />
 /// <reference path="models/DiagramNode.ts" />
