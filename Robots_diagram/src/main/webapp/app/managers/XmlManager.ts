@@ -54,10 +54,9 @@ class XmlManager {
             }
 
             content += '</ul></li>';
-
-            $('#navigation').append($compile(content)($scope));
-
-            return nodeTypesMap;
         }
+
+        $('#navigation').append($compile(content)($scope));
+        return nodeTypesMap;
     }
 }
