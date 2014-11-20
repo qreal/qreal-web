@@ -1,35 +1,17 @@
 module Controllers {
 
     export class diagramController {
-        graph = new joint.dia.Graph;
-        paper = new joint.dia.Paper({
-            el: $('#paper'),
-            width: $('#paper').width(),
-            height: $('#paper').height(),
-            model: this.graph,
-            gridSize: 25,
-            defaultLink: new joint.dia.Link({
-                attrs: {
-                    '.connection': { stroke: 'black' },
-                    '.marker-target': { fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z' }
-                }
-            }),
-            validateConnection: function (cellViewS, magnetS, cellViewT, magnetT, end, linkView) {
-                return (!(magnetT && magnetT.getAttribute('type') === 'output') && !(cellViewT && cellViewT.model.get('type') === 'link'));
-            },
-            validateMagnet: function (cellView, magnet) {
-                return magnet.getAttribute('magnet') !== 'passive';
-            }
-        });
-        elementsList = {};
+        private graph: joint.dia.Graph = new joint.dia.Graph;
+        private paper: DiagramPaper = new DiagramPaper(this.graph);
 
-        nodesList = {};
-        currentNode:DiagramNode;
-        nodeIndex = -1;
+        private elementsList = {};
+        private nodesList = {};
+        private currentNode: DiagramNode;
+        private nodeIndex: number = -1;
 
         constructor($scope, $compile) {
             $scope.vm = this;
-            $scope.vm.loadElementsFromXml("configs/elements.xml", $scope, $compile);
+            this.loadElementsFromXml("configs/elements.xml", $scope, $compile);
 
             this.paper.on('cell:pointerdown',
                 function (cellView, evt, x, y) {
@@ -71,6 +53,9 @@ module Controllers {
                     var paperPos = $("#paper").position();
                     var top = ui.position.top - paperPos.top;   //new left position of cloned/dragged image
                     var left = ui.position.left - paperPos.left; //new top position of cloned/dragged image
+                    var gridSize: number = $scope.vm.paper.getGridSizeValue();
+                    top += (gridSize - top % gridSize);
+                    left += (gridSize - left % gridSize);
                     var element = $(ui.draggable.context).text();
                     var image = $scope.vm.elementsList[element]['image'];
                     var properties = $scope.vm.elementsList[element]['properties'];
@@ -79,7 +64,7 @@ module Controllers {
             });
         }
 
-        loadElementsFromXml(pathToXML:string, $scope, $compile) {
+        loadElementsFromXml(pathToXML: string, $scope, $compile): void {
             var xmlDoc = this.loadXMLDoc(pathToXML);
             var content = '';
             var categories = xmlDoc.getElementsByTagName("Category");
@@ -118,7 +103,7 @@ module Controllers {
             $('#navigation').append($compile(content)($scope));
         }
 
-        setNodeProperties(node:DiagramNode) {
+        setNodeProperties(node: DiagramNode): void {
             var properties = node.getProperties();
             var content = '';
             for (var property in properties) {
