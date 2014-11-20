@@ -51,16 +51,16 @@ module Controllers {
 
             $("#paper").droppable({
                 drop: function(event, ui) {
-                    var paperPos = $("#paper").position();
-                    var top: number = ui.position.top - paperPos.top;   //new left position of cloned/dragged image
-                    var left: number = ui.position.left - paperPos.left; //new top position of cloned/dragged image
+                    var paperPos: { top: number; left: number;} = $("#paper").position();
+                    var topElementPos: number = ui.position.top - paperPos.top;
+                    var leftElementPos: number = ui.position.left - paperPos.left;
                     var gridSize: number = controller.paper.getGridSizeValue();
-                    top += (gridSize - top % gridSize);
-                    left += (gridSize - left % gridSize);
+                    topElementPos += (gridSize - topElementPos % gridSize);
+                    leftElementPos += (gridSize - leftElementPos % gridSize);
                     var element: string = $(ui.draggable.context).text();
                     var image: string = controller.nodeTypesMap[element].image;
                     var properties: PropertiesMap = controller.nodeTypesMap[element].properties;
-                    controller.createDefaultNode(left, top, properties, image);
+                    controller.createDefaultNode(leftElementPos, topElementPos, properties, image);
                 }
             });
         }
