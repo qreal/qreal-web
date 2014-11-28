@@ -19,14 +19,14 @@ import java.util.Set;
  */
 @Controller
 public class DiagramController {
-    private static final Logger log = Logger.getLogger(DiagramController.class);
+    private static final Logger LOG = Logger.getLogger(DiagramController.class);
 
     @Autowired
     private DiagramDAO diagramDAO;
 
     @RequestMapping("/")
     public String home() {
-        log.info("redirect from / to /diagram");
+        LOG.info("redirect from / to /diagram");
         return "redirect:/diagram";
     }
 
@@ -39,7 +39,7 @@ public class DiagramController {
     public
     @ResponseBody
     String save(@RequestBody Diagram diagram) {
-        log.info("save diagram");
+        LOG.info("save diagram");
         diagramDAO.save(diagram);
         return "{\"message\":\"OK\"}";
     }
@@ -48,7 +48,7 @@ public class DiagramController {
     public
     @ResponseBody
     Diagram open(@RequestBody OpenRequest request) {
-        log.info("open diagram");
+        LOG.info("open diagram");
         return diagramDAO.openById(request.getDiagramId());
     }
 }

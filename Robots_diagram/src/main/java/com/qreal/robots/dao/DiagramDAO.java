@@ -14,27 +14,44 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 public class DiagramDAO {
-    private static final Logger log = Logger.getLogger(DiagramDAO.class);
+    private static final Logger LOG = Logger.getLogger(DiagramDAO.class);
 
     @Autowired
     private SessionFactory sessionFactory;
 
     @Transactional
     public void save(Diagram diagram) {
-        log.debug("saving diagram");
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(diagram);
-        transaction.commit();
+        LOG.debug("saving diagram");
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            session.save(diagram);
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
     }
 
     @Transactional
     public Diagram openById(Long diagramId) {
-        log.debug("open diagram");
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-        Diagram diagram = (Diagram) session.get(Diagram.class, diagramId);
-        transaction.commit();
-        return diagram;
+        LOG.debug("open diagram");
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        Diagram diagram = null;
+        try {
+            transaction = session.beginTransaction();
+            diagram = (Diagram) session.get(Diagram.class, diagramId);
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+            return diagram;
+        }
     }
 }

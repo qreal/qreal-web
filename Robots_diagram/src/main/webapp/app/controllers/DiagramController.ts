@@ -55,8 +55,8 @@ module Controllers {
                     var topElementPos: number = ui.position.top - paperPos.top;
                     var leftElementPos: number = ui.position.left - paperPos.left;
                     var gridSize: number = controller.paper.getGridSizeValue();
-                    topElementPos += (gridSize - topElementPos % gridSize);
-                    leftElementPos += (gridSize - leftElementPos % gridSize);
+                    topElementPos -= topElementPos % gridSize;
+                    leftElementPos -= leftElementPos % gridSize;
                     var element: string = $(ui.draggable.context).text();
                     var image: string = controller.nodeTypesMap[element].image;
                     var properties: PropertiesMap = controller.nodeTypesMap[element].properties;
