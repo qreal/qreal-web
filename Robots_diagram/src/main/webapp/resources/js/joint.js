@@ -20095,14 +20095,23 @@ joint.dia.ElementView = joint.dia.CellView.extend({
             this.model.trigger('batch:start');
 
             var link = this.paper.getDefaultLink(this, evt.target);
-            link.set({
-                source: {
-                    id: this.model.id,
-                    selector: this.getSelector(evt.target),
-                    port: $(evt.target).attr('port')
-                },
-                target: { x: x, y: y }
-            });
+            if (evt.target.tagName === "circle") {
+                link.set({
+                    source: {
+                        id: this.model.id
+                    },
+                    target: { x: x, y: y }
+                });
+            } else {
+                link.set({
+                    source: {
+                        id: this.model.id,
+                        selector: this.getSelector(evt.target),
+                        port: $(evt.target).attr('port')
+                    },
+                    target: { x: x, y: y }
+                });
+            }
 
             this.paper.model.addCell(link);
 
@@ -22220,7 +22229,7 @@ joint.shapes.devs.Model = joint.shapes.basic.Generic.extend(_.extend({}, joint.s
             circle: {
                 r: 5,
                 magnet: true,
-                stroke: 'black'
+                stroke: 'black',
             },
             text: {
                 fill: 'black',
