@@ -33,12 +33,15 @@ class ExportManager {
                 };
 
                 var properties: PropertiesMap = node.getProperties();
+                var position: number = 1;
                 for (var name in properties) {
                     var property = {
                         'name': name,
-                        'value': properties[name]
+                        'value': properties[name],
+                        'position': position
                     };
                     newNode.properties.push(property);
+                    position++;
                 }
 
                 json.nodes.push(newNode);

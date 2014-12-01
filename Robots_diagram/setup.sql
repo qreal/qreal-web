@@ -36,6 +36,7 @@ CREATE TABLE properties (
 	property_id BIGINT NOT NULL AUTO_INCREMENT,
 	name VARCHAR(50) NOT NULL,
 	value VARCHAR(50) NOT NULL,
+  position INT NOT NULL,
 	node_id BIGINT,
 	PRIMARY KEY (property_id),
 	FOREIGN KEY (node_id) REFERENCES nodes(node_id)

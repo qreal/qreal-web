@@ -31,6 +31,7 @@ public class DefaultDiagramNode implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "node_id", referencedColumnName = "node_id")
+    @OrderBy("position")
     private Set<Property> properties;
 
     public Long getNodeId() {

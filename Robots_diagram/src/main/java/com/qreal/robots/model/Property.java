@@ -21,6 +21,9 @@ public class Property implements Serializable {
     @Column(name = "value")
     private String value;
 
+    @Column(name = "position")
+    private int position;
+
     public Long getPropertyId() {
         return propertyId;
     }
@@ -43,5 +46,13 @@ public class Property implements Serializable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }
