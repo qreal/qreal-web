@@ -50,8 +50,8 @@ class DefaultDiagramNode implements DiagramNode {
         return this.element;
     }
 
-    setProperty(name:string, value:string): void {
-        this.properties[name] = value;
+    setProperty(name:string, property: Property): void {
+        this.properties[name] = property;
     }
 
     getProperties(): PropertiesMap {

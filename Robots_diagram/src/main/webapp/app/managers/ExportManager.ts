@@ -37,7 +37,8 @@ class ExportManager {
                 for (var name in properties) {
                     var property = {
                         'name': name,
-                        'value': properties[name],
+                        'value': properties[name].value,
+                        'type': properties[name].type,
                         'position': position
                     };
                     newNode.properties.push(property);
@@ -49,6 +50,7 @@ class ExportManager {
         }
 
         graph.getLinks().forEach(function (link) {
+            console.log(link.get('target'));
             var src: string = nodesList[link.get('source').id].getName();
             var target: string = nodesList[link.get('target').id].getName();
             var vertices;

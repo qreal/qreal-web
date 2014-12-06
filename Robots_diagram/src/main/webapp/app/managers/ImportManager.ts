@@ -4,11 +4,12 @@ class ImportManager {
         for (var i = 0; i < response.nodes.length; i++) {
             var nodeObject = response.nodes[i];
 
-            var properties: PropertiesMap = {}
+            var properties: PropertiesMap = {};
             var propertiesObject = nodeObject.properties;
 
             for (var j = 0; j < propertiesObject.length; j++) {
-                properties[propertiesObject[j].name] = propertiesObject[j].value;
+                var property: Property = new Property(propertiesObject[j].value, propertiesObject[j].type);
+                properties[propertiesObject[j].name] = property;
             }
 
             this.importNode(graph, nodesList, nodeObject.name, nodeObject.x, nodeObject.y, properties, nodeObject.image);

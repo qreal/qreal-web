@@ -39,7 +39,26 @@ module Controllers {
                 var tr = $(this).closest('tr');
                 var name = tr.find('td:first').html();
                 var value = $(this).val();
-                controller.currentNode.setProperty(name, value);
+                var property: Property = controller.currentNode.getProperties()[name];
+                property.value = value;
+                controller.currentNode.setProperty(name, property);
+            });
+
+            $(document).on('change', '.checkbox', function () {
+                var tr = $(this).closest('tr');
+                var name = tr.find('td:first').html();
+                var label = tr.find('label');
+                var value = label.contents().last()[0].textContent;
+                if (value === "True") {
+                    value = "False"
+                    label.contents().last()[0].textContent = value;
+                } else {
+                    value = "True"
+                    label.contents().last()[0].textContent = value;
+                }
+                var property: Property = controller.currentNode.getProperties()[name];
+                property.value = value;
+                controller.currentNode.setProperty(name, property);
             });
 
             $(".tree_element").draggable({
@@ -74,13 +93,8 @@ module Controllers {
             $('#property_table tbody').html(content);
         }
 
-        getPropertyHtml(name:string, value:string): string {
-            var content: string = '<tr class="property">';
-            content += '<td class="vert-align">' + name + '</td>';
-            content += '<td class="vert-align"><div class="input-group">';
-            content += '<input type="text" class="form-control" value="' + value + '">';
-            content += '</div></td></tr>';
-            return content;
+        getPropertyHtml(name: string, property: Property): string {
+            return PropertyManager.getPropertyHtml(name, property);
         }
 
         createDefaultNode(x:number, y:number, properties: PropertiesMap, image:string): void {
@@ -95,6 +109,7 @@ module Controllers {
             this.graph.clear();
             this.nodeIndex = -1;
             this.nodesList = {};
+            $(".property").remove();
             this.currentNode = undefined;
         }
 

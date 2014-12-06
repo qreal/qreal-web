@@ -17,6 +17,14 @@ class XmlManager {
         return null;
     }
 
+    static addDropdownList(name: string, variants): void {
+        var list = [];
+        for (var i = 0; i < variants.length; i++) {
+            list.push(variants[i].childNodes[0].nodeValue);
+        }
+        DropdownListManager.addDropdownList(name, list);
+    }
+
     static loadElementsFromXml(pathToXML: string, $scope, $compile): NodeTypesMap {
         var xmlDoc = this.loadXMLDoc(pathToXML);
         var nodeTypesMap: NodeTypesMap = {};
@@ -35,13 +43,22 @@ class XmlManager {
                 var properties:PropertiesMap = {};
                 for (var j = 0; j < elementProperties.length; j++) {
                     var propertyName: string = elementProperties[j].getAttribute('name');
+                    var propertyType: string = elementProperties[j].getAttribute('type');
+
+                    if (propertyType === "dropdown") {
+                        this.addDropdownList(propertyName, elementProperties[j].
+                            getElementsByTagName("Variants")[0].getElementsByTagName("variant"));
+                    }
+
                     var propertyValue: string;
-                    if (elementProperties[j].childNodes[0]) {
-                        propertyValue = elementProperties[j].childNodes[0].nodeValue;
+                    var valueElement = elementProperties[j].getElementsByTagName("value")[0];
+                    if (valueElement.childNodes[0]) {
+                        propertyValue = valueElement.childNodes[0].nodeValue;
                     } else {
                         propertyValue = '';
                     }
-                    properties[propertyName] = propertyValue;
+                    var property: Property = new Property(propertyValue, propertyType);
+                    properties[propertyName] = property;
                 }
 
                 var image: string = elements[i].getElementsByTagName("Image")[0].getAttribute('src');

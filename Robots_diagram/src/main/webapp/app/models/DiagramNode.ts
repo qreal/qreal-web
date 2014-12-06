@@ -12,6 +12,6 @@ interface DiagramNode {
     getY(): number;
     getImagePath(): string;
     getElement();
-    setProperty(name: string, value: string): void;
+    setProperty(name: string, property: Property): void;
     getProperties(): PropertiesMap;
 }

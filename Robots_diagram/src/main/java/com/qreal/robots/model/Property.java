@@ -21,6 +21,9 @@ public class Property implements Serializable {
     @Column(name = "value")
     private String value;
 
+    @Column(name = "type")
+    private String type;
+
     @Column(name = "position")
     private int position;
 
@@ -54,5 +57,13 @@ public class Property implements Serializable {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
