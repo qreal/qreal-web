@@ -35,6 +35,15 @@ module Controllers {
                 }
             );
 
+            this.setInputStringListener(controller);
+            this.setCheckboxListener(controller);
+            this.setDropdownListener(controller);
+            this.setSpinnerListener(controller);
+
+            this.initDragAndDrop(controller);
+        }
+
+        setInputStringListener(controller: DiagramController): void {
             $(document).on('change', '.form-control', function () {
                 var tr = $(this).closest('tr');
                 var name = tr.find('td:first').html();
@@ -43,7 +52,9 @@ module Controllers {
                 property.value = value;
                 controller.currentNode.setProperty(name, property);
             });
+        }
 
+        setCheckboxListener(controller: DiagramController): void {
             $(document).on('change', '.checkbox', function () {
                 var tr = $(this).closest('tr');
                 var name = tr.find('td:first').html();
@@ -60,7 +71,26 @@ module Controllers {
                 property.value = value;
                 controller.currentNode.setProperty(name, property);
             });
+        }
 
+        setDropdownListener(controller: DiagramController): void {
+            //TODO: ADD CODE
+        }
+
+        setSpinnerListener(controller: DiagramController): void {
+            $(document).on('change', '.spinner', function () {
+                var tr = $(this).closest('tr');
+                var name = tr.find('td:first').html();
+                var value = $(this).val();
+                if (value !== "" && !isNaN(value)) {
+                    var property: Property = controller.currentNode.getProperties()[name];
+                    property.value = value;
+                    controller.currentNode.setProperty(name, property);
+                }
+            });
+        }
+
+        initDragAndDrop(controller: DiagramController): void {
             $(".tree_element").draggable({
                 helper: function () {
                     return $(this).find('.elementImg').clone();

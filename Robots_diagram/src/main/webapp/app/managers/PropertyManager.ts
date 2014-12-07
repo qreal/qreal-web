@@ -8,7 +8,7 @@ class PropertyManager {
             case "dropdown":
                 return this.getHtmlForString(name, property);
             case "spinner":
-                return this.getHtmlForString(name, property);
+                return this.getHtmlForSpinner(name, property);
             default:
                 return undefined;
         }
@@ -35,4 +35,11 @@ class PropertyManager {
         content += '</div></td></tr>';
         return content;
     }
-}
+
+    static getHtmlForSpinner(name: string, property: Property): string {
+        var content: string = '<tr class="property">';
+        content += '<td class="vert-align">' + name + '</td>';
+        content += '<td class="vert-align"><input type="number" class="spinner" value="' + property.value +'">';
+        return content;
+    }
+ }
