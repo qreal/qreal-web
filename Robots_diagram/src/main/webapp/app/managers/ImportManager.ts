@@ -12,7 +12,8 @@ class ImportManager {
                 properties[propertiesObject[j].name] = property;
             }
 
-            this.importNode(graph, nodesList, nodeObject.name, nodeObject.x, nodeObject.y, properties, nodeObject.image);
+            this.importNode(graph, nodesList, nodeObject.name, nodeObject.type, nodeObject.x,
+                nodeObject.y, properties, nodeObject.image);
         }
 
         for (var i = 0; i < response.links.length; i++) {
@@ -23,8 +24,9 @@ class ImportManager {
         return response.nodeIndex;
     }
 
-    static importNode(graph: joint.dia.Graph, nodesList, name:string, x:number, y:number, properties, image:string): void {
-        var node: DefaultDiagramNode = new DefaultDiagramNode(name, x, y, properties, image);
+    static importNode(graph: joint.dia.Graph, nodesList, name: string,
+                      type: string, x: number, y: number, properties, image: string): void {
+        var node: DefaultDiagramNode = new DefaultDiagramNode(name, type, x, y, properties, image);
         nodesList[node.getElement().id] = node;
         graph.addCell(node.getElement());
     }

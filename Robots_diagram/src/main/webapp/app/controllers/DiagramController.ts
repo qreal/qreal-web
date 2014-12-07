@@ -74,7 +74,14 @@ module Controllers {
         }
 
         setDropdownListener(controller: DiagramController): void {
-            //TODO: ADD CODE
+            $(document).on('change', '.mydropdown', function () {
+                var tr = $(this).closest('tr');
+                var name = tr.find('td:first').html();
+                var value = $(this).val();
+                var property: Property = controller.currentNode.getProperties()[name];
+                property.value = value;
+                controller.currentNode.setProperty(name, property);
+            });
         }
 
         setSpinnerListener(controller: DiagramController): void {
@@ -106,10 +113,10 @@ module Controllers {
                     var gridSize: number = controller.paper.getGridSizeValue();
                     topElementPos -= topElementPos % gridSize;
                     leftElementPos -= leftElementPos % gridSize;
-                    var element: string = $(ui.draggable.context).text();
-                    var image: string = controller.nodeTypesMap[element].image;
-                    var properties: PropertiesMap = controller.nodeTypesMap[element].properties;
-                    controller.createDefaultNode(leftElementPos, topElementPos, properties, image);
+                    var type: string = $(ui.draggable.context).text();
+                    var image: string = controller.nodeTypesMap[type].image;
+                    var properties: PropertiesMap = controller.nodeTypesMap[type].properties;
+                    controller.createDefaultNode(type, leftElementPos, topElementPos, properties, image);
                 }
             });
         }
@@ -118,19 +125,19 @@ module Controllers {
             var properties: PropertiesMap = node.getProperties();
             var content: string = '';
             for (var property in properties) {
-                content += this.getPropertyHtml(property, properties[property]);
+                content += this.getPropertyHtml(node.getType(), property, properties[property]);
             }
             $('#property_table tbody').html(content);
         }
 
-        getPropertyHtml(name: string, property: Property): string {
-            return PropertyManager.getPropertyHtml(name, property);
+        getPropertyHtml(typeName, propertyName: string, property: Property): string {
+            return PropertyManager.getPropertyHtml(typeName, propertyName, property);
         }
 
-        createDefaultNode(x:number, y:number, properties: PropertiesMap, image:string): void {
+        createDefaultNode(type: string, x: number, y: number, properties: PropertiesMap, image: string): void {
             this.nodeIndex++;
             var name: string = "Node" + this.nodeIndex;
-            var node: DefaultDiagramNode = new DefaultDiagramNode(name, x, y, properties, image);
+            var node: DefaultDiagramNode = new DefaultDiagramNode(name, type, x, y, properties, image);
             this.nodesList[node.getElement().id] = node;
             this.graph.addCell(node.getElement());
         }

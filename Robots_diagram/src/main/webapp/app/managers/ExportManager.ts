@@ -26,6 +26,7 @@ class ExportManager {
                 var node: DiagramNode = nodesList[id];
                 var newNode = {
                     'name': node.getName(),
+                    'type': node.getType(),
                     'x': node.getX(),
                     'y': node.getY(),
                     'image': node.getImagePath(),

@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS nodes;
 CREATE TABLE nodes (
   node_id    BIGINT       NOT NULL AUTO_INCREMENT,
   name       VARCHAR(50)  NOT NULL,
+  type       VARCHAR(50)  NOT NULL,
   x          DOUBLE       NOT NULL,
   y          DOUBLE       NOT NULL,
   image      VARCHAR(255) NOT NULL,

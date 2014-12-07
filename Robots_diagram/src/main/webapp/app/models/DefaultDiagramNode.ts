@@ -4,13 +4,15 @@
 class DefaultDiagramNode implements DiagramNode {
     name: string;
     element: joint.shapes.devs.ImageWithPorts;
+    type: string;
     text: string;
     properties: PropertiesMap;
     image: string;
 
-    constructor(name: string, x: number, y: number, properties: PropertiesMap, image: string) {
+    constructor(name: string, type: string, x: number, y: number, properties: PropertiesMap, image: string) {
         this.name = name;
         this.text = 'Default';
+        this.type = type;
 
         this.element = new joint.shapes.devs.ImageWithPorts({
             position: { x: x, y: y },
@@ -32,6 +34,10 @@ class DefaultDiagramNode implements DiagramNode {
 
     getName(): string {
         return this.name;
+    }
+
+    getType(): string {
+        return this.type;
     }
 
     getX(): number {

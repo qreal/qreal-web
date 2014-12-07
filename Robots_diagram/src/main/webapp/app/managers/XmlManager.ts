@@ -17,12 +17,12 @@ class XmlManager {
         return null;
     }
 
-    static addDropdownList(name: string, variants): void {
+    static addDropdownList(typeName: string, propertyName: string, variants): void {
         var list = [];
         for (var i = 0; i < variants.length; i++) {
             list.push(variants[i].childNodes[0].nodeValue);
         }
-        DropdownListManager.addDropdownList(name, list);
+        DropdownListManager.addDropdownList(typeName, propertyName, list);
     }
 
     static loadElementsFromXml(pathToXML: string, $scope, $compile): NodeTypesMap {
@@ -46,7 +46,7 @@ class XmlManager {
                     var propertyType: string = elementProperties[j].getAttribute('type');
 
                     if (propertyType === "dropdown") {
-                        this.addDropdownList(propertyName, elementProperties[j].
+                        this.addDropdownList(typeName, propertyName, elementProperties[j].
                             getElementsByTagName("Variants")[0].getElementsByTagName("variant"));
                     }
 

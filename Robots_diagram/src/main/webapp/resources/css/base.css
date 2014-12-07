@@ -88,3 +88,8 @@ body {
 .elementImg {
     padding-right: 5px;
 }
+
+.mydropdown {
+    width: 100%;
+    max-width: 100%;
+}

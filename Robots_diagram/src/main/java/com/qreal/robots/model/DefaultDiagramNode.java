@@ -20,6 +20,9 @@ public class DefaultDiagramNode implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "type")
+    private String type;
+
     @Column(name = "x")
     private double x;
 
@@ -48,6 +51,14 @@ public class DefaultDiagramNode implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public double getX() {
