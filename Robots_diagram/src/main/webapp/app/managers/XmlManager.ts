@@ -6,8 +6,7 @@ class XmlManager {
             xmlDoc.open("GET", name, false);
             xmlDoc.send("");
             return xmlDoc.responseXML;
-        }
-        if (ActiveXObject("Microsoft.XMLDOM")) {
+        } else {
             xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
             xmlDoc.async = false;
             xmlDoc.load(name);

@@ -1,6 +1,7 @@
 /// <reference path="main.ts" />
 //grunt-start
 /// <reference path="controllers/DiagramController.ts" />
+/// <reference path="controllers/TwoDModelController.ts" />
 /// <reference path="controllers/controllers.ts" />
 /// <reference path="managers/DropdownListManager.ts" />
 /// <reference path="managers/ExportManager.ts" />

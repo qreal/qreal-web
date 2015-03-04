@@ -1,0 +1,101 @@
+html, body {
+    padding: 0;
+    height: 99%;
+}
+
+body {
+    font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    line-height: 1.4em;
+    background: lavender;
+}
+
+table
+{ 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button
+{
+    margin: 2px;
+}
+
+#container {
+    width: 99%;
+    height: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+}
+
+#stage {
+    width: 71%;
+    height: 100%;
+    display: inline-block;
+    margin: 0 auto;
+    margin-top: 10px;
+    border: 1px solid gray;
+}
+
+#left-menu {
+    width: 15%;
+    height: 100%;
+    display: inline-block;
+    float: left;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#palette {
+    height: 94%;
+    padding-top: 10px;
+    border: 1px solid gray;
+    background: #ffffff;
+}
+
+#controll_buttons_container {
+    height: 25%;
+    margin-top: 5px;
+}
+
+#right-menu {
+    width: 12%;
+    height: 100%;
+    display: inline-block;
+    float: right;
+    border: 1px solid gray;
+    text-align: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 10px;
+    background: #ffffff;
+}
+
+#pen_settings {
+	border: 1px solid gray;
+	padding: 10px;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.tabbable {
+    height: 80%;
+}
+
+.palette_button {
+    width: 80px;
+    height: 30px;
+}
+
+.palette_button_right {
+    width: 80px;
+    height: 30px;
+    margin-left: 15px;
+}
+
+.mydropdown {
+    width: 76%;
+    max-width: 76%;
+}
+
+

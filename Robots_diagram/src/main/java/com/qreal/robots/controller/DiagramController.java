@@ -1,18 +1,17 @@
 package com.qreal.robots.controller;
 
 import com.qreal.robots.dao.DiagramDAO;
-import com.qreal.robots.model.DefaultDiagramNode;
 import com.qreal.robots.model.Diagram;
 import com.qreal.robots.model.OpenRequest;
-import com.qreal.robots.model.Property;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
-import java.util.Set;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Created by vladzx on 25.10.14.
@@ -25,14 +24,14 @@ public class DiagramController {
     private DiagramDAO diagramDAO;
 
     @RequestMapping("/")
-    public String home() {
+    public ModelAndView home() {
         LOG.info("redirect from / to /diagram");
-        return "redirect:/diagram";
+        return new ModelAndView("redirect:/diagram");
     }
 
     @RequestMapping(value = "/diagram", method = RequestMethod.GET)
-    public String index(Model model) {
-        return "index";
+    public ModelAndView index(Model model) {
+        return new ModelAndView("index");
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)

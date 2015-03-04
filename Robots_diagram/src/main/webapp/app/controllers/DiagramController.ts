@@ -172,7 +172,7 @@ module Controllers {
                     console.log(response.message);
                 },
                 error: function (response, status, error) {
-                    console.log("error: " + status + " " + error + " " + response.message);
+                    console.log("error: " + status + " " + error);
                 }
             });
         }

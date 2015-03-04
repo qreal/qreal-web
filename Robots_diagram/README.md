@@ -22,6 +22,7 @@
 * установить Apache Maven
 * установить mysql-server, mysql-client
 * создать нового пользвотеля user с паролем user
+* дать пользователю user все права
 * зайти в mysql, выполнить скрипт setup.sql из папки /Robots_diagram
 * установить npm, nodejs
 * установить grunt-cli (в линуксе делается так: sudo npm install -g grunt-cli)
