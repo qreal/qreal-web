@@ -23,9 +23,4 @@ public class DiagramController {
     public String index() {
         return "index";
     }
-
-
-
-
-
 }

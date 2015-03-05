@@ -2,16 +2,9 @@
 <html>
 <head>
     <title>2d Model</title>
-
+    <jsp:include page="scripts.jsp" flush="true"/>
     <link rel="stylesheet" href="<c:url value='/resources/bootstrap/css/bootstrap.min.css' />" />
     <link rel="stylesheet" href="<c:url value='/resources/css/2dmodel.css' />" />
-
-    <script src="<c:url value='/resources/js/pixi.js' />"></script>
-    <script src="<c:url value='/resources/js/jquery-1.11.0.min.js' />"></script>
-    <script src="<c:url value='/resources/js/angular.js' />"></script>
-    <script src="<c:url value='/resources/bootstrap/js/bootstrap.min.js' />"></script>
-
-    <script src="<c:url value='/app/out.js' />"></script>
 <body ng-app="diagram" ng-controller="TwoDModelController">
 <div id="container" >
     <div id="left-menu">
