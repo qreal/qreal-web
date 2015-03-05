@@ -1,4 +1,4 @@
-package com.qreal.robots.model;
+package com.qreal.robots.model.diagram;
 
 import java.io.Serializable;
 

@@ -1,6 +1,6 @@
 package com.qreal.robots.dao;
 
-import com.qreal.robots.model.Diagram;
+import com.qreal.robots.model.diagram.Diagram;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -18,6 +18,13 @@ public class DiagramDAO {
 
     @Autowired
     private SessionFactory sessionFactory;
+
+    public DiagramDAO() {
+    }
+
+    public DiagramDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Transactional
     public void save(Diagram diagram) {
