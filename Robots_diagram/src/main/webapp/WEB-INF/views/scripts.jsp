@@ -4,5 +4,6 @@
 <script src="<c:url value='/resources/js/joint.js' />"></script>
 <script src="<c:url value='/resources/bootstrap/js/bootstrap.min.js' />"></script>
 <script src="<c:url value='/resources/js/jquery-ui.min.js' />"></script>
+<script src="<c:url value='/resources/js/pixi.js' />"></script>
 
 <script src="<c:url value='/app/out.js' />"></script>
