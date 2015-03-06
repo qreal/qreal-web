@@ -5,43 +5,19 @@
 
     <jsp:include page="scripts.jsp"/>
 
-    <link rel="stylesheet" href="<c:url value='/resources/bootstrap/css/bootstrap.min.css' />" />
-    <link rel="stylesheet" href="<c:url value='/resources/css/joint.css' />" />
-    <link rel="stylesheet" href="<c:url value='/resources/css/base.css' />" />
+    <link rel="stylesheet" href="<c:url value='/resources/bootstrap/css/bootstrap.min.css' />"/>
+    <link rel="stylesheet" href="<c:url value='/resources/css/joint.css' />"/>
+    <link rel="stylesheet" href="<c:url value='/resources/css/base.css' />"/>
 
-    <link rel="stylesheet" href="<c:url value='/resources/treeview/jquery.treeview.css' />" />
+    <link rel="stylesheet" href="<c:url value='/resources/treeview/jquery.treeview.css' />"/>
     <script type="text/javascript" src="<c:url value='/resources/treeview/jquery.treeview.js' />"></script>
 </head>
 
 <body ng-app="diagram" ng-controller="DiagramController">
-<div class="navbar navbar-inverse" role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.saveDiagram()">Save</a></li>
-                        <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.openDiagram()">Open</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <p class="navbar-text" ng-click="vm.removeCurrentElement()">
-                        <span id="remove" class="glyphicon glyphicon-trash" style="vertical-align: middle"></span>
-                    </p>
-                </li>
-                <li>
-                    <a href="2dmodel">
-                        <img src="images/2dmodel/2d-model.svg" style="width: 25px; height:25px;" />
-                    </a>
-                </li>
-            </ul>
+<jsp:include page="navbar.jsp"/>
 
-        </div>
-    </div>
-</div>
 
-<div id="container" >
+<div id="container">
     <div id="left-menu">
         <legend style="padding: 10px">Property Editor</legend>
         <table class="table table-condensed" id="property_table">
@@ -69,7 +45,7 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function(){
+    $(document).ready(function () {
         $("#navigation").treeview({
             persist: "location"
         });
