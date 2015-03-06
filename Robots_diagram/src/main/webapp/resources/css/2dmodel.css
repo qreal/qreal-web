@@ -1,12 +1,13 @@
-html, body {
+body{
+    margin: 0;
     padding: 0;
-    height: 99%;
-}
-
-body {
+    border: 0;
     font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
     line-height: 1.4em;
     background: lavender;
+    overflow: hidden;
+    height: 100%;
+    max-height: 100%;
 }
 
 table
@@ -20,55 +21,71 @@ button
     margin: 2px;
 }
 
-#container {
-    width: 99%;
-    height: 100%;
-    padding-left: 10px;
-    padding-right: 10px;
+#left-menu, #right-menu{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 260px; /*Width of left frame div*/
+    height: 98%;
+    overflow: hidden; /*Disable scrollbars. Set to "scroll" to enable*/
     text-align: center;
 }
 
-#stage {
-    width: 71%;
-    height: 100%;
-    display: inline-block;
-    margin: 0 auto;
-    margin-top: 10px;
+#right-menu{
+    left: auto;
+    width: 210px; /*Width of right frame div*/
+    overflow: hidden; /*Disable scrollbars. Set to "scroll" to enable*/
+    background: #ffffff;
+    top: 10px;
+    right: 10px;
     border: 1px solid gray;
 }
 
-#left-menu {
-    width: 15%;
+#stage{
+    position: fixed;
+    top: 10px;
+    left: 280px;
+    right: 230px;
+    bottom: 10px;
+    overflow: auto;
+    border: 1px solid gray;
+}
+
+.innertube{
+    margin: 15px; /*Margins for inner DIV inside each DIV (to provide padding)*/
+}
+
+* html body{ /*IE6 hack*/
+    padding: 0 280px 0 230px;
+}
+
+* html #maincontent{ /*IE6 hack*/
     height: 100%;
-    display: inline-block;
-    float: left;
-    padding-left: 10px;
-    padding-right: 10px;
+    width: 100%;
+}
+
+
+.tabbable {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 210px;
 }
 
 #palette {
-    height: 94%;
+    height: 90%;
     padding-top: 10px;
     border: 1px solid gray;
     background: #ffffff;
 }
 
 #controll_buttons_container {
-    height: 25%;
-    margin-top: 5px;
-}
-
-#right-menu {
-    width: 12%;
-    height: 100%;
-    display: inline-block;
-    float: right;
-    border: 1px solid gray;
-    text-align: left;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-top: 10px;
-    background: #ffffff;
+    position: absolute;
+    height: 200px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
 }
 
 #pen_settings {
@@ -76,10 +93,6 @@ button
 	padding: 10px;
     margin-left: 15px;
     margin-right: 15px;
-}
-
-.tabbable {
-    height: 80%;
 }
 
 .palette_button {
@@ -93,9 +106,16 @@ button
     margin-left: 15px;
 }
 
+.spinner {
+    width: 200px;
+}
+
 .mydropdown {
-    width: 76%;
-    max-width: 76%;
+    width: 200px;
+}
+
+.nav .nav-tabs {
+    height: 10%;
 }
 
 
