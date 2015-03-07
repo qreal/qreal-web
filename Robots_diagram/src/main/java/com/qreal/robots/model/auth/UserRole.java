@@ -24,7 +24,7 @@ public class UserRole {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "user_role_id",
+    @Column(name = "user_roleid",
             unique = true, nullable = false)
     public Integer getUserRoleId() {
         return this.userRoleId;

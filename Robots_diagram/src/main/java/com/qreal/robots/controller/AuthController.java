@@ -1,6 +1,6 @@
 package com.qreal.robots.controller;
 
-import com.qreal.robots.dao.UserDao;
+import com.qreal.robots.dao.UserDAO;
 import com.qreal.robots.model.auth.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +22,7 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserDao userDao;
+    private UserDAO userDAO;
 
     //Spring Security see this :
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -57,7 +57,7 @@ public class AuthController {
                                  @RequestParam(value = "password2") String password2,
                                  RedirectAttributes redirectAttributes) {
         ModelAndView model = new ModelAndView();
-        if (userDao.isUserExist(username)) {
+        if (userDAO.isUserExist(username)) {
             return registerError(model, String.format("User with %s name is already exist", username));
         }
 
@@ -66,7 +66,7 @@ public class AuthController {
         }
 
         User user = new User(username, passwordEncoder.encode(password), true);
-        userDao.save(user);
+        userDAO.save(user);
 
 
         redirectAttributes.addFlashAttribute("msg", "Registered successfully. Log in to continue working");

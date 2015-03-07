@@ -1,6 +1,6 @@
 package com.qreal.robots.service;
 
-import com.qreal.robots.dao.UserDao;
+import com.qreal.robots.dao.UserDAO;
 import com.qreal.robots.model.auth.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,17 +19,17 @@ import java.util.Set;
 
 
 @Service("userDetailsService")
-public class MyUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UserDao userDao;
+    private UserDAO userDAO;
 
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(final String username)
             throws UsernameNotFoundException {
 
-        com.qreal.robots.model.auth.User user = userDao.findByUserName(username);
+        com.qreal.robots.model.auth.User user = userDAO.findByUserName(username);
         List<GrantedAuthority> authorities =
                 buildUserAuthority(user.getUserRole());
 

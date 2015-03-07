@@ -15,16 +15,16 @@ import java.util.List;
  */
 @Repository
 @Transactional
-public class UserDao {
+public class UserDAO {
 
     @Autowired
     private SessionFactory sessionFactory;
 
-    public UserDao() {
+    public UserDAO() {
 
     }
 
-    public UserDao(SessionFactory sessionFactory) {
+    public UserDAO(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 

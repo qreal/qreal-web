@@ -10,17 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @Controller
 public class DiagramController {
-    private static final Logger LOG = Logger.getLogger(DiagramController.class);
-
-
-    @RequestMapping("/")
-    public String home() {
-        LOG.info("redirect from / to /diagram");
-        return "redirect:/diagram";
-    }
 
     @RequestMapping(value = "/diagram", method = RequestMethod.GET)
     public String index() {
-        return "index";
+        return "diagram";
     }
 }

@@ -82,13 +82,17 @@ CREATE TABLE user_roles (
   CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES users (username)
 );
 
+
+DROP TABLE IF EXISTS robots;
+CREATE TABLE robots (
+  id          INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  name        VARCHAR(45)     NOT NULL UNIQUE,
+  username      VARCHAR(45)     NOT NULL,
+  secret_code VARCHAR(45)     NOT NULL,
+  FOREIGN KEY (username) REFERENCES users (username)
+);
+
 INSERT INTO users (username, password, enabled)
 VALUES ('denis', '$2a$10$04TVADrR6/SPLBjsK0N30.Jf5fNjBugSACeGv1S69dZALR7lSov0y', TRUE);
-INSERT INTO users (username, password, enabled)
-VALUES ('alex', '$2a$10$zPpMriFYhIdC.D9miiUF7OSlrHrteATa6/sNg.T.UPK8EHr5Byw7m', TRUE);
 
-
-INSERT INTO user_roles (username, ROLE)
-VALUES ('denis', 'ROLE_ADMIN');
-INSERT INTO user_roles (username, ROLE)
-VALUES ('alex', 'ROLE_USER');
+INSERT INTO user_roles (username, ROLE) VALUES ('denis', 'ROLE_USER');

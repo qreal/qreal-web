@@ -2,7 +2,7 @@ package com.qreal.robots.config;
 
 
 import com.qreal.robots.dao.DiagramDAO;
-import com.qreal.robots.dao.UserDao;
+import com.qreal.robots.dao.UserDAO;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,8 +84,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
     @Bean(name = "userDao")
-    public UserDao getUserDao(SessionFactory sessionFactory) {
-        return new UserDao(sessionFactory);
+    public UserDAO getUserDao(SessionFactory sessionFactory) {
+        return new UserDAO(sessionFactory);
     }
 
     private Properties getHibernateProperties() {
