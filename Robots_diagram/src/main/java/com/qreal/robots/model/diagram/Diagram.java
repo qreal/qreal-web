@@ -24,7 +24,9 @@ public class Diagram implements Serializable {
     @Column(name = "node_index")
     private Long nodeIndex;
 
-    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "username", nullable = false)
+    private User creator;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "diagram_id", referencedColumnName = "diagram_id")
@@ -34,14 +36,13 @@ public class Diagram implements Serializable {
     @JoinColumn(name = "diagram_id", referencedColumnName = "diagram_id")
     private Set<Link> links;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "username", nullable = false)
-    public User getUser() {
-        return this.user;
+
+    public User getCreator() {
+        return this.creator;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 
     public Long getDiagramId() {

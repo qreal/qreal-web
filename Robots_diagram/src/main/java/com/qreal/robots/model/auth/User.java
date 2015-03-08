@@ -15,8 +15,8 @@ public class User {
     private String password;
     private boolean enabled;
     private Set<UserRole> userRole = new HashSet<>(0);
-    private Set<Robot> userRobots = new HashSet<>(0);
-    private Set<Diagram> userDiagrams = new HashSet<>(0);
+    private Set<Robot> robots = new HashSet<>(0);
+    private Set<Diagram> diagrams = new HashSet<>(0);
 
     public User() {
     }
@@ -75,22 +75,24 @@ public class User {
     }
 
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    public Set<Robot> getUserRobots() {
-        return this.userRobots;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
+    public Set<Robot> getRobots() {
+        return this.robots;
     }
 
-    public void setUserRobots(Set<Robot> userRobots) {
-        this.userRobots = userRobots;
+    public void setRobots(Set<Robot> robots) {
+        this.robots = robots;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    public Set<Diagram> getUserDiagrams() {
-        return this.userDiagrams;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
+    public Set<Diagram> getDiagrams() {
+        return this.diagrams;
     }
 
-    public void setUserDiagrams(Set<Diagram> userDiagrams) {
-        this.userDiagrams = userDiagrams;
+    public void setDiagrams(Set<Diagram> diagrams) {
+        this.diagrams = diagrams;
     }
+
 
 }

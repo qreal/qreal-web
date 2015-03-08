@@ -65,7 +65,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
         LocalSessionFactoryBuilder sessionBuilder = new LocalSessionFactoryBuilder(dataSource());
 
-        sessionBuilder.scanPackages("com.qreal.robots.model.auth");
+        sessionBuilder.scanPackages("com.qreal.robots.model");
         sessionBuilder.addProperties(getHibernateProperties());
         return sessionBuilder.buildSessionFactory();
     }

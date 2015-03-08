@@ -16,13 +16,13 @@ public class Robot {
 
     private Integer id;
     private String name;
-    private User user;
+    private User owner;
 
     public Robot() {
     }
 
-    public Robot(User user, String name) {
-        this.user = user;
+    public Robot(User owner, String name) {
+        this.owner = owner;
         this.name = name;
     }
 
@@ -41,12 +41,12 @@ public class Robot {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "username", nullable = false)
-    public User getUser() {
-        return this.user;
+    public User getOwner() {
+        return this.owner;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     @Column(name = "name", nullable = false, length = 45)
