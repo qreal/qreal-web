@@ -1,5 +1,7 @@
 package com.qreal.robots.model.diagram;
 
+import com.qreal.robots.model.auth.User;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -16,8 +18,13 @@ public class Diagram implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long diagramId;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "node_index")
     private Long nodeIndex;
+
+    private User user;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "diagram_id", referencedColumnName = "diagram_id")
@@ -26,6 +33,16 @@ public class Diagram implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "diagram_id", referencedColumnName = "diagram_id")
     private Set<Link> links;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "username", nullable = false)
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Long getDiagramId() {
         return diagramId;
@@ -57,5 +74,13 @@ public class Diagram implements Serializable {
 
     public void setLinks(Set<Link> links) {
         this.links = links;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

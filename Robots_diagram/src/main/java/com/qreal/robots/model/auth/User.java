@@ -1,5 +1,8 @@
 package com.qreal.robots.model.auth;
 
+import com.qreal.robots.model.diagram.Diagram;
+import com.qreal.robots.model.robot.Robot;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +14,9 @@ public class User {
     private String username;
     private String password;
     private boolean enabled;
-    private Set<UserRole> userRole = new HashSet<UserRole>(0);
+    private Set<UserRole> userRole = new HashSet<>(0);
+    private Set<Robot> userRobots = new HashSet<>(0);
+    private Set<Diagram> userDiagrams = new HashSet<>(0);
 
     public User() {
     }
@@ -67,6 +72,25 @@ public class User {
 
     public void setUserRole(Set<UserRole> userRole) {
         this.userRole = userRole;
+    }
+
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    public Set<Robot> getUserRobots() {
+        return this.userRobots;
+    }
+
+    public void setUserRobots(Set<Robot> userRobots) {
+        this.userRobots = userRobots;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    public Set<Diagram> getUserDiagrams() {
+        return this.userDiagrams;
+    }
+
+    public void setUserDiagrams(Set<Diagram> userDiagrams) {
+        this.userDiagrams = userDiagrams;
     }
 
 }

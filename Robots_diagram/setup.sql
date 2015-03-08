@@ -4,9 +4,12 @@ USE diagram;
 
 DROP TABLE IF EXISTS diagrams;
 CREATE TABLE diagrams (
-  diagram_id BIGINT NOT NULL AUTO_INCREMENT,
-  node_index BIGINT NOT NULL,
-  PRIMARY KEY (diagram_id)
+  diagram_id BIGINT      NOT NULL AUTO_INCREMENT,
+  name       VARCHAR(50) NOT NULL,
+  username   VARCHAR(50) NOT NULL,
+  node_index BIGINT      NOT NULL,
+  PRIMARY KEY (diagram_id),
+  FOREIGN KEY (username) REFERENCES users (username)
 );
 
 DROP TABLE IF EXISTS nodes;
@@ -87,7 +90,7 @@ DROP TABLE IF EXISTS robots;
 CREATE TABLE robots (
   id          INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   name        VARCHAR(45)     NOT NULL UNIQUE,
-  username      VARCHAR(45)     NOT NULL,
+  username    VARCHAR(45)     NOT NULL,
   secret_code VARCHAR(45)     NOT NULL,
   FOREIGN KEY (username) REFERENCES users (username)
 );
