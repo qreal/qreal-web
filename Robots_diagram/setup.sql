@@ -2,7 +2,25 @@ DROP DATABASE IF EXISTS diagram;
 CREATE DATABASE diagram;
 USE diagram;
 
+
+DROP TABLE IF EXISTS robots;
+DROP TABLE IF EXISTS user_roles;
+DROP TABLE IF EXISTS vertices;
+DROP TABLE IF EXISTS properties;
+DROP TABLE IF EXISTS links;
+DROP TABLE IF EXISTS nodes;
 DROP TABLE IF EXISTS diagrams;
+DROP TABLE IF EXISTS users;
+
+
+
+CREATE TABLE users (
+  username VARCHAR(45) NOT NULL,
+  password VARCHAR(60) NOT NULL,
+  enabled  TINYINT     NOT NULL DEFAULT 1,
+  PRIMARY KEY (username)
+);
+
 CREATE TABLE diagrams (
   diagram_id BIGINT      NOT NULL AUTO_INCREMENT,
   name       VARCHAR(50) NOT NULL,
@@ -12,7 +30,6 @@ CREATE TABLE diagrams (
   FOREIGN KEY (username) REFERENCES users (username)
 );
 
-DROP TABLE IF EXISTS nodes;
 CREATE TABLE nodes (
   node_id    BIGINT       NOT NULL AUTO_INCREMENT,
   name       VARCHAR(50)  NOT NULL,
@@ -25,7 +42,6 @@ CREATE TABLE nodes (
   FOREIGN KEY (diagram_id) REFERENCES diagrams (diagram_id)
 );
 
-DROP TABLE IF EXISTS links;
 CREATE TABLE links (
   link_id    BIGINT      NOT NULL AUTO_INCREMENT,
   source     VARCHAR(50) NOT NULL,
@@ -35,7 +51,6 @@ CREATE TABLE links (
   FOREIGN KEY (diagram_id) REFERENCES diagrams (diagram_id)
 );
 
-DROP TABLE IF EXISTS properties;
 CREATE TABLE properties (
   property_id BIGINT      NOT NULL AUTO_INCREMENT,
   name        VARCHAR(50) NOT NULL,
@@ -47,7 +62,6 @@ CREATE TABLE properties (
   FOREIGN KEY (node_id) REFERENCES nodes (node_id)
 );
 
-DROP TABLE IF EXISTS vertices;
 CREATE TABLE vertices (
   vertex_id BIGINT NOT NULL AUTO_INCREMENT,
   x         DOUBLE NOT NULL,
@@ -58,23 +72,9 @@ CREATE TABLE vertices (
   FOREIGN KEY (link_id) REFERENCES links (link_id)
 );
 
-DROP TABLE IF EXISTS users;
-CREATE TABLE users (
-  username VARCHAR(45) NOT NULL,
-  password VARCHAR(60) NOT NULL,
-  enabled  TINYINT     NOT NULL DEFAULT 1,
-  PRIMARY KEY (username)
-);
 
-DROP TABLE IF EXISTS users;
-CREATE TABLE users (
-  username VARCHAR(45) NOT NULL,
-  password VARCHAR(60) NOT NULL,
-  enabled  TINYINT     NOT NULL DEFAULT 1,
-  PRIMARY KEY (username)
-);
 
-DROP TABLE IF EXISTS user_roles;
+
 CREATE TABLE user_roles (
   user_role_id INT(11)     NOT NULL AUTO_INCREMENT,
   username     VARCHAR(45) NOT NULL,
@@ -86,7 +86,6 @@ CREATE TABLE user_roles (
 );
 
 
-DROP TABLE IF EXISTS robots;
 CREATE TABLE robots (
   id          INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   name        VARCHAR(45)     NOT NULL UNIQUE,
