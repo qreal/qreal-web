@@ -7,13 +7,13 @@ import java.io.Serializable;
  */
 public class OpenRequest implements Serializable {
 
-    private Long diagramId;
-
-    public Long getDiagramId() {
-        return diagramId;
+    public String getName() {
+        return name;
     }
 
-    public void setDiagramId(Long diagramId) {
-        this.diagramId = diagramId;
+    public void setName(String name) {
+        this.name = name;
     }
+
+    private String name;
 }

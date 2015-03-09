@@ -161,13 +161,14 @@ module Controllers {
         }
 
         saveDiagram(): void {
-            console.log(ExportManager.exportDiagramStateToJSON(this.graph, this.nodeIndex, this.nodesList));
+            var name: string = prompt("input name");
+            console.log(ExportManager.exportDiagramStateToJSON(this.graph, name, this.nodeIndex, this.nodesList));
             $.ajax({
                 type: 'POST',
                 url: 'save',
                 dataType: 'json',
                 contentType: 'application/json',
-                data: (ExportManager.exportDiagramStateToJSON(this.graph, this.nodeIndex, this.nodesList)),
+                data: (ExportManager.exportDiagramStateToJSON(this.graph, name, this.nodeIndex, this.nodesList)),
                 success: function (response) {
                     console.log(response.message);
                 },
@@ -179,13 +180,13 @@ module Controllers {
 
         openDiagram(): void {
             var controller = this;
-            var id: number = parseInt(prompt("input id"));
+            var name: string = prompt("input diagram name");
             $.ajax({
                 type: 'POST',
                 url: 'open',
                 dataType: 'json',
                 contentType: 'application/json',
-                data: (JSON.stringify({diagramId: id})),
+                data: (JSON.stringify({name: name})),
                 success: function (response) {
                     controller.clear();
                     controller.nodeIndex = ImportManager.import(response, controller.graph, controller.nodesList);

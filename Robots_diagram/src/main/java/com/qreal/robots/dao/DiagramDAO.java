@@ -1,6 +1,5 @@
 package com.qreal.robots.dao;
 
-import com.qreal.robots.model.auth.User;
 import com.qreal.robots.model.diagram.Diagram;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -65,15 +64,22 @@ public class DiagramDAO {
         }
     }
 
-
-    public User findByName(String name) {
-
-        Session session = sessionFactory.getCurrentSession();
-        List<User> diagrams = session.createQuery("from Diagram where name=?").setParameter(0, name).list();
-        if (diagrams.size() > 0) {
-            return diagrams.get(0);
-        } else {
-            return null;
+    @Transactional
+    public Diagram openByName(String name) {
+        LOG.debug("open diagram");
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        List<Diagram> diagrams = null;
+        try {
+            transaction = session.beginTransaction();
+            diagrams = session.createQuery("from Diagram where name=?").setParameter(0, name).list();
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+            return  (diagrams.isEmpty() ? null : diagrams.get(0));
         }
     }
 }

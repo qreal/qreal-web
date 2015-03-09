@@ -141,13 +141,14 @@ var Controllers;
             }
         };
         DiagramController.prototype.saveDiagram = function () {
-            console.log(ExportManager.exportDiagramStateToJSON(this.graph, this.nodeIndex, this.nodesList));
+            var name = prompt("input name");
+            console.log(ExportManager.exportDiagramStateToJSON(this.graph, name, this.nodeIndex, this.nodesList));
             $.ajax({
                 type: 'POST',
                 url: 'save',
                 dataType: 'json',
                 contentType: 'application/json',
-                data: (ExportManager.exportDiagramStateToJSON(this.graph, this.nodeIndex, this.nodesList)),
+                data: (ExportManager.exportDiagramStateToJSON(this.graph, name, this.nodeIndex, this.nodesList)),
                 success: function (response) {
                     console.log(response.message);
                 },
@@ -158,13 +159,13 @@ var Controllers;
         };
         DiagramController.prototype.openDiagram = function () {
             var controller = this;
-            var id = parseInt(prompt("input id"));
+            var name = prompt("input diagram name");
             $.ajax({
                 type: 'POST',
                 url: 'open',
                 dataType: 'json',
                 contentType: 'application/json',
-                data: (JSON.stringify({ diagramId: id })),
+                data: (JSON.stringify({ name: name })),
                 success: function (response) {
                     controller.clear();
                     controller.nodeIndex = ImportManager.import(response, controller.graph, controller.nodesList);
@@ -231,8 +232,9 @@ var ExportManager = (function () {
         });
         return newVertices;
     };
-    ExportManager.exportDiagramStateToJSON = function (graph, nodeIndex, nodesList) {
+    ExportManager.exportDiagramStateToJSON = function (graph, name, nodeIndex, nodesList) {
         var json = {
+            'name': name,
             'nodeIndex': nodeIndex,
             'nodes': [],
             'links': []
@@ -250,11 +252,11 @@ var ExportManager = (function () {
                 };
                 var properties = node.getProperties();
                 var position = 1;
-                for (var name in properties) {
+                for (var propertyName in properties) {
                     var property = {
-                        'name': name,
-                        'value': properties[name].value,
-                        'type': properties[name].type,
+                        'name': propertyName,
+                        'value': properties[propertyName].value,
+                        'type': properties[propertyName].type,
                         'position': position
                     };
                     newNode.properties.push(property);
@@ -562,6 +564,23 @@ var DiagramPaper = (function (_super) {
     };
     return DiagramPaper;
 })(joint.dia.Paper);
+var ModelImp = (function () {
+    function ModelImp() {
+    }
+    ModelImp.prototype.getWorldModel = function () {
+        return null;
+    };
+    ModelImp.prototype.getTimeline = function () {
+        return null;
+    };
+    ModelImp.prototype.getRobotMode = function () {
+        return null;
+    };
+    ModelImp.prototype.getSetting = function () {
+        return null;
+    };
+    return ModelImp;
+})();
 var NodeType = (function () {
     function NodeType() {
     }

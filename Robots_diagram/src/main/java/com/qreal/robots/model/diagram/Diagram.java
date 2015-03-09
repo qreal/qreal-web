@@ -24,7 +24,7 @@ public class Diagram implements Serializable {
     @Column(name = "node_index")
     private Long nodeIndex;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username", nullable = false)
     private User creator;
 

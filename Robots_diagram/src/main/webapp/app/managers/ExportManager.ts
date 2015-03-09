@@ -15,8 +15,9 @@ class ExportManager {
         return newVertices;
     }
 
-    static exportDiagramStateToJSON(graph: joint.dia.Graph, nodeIndex: number, nodesList): string {
+    static exportDiagramStateToJSON(graph: joint.dia.Graph,  name: string, nodeIndex: number, nodesList): string {
         var json = {
+            'name': name,
             'nodeIndex': nodeIndex,
             'nodes': [],
             'links': []
@@ -35,11 +36,11 @@ class ExportManager {
 
                 var properties: PropertiesMap = node.getProperties();
                 var position: number = 1;
-                for (var name in properties) {
+                for (var propertyName in properties) {
                     var property = {
-                        'name': name,
-                        'value': properties[name].value,
-                        'type': properties[name].type,
+                        'name': propertyName,
+                        'value': properties[propertyName].value,
+                        'type': properties[propertyName].type,
                         'position': position
                     };
                     newNode.properties.push(property);
