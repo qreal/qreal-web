@@ -4,7 +4,6 @@ import com.qreal.robots.model.diagram.Diagram;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +14,7 @@ import java.util.List;
  * Created by vladzx on 07.11.14.
  */
 @Repository
+@Transactional
 public class DiagramDAO {
     private static final Logger LOG = Logger.getLogger(DiagramDAO.class);
 
@@ -28,58 +28,22 @@ public class DiagramDAO {
         this.sessionFactory = sessionFactory;
     }
 
-    @Transactional
     public void save(Diagram diagram) {
         LOG.debug("saving diagram");
-        Session session = sessionFactory.openSession();
-        Transaction transaction = null;
-        try {
-            transaction = session.beginTransaction();
-            session.save(diagram);
-            transaction.commit();
-        } catch (Exception e) {
-            transaction.rollback();
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
+        Session session = sessionFactory.getCurrentSession();
+        session.save(diagram);
     }
 
-    @Transactional
     public Diagram openById(Long diagramId) {
-        LOG.debug("open diagram");
-        Session session = sessionFactory.openSession();
-        Transaction transaction = null;
-        Diagram diagram = null;
-        try {
-            transaction = session.beginTransaction();
-            diagram = (Diagram) session.get(Diagram.class, diagramId);
-            transaction.commit();
-        } catch (Exception e) {
-            transaction.rollback();
-            e.printStackTrace();
-        } finally {
-            session.close();
-            return diagram;
-        }
+        Session session = sessionFactory.getCurrentSession();
+        return (Diagram) session.get(Diagram.class, diagramId);
     }
 
-    @Transactional
     public Diagram openByName(String name) {
         LOG.debug("open diagram");
-        Session session = sessionFactory.openSession();
-        Transaction transaction = null;
-        List<Diagram> diagrams = null;
-        try {
-            transaction = session.beginTransaction();
-            diagrams = session.createQuery("from Diagram where name=?").setParameter(0, name).list();
-            transaction.commit();
-        } catch (Exception e) {
-            transaction.rollback();
-            e.printStackTrace();
-        } finally {
-            session.close();
-            return  (diagrams.isEmpty() ? null : diagrams.get(0));
-        }
+        Session session = sessionFactory.getCurrentSession();
+        List<Diagram> diagrams = session.createQuery("from Diagram where name=?").setParameter(0, name).list();
+        return (diagrams.isEmpty() ? null : diagrams.get(0));
+
     }
 }

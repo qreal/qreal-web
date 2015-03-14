@@ -2,7 +2,6 @@ package com.qreal.robots.service.rest;
 
 import com.qreal.robots.dao.DiagramDAO;
 import com.qreal.robots.dao.UserDAO;
-import com.qreal.robots.model.auth.User;
 import com.qreal.robots.model.diagram.Diagram;
 import com.qreal.robots.model.diagram.OpenRequest;
 import org.springframework.beans.factory.annotation.Autowired;
