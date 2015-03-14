@@ -1,7 +1,6 @@
 package com.qreal.robots.dao;
 
 import com.qreal.robots.model.auth.User;
-import com.qreal.robots.model.auth.UserRole;
 import com.qreal.robots.model.robot.Robot;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -36,11 +35,11 @@ public class RobotDAO {
         session.save(robot);
     }
 
-    public User findByName(String robotName) {
+    public Robot findByName(String robotName) {
 
         Session session = sessionFactory.getCurrentSession();
 
-        List<User> robots = session.createQuery("from Robot where name=?").setParameter(0, robotName).list();
+        List<Robot> robots = session.createQuery("from Robot where name=?").setParameter(0, robotName).list();
         if (robots.size() > 0) {
             return robots.get(0);
         } else {
