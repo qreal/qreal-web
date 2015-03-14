@@ -1,4 +1,4 @@
-<%@ include file="include.jsp" %>
+<%@ include file="../include/include.jsp" %>
 <html>
 <head>
     <title>Register</title>
@@ -13,7 +13,7 @@
 <c:url value="/register" var="loginUrl"/>
 
 
-<%@ include file="navbar.jsp" %>
+<%@ include file="../include/navbar.jsp" %>
 
 <div class="container-fluid">
     <section class="container">

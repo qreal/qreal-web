@@ -1,4 +1,4 @@
-<%@ include file="include.jsp" %>
+<%@ include file="../include/include.jsp" %>
 <html>
 <head>
     <title>Login</title>
@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<%@ include file="navbar.jsp" %>
+<%@ include file="../include/navbar.jsp" %>
 
 
 <div class="container">

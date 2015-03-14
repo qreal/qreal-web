@@ -36,7 +36,7 @@ public class AuthController {
         if (logout != null) {
             model.addObject("msg", "You've been logged out successfully.");
         }
-        model.setViewName("login");
+        model.setViewName("auth/login");
 
         return model;
 
@@ -46,7 +46,7 @@ public class AuthController {
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public ModelAndView register() {
         ModelAndView model = new ModelAndView();
-        model.setViewName("register");
+        model.setViewName("auth/register");
         return model;
     }
 
@@ -76,7 +76,7 @@ public class AuthController {
 
     private ModelAndView registerError(ModelAndView modelAndView, String message) {
         modelAndView.addObject("error", message);
-        modelAndView.setViewName("register");
+        modelAndView.setViewName("auth/register");
         return modelAndView;
     }
 

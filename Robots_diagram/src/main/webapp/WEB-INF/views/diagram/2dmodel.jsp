@@ -1,8 +1,8 @@
-<%@ include file="include.jsp" %>
+<%@ include file="../include/include.jsp" %>
 <html>
 <head>
     <title>2d Model</title>
-    <jsp:include page="scripts.jsp" flush="true"/>
+    <jsp:include page="../include/scripts.jsp" flush="true"/>
     <link rel="stylesheet" href="<c:url value='/resources/bootstrap/css/bootstrap.min.css' />" />
     <link rel="stylesheet" href="<c:url value='/resources/css/2dmodel.css' />" />
 <body ng-app="diagram" ng-controller="TwoDModelController">

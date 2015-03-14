@@ -12,6 +12,6 @@ public class DiagramController {
 
     @RequestMapping(value = "/diagram", method = RequestMethod.GET)
     public String index() {
-        return "diagram";
+        return "diagram/diagram";
     }
 }

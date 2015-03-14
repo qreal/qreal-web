@@ -17,6 +17,6 @@ public class TwoDModelController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ModelAndView twoDModel(Model model) {
-        return new ModelAndView("2dmodel");
+        return new ModelAndView("diagram/2dmodel");
     }
 }

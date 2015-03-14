@@ -1,9 +1,9 @@
-<%@ include file="include.jsp" %>
+<%@ include file="include/include.jsp" %>
 
 <head>
     <title>Robots Diagram</title>
 
-    <jsp:include page="scripts.jsp"/>
+    <jsp:include page="include/scripts.jsp"/>
 
     <link rel="stylesheet" href="<c:url value='/resources/bootstrap/css/bootstrap.min.css' />"/>
 
@@ -11,7 +11,7 @@
 
 <body>
 
-<%@ include file="navbar.jsp" %>
+<%@ include file="include/navbar.jsp" %>
 
 
 <!-- Main -->
