@@ -5,6 +5,7 @@
     <title>Robots online</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script src="<c:url value='/resources/js/jquery-1.11.0.min.js' />"></script>
+    <jsp:include page="scripts.jsp"/>
     <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
     <script src="<c:url value='/resources/js/map.js' />"></script>
 
@@ -22,6 +23,9 @@
 </head>
 
 <body>
+
+<%@ include file="navbar.jsp" %>
+
 <div id="map" style="width: 100%; height: 600px"></div>
 <button id="target">ADD LABEL</button>
 </body>

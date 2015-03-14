@@ -32,7 +32,7 @@
         <button class="btn btn-lg btn-primary btn-block" type="submit">
             Sign In
         </button>
-        <a class="pull-right" href="#">Sign up here!</a>
+        <a class="pull-right" href="<c:url value="/register"/>">Sign up here!</a>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
 

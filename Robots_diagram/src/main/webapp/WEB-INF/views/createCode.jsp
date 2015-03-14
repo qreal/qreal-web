@@ -38,6 +38,9 @@
 
 <body>
 
+
+<%@ include file="navbar.jsp" %>
+
 <div class="navbar navbar-inverse" role="navigation">
     <div class="container-fluid">
         <div class="navbar-collapse collapse">
