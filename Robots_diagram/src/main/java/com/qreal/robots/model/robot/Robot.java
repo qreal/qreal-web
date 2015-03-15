@@ -16,14 +16,16 @@ public class Robot {
 
     private Integer id;
     private String name;
+    private String secretCode;
     private User owner;
 
     public Robot() {
     }
 
-    public Robot(String name, User owner) {
+    public Robot(String name, String secretCode, User owner) {
         this.owner = owner;
         this.name = name;
+        this.secretCode = secretCode;
     }
 
 
@@ -58,5 +60,29 @@ public class Robot {
         this.name = name;
     }
 
+    @Column(name = "secretCode", nullable = false, length = 45)
+    public String getSecretCode() {
+        return secretCode;
+    }
 
+    public void setSecretCode(String secretCode) {
+        this.secretCode = secretCode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Robot)) return false;
+
+        Robot robot = (Robot) o;
+
+        if (!name.equals(robot.name)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 }

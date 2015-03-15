@@ -35,6 +35,11 @@ public class RobotDAO {
         session.save(robot);
     }
 
+    public void delete(Robot robot) {
+        Session session = sessionFactory.getCurrentSession();
+        session.delete(robot);
+    }
+
     public Robot findByName(String robotName) {
 
         Session session = sessionFactory.getCurrentSession();

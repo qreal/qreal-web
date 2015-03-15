@@ -11,8 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * Created by dageev on 14.03.15.
@@ -23,6 +22,7 @@ import static org.junit.Assert.assertNotNull;
 public class RobotDAOTest extends BaseDAOTest {
 
 
+    public static final String CODE = "CODE";
     @Autowired
     private RobotDAO robotDao;
 
@@ -33,7 +33,7 @@ public class RobotDAOTest extends BaseDAOTest {
     @Test
     public void testFindByNameRobot() {
         User user = getAndSaveUser(USER_NAME, userDao);
-        Robot robot = new Robot(ROBOT_NAME, user);
+        Robot robot = new Robot(ROBOT_NAME, CODE, user);
         robotDao.save(robot);
 
         Robot savedRobot = robotDao.findByName(ROBOT_NAME);
@@ -45,7 +45,7 @@ public class RobotDAOTest extends BaseDAOTest {
     @Test
     public void testSaveRobot() {
         User user = getAndSaveUser(USER_NAME2, userDao);
-        Robot robot = new Robot(ROBOT_NAME, user);
+        Robot robot = new Robot(ROBOT_NAME2, CODE, user);
         robotDao.save(robot);
 
         User savedUser = userDao.findByUserName(USER_NAME2);
@@ -53,6 +53,16 @@ public class RobotDAOTest extends BaseDAOTest {
         Set<Robot> robots = savedUser.getRobots();
         assertEquals(1, robots.size());
         assertEquals(robot.getName(), robots.iterator().next().getName());
+    }
+
+    @Test
+    public void testDelete() {
+        User user = getAndSaveUser(USER_NAME3, userDao);
+        Robot robot = new Robot(ROBOT_NAME, CODE, user);
+        robotDao.save(robot);
+        assertTrue(robotDao.isRobotExists(ROBOT_NAME));
+        robotDao.delete(robot);
+        assertFalse(robotDao.isRobotExists(ROBOT_NAME));
     }
 
 }

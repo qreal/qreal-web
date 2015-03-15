@@ -24,18 +24,6 @@
                     </ul>
                 </li>
 
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Robots<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="<c:url value="/diagram"/>">Add Robot</a></li>
-                        <li><a href="<c:url value="/diagram"/>">View Robots</a></li>
-                        <li><a href="<c:url value="/diagram"/>">Send Program</a></li>
-                        <li><a href="<c:url value="/create-code"/>">Create Program</a></li>
-                        <li><a href="<c:url value="/map"/>">Robots map</a></li>
-                    </ul>
-                </li>
-
-
             </ul>
 
             <ul class="nav navbar-nav navbar-right">

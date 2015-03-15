@@ -13,7 +13,6 @@ DROP TABLE IF EXISTS diagrams;
 DROP TABLE IF EXISTS users;
 
 
-
 CREATE TABLE users (
   username VARCHAR(45) NOT NULL,
   password VARCHAR(60) NOT NULL,
@@ -73,8 +72,6 @@ CREATE TABLE vertices (
 );
 
 
-
-
 CREATE TABLE user_roles (
   user_role_id INT(11)     NOT NULL AUTO_INCREMENT,
   username     VARCHAR(45) NOT NULL,
@@ -87,10 +84,11 @@ CREATE TABLE user_roles (
 
 
 CREATE TABLE robots (
-  id          INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  name        VARCHAR(45)     NOT NULL UNIQUE,
-  username    VARCHAR(45)     NOT NULL,
-  secret_code VARCHAR(45)     NOT NULL,
+  id         INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  name       VARCHAR(45)     NOT NULL,
+  secretCode VARCHAR(45)     NOT NULL,
+  username   VARCHAR(45)     NOT NULL,
+  UNIQUE KEY uni_robotName_username (name, username),
   FOREIGN KEY (username) REFERENCES users (username)
 );
 
