@@ -544,6 +544,45 @@ var DiagramPaper = (function (_super) {
     };
     return DiagramPaper;
 })(joint.dia.Paper);
+var EllipseItemImpl = (function () {
+    function EllipseItemImpl(worldModel, xStart, yStart, xEnd, yEnd, width, color) {
+        var paper = worldModel.getPaper();
+        this.ellipse = paper.ellipse(xStart, yStart, 0, 0);
+        this.ellipse.attr({
+            fill: "transparent",
+            cursor: "pointer",
+            "stroke": color,
+            "stroke-width": width
+        });
+        var thisEllipse = this.ellipse;
+        var startEllipse = function () {
+            if (!worldModel.getDrawMode()) {
+                this.cx = this.attr("cx");
+                this.cy = this.attr("cy");
+            }
+            return this;
+        }, moveEllipse = function (dx, dy) {
+            if (!worldModel.getDrawMode()) {
+                var newX = this.cx + dx;
+                var newY = this.cy + dy;
+                thisEllipse.attr({ cx: newX, cy: newY });
+            }
+            return this;
+        }, upEllipse = function () {
+            return this;
+        };
+        thisEllipse.drag(moveEllipse, startEllipse, upEllipse);
+    }
+    EllipseItemImpl.prototype.updateCorner = function (oppositeCornerX, oppositeCornerY, x, y) {
+        var newCx = (oppositeCornerX + x) / 2;
+        var newCy = (oppositeCornerY + y) / 2;
+        var newRx = Math.abs(x - oppositeCornerX) / 2;
+        var newRy = Math.abs(y - oppositeCornerY) / 2;
+        this.ellipse.attr({ "cx": newCx, "cy": newCy });
+        this.ellipse.attr({ "rx": newRx, "ry": newRy });
+    };
+    return EllipseItemImpl;
+})();
 var LineItemImpl = (function () {
     function LineItemImpl(worldModel, xStart, yStart, xEnd, yEnd, width, color) {
         var paper = worldModel.getPaper();
@@ -770,10 +809,10 @@ var WorldModelImpl = (function () {
     function WorldModelImpl($scope) {
         this.drawMode = 0;
         $scope.vm = this;
-        var controller = this;
+        var worldModel = this;
         $(document).ready(function () {
-            controller.paper = Raphael("stage", "100%", "100%");
-            $(controller.paper.canvas).attr("id", "paper");
+            worldModel.paper = Raphael("stage", "100%", "100%");
+            $(worldModel.paper.canvas).attr("id", "paper");
             var wall_pattern = '<pattern id="wall_pattern" patternUnits="userSpaceOnUse" width="85" height="80">\
                                         <image xlink:href="images/2dmodel/2d_wall.png" width="85" height="80" />\
                                     </pattern>';
@@ -782,22 +821,38 @@ var WorldModelImpl = (function () {
             $("#dummy").remove();
             var shape;
             var isDrawing = false;
+            var startDrawPoint;
             $("#stage").mousedown(function (e) {
-                switch (controller.drawMode) {
+                switch (worldModel.drawMode) {
                     case 1:
-                        var offset = $("#stage").offset();
-                        var x = e.pageX - offset.left;
-                        var y = e.pageY - offset.top;
+                        var position = worldModel.getMousePosition(e);
+                        var x = position.x;
+                        var y = position.y;
                         var width = $("#pen_width_spinner").val();
                         var color = $("#pen_color_dropdown").val();
-                        shape = new LineItemImpl(controller, x, y, x, y, width, color);
+                        shape = new LineItemImpl(worldModel, x, y, x, y, width, color);
                         isDrawing = true;
                         break;
                     case 2:
-                        var offset = $("#stage").offset();
-                        var x = e.pageX - offset.left;
-                        var y = e.pageY - offset.top;
-                        shape = new WallItemImpl(controller, x, y, x, y);
+                        var position = worldModel.getMousePosition(e);
+                        var x = position.x;
+                        var y = position.y;
+                        shape = new WallItemImpl(worldModel, x, y, x, y);
+                        isDrawing = true;
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        var position = worldModel.getMousePosition(e);
+                        var x = position.x;
+                        var y = position.y;
+                        var width = $("#pen_width_spinner").val();
+                        var color = $("#pen_color_dropdown").val();
+                        startDrawPoint = {
+                            "x": x,
+                            "y": y
+                        };
+                        shape = new EllipseItemImpl(worldModel, x, y, x, y, width, color);
                         isDrawing = true;
                         break;
                     default:
@@ -805,13 +860,20 @@ var WorldModelImpl = (function () {
             });
             $("#stage").mousemove(function (e) {
                 if (isDrawing) {
-                    switch (controller.drawMode) {
+                    switch (worldModel.drawMode) {
                         case 1:
                         case 2:
-                            var offset = $("#stage").offset();
-                            var x = e.pageX - offset.left;
-                            var y = e.pageY - offset.top;
+                            var position = worldModel.getMousePosition(e);
+                            var x = position.x;
+                            var y = position.y;
                             shape.updateEnd(x, y);
+                            break;
+                        case 4:
+                            var position = worldModel.getMousePosition(e);
+                            var x = position.x;
+                            var y = position.y;
+                            shape.updateCorner(startDrawPoint.x, startDrawPoint.y, x, y);
+                            break;
                         default:
                     }
                 }
@@ -823,11 +885,25 @@ var WorldModelImpl = (function () {
             });
         });
     }
+    WorldModelImpl.prototype.getMousePosition = function (e) {
+        var offset = $("#stage").offset();
+        var position = {
+            x: e.pageX - offset.left,
+            y: e.pageY - offset.top
+        };
+        return position;
+    };
     WorldModelImpl.prototype.setDrawLineMode = function () {
         this.drawMode = 1;
     };
     WorldModelImpl.prototype.setDrawWallMode = function () {
         this.drawMode = 2;
+    };
+    WorldModelImpl.prototype.setDrawPencilMode = function () {
+        this.drawMode = 3;
+    };
+    WorldModelImpl.prototype.setDrawEllipseMode = function () {
+        this.drawMode = 4;
     };
     WorldModelImpl.prototype.getDrawMode = function () {
         return this.drawMode;

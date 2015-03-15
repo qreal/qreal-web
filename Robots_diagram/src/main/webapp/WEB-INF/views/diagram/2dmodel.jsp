@@ -35,13 +35,13 @@
 
                             <tr>
                                 <td>
-                                    <button class="palette_button">
+                                    <button class="palette_button" ng-click="vm.setDrawPencilMode()">
                                         <img src="images/2dmodel/2d_pencil.png"
                                              style="width: 20px; height: 20px; vertical-align: middle"/>
                                     </button>
                                 </td>
                                 <td>
-                                    <button class="palette_button_right">
+                                    <button class="palette_button_right" ng-click="vm.setDrawEllipseMode()">
                                         <img src="images/2dmodel/2d_ellipse.png"
                                              style="width: 20px; height: 20px; vertical-align: middle"/>
                                     </button>
