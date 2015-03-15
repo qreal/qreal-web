@@ -1,4 +1,4 @@
-<%@ include file="include.jsp" %>
+<%@ include file="../include/include.jsp" %>
 <html>
 <head>
     <title>Login</title>
@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<%@ include file="navbar.jsp" %>
+<%@ include file="../include/navbar.jsp" %>
 
 
 <div class="container">
@@ -32,7 +32,7 @@
         <button class="btn btn-lg btn-primary btn-block" type="submit">
             Sign In
         </button>
-        <a class="pull-right" href="#">Sign up here!</a>
+        <a class="pull-right" href="<c:url value="/register"/>">Sign up here!</a>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
 

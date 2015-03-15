@@ -7,3 +7,5 @@
 <script src="<c:url value='/resources/js/raphael-min.js' />"></script>
 
 <script src="<c:url value='/app/out.js' />"></script>
+
+

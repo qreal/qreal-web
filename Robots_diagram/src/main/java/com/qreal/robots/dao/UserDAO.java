@@ -17,6 +17,7 @@ import java.util.List;
 @Transactional
 public class UserDAO {
 
+    public static final String ROLE_USER = "ROLE_USER";
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -32,7 +33,7 @@ public class UserDAO {
     public void save(User user) {
         Session session = sessionFactory.getCurrentSession();
         session.save(user);
-        UserRole userRole = new UserRole(user, "ROLE_USER");
+        UserRole userRole = new UserRole(user, ROLE_USER);
         session.save(userRole);
     }
 

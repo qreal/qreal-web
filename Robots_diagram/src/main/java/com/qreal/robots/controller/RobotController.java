@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -33,7 +32,7 @@ public class RobotController {
         List<RobotInfo> robots = mapper.readValue(robotsMessage, mapper.getTypeFactory().constructCollectionType(List.class, RobotInfo.class));
         model.addAttribute("robotsId", getRobotIds(robots));
 
-        return "createCode";
+        return "robot/createCode";
     }
 
     @RequestMapping(value = "/map", method = RequestMethod.GET)
@@ -42,32 +41,7 @@ public class RobotController {
         String robots = socketClient.sendMessage(generateGetOnlineRobotsRequest());
 
         model.addAttribute("robots", robots);
-        return "map";
-    }
-
-
-    @RequestMapping(value = {"/welcome**"}, method = RequestMethod.GET)
-    public ModelAndView welcomePage() {
-
-        ModelAndView model = new ModelAndView();
-        model.addObject("title", "Spring Security Hello World");
-        model.addObject("message", "This is welcome page!");
-        model.setViewName("hello");
-        return model;
-
-    }
-
-
-    @RequestMapping(value = "/dba**", method = RequestMethod.GET)
-    public ModelAndView dbaPage() {
-
-        ModelAndView model = new ModelAndView();
-        model.addObject("title", "Spring Security Hello World");
-        model.addObject("message", "This is protected page - Database Page!");
-        model.setViewName("admin");
-
-        return model;
-
+        return "robot/map";
     }
 
 

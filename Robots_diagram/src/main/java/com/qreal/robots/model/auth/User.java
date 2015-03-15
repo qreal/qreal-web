@@ -1,5 +1,6 @@
 package com.qreal.robots.model.auth;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.qreal.robots.model.diagram.Diagram;
 import com.qreal.robots.model.robot.Robot;
 
@@ -14,8 +15,14 @@ public class User {
     private String username;
     private String password;
     private boolean enabled;
+
+    @JsonIgnore
     private Set<UserRole> userRole = new HashSet<>(0);
+
+    @JsonIgnore
     private Set<Robot> robots = new HashSet<>(0);
+
+    @JsonIgnore
     private Set<Diagram> diagrams = new HashSet<>(0);
 
     public User() {

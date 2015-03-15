@@ -1,9 +1,9 @@
-<%@ include file="include.jsp" %>
+<%@ include file="include/include.jsp" %>
 
 <head>
     <title>Robots Diagram</title>
 
-    <jsp:include page="scripts.jsp"/>
+    <jsp:include page="include/scripts.jsp"/>
 
     <link rel="stylesheet" href="<c:url value='/resources/bootstrap/css/bootstrap.min.css' />"/>
 
@@ -11,50 +11,60 @@
 
 <body>
 
+<%@ include file="include/navbar.jsp" %>
 
-<!-- Header -->
-<div id="top-nav" class="navbar navbar-inverse navbar-static-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Dashboard</a>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
 
-                <li class="dropdown">
-                    <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"><i
-                            class="glyphicon glyphicon-user"></i> Admin <span class="caret"></span></a>
-                    <ul id="g-account-menu" class="dropdown-menu" role="menu">
-                        <li><a href="#">My Profile</a></li>
-                    </ul>
-                </li>
-                <li><a href="#"><i class="glyphicon glyphicon-lock"></i> Logout</a></li>
-            </ul>
-        </div>
-    </div>
-    <!-- /container -->
-</div>
-<!-- /Header -->
-
-<div class="container">
+<!-- Main -->
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-sm-3">
+            <!-- Left column -->
+
             <ul class="nav nav-pills nav-stacked">
-                <li class="active"><a href="#"><i class="fa fa-home fa-fw"></i>Home</a></li>
-                <li><a href="http://www.jquery2dotnet.com"><i class="fa fa-list-alt fa-fw"></i>Robots</a></li>
-                <li><a href="http://www.jquery2dotnet.com"><i class="fa fa-cogs fa-fw"></i>Diagrams</a></li>
+                <li class="nav-header"></li>
+                <li class="active"><a href="#home" data-toggle="tab"><i class="glyphicon glyphicon-list"></i> Robots</a>
+                </li>
+                <li><a href="#profile" data-toggle="tab"><i class="glyphicon glyphicon-briefcase"></i> Diagrams</a></li>
             </ul>
+
         </div>
-        <div class="col-md-9 well">
-            Vertical admin menu
+        <!-- /col-3 -->
+        <div class="col-sm-9">
+
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane active in" id="home">
+                    <form id="tab">
+                        <label>Username</label>
+                        <input type="text" value="jsmith" class="input-xlarge">
+                        <label>First Name</label>
+                        <input type="text" value="John" class="input-xlarge">
+                        <label>Last Name</label>
+                        <input type="text" value="Smith" class="input-xlarge">
+                        <label>Email</label>
+                        <input type="text" value="jsmith@yourcompany.com" class="input-xlarge">
+                        <label>Address</label>
+
+                        <div>
+                            <button class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane fade" id="profile">
+                    <form id="tab2">
+                        <label>New Password</label>
+                        <input type="password" class="input-xlarge">
+
+                        <div>
+                            <button class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
+        <!--/col-span-9-->
     </div>
 </div>
+<!-- /Main -->
 
 
 </body>

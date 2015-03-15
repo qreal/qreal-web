@@ -21,7 +21,7 @@ public class Robot {
     public Robot() {
     }
 
-    public Robot(User owner, String name) {
+    public Robot(String name, User owner) {
         this.owner = owner;
         this.name = name;
     }
