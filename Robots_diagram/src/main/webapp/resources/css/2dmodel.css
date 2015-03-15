@@ -49,6 +49,7 @@ button
     bottom: 10px;
     overflow: auto;
     border: 1px solid gray;
+    background: #ffffff;
 }
 
 .innertube{

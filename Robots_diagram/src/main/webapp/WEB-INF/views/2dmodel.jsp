@@ -5,7 +5,7 @@
     <jsp:include page="scripts.jsp" flush="true"/>
     <link rel="stylesheet" href="<c:url value='/resources/bootstrap/css/bootstrap.min.css' />" />
     <link rel="stylesheet" href="<c:url value='/resources/css/2dmodel.css' />" />
-<body ng-app="diagram" ng-controller="TwoDModelController">
+<body ng-app="diagram" ng-controller="ModelImpl">
 <div id="container" >
     <div id="left-menu">
         <div class="tabbable">
@@ -20,13 +20,13 @@
                         <table>
                             <tr>
                                 <td>
-                                    <button class="palette_button">
+                                    <button class="palette_button" ng-click="vm.setDrawLineMode()">
                                         <img src="images/2dmodel/2d_ruler.png"
                                              style="width: 20px; height: 20px; vertical-align: middle"/>
                                     </button>
                                 </td>
                                 <td>
-                                    <button class="palette_button_right">
+                                    <button class="palette_button_right" ng-click="vm.setDrawWallMode()">
                                         <img src="images/2dmodel/2d_wall.png"
                                              style="width: 20px; height: 20px; vertical-align: middle"/>
                                     </button>
@@ -56,7 +56,7 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <button class="palette_button_right">
+                                    <button class="palette_button_right" ng-click="vm.setNoneMode()">
                                         <img src="images/2dmodel/2d_none.png"
                                              style="width: 13px; height: 20px; vertical-align: middle"/>
                                     </button>
@@ -68,10 +68,10 @@
 
                         <div id="pen_settings">
                             <p><b>Width</b></p>
-                            <p><input type="number" class="spinner" value="6"></p>
+                            <p><input id="pen_width_spinner" type="number" class="spinner" value="6"></p>
                             <p><b>Color</b></p>
                             <p>
-                                <select class="mydropdown">
+                                <select id="pen_color_dropdown" class="mydropdown">
                                     <option selected="selected" value="black">black</option>
                                     <option value="blue">blue</option>
                                     <option value="green">green</option>

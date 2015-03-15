@@ -180,26 +180,6 @@ var Controllers;
     })();
     Controllers.DiagramController = DiagramController;
 })(Controllers || (Controllers = {}));
-var Controllers;
-(function (Controllers) {
-    var TwoDModelController = (function () {
-        function TwoDModelController($scope, $compile) {
-            $scope.vm = this;
-            $(document).ready(function () {
-                var stage = new PIXI.Stage(0xFFFFFF);
-                var renderer = PIXI.autoDetectRenderer($("#stage").width(), $("#stage").height());
-                $("#stage").append(renderer.view);
-                requestAnimFrame(animate);
-                function animate() {
-                    requestAnimFrame(animate);
-                    renderer.render(stage);
-                }
-            });
-        }
-        return TwoDModelController;
-    })();
-    Controllers.TwoDModelController = TwoDModelController;
-})(Controllers || (Controllers = {}));
 angular.module('controllers', []).controller(Controllers);
 var DropdownListManager = (function () {
     function DropdownListManager() {
@@ -564,22 +544,301 @@ var DiagramPaper = (function (_super) {
     };
     return DiagramPaper;
 })(joint.dia.Paper);
-var ModelImp = (function () {
-    function ModelImp() {
+var LineItemImpl = (function () {
+    function LineItemImpl(worldModel, xStart, yStart, xEnd, yEnd, width, color) {
+        var paper = worldModel.getPaper();
+        this.path = paper.path("M" + xStart + " " + yStart + " L" + xEnd + " " + yEnd);
+        this.path.attr({
+            cursor: "pointer",
+            "stroke": color,
+            "stroke-width": width
+        });
+        this.pathArray = this.path.attr("path");
+        var handleRadius = 10;
+        this.handleStart = paper.circle(xStart, yStart, handleRadius).attr({
+            fill: "transparent",
+            cursor: "pointer",
+            "stroke-width": 1,
+            stroke: "black"
+        });
+        this.handleEnd = paper.circle(xEnd, yEnd, handleRadius).attr({
+            fill: "transparent",
+            cursor: "pointer",
+            "stroke-width": 1,
+            stroke: "black"
+        });
+        var line = this;
+        var start = function () {
+            if (!worldModel.getDrawMode()) {
+                this.cx = this.attr("cx");
+                this.cy = this.attr("cy");
+            }
+            return this;
+        }, moveStart = function (dx, dy) {
+            if (!worldModel.getDrawMode()) {
+                var newX = this.cx + dx;
+                var newY = this.cy + dy;
+                line.updateStart(newX, newY);
+            }
+            return this;
+        }, moveEnd = function (dx, dy) {
+            if (!worldModel.getDrawMode()) {
+                var newX = this.cx + dx;
+                var newY = this.cy + dy;
+                line.updateEnd(newX, newY);
+            }
+            return this;
+        }, up = function () {
+            return this;
+        };
+        line.handleStart.drag(moveStart, start, up);
+        line.handleEnd.drag(moveEnd, start, up);
+        var startPath = function () {
+            if (!worldModel.getDrawMode()) {
+                this.startX = line.pathArray[0][1];
+                this.startY = line.pathArray[0][2];
+                this.endX = line.pathArray[1][1];
+                this.endY = line.pathArray[1][2];
+                this.ox = this.attr("x");
+                this.oy = this.attr("y");
+            }
+            return this;
+        }, movePath = function (dx, dy) {
+            if (!worldModel.getDrawMode()) {
+                var trans_x = dx - this.ox;
+                var trans_y = dy - this.oy;
+                line.pathArray[0][1] = this.startX + dx;
+                line.pathArray[0][2] = this.startY + dy;
+                line.pathArray[1][1] = this.endX + dx;
+                line.pathArray[1][2] = this.endY + dy;
+                line.path.attr({ path: line.pathArray });
+                this.ox = dx;
+                this.oy = dy;
+                var hStartX = line.handleStart.attr("cx") + trans_x;
+                var hStartY = line.handleStart.attr("cy") + trans_y;
+                var hEndX = line.handleEnd.attr("cx") + trans_x;
+                var hEndY = line.handleEnd.attr("cy") + trans_y;
+                line.handleStart.attr({ cx: hStartX, cy: hStartY });
+                line.handleEnd.attr({ cx: hEndX, cy: hEndY });
+            }
+            return this;
+        }, upPath = function () {
+            return this;
+        };
+        line.path.drag(movePath, startPath, upPath);
     }
-    ModelImp.prototype.getWorldModel = function () {
-        return null;
+    LineItemImpl.prototype.getPath = function () {
+        return this.path;
     };
-    ModelImp.prototype.getTimeline = function () {
-        return null;
+    LineItemImpl.prototype.updateStart = function (x, y) {
+        this.pathArray[0][1] = x;
+        this.pathArray[0][2] = y;
+        this.path.attr({ path: this.pathArray });
+        this.handleStart.attr({ cx: x, cy: y });
     };
-    ModelImp.prototype.getRobotMode = function () {
-        return null;
+    LineItemImpl.prototype.updateEnd = function (x, y) {
+        this.pathArray[1][1] = x;
+        this.pathArray[1][2] = y;
+        this.path.attr({ path: this.pathArray });
+        this.handleEnd.attr({ cx: x, cy: y });
     };
-    ModelImp.prototype.getSetting = function () {
-        return null;
+    return LineItemImpl;
+})();
+var WallItemImpl = (function () {
+    function WallItemImpl(worldModel, xStart, yStart, xEnd, yEnd) {
+        var paper = worldModel.getPaper();
+        var wall = this;
+        this.width = 15;
+        this.path = paper.path("M" + xStart + " " + yStart + " L" + xEnd + " " + yEnd);
+        this.path.attr({
+            cursor: "pointer",
+            "stroke-width": wall.width
+        });
+        $(this.path.node).attr("class", "path");
+        $(".path").attr("stroke", "url(#wall_pattern)");
+        this.pathArray = this.path.attr("path");
+        var handleRadius = 10;
+        this.handleStart = paper.circle(xStart, yStart, handleRadius).attr({
+            cursor: "pointer",
+            "stroke-width": 1,
+            stroke: "black"
+        });
+        $(this.handleStart.node).attr("class", "handleStart");
+        $(".handleStart").attr("fill", "url(#wall_pattern)");
+        this.handleEnd = paper.circle(xEnd, yEnd, handleRadius).attr({
+            cursor: "pointer",
+            "stroke-width": 1,
+            stroke: "black"
+        });
+        $(this.handleEnd.node).attr("class", "handleEnd");
+        $(".handleEnd").attr("fill", "url(#wall_pattern)");
+        var start = function () {
+            if (!worldModel.getDrawMode()) {
+                this.cx = this.attr("cx");
+                this.cy = this.attr("cy");
+            }
+            return this;
+        }, moveStart = function (dx, dy) {
+            if (!worldModel.getDrawMode()) {
+                var newX = this.cx + dx;
+                var newY = this.cy + dy;
+                wall.updateStart(newX, newY);
+            }
+            return this;
+        }, moveEnd = function (dx, dy) {
+            if (!worldModel.getDrawMode()) {
+                var newX = this.cx + dx;
+                var newY = this.cy + dy;
+                wall.updateEnd(newX, newY);
+            }
+            return this;
+        }, up = function () {
+            return this;
+        };
+        wall.handleStart.drag(moveStart, start, up);
+        wall.handleEnd.drag(moveEnd, start, up);
+        var startPath = function () {
+            if (!worldModel.getDrawMode()) {
+                this.startX = wall.pathArray[0][1];
+                this.startY = wall.pathArray[0][2];
+                this.endX = wall.pathArray[1][1];
+                this.endY = wall.pathArray[1][2];
+                this.ox = this.attr("x");
+                this.oy = this.attr("y");
+            }
+            return this;
+        }, movePath = function (dx, dy) {
+            if (!worldModel.getDrawMode()) {
+                var trans_x = dx - this.ox;
+                var trans_y = dy - this.oy;
+                wall.pathArray[0][1] = this.startX + dx;
+                wall.pathArray[0][2] = this.startY + dy;
+                wall.pathArray[1][1] = this.endX + dx;
+                wall.pathArray[1][2] = this.endY + dy;
+                wall.path.attr({ path: wall.pathArray });
+                this.ox = dx;
+                this.oy = dy;
+                var hStartX = wall.handleStart.attr("cx") + trans_x;
+                var hStartY = wall.handleStart.attr("cy") + trans_y;
+                var hEndX = wall.handleEnd.attr("cx") + trans_x;
+                var hEndY = wall.handleEnd.attr("cy") + trans_y;
+                wall.handleStart.attr({ cx: hStartX, cy: hStartY });
+                wall.handleEnd.attr({ cx: hEndX, cy: hEndY });
+            }
+            return this;
+        }, upPath = function () {
+            return this;
+        };
+        wall.path.drag(movePath, startPath, upPath);
+    }
+    WallItemImpl.prototype.getPath = function () {
+        return this.path;
     };
-    return ModelImp;
+    WallItemImpl.prototype.updateStart = function (x, y) {
+        this.pathArray[0][1] = x;
+        this.pathArray[0][2] = y;
+        this.path.attr({ path: this.pathArray });
+        this.handleStart.attr({ cx: x, cy: y });
+    };
+    WallItemImpl.prototype.updateEnd = function (x, y) {
+        this.pathArray[1][1] = x;
+        this.pathArray[1][2] = y;
+        this.path.attr({ path: this.pathArray });
+        this.handleEnd.attr({ cx: x, cy: y });
+    };
+    return WallItemImpl;
+})();
+var ModelImpl = (function () {
+    function ModelImpl($scope) {
+        this.worldModel = new WorldModelImpl($scope);
+    }
+    ModelImpl.prototype.getWorldModel = function () {
+        return this.worldModel;
+    };
+    ModelImpl.prototype.getTimeline = function () {
+        return this.timeline;
+    };
+    ModelImpl.prototype.getRobotMode = function () {
+        return this.robotModel;
+    };
+    ModelImpl.prototype.getSetting = function () {
+        return this.settings;
+    };
+    return ModelImpl;
+})();
+var WorldModelImpl = (function () {
+    function WorldModelImpl($scope) {
+        this.drawMode = 0;
+        $scope.vm = this;
+        var controller = this;
+        $(document).ready(function () {
+            controller.paper = Raphael("stage", "100%", "100%");
+            $(controller.paper.canvas).attr("id", "paper");
+            var wall_pattern = '<pattern id="wall_pattern" patternUnits="userSpaceOnUse" width="85" height="80">\
+                                        <image xlink:href="images/2dmodel/2d_wall.png" width="85" height="80" />\
+                                    </pattern>';
+            $("body").append('<svg id="dummy" style="display:none"><defs>' + wall_pattern + '</defs></svg>');
+            $("#paper defs").append($("#dummy pattern"));
+            $("#dummy").remove();
+            var shape;
+            var isDrawing = false;
+            $("#stage").mousedown(function (e) {
+                switch (controller.drawMode) {
+                    case 1:
+                        var offset = $("#stage").offset();
+                        var x = e.pageX - offset.left;
+                        var y = e.pageY - offset.top;
+                        var width = $("#pen_width_spinner").val();
+                        var color = $("#pen_color_dropdown").val();
+                        shape = new LineItemImpl(controller, x, y, x, y, width, color);
+                        isDrawing = true;
+                        break;
+                    case 2:
+                        var offset = $("#stage").offset();
+                        var x = e.pageX - offset.left;
+                        var y = e.pageY - offset.top;
+                        shape = new WallItemImpl(controller, x, y, x, y);
+                        isDrawing = true;
+                        break;
+                    default:
+                }
+            });
+            $("#stage").mousemove(function (e) {
+                if (isDrawing) {
+                    switch (controller.drawMode) {
+                        case 1:
+                        case 2:
+                            var offset = $("#stage").offset();
+                            var x = e.pageX - offset.left;
+                            var y = e.pageY - offset.top;
+                            shape.updateEnd(x, y);
+                        default:
+                    }
+                }
+            });
+            $("#stage").mouseup(function (e) {
+                if (isDrawing) {
+                    isDrawing = false;
+                }
+            });
+        });
+    }
+    WorldModelImpl.prototype.setDrawLineMode = function () {
+        this.drawMode = 1;
+    };
+    WorldModelImpl.prototype.setDrawWallMode = function () {
+        this.drawMode = 2;
+    };
+    WorldModelImpl.prototype.getDrawMode = function () {
+        return this.drawMode;
+    };
+    WorldModelImpl.prototype.setNoneMode = function () {
+        this.drawMode = 0;
+    };
+    WorldModelImpl.prototype.getPaper = function () {
+        return this.paper;
+    };
+    return WorldModelImpl;
 })();
 var NodeType = (function () {
     function NodeType() {
