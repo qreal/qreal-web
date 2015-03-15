@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -24,6 +25,13 @@ public class RobotController {
     public static final String HOST_NAME = "127.0.0.1";
     public static final int PORT = 9002;
     private static final ObjectMapper mapper = new ObjectMapper();
+
+    @RequestMapping(value = "/robot", method = RequestMethod.GET)
+    public ModelAndView viewRobot() {
+        ModelAndView model = new ModelAndView();
+        model.setViewName("robot/robot");
+        return model;
+    }
 
     @RequestMapping(value = "/create-code", method = RequestMethod.GET)
     public String createCode(Model model) throws IOException {
