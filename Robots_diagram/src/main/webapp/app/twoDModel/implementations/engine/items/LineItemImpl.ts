@@ -16,30 +16,26 @@ class LineItemImpl implements LineItem {
 
         var handleRadius: number = 10;
 
-        this.handleStart = paper.circle(xStart, yStart, handleRadius).attr({
+        var handleAttrs = {
             fill: "transparent",
             cursor: "pointer",
             "stroke-width": 1,
             stroke: "black"
-        });
+        };
 
-        this.handleEnd = paper.circle(xEnd, yEnd, handleRadius).attr({
-            fill: "transparent",
-            cursor: "pointer",
-            "stroke-width": 1,
-            stroke: "black"
-        });
+        this.handleStart = paper.circle(xStart, yStart, handleRadius).attr(handleAttrs);
+        this.handleEnd = paper.circle(xEnd, yEnd, handleRadius).attr(handleAttrs);
 
         var line = this;
 
-        var start = function () {
+        var startHandle = function () {
                 if (!worldModel.getDrawMode()) {
                     this.cx = this.attr("cx");
                     this.cy = this.attr("cy");
                 }
                 return this;
             },
-            moveStart = function (dx, dy) {
+            moveHandleStart = function (dx, dy) {
                 if (!worldModel.getDrawMode()) {
                     var newX = this.cx + dx;
                     var newY = this.cy + dy;
@@ -47,7 +43,7 @@ class LineItemImpl implements LineItem {
                 }
                 return this;
             },
-            moveEnd = function (dx, dy) {
+            moveHandleEnd = function (dx, dy) {
                 if (!worldModel.getDrawMode()) {
                     var newX = this.cx + dx;
                     var newY = this.cy + dy;
@@ -55,12 +51,12 @@ class LineItemImpl implements LineItem {
                 }
                 return this;
             },
-            up = function () {
+            upHandle = function () {
                 return this;
             };
 
-        line.handleStart.drag(moveStart, start, up);
-        line.handleEnd.drag(moveEnd, start, up);
+        line.handleStart.drag(moveHandleStart, startHandle, upHandle);
+        line.handleEnd.drag(moveHandleEnd, startHandle, upHandle);
 
 
         var startPath = function () {

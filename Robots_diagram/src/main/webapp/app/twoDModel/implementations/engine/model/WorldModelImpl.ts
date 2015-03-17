@@ -50,7 +50,7 @@ class WorldModelImpl implements WorldModel {
                             "x": x,
                             "y": y
                         }
-                        shape = new EllipseItemImpl(worldModel, x, y, x, y, width, color);
+                        shape = new EllipseItemImpl(worldModel, x, y, width, color);
                         isDrawing = true;
                         break
                     default:

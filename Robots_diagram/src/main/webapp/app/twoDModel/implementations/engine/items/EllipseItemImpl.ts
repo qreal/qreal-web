@@ -1,7 +1,12 @@
 class EllipseItemImpl implements EllipseItem {
     private ellipse: RaphaelElement;
+    private handleTopLeft: RaphaelElement;
+    private handleTopRight: RaphaelElement;
+    private handleBottomLeft: RaphaelElement;
+    private handleBottomRight: RaphaelElement;
+    private handleSize: number  = 10;
 
-    constructor(worldModel: WorldModel, xStart: number, yStart: number, xEnd: number, yEnd: number, width: number, color: string) {
+    constructor(worldModel: WorldModel, xStart: number, yStart: number, width: number, color: string) {
         var paper = worldModel.getPaper();
         this.ellipse = paper.ellipse(xStart, yStart, 0, 0);
         this.ellipse.attr({
@@ -11,12 +16,93 @@ class EllipseItemImpl implements EllipseItem {
             "stroke-width": width
         })
 
-        var thisEllipse = this.ellipse;
+        var ellipseItem = this;
+
+        var handleAttrs = {
+            fill: "transparent",
+            cursor: "pointer",
+            "stroke-width": 1,
+            stroke: "black"
+        };
+
+        this.handleTopLeft = paper.rect(xStart, yStart, this.handleSize, this.handleSize).attr(handleAttrs);
+        this.handleTopRight = paper.rect(xStart - this.handleSize, yStart, this.handleSize, this.handleSize).attr(handleAttrs);
+        this.handleBottomLeft = paper.rect(xStart, yStart - this.handleSize, this.handleSize, this.handleSize).attr(handleAttrs);
+        this.handleBottomRight = paper.rect(xStart - this.handleSize, yStart - this.handleSize, this.handleSize, this.handleSize).attr(handleAttrs);
+
+        var startTopLeftHandle = function () {
+                if (!worldModel.getDrawMode()) {
+                    this.ox = this.attr("x");
+                    this.oy = this.attr("y");
+                    this.oppositeCornerX = ellipseItem.handleBottomRight.attr("x") + ellipseItem.handleSize;
+                    this.oppositeCornerY = ellipseItem.handleBottomRight.attr("y") + ellipseItem.handleSize;
+                }
+                return this;
+            },
+            startTopRightHandle = function () {
+                if (!worldModel.getDrawMode()) {
+                    this.ox = this.attr("x") + ellipseItem.handleSize;
+                    this.oy = this.attr("y");
+                    this.oppositeCornerX = ellipseItem.handleBottomLeft.attr("x");
+                    this.oppositeCornerY = ellipseItem.handleBottomLeft.attr("y") + ellipseItem.handleSize;
+                }
+                return this;
+            },
+            startBottomLeftHandle = function () {
+                if (!worldModel.getDrawMode()) {
+                    this.ox = this.attr("x");
+                    this.oy = this.attr("y") + ellipseItem.handleSize;
+                    this.oppositeCornerX = ellipseItem.handleTopRight.attr("x") + ellipseItem.handleSize;
+                    this.oppositeCornerY = ellipseItem.handleTopRight.attr("y");
+                }
+                return this;
+            },
+            startBottomRightHandle = function () {
+                if (!worldModel.getDrawMode()) {
+                    this.ox = this.attr("x") + ellipseItem.handleSize;
+                    this.oy = this.attr("y") + ellipseItem.handleSize;
+                    this.oppositeCornerX = ellipseItem.handleTopLeft.attr("x");
+                    this.oppositeCornerY = ellipseItem.handleTopLeft.attr("y");
+                }
+                return this;
+            },
+            moveHandle = function (dx, dy) {
+                if (!worldModel.getDrawMode()) {
+                    var newX = this.ox + dx;
+                    var newY = this.oy + dy;
+                    ellipseItem.updateCorner(this.oppositeCornerX, this.oppositeCornerY, newX, newY);
+                }
+                return this;
+            },
+            upHandle = function () {
+                return this;
+            };
+
+        ellipseItem.handleTopLeft.drag(moveHandle, startTopLeftHandle, upHandle);
+        ellipseItem.handleTopRight.drag(moveHandle, startTopRightHandle, upHandle);
+        ellipseItem.handleBottomLeft.drag(moveHandle, startBottomLeftHandle, upHandle);
+        ellipseItem.handleBottomRight.drag(moveHandle, startBottomRightHandle, upHandle);
 
         var startEllipse = function () {
                 if (!worldModel.getDrawMode()) {
                     this.cx = this.attr("cx");
                     this.cy = this.attr("cy");
+                    this.handleTopLeftCoord = {
+                        x: ellipseItem.handleTopLeft.attr("x"),
+                        y: ellipseItem.handleTopLeft.attr("y")
+                    };
+                    this.handleTopRightCoord = {
+                        x: ellipseItem.handleTopRight.attr("x"),
+                        y: ellipseItem.handleTopRight.attr("y")
+                    };
+                    this.handleBottomLeftCoord = {
+                        x: ellipseItem.handleBottomLeft.attr("x"),
+                        y: ellipseItem.handleBottomLeft.attr("y")
+                    };
+                    this.handleBottomRightCoord = {
+                        x: ellipseItem.handleBottomRight.attr("x"),
+                        y: ellipseItem.handleBottomRight.attr("y")
+                    };
                 }
                 return this;
             },
@@ -24,7 +110,13 @@ class EllipseItemImpl implements EllipseItem {
                 if (!worldModel.getDrawMode()) {
                     var newX = this.cx + dx;
                     var newY = this.cy + dy;
-                    thisEllipse.attr({cx: newX, cy: newY});
+                    ellipseItem.ellipse.attr({cx: newX, cy: newY});
+
+                    ellipseItem.handleTopLeft.attr({x : this.handleTopLeftCoord.x + dx, y: this.handleTopLeftCoord.y + dy});
+                    ellipseItem.handleTopRight.attr({x : this.handleTopRightCoord.x + dx, y: this.handleTopRightCoord.y + dy});
+                    ellipseItem.handleBottomLeft.attr({x : this.handleBottomLeftCoord.x + dx, y: this.handleBottomLeftCoord.y + dy});
+                    ellipseItem.handleBottomRight.attr({x : this.handleBottomRightCoord.x + dx, y: this.handleBottomRightCoord.y + dy});
+
                 }
                 return this;
             },
@@ -32,7 +124,7 @@ class EllipseItemImpl implements EllipseItem {
                 return this;
             };
 
-        thisEllipse.drag(moveEllipse, startEllipse, upEllipse);
+        ellipseItem.ellipse.drag(moveEllipse, startEllipse, upEllipse);
     }
 
     updateCorner(oppositeCornerX: number, oppositeCornerY: number, x: number, y: number): void {
@@ -42,5 +134,28 @@ class EllipseItemImpl implements EllipseItem {
         var newRy = Math.abs(y - oppositeCornerY) / 2;
         this.ellipse.attr({"cx": newCx , "cy": newCy});
         this.ellipse.attr({"rx": newRx, "ry": newRy});
+
+        if (x - oppositeCornerX >= 0 && y - oppositeCornerY >= 0) {
+            this.handleTopLeft.attr({x : oppositeCornerX, y: oppositeCornerY});
+            this.handleTopRight.attr({x : x - this.handleSize, y: oppositeCornerY});
+            this.handleBottomLeft.attr({x : oppositeCornerX, y: y - this.handleSize});
+            this.handleBottomRight.attr({x : x - this.handleSize, y: y - this.handleSize});
+        } else if (x - oppositeCornerX < 0 && y - oppositeCornerY >= 0) {
+            this.handleTopLeft.attr({x : x, y: oppositeCornerY});
+            this.handleTopRight.attr({x : oppositeCornerX - this.handleSize, y: oppositeCornerY});
+            this.handleBottomLeft.attr({x : x, y: y - this.handleSize});
+            this.handleBottomRight.attr({x : oppositeCornerX - this.handleSize, y: y - this.handleSize});
+        } else if (x - oppositeCornerX >= 0 && y - oppositeCornerY < 0) {
+            this.handleTopLeft.attr({x : oppositeCornerX, y: y});
+            this.handleTopRight.attr({x : x - this.handleSize, y: y});
+            this.handleBottomLeft.attr({x : oppositeCornerX, y: oppositeCornerY - this.handleSize});
+            this.handleBottomRight.attr({x : x - this.handleSize, y: oppositeCornerY - this.handleSize});
+        } else if (x - oppositeCornerX < 0 && y - oppositeCornerY < 0) {
+            this.handleTopLeft.attr({x : x, y: y});
+            this.handleTopRight.attr({x : oppositeCornerX - this.handleSize, y: y});
+            this.handleBottomLeft.attr({x : x, y: oppositeCornerY - this.handleSize});
+            this.handleBottomRight.attr({x : oppositeCornerX - this.handleSize, y: oppositeCornerY - this.handleSize});
+        }
+
     }
 }
