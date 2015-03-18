@@ -42,6 +42,14 @@ class WorldModelImpl implements WorldModel {
                         isDrawing = true;
                         break
                     case 3:
+                        var position = worldModel.getMousePosition(e);
+                        var x = position.x;
+                        var y = position.y;
+                        var width = $("#pen_width_spinner").val();
+                        var color = $("#pen_color_dropdown").val();
+                        shape = new PencilItemImpl(worldModel, x, y, width, color);
+                        worldModel.setCurrentElement(shape);
+                        isDrawing = true;
                         break
                     case 4:
                         var position = worldModel.getMousePosition(e);
@@ -70,6 +78,12 @@ class WorldModelImpl implements WorldModel {
                             var x = position.x;
                             var y = position.y;
                             shape.updateEnd(x, y);
+                            break
+                        case 3:
+                            var position = worldModel.getMousePosition(e);
+                            var x = position.x;
+                            var y = position.y;
+                            shape.updatePath(x, y);
                             break
                         case 4:
                             var position = worldModel.getMousePosition(e);

@@ -802,6 +802,52 @@ var LineItemImpl = (function () {
     };
     return LineItemImpl;
 })();
+var PencilItemImpl = (function () {
+    function PencilItemImpl(worldModel, xStart, yStart, width, color) {
+        this.pathArray = new Array();
+        var paper = worldModel.getPaper();
+        this.pathArray[0] = ["M", xStart, yStart];
+        this.path = paper.path(this.pathArray);
+        this.path.attr({
+            cursor: "pointer",
+            "stroke": color,
+            "stroke-width": width
+        });
+        var pencilItem = this;
+        var startPath = function () {
+            if (!worldModel.getDrawMode()) {
+                this.ox = this.attr("x");
+                this.oy = this.attr("y");
+                worldModel.setCurrentElement(pencilItem);
+            }
+            return this;
+        }, movePath = function (dx, dy) {
+            if (!worldModel.getDrawMode()) {
+                var trans_x = dx - this.ox;
+                var trans_y = dy - this.oy;
+                this.transform("...T" + [trans_x, trans_y]);
+                this.ox = dx;
+                this.oy = dy;
+            }
+            return this;
+        }, upPath = function () {
+            return this;
+        };
+        pencilItem.path.drag(movePath, startPath, upPath);
+    }
+    PencilItemImpl.prototype.updatePath = function (x, y) {
+        this.pathArray[this.pathArray.length] = ["L", x, y];
+        this.path.attr({ path: this.pathArray });
+    };
+    PencilItemImpl.prototype.getPath = function () {
+        return this.path;
+    };
+    PencilItemImpl.prototype.hideHandles = function () {
+    };
+    PencilItemImpl.prototype.showHandles = function () {
+    };
+    return PencilItemImpl;
+})();
 var WallItemImpl = (function () {
     function WallItemImpl(worldModel, xStart, yStart, xEnd, yEnd) {
         var paper = worldModel.getPaper();
@@ -972,6 +1018,14 @@ var WorldModelImpl = (function () {
                         isDrawing = true;
                         break;
                     case 3:
+                        var position = worldModel.getMousePosition(e);
+                        var x = position.x;
+                        var y = position.y;
+                        var width = $("#pen_width_spinner").val();
+                        var color = $("#pen_color_dropdown").val();
+                        shape = new PencilItemImpl(worldModel, x, y, width, color);
+                        worldModel.setCurrentElement(shape);
+                        isDrawing = true;
                         break;
                     case 4:
                         var position = worldModel.getMousePosition(e);
@@ -999,6 +1053,12 @@ var WorldModelImpl = (function () {
                             var x = position.x;
                             var y = position.y;
                             shape.updateEnd(x, y);
+                            break;
+                        case 3:
+                            var position = worldModel.getMousePosition(e);
+                            var x = position.x;
+                            var y = position.y;
+                            shape.updatePath(x, y);
                             break;
                         case 4:
                             var position = worldModel.getMousePosition(e);
