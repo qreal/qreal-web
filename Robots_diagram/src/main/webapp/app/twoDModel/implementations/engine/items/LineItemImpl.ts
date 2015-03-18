@@ -67,6 +67,7 @@ class LineItemImpl implements LineItem {
                     this.endY = line.pathArray[1][2]
                     this.ox = this.attr("x");
                     this.oy = this.attr("y");
+                    worldModel.setCurrentElement(line);
                 }
                 return this;
             },
@@ -117,5 +118,15 @@ class LineItemImpl implements LineItem {
         this.pathArray[1][2] = y;
         this.path.attr({path: this.pathArray});
         this.handleEnd.attr({cx: x, cy: y});
+    }
+
+    hideHandles(): void {
+        this.handleStart.hide();
+        this.handleEnd.hide();
+    }
+
+    showHandles(): void {
+        this.handleStart.show();
+        this.handleEnd.show();
     }
 }

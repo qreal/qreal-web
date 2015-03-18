@@ -632,6 +632,7 @@ var EllipseItemImpl = (function () {
                     x: ellipseItem.handleBottomRight.attr("x"),
                     y: ellipseItem.handleBottomRight.attr("y")
                 };
+                worldModel.setCurrentElement(ellipseItem);
             }
             return this;
         }, moveEllipse = function (dx, dy) {
@@ -681,6 +682,18 @@ var EllipseItemImpl = (function () {
             this.handleBottomLeft.attr({ x: x, y: oppositeCornerY - this.handleSize });
             this.handleBottomRight.attr({ x: oppositeCornerX - this.handleSize, y: oppositeCornerY - this.handleSize });
         }
+    };
+    EllipseItemImpl.prototype.hideHandles = function () {
+        this.handleTopLeft.hide();
+        this.handleTopRight.hide();
+        this.handleBottomLeft.hide();
+        this.handleBottomRight.hide();
+    };
+    EllipseItemImpl.prototype.showHandles = function () {
+        this.handleTopLeft.show();
+        this.handleTopRight.show();
+        this.handleBottomLeft.show();
+        this.handleBottomRight.show();
     };
     return EllipseItemImpl;
 })();
@@ -737,6 +750,7 @@ var LineItemImpl = (function () {
                 this.endY = line.pathArray[1][2];
                 this.ox = this.attr("x");
                 this.oy = this.attr("y");
+                worldModel.setCurrentElement(line);
             }
             return this;
         }, movePath = function (dx, dy) {
@@ -777,6 +791,14 @@ var LineItemImpl = (function () {
         this.pathArray[1][2] = y;
         this.path.attr({ path: this.pathArray });
         this.handleEnd.attr({ cx: x, cy: y });
+    };
+    LineItemImpl.prototype.hideHandles = function () {
+        this.handleStart.hide();
+        this.handleEnd.hide();
+    };
+    LineItemImpl.prototype.showHandles = function () {
+        this.handleStart.show();
+        this.handleEnd.show();
     };
     return LineItemImpl;
 })();
@@ -841,6 +863,7 @@ var WallItemImpl = (function () {
                 this.endY = wall.pathArray[1][2];
                 this.ox = this.attr("x");
                 this.oy = this.attr("y");
+                worldModel.setCurrentElement(wall);
             }
             return this;
         }, movePath = function (dx, dy) {
@@ -882,6 +905,14 @@ var WallItemImpl = (function () {
         this.path.attr({ path: this.pathArray });
         this.handleEnd.attr({ cx: x, cy: y });
     };
+    WallItemImpl.prototype.hideHandles = function () {
+        this.handleStart.hide();
+        this.handleEnd.hide();
+    };
+    WallItemImpl.prototype.showHandles = function () {
+        this.handleStart.show();
+        this.handleEnd.show();
+    };
     return WallItemImpl;
 })();
 var ModelImpl = (function () {
@@ -905,6 +936,7 @@ var ModelImpl = (function () {
 var WorldModelImpl = (function () {
     function WorldModelImpl($scope) {
         this.drawMode = 0;
+        this.currentElement = null;
         $scope.vm = this;
         var worldModel = this;
         $(document).ready(function () {
@@ -928,6 +960,7 @@ var WorldModelImpl = (function () {
                         var width = $("#pen_width_spinner").val();
                         var color = $("#pen_color_dropdown").val();
                         shape = new LineItemImpl(worldModel, x, y, x, y, width, color);
+                        worldModel.setCurrentElement(shape);
                         isDrawing = true;
                         break;
                     case 2:
@@ -935,6 +968,7 @@ var WorldModelImpl = (function () {
                         var x = position.x;
                         var y = position.y;
                         shape = new WallItemImpl(worldModel, x, y, x, y);
+                        worldModel.setCurrentElement(shape);
                         isDrawing = true;
                         break;
                     case 3:
@@ -950,6 +984,7 @@ var WorldModelImpl = (function () {
                             "y": y
                         };
                         shape = new EllipseItemImpl(worldModel, x, y, width, color);
+                        worldModel.setCurrentElement(shape);
                         isDrawing = true;
                         break;
                     default:
@@ -978,6 +1013,14 @@ var WorldModelImpl = (function () {
             $("#stage").mouseup(function (e) {
                 if (isDrawing) {
                     isDrawing = false;
+                }
+                else {
+                    if (e.target.nodeName === "svg") {
+                        if (worldModel.currentElement) {
+                            worldModel.currentElement.hideHandles();
+                            worldModel.currentElement = null;
+                        }
+                    }
                 }
             });
         });
@@ -1010,6 +1053,13 @@ var WorldModelImpl = (function () {
     };
     WorldModelImpl.prototype.getPaper = function () {
         return this.paper;
+    };
+    WorldModelImpl.prototype.setCurrentElement = function (element) {
+        if (this.currentElement) {
+            this.currentElement.hideHandles();
+        }
+        this.currentElement = element;
+        element.showHandles();
     };
     return WorldModelImpl;
 })();

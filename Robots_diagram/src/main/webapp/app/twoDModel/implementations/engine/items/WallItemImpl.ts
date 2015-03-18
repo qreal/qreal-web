@@ -75,6 +75,7 @@ class WallItemImpl implements WallItem {
                     this.endY = wall.pathArray[1][2]
                     this.ox = this.attr("x");
                     this.oy = this.attr("y");
+                    worldModel.setCurrentElement(wall);
                 }
                 return this;
             },
@@ -125,5 +126,15 @@ class WallItemImpl implements WallItem {
         this.pathArray[1][2] = y;
         this.path.attr({path: this.pathArray});
         this.handleEnd.attr({cx: x, cy: y});
+    }
+
+    hideHandles(): void {
+        this.handleStart.hide();
+        this.handleEnd.hide();
+    }
+
+    showHandles(): void {
+        this.handleStart.show();
+        this.handleEnd.show();
     }
 }

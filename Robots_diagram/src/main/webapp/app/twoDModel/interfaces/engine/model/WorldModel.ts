@@ -6,4 +6,5 @@ interface WorldModel {
     getDrawMode();
     setNoneMode();
     getPaper();
+    setCurrentElement(element);
 }

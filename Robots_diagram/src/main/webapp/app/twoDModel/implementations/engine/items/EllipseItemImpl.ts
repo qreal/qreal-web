@@ -103,6 +103,7 @@ class EllipseItemImpl implements EllipseItem {
                         x: ellipseItem.handleBottomRight.attr("x"),
                         y: ellipseItem.handleBottomRight.attr("y")
                     };
+                    worldModel.setCurrentElement(ellipseItem);
                 }
                 return this;
             },
@@ -157,5 +158,19 @@ class EllipseItemImpl implements EllipseItem {
             this.handleBottomRight.attr({x : oppositeCornerX - this.handleSize, y: oppositeCornerY - this.handleSize});
         }
 
+    }
+
+    hideHandles(): void {
+        this.handleTopLeft.hide();
+        this.handleTopRight.hide();
+        this.handleBottomLeft.hide();
+        this.handleBottomRight.hide();
+    }
+
+    showHandles(): void {
+        this.handleTopLeft.show();
+        this.handleTopRight.show();
+        this.handleBottomLeft.show();
+        this.handleBottomRight.show();
     }
 }

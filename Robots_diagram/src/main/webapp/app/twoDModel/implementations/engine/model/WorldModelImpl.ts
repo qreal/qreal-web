@@ -1,6 +1,7 @@
 class WorldModelImpl implements WorldModel {
     drawMode: number = 0;
     paper: RaphaelPaper;
+    currentElement = null;
 
     constructor($scope) {
         $scope.vm = this;
@@ -29,6 +30,7 @@ class WorldModelImpl implements WorldModel {
                         var width = $("#pen_width_spinner").val();
                         var color = $("#pen_color_dropdown").val();
                         shape = new LineItemImpl(worldModel, x, y, x, y, width, color);
+                        worldModel.setCurrentElement(shape);
                         isDrawing = true;
                         break
                     case 2:
@@ -36,6 +38,7 @@ class WorldModelImpl implements WorldModel {
                         var x = position.x;
                         var y = position.y;
                         shape = new WallItemImpl(worldModel, x, y, x, y);
+                        worldModel.setCurrentElement(shape);
                         isDrawing = true;
                         break
                     case 3:
@@ -51,6 +54,7 @@ class WorldModelImpl implements WorldModel {
                             "y": y
                         }
                         shape = new EllipseItemImpl(worldModel, x, y, width, color);
+                        worldModel.setCurrentElement(shape);
                         isDrawing = true;
                         break
                     default:
@@ -81,6 +85,13 @@ class WorldModelImpl implements WorldModel {
             $("#stage").mouseup(function(e) {
                 if (isDrawing) {
                     isDrawing = false;
+                } else {
+                    if (e.target.nodeName === "svg") {
+                        if (worldModel.currentElement) {
+                            worldModel.currentElement.hideHandles();
+                            worldModel.currentElement = null;
+                        }
+                    }
                 }
             });
         });
@@ -121,5 +132,13 @@ class WorldModelImpl implements WorldModel {
 
     getPaper(): RaphaelPaper {
         return this.paper;
+    }
+
+    setCurrentElement(element) {
+        if (this.currentElement) {
+            this.currentElement.hideHandles();
+        }
+        this.currentElement = element;
+        element.showHandles();
     }
 }
