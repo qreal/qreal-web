@@ -17,6 +17,11 @@ class WorldModelImpl implements WorldModel {
             $("#paper defs").append($("#dummy pattern"));
             $("#dummy").remove();
 
+            $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
+                // TODO: add clear paper (paper.clean() clear also wall_pattern)
+                $('#confirmDelete').modal('hide');
+            });
+
             var shape;
             var isDrawing: boolean = false;
             var startDrawPoint;
@@ -148,11 +153,15 @@ class WorldModelImpl implements WorldModel {
         return this.paper;
     }
 
-    setCurrentElement(element) {
+    setCurrentElement(element): void {
         if (this.currentElement) {
             this.currentElement.hideHandles();
         }
         this.currentElement = element;
         element.showHandles();
+    }
+
+    clearPaper(): void {
+        this.paper.clear();
     }
 }

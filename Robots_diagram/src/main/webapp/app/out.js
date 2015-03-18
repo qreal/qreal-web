@@ -994,6 +994,9 @@ var WorldModelImpl = (function () {
             $("body").append('<svg id="dummy" style="display:none"><defs>' + wall_pattern + '</defs></svg>');
             $("#paper defs").append($("#dummy pattern"));
             $("#dummy").remove();
+            $('#confirmDelete').find('.modal-footer #confirm').on('click', function () {
+                $('#confirmDelete').modal('hide');
+            });
             var shape;
             var isDrawing = false;
             var startDrawPoint;
@@ -1120,6 +1123,9 @@ var WorldModelImpl = (function () {
         }
         this.currentElement = element;
         element.showHandles();
+    };
+    WorldModelImpl.prototype.clearPaper = function () {
+        this.paper.clear();
     };
     return WorldModelImpl;
 })();

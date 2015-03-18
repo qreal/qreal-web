@@ -7,6 +7,24 @@
     <link rel="stylesheet" href="<c:url value='/resources/css/2dmodel.css' />" />
 <body ng-app="diagram" ng-controller="ModelImpl">
 <div id="container" >
+    <div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Clear scene</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Do you really want to clear scene?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirm">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="left-menu">
         <div class="tabbable">
             <ul class="nav nav-tabs">
@@ -50,7 +68,7 @@
 
                             <tr>
                                 <td>
-                                    <button class="palette_button">
+                                    <button class="palette_button" data-toggle="modal" data-target="#confirmDelete">
                                         <img src="images/2dmodel/2d_clear.png"
                                              style="width: 20px; height: 20px; vertical-align: middle"/>
                                     </button>

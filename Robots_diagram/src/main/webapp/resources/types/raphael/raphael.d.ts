@@ -209,6 +209,7 @@ interface RaphaelPaper {
     height: number;
     image(src: string, x: number, y: number, width: number, height: number): RaphaelElement;
     path(pathString?: string): RaphaelPath;
+    path(pathArray: any[]): RaphaelPath;
     print(x: number, y: number, str: string, font: RaphaelFont, size?: number, origin?: string, letter_spacing?: number): RaphaelPath;
     rect(x: number, y: number, width: number, height: number, r?: number): RaphaelElement;
     remove(): void;
