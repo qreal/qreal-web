@@ -4,6 +4,7 @@
 /// <reference path="../resources/types/backbone/backbone.d.ts" />
 /// <reference path="../resources/types/jointjs/jointjs.d.ts" />
 /// <reference path="../resources/types/raphael/raphael.d.ts" />
+/// <reference path="../resources/types/bootstrap/bootstrap.d.ts" />
 
 
 
