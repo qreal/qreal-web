@@ -129,4 +129,10 @@ class LineItemImpl implements LineItem {
         this.handleStart.show();
         this.handleEnd.show();
     }
+
+    remove(): void {
+        this.handleStart.remove();
+        this.handleEnd.remove();
+        this.path.remove();
+    }
 }

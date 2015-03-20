@@ -53,4 +53,8 @@ class PencilItemImpl {
     }
     showHandles(): void {
     }
+
+    remove(): void {
+        this.path.remove();
+    }
 }

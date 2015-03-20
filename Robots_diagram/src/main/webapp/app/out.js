@@ -695,6 +695,13 @@ var EllipseItemImpl = (function () {
         this.handleBottomLeft.show();
         this.handleBottomRight.show();
     };
+    EllipseItemImpl.prototype.remove = function () {
+        this.handleTopLeft.remove();
+        this.handleTopRight.remove();
+        this.handleBottomLeft.remove();
+        this.handleBottomRight.remove();
+        this.ellipse.remove();
+    };
     return EllipseItemImpl;
 })();
 var LineItemImpl = (function () {
@@ -800,6 +807,11 @@ var LineItemImpl = (function () {
         this.handleStart.show();
         this.handleEnd.show();
     };
+    LineItemImpl.prototype.remove = function () {
+        this.handleStart.remove();
+        this.handleEnd.remove();
+        this.path.remove();
+    };
     return LineItemImpl;
 })();
 var PencilItemImpl = (function () {
@@ -845,6 +857,9 @@ var PencilItemImpl = (function () {
     PencilItemImpl.prototype.hideHandles = function () {
     };
     PencilItemImpl.prototype.showHandles = function () {
+    };
+    PencilItemImpl.prototype.remove = function () {
+        this.path.remove();
     };
     return PencilItemImpl;
 })();
@@ -959,6 +974,11 @@ var WallItemImpl = (function () {
         this.handleStart.show();
         this.handleEnd.show();
     };
+    WallItemImpl.prototype.remove = function () {
+        this.handleStart.remove();
+        this.handleEnd.remove();
+        this.path.remove();
+    };
     return WallItemImpl;
 })();
 var ModelImpl = (function () {
@@ -983,6 +1003,8 @@ var WorldModelImpl = (function () {
     function WorldModelImpl($scope) {
         this.drawMode = 0;
         this.currentElement = null;
+        this.colorFields = [];
+        this.wallItems = [];
         $scope.vm = this;
         var worldModel = this;
         $(document).ready(function () {
@@ -995,6 +1017,7 @@ var WorldModelImpl = (function () {
             $("#paper defs").append($("#dummy pattern"));
             $("#dummy").remove();
             $('#confirmDelete').find('.modal-footer #confirm').on('click', function () {
+                worldModel.clearPaper();
                 $('#confirmDelete').modal('hide');
             });
             var shape;
@@ -1009,6 +1032,7 @@ var WorldModelImpl = (function () {
                         var width = $("#pen_width_spinner").val();
                         var color = $("#pen_color_dropdown").val();
                         shape = new LineItemImpl(worldModel, x, y, x, y, width, color);
+                        worldModel.colorFields.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
                         break;
@@ -1017,6 +1041,7 @@ var WorldModelImpl = (function () {
                         var x = position.x;
                         var y = position.y;
                         shape = new WallItemImpl(worldModel, x, y, x, y);
+                        worldModel.wallItems.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
                         break;
@@ -1027,6 +1052,7 @@ var WorldModelImpl = (function () {
                         var width = $("#pen_width_spinner").val();
                         var color = $("#pen_color_dropdown").val();
                         shape = new PencilItemImpl(worldModel, x, y, width, color);
+                        worldModel.colorFields.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
                         break;
@@ -1041,6 +1067,7 @@ var WorldModelImpl = (function () {
                             "y": y
                         };
                         shape = new EllipseItemImpl(worldModel, x, y, width, color);
+                        worldModel.colorFields.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
                         break;
@@ -1125,7 +1152,14 @@ var WorldModelImpl = (function () {
         element.showHandles();
     };
     WorldModelImpl.prototype.clearPaper = function () {
-        this.paper.clear();
+        while (this.wallItems.length) {
+            var wallItem = this.wallItems.pop();
+            wallItem.remove();
+        }
+        while (this.colorFields.length) {
+            var item = this.colorFields.pop();
+            item.remove();
+        }
     };
     return WorldModelImpl;
 })();

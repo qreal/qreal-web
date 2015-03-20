@@ -137,4 +137,10 @@ class WallItemImpl implements WallItem {
         this.handleStart.show();
         this.handleEnd.show();
     }
+
+    remove(): void {
+        this.handleStart.remove();
+        this.handleEnd.remove();
+        this.path.remove();
+    }
 }

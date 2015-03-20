@@ -4,4 +4,5 @@ interface WallItem {
     updateEnd(x: number, y: number): void;
     hideHandles(): void;
     showHandles(): void;
+    remove(): void;
 }

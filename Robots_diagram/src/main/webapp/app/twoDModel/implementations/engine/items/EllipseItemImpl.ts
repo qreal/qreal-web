@@ -173,4 +173,12 @@ class EllipseItemImpl implements EllipseItem {
         this.handleBottomLeft.show();
         this.handleBottomRight.show();
     }
+
+    remove(): void {
+        this.handleTopLeft.remove();
+        this.handleTopRight.remove();
+        this.handleBottomLeft.remove();
+        this.handleBottomRight.remove();
+        this.ellipse.remove();
+    }
 }

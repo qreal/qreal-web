@@ -1,7 +1,9 @@
 class WorldModelImpl implements WorldModel {
-    drawMode: number = 0;
-    paper: RaphaelPaper;
-    currentElement = null;
+    private drawMode: number = 0;
+    private paper: RaphaelPaper;
+    private currentElement = null;
+    private colorFields: any[] = [];
+    private wallItems: WallItem[] = [];
 
     constructor($scope) {
         $scope.vm = this;
@@ -18,7 +20,7 @@ class WorldModelImpl implements WorldModel {
             $("#dummy").remove();
 
             $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
-                // TODO: add clear paper (paper.clean() clear also wall_pattern)
+                worldModel.clearPaper();
                 $('#confirmDelete').modal('hide');
             });
 
@@ -35,6 +37,7 @@ class WorldModelImpl implements WorldModel {
                         var width = $("#pen_width_spinner").val();
                         var color = $("#pen_color_dropdown").val();
                         shape = new LineItemImpl(worldModel, x, y, x, y, width, color);
+                        worldModel.colorFields.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
                         break
@@ -43,6 +46,7 @@ class WorldModelImpl implements WorldModel {
                         var x = position.x;
                         var y = position.y;
                         shape = new WallItemImpl(worldModel, x, y, x, y);
+                        worldModel.wallItems.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
                         break
@@ -53,6 +57,7 @@ class WorldModelImpl implements WorldModel {
                         var width = $("#pen_width_spinner").val();
                         var color = $("#pen_color_dropdown").val();
                         shape = new PencilItemImpl(worldModel, x, y, width, color);
+                        worldModel.colorFields.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
                         break
@@ -67,6 +72,7 @@ class WorldModelImpl implements WorldModel {
                             "y": y
                         }
                         shape = new EllipseItemImpl(worldModel, x, y, width, color);
+                        worldModel.colorFields.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
                         break
@@ -162,6 +168,14 @@ class WorldModelImpl implements WorldModel {
     }
 
     clearPaper(): void {
-        this.paper.clear();
+        while (this.wallItems.length) {
+            var wallItem = this.wallItems.pop();
+            wallItem.remove();
+        }
+
+        while (this.colorFields.length) {
+            var item = this.colorFields.pop();
+            item.remove();
+        }
     }
 }
