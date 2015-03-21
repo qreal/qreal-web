@@ -6,6 +6,11 @@ class ModelImpl implements Model {
 
     constructor($scope) {
         this.worldModel = new WorldModelImpl($scope);
+
+        this.robotModel = new RobotModelImpl();
+
+        this.timeline = new TimelineImpl(this.robotModel);
+        this.timeline.start();
     }
 
     getWorldModel() : WorldModel {

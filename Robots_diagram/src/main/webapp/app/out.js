@@ -863,6 +863,14 @@ var PencilItemImpl = (function () {
     };
     return PencilItemImpl;
 })();
+var RobotItemImpl = (function () {
+    function RobotItemImpl() {
+    }
+    RobotItemImpl.prototype.ride = function () {
+        console.log("robot ride");
+    };
+    return RobotItemImpl;
+})();
 var WallItemImpl = (function () {
     function WallItemImpl(worldModel, xStart, yStart, xEnd, yEnd) {
         var paper = worldModel.getPaper();
@@ -984,6 +992,9 @@ var WallItemImpl = (function () {
 var ModelImpl = (function () {
     function ModelImpl($scope) {
         this.worldModel = new WorldModelImpl($scope);
+        this.robotModel = new RobotModelImpl();
+        this.timeline = new TimelineImpl(this.robotModel);
+        this.timeline.start();
     }
     ModelImpl.prototype.getWorldModel = function () {
         return this.worldModel;
@@ -998,6 +1009,52 @@ var ModelImpl = (function () {
         return this.settings;
     };
     return ModelImpl;
+})();
+var RobotModelImpl = (function () {
+    function RobotModelImpl() {
+        this.robotItem = new RobotItemImpl();
+    }
+    RobotModelImpl.prototype.nextFragment = function () {
+        this.robotItem.ride();
+    };
+    return RobotModelImpl;
+})();
+var TimelineImpl = (function () {
+    function TimelineImpl(robotModel) {
+        this.timeInterval = 10;
+        this.fps = 28;
+        this.defaultFrameLength = 1000 / this.fps;
+        this.slowSpeedFactor = 2;
+        this.normalSpeedFactor = 5;
+        this.fastSpeedFactor = 10;
+        this.immediateSpeedFactor = 100000000;
+        this.defaultRealTimeInterval = 0;
+        this.ticksPerCycle = 3;
+        this.frameLength = this.defaultFrameLength;
+        this.robotModel = robotModel;
+    }
+    TimelineImpl.prototype.start = function () {
+        var timeline = this;
+        this.intervalId = setInterval(function () {
+            timeline.onTimer(timeline);
+        }, this.defaultFrameLength);
+    };
+    TimelineImpl.prototype.stop = function () {
+        clearInterval(this.intervalId);
+    };
+    TimelineImpl.prototype.onTimer = function (timeline) {
+        timeline.getRobotModel().nextFragment();
+    };
+    TimelineImpl.prototype.setSpeedFactor = function (factor) {
+        this.speedFactor = factor;
+    };
+    TimelineImpl.prototype.getSpeedFactor = function () {
+        return this.speedFactor;
+    };
+    TimelineImpl.prototype.getRobotModel = function () {
+        return this.robotModel;
+    };
+    return TimelineImpl;
 })();
 var WorldModelImpl = (function () {
     function WorldModelImpl($scope) {

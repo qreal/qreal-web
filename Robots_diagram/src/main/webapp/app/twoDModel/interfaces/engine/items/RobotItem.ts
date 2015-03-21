@@ -1,0 +1,3 @@
+interface RobotItem {
+    ride(): void;
+}
