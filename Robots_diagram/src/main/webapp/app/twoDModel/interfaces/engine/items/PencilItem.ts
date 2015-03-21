@@ -1,6 +1,3 @@
-interface PencilItem {
-    hideHandles(): void;
-    showHandles(): void;
+interface PencilItem extends ColorFieldItem {
     updatePath(x: number, y: number): void
-    remove(): void;
 }

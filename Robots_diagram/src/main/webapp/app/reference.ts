@@ -16,6 +16,7 @@
 /// <reference path="twoDModel/implementations/engine/items/WallItemImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/model/ModelImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/model/WorldModelImpl.ts" />
+/// <reference path="twoDModel/interfaces/engine/items/ColorFieldItem.ts" />
 /// <reference path="twoDModel/interfaces/engine/items/EllipseItem.ts" />
 /// <reference path="twoDModel/interfaces/engine/items/LineItem.ts" />
 /// <reference path="twoDModel/interfaces/engine/items/PencilItem.ts" />

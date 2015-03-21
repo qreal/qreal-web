@@ -2,7 +2,7 @@ class WorldModelImpl implements WorldModel {
     private drawMode: number = 0;
     private paper: RaphaelPaper;
     private currentElement = null;
-    private colorFields: any[] = [];
+    private colorFields: ColorFieldItem[] = [];
     private wallItems: WallItem[] = [];
 
     constructor($scope) {
