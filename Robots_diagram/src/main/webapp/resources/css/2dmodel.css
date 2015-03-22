@@ -21,7 +21,7 @@ button
     margin: 2px;
 }
 
-#left-menu, #right-menu{
+#twoDModel_left-menu, #twoDModel_right-menu{
     position: absolute;
     width: 260px; /*Width of left frame div*/
     top: 70px;
@@ -31,7 +31,7 @@ button
     text-align: center;
 }
 
-#right-menu{
+#twoDModel_right-menu{
     left: auto;
     width: 210px; /*Width of right frame div*/
     top: 70px;
@@ -42,7 +42,7 @@ button
     border: 1px solid gray;
 }
 
-#stage{
+#twoDModel_stage{
     position: fixed;
     top: 70px;
     left: 280px;
@@ -75,7 +75,7 @@ button
     bottom: 210px;
 }
 
-#palette {
+#twoDModel_palette {
     height: 90%;
     padding-top: 10px;
     border: 1px solid gray;
@@ -108,11 +108,11 @@ button
     margin-left: 15px;
 }
 
-.spinner {
+.twoDModel_spinner {
     width: 200px;
 }
 
-.mydropdown {
+.twoDModel_dropdown {
     width: 200px;
 }
 

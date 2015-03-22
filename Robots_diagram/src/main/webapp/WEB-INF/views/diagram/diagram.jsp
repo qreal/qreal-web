@@ -75,8 +75,8 @@
     </div>
 </div>
 
-<div id="container">
-    <div id="left-menu">
+<div id="diagram_container">
+    <div id="diagram_left-menu">
         <legend style="padding: 10px">Property Editor</legend>
         <table class="table table-condensed" id="property_table">
             <thead>
@@ -90,10 +90,10 @@
         </table>
     </div>
 
-    <div id="paper">
+    <div id="diagram_paper">
     </div>
 
-    <div id="right-menu">
+    <div id="diagram_right-menu">
         <legend style="height: 40px; padding: 10px">Palette</legend>
         <div id="elements_tree">
             <ul id="navigation">

@@ -91,9 +91,9 @@ var Controllers;
                 },
                 revert: "invalid"
             });
-            $("#paper").droppable({
+            $("#diagram_paper").droppable({
                 drop: function (event, ui) {
-                    var paperPos = $("#paper").position();
+                    var paperPos = $("#diagram_paper").position();
                     var topElementPos = ui.position.top - paperPos.top;
                     var leftElementPos = ui.position.left - paperPos.left;
                     var gridSize = controller.paper.getGridSizeValue();
@@ -520,9 +520,9 @@ var DiagramPaper = (function (_super) {
     function DiagramPaper(graph) {
         this.gridSizeValue = 25;
         _super.call(this, {
-            el: $('#paper'),
-            width: $('#paper').width(),
-            height: $('#paper').height(),
+            el: $('#diagram_paper'),
+            width: $('#diagram_paper').width(),
+            height: $('#diagram_paper').height(),
             model: graph,
             gridSize: this.gridSizeValue,
             defaultLink: new joint.dia.Link({
@@ -544,6 +544,18 @@ var DiagramPaper = (function (_super) {
     };
     return DiagramPaper;
 })(joint.dia.Paper);
+var NodeType = (function () {
+    function NodeType() {
+    }
+    return NodeType;
+})();
+var Property = (function () {
+    function Property(value, type) {
+        this.value = value;
+        this.type = type;
+    }
+    return Property;
+})();
 var EllipseItemImpl = (function () {
     function EllipseItemImpl(worldModel, xStart, yStart, width, color) {
         this.handleSize = 10;
@@ -1064,13 +1076,13 @@ var WorldModelImpl = (function () {
         $scope.vm = this;
         var worldModel = this;
         $(document).ready(function () {
-            worldModel.paper = Raphael("stage", "100%", "100%");
-            $(worldModel.paper.canvas).attr("id", "paper");
+            worldModel.paper = Raphael("twoDModel_stage", "100%", "100%");
+            $(worldModel.paper.canvas).attr("id", "twoDModel_paper");
             var wall_pattern = '<pattern id="wall_pattern" patternUnits="userSpaceOnUse" width="85" height="80">\
                                         <image xlink:href="images/2dmodel/2d_wall.png" width="85" height="80" />\
                                     </pattern>';
             $("body").append('<svg id="dummy" style="display:none"><defs>' + wall_pattern + '</defs></svg>');
-            $("#paper defs").append($("#dummy pattern"));
+            $("#twoDModel_paper defs").append($("#dummy pattern"));
             $("#dummy").remove();
             $('#confirmDelete').find('.modal-footer #confirm').on('click', function () {
                 worldModel.clearPaper();
@@ -1079,7 +1091,7 @@ var WorldModelImpl = (function () {
             var shape;
             var isDrawing = false;
             var startDrawPoint;
-            $("#stage").mousedown(function (e) {
+            $("#twoDModel_stage").mousedown(function (e) {
                 switch (worldModel.drawMode) {
                     case 1:
                         var position = worldModel.getMousePosition(e);
@@ -1130,7 +1142,7 @@ var WorldModelImpl = (function () {
                     default:
                 }
             });
-            $("#stage").mousemove(function (e) {
+            $("#twoDModel_stage").mousemove(function (e) {
                 if (isDrawing) {
                     switch (worldModel.drawMode) {
                         case 1:
@@ -1156,7 +1168,7 @@ var WorldModelImpl = (function () {
                     }
                 }
             });
-            $("#stage").mouseup(function (e) {
+            $("#twoDModel_stage").mouseup(function (e) {
                 if (isDrawing) {
                     isDrawing = false;
                 }
@@ -1172,7 +1184,7 @@ var WorldModelImpl = (function () {
         });
     }
     WorldModelImpl.prototype.getMousePosition = function (e) {
-        var offset = $("#stage").offset();
+        var offset = $("#twoDModel_stage").offset();
         var position = {
             x: e.pageX - offset.left,
             y: e.pageY - offset.top
@@ -1218,17 +1230,5 @@ var WorldModelImpl = (function () {
         }
     };
     return WorldModelImpl;
-})();
-var NodeType = (function () {
-    function NodeType() {
-    }
-    return NodeType;
-})();
-var Property = (function () {
-    function Property(value, type) {
-        this.value = value;
-        this.type = type;
-    }
-    return Property;
 })();
 //# sourceMappingURL=out.js.map

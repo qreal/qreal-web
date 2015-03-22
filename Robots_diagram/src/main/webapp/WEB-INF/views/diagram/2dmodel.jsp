@@ -74,14 +74,14 @@
         </div>
     </div>
 
-    <div id="left-menu">
+    <div id="twoDModel_left-menu">
         <div class="tabbable">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#lA" data-toggle="tab">Tools</a></li>
                 <li><a href="#lB" data-toggle="tab">Ports</a></li>
                 <li><a href="#lC" data-toggle="tab">Model settings</a></li>
             </ul>
-            <div id="palette">
+            <div id="twoDModel_palette">
                 <div class="tab-content">
                     <div class="tab-pane active" id="lA">
                         <table>
@@ -135,10 +135,10 @@
 
                         <div id="pen_settings">
                             <p><b>Width</b></p>
-                            <p><input id="pen_width_spinner" type="number" class="spinner" value="6"></p>
+                            <p><input id="pen_width_spinner" type="number" class="spinner twoDModel_spinner" value="6"></p>
                             <p><b>Color</b></p>
                             <p>
-                                <select id="pen_color_dropdown" class="mydropdown">
+                                <select id="pen_color_dropdown" class="twoDModel_dropdown">
                                     <option selected="selected" value="black">black</option>
                                     <option value="blue">blue</option>
                                     <option value="green">green</option>
@@ -222,10 +222,10 @@
         </div>
     </div>
 
-    <div id="stage">
+    <div id="twoDModel_stage">
     </div>
 
-    <div id="right-menu">
+    <div id="twoDModel_right-menu">
     </div>
 </div>
 </body>

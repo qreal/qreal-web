@@ -105,9 +105,9 @@ module Controllers {
                 revert:"invalid"
             });
 
-            $("#paper").droppable({
+            $("#diagram_paper").droppable({
                 drop: function(event, ui) {
-                    var paperPos: { top: number; left: number;} = $("#paper").position();
+                    var paperPos: { top: number; left: number;} = $("#diagram_paper").position();
                     var topElementPos: number = ui.position.top - paperPos.top;
                     var leftElementPos: number = ui.position.left - paperPos.left;
                     var gridSize: number = controller.paper.getGridSizeValue();

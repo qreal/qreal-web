@@ -9,14 +9,14 @@ class WorldModelImpl implements WorldModel {
         $scope.vm = this;
         var worldModel = this;
         $(document).ready(function(){
-            worldModel.paper = Raphael("stage", "100%", "100%");
-            $(worldModel.paper.canvas).attr("id", "paper");
+            worldModel.paper = Raphael("twoDModel_stage", "100%", "100%");
+            $(worldModel.paper.canvas).attr("id", "twoDModel_paper");
 
             var wall_pattern = '<pattern id="wall_pattern" patternUnits="userSpaceOnUse" width="85" height="80">\
                                         <image xlink:href="images/2dmodel/2d_wall.png" width="85" height="80" />\
                                     </pattern>';
             $("body").append('<svg id="dummy" style="display:none"><defs>' + wall_pattern + '</defs></svg>');
-            $("#paper defs").append($("#dummy pattern"));
+            $("#twoDModel_paper defs").append($("#dummy pattern"));
             $("#dummy").remove();
 
             $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
@@ -28,7 +28,7 @@ class WorldModelImpl implements WorldModel {
             var isDrawing: boolean = false;
             var startDrawPoint;
 
-            $("#stage").mousedown(function(e) {
+            $("#twoDModel_stage").mousedown(function(e) {
                 switch (worldModel.drawMode) {
                     case 1:
                         var position = worldModel.getMousePosition(e);
@@ -80,7 +80,7 @@ class WorldModelImpl implements WorldModel {
                 }
             });
 
-            $("#stage").mousemove(function(e) {
+            $("#twoDModel_stage").mousemove(function(e) {
                 if (isDrawing) {
                     switch (worldModel.drawMode) {
                         case 1:
@@ -107,7 +107,7 @@ class WorldModelImpl implements WorldModel {
                 }
             });
 
-            $("#stage").mouseup(function(e) {
+            $("#twoDModel_stage").mouseup(function(e) {
                 if (isDrawing) {
                     isDrawing = false;
                 } else {
@@ -123,7 +123,7 @@ class WorldModelImpl implements WorldModel {
     }
 
     getMousePosition(e) {
-        var offset = $("#stage").offset();
+        var offset = $("#twoDModel_stage").offset();
         var position = {
             x : e.pageX - offset.left,
             y : e.pageY - offset.top

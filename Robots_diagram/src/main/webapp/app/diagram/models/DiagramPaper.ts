@@ -4,9 +4,9 @@ class DiagramPaper extends joint.dia.Paper {
     constructor(graph: joint.dia.Graph) {
         this.gridSizeValue = 25;
         super({
-            el: $('#paper'),
-            width: $('#paper').width(),
-            height: $('#paper').height(),
+            el: $('#diagram_paper'),
+            width: $('#diagram_paper').width(),
+            height: $('#diagram_paper').height(),
             model: graph,
             gridSize: this.gridSizeValue,
             defaultLink: new joint.dia.Link({
