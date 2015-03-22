@@ -178,4 +178,10 @@ class WorldModelImpl implements WorldModel {
             item.remove();
         }
     }
+
+    openDiagram(): void {
+        console.log("test");
+        $("#twoDModelContent").hide();
+        $("#diagramContent").show();
+    }
 }

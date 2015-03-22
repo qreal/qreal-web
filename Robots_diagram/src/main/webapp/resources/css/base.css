@@ -15,6 +15,10 @@ body{
     max-height: 100%;
 }
 
+#diagramContent {
+    height: 100%;
+}
+
 .navbar .navbar-inverse .navbar-static-top {
     height: 70px;
 }

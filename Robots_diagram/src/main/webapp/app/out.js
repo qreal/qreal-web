@@ -1,8 +1,3 @@
-var AppController = (function () {
-    function AppController() {
-    }
-    return AppController;
-})();
 var DiagramController = (function () {
     function DiagramController($scope, $compile) {
         this.graph = new joint.dia.Graph;
@@ -177,6 +172,10 @@ var DiagramController = (function () {
                 console.log("error: " + status + " " + error);
             }
         });
+    };
+    DiagramController.prototype.openTwoDModel = function () {
+        $("#diagramContent").hide();
+        $("#twoDModelContent").show();
     };
     return DiagramController;
 })();
@@ -1227,6 +1226,11 @@ var WorldModelImpl = (function () {
             var item = this.colorFields.pop();
             item.remove();
         }
+    };
+    WorldModelImpl.prototype.openDiagram = function () {
+        console.log("test");
+        $("#twoDModelContent").hide();
+        $("#diagramContent").show();
     };
     return WorldModelImpl;
 })();

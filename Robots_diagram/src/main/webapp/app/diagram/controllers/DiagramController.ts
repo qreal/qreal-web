@@ -195,4 +195,9 @@ class DiagramController {
             }
         });
     }
+
+    openTwoDModel(): void {
+        $("#diagramContent").hide();
+        $("#twoDModelContent").show();
+    }
 }

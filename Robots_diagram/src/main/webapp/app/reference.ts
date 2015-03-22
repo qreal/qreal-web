@@ -1,5 +1,4 @@
 //grunt-start
-/// <reference path="AppController.ts" />
 /// <reference path="diagram/controllers/DiagramController.ts" />
 /// <reference path="diagram/managers/DropdownListManager.ts" />
 /// <reference path="diagram/managers/ExportManager.ts" />
