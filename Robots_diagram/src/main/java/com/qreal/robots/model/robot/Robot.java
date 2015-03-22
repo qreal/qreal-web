@@ -18,6 +18,7 @@ public class Robot {
     private String name;
     private String secretCode;
     private User owner;
+    private String status;
 
     public Robot() {
     }
@@ -67,6 +68,14 @@ public class Robot {
 
     public void setSecretCode(String secretCode) {
         this.secretCode = secretCode;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

@@ -160,13 +160,13 @@
                                     <div class="row-fluid">
                                         <div class="col-md-4">
 
-                                        <img src="http://vz.iminent.com/vz/ebbaaad3-77d8-4522-a8b7-45c10811941e/2/cute-rusty-robot-laughing.gif"
+                                            <img src="http://vz.iminent.com/vz/ebbaaad3-77d8-4522-a8b7-45c10811941e/2/cute-rusty-robot-laughing.gif"
                                                  class="img-circle">
                                         </div>
 
                                         <div class="col-md-4">
                                             <h4>${robot.name}</h4>
-                                            <h6>Status: offline</h6>
+                                            <h6>Status: ${robot.status}</h6>
 
 
                                         </div>
@@ -181,11 +181,15 @@
 
                                                 </a>
                                                 <ul class="dropdown-menu">
-                                                    <li><a href="#" data-toggle="modal" data-target="#sendDiagramModal"><span
-                                                            class="icon-wrench"></span> Send diagram</a>
-                                                    </li>
+                                                    <c:if test="${robot.status == 'Online'}">
+                                                        <li><a href="#" data-toggle="modal"
+                                                               data-target="#sendDiagramModal"><span
+                                                                class="icon-wrench"></span> Send diagram</a>
+                                                        </li>
 
-                                                    <li><a href="#"><span class="icon-wrench"></span> Configure</a></li>
+                                                        <li><a href="#"><span class="icon-wrench"></span> Configure</a>
+                                                        </li>
+                                                    </c:if>
                                                     <li><a href='#' name="deleteRobot" id="delete-${robot.name}">
                                                         <span class="icon-trash"></span>
                                                         Delete

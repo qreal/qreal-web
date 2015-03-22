@@ -8,27 +8,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class RobotInfo {
 
-    private String id;
+    private String code;
     private Coordinates coordinates;
     private String program;
+    private String owner;
 
     public RobotInfo() {
 
     }
 
-    public RobotInfo(String id, Coordinates coordinates) {
-        this.id = id;
-        this.coordinates = coordinates;
-    }
 
-    public RobotInfo(String id, String program) {
-        this.id = id;
-        this.program = program;
-    }
-
-    public RobotInfo(String id, Coordinates coordinates, String program) {
-        this.id = id;
-        this.coordinates = coordinates;
+    public RobotInfo(String owner, String code, String program) {
+        this.owner = owner;
+        this.code = code;
         this.program = program;
     }
 
@@ -36,16 +28,16 @@ public class RobotInfo {
         return coordinates;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public void setCoordinates(Coordinates coordinates) {
         this.coordinates = coordinates;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     @Override
@@ -56,14 +48,14 @@ public class RobotInfo {
         RobotInfo robotInfo = (RobotInfo) o;
 
         if (!coordinates.equals(robotInfo.coordinates)) return false;
-        if (!id.equals(robotInfo.id)) return false;
+        if (!code.equals(robotInfo.code)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
+        int result = code.hashCode();
         result = 31 * result + coordinates.hashCode();
         return result;
     }
@@ -79,5 +71,13 @@ public class RobotInfo {
 
     public void setProgram(String program) {
         this.program = program;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

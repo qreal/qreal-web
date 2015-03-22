@@ -88,6 +88,7 @@ CREATE TABLE robots (
   name       VARCHAR(45)     NOT NULL,
   secretCode VARCHAR(45)     NOT NULL,
   username   VARCHAR(45)     NOT NULL,
+  status VARCHAR(45),
   UNIQUE KEY uni_robotName_username (name, username),
   FOREIGN KEY (username) REFERENCES users (username)
 );
