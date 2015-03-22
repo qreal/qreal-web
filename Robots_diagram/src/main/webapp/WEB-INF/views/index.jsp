@@ -50,6 +50,23 @@
                     }
                 });
             });
+
+            $('[name="sendDiagram"]').click(function (event) {
+                var robotName = event.target.id.substring(13);
+                var data = "robotName=" + robotName + "&program=" + "MUR MUR MUR";
+                $.ajax({
+                    type: 'POST',
+                    url: 'sendDiagram',
+                    data: data,
+                    success: function (data) {
+                        $('#sendDiagramModal').modal('hide')
+                        alert("Successfully sent ");
+                    },
+                    error: function (response, status, error) {
+                        console.log("error");
+                    }
+                });
+            });
         });
     </script>
     <link rel="stylesheet" href="<c:url value='/resources/bootstrap/css/bootstrap.min.css' />"/>
@@ -63,6 +80,7 @@
 
 <!-- Main -->
 <div class="container-fluid">
+
 
     <!-- upper section -->
     <div class="row">
@@ -104,22 +122,57 @@
 
                         <c:forEach var="robot" items="${user.robots}">
 
+                            <div class="modal fade" id="sendDiagramModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close"
+                                                    data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="sendDiagramLabel">Send diagram</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h4>Select diagram</h4>
+                                            <select class="form-control">
+                                                <c:forEach var="diagram" items="${user.diagrams}">
+                                                    <option>${diagram.name}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" name="sendDiagram" id="send-diagram-${robot.name}"
+                                                    class="btn btn-primary">Send
+                                            </button>
+                                            <button type="button" class="btn btn-default"
+                                                    data-dismiss="modal">Close
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
 
                             <div class="col-md-6">
+
                                 <div class="container-fluid well">
                                     <div class="row-fluid">
                                         <div class="col-md-4">
-                                            <img src="http://vz.iminent.com/vz/ebbaaad3-77d8-4522-a8b7-45c10811941e/2/cute-rusty-robot-laughing.gif"
+
+                                        <img src="http://vz.iminent.com/vz/ebbaaad3-77d8-4522-a8b7-45c10811941e/2/cute-rusty-robot-laughing.gif"
                                                  class="img-circle">
                                         </div>
 
                                         <div class="col-md-4">
                                             <h4>${robot.name}</h4>
+                                            <h6>Status: offline</h6>
 
 
                                         </div>
 
                                         <div class="col-md-4">
+
                                             <div class="btn-group pull-right">
                                                 <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
                                                     <li class="glyphicon glyphicon-cog"></li>
@@ -128,8 +181,10 @@
 
                                                 </a>
                                                 <ul class="dropdown-menu">
-                                                    <li><a href="#"><span class="icon-wrench"></span> Send diagram</a>
+                                                    <li><a href="#" data-toggle="modal" data-target="#sendDiagramModal"><span
+                                                            class="icon-wrench"></span> Send diagram</a>
                                                     </li>
+
                                                     <li><a href="#"><span class="icon-wrench"></span> Configure</a></li>
                                                     <li><a href='#' name="deleteRobot" id="delete-${robot.name}">
                                                         <span class="icon-trash"></span>
@@ -137,6 +192,7 @@
                                                     </a>
                                                     </li>
                                                 </ul>
+
                                             </div>
                                         </div>
                                     </div>

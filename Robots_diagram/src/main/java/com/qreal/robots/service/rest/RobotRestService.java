@@ -8,7 +8,6 @@ import com.qreal.robots.model.auth.User;
 import com.qreal.robots.model.robot.Message;
 import com.qreal.robots.model.robot.Robot;
 import com.qreal.robots.model.robot.RobotInfo;
-import com.qreal.robots.socket.SocketClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -32,11 +31,13 @@ public class RobotRestService {
 
 
     @ResponseBody
-    @RequestMapping(value = "/sendProgram", method = RequestMethod.POST)
-    public String sendProgram(@RequestParam("id") String id, @RequestParam("program") String program) throws JsonProcessingException {
+    @RequestMapping(value = "/sendDiagram", method = RequestMethod.POST)
+    public String sendProgram(@RequestParam("robotName") String robotName, @RequestParam("program") String program) throws JsonProcessingException {
+        Robot robot = robotDao.findByName(robotName);
+        //  SocketClient socketClient = new SocketClient(HOST_NAME, PORT);
+        return "{\"message\":\"OK\"}";
 
-        SocketClient socketClient = new SocketClient(HOST_NAME, PORT);
-        return socketClient.sendMessage(generateSendProgramRequest(id, program));
+        //   return socketClient.sendMessage(generateSendProgramRequest(robot.getSecretCode(), program));
     }
 
 
@@ -56,11 +57,12 @@ public class RobotRestService {
         Robot robot = robotDao.findByName(name);
         robotDao.delete(robot);
         return "{\"message\":\"OK\"}";
+
     }
 
 
-    private String generateSendProgramRequest(String id, String program) throws JsonProcessingException {
-        RobotInfo robotInfo = new RobotInfo(id, program);
+    private String generateSendProgramRequest(String secretCode, String program) throws JsonProcessingException {
+        RobotInfo robotInfo = new RobotInfo(secretCode, program);
         Message message = new Message("WebApp", "sendProgram", robotInfo);
         return mapper.writeValueAsString(message);
     }
