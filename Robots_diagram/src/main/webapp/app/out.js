@@ -1,186 +1,185 @@
-angular.module('diagram', ['controllers']);
-var Controllers;
-(function (Controllers) {
-    var DiagramController = (function () {
-        function DiagramController($scope, $compile) {
-            this.graph = new joint.dia.Graph;
-            this.paper = new DiagramPaper(this.graph);
-            this.nodeTypesMap = {};
-            this.nodesList = {};
-            this.nodeIndex = -1;
-            var controller = this;
-            $scope.vm = controller;
-            controller.nodeTypesMap = XmlManager.loadElementsFromXml("configs/elements.xml", $scope, $compile);
-            this.paper.on('cell:pointerdown', function (cellView, evt, x, y) {
-                console.log('cell view ' + cellView.model.id + ' was clicked');
-                var node = controller.nodesList[cellView.model.id];
-                if (node) {
-                    controller.currentNode = node;
-                    controller.setNodeProperties(node);
-                }
-                else {
-                    controller.currentNode = undefined;
-                }
-            });
-            this.paper.on('blank:pointerdown', function (evt, x, y) {
-                console.log('blank was clicked');
-                $(".property").remove();
-                controller.currentNode = undefined;
-            });
-            this.setInputStringListener(controller);
-            this.setCheckboxListener(controller);
-            this.setDropdownListener(controller);
-            this.setSpinnerListener(controller);
-            this.initDragAndDrop(controller);
-        }
-        DiagramController.prototype.setInputStringListener = function (controller) {
-            $(document).on('change', '.form-control', function () {
-                var tr = $(this).closest('tr');
-                var name = tr.find('td:first').html();
-                var value = $(this).val();
-                var property = controller.currentNode.getProperties()[name];
-                property.value = value;
-                controller.currentNode.setProperty(name, property);
-            });
-        };
-        DiagramController.prototype.setCheckboxListener = function (controller) {
-            $(document).on('change', '.checkbox', function () {
-                var tr = $(this).closest('tr');
-                var name = tr.find('td:first').html();
-                var label = tr.find('label');
-                var value = label.contents().last()[0].textContent;
-                if (value === "True") {
-                    value = "False";
-                    label.contents().last()[0].textContent = value;
-                }
-                else {
-                    value = "True";
-                    label.contents().last()[0].textContent = value;
-                }
-                var property = controller.currentNode.getProperties()[name];
-                property.value = value;
-                controller.currentNode.setProperty(name, property);
-            });
-        };
-        DiagramController.prototype.setDropdownListener = function (controller) {
-            $(document).on('change', '.mydropdown', function () {
-                var tr = $(this).closest('tr');
-                var name = tr.find('td:first').html();
-                var value = $(this).val();
-                var property = controller.currentNode.getProperties()[name];
-                property.value = value;
-                controller.currentNode.setProperty(name, property);
-            });
-        };
-        DiagramController.prototype.setSpinnerListener = function (controller) {
-            $(document).on('change', '.spinner', function () {
-                var tr = $(this).closest('tr');
-                var name = tr.find('td:first').html();
-                var value = $(this).val();
-                if (value !== "" && !isNaN(value)) {
-                    var property = controller.currentNode.getProperties()[name];
-                    property.value = value;
-                    controller.currentNode.setProperty(name, property);
-                }
-            });
-        };
-        DiagramController.prototype.initDragAndDrop = function (controller) {
-            $(".tree_element").draggable({
-                helper: function () {
-                    return $(this).find('.elementImg').clone();
-                },
-                revert: "invalid"
-            });
-            $("#diagram_paper").droppable({
-                drop: function (event, ui) {
-                    var paperPos = $("#diagram_paper").position();
-                    var topElementPos = ui.position.top - paperPos.top;
-                    var leftElementPos = ui.position.left - paperPos.left;
-                    var gridSize = controller.paper.getGridSizeValue();
-                    topElementPos -= topElementPos % gridSize;
-                    leftElementPos -= leftElementPos % gridSize;
-                    var type = $(ui.draggable.context).text();
-                    var image = controller.nodeTypesMap[type].image;
-                    var properties = controller.nodeTypesMap[type].properties;
-                    controller.createDefaultNode(type, leftElementPos, topElementPos, properties, image);
-                }
-            });
-        };
-        DiagramController.prototype.setNodeProperties = function (node) {
-            var properties = node.getProperties();
-            var content = '';
-            for (var property in properties) {
-                content += this.getPropertyHtml(node.getType(), property, properties[property]);
+var AppController = (function () {
+    function AppController() {
+    }
+    return AppController;
+})();
+var DiagramController = (function () {
+    function DiagramController($scope, $compile) {
+        this.graph = new joint.dia.Graph;
+        this.paper = new DiagramPaper(this.graph);
+        this.nodeTypesMap = {};
+        this.nodesList = {};
+        this.nodeIndex = -1;
+        var controller = this;
+        $scope.vm = controller;
+        controller.nodeTypesMap = XmlManager.loadElementsFromXml("configs/elements.xml", $scope, $compile);
+        this.paper.on('cell:pointerdown', function (cellView, evt, x, y) {
+            console.log('cell view ' + cellView.model.id + ' was clicked');
+            var node = controller.nodesList[cellView.model.id];
+            if (node) {
+                controller.currentNode = node;
+                controller.setNodeProperties(node);
             }
-            $('#property_table tbody').html(content);
-        };
-        DiagramController.prototype.getPropertyHtml = function (typeName, propertyName, property) {
-            return PropertyManager.getPropertyHtml(typeName, propertyName, property);
-        };
-        DiagramController.prototype.createDefaultNode = function (type, x, y, properties, image) {
-            this.nodeIndex++;
-            var name = "Node" + this.nodeIndex;
-            var node = new DefaultDiagramNode(name, type, x, y, properties, image);
-            this.nodesList[node.getElement().id] = node;
-            this.graph.addCell(node.getElement());
-        };
-        DiagramController.prototype.clear = function () {
-            this.graph.clear();
-            this.nodeIndex = -1;
-            this.nodesList = {};
+            else {
+                controller.currentNode = undefined;
+            }
+        });
+        this.paper.on('blank:pointerdown', function (evt, x, y) {
+            console.log('blank was clicked');
+            $(".property").remove();
+            controller.currentNode = undefined;
+        });
+        this.setInputStringListener(controller);
+        this.setCheckboxListener(controller);
+        this.setDropdownListener(controller);
+        this.setSpinnerListener(controller);
+        this.initDragAndDrop(controller);
+    }
+    DiagramController.prototype.setInputStringListener = function (controller) {
+        $(document).on('change', '.form-control', function () {
+            var tr = $(this).closest('tr');
+            var name = tr.find('td:first').html();
+            var value = $(this).val();
+            var property = controller.currentNode.getProperties()[name];
+            property.value = value;
+            controller.currentNode.setProperty(name, property);
+        });
+    };
+    DiagramController.prototype.setCheckboxListener = function (controller) {
+        $(document).on('change', '.checkbox', function () {
+            var tr = $(this).closest('tr');
+            var name = tr.find('td:first').html();
+            var label = tr.find('label');
+            var value = label.contents().last()[0].textContent;
+            if (value === "True") {
+                value = "False";
+                label.contents().last()[0].textContent = value;
+            }
+            else {
+                value = "True";
+                label.contents().last()[0].textContent = value;
+            }
+            var property = controller.currentNode.getProperties()[name];
+            property.value = value;
+            controller.currentNode.setProperty(name, property);
+        });
+    };
+    DiagramController.prototype.setDropdownListener = function (controller) {
+        $(document).on('change', '.mydropdown', function () {
+            var tr = $(this).closest('tr');
+            var name = tr.find('td:first').html();
+            var value = $(this).val();
+            var property = controller.currentNode.getProperties()[name];
+            property.value = value;
+            controller.currentNode.setProperty(name, property);
+        });
+    };
+    DiagramController.prototype.setSpinnerListener = function (controller) {
+        $(document).on('change', '.spinner', function () {
+            var tr = $(this).closest('tr');
+            var name = tr.find('td:first').html();
+            var value = $(this).val();
+            if (value !== "" && !isNaN(value)) {
+                var property = controller.currentNode.getProperties()[name];
+                property.value = value;
+                controller.currentNode.setProperty(name, property);
+            }
+        });
+    };
+    DiagramController.prototype.initDragAndDrop = function (controller) {
+        $(".tree_element").draggable({
+            helper: function () {
+                return $(this).find('.elementImg').clone();
+            },
+            revert: "invalid"
+        });
+        $("#diagram_paper").droppable({
+            drop: function (event, ui) {
+                var paperPos = $("#diagram_paper").position();
+                var topElementPos = ui.position.top - paperPos.top;
+                var leftElementPos = ui.position.left - paperPos.left;
+                var gridSize = controller.paper.getGridSizeValue();
+                topElementPos -= topElementPos % gridSize;
+                leftElementPos -= leftElementPos % gridSize;
+                var type = $(ui.draggable.context).text();
+                var image = controller.nodeTypesMap[type].image;
+                var properties = controller.nodeTypesMap[type].properties;
+                controller.createDefaultNode(type, leftElementPos, topElementPos, properties, image);
+            }
+        });
+    };
+    DiagramController.prototype.setNodeProperties = function (node) {
+        var properties = node.getProperties();
+        var content = '';
+        for (var property in properties) {
+            content += this.getPropertyHtml(node.getType(), property, properties[property]);
+        }
+        $('#property_table tbody').html(content);
+    };
+    DiagramController.prototype.getPropertyHtml = function (typeName, propertyName, property) {
+        return PropertyManager.getPropertyHtml(typeName, propertyName, property);
+    };
+    DiagramController.prototype.createDefaultNode = function (type, x, y, properties, image) {
+        this.nodeIndex++;
+        var name = "Node" + this.nodeIndex;
+        var node = new DefaultDiagramNode(name, type, x, y, properties, image);
+        this.nodesList[node.getElement().id] = node;
+        this.graph.addCell(node.getElement());
+    };
+    DiagramController.prototype.clear = function () {
+        this.graph.clear();
+        this.nodeIndex = -1;
+        this.nodesList = {};
+        $(".property").remove();
+        this.currentNode = undefined;
+    };
+    DiagramController.prototype.removeCurrentElement = function () {
+        if (this.currentNode) {
+            console.log("Node was deleted");
+            delete this.nodesList[this.currentNode.getElement().id];
+            this.currentNode.getElement().remove();
             $(".property").remove();
             this.currentNode = undefined;
-        };
-        DiagramController.prototype.removeCurrentElement = function () {
-            if (this.currentNode) {
-                console.log("Node was deleted");
-                delete this.nodesList[this.currentNode.getElement().id];
-                this.currentNode.getElement().remove();
-                $(".property").remove();
-                this.currentNode = undefined;
+        }
+    };
+    DiagramController.prototype.saveDiagram = function () {
+        var name = prompt("input name");
+        console.log(ExportManager.exportDiagramStateToJSON(this.graph, name, this.nodeIndex, this.nodesList));
+        $.ajax({
+            type: 'POST',
+            url: 'save',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: (ExportManager.exportDiagramStateToJSON(this.graph, name, this.nodeIndex, this.nodesList)),
+            success: function (response) {
+                console.log(response.message);
+            },
+            error: function (response, status, error) {
+                console.log("error: " + status + " " + error);
             }
-        };
-        DiagramController.prototype.saveDiagram = function () {
-            var name = prompt("input name");
-            console.log(ExportManager.exportDiagramStateToJSON(this.graph, name, this.nodeIndex, this.nodesList));
-            $.ajax({
-                type: 'POST',
-                url: 'save',
-                dataType: 'json',
-                contentType: 'application/json',
-                data: (ExportManager.exportDiagramStateToJSON(this.graph, name, this.nodeIndex, this.nodesList)),
-                success: function (response) {
-                    console.log(response.message);
-                },
-                error: function (response, status, error) {
-                    console.log("error: " + status + " " + error);
-                }
-            });
-        };
-        DiagramController.prototype.openDiagram = function () {
-            var controller = this;
-            var name = prompt("input diagram name");
-            $.ajax({
-                type: 'POST',
-                url: 'open',
-                dataType: 'json',
-                contentType: 'application/json',
-                data: (JSON.stringify({ name: name })),
-                success: function (response) {
-                    controller.clear();
-                    controller.nodeIndex = ImportManager.import(response, controller.graph, controller.nodesList);
-                    console.log(response.nodeIndex);
-                },
-                error: function (response, status, error) {
-                    console.log("error: " + status + " " + error);
-                }
-            });
-        };
-        return DiagramController;
-    })();
-    Controllers.DiagramController = DiagramController;
-})(Controllers || (Controllers = {}));
-angular.module('controllers', []).controller(Controllers);
+        });
+    };
+    DiagramController.prototype.openDiagram = function () {
+        var controller = this;
+        var name = prompt("input diagram name");
+        $.ajax({
+            type: 'POST',
+            url: 'open',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: (JSON.stringify({ name: name })),
+            success: function (response) {
+                controller.clear();
+                controller.nodeIndex = ImportManager.import(response, controller.graph, controller.nodesList);
+                console.log(response.nodeIndex);
+            },
+            error: function (response, status, error) {
+                console.log("error: " + status + " " + error);
+            }
+        });
+    };
+    return DiagramController;
+})();
 var DropdownListManager = (function () {
     function DropdownListManager() {
     }

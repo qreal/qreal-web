@@ -1,4 +1,4 @@
-body{
+body {
     margin: 0;
     padding: 0;
     border: 0;
@@ -10,18 +10,16 @@ body{
     max-height: 100%;
 }
 
-table
-{ 
+.twoDModel_table {
     margin-left: auto;
     margin-right: auto;
 }
 
-button
-{
+.twoDModel_button {
     margin: 2px;
 }
 
-#twoDModel_left-menu, #twoDModel_right-menu{
+#twoDModel_left-menu, #twoDModel_right-menu {
     position: absolute;
     width: 260px; /*Width of left frame div*/
     top: 70px;
@@ -31,7 +29,7 @@ button
     text-align: center;
 }
 
-#twoDModel_right-menu{
+#twoDModel_right-menu {
     left: auto;
     width: 210px; /*Width of right frame div*/
     top: 70px;
@@ -42,7 +40,7 @@ button
     border: 1px solid gray;
 }
 
-#twoDModel_stage{
+#twoDModel_stage {
     position: fixed;
     top: 70px;
     left: 280px;
@@ -53,19 +51,9 @@ button
     background: #ffffff;
 }
 
-.innertube{
+.innertube {
     margin: 15px; /*Margins for inner DIV inside each DIV (to provide padding)*/
 }
-
-* html body{ /*IE6 hack*/
-    padding: 0 280px 0 230px;
-}
-
-* html #maincontent{ /*IE6 hack*/
-    height: 100%;
-    width: 100%;
-}
-
 
 .tabbable {
     position: absolute;

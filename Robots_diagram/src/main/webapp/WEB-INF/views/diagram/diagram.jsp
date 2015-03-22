@@ -13,7 +13,7 @@
     <script type="text/javascript" src="<c:url value='/resources/treeview/jquery.treeview.js' />"></script>
 </head>
 
-<body ng-app="diagram" ng-controller="DiagramController">
+<body ng-app ng-controller="DiagramController">
 <div class="navbar navbar-inverse navbar-static-top">
     <div class="container-fluid">
         <div class="navbar-header">

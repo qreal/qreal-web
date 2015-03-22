@@ -5,7 +5,7 @@
     <jsp:include page="../include/scripts.jsp" flush="true"/>
     <link rel="stylesheet" href="<c:url value='/resources/bootstrap/css/bootstrap.min.css' />" />
     <link rel="stylesheet" href="<c:url value='/resources/css/2dmodel.css' />" />
-<body ng-app="diagram" ng-controller="ModelImpl">
+<body ng-app ng-controller="ModelImpl">
 
 <div class="navbar navbar-inverse navbar-static-top">
     <div class="container-fluid">
@@ -84,16 +84,16 @@
             <div id="twoDModel_palette">
                 <div class="tab-content">
                     <div class="tab-pane active" id="lA">
-                        <table>
+                        <table class="twoDModel_table">
                             <tr>
                                 <td>
-                                    <button class="palette_button" ng-click="vm.setDrawLineMode()">
+                                    <button class="twoDModel_button palette_button" ng-click="vm.setDrawLineMode()">
                                         <img src="images/2dmodel/2d_ruler.png"
                                              style="width: 20px; height: 20px; vertical-align: middle"/>
                                     </button>
                                 </td>
                                 <td>
-                                    <button class="palette_button_right" ng-click="vm.setDrawWallMode()">
+                                    <button class="twoDModel_button palette_button_right" ng-click="vm.setDrawWallMode()">
                                         <img src="images/2dmodel/2d_wall.png"
                                              style="width: 20px; height: 20px; vertical-align: middle"/>
                                     </button>
@@ -102,13 +102,13 @@
 
                             <tr>
                                 <td>
-                                    <button class="palette_button" ng-click="vm.setDrawPencilMode()">
+                                    <button class="twoDModel_button palette_button" ng-click="vm.setDrawPencilMode()">
                                         <img src="images/2dmodel/2d_pencil.png"
                                              style="width: 20px; height: 20px; vertical-align: middle"/>
                                     </button>
                                 </td>
                                 <td>
-                                    <button class="palette_button_right" ng-click="vm.setDrawEllipseMode()">
+                                    <button class="twoDModel_button palette_button_right" ng-click="vm.setDrawEllipseMode()">
                                         <img src="images/2dmodel/2d_ellipse.png"
                                              style="width: 20px; height: 20px; vertical-align: middle"/>
                                     </button>
@@ -117,13 +117,13 @@
 
                             <tr>
                                 <td>
-                                    <button class="palette_button" data-toggle="modal" data-target="#confirmDelete">
+                                    <button class="twoDModel_button palette_button" data-toggle="modal" data-target="#confirmDelete">
                                         <img src="images/2dmodel/2d_clear.png"
                                              style="width: 20px; height: 20px; vertical-align: middle"/>
                                     </button>
                                 </td>
                                 <td>
-                                    <button class="palette_button_right" ng-click="vm.setNoneMode()">
+                                    <button class="twoDModel_button palette_button_right" ng-click="vm.setNoneMode()">
                                         <img src="images/2dmodel/2d_none.png"
                                              style="width: 13px; height: 20px; vertical-align: middle"/>
                                     </button>
@@ -158,16 +158,16 @@
             </div>
         </div>
         <div id="controll_buttons_container">
-            <table>
+            <table class="twoDModel_table">
                 <tr>
                     <td>
-                        <button style="width: 100px; height: 45px;">
+                        <button class="twoDModel_button" style="width: 100px; height: 45px;">
                             <img src="images/2dmodel/2d_save.png"
                                  style="width: 25px; height: 25px; vertical-align: middle"/>
                         </button>
                     </td>
                     <td>
-                        <button style="width: 100px; height: 45px;">
+                        <button class="twoDModel_button" style="width: 100px; height: 45px;">
                             <img src="images/2dmodel/2d_open.png"
                                  style="width: 25px; height: 25px; vertical-align: middle"/>
                         </button>
@@ -176,7 +176,7 @@
 
                 <tr>
                     <td colspan="2">
-                        <button style="width: 204px; height: 70px;">
+                        <button class="twoDModel_button" style="width: 204px; height: 70px;">
                             <img src="images/2dmodel/2d_run.png"
                                  style="width: 40px; height: 40px; vertical-align: middle"/>
                         </button>
@@ -206,13 +206,13 @@
 
                 <tr>
                     <td>
-                        <button class="btn btn-default" data-toggle="button" aria-pressed="false" style="width: 100px; height: 30px;">
+                        <button class="twoDModel_button btn btn-default" data-toggle="button" aria-pressed="false" style="width: 100px; height: 30px;">
                             <img src="images/2dmodel/2d_target.png"
                                  style="width: 20px; height: 20px; vertical-align: middle"/>
                         </button>
                     </td>
                     <td>
-                        <button class="btn btn-default" style="width: 100px; height: 30px;">
+                        <button class="twoDModel_button btn btn-default" style="width: 100px; height: 30px;">
                             <img src="images/2dmodel/2d_robot_back.png"
                                  style="width: 20px; height: 20px; vertical-align: middle"/>
                         </button>
