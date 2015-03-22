@@ -23,10 +23,10 @@ button
 
 #left-menu, #right-menu{
     position: absolute;
-    top: 10px;
-    left: 10px;
     width: 260px; /*Width of left frame div*/
-    height: 98%;
+    top: 70px;
+    left: 10px;
+    bottom: 10px;
     overflow: hidden; /*Disable scrollbars. Set to "scroll" to enable*/
     text-align: center;
 }
@@ -34,16 +34,17 @@ button
 #right-menu{
     left: auto;
     width: 210px; /*Width of right frame div*/
-    overflow: hidden; /*Disable scrollbars. Set to "scroll" to enable*/
-    background: #ffffff;
-    top: 10px;
+    top: 70px;
     right: 10px;
+    bottom: 10px;
+    background: #ffffff;
+    overflow: hidden; /*Disable scrollbars. Set to "scroll" to enable*/
     border: 1px solid gray;
 }
 
 #stage{
     position: fixed;
-    top: 10px;
+    top: 70px;
     left: 280px;
     right: 230px;
     bottom: 10px;

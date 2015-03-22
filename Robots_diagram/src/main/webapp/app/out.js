@@ -994,7 +994,6 @@ var ModelImpl = (function () {
         this.worldModel = new WorldModelImpl($scope);
         this.robotModel = new RobotModelImpl();
         this.timeline = new TimelineImpl(this.robotModel);
-        this.timeline.start();
     }
     ModelImpl.prototype.getWorldModel = function () {
         return this.worldModel;

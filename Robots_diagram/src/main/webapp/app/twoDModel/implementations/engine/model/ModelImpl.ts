@@ -10,7 +10,7 @@ class ModelImpl implements Model {
         this.robotModel = new RobotModelImpl();
 
         this.timeline = new TimelineImpl(this.robotModel);
-        this.timeline.start();
+        //this.timeline.start();
     }
 
     getWorldModel() : WorldModel {

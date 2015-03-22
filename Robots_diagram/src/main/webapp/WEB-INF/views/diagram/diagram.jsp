@@ -14,7 +14,7 @@
 </head>
 
 <body ng-app="diagram" ng-controller="DiagramController">
-<div class="navbar navbar-inverse" role="navigation">
+<div class="navbar navbar-inverse navbar-static-top">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -41,7 +41,7 @@
                 </li>
                 <li>
                     <a href="2dmodel">
-                        <img src="images/2dmodel/2d-model.svg" style="width: 25px; height:25px;"/>
+                        <img src="images/2dmodel/2d-model.svg" style="width: 18px; height: 18px;"/>
                     </a>
                 </li>
             </ul>
@@ -94,7 +94,7 @@
     </div>
 
     <div id="right-menu">
-        <legend style="padding: 10px">Palette</legend>
+        <legend style="height: 40px; padding: 10px">Palette</legend>
         <div id="elements_tree">
             <ul id="navigation">
             </ul>
