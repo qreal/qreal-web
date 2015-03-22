@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,27 +41,36 @@ public class MainController {
 
 
     @RequestMapping("/")
-    public ModelAndView home() throws IOException {
+    public ModelAndView home() {
         User user = userDao.findByUserName(getUserName());
         ModelAndView model = new ModelAndView();
         model.addObject("user", user);
-        SocketClient socketClient = new SocketClient(HOST_NAME, PORT);
-        String response = socketClient.sendMessage(getUserOnlineRobots(user));
-        Map<String, Boolean> onlineUserRobots = mapper.readValue(response,
-                new TypeReference<Map<String, Boolean>>() {
-                });
+        Map<String, Boolean> onlineUserRobots = getOnlineRobots(user);
 
-        setRobotsStatuses(user.getRobots(), onlineUserRobots);
+        setRobotsStatus(user.getRobots(), onlineUserRobots);
 
 
         model.setViewName("index");
         return model;
     }
 
-    private void setRobotsStatuses(Collection<Robot> robots, Map<String, Boolean> onlineRobots) {
+    private Map<String, Boolean> getOnlineRobots(User user) {
+        SocketClient socketClient = new SocketClient(HOST_NAME, PORT);
+        try {
+            String response = socketClient.sendMessage(getUserOnlineRobots(user));
+            return mapper.readValue(response,
+                    new TypeReference<Map<String, Boolean>>() {
+                    });
+        } catch (IOException e) {
+            LOG.error("Error getting online robots", e);
+        }
+        return new HashMap();
+    }
+
+    private void setRobotsStatus(Collection<Robot> robots, Map<String, Boolean> onlineRobots) {
         for (Robot robot : robots) {
-            String status = onlineRobots.get(robot.getSecretCode()) ? "Online" : "Offline";
-            robot.setStatus(status);
+            boolean status = onlineRobots.get(robot.getSecretCode()) != null && onlineRobots.get(robot.getSecretCode());
+            robot.setStatus(status ? "Online" : "Offline");
         }
     }
 
