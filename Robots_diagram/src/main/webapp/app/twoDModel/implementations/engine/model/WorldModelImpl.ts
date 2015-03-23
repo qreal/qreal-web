@@ -5,8 +5,7 @@ class WorldModelImpl implements WorldModel {
     private colorFields: ColorFieldItem[] = [];
     private wallItems: WallItem[] = [];
 
-    constructor($scope) {
-        $scope.vm = this;
+    constructor() {
         var worldModel = this;
         $(document).ready(function(){
             worldModel.paper = Raphael("twoDModel_stage", "100%", "100%");
@@ -18,11 +17,6 @@ class WorldModelImpl implements WorldModel {
             $("body").append('<svg id="dummy" style="display:none"><defs>' + wall_pattern + '</defs></svg>');
             $("#twoDModel_paper defs").append($("#dummy pattern"));
             $("#dummy").remove();
-
-            $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
-                worldModel.clearPaper();
-                $('#confirmDelete').modal('hide');
-            });
 
             var shape;
             var isDrawing: boolean = false;
@@ -177,11 +171,5 @@ class WorldModelImpl implements WorldModel {
             var item = this.colorFields.pop();
             item.remove();
         }
-    }
-
-    openDiagram(): void {
-        console.log("test");
-        $("#twoDModelContent").hide();
-        $("#diagramContent").show();
     }
 }

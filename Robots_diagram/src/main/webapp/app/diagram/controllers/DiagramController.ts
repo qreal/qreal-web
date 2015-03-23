@@ -7,10 +7,15 @@ class DiagramController {
     private currentNode: DiagramNode;
     private nodeIndex: number = -1;
 
+    private robotModel: TwoDRobotModel;
+
     constructor($scope, $compile) {
         var controller: DiagramController = this;
         $scope.vm = controller;
         controller.nodeTypesMap = XmlManager.loadElementsFromXml("configs/elements.xml", $scope, $compile);
+
+        this.robotModel = new TwoDRobotModelImpl("test_model");
+        $scope.root.setRobotModel(this.robotModel);
 
         this.paper.on('cell:pointerdown',
             function (cellView, evt, x, y) {

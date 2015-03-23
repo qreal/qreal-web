@@ -4,8 +4,8 @@ class ModelImpl implements Model {
     settings : Settings;
     robotModel : RobotModel;
 
-    constructor($scope) {
-        this.worldModel = new WorldModelImpl($scope);
+    constructor() {
+        this.worldModel = new WorldModelImpl();
 
         this.robotModel = new RobotModelImpl();
 
@@ -21,7 +21,7 @@ class ModelImpl implements Model {
         return this.timeline;
     }
 
-    getRobotMode() : RobotModel {
+    getRobotModel() : RobotModel {
         return this.robotModel;
     }
 

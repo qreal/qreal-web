@@ -1,3 +1,15 @@
+var RootDiagramController = (function () {
+    function RootDiagramController($scope) {
+        $scope.root = this;
+    }
+    RootDiagramController.prototype.setRobotModel = function (robotModel) {
+        this.robotModel = robotModel;
+    };
+    RootDiagramController.prototype.getRobotModel = function () {
+        return this.robotModel;
+    };
+    return RootDiagramController;
+})();
 var DiagramController = (function () {
     function DiagramController($scope, $compile) {
         this.graph = new joint.dia.Graph;
@@ -8,6 +20,8 @@ var DiagramController = (function () {
         var controller = this;
         $scope.vm = controller;
         controller.nodeTypesMap = XmlManager.loadElementsFromXml("configs/elements.xml", $scope, $compile);
+        this.robotModel = new TwoDRobotModelImpl("test_model");
+        $scope.root.setRobotModel(this.robotModel);
         this.paper.on('cell:pointerdown', function (cellView, evt, x, y) {
             console.log('cell view ' + cellView.model.id + ' was clicked');
             var node = controller.nodesList[cellView.model.id];
@@ -554,6 +568,44 @@ var Property = (function () {
     }
     return Property;
 })();
+var TwoDModelEngineApiImpl = (function () {
+    function TwoDModelEngineApiImpl() {
+    }
+    return TwoDModelEngineApiImpl;
+})();
+var TwoDModelEngineFacadeImpl = (function () {
+    function TwoDModelEngineFacadeImpl($scope) {
+        $scope.vm = this;
+        var facade = this;
+        var robotModel = $scope.root.getRobotModel();
+        this.robotModelName = robotModel.getName();
+        this.model = new ModelImpl();
+        $('#confirmDelete').find('.modal-footer #confirm').on('click', function () {
+            facade.model.getWorldModel().clearPaper();
+            $('#confirmDelete').modal('hide');
+        });
+    }
+    TwoDModelEngineFacadeImpl.prototype.setDrawLineMode = function () {
+        this.model.getWorldModel().setDrawLineMode();
+    };
+    TwoDModelEngineFacadeImpl.prototype.setDrawWallMode = function () {
+        this.model.getWorldModel().setDrawWallMode();
+    };
+    TwoDModelEngineFacadeImpl.prototype.setDrawPencilMode = function () {
+        this.model.getWorldModel().setDrawPencilMode();
+    };
+    TwoDModelEngineFacadeImpl.prototype.setDrawEllipseMode = function () {
+        this.model.getWorldModel().setDrawEllipseMode();
+    };
+    TwoDModelEngineFacadeImpl.prototype.setNoneMode = function () {
+        this.model.getWorldModel().setNoneMode();
+    };
+    TwoDModelEngineFacadeImpl.prototype.openDiagram = function () {
+        $("#twoDModelContent").hide();
+        $("#diagramContent").show();
+    };
+    return TwoDModelEngineFacadeImpl;
+})();
 var EllipseItemImpl = (function () {
     function EllipseItemImpl(worldModel, xStart, yStart, width, color) {
         this.handleSize = 10;
@@ -1000,8 +1052,8 @@ var WallItemImpl = (function () {
     return WallItemImpl;
 })();
 var ModelImpl = (function () {
-    function ModelImpl($scope) {
-        this.worldModel = new WorldModelImpl($scope);
+    function ModelImpl() {
+        this.worldModel = new WorldModelImpl();
         this.robotModel = new RobotModelImpl();
         this.timeline = new TimelineImpl(this.robotModel);
     }
@@ -1011,7 +1063,7 @@ var ModelImpl = (function () {
     ModelImpl.prototype.getTimeline = function () {
         return this.timeline;
     };
-    ModelImpl.prototype.getRobotMode = function () {
+    ModelImpl.prototype.getRobotModel = function () {
         return this.robotModel;
     };
     ModelImpl.prototype.getSetting = function () {
@@ -1066,12 +1118,11 @@ var TimelineImpl = (function () {
     return TimelineImpl;
 })();
 var WorldModelImpl = (function () {
-    function WorldModelImpl($scope) {
+    function WorldModelImpl() {
         this.drawMode = 0;
         this.currentElement = null;
         this.colorFields = [];
         this.wallItems = [];
-        $scope.vm = this;
         var worldModel = this;
         $(document).ready(function () {
             worldModel.paper = Raphael("twoDModel_stage", "100%", "100%");
@@ -1082,10 +1133,6 @@ var WorldModelImpl = (function () {
             $("body").append('<svg id="dummy" style="display:none"><defs>' + wall_pattern + '</defs></svg>');
             $("#twoDModel_paper defs").append($("#dummy pattern"));
             $("#dummy").remove();
-            $('#confirmDelete').find('.modal-footer #confirm').on('click', function () {
-                worldModel.clearPaper();
-                $('#confirmDelete').modal('hide');
-            });
             var shape;
             var isDrawing = false;
             var startDrawPoint;
@@ -1227,11 +1274,15 @@ var WorldModelImpl = (function () {
             item.remove();
         }
     };
-    WorldModelImpl.prototype.openDiagram = function () {
-        console.log("test");
-        $("#twoDModelContent").hide();
-        $("#diagramContent").show();
-    };
     return WorldModelImpl;
+})();
+var TwoDRobotModelImpl = (function () {
+    function TwoDRobotModelImpl(name) {
+        this.name = name;
+    }
+    TwoDRobotModelImpl.prototype.getName = function () {
+        return this.name;
+    };
+    return TwoDRobotModelImpl;
 })();
 //# sourceMappingURL=out.js.map

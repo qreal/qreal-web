@@ -1,4 +1,4 @@
-<div id="twoDModelContent" ng-controller="ModelImpl" style="display: none">
+<div id="twoDModelContent" ng-controller="TwoDModelEngineFacadeImpl" style="display: none">
     <div class="navbar navbar-inverse navbar-static-top">
         <div class="container-fluid">
             <div class="navbar-header">

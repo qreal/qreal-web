@@ -14,7 +14,7 @@
     <script type="text/javascript" src="<c:url value='/resources/treeview/jquery.treeview.js' />"></script>
 </head>
 
-<body ng-app>
+<body ng-app ng-controller="RootDiagramController">
     <%@ include file="diagramContent.jsp" %>
     <%@ include file="2dmodelContent.jsp" %>
 </body>

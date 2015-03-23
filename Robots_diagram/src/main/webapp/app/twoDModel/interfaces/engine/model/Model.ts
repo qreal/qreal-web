@@ -6,6 +6,6 @@ interface Model {
 
     getWorldModel() : WorldModel;
     getTimeline() : Timeline;
-    getRobotMode() : RobotModel;
+    getRobotModel() : RobotModel;
     getSetting() : Settings;
 }
