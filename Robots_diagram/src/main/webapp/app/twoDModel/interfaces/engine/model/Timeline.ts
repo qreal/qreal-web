@@ -3,5 +3,6 @@ interface Timeline {
     stop(): void;
     setSpeedFactor(factor: number): void;
     getSpeedFactor(): number;
-    getRobotModel(): RobotModel;
+    getRobotModels(): RobotModel[];
+    addRobotModel(robotModel: RobotModel): void;
 }

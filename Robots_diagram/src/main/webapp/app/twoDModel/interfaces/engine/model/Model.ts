@@ -1,11 +1,7 @@
 interface Model {
-    worldModel : WorldModel;
-    timeline : Timeline;
-    settings : Settings;
-    robotModel : RobotModel;
-
     getWorldModel() : WorldModel;
     getTimeline() : Timeline;
-    getRobotModel() : RobotModel;
+    getRobotModels() : RobotModel[];
     getSetting() : Settings;
+    addRobotModel(robotModel: TwoDRobotModel): void;
 }

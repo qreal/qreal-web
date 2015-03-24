@@ -16,10 +16,9 @@ class TimelineImpl implements Timeline {
 
     private intervalId: number;
 
-    private robotModel: RobotModel;
+    private robotModels: RobotModel[];
 
-    constructor(robotModel: RobotModel) {
-        this.robotModel = robotModel;
+    constructor() {
     }
 
     start(): void {
@@ -32,7 +31,9 @@ class TimelineImpl implements Timeline {
     }
 
     onTimer(timeline: Timeline): void {
-        timeline.getRobotModel().nextFragment();
+        timeline.getRobotModels().forEach(function(model) {
+           model.nextFragment();
+        });
     }
 
     setSpeedFactor(factor: number): void {
@@ -43,7 +44,11 @@ class TimelineImpl implements Timeline {
         return this.speedFactor;
     }
 
-    getRobotModel(): RobotModel {
-        return this.robotModel;
+    getRobotModels(): RobotModel[] {
+        return this.robotModels;
+    }
+
+    addRobotModel(robotModel: RobotModel): void {
+        this.robotModels.push(robotModel);
     }
 }

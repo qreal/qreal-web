@@ -1,16 +1,11 @@
 class ModelImpl implements Model {
-    worldModel : WorldModel;
-    timeline : Timeline;
-    settings : Settings;
-    robotModel : RobotModel;
+    private worldModel : WorldModel;
+    private timeline : Timeline;
+    private settings : Settings;
+    private robotModels : RobotModel[] = [];
 
     constructor() {
         this.worldModel = new WorldModelImpl();
-
-        this.robotModel = new RobotModelImpl();
-
-        this.timeline = new TimelineImpl(this.robotModel);
-        //this.timeline.start();
     }
 
     getWorldModel() : WorldModel {
@@ -21,11 +16,17 @@ class ModelImpl implements Model {
         return this.timeline;
     }
 
-    getRobotModel() : RobotModel {
-        return this.robotModel;
+    getRobotModels() : RobotModel[] {
+        return this.robotModels;
     }
 
     getSetting() : Settings {
         return this.settings;
+    }
+
+    addRobotModel(robotModel: TwoDRobotModel): void {
+        var robot: RobotModel = new RobotModelImpl();
+        this.robotModels.push(robot);
+        this.timeline.addRobotModel(robot);
     }
 }

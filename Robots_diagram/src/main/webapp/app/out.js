@@ -1053,9 +1053,8 @@ var WallItemImpl = (function () {
 })();
 var ModelImpl = (function () {
     function ModelImpl() {
+        this.robotModels = [];
         this.worldModel = new WorldModelImpl();
-        this.robotModel = new RobotModelImpl();
-        this.timeline = new TimelineImpl(this.robotModel);
     }
     ModelImpl.prototype.getWorldModel = function () {
         return this.worldModel;
@@ -1063,11 +1062,16 @@ var ModelImpl = (function () {
     ModelImpl.prototype.getTimeline = function () {
         return this.timeline;
     };
-    ModelImpl.prototype.getRobotModel = function () {
-        return this.robotModel;
+    ModelImpl.prototype.getRobotModels = function () {
+        return this.robotModels;
     };
     ModelImpl.prototype.getSetting = function () {
         return this.settings;
+    };
+    ModelImpl.prototype.addRobotModel = function (robotModel) {
+        var robot = new RobotModelImpl();
+        this.robotModels.push(robot);
+        this.timeline.addRobotModel(robot);
     };
     return ModelImpl;
 })();
@@ -1081,7 +1085,7 @@ var RobotModelImpl = (function () {
     return RobotModelImpl;
 })();
 var TimelineImpl = (function () {
-    function TimelineImpl(robotModel) {
+    function TimelineImpl() {
         this.timeInterval = 10;
         this.fps = 28;
         this.defaultFrameLength = 1000 / this.fps;
@@ -1092,7 +1096,6 @@ var TimelineImpl = (function () {
         this.defaultRealTimeInterval = 0;
         this.ticksPerCycle = 3;
         this.frameLength = this.defaultFrameLength;
-        this.robotModel = robotModel;
     }
     TimelineImpl.prototype.start = function () {
         var timeline = this;
@@ -1104,7 +1107,9 @@ var TimelineImpl = (function () {
         clearInterval(this.intervalId);
     };
     TimelineImpl.prototype.onTimer = function (timeline) {
-        timeline.getRobotModel().nextFragment();
+        timeline.getRobotModels().forEach(function (model) {
+            model.nextFragment();
+        });
     };
     TimelineImpl.prototype.setSpeedFactor = function (factor) {
         this.speedFactor = factor;
@@ -1112,8 +1117,11 @@ var TimelineImpl = (function () {
     TimelineImpl.prototype.getSpeedFactor = function () {
         return this.speedFactor;
     };
-    TimelineImpl.prototype.getRobotModel = function () {
-        return this.robotModel;
+    TimelineImpl.prototype.getRobotModels = function () {
+        return this.robotModels;
+    };
+    TimelineImpl.prototype.addRobotModel = function (robotModel) {
+        this.robotModels.push(robotModel);
     };
     return TimelineImpl;
 })();
