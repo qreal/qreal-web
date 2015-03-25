@@ -10,6 +10,8 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
 
         this.model = new ModelImpl();
 
+        this.model.addRobotModel(robotModel);
+
         $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
             facade.model.getWorldModel().clearPaper();
             $('#confirmDelete').modal('hide');

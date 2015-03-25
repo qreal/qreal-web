@@ -580,6 +580,7 @@ var TwoDModelEngineFacadeImpl = (function () {
         var robotModel = $scope.root.getRobotModel();
         this.robotModelName = robotModel.getName();
         this.model = new ModelImpl();
+        this.model.addRobotModel(robotModel);
         $('#confirmDelete').find('.modal-footer #confirm').on('click', function () {
             facade.model.getWorldModel().clearPaper();
             $('#confirmDelete').modal('hide');
@@ -926,7 +927,24 @@ var PencilItemImpl = (function () {
     return PencilItemImpl;
 })();
 var RobotItemImpl = (function () {
-    function RobotItemImpl() {
+    function RobotItemImpl(paper, imageFileName, robot) {
+        this.robot = robot;
+        var robotPosition = robot.getPosition();
+        this.image = paper.image(imageFileName, robotPosition.x, robotPosition.y, 50, 50);
+        this.image.rotate(45);
+        var start = function () {
+            this.ox = this.attr("x");
+            this.oy = this.attr("y");
+            var realX = this.matrix.x(this.attr("x"), this.attr("y"));
+            console.log("x = " + realX);
+            var realY = this.matrix.y(this.attr("x"), this.attr("y"));
+            console.log("y = " + realY);
+            this._transform = this.transform();
+        }, move = function (dx, dy) {
+            this.transform("t" + dx + "," + dy + this._transform);
+        }, up = function () {
+        };
+        this.image.drag(move, start, up);
     }
     RobotItemImpl.prototype.ride = function () {
         console.log("robot ride");
@@ -1054,7 +1072,19 @@ var WallItemImpl = (function () {
 var ModelImpl = (function () {
     function ModelImpl() {
         this.robotModels = [];
-        this.worldModel = new WorldModelImpl();
+        var model = this;
+        this.timeline = new TimelineImpl();
+        $(document).ready(function () {
+            model.paper = Raphael("twoDModel_stage", "100%", "100%");
+            $(model.paper.canvas).attr("id", "twoDModel_paper");
+            var wall_pattern = '<pattern id="wall_pattern" patternUnits="userSpaceOnUse" width="85" height="80">\
+                                        <image xlink:href="images/2dmodel/2d_wall.png" width="85" height="80" />\
+                                    </pattern>';
+            $("body").append('<svg id="dummy" style="display:none"><defs>' + wall_pattern + '</defs></svg>');
+            $("#twoDModel_paper defs").append($("#dummy pattern"));
+            $("#dummy").remove();
+            model.worldModel = new WorldModelImpl(model.paper);
+        });
     }
     ModelImpl.prototype.getWorldModel = function () {
         return this.worldModel;
@@ -1065,22 +1095,36 @@ var ModelImpl = (function () {
     ModelImpl.prototype.getRobotModels = function () {
         return this.robotModels;
     };
+    ModelImpl.prototype.getPaper = function () {
+        return this.paper;
+    };
     ModelImpl.prototype.getSetting = function () {
         return this.settings;
     };
     ModelImpl.prototype.addRobotModel = function (robotModel) {
-        var robot = new RobotModelImpl();
-        this.robotModels.push(robot);
-        this.timeline.addRobotModel(robot);
+        var model = this;
+        $(document).ready(function () {
+            var robot = new RobotModelImpl(model.paper, robotModel, new TwoDPosition(300, 300));
+            model.robotModels.push(robot);
+            model.timeline.addRobotModel(robot);
+        });
     };
     return ModelImpl;
 })();
 var RobotModelImpl = (function () {
-    function RobotModelImpl() {
-        this.robotItem = new RobotItemImpl();
+    function RobotModelImpl(paper, twoDRobotModel, position) {
+        this.position = position;
+        this.twoDRobotModel = twoDRobotModel;
+        this.robotItem = new RobotItemImpl(paper, twoDRobotModel.getRobotImage(), this);
     }
     RobotModelImpl.prototype.nextFragment = function () {
         this.robotItem.ride();
+    };
+    RobotModelImpl.prototype.setPosition = function (position) {
+        this.position = position;
+    };
+    RobotModelImpl.prototype.getPosition = function () {
+        return this.position;
     };
     return RobotModelImpl;
 })();
@@ -1096,6 +1140,7 @@ var TimelineImpl = (function () {
         this.defaultRealTimeInterval = 0;
         this.ticksPerCycle = 3;
         this.frameLength = this.defaultFrameLength;
+        this.robotModels = [];
     }
     TimelineImpl.prototype.start = function () {
         var timeline = this;
@@ -1126,21 +1171,14 @@ var TimelineImpl = (function () {
     return TimelineImpl;
 })();
 var WorldModelImpl = (function () {
-    function WorldModelImpl() {
+    function WorldModelImpl(paper) {
         this.drawMode = 0;
         this.currentElement = null;
         this.colorFields = [];
         this.wallItems = [];
+        this.paper = paper;
         var worldModel = this;
         $(document).ready(function () {
-            worldModel.paper = Raphael("twoDModel_stage", "100%", "100%");
-            $(worldModel.paper.canvas).attr("id", "twoDModel_paper");
-            var wall_pattern = '<pattern id="wall_pattern" patternUnits="userSpaceOnUse" width="85" height="80">\
-                                        <image xlink:href="images/2dmodel/2d_wall.png" width="85" height="80" />\
-                                    </pattern>';
-            $("body").append('<svg id="dummy" style="display:none"><defs>' + wall_pattern + '</defs></svg>');
-            $("#twoDModel_paper defs").append($("#dummy pattern"));
-            $("#dummy").remove();
             var shape;
             var isDrawing = false;
             var startDrawPoint;
@@ -1287,10 +1325,21 @@ var WorldModelImpl = (function () {
 var TwoDRobotModelImpl = (function () {
     function TwoDRobotModelImpl(name) {
         this.name = name;
+        this.image = "images/2dmodel/trikTwoDRobot.svg";
     }
     TwoDRobotModelImpl.prototype.getName = function () {
         return this.name;
     };
+    TwoDRobotModelImpl.prototype.getRobotImage = function () {
+        return this.image;
+    };
     return TwoDRobotModelImpl;
+})();
+var TwoDPosition = (function () {
+    function TwoDPosition(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    return TwoDPosition;
 })();
 //# sourceMappingURL=out.js.map

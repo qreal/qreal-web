@@ -16,7 +16,7 @@ class TimelineImpl implements Timeline {
 
     private intervalId: number;
 
-    private robotModels: RobotModel[];
+    private robotModels: RobotModel[] = [];
 
     constructor() {
     }

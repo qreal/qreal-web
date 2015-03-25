@@ -5,19 +5,10 @@ class WorldModelImpl implements WorldModel {
     private colorFields: ColorFieldItem[] = [];
     private wallItems: WallItem[] = [];
 
-    constructor() {
+    constructor(paper: RaphaelPaper) {
+        this.paper = paper;
         var worldModel = this;
         $(document).ready(function(){
-            worldModel.paper = Raphael("twoDModel_stage", "100%", "100%");
-            $(worldModel.paper.canvas).attr("id", "twoDModel_paper");
-
-            var wall_pattern = '<pattern id="wall_pattern" patternUnits="userSpaceOnUse" width="85" height="80">\
-                                        <image xlink:href="images/2dmodel/2d_wall.png" width="85" height="80" />\
-                                    </pattern>';
-            $("body").append('<svg id="dummy" style="display:none"><defs>' + wall_pattern + '</defs></svg>');
-            $("#twoDModel_paper defs").append($("#dummy pattern"));
-            $("#dummy").remove();
-
             var shape;
             var isDrawing: boolean = false;
             var startDrawPoint;

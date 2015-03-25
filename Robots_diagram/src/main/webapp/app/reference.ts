@@ -39,5 +39,6 @@
 /// <reference path="twoDModel/interfaces/engine/model/Timeline.ts" />
 /// <reference path="twoDModel/interfaces/engine/model/WorldModel.ts" />
 /// <reference path="twoDModel/interfaces/robotModel/TwoDRobotModel.ts" />
+/// <reference path="twoDModel/types/TwoDPosition.ts" />
 /// <reference path="vendor.d.ts" />
 //grunt-end
