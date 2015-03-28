@@ -1,6 +1,6 @@
 class CommonRobotModelImpl implements CommonRobotModel {
     private ports: PortInfo[] = [];
-    private allowedConnections: {number: DeviceInfo[]};
+    private allowedConnections: {number?: DeviceInfo[]} = {};
 
     getAvailablePorts(): PortInfo[] {
         return this.ports;

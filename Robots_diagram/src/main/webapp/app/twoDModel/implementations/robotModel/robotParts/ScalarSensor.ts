@@ -1,0 +1,3 @@
+class ScalarSensor extends AbstractSensor {
+
+}

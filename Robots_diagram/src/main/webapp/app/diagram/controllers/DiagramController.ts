@@ -17,6 +17,8 @@ class DiagramController {
         this.robotModel = new TwoDRobotModelImpl("test_model");
         $scope.root.setRobotModel(this.robotModel);
 
+        var trik = new TrikRobotModelBaseImpl();
+
         this.paper.on('cell:pointerdown',
             function (cellView, evt, x, y) {
                 console.log('cell view ' + cellView.model.id + ' was clicked');

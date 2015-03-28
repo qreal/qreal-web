@@ -91,76 +91,77 @@ class TrikRobotModelBaseImpl extends CommonRobotModelImpl {
     }
     
     displayInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(Display);
     }
     speakerInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(Speaker);
     }
     buttonInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(Button);
     }
 
     powerMotorInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(Motor);
     }
     servoMotorInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(Motor);
     }
     encoderInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(EncoderSensor);
     }
 
     lightSensorInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(LightSensor);
     }
+
     infraredSensorInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikInfraredSensor);
     }
 
     sonarSensorInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikSonarSensor);
     }
 
     motionSensorInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikMotionSensor);
     }
 
     gyroscopeInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(GyroscopeSensor);
     }
     accelerometerInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(AccelerometerSensor);
     }
 
     ledInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikLed);
     }
     lineSensorInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikLineSensor);
     }
     colorSensorInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikColorSensor);
     }
     objectSensorInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikObjectSensor);
     }
     shellInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikShell);
     }
 
     gamepadButtonInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikGamepadButton);
     }
     gamepadPadInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikGamepadPad);
     }
     gamepadPadPressSensorInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikGamepadPadPressSensor);
     }
     gamepadWheelInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikGamepadWheel);
     }
     gamepadConnectionIndicatorInfo(): DeviceInfo {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikGamepadConnectionIndicator);
     }
 }

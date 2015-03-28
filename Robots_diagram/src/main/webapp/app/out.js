@@ -1,3 +1,194 @@
+var DeviceImpl = (function () {
+    function DeviceImpl() {
+    }
+    return DeviceImpl;
+})();
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var AbstractSensor = (function (_super) {
+    __extends(AbstractSensor, _super);
+    function AbstractSensor() {
+        _super.apply(this, arguments);
+    }
+    return AbstractSensor;
+})(DeviceImpl);
+var ScalarSensor = (function (_super) {
+    __extends(ScalarSensor, _super);
+    function ScalarSensor() {
+        _super.apply(this, arguments);
+    }
+    return ScalarSensor;
+})(AbstractSensor);
+var VectorSensor = (function (_super) {
+    __extends(VectorSensor, _super);
+    function VectorSensor() {
+        _super.apply(this, arguments);
+    }
+    return VectorSensor;
+})(AbstractSensor);
+var AccelerometerSensor = (function (_super) {
+    __extends(AccelerometerSensor, _super);
+    function AccelerometerSensor() {
+        _super.apply(this, arguments);
+    }
+    AccelerometerSensor.name = "accelerometer";
+    AccelerometerSensor.friendlyName = "Accelerometer";
+    return AccelerometerSensor;
+})(ScalarSensor);
+var Button = (function (_super) {
+    __extends(Button, _super);
+    function Button() {
+        _super.apply(this, arguments);
+    }
+    Button.name = "button";
+    Button.friendlyName = "Button";
+    return Button;
+})(ScalarSensor);
+var ColorSensor = (function (_super) {
+    __extends(ColorSensor, _super);
+    function ColorSensor() {
+        _super.apply(this, arguments);
+    }
+    ColorSensor.name = "color";
+    ColorSensor.friendlyName = "Color sensor";
+    return ColorSensor;
+})(ScalarSensor);
+var ColorSensorBlue = (function (_super) {
+    __extends(ColorSensorBlue, _super);
+    function ColorSensorBlue() {
+        _super.apply(this, arguments);
+    }
+    ColorSensorBlue.name = "colorBlue";
+    ColorSensorBlue.friendlyName = "Color sensor (blue)";
+    return ColorSensorBlue;
+})(ColorSensor);
+var ColorSensorFull = (function (_super) {
+    __extends(ColorSensorFull, _super);
+    function ColorSensorFull() {
+        _super.apply(this, arguments);
+    }
+    ColorSensorFull.name = "colorRecognition";
+    ColorSensorFull.friendlyName = "Color sensor (full)";
+    return ColorSensorFull;
+})(ColorSensor);
+var ColorSensorGreen = (function (_super) {
+    __extends(ColorSensorGreen, _super);
+    function ColorSensorGreen() {
+        _super.apply(this, arguments);
+    }
+    ColorSensorGreen.name = "colorGreen";
+    ColorSensorGreen.friendlyName = "Color sensor (green)";
+    return ColorSensorGreen;
+})(ColorSensor);
+var ColorSensorPassive = (function (_super) {
+    __extends(ColorSensorPassive, _super);
+    function ColorSensorPassive() {
+        _super.apply(this, arguments);
+    }
+    ColorSensorPassive.name = "colorNone";
+    ColorSensorPassive.friendlyName = "Color sensor (passive)";
+    return ColorSensorPassive;
+})(ColorSensor);
+var ColorSensorRed = (function (_super) {
+    __extends(ColorSensorRed, _super);
+    function ColorSensorRed() {
+        _super.apply(this, arguments);
+    }
+    ColorSensorRed.name = "colorRed";
+    ColorSensorRed.friendlyName = "Color sensor (red)";
+    return ColorSensorRed;
+})(ColorSensor);
+var Display = (function (_super) {
+    __extends(Display, _super);
+    function Display() {
+        _super.apply(this, arguments);
+    }
+    Display.name = "display";
+    Display.friendlyName = "Display";
+    return Display;
+})(DeviceImpl);
+var EncoderSensor = (function (_super) {
+    __extends(EncoderSensor, _super);
+    function EncoderSensor() {
+        _super.apply(this, arguments);
+    }
+    EncoderSensor.name = "encoder";
+    EncoderSensor.friendlyName = "Encoder";
+    return EncoderSensor;
+})(ScalarSensor);
+var GyroscopeSensor = (function (_super) {
+    __extends(GyroscopeSensor, _super);
+    function GyroscopeSensor() {
+        _super.apply(this, arguments);
+        this.name = "gyroscope";
+        this.friendlyName = "Gyroscope";
+    }
+    GyroscopeSensor.prototype.getName = function () {
+        return this.name;
+    };
+    GyroscopeSensor.prototype.getFriendlyName = function () {
+        return this.friendlyName;
+    };
+    return GyroscopeSensor;
+})(ScalarSensor);
+var LightSensor = (function (_super) {
+    __extends(LightSensor, _super);
+    function LightSensor() {
+        _super.apply(this, arguments);
+    }
+    LightSensor.name = "light";
+    LightSensor.friendlyName = "Light sensor";
+    return LightSensor;
+})(ScalarSensor);
+var Motor = (function (_super) {
+    __extends(Motor, _super);
+    function Motor() {
+        _super.apply(this, arguments);
+    }
+    Motor.name = "motor";
+    Motor.friendlyName = "Motor";
+    return Motor;
+})(DeviceImpl);
+var RangeSensor = (function (_super) {
+    __extends(RangeSensor, _super);
+    function RangeSensor() {
+        _super.apply(this, arguments);
+    }
+    RangeSensor.name = "sonar";
+    RangeSensor.friendlyName = "Range sensor";
+    return RangeSensor;
+})(ScalarSensor);
+var SoundSensor = (function (_super) {
+    __extends(SoundSensor, _super);
+    function SoundSensor() {
+        _super.apply(this, arguments);
+    }
+    SoundSensor.name = "sound";
+    SoundSensor.friendlyName = "Sound sensor";
+    return SoundSensor;
+})(ScalarSensor);
+var Speaker = (function (_super) {
+    __extends(Speaker, _super);
+    function Speaker() {
+        _super.apply(this, arguments);
+    }
+    Speaker.name = "speaker";
+    Speaker.friendlyName = "Speaker";
+    return Speaker;
+})(DeviceImpl);
+var TouchSensor = (function (_super) {
+    __extends(TouchSensor, _super);
+    function TouchSensor() {
+        _super.apply(this, arguments);
+    }
+    TouchSensor.name = "touch";
+    TouchSensor.friendlyName = "Touch sensor";
+    return TouchSensor;
+})(ScalarSensor);
 var RootDiagramController = (function () {
     function RootDiagramController($scope) {
         $scope.root = this;
@@ -22,6 +213,7 @@ var DiagramController = (function () {
         controller.nodeTypesMap = XmlManager.loadElementsFromXml("configs/elements.xml", $scope, $compile);
         this.robotModel = new TwoDRobotModelImpl("test_model");
         $scope.root.setRobotModel(this.robotModel);
+        var trik = new TrikRobotModelBaseImpl();
         this.paper.on('cell:pointerdown', function (cellView, evt, x, y) {
             console.log('cell view ' + cellView.model.id + ' was clicked');
             var node = controller.nodesList[cellView.model.id];
@@ -521,12 +713,6 @@ var DefaultDiagramNode = (function () {
     };
     return DefaultDiagramNode;
 })();
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
 var DiagramPaper = (function (_super) {
     __extends(DiagramPaper, _super);
     function DiagramPaper(graph) {
@@ -1325,6 +1511,7 @@ var WorldModelImpl = (function () {
 var CommonRobotModelImpl = (function () {
     function CommonRobotModelImpl() {
         this.ports = [];
+        this.allowedConnections = {};
     }
     CommonRobotModelImpl.prototype.getAvailablePorts = function () {
         return this.ports;
@@ -1350,8 +1537,17 @@ var CommonRobotModelImpl = (function () {
     return CommonRobotModelImpl;
 })();
 var DeviceInfoImpl = (function () {
-    function DeviceInfoImpl() {
+    function DeviceInfoImpl(deviceType) {
+        this.deviceType = deviceType;
+        this.name = deviceType.name;
+        this.friendlyName = deviceType.friendlyName;
     }
+    DeviceInfoImpl.prototype.getName = function () {
+        return this.name;
+    };
+    DeviceInfoImpl.prototype.getFriendlyName = function () {
+        return this.friendlyName;
+    };
     return DeviceInfoImpl;
 })();
 var PortInfoImpl = (function () {
@@ -1448,73 +1644,221 @@ var TrikRobotModelBaseImpl = (function (_super) {
         this.addAllowedConnection(new PortInfoImpl("GamepadConnectionIndicatorPort", 0 /* input */, [], "gamepadConnected"), [this.gamepadConnectionIndicatorInfo()]);
     }
     TrikRobotModelBaseImpl.prototype.displayInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(Display);
     };
     TrikRobotModelBaseImpl.prototype.speakerInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(Speaker);
     };
     TrikRobotModelBaseImpl.prototype.buttonInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(Button);
     };
     TrikRobotModelBaseImpl.prototype.powerMotorInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(Motor);
     };
     TrikRobotModelBaseImpl.prototype.servoMotorInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(Motor);
     };
     TrikRobotModelBaseImpl.prototype.encoderInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(EncoderSensor);
     };
     TrikRobotModelBaseImpl.prototype.lightSensorInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(LightSensor);
     };
     TrikRobotModelBaseImpl.prototype.infraredSensorInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikInfraredSensor);
     };
     TrikRobotModelBaseImpl.prototype.sonarSensorInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikSonarSensor);
     };
     TrikRobotModelBaseImpl.prototype.motionSensorInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikMotionSensor);
     };
     TrikRobotModelBaseImpl.prototype.gyroscopeInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(GyroscopeSensor);
     };
     TrikRobotModelBaseImpl.prototype.accelerometerInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(AccelerometerSensor);
     };
     TrikRobotModelBaseImpl.prototype.ledInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikLed);
     };
     TrikRobotModelBaseImpl.prototype.lineSensorInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikLineSensor);
     };
     TrikRobotModelBaseImpl.prototype.colorSensorInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikColorSensor);
     };
     TrikRobotModelBaseImpl.prototype.objectSensorInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikObjectSensor);
     };
     TrikRobotModelBaseImpl.prototype.shellInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikShell);
     };
     TrikRobotModelBaseImpl.prototype.gamepadButtonInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikGamepadButton);
     };
     TrikRobotModelBaseImpl.prototype.gamepadPadInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikGamepadPad);
     };
     TrikRobotModelBaseImpl.prototype.gamepadPadPressSensorInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikGamepadPadPressSensor);
     };
     TrikRobotModelBaseImpl.prototype.gamepadWheelInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikGamepadWheel);
     };
     TrikRobotModelBaseImpl.prototype.gamepadConnectionIndicatorInfo = function () {
-        return new DeviceInfoImpl();
+        return new DeviceInfoImpl(TrikGamepadConnectionIndicator);
     };
     return TrikRobotModelBaseImpl;
 })(CommonRobotModelImpl);
+var TrikColorSensor = (function (_super) {
+    __extends(TrikColorSensor, _super);
+    function TrikColorSensor() {
+        _super.apply(this, arguments);
+    }
+    TrikColorSensor.name = "trikColorSensor";
+    TrikColorSensor.friendlyName = "Color Sensor";
+    return TrikColorSensor;
+})(VectorSensor);
+var TrikDisplay = (function (_super) {
+    __extends(TrikDisplay, _super);
+    function TrikDisplay() {
+        _super.apply(this, arguments);
+    }
+    return TrikDisplay;
+})(Display);
+var TrikGamepadButton = (function (_super) {
+    __extends(TrikGamepadButton, _super);
+    function TrikGamepadButton() {
+        _super.apply(this, arguments);
+    }
+    TrikGamepadButton.name = "gamepadButton";
+    TrikGamepadButton.friendlyName = "Android Gamepad Button";
+    return TrikGamepadButton;
+})(Button);
+var TrikGamepadConnectionIndicator = (function (_super) {
+    __extends(TrikGamepadConnectionIndicator, _super);
+    function TrikGamepadConnectionIndicator() {
+        _super.apply(this, arguments);
+    }
+    TrikGamepadConnectionIndicator.name = "gamepadConnectionIndicator";
+    TrikGamepadConnectionIndicator.friendlyName = "Android Gamepad Connection Indicator";
+    return TrikGamepadConnectionIndicator;
+})(ScalarSensor);
+var TrikGamepadPad = (function (_super) {
+    __extends(TrikGamepadPad, _super);
+    function TrikGamepadPad() {
+        _super.apply(this, arguments);
+    }
+    TrikGamepadPad.name = "gamepadPad";
+    TrikGamepadPad.friendlyName = "Android Gamepad Pad";
+    return TrikGamepadPad;
+})(VectorSensor);
+var TrikGamepadPadPressSensor = (function (_super) {
+    __extends(TrikGamepadPadPressSensor, _super);
+    function TrikGamepadPadPressSensor() {
+        _super.apply(this, arguments);
+    }
+    TrikGamepadPadPressSensor.name = "gamepadPadPressSensor";
+    TrikGamepadPadPressSensor.friendlyName = "Android Gamepad Pad as Button";
+    return TrikGamepadPadPressSensor;
+})(Button);
+var TrikGamepadWheel = (function (_super) {
+    __extends(TrikGamepadWheel, _super);
+    function TrikGamepadWheel() {
+        _super.apply(this, arguments);
+    }
+    TrikGamepadWheel.name = "gamepadWheel";
+    TrikGamepadWheel.friendlyName = "Android Gamepad Wheel";
+    return TrikGamepadWheel;
+})(ScalarSensor);
+var TrikInfraredSensor = (function (_super) {
+    __extends(TrikInfraredSensor, _super);
+    function TrikInfraredSensor() {
+        _super.apply(this, arguments);
+    }
+    TrikInfraredSensor.name = "infrared";
+    TrikInfraredSensor.friendlyName = "Infrared Sensor";
+    return TrikInfraredSensor;
+})(RangeSensor);
+var TrikLed = (function (_super) {
+    __extends(TrikLed, _super);
+    function TrikLed() {
+        _super.apply(this, arguments);
+    }
+    TrikLed.name = "led";
+    TrikLed.friendlyName = "Led";
+    return TrikLed;
+})(DeviceImpl);
+var TrikLineSensor = (function (_super) {
+    __extends(TrikLineSensor, _super);
+    function TrikLineSensor() {
+        _super.apply(this, arguments);
+    }
+    TrikLineSensor.name = "trikLineSensor";
+    TrikLineSensor.friendlyName = "Line Sensor";
+    return TrikLineSensor;
+})(VectorSensor);
+var TrikMotionSensor = (function (_super) {
+    __extends(TrikMotionSensor, _super);
+    function TrikMotionSensor() {
+        _super.apply(this, arguments);
+    }
+    TrikMotionSensor.name = "motion";
+    TrikMotionSensor.friendlyName = "Motion Sensor";
+    return TrikMotionSensor;
+})(ScalarSensor);
+var TrikObjectSensor = (function (_super) {
+    __extends(TrikObjectSensor, _super);
+    function TrikObjectSensor() {
+        _super.apply(this, arguments);
+    }
+    TrikObjectSensor.name = "trikObjectSensor";
+    TrikObjectSensor.friendlyName = "Object Sensor";
+    return TrikObjectSensor;
+})(VectorSensor);
+var TrikPowerMotor = (function (_super) {
+    __extends(TrikPowerMotor, _super);
+    function TrikPowerMotor() {
+        _super.apply(this, arguments);
+    }
+    TrikPowerMotor.name = "power";
+    TrikPowerMotor.friendlyName = "Power Motor";
+    return TrikPowerMotor;
+})(Motor);
+var TrikServoMotor = (function (_super) {
+    __extends(TrikServoMotor, _super);
+    function TrikServoMotor() {
+        _super.apply(this, arguments);
+    }
+    TrikServoMotor.name = "servo";
+    TrikServoMotor.friendlyName = "Servo Motor";
+    return TrikServoMotor;
+})(Motor);
+var TrikShell = (function (_super) {
+    __extends(TrikShell, _super);
+    function TrikShell() {
+        _super.apply(this, arguments);
+    }
+    TrikShell.name = "shell";
+    TrikShell.friendlyName = "Shell";
+    return TrikShell;
+})(DeviceImpl);
+var TrikSonarSensor = (function (_super) {
+    __extends(TrikSonarSensor, _super);
+    function TrikSonarSensor() {
+        _super.apply(this, arguments);
+    }
+    TrikSonarSensor.friendlyName = "Sonic Sensor";
+    return TrikSonarSensor;
+})(RangeSensor);
+var TrikSpeaker = (function (_super) {
+    __extends(TrikSpeaker, _super);
+    function TrikSpeaker() {
+        _super.apply(this, arguments);
+    }
+    return TrikSpeaker;
+})(Speaker);
 var TwoDRobotModelImpl = (function () {
     function TwoDRobotModelImpl(name) {
         this.name = name;
