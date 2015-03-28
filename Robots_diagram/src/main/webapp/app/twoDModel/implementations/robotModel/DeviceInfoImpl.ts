@@ -1,0 +1,3 @@
+class DeviceInfoImpl implements DeviceInfo {
+
+}

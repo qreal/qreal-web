@@ -1322,6 +1322,199 @@ var WorldModelImpl = (function () {
     };
     return WorldModelImpl;
 })();
+var CommonRobotModelImpl = (function () {
+    function CommonRobotModelImpl() {
+        this.ports = [];
+    }
+    CommonRobotModelImpl.prototype.getAvailablePorts = function () {
+        return this.ports;
+    };
+    CommonRobotModelImpl.prototype.addAllowedConnection = function (port, devices) {
+        this.ports.push(port);
+        this.allowedConnections[this.ports.indexOf(port)] = devices;
+    };
+    CommonRobotModelImpl.prototype.configurablePorts = function () {
+        var result = [];
+        var robotModel = this;
+        robotModel.getAvailablePorts().forEach(function (port) {
+            var devices = robotModel.getAllowedDevices(port);
+            if (devices.length) {
+                result.push(port);
+            }
+        });
+        return result;
+    };
+    CommonRobotModelImpl.prototype.getAllowedDevices = function (port) {
+        return this.allowedConnections[this.ports.indexOf(port)];
+    };
+    return CommonRobotModelImpl;
+})();
+var DeviceInfoImpl = (function () {
+    function DeviceInfoImpl() {
+    }
+    return DeviceInfoImpl;
+})();
+var PortInfoImpl = (function () {
+    function PortInfoImpl(name, direction, nameAliases, reservedVariable, reservedVariableType) {
+        this.nameAliases = [];
+        this.reservedVariableType = 0 /* scalar */;
+        this.name = name;
+        this.direction = direction;
+        this.nameAliases = nameAliases;
+        this.reservedVariable = reservedVariable;
+        this.reservedVariableType = reservedVariableType;
+    }
+    PortInfoImpl.prototype.getName = function () {
+        return this.name;
+    };
+    PortInfoImpl.prototype.getDirection = function () {
+        return this.direction;
+    };
+    PortInfoImpl.prototype.getNameAliases = function () {
+        return this.nameAliases;
+    };
+    PortInfoImpl.prototype.getReservedVariable = function () {
+        return this.reservedVariable;
+    };
+    PortInfoImpl.prototype.getReservedVariableType = function () {
+        return this.reservedVariableType;
+    };
+    return PortInfoImpl;
+})();
+var TrikRobotModelBaseImpl = (function (_super) {
+    __extends(TrikRobotModelBaseImpl, _super);
+    function TrikRobotModelBaseImpl() {
+        _super.call(this);
+        var analogPortConnections = [this.lightSensorInfo(), this.infraredSensorInfo()];
+        this.addAllowedConnection(new PortInfoImpl("DisplayPort", 1 /* output */), [this.displayInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("SpeakerPort", 1 /* output */), [this.speakerInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("Left", 0 /* input */, [], "buttonLeft"), [this.buttonInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("Right", 0 /* input */, [], "buttonRight"), [this.buttonInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("Up", 0 /* input */, [], "buttonUp"), [this.buttonInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("Down", 0 /* input */, [], "buttonDown"), [this.buttonInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("Enter", 0 /* input */, [], "buttonEnter"), [this.buttonInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("Esc", 0 /* input */, [], "buttonEsc"), [this.buttonInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("C1", 1 /* output */, ["JC1"]), [this.servoMotorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("C2", 1 /* output */, ["JC2"]), [this.servoMotorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("C3", 1 /* output */, ["JC3"]), [this.servoMotorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("E1", 1 /* output */, ["JE1"]), [this.servoMotorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("E2", 1 /* output */, ["JE2"]), [this.servoMotorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("E3", 1 /* output */, ["JE3"]), [this.servoMotorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("E4", 1 /* output */, ["JE4"]), [this.servoMotorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("M1", 1 /* output */, ["JM1", "A", "1"]), [this.powerMotorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("M2", 1 /* output */, ["JM2", "B", "2"]), [this.powerMotorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("M3", 1 /* output */, ["JM3", "C", "3"]), [this.powerMotorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("M4", 1 /* output */, ["JM4", "D", "4"]), [this.powerMotorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("B1", 0 /* input */, ["JB1", "M1", "JM1", "A", "1"], "encoder1"), [this.encoderInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("B2", 0 /* input */, ["JB2", "M2", "JM2", "B", "2"], "encoder2"), [this.encoderInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("B3", 0 /* input */, ["JB3", "M3", "JM3", "C", "3"], "encoder3"), [this.encoderInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("B4", 0 /* input */, ["JB4", "M4", "JM4", "D", "4"], "encoder4"), [this.encoderInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("A1", 0 /* input */, ["JA1"], "sensorA1"), analogPortConnections);
+        this.addAllowedConnection(new PortInfoImpl("A2", 0 /* input */, ["JA2"], "sensorA2"), analogPortConnections);
+        this.addAllowedConnection(new PortInfoImpl("A3", 0 /* input */, ["JA3"], "sensorA3"), analogPortConnections);
+        this.addAllowedConnection(new PortInfoImpl("A4", 0 /* input */, ["JA4"], "sensorA4"), analogPortConnections);
+        this.addAllowedConnection(new PortInfoImpl("A5", 0 /* input */, ["JA5"], "sensorA5"), analogPortConnections);
+        this.addAllowedConnection(new PortInfoImpl("A6", 0 /* input */, ["JA6"], "sensorA6"), analogPortConnections);
+        this.addAllowedConnection(new PortInfoImpl("D1", 0 /* input */, ["JD1"], "sensorD1"), [this.sonarSensorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("D2", 0 /* input */, ["JD2"], "sensorD2"), [this.sonarSensorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("F1", 0 /* input */, ["JF1"], "sensorF1"), [this.motionSensorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("GyroscopePortX", 0 /* input */, [], "gyroscopeX"), [this.gyroscopeInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("GyroscopePortY", 0 /* input */, [], "gyroscopeY"), [this.gyroscopeInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("GyroscopePortZ", 0 /* input */, [], "gyroscopeZ"), [this.gyroscopeInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("AccelerometerPortX", 0 /* input */, [], "accelerometerX"), [this.accelerometerInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("AccelerometerPortY", 0 /* input */, [], "accelerometerY"), [this.accelerometerInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("AccelerometerPortZ", 0 /* input */, [], "accelerometerZ"), [this.accelerometerInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("LedPort", 1 /* output */), [this.ledInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("LineSensorXPort", 0 /* input */, [], "lineSensorX"), [this.lineSensorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("LineSensorSizePort", 0 /* input */, [], "lineSensorSize"), [this.lineSensorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("LineSensorCrossroadsPort", 0 /* input */, [], "lineSensorCross"), [this.lineSensorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("ObjectSensorXPort", 0 /* input */, [], "objectSensorX"), [this.objectSensorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("ObjectSensorYPort", 0 /* input */, [], "objectSensorY"), [this.objectSensorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("ObjectSensorSizePort", 0 /* input */, [], "objectSensorSize"), [this.objectSensorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("ColorSensorRPort", 0 /* input */, [], "colorSensorR"), [this.colorSensorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("ColorSensorGPort", 0 /* input */, [], "colorSensorG"), [this.colorSensorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("ColorSensorBPort", 0 /* input */, [], "colorSensorB"), [this.colorSensorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("ShellPort", 1 /* output */), [this.shellInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("GamepadPad1PosPort", 0 /* input */, [], "gamepadPad1", 1 /* vector */), [this.gamepadPadInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("GamepadPad2PosPort", 0 /* input */, [], "gamepadPad2", 1 /* vector */), [this.gamepadPadInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("GamepadPad1PressedPort", 0 /* input */, [], "gamepadPad1Pressed"), [this.gamepadPadPressSensorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("GamepadPad2PressedPort", 0 /* input */, [], "gamepadPad2Pressed"), [this.gamepadPadPressSensorInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("GamepadWheelPort", 0 /* input */, [], "gamepadWheel"), [this.gamepadWheelInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("GamepadButton1Port", 0 /* input */, [], "gamepadButton1"), [this.gamepadButtonInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("GamepadButton2Port", 0 /* input */, [], "gamepadButton2"), [this.gamepadButtonInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("GamepadButton3Port", 0 /* input */, [], "gamepadButton3"), [this.gamepadButtonInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("GamepadButton4Port", 0 /* input */, [], "gamepadButton4"), [this.gamepadButtonInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("GamepadButton5Port", 0 /* input */, [], "gamepadButton5"), [this.gamepadButtonInfo()]);
+        this.addAllowedConnection(new PortInfoImpl("GamepadConnectionIndicatorPort", 0 /* input */, [], "gamepadConnected"), [this.gamepadConnectionIndicatorInfo()]);
+    }
+    TrikRobotModelBaseImpl.prototype.displayInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.speakerInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.buttonInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.powerMotorInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.servoMotorInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.encoderInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.lightSensorInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.infraredSensorInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.sonarSensorInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.motionSensorInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.gyroscopeInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.accelerometerInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.ledInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.lineSensorInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.colorSensorInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.objectSensorInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.shellInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.gamepadButtonInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.gamepadPadInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.gamepadPadPressSensorInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.gamepadWheelInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    TrikRobotModelBaseImpl.prototype.gamepadConnectionIndicatorInfo = function () {
+        return new DeviceInfoImpl();
+    };
+    return TrikRobotModelBaseImpl;
+})(CommonRobotModelImpl);
 var TwoDRobotModelImpl = (function () {
     function TwoDRobotModelImpl(name) {
         this.name = name;
@@ -1335,6 +1528,16 @@ var TwoDRobotModelImpl = (function () {
     };
     return TwoDRobotModelImpl;
 })();
+var Direction;
+(function (Direction) {
+    Direction[Direction["input"] = 0] = "input";
+    Direction[Direction["output"] = 1] = "output";
+})(Direction || (Direction = {}));
+var ReservedVariableType;
+(function (ReservedVariableType) {
+    ReservedVariableType[ReservedVariableType["scalar"] = 0] = "scalar";
+    ReservedVariableType[ReservedVariableType["vector"] = 1] = "vector";
+})(ReservedVariableType || (ReservedVariableType = {}));
 var TwoDPosition = (function () {
     function TwoDPosition(x, y) {
         this.x = x;

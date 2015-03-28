@@ -117,7 +117,6 @@ class EllipseItemImpl implements EllipseItem {
                     ellipseItem.handleTopRight.attr({x : this.handleTopRightCoord.x + dx, y: this.handleTopRightCoord.y + dy});
                     ellipseItem.handleBottomLeft.attr({x : this.handleBottomLeftCoord.x + dx, y: this.handleBottomLeftCoord.y + dy});
                     ellipseItem.handleBottomRight.attr({x : this.handleBottomRightCoord.x + dx, y: this.handleBottomRightCoord.y + dy});
-
                 }
                 return this;
             },
