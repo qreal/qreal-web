@@ -189,6 +189,34 @@ var TouchSensor = (function (_super) {
     TouchSensor.friendlyName = "Touch sensor";
     return TouchSensor;
 })(ScalarSensor);
+var CommonRobotModelImpl = (function () {
+    function CommonRobotModelImpl() {
+        this.ports = [];
+        this.allowedConnections = {};
+    }
+    CommonRobotModelImpl.prototype.getAvailablePorts = function () {
+        return this.ports;
+    };
+    CommonRobotModelImpl.prototype.addAllowedConnection = function (port, devices) {
+        this.ports.push(port);
+        this.allowedConnections[this.ports.indexOf(port)] = devices;
+    };
+    CommonRobotModelImpl.prototype.getConfigurablePorts = function () {
+        var result = [];
+        var robotModel = this;
+        robotModel.getAvailablePorts().forEach(function (port) {
+            var devices = robotModel.getAllowedDevices(port);
+            if (devices.length) {
+                result.push(port);
+            }
+        });
+        return result;
+    };
+    CommonRobotModelImpl.prototype.getAllowedDevices = function (port) {
+        return this.allowedConnections[this.ports.indexOf(port)];
+    };
+    return CommonRobotModelImpl;
+})();
 var RootDiagramController = (function () {
     function RootDiagramController($scope) {
         $scope.root = this;
@@ -211,9 +239,9 @@ var DiagramController = (function () {
         var controller = this;
         $scope.vm = controller;
         controller.nodeTypesMap = XmlManager.loadElementsFromXml("configs/elements.xml", $scope, $compile);
-        this.robotModel = new TwoDRobotModelImpl("test_model");
+        this.realModel = new TrikRobotModelBaseImpl();
+        this.robotModel = new TwoDRobotModelImpl(this.realModel, "model");
         $scope.root.setRobotModel(this.robotModel);
-        var trik = new TrikRobotModelBaseImpl();
         this.paper.on('cell:pointerdown', function (cellView, evt, x, y) {
             console.log('cell view ' + cellView.model.id + ' was clicked');
             var node = controller.nodesList[cellView.model.id];
@@ -1508,34 +1536,6 @@ var WorldModelImpl = (function () {
     };
     return WorldModelImpl;
 })();
-var CommonRobotModelImpl = (function () {
-    function CommonRobotModelImpl() {
-        this.ports = [];
-        this.allowedConnections = {};
-    }
-    CommonRobotModelImpl.prototype.getAvailablePorts = function () {
-        return this.ports;
-    };
-    CommonRobotModelImpl.prototype.addAllowedConnection = function (port, devices) {
-        this.ports.push(port);
-        this.allowedConnections[this.ports.indexOf(port)] = devices;
-    };
-    CommonRobotModelImpl.prototype.configurablePorts = function () {
-        var result = [];
-        var robotModel = this;
-        robotModel.getAvailablePorts().forEach(function (port) {
-            var devices = robotModel.getAllowedDevices(port);
-            if (devices.length) {
-                result.push(port);
-            }
-        });
-        return result;
-    };
-    CommonRobotModelImpl.prototype.getAllowedDevices = function (port) {
-        return this.allowedConnections[this.ports.indexOf(port)];
-    };
-    return CommonRobotModelImpl;
-})();
 var DeviceInfoImpl = (function () {
     function DeviceInfoImpl(deviceType) {
         this.deviceType = deviceType;
@@ -1859,8 +1859,11 @@ var TrikSpeaker = (function (_super) {
     }
     return TrikSpeaker;
 })(Speaker);
-var TwoDRobotModelImpl = (function () {
-    function TwoDRobotModelImpl(name) {
+var TwoDRobotModelImpl = (function (_super) {
+    __extends(TwoDRobotModelImpl, _super);
+    function TwoDRobotModelImpl(realModel, name) {
+        _super.call(this);
+        this.realModel = realModel;
         this.name = name;
         this.image = "images/2dmodel/trikTwoDRobot.svg";
     }
@@ -1871,7 +1874,7 @@ var TwoDRobotModelImpl = (function () {
         return this.image;
     };
     return TwoDRobotModelImpl;
-})();
+})(CommonRobotModelImpl);
 var Direction;
 (function (Direction) {
     Direction[Direction["input"] = 0] = "input";

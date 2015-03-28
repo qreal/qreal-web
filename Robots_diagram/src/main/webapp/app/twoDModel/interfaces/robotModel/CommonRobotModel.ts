@@ -1,6 +1,3 @@
-interface CommonRobotModel {
-    getAvailablePorts(): PortInfo[];
+interface CommonRobotModel extends RobotModelInterface {
     addAllowedConnection(port: PortInfo, devices: DeviceInfo[]);
-    configurablePorts(): PortInfo[];
-    getAllowedDevices(port: PortInfo): DeviceInfo[];
 }

@@ -3,6 +3,6 @@ interface Model {
     getTimeline() : Timeline;
     getRobotModels() : RobotModel[];
     getSetting() : Settings;
-    addRobotModel(robotModel: TwoDRobotModel): void;
+    addRobotModel(robotModel: TwoDRobotModelImpl): void;
     getPaper(): RaphaelPaper;
 }
