@@ -1,4 +1,4 @@
-class TwoDRobotModelImpl extends CommonRobotModelImpl {
+class TwoDRobotModel extends CommonRobotModelImpl {
     private name: string;
     private image: string;
     private realModel: RobotModelInterface;

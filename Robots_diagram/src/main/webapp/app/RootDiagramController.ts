@@ -1,15 +1,15 @@
 class RootDiagramController {
-    private robotModel: TwoDRobotModelImpl;
+    private robotModel: TwoDRobotModel;
 
     constructor($scope) {
         $scope.root = this;
     }
 
-    setRobotModel(robotModel: TwoDRobotModelImpl) {
+    setRobotModel(robotModel: TwoDRobotModel) {
         this.robotModel = robotModel;
     }
 
-    getRobotModel(): TwoDRobotModelImpl {
+    getRobotModel(): TwoDRobotModel {
         return this.robotModel;
     }
 }

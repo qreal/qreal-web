@@ -240,7 +240,7 @@ var DiagramController = (function () {
         $scope.vm = controller;
         controller.nodeTypesMap = XmlManager.loadElementsFromXml("configs/elements.xml", $scope, $compile);
         this.realModel = new TrikRobotModelBaseImpl();
-        this.robotModel = new TwoDRobotModelImpl(this.realModel, "model");
+        this.robotModel = new TwoDRobotModel(this.realModel, "model");
         $scope.root.setRobotModel(this.robotModel);
         this.paper.on('cell:pointerdown', function (cellView, evt, x, y) {
             console.log('cell view ' + cellView.model.id + ' was clicked');
@@ -1859,21 +1859,21 @@ var TrikSpeaker = (function (_super) {
     }
     return TrikSpeaker;
 })(Speaker);
-var TwoDRobotModelImpl = (function (_super) {
-    __extends(TwoDRobotModelImpl, _super);
-    function TwoDRobotModelImpl(realModel, name) {
+var TwoDRobotModel = (function (_super) {
+    __extends(TwoDRobotModel, _super);
+    function TwoDRobotModel(realModel, name) {
         _super.call(this);
         this.realModel = realModel;
         this.name = name;
         this.image = "images/2dmodel/trikTwoDRobot.svg";
     }
-    TwoDRobotModelImpl.prototype.getName = function () {
+    TwoDRobotModel.prototype.getName = function () {
         return this.name;
     };
-    TwoDRobotModelImpl.prototype.getRobotImage = function () {
+    TwoDRobotModel.prototype.getRobotImage = function () {
         return this.image;
     };
-    return TwoDRobotModelImpl;
+    return TwoDRobotModel;
 })(CommonRobotModelImpl);
 var Direction;
 (function (Direction) {

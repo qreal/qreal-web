@@ -43,7 +43,7 @@ class ModelImpl implements Model {
         return this.settings;
     }
 
-    addRobotModel(robotModel: TwoDRobotModelImpl): void {
+    addRobotModel(robotModel: TwoDRobotModel): void {
         var model = this;
         $(document).ready(function() {
             var robot:RobotModel = new RobotModelImpl(model.paper, robotModel, new TwoDPosition(300, 300));

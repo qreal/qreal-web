@@ -1,9 +1,9 @@
 class RobotModelImpl implements RobotModel {
     private robotItem: RobotItem;
-    private twoDRobotModel: TwoDRobotModelImpl;
+    private twoDRobotModel: TwoDRobotModel;
     private position: TwoDPosition;
 
-    constructor(paper: RaphaelPaper, twoDRobotModel: TwoDRobotModelImpl, position: TwoDPosition) {
+    constructor(paper: RaphaelPaper, twoDRobotModel: TwoDRobotModel, position: TwoDPosition) {
         this.position = position;
         this.twoDRobotModel = twoDRobotModel;
         this.robotItem = new RobotItemImpl(paper, twoDRobotModel.getRobotImage(), this);

@@ -8,7 +8,7 @@ class DiagramController {
     private nodeIndex: number = -1;
 
     private realModel;
-    private robotModel: TwoDRobotModelImpl;
+    private robotModel: TwoDRobotModel;
 
     constructor($scope, $compile) {
         var controller: DiagramController = this;
@@ -16,7 +16,7 @@ class DiagramController {
         controller.nodeTypesMap = XmlManager.loadElementsFromXml("configs/elements.xml", $scope, $compile);
 
         this.realModel = new TrikRobotModelBaseImpl();
-        this.robotModel = new TwoDRobotModelImpl(this.realModel, "model");
+        this.robotModel = new TwoDRobotModel(this.realModel, "model");
         $scope.root.setRobotModel(this.robotModel);
 
         this.paper.on('cell:pointerdown',
