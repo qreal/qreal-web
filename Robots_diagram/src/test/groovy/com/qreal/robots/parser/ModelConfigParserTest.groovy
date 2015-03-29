@@ -14,11 +14,5 @@ class ModelConfigParserTest extends GroovyTestCase {
         assert devicePorts.get("B1") == "encoder95"
     }
 
-    void testMyTest() {
-        def xml = this.getClass().getResource('/model-config.xml').text
-        ModelConfigParser modelConfigParser = new ModelConfigParser()
-
-        println modelConfigParser.parse(xml).convertToXml()
-    }
 
 }

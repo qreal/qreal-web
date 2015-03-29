@@ -68,8 +68,6 @@ public class MainController {
                     robotsWrapper.add(new RobotWrapper(robot, "Offline"));
                 }
             }
-            "initScript" ()
-
         }
         return robotsWrapper;
     }
