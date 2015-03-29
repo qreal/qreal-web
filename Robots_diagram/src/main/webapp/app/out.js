@@ -218,14 +218,50 @@ var CommonRobotModelImpl = (function () {
     return CommonRobotModelImpl;
 })();
 var RootDiagramController = (function () {
-    function RootDiagramController($scope) {
+    function RootDiagramController($scope, $compile) {
         $scope.root = this;
+        var controller = this;
+        this.realModel = new TrikRobotModelBase();
+        this.robotModel = new TwoDRobotModel(this.realModel, "model");
+        $(document).ready(function () {
+            controller.initPortsConfigation($scope, $compile);
+        });
     }
     RootDiagramController.prototype.setRobotModel = function (robotModel) {
         this.robotModel = robotModel;
     };
     RootDiagramController.prototype.getRobotModel = function () {
         return this.robotModel;
+    };
+    RootDiagramController.prototype.initPortsConfigation = function ($scope, $compile) {
+        var configurationDropdownsContent = "<p>";
+        var controller = this;
+        controller.realModel.getConfigurablePorts().forEach(function (port) {
+            var portName = port.getName();
+            var id = portName + "Select";
+            configurationDropdownsContent += "<p>";
+            configurationDropdownsContent += portName + " ";
+            configurationDropdownsContent += "<select id='" + id + "' style='width: 150px'>";
+            configurationDropdownsContent += "<option value='Unused'>Unused</option>";
+            var devices = controller.realModel.getAllowedDevices(port);
+            devices.forEach(function (device) {
+                var friendlyName = device.getFriendlyName();
+                configurationDropdownsContent += "<option value='" + friendlyName + "'>" + friendlyName + "</option>";
+            });
+            configurationDropdownsContent += "</select>";
+            configurationDropdownsContent += "</p>";
+        });
+        configurationDropdownsContent += "</p>";
+        $('#configurationDropdowns').append($compile(configurationDropdownsContent)($scope));
+        this.setPortsSelectsListeners();
+    };
+    RootDiagramController.prototype.setPortsSelectsListeners = function () {
+        this.realModel.getConfigurablePorts().forEach(function (port) {
+            var htmlId = "#" + port.getName() + "Select";
+            $(htmlId).change(function () {
+                console.log($(htmlId).val());
+            });
+        });
     };
     return RootDiagramController;
 })();
@@ -239,16 +275,6 @@ var DiagramController = (function () {
         var controller = this;
         $scope.vm = controller;
         controller.nodeTypesMap = XmlManager.loadElementsFromXml("configs/elements.xml", $scope, $compile);
-        this.realModel = new TrikRobotModelBase();
-        this.robotModel = new TwoDRobotModel(this.realModel, "model");
-        this.realModel.getConfigurablePorts().forEach(function (port) {
-            console.log("PORT: " + port.getName());
-            var devices = controller.realModel.getAllowedDevices(port);
-            devices.forEach(function (device) {
-                console.log(device.getFriendlyName());
-            });
-        });
-        $scope.root.setRobotModel(this.robotModel);
         this.paper.on('cell:pointerdown', function (cellView, evt, x, y) {
             console.log('cell view ' + cellView.model.id + ' was clicked');
             var node = controller.nodesList[cellView.model.id];

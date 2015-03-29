@@ -7,26 +7,10 @@ class DiagramController {
     private currentNode: DiagramNode;
     private nodeIndex: number = -1;
 
-    private realModel;
-    private robotModel: TwoDRobotModel;
-
     constructor($scope, $compile) {
         var controller: DiagramController = this;
         $scope.vm = controller;
         controller.nodeTypesMap = XmlManager.loadElementsFromXml("configs/elements.xml", $scope, $compile);
-
-        this.realModel = new TrikRobotModelBase();
-        this.robotModel = new TwoDRobotModel(this.realModel, "model");
-
-        this.realModel.getConfigurablePorts().forEach(function(port){
-            console.log("PORT: " + port.getName());
-            var devices = controller.realModel.getAllowedDevices(port);
-            devices.forEach(function (device) {
-               console.log(device.getFriendlyName());
-            });
-        });
-
-        $scope.root.setRobotModel(this.robotModel);
 
         this.paper.on('cell:pointerdown',
             function (cellView, evt, x, y) {

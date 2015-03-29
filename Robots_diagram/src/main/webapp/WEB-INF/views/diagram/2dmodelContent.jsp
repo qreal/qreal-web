@@ -69,13 +69,13 @@
         <div id="twoDModel_left-menu">
             <div class="tabbable">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#lA" data-toggle="tab">Tools</a></li>
-                    <li><a href="#lB" data-toggle="tab">Ports</a></li>
-                    <li><a href="#lC" data-toggle="tab">Model settings</a></li>
+                    <li class="active"><a href="#pallete_tab" data-toggle="tab">Tools</a></li>
+                    <li><a href="#ports_tab" data-toggle="tab">Ports</a></li>
+                    <li><a href="#settings_tab" data-toggle="tab">Model settings</a></li>
                 </ul>
                 <div id="twoDModel_palette">
                     <div class="tab-content">
-                        <div class="tab-pane active" id="lA">
+                        <div class="tab-pane active" id="pallete_tab">
                             <table class="twoDModel_table">
                                 <tr>
                                     <td>
@@ -140,10 +140,13 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="tab-pane" id="lB">
-                            <p>Ports</p>
+                        <div class="tab-pane" id="ports_tab">
+                            <p>Ports configuration</p>
+                            <p>
+                                <div id="configurationDropdowns"></div>
+                            </p>
                         </div>
-                        <div class="tab-pane" id="lC">
+                        <div class="tab-pane" id="settings_tab">
                             <p>Model settings</p>
                         </div>
                     </div>

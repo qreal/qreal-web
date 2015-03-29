@@ -112,4 +112,7 @@ body {
     height: 10%;
 }
 
+#configurationDropdowns {
+    overflow: auto;
+}
 
