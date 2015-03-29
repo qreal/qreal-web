@@ -18,7 +18,6 @@ public class Robot {
     private String name;
     private String secretCode;
     private User owner;
-    private String status;
 
     public Robot() {
     }
@@ -70,13 +69,6 @@ public class Robot {
         this.secretCode = secretCode;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     @Override
     public boolean equals(Object o) {

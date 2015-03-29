@@ -8,7 +8,10 @@ import com.qreal.robots.dao.UserDAO;
 import com.qreal.robots.model.auth.User;
 import com.qreal.robots.model.robot.Message;
 import com.qreal.robots.model.robot.Robot;
+import com.qreal.robots.model.robot.RobotInfo;
+import com.qreal.robots.model.robot.RobotWrapper;
 import com.qreal.robots.socket.SocketClient;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,10 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by dageev on 07.03.15.
@@ -45,34 +47,61 @@ public class MainController {
         User user = userDao.findByUserName(getUserName());
         ModelAndView model = new ModelAndView();
         model.addObject("user", user);
-        Map<String, Boolean> onlineUserRobots = getOnlineRobots(user);
-
-        setRobotsStatus(user.getRobots(), onlineUserRobots);
+        // model.addObject("robotsWrapper", getFullRobotInfo(user.getRobots(), getOnlineRobots(user)));
+        model.addObject("robotsWrapper", getFakeList(user));
 
 
         model.setViewName("index");
         return model;
     }
 
-    private Map<String, Boolean> getOnlineRobots(User user) {
+    private List<RobotWrapper> getFullRobotInfo(Set<Robot> robots, List<RobotInfo> onlineUserRobots) {
+        List<RobotWrapper> robotsWrapper = Lists.newArrayList();
+        for (Robot robot : robots) {
+            for (RobotInfo robotInfo : onlineUserRobots) {
+                boolean found = false;
+                if (robot.getSecretCode().equals(robotInfo.getSecretCode())) {
+                    found = true;
+                    robotsWrapper.add(new RobotWrapper(robot, robotInfo, "Online"));
+                }
+                if (!found) {
+                    robotsWrapper.add(new RobotWrapper(robot, "Offline"));
+                }
+            }
+            "initScript" ()
+
+        }
+        return robotsWrapper;
+    }
+
+    private List<RobotWrapper> getFakeList(User user) {
+        List<RobotWrapper> robotWrappers = Lists.newArrayList();
+
+        Robot robot = new Robot("Robot", "SecretCode", user);
+        try {
+            String modelConfig = IOUtils.toString(this.getClass().getResourceAsStream("/model-config.xml"));
+            String systemConfig = IOUtils.toString(this.getClass().getResourceAsStream("/system-config.xml"));
+            RobotInfo robotInfo = new RobotInfo("SecretCode", systemConfig, modelConfig);
+            robotWrappers.add(new RobotWrapper(robot, robotInfo, "Online"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return robotWrappers;
+    }
+
+    private List<RobotInfo> getOnlineRobots(User user) {
         SocketClient socketClient = new SocketClient(HOST_NAME, PORT);
         try {
             String response = socketClient.sendMessage(getUserOnlineRobots(user));
             return mapper.readValue(response,
-                    new TypeReference<Map<String, Boolean>>() {
+                    new TypeReference<List<RobotInfo>>() {
                     });
         } catch (IOException e) {
             LOG.error("Error getting online robots", e);
         }
-        return new HashMap();
+        return Collections.emptyList();
     }
 
-    private void setRobotsStatus(Collection<Robot> robots, Map<String, Boolean> onlineRobots) {
-        for (Robot robot : robots) {
-            boolean status = onlineRobots.get(robot.getSecretCode()) != null && onlineRobots.get(robot.getSecretCode());
-            robot.setStatus(status ? "Online" : "Offline");
-        }
-    }
 
     private String getUserOnlineRobots(User user) throws JsonProcessingException {
         List<String> secretCodes = Lists.newArrayList();

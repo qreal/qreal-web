@@ -3,11 +3,15 @@ package com.qreal.robots.parser
 import groovy.transform.TupleConstructor
 
 /**
- * Created by dageev on 26.03.15.
+ * Created by dageev on 28.03.15.
  */
-@TupleConstructor
-class SystemConfig {
-    List<Device> devices
-    List<Port> ports
 
+@TupleConstructor
+class Port {
+    List<Device> devices
+    String name
+
+    public getDevices() {
+        return this.devices
+    }
 }

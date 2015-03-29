@@ -67,8 +67,125 @@
                     }
                 });
             });
+
+            $('[name="saveModelConfig').click(function (event) {
+                var robotName = event.target.id.substring(18);
+                var name = robotName + "-port";
+                var o = [];
+                $('[name="' + name + '"]').each(function (index, value) {
+                    var key = $(value).text();
+                    var valueElementName = '[name="' + robotName + '-' + key + '"]';
+                    var obj = {};
+                    var attr = $(valueElementName).attr("data-content");
+
+                    if (typeof attr !== typeof undefined && attr !== false) {
+                        obj[key] = $(valueElementName).attr("data-content");
+                    } else {
+                        obj[key] = $(valueElementName).text();
+                    }
+                    o.push(obj); // push in the "o" object created
+                });
+                var data = "robotName=" + robotName + "&modelConfigJson=" + JSON.stringify(o);
+                $.ajax({
+                    type: 'POST',
+                    url: 'saveModelConfig',
+                    data: data,
+                    success: function (response) {
+                        alert(JSON.parse(response).message);
+                    },
+                    error: function (response, status, error) {
+                        console.log("error");
+                    }
+                });
+            });
+
+
+            $("#configureMenu a").click(function (event) {
+                event.preventDefault(); //prevent synchronous loading
+                var id = event.target.id.substring(2);
+                var option = $(this).text();
+                if (option.length > 9) {
+                    var diff = option.length - 9;
+                    option = option.substring(0, option.length - diff);
+                    $("#" + id).attr("data-content", $(this).text());
+                }
+                $("#" + id).html(option);
+            });
+
+            $('[data-toggle="tooltip"]').tooltip({
+                'placement': 'top'
+            });
+            $('[data-toggle="popover"]').popover({
+                trigger: 'hover',
+                'placement': 'top'
+            });
+
+
+            $(window).load(function () {
+                $('[data-toggle="popover"]').each(function (index, value) {
+                    var option = $(value).text();
+
+                    if (option.length > 9) {
+                        var diff = option.length - 9;
+                        option = option.substring(0, option.length - diff);
+                        $(value).attr("data-content", $(value).text());
+                        $(value).text(option);
+                    }
+                });
+            });
+
+
         });
     </script>
+    <style>
+        .dropdown-submenu {
+            position: relative;
+        }
+
+        .dropdown-submenu > .dropdown-menu {
+            top: 0;
+            left: 100%;
+            margin-top: -6px;
+            margin-left: -1px;
+            -webkit-border-radius: 0 6px 6px 6px;
+            -moz-border-radius: 0 6px 6px;
+            border-radius: 0 6px 6px 6px;
+        }
+
+        .dropdown-submenu:hover > .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-submenu > a:after {
+            display: block;
+            content: " ";
+            float: right;
+            width: 0;
+            height: 0;
+            border-color: transparent;
+            border-style: solid;
+            border-width: 5px 0 5px 5px;
+            border-left-color: #ccc;
+            margin-top: 5px;
+            margin-right: -10px;
+        }
+
+        .dropdown-submenu:hover > a:after {
+            border-left-color: #fff;
+        }
+
+        .dropdown-submenu.pull-left {
+            float: none;
+        }
+
+        .dropdown-submenu.pull-left > .dropdown-menu {
+            left: -100%;
+            margin-left: 10px;
+            -webkit-border-radius: 6px 0 6px 6px;
+            -moz-border-radius: 6px 0 6px 6px;
+            border-radius: 6px 0 6px 6px;
+        }
+    </style>
     <link rel="stylesheet" href="<c:url value='/resources/bootstrap/css/bootstrap.min.css' />"/>
 
 </head>
@@ -120,7 +237,8 @@
                     <div class="row">
                         <!-- center left-->
 
-                        <c:forEach var="robot" items="${user.robots}">
+                        <c:forEach var="robotWrapper" items="${robotsWrapper}">
+                            <c:set var="robot" value="${robotWrapper.robot}"/>
 
                             <div class="modal fade" id="sendDiagramModal" tabindex="-1" role="dialog"
                                  aria-labelledby="myModalLabel" aria-hidden="true">
@@ -141,13 +259,97 @@
                                             </select>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" name="sendDiagram" id="send-diagram-${robot.name}"
+                                            <button type="button" name="sendDiagram"
+                                                    id="send-diagram-${robot.name}"
                                                     class="btn btn-primary">Send
                                             </button>
                                             <button type="button" class="btn btn-default"
                                                     data-dismiss="modal">Close
                                             </button>
 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="configureRobotModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close"
+                                                    data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="configureModaLabel">Configure robot</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+
+                                                <c:set var="systemConfig"
+                                                       value="${robotWrapper.robotInfo.systemConfig}"/>
+                                                <c:set var="modelConfig"
+                                                       value="${robotWrapper.robotInfo.modelConfig}"/>
+                                                <c:forEach var="port" items="${systemConfig.ports}">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon"
+                                                                      name="${robot.name}-port">${port.name}</span>
+                                                            <span class="input-group-addon">
+                                                                    <a role="button"
+                                                                       data-toggle="dropdown"
+                                                                       class="btn btn-default" data-target="#">
+                                                                        <div id="${port.name}"
+                                                                             name="${robot.name}-${port.name}"
+                                                                             data-toggle="popover">${modelConfig.getDeviceName(port.name)}<span
+                                                                                class="caret"></span></div>
+                                                                    </a>
+                                                                    <ul id="configureMenu"
+                                                                        class="dropdown-menu multi-level" role="menu"
+                                                                        aria-labelledby="dropdownMenu">
+                                                                        <c:forEach var="device" items="${port.devices}">
+                                                                            <c:if test="${device.types.size() > 0}">
+                                                                                <li class="dropdown-submenu">
+                                                                                    <a id="s-${port.name}" tabindex="-1"
+                                                                                       href="#">${device.name}</a>
+                                                                                    <ul class="dropdown-menu">
+                                                                                        <c:forEach var="type"
+                                                                                                   items="${device.types}">
+                                                                                            <li><a href="#"
+                                                                                                   id="s-${port.name}">${type}</a>
+                                                                                            </li>
+                                                                                        </c:forEach>
+
+                                                                                    </ul>
+
+                                                                                </li>
+                                                                            </c:if>
+                                                                            <c:if test="${device.types.size() == 0}">
+                                                                                <li class="dropdown">
+                                                                                    <a tabindex="-1"
+                                                                                       href="#"
+                                                                                       id="s-${port.name}">${device.name}</a>
+                                                                                </li>
+                                                                            </c:if>
+                                                                        </c:forEach>
+                                                                    </ul>
+                                                            </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </c:forEach>
+                                            </div>
+
+
+                                            <div class="modal-footer">
+                                                <button type="button" name="saveModelConfig"
+                                                        id="save-model-config-${robot.name}"
+                                                        class="btn btn-primary">Save
+                                                </button>
+                                                <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">Close
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -166,8 +368,7 @@
 
                                         <div class="col-md-4">
                                             <h4>${robot.name}</h4>
-                                            <h6>Status: ${robot.status}</h6>
-
+                                            <h6>Status: ${robotWrapper.status}</h6>
 
                                         </div>
 
@@ -181,16 +382,20 @@
 
                                                 </a>
                                                 <ul class="dropdown-menu">
-                                                    <c:if test="${robot.status == 'Online'}">
+                                                    <c:if test="${robotWrapper.status == 'Online'}">
                                                         <li><a href="#" data-toggle="modal"
                                                                data-target="#sendDiagramModal"><span
                                                                 class="icon-wrench"></span> Send diagram</a>
                                                         </li>
 
-                                                        <li><a href="#"><span class="icon-wrench"></span> Configure</a>
-                                                        </li>
+
                                                     </c:if>
-                                                    <li><a href='#' name="deleteRobot" id="delete-${robot.name}">
+                                                    <li><a href="#" data-toggle="modal"
+                                                           data-target="#configureRobotModal"><span
+                                                            class="icon-wrench"></span> Configure</a>
+                                                    </li>
+                                                    <li><a href='#' name="deleteRobot"
+                                                           id="delete-${robot.name}">
                                                         <span class="icon-trash"></span>
                                                         Delete
                                                     </a>

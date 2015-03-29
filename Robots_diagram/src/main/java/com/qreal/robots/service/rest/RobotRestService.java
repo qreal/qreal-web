@@ -1,6 +1,7 @@
 package com.qreal.robots.service.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qreal.robots.controller.MainController;
 import com.qreal.robots.dao.RobotDAO;
@@ -9,10 +10,21 @@ import com.qreal.robots.model.auth.User;
 import com.qreal.robots.model.robot.Message;
 import com.qreal.robots.model.robot.Robot;
 import com.qreal.robots.model.robot.RobotInfo;
+import com.qreal.robots.parser.ModelConfig;
+import com.qreal.robots.parser.ModelConfigValidator;
+import com.qreal.robots.parser.SystemConfig;
+import com.qreal.robots.parser.SystemConfigParser;
 import com.qreal.robots.socket.SocketClient;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ageevdenis on 02-3-15.
@@ -22,6 +34,9 @@ import org.springframework.web.bind.annotation.*;
 public class RobotRestService {
 
     private static final ObjectMapper mapper = new ObjectMapper();
+
+    private static final Logger LOG = Logger.getLogger(RobotRestService.class);
+
 
     @Autowired
     private UserDAO userDao;
@@ -56,6 +71,31 @@ public class RobotRestService {
         robotDao.delete(robot);
         return "{\"message\":\"OK\"}";
 
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/saveModelConfig", method = RequestMethod.POST)
+    public String saveModelConfig(@RequestParam("robotName") String name, @RequestParam("modelConfigJson") String modelConfigJson) throws IOException {
+        ModelConfig modelConfig = getModelConfig(modelConfigJson);
+        String systemConfigXml = IOUtils.toString(this.getClass().getResourceAsStream("/system-config.xml"));
+        SystemConfig systemConfig = new SystemConfigParser().parse(systemConfigXml);
+        ModelConfigValidator validator = new ModelConfigValidator(systemConfig);
+        validator.validate(modelConfig);
+
+        return "{\"message\":\"OK\"}";
+    }
+
+    private ModelConfig getModelConfig(String modelConfigJson) throws IOException {
+        List<Map<String, String>> mapList = mapper.readValue(modelConfigJson,
+                new TypeReference<List<HashMap<String, String>>>() {
+                });
+
+        Map<String, String> map = new HashMap<>();
+        for (Map lMap : mapList) {
+            map.putAll(lMap);
+        }
+
+        return new ModelConfig(map);
     }
 
 

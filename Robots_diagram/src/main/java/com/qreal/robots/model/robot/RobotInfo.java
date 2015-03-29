@@ -1,83 +1,53 @@
 package com.qreal.robots.model.robot;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.qreal.robots.parser.ModelConfig;
+import com.qreal.robots.parser.ModelConfigParser;
+import com.qreal.robots.parser.SystemConfig;
+import com.qreal.robots.parser.SystemConfigParser;
 
 /**
  * Created by ageevdenis on 02-3-15.
  */
 public class RobotInfo {
 
-    private String code;
-    private Coordinates coordinates;
-    private String program;
-    private String owner;
+    private String secretCode;
+    private ModelConfig modelConfig;
+    private SystemConfig systemConfig;
 
     public RobotInfo() {
 
     }
 
 
-    public RobotInfo(String owner, String code, String program) {
-        this.owner = owner;
-        this.code = code;
-        this.program = program;
+    public RobotInfo(String secretCode, String systemConfig, String modelConfig) {
+
+        this.secretCode = secretCode;
+        this.modelConfig = new ModelConfigParser().parse(modelConfig);
+        this.systemConfig = new SystemConfigParser().parse(systemConfig);
+
     }
 
-    public Coordinates getCoordinates() {
-        return coordinates;
+    public String getSecretCode() {
+        return secretCode;
     }
 
-    public void setCoordinates(Coordinates coordinates) {
-        this.coordinates = coordinates;
+    public void setSecretCode(String secretCode) {
+        this.secretCode = secretCode;
     }
 
-    public String getCode() {
-        return code;
+    public ModelConfig getModelConfig() {
+        return modelConfig;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setModelConfig(String modelConfig) {
+        this.modelConfig = new ModelConfigParser().parse(modelConfig);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof RobotInfo)) return false;
-
-        RobotInfo robotInfo = (RobotInfo) o;
-
-        if (!coordinates.equals(robotInfo.coordinates)) return false;
-        if (!code.equals(robotInfo.code)) return false;
-
-        return true;
+    public SystemConfig getSystemConfig() {
+        return systemConfig;
     }
 
-    @Override
-    public int hashCode() {
-        int result = code.hashCode();
-        result = 31 * result + coordinates.hashCode();
-        return result;
-    }
-
-    public String toJson() throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(this);
-    }
-
-    public String getProgram() {
-        return program;
-    }
-
-    public void setProgram(String program) {
-        this.program = program;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setSystemConfig(String systemConfig) {
+        this.systemConfig = new SystemConfigParser().parse(systemConfig);
     }
 }
