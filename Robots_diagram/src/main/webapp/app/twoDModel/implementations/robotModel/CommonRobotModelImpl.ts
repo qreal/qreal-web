@@ -18,7 +18,7 @@ class CommonRobotModelImpl implements CommonRobotModel {
         robotModel.getAvailablePorts().forEach(function(port) {
             var devices: DeviceInfo[] = robotModel.getAllowedDevices(port);
 
-            if(devices.length) {
+            if(devices.length > 1) {
                 result.push(port);
             }
         });

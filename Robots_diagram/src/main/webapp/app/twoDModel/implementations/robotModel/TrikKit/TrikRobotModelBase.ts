@@ -1,4 +1,5 @@
-class TrikRobotModelBaseImpl extends CommonRobotModelImpl {
+class TrikRobotModelBase extends CommonRobotModelImpl {
+    private digitalPorts: PortInfo[];
     
     constructor() {
         super();
@@ -39,10 +40,14 @@ class TrikRobotModelBaseImpl extends CommonRobotModelImpl {
         this.addAllowedConnection(new PortInfoImpl("A5", Direction.input, ["JA5"], "sensorA5"), analogPortConnections);
         this.addAllowedConnection(new PortInfoImpl("A6", Direction.input, ["JA6"], "sensorA6"), analogPortConnections);
 
-        this.addAllowedConnection(new PortInfoImpl("D1", Direction.input, ["JD1"], "sensorD1"), [this.sonarSensorInfo()]);
-        this.addAllowedConnection(new PortInfoImpl("D2", Direction.input, ["JD2"], "sensorD2"), [this.sonarSensorInfo()]);
-
-        this.addAllowedConnection(new PortInfoImpl("F1", Direction.input, ["JF1"], "sensorF1"), [this.motionSensorInfo()]);
+        this.digitalPorts = [
+            new PortInfoImpl("D1", Direction.input, ["JD1"], "sensorD1"),
+            new PortInfoImpl("D2", Direction.input, ["JD2"], "sensorD2"),
+            new PortInfoImpl("F1", Direction.input, ["JF1"], "sensorF1")
+        ];
+        this.addAllowedConnection(this.digitalPorts[0], [this.sonarSensorInfo()]);
+        this.addAllowedConnection(this.digitalPorts[1], [this.sonarSensorInfo()]);
+        this.addAllowedConnection(this.digitalPorts[2], [this.motionSensorInfo()]);
 
         this.addAllowedConnection(new PortInfoImpl("GyroscopePortX", Direction.input, [], "gyroscopeX"), [this.gyroscopeInfo()]);
         this.addAllowedConnection(new PortInfoImpl("GyroscopePortY", Direction.input, [], "gyroscopeY"), [this.gyroscopeInfo()]);
@@ -89,7 +94,11 @@ class TrikRobotModelBaseImpl extends CommonRobotModelImpl {
         this.addAllowedConnection(new PortInfoImpl("GamepadConnectionIndicatorPort", Direction.input, [], "gamepadConnected")
             , [this.gamepadConnectionIndicatorInfo()]);
     }
-    
+
+    getConfigurablePorts(): PortInfo[] {
+        return super.getConfigurablePorts().concat(this.digitalPorts);
+    }
+
     displayInfo(): DeviceInfo {
         return new DeviceInfoImpl(Display);
     }

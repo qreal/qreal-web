@@ -206,7 +206,7 @@ var CommonRobotModelImpl = (function () {
         var robotModel = this;
         robotModel.getAvailablePorts().forEach(function (port) {
             var devices = robotModel.getAllowedDevices(port);
-            if (devices.length) {
+            if (devices.length > 1) {
                 result.push(port);
             }
         });
@@ -239,8 +239,15 @@ var DiagramController = (function () {
         var controller = this;
         $scope.vm = controller;
         controller.nodeTypesMap = XmlManager.loadElementsFromXml("configs/elements.xml", $scope, $compile);
-        this.realModel = new TrikRobotModelBaseImpl();
+        this.realModel = new TrikRobotModelBase();
         this.robotModel = new TwoDRobotModel(this.realModel, "model");
+        this.realModel.getConfigurablePorts().forEach(function (port) {
+            console.log("PORT: " + port.getName());
+            var devices = controller.realModel.getAllowedDevices(port);
+            devices.forEach(function (device) {
+                console.log(device.getFriendlyName());
+            });
+        });
         $scope.root.setRobotModel(this.robotModel);
         this.paper.on('cell:pointerdown', function (cellView, evt, x, y) {
             console.log('cell view ' + cellView.model.id + ' was clicked');
@@ -1577,9 +1584,9 @@ var PortInfoImpl = (function () {
     };
     return PortInfoImpl;
 })();
-var TrikRobotModelBaseImpl = (function (_super) {
-    __extends(TrikRobotModelBaseImpl, _super);
-    function TrikRobotModelBaseImpl() {
+var TrikRobotModelBase = (function (_super) {
+    __extends(TrikRobotModelBase, _super);
+    function TrikRobotModelBase() {
         _super.call(this);
         var analogPortConnections = [this.lightSensorInfo(), this.infraredSensorInfo()];
         this.addAllowedConnection(new PortInfoImpl("DisplayPort", 1 /* output */), [this.displayInfo()]);
@@ -1611,9 +1618,14 @@ var TrikRobotModelBaseImpl = (function (_super) {
         this.addAllowedConnection(new PortInfoImpl("A4", 0 /* input */, ["JA4"], "sensorA4"), analogPortConnections);
         this.addAllowedConnection(new PortInfoImpl("A5", 0 /* input */, ["JA5"], "sensorA5"), analogPortConnections);
         this.addAllowedConnection(new PortInfoImpl("A6", 0 /* input */, ["JA6"], "sensorA6"), analogPortConnections);
-        this.addAllowedConnection(new PortInfoImpl("D1", 0 /* input */, ["JD1"], "sensorD1"), [this.sonarSensorInfo()]);
-        this.addAllowedConnection(new PortInfoImpl("D2", 0 /* input */, ["JD2"], "sensorD2"), [this.sonarSensorInfo()]);
-        this.addAllowedConnection(new PortInfoImpl("F1", 0 /* input */, ["JF1"], "sensorF1"), [this.motionSensorInfo()]);
+        this.digitalPorts = [
+            new PortInfoImpl("D1", 0 /* input */, ["JD1"], "sensorD1"),
+            new PortInfoImpl("D2", 0 /* input */, ["JD2"], "sensorD2"),
+            new PortInfoImpl("F1", 0 /* input */, ["JF1"], "sensorF1")
+        ];
+        this.addAllowedConnection(this.digitalPorts[0], [this.sonarSensorInfo()]);
+        this.addAllowedConnection(this.digitalPorts[1], [this.sonarSensorInfo()]);
+        this.addAllowedConnection(this.digitalPorts[2], [this.motionSensorInfo()]);
         this.addAllowedConnection(new PortInfoImpl("GyroscopePortX", 0 /* input */, [], "gyroscopeX"), [this.gyroscopeInfo()]);
         this.addAllowedConnection(new PortInfoImpl("GyroscopePortY", 0 /* input */, [], "gyroscopeY"), [this.gyroscopeInfo()]);
         this.addAllowedConnection(new PortInfoImpl("GyroscopePortZ", 0 /* input */, [], "gyroscopeZ"), [this.gyroscopeInfo()]);
@@ -1643,73 +1655,76 @@ var TrikRobotModelBaseImpl = (function (_super) {
         this.addAllowedConnection(new PortInfoImpl("GamepadButton5Port", 0 /* input */, [], "gamepadButton5"), [this.gamepadButtonInfo()]);
         this.addAllowedConnection(new PortInfoImpl("GamepadConnectionIndicatorPort", 0 /* input */, [], "gamepadConnected"), [this.gamepadConnectionIndicatorInfo()]);
     }
-    TrikRobotModelBaseImpl.prototype.displayInfo = function () {
+    TrikRobotModelBase.prototype.getConfigurablePorts = function () {
+        return _super.prototype.getConfigurablePorts.call(this).concat(this.digitalPorts);
+    };
+    TrikRobotModelBase.prototype.displayInfo = function () {
         return new DeviceInfoImpl(Display);
     };
-    TrikRobotModelBaseImpl.prototype.speakerInfo = function () {
+    TrikRobotModelBase.prototype.speakerInfo = function () {
         return new DeviceInfoImpl(Speaker);
     };
-    TrikRobotModelBaseImpl.prototype.buttonInfo = function () {
+    TrikRobotModelBase.prototype.buttonInfo = function () {
         return new DeviceInfoImpl(Button);
     };
-    TrikRobotModelBaseImpl.prototype.powerMotorInfo = function () {
+    TrikRobotModelBase.prototype.powerMotorInfo = function () {
         return new DeviceInfoImpl(Motor);
     };
-    TrikRobotModelBaseImpl.prototype.servoMotorInfo = function () {
+    TrikRobotModelBase.prototype.servoMotorInfo = function () {
         return new DeviceInfoImpl(Motor);
     };
-    TrikRobotModelBaseImpl.prototype.encoderInfo = function () {
+    TrikRobotModelBase.prototype.encoderInfo = function () {
         return new DeviceInfoImpl(EncoderSensor);
     };
-    TrikRobotModelBaseImpl.prototype.lightSensorInfo = function () {
+    TrikRobotModelBase.prototype.lightSensorInfo = function () {
         return new DeviceInfoImpl(LightSensor);
     };
-    TrikRobotModelBaseImpl.prototype.infraredSensorInfo = function () {
+    TrikRobotModelBase.prototype.infraredSensorInfo = function () {
         return new DeviceInfoImpl(TrikInfraredSensor);
     };
-    TrikRobotModelBaseImpl.prototype.sonarSensorInfo = function () {
+    TrikRobotModelBase.prototype.sonarSensorInfo = function () {
         return new DeviceInfoImpl(TrikSonarSensor);
     };
-    TrikRobotModelBaseImpl.prototype.motionSensorInfo = function () {
+    TrikRobotModelBase.prototype.motionSensorInfo = function () {
         return new DeviceInfoImpl(TrikMotionSensor);
     };
-    TrikRobotModelBaseImpl.prototype.gyroscopeInfo = function () {
+    TrikRobotModelBase.prototype.gyroscopeInfo = function () {
         return new DeviceInfoImpl(GyroscopeSensor);
     };
-    TrikRobotModelBaseImpl.prototype.accelerometerInfo = function () {
+    TrikRobotModelBase.prototype.accelerometerInfo = function () {
         return new DeviceInfoImpl(AccelerometerSensor);
     };
-    TrikRobotModelBaseImpl.prototype.ledInfo = function () {
+    TrikRobotModelBase.prototype.ledInfo = function () {
         return new DeviceInfoImpl(TrikLed);
     };
-    TrikRobotModelBaseImpl.prototype.lineSensorInfo = function () {
+    TrikRobotModelBase.prototype.lineSensorInfo = function () {
         return new DeviceInfoImpl(TrikLineSensor);
     };
-    TrikRobotModelBaseImpl.prototype.colorSensorInfo = function () {
+    TrikRobotModelBase.prototype.colorSensorInfo = function () {
         return new DeviceInfoImpl(TrikColorSensor);
     };
-    TrikRobotModelBaseImpl.prototype.objectSensorInfo = function () {
+    TrikRobotModelBase.prototype.objectSensorInfo = function () {
         return new DeviceInfoImpl(TrikObjectSensor);
     };
-    TrikRobotModelBaseImpl.prototype.shellInfo = function () {
+    TrikRobotModelBase.prototype.shellInfo = function () {
         return new DeviceInfoImpl(TrikShell);
     };
-    TrikRobotModelBaseImpl.prototype.gamepadButtonInfo = function () {
+    TrikRobotModelBase.prototype.gamepadButtonInfo = function () {
         return new DeviceInfoImpl(TrikGamepadButton);
     };
-    TrikRobotModelBaseImpl.prototype.gamepadPadInfo = function () {
+    TrikRobotModelBase.prototype.gamepadPadInfo = function () {
         return new DeviceInfoImpl(TrikGamepadPad);
     };
-    TrikRobotModelBaseImpl.prototype.gamepadPadPressSensorInfo = function () {
+    TrikRobotModelBase.prototype.gamepadPadPressSensorInfo = function () {
         return new DeviceInfoImpl(TrikGamepadPadPressSensor);
     };
-    TrikRobotModelBaseImpl.prototype.gamepadWheelInfo = function () {
+    TrikRobotModelBase.prototype.gamepadWheelInfo = function () {
         return new DeviceInfoImpl(TrikGamepadWheel);
     };
-    TrikRobotModelBaseImpl.prototype.gamepadConnectionIndicatorInfo = function () {
+    TrikRobotModelBase.prototype.gamepadConnectionIndicatorInfo = function () {
         return new DeviceInfoImpl(TrikGamepadConnectionIndicator);
     };
-    return TrikRobotModelBaseImpl;
+    return TrikRobotModelBase;
 })(CommonRobotModelImpl);
 var TrikColorSensor = (function (_super) {
     __extends(TrikColorSensor, _super);
