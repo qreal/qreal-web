@@ -1,0 +1,3 @@
+class SonarSensorItem extends SensorItem {
+
+}

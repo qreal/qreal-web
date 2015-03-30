@@ -16,20 +16,14 @@ class PencilItemImpl {
 
         var startPath = function () {
                 if (!worldModel.getDrawMode()) {
-                    this.ox = this.attr("x");
-                    this.oy = this.attr("y");
+                    this.transformation = this.transform();
                     worldModel.setCurrentElement(pencilItem);
                 }
                 return this;
             },
             movePath = function (dx, dy) {
                 if (!worldModel.getDrawMode()) {
-                    var trans_x = dx - this.ox;
-                    var trans_y = dy - this.oy;
-
-                    this.transform("...T" + [trans_x, trans_y]);
-                    this.ox = dx;
-                    this.oy = dy;
+                    this.transform(this.transformation + "T" + dx + "," + dy);
                 }
                 return this;
             },
@@ -41,7 +35,7 @@ class PencilItemImpl {
     }
 
     updatePath(x: number, y: number): void {
-        this.pathArray[this.pathArray.length] =["L", x, y];
+        this.pathArray[this.pathArray.length] = ["L", x, y];
         this.path.attr({path: this.pathArray});
     }
 
