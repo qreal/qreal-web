@@ -1169,14 +1169,14 @@ var PencilItemImpl = (function () {
     return PencilItemImpl;
 })();
 var RobotItemImpl = (function () {
-    function RobotItemImpl(paper, imageFileName, robot) {
+    function RobotItemImpl(worldModel, position, imageFileName, robot) {
         this.width = 50;
         this.height = 50;
         this.robot = robot;
-        var robotPosition = robot.getPosition();
-        this.image = paper.image(imageFileName, robotPosition.x, robotPosition.y, this.width, this.height);
-        this.centerX = robotPosition.x + this.width / 2;
-        this.centerY = robotPosition.y + this.height / 2;
+        var paper = worldModel.getPaper();
+        this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
+        this.centerX = position.x + this.width / 2;
+        this.centerY = position.y + this.height / 2;
         var startCx = this.centerX;
         var startCy = this.centerY;
         var handleRadius = 10;
@@ -1186,49 +1186,67 @@ var RobotItemImpl = (function () {
             "stroke-width": 1,
             stroke: "black"
         };
-        this.rotateHandle = paper.circle(robotPosition.x + this.width + 20, robotPosition.y + this.height / 2, handleRadius).attr(handleAttrs);
+        this.rotateHandle = paper.circle(position.x + this.width + 20, position.y + this.height / 2, handleRadius).attr(handleAttrs);
         var robotItem = this;
         var startHandle = function () {
-            this.transformation = robotItem.image.transform();
-            this.rotation = robotItem.image.matrix.split().rotate;
-            this.cx = this.attr("cx");
-            this.cy = this.attr("cy");
+            if (!worldModel.getDrawMode()) {
+                this.transformation = robotItem.image.transform();
+                this.rotation = robotItem.image.matrix.split().rotate;
+                this.cx = this.attr("cx");
+                this.cy = this.attr("cy");
+            }
             return this;
         }, moveHandle = function (dx, dy) {
-            var newX = this.cx + dx;
-            var newY = this.cy + dy;
-            var offsetX = newX - robotItem.centerX;
-            var offsetY = newY - robotItem.centerY;
-            var tan = offsetY / offsetX;
-            var angle = Math.atan(tan) / (Math.PI / 180);
-            if (offsetX < 0) {
-                angle += 180;
+            if (!worldModel.getDrawMode()) {
+                var newX = this.cx + dx;
+                var newY = this.cy + dy;
+                var offsetX = newX - robotItem.centerX;
+                var offsetY = newY - robotItem.centerY;
+                var tan = offsetY / offsetX;
+                var angle = Math.atan(tan) / (Math.PI / 180);
+                if (offsetX < 0) {
+                    angle += 180;
+                }
+                angle -= this.rotation;
+                robotItem.image.transform(this.transformation + "R" + angle);
+                var newCx = robotItem.image.matrix.x(startCx + robotItem.width / 2 + 20, startCy);
+                var newCy = robotItem.image.matrix.y(startCx + robotItem.width / 2 + 20, startCy);
+                this.attr({ cx: newCx, cy: newCy });
             }
-            angle -= this.rotation;
-            robotItem.image.transform(this.transformation + "R" + angle);
-            var newCx = robotItem.image.matrix.x(startCx + robotItem.width / 2 + 20, startCy);
-            var newCy = robotItem.image.matrix.y(startCx + robotItem.width / 2 + 20, startCy);
-            this.attr({ cx: newCx, cy: newCy });
             return this;
         }, upHandle = function () {
             return this;
         };
         robotItem.rotateHandle.drag(moveHandle, startHandle, upHandle);
         var start = function () {
-            this.transformation = this.transform();
-            this.handle_cx = robotItem.rotateHandle.attr("cx");
-            this.handle_cy = robotItem.rotateHandle.attr("cy");
+            if (!worldModel.getDrawMode()) {
+                this.transformation = this.transform();
+                this.handle_cx = robotItem.rotateHandle.attr("cx");
+                this.handle_cy = robotItem.rotateHandle.attr("cy");
+                worldModel.setCurrentElement(robotItem);
+            }
         }, move = function (dx, dy) {
-            this.transform(this.transformation + "T" + dx + "," + dy);
-            robotItem.rotateHandle.attr({ "cx": this.handle_cx + dx, "cy": this.handle_cy + dy });
+            if (!worldModel.getDrawMode()) {
+                this.transform(this.transformation + "T" + dx + "," + dy);
+                robotItem.rotateHandle.attr({ "cx": this.handle_cx + dx, "cy": this.handle_cy + dy });
+            }
         }, up = function () {
-            robotItem.centerX = this.matrix.x(startCx, startCy);
-            robotItem.centerY = this.matrix.y(startCx, startCy);
+            if (!worldModel.getDrawMode()) {
+                robotItem.centerX = this.matrix.x(startCx, startCy);
+                robotItem.centerY = this.matrix.y(startCx, startCy);
+            }
         };
         this.image.drag(move, start, up);
+        this.hideHandles();
     }
     RobotItemImpl.prototype.ride = function () {
         console.log("robot ride");
+    };
+    RobotItemImpl.prototype.hideHandles = function () {
+        this.rotateHandle.hide();
+    };
+    RobotItemImpl.prototype.showHandles = function () {
+        this.rotateHandle.show();
     };
     return RobotItemImpl;
 })();
@@ -1367,17 +1385,7 @@ var ModelImpl = (function () {
         this.robotModels = [];
         var model = this;
         this.timeline = new TimelineImpl();
-        $(document).ready(function () {
-            model.paper = Raphael("twoDModel_stage", "100%", "100%");
-            $(model.paper.canvas).attr("id", "twoDModel_paper");
-            var wall_pattern = '<pattern id="wall_pattern" patternUnits="userSpaceOnUse" width="85" height="80">\
-                                        <image xlink:href="images/2dmodel/2d_wall.png" width="85" height="80" />\
-                                    </pattern>';
-            $("body").append('<svg id="dummy" style="display:none"><defs>' + wall_pattern + '</defs></svg>');
-            $("#twoDModel_paper defs").append($("#dummy pattern"));
-            $("#dummy").remove();
-            model.worldModel = new WorldModelImpl(model.paper);
-        });
+        model.worldModel = new WorldModelImpl();
     }
     ModelImpl.prototype.getWorldModel = function () {
         return this.worldModel;
@@ -1388,16 +1396,13 @@ var ModelImpl = (function () {
     ModelImpl.prototype.getRobotModels = function () {
         return this.robotModels;
     };
-    ModelImpl.prototype.getPaper = function () {
-        return this.paper;
-    };
     ModelImpl.prototype.getSetting = function () {
         return this.settings;
     };
     ModelImpl.prototype.addRobotModel = function (robotModel) {
         var model = this;
         $(document).ready(function () {
-            var robot = new RobotModelImpl(model.paper, robotModel, new TwoDPosition(300, 300));
+            var robot = new RobotModelImpl(model.worldModel, robotModel, new TwoDPosition(300, 300));
             model.robotModels.push(robot);
             model.timeline.addRobotModel(robot);
         });
@@ -1405,19 +1410,12 @@ var ModelImpl = (function () {
     return ModelImpl;
 })();
 var RobotModelImpl = (function () {
-    function RobotModelImpl(paper, twoDRobotModel, position) {
-        this.position = position;
+    function RobotModelImpl(worldModel, twoDRobotModel, position) {
         this.twoDRobotModel = twoDRobotModel;
-        this.robotItem = new RobotItemImpl(paper, twoDRobotModel.getRobotImage(), this);
+        this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), this);
     }
     RobotModelImpl.prototype.nextFragment = function () {
         this.robotItem.ride();
-    };
-    RobotModelImpl.prototype.setPosition = function (position) {
-        this.position = position;
-    };
-    RobotModelImpl.prototype.getPosition = function () {
-        return this.position;
     };
     return RobotModelImpl;
 })();
@@ -1464,12 +1462,19 @@ var TimelineImpl = (function () {
     return TimelineImpl;
 })();
 var WorldModelImpl = (function () {
-    function WorldModelImpl(paper) {
+    function WorldModelImpl() {
         this.drawMode = 0;
         this.currentElement = null;
         this.colorFields = [];
         this.wallItems = [];
-        this.paper = paper;
+        this.paper = Raphael("twoDModel_stage", "100%", "100%");
+        $(this.paper.canvas).attr("id", "twoDModel_paper");
+        var wall_pattern = '<pattern id="wall_pattern" patternUnits="userSpaceOnUse" width="85" height="80">\
+                                        <image xlink:href="images/2dmodel/2d_wall.png" width="85" height="80" />\
+                                    </pattern>';
+        $("body").append('<svg id="dummy" style="display:none"><defs>' + wall_pattern + '</defs></svg>');
+        $("#twoDModel_paper defs").append($("#dummy pattern"));
+        $("#dummy").remove();
         var worldModel = this;
         $(document).ready(function () {
             var shape;
@@ -1477,6 +1482,14 @@ var WorldModelImpl = (function () {
             var startDrawPoint;
             $("#twoDModel_stage").mousedown(function (e) {
                 switch (worldModel.drawMode) {
+                    case 0:
+                        if (e.target.nodeName === "svg") {
+                            if (worldModel.currentElement) {
+                                worldModel.currentElement.hideHandles();
+                                worldModel.currentElement = null;
+                            }
+                        }
+                        break;
                     case 1:
                         var position = worldModel.getMousePosition(e);
                         var x = position.x;
@@ -1555,14 +1568,6 @@ var WorldModelImpl = (function () {
             $("#twoDModel_stage").mouseup(function (e) {
                 if (isDrawing) {
                     isDrawing = false;
-                }
-                else {
-                    if (e.target.nodeName === "svg") {
-                        if (worldModel.currentElement) {
-                            worldModel.currentElement.hideHandles();
-                            worldModel.currentElement = null;
-                        }
-                    }
                 }
             });
         });

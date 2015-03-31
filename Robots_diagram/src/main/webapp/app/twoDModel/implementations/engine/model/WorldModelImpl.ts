@@ -5,8 +5,17 @@ class WorldModelImpl implements WorldModel {
     private colorFields: ColorFieldItem[] = [];
     private wallItems: WallItem[] = [];
 
-    constructor(paper: RaphaelPaper) {
-        this.paper = paper;
+    constructor() {
+        this.paper = Raphael("twoDModel_stage", "100%", "100%");
+        $(this.paper.canvas).attr("id", "twoDModel_paper");
+
+        var wall_pattern = '<pattern id="wall_pattern" patternUnits="userSpaceOnUse" width="85" height="80">\
+                                        <image xlink:href="images/2dmodel/2d_wall.png" width="85" height="80" />\
+                                    </pattern>';
+        $("body").append('<svg id="dummy" style="display:none"><defs>' + wall_pattern + '</defs></svg>');
+        $("#twoDModel_paper defs").append($("#dummy pattern"));
+        $("#dummy").remove();
+
         var worldModel = this;
         $(document).ready(function(){
             var shape;
@@ -15,6 +24,14 @@ class WorldModelImpl implements WorldModel {
 
             $("#twoDModel_stage").mousedown(function(e) {
                 switch (worldModel.drawMode) {
+                    case 0:
+                        if (e.target.nodeName === "svg") {
+                            if (worldModel.currentElement) {
+                                worldModel.currentElement.hideHandles();
+                                worldModel.currentElement = null;
+                            }
+                        }
+                        break;
                     case 1:
                         var position = worldModel.getMousePosition(e);
                         var x = position.x;
@@ -95,13 +112,6 @@ class WorldModelImpl implements WorldModel {
             $("#twoDModel_stage").mouseup(function(e) {
                 if (isDrawing) {
                     isDrawing = false;
-                } else {
-                    if (e.target.nodeName === "svg") {
-                        if (worldModel.currentElement) {
-                            worldModel.currentElement.hideHandles();
-                            worldModel.currentElement = null;
-                        }
-                    }
                 }
             });
         });

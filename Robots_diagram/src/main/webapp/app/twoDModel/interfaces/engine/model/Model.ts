@@ -4,5 +4,4 @@ interface Model {
     getRobotModels() : RobotModel[];
     getSetting() : Settings;
     addRobotModel(robotModel: TwoDRobotModel): void;
-    getPaper(): RaphaelPaper;
 }

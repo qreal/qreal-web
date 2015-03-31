@@ -7,13 +7,13 @@ class RobotItemImpl implements RobotItem {
     private width: number = 50;
     private height: number = 50;
 
-    constructor(paper: RaphaelPaper, imageFileName: string, robot: RobotModel) {
+    constructor(worldModel: WorldModel, position: TwoDPosition, imageFileName: string, robot: RobotModel) {
         this.robot = robot;
-        var robotPosition: TwoDPosition = robot.getPosition();
-        this.image = paper.image(imageFileName, robotPosition.x, robotPosition.y, this.width, this.height);
+        var paper = worldModel.getPaper();
+        this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
 
-        this.centerX = robotPosition.x + this.width / 2;
-        this.centerY = robotPosition.y + this.height / 2;
+        this.centerX = position.x + this.width / 2;
+        this.centerY = position.y + this.height / 2;
 
         var startCx = this.centerX;
         var startCy = this.centerY;
@@ -27,33 +27,37 @@ class RobotItemImpl implements RobotItem {
             stroke: "black"
         };
 
-        this.rotateHandle = paper.circle(robotPosition.x + this.width + 20,
-            robotPosition.y + this.height / 2, handleRadius).attr(handleAttrs);
+        this.rotateHandle = paper.circle(position.x + this.width + 20,
+            position.y + this.height / 2, handleRadius).attr(handleAttrs);
 
         var robotItem = this;
 
         var startHandle = function () {
-                this.transformation = robotItem.image.transform();
-                this.rotation = robotItem.image.matrix.split().rotate;
-                this.cx = this.attr("cx");
-                this.cy = this.attr("cy");
+                if (!worldModel.getDrawMode()) {
+                    this.transformation = robotItem.image.transform();
+                    this.rotation = robotItem.image.matrix.split().rotate;
+                    this.cx = this.attr("cx");
+                    this.cy = this.attr("cy");
+                }
                 return this;
             },
             moveHandle = function (dx, dy) {
-                var newX = this.cx + dx;
-                var newY = this.cy + dy;
-                var offsetX = newX - robotItem.centerX;
-                var offsetY = newY - robotItem.centerY;
-                var tan = offsetY / offsetX;
-                var angle = Math.atan(tan) / (Math.PI / 180);
-                if (offsetX < 0) {
-                    angle += 180;
+                if (!worldModel.getDrawMode()) {
+                    var newX = this.cx + dx;
+                    var newY = this.cy + dy;
+                    var offsetX = newX - robotItem.centerX;
+                    var offsetY = newY - robotItem.centerY;
+                    var tan = offsetY / offsetX;
+                    var angle = Math.atan(tan) / (Math.PI / 180);
+                    if (offsetX < 0) {
+                        angle += 180;
+                    }
+                    angle -= this.rotation;
+                    robotItem.image.transform(this.transformation + "R" + angle);
+                    var newCx = robotItem.image.matrix.x(startCx + robotItem.width / 2 + 20, startCy);
+                    var newCy = robotItem.image.matrix.y(startCx + robotItem.width / 2 + 20, startCy);
+                    this.attr({cx: newCx, cy: newCy});
                 }
-                angle -= this.rotation;
-                robotItem.image.transform(this.transformation + "R" + angle);
-                var newCx = robotItem.image.matrix.x(startCx + robotItem.width / 2 + 20, startCy);
-                var newCy = robotItem.image.matrix.y(startCx + robotItem.width / 2 + 20, startCy);
-                this.attr({cx: newCx, cy: newCy});
                 return this;
             },
             upHandle = function () {
@@ -63,21 +67,38 @@ class RobotItemImpl implements RobotItem {
         robotItem.rotateHandle.drag(moveHandle, startHandle, upHandle);
 
         var start = function () {
-                this.transformation = this.transform();
-                this.handle_cx = robotItem.rotateHandle.attr("cx");
-                this.handle_cy = robotItem.rotateHandle.attr("cy");
+                if (!worldModel.getDrawMode()) {
+                    this.transformation = this.transform();
+                    this.handle_cx = robotItem.rotateHandle.attr("cx");
+                    this.handle_cy = robotItem.rotateHandle.attr("cy");
+                    worldModel.setCurrentElement(robotItem);
+                }
             }
             ,move = function (dx, dy) {
-                this.transform(this.transformation + "T" + dx + "," + dy);
-                robotItem.rotateHandle.attr({"cx": this.handle_cx + dx, "cy": this.handle_cy + dy});
+                if (!worldModel.getDrawMode()) {
+                    this.transform(this.transformation + "T" + dx + "," + dy);
+                    robotItem.rotateHandle.attr({"cx": this.handle_cx + dx, "cy": this.handle_cy + dy});
+                }
             }
             ,up = function () {
-                robotItem.centerX = this.matrix.x(startCx, startCy);
-                robotItem.centerY = this.matrix.y(startCx, startCy);
+                if (!worldModel.getDrawMode()) {
+                    robotItem.centerX = this.matrix.x(startCx, startCy);
+                    robotItem.centerY = this.matrix.y(startCx, startCy);
+                }
             }
         this.image.drag(move, start, up);
+        this.hideHandles();
     }
+
     ride(): void {
         console.log("robot ride");
+    }
+
+    hideHandles(): void {
+        this.rotateHandle.hide();
+    }
+
+    showHandles(): void {
+        this.rotateHandle.show();
     }
 }
