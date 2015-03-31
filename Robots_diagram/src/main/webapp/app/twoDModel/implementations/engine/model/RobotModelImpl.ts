@@ -7,6 +7,10 @@ class RobotModelImpl implements RobotModel {
         this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), this);
     }
 
+    info(): TwoDRobotModel {
+        return this.twoDRobotModel;
+    }
+
     nextFragment(): void {
         this.robotItem.ride();
     }

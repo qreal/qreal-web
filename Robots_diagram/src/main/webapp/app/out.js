@@ -220,48 +220,14 @@ var CommonRobotModelImpl = (function () {
 var RootDiagramController = (function () {
     function RootDiagramController($scope, $compile) {
         $scope.root = this;
-        var controller = this;
         this.realModel = new TrikRobotModelBase();
         this.robotModel = new TwoDRobotModel(this.realModel, "model");
-        $(document).ready(function () {
-            controller.initPortsConfigation($scope, $compile);
-        });
     }
     RootDiagramController.prototype.setRobotModel = function (robotModel) {
         this.robotModel = robotModel;
     };
     RootDiagramController.prototype.getRobotModel = function () {
         return this.robotModel;
-    };
-    RootDiagramController.prototype.initPortsConfigation = function ($scope, $compile) {
-        var configurationDropdownsContent = "<p>";
-        var controller = this;
-        controller.realModel.getConfigurablePorts().forEach(function (port) {
-            var portName = port.getName();
-            var id = portName + "Select";
-            configurationDropdownsContent += "<p>";
-            configurationDropdownsContent += portName + " ";
-            configurationDropdownsContent += "<select id='" + id + "' style='width: 150px'>";
-            configurationDropdownsContent += "<option value='Unused'>Unused</option>";
-            var devices = controller.realModel.getAllowedDevices(port);
-            devices.forEach(function (device) {
-                var friendlyName = device.getFriendlyName();
-                configurationDropdownsContent += "<option value='" + friendlyName + "'>" + friendlyName + "</option>";
-            });
-            configurationDropdownsContent += "</select>";
-            configurationDropdownsContent += "</p>";
-        });
-        configurationDropdownsContent += "</p>";
-        $('#configurationDropdowns').append($compile(configurationDropdownsContent)($scope));
-        this.setPortsSelectsListeners();
-    };
-    RootDiagramController.prototype.setPortsSelectsListeners = function () {
-        this.realModel.getConfigurablePorts().forEach(function (port) {
-            var htmlId = "#" + port.getName() + "Select";
-            $(htmlId).change(function () {
-                console.log($(htmlId).val());
-            });
-        });
     };
     return RootDiagramController;
 })();
@@ -821,16 +787,19 @@ var TwoDModelEngineApiImpl = (function () {
     return TwoDModelEngineApiImpl;
 })();
 var TwoDModelEngineFacadeImpl = (function () {
-    function TwoDModelEngineFacadeImpl($scope) {
+    function TwoDModelEngineFacadeImpl($scope, $compile) {
         $scope.vm = this;
         var facade = this;
         var robotModel = $scope.root.getRobotModel();
         this.robotModelName = robotModel.getName();
         this.model = new ModelImpl();
         this.model.addRobotModel(robotModel);
-        $('#confirmDelete').find('.modal-footer #confirm').on('click', function () {
-            facade.model.getWorldModel().clearPaper();
-            $('#confirmDelete').modal('hide');
+        $(document).ready(function () {
+            $('#confirmDelete').find('.modal-footer #confirm').on('click', function () {
+                facade.model.getWorldModel().clearPaper();
+                $('#confirmDelete').modal('hide');
+            });
+            facade.initPortsConfigation($scope, $compile, robotModel);
         });
     }
     TwoDModelEngineFacadeImpl.prototype.setDrawLineMode = function () {
@@ -851,6 +820,35 @@ var TwoDModelEngineFacadeImpl = (function () {
     TwoDModelEngineFacadeImpl.prototype.openDiagram = function () {
         $("#twoDModelContent").hide();
         $("#diagramContent").show();
+    };
+    TwoDModelEngineFacadeImpl.prototype.initPortsConfigation = function ($scope, $compile, twoDRobotModel) {
+        var configurationDropdownsContent = "<p>";
+        twoDRobotModel.getConfigurablePorts().forEach(function (port) {
+            var portName = port.getName();
+            var id = portName + "Select";
+            configurationDropdownsContent += "<p>";
+            configurationDropdownsContent += portName + " ";
+            configurationDropdownsContent += "<select id='" + id + "' style='width: 150px'>";
+            configurationDropdownsContent += "<option value='Unused'>Unused</option>";
+            var devices = twoDRobotModel.getAllowedDevices(port);
+            devices.forEach(function (device) {
+                var friendlyName = device.getFriendlyName();
+                configurationDropdownsContent += "<option value='" + friendlyName + "'>" + friendlyName + "</option>";
+            });
+            configurationDropdownsContent += "</select>";
+            configurationDropdownsContent += "</p>";
+        });
+        configurationDropdownsContent += "</p>";
+        $('#configurationDropdowns').append($compile(configurationDropdownsContent)($scope));
+        this.setPortsSelectsListeners(twoDRobotModel);
+    };
+    TwoDModelEngineFacadeImpl.prototype.setPortsSelectsListeners = function (twoDRobotModel) {
+        twoDRobotModel.getConfigurablePorts().forEach(function (port) {
+            var htmlId = "#" + port.getName() + "Select";
+            $(htmlId).change(function () {
+                console.log($(htmlId).val());
+            });
+        });
     };
     return TwoDModelEngineFacadeImpl;
 })();
@@ -1251,14 +1249,14 @@ var RobotItemImpl = (function () {
     return RobotItemImpl;
 })();
 var SensorItem = (function () {
-    function SensorItem() {
+    function SensorItem(worldModel, position) {
     }
     return SensorItem;
 })();
 var SonarSensorItem = (function (_super) {
     __extends(SonarSensorItem, _super);
-    function SonarSensorItem() {
-        _super.apply(this, arguments);
+    function SonarSensorItem(worldModel, position) {
+        _super.call(this, worldModel, position);
     }
     return SonarSensorItem;
 })(SensorItem);
@@ -1414,6 +1412,9 @@ var RobotModelImpl = (function () {
         this.twoDRobotModel = twoDRobotModel;
         this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), this);
     }
+    RobotModelImpl.prototype.info = function () {
+        return this.twoDRobotModel;
+    };
     RobotModelImpl.prototype.nextFragment = function () {
         this.robotItem.ride();
     };
@@ -1955,15 +1956,22 @@ var TwoDRobotModel = (function (_super) {
     __extends(TwoDRobotModel, _super);
     function TwoDRobotModel(realModel, name) {
         _super.call(this);
+        var twoDRobotModel = this;
         this.realModel = realModel;
         this.name = name;
         this.image = "images/2dmodel/trikTwoDRobot.svg";
+        realModel.getAvailablePorts().forEach(function (port) {
+            twoDRobotModel.addAllowedConnection(port, realModel.getAllowedDevices(port));
+        });
     }
     TwoDRobotModel.prototype.getName = function () {
         return this.name;
     };
     TwoDRobotModel.prototype.getRobotImage = function () {
         return this.image;
+    };
+    TwoDRobotModel.prototype.getConfigurablePorts = function () {
+        return this.realModel.getConfigurablePorts();
     };
     return TwoDRobotModel;
 })(CommonRobotModelImpl);

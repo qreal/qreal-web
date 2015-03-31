@@ -5,9 +5,14 @@ class TwoDRobotModel extends CommonRobotModelImpl {
 
     constructor(realModel: RobotModelInterface, name: string) {
         super();
+        var twoDRobotModel = this;
         this.realModel = realModel;
         this.name = name;
         this.image = "images/2dmodel/trikTwoDRobot.svg"
+
+        realModel.getAvailablePorts().forEach(function(port) {
+            twoDRobotModel.addAllowedConnection(port, realModel.getAllowedDevices(port));
+        });
     }
 
     getName(): string {
@@ -16,5 +21,9 @@ class TwoDRobotModel extends CommonRobotModelImpl {
 
     getRobotImage(): string {
         return this.image;
+    }
+
+    getConfigurablePorts(): PortInfo[] {
+        return this.realModel.getConfigurablePorts();
     }
 }
