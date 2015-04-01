@@ -32,12 +32,18 @@ class RobotItemImpl implements RobotItem {
 
         var robotItem = this;
 
+        var sonar: SonarSensorItem = new SonarSensorItem(worldModel,
+            {x: position.x + this.width + 10, y: position.y - 15 + this.height / 2});
+
         var startHandle = function () {
                 if (!worldModel.getDrawMode()) {
                     this.transformation = robotItem.image.transform();
                     this.rotation = robotItem.image.matrix.split().rotate;
                     this.cx = this.attr("cx");
                     this.cy = this.attr("cy");
+
+                    this.sonarTransformation = sonar.getSonarTransformation();
+                    this.sonarRegionTransformation = sonar.getRegionTransformation();
                 }
                 return this;
             },
@@ -52,8 +58,17 @@ class RobotItemImpl implements RobotItem {
                     if (offsetX < 0) {
                         angle += 180;
                     }
+
                     angle -= this.rotation;
-                    robotItem.image.transform(this.transformation + "R" + angle);
+                    robotItem.image.transform(this.transformation + "R" + angle + "," +
+                        robotItem.centerX + "," + robotItem.centerY);
+
+                    sonar.setSonarTransformation(this.sonarTransformation + "R" + angle + "," +
+                        robotItem.centerX + "," + robotItem.centerY);
+                    sonar.setRegionTransformation(this.sonarRegionTransformation + "R" + angle + "," +
+                        robotItem.centerX + "," + robotItem.centerY);
+
+
                     var newCx = robotItem.image.matrix.x(startCx + robotItem.width / 2 + 20, startCy);
                     var newCy = robotItem.image.matrix.y(startCx + robotItem.width / 2 + 20, startCy);
                     this.attr({cx: newCx, cy: newCy});
@@ -69,22 +84,33 @@ class RobotItemImpl implements RobotItem {
         var start = function () {
                 if (!worldModel.getDrawMode()) {
                     this.transformation = this.transform();
+
+                    this.sonarTransformation = sonar.getSonarTransformation();
+                    this.sonarRegionTransformation = sonar.getRegionTransformation();
+
                     this.handle_cx = robotItem.rotateHandle.attr("cx");
                     this.handle_cy = robotItem.rotateHandle.attr("cy");
                     worldModel.setCurrentElement(robotItem);
                 }
+                return this;
             }
             ,move = function (dx, dy) {
                 if (!worldModel.getDrawMode()) {
                     this.transform(this.transformation + "T" + dx + "," + dy);
+
+                    sonar.setSonarTransformation(this.sonarTransformation + "T" + dx + "," + dy);
+                    sonar.setRegionTransformation(this.sonarRegionTransformation + "T" + dx + "," + dy);
+
                     robotItem.rotateHandle.attr({"cx": this.handle_cx + dx, "cy": this.handle_cy + dy});
                 }
+                return this;
             }
             ,up = function () {
                 if (!worldModel.getDrawMode()) {
                     robotItem.centerX = this.matrix.x(startCx, startCy);
                     robotItem.centerY = this.matrix.y(startCx, startCy);
                 }
+                return this;
             }
         this.image.drag(move, start, up);
         this.hideHandles();
@@ -99,6 +125,7 @@ class RobotItemImpl implements RobotItem {
     }
 
     showHandles(): void {
+        this.rotateHandle.toFront();
         this.rotateHandle.show();
     }
 }

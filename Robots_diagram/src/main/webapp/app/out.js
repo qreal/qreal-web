@@ -1186,12 +1186,15 @@ var RobotItemImpl = (function () {
         };
         this.rotateHandle = paper.circle(position.x + this.width + 20, position.y + this.height / 2, handleRadius).attr(handleAttrs);
         var robotItem = this;
+        var sonar = new SonarSensorItem(worldModel, { x: position.x + this.width + 10, y: position.y - 15 + this.height / 2 });
         var startHandle = function () {
             if (!worldModel.getDrawMode()) {
                 this.transformation = robotItem.image.transform();
                 this.rotation = robotItem.image.matrix.split().rotate;
                 this.cx = this.attr("cx");
                 this.cy = this.attr("cy");
+                this.sonarTransformation = sonar.getSonarTransformation();
+                this.sonarRegionTransformation = sonar.getRegionTransformation();
             }
             return this;
         }, moveHandle = function (dx, dy) {
@@ -1206,7 +1209,9 @@ var RobotItemImpl = (function () {
                     angle += 180;
                 }
                 angle -= this.rotation;
-                robotItem.image.transform(this.transformation + "R" + angle);
+                robotItem.image.transform(this.transformation + "R" + angle + "," + robotItem.centerX + "," + robotItem.centerY);
+                sonar.setSonarTransformation(this.sonarTransformation + "R" + angle + "," + robotItem.centerX + "," + robotItem.centerY);
+                sonar.setRegionTransformation(this.sonarRegionTransformation + "R" + angle + "," + robotItem.centerX + "," + robotItem.centerY);
                 var newCx = robotItem.image.matrix.x(startCx + robotItem.width / 2 + 20, startCy);
                 var newCy = robotItem.image.matrix.y(startCx + robotItem.width / 2 + 20, startCy);
                 this.attr({ cx: newCx, cy: newCy });
@@ -1219,20 +1224,27 @@ var RobotItemImpl = (function () {
         var start = function () {
             if (!worldModel.getDrawMode()) {
                 this.transformation = this.transform();
+                this.sonarTransformation = sonar.getSonarTransformation();
+                this.sonarRegionTransformation = sonar.getRegionTransformation();
                 this.handle_cx = robotItem.rotateHandle.attr("cx");
                 this.handle_cy = robotItem.rotateHandle.attr("cy");
                 worldModel.setCurrentElement(robotItem);
             }
+            return this;
         }, move = function (dx, dy) {
             if (!worldModel.getDrawMode()) {
                 this.transform(this.transformation + "T" + dx + "," + dy);
+                sonar.setSonarTransformation(this.sonarTransformation + "T" + dx + "," + dy);
+                sonar.setRegionTransformation(this.sonarRegionTransformation + "T" + dx + "," + dy);
                 robotItem.rotateHandle.attr({ "cx": this.handle_cx + dx, "cy": this.handle_cy + dy });
             }
+            return this;
         }, up = function () {
             if (!worldModel.getDrawMode()) {
                 robotItem.centerX = this.matrix.x(startCx, startCy);
                 robotItem.centerY = this.matrix.y(startCx, startCy);
             }
+            return this;
         };
         this.image.drag(move, start, up);
         this.hideHandles();
@@ -1244,12 +1256,15 @@ var RobotItemImpl = (function () {
         this.rotateHandle.hide();
     };
     RobotItemImpl.prototype.showHandles = function () {
+        this.rotateHandle.toFront();
         this.rotateHandle.show();
     };
     return RobotItemImpl;
 })();
 var SensorItem = (function () {
     function SensorItem(worldModel, position) {
+        this.width = 30;
+        this.height = 30;
     }
     return SensorItem;
 })();
@@ -1257,7 +1272,118 @@ var SonarSensorItem = (function (_super) {
     __extends(SonarSensorItem, _super);
     function SonarSensorItem(worldModel, position) {
         _super.call(this, worldModel, position);
+        this.sonarRange = 255;
+        var paper = worldModel.getPaper();
+        this.image = paper.image("images/2dmodel/twoDIrRangeSensor.svg", position.x, position.y, this.width, this.height);
+        this.regionStartX = position.x + this.width / 2;
+        this.regionStartY = position.y + this.height / 2;
+        var regAngle = 20;
+        var halfRegAngleInRad = regAngle / 2 * (Math.PI / 180);
+        var rangeInPixels = this.sonarRange * Constants.pixelsInCm;
+        var regionTopX = this.regionStartX + Math.cos(halfRegAngleInRad) * rangeInPixels;
+        var regionTopY = this.regionStartY - Math.sin(halfRegAngleInRad) * rangeInPixels;
+        var regionBottomX = regionTopX;
+        var regionBottomY = this.regionStartY + Math.sin(halfRegAngleInRad) * rangeInPixels;
+        this.scanningRegion = paper.path("M" + this.regionStartX + "," + this.regionStartY + "L" + regionTopX + "," + regionTopY + "Q" + (this.regionStartX + rangeInPixels) + "," + this.regionStartY + " " + regionBottomX + "," + regionBottomY + "Z");
+        this.scanningRegion.attr({ fill: "#c5d0de", stroke: "#b1bbc7" });
+        this.centerX = position.x + this.width / 2;
+        this.centerY = position.y + this.height / 2;
+        this.startCx = this.centerX;
+        this.startCy = this.centerY;
+        var handleRadius = 10;
+        var handleAttrs = {
+            fill: "transparent",
+            cursor: "pointer",
+            "stroke-width": 1,
+            stroke: "black"
+        };
+        this.rotateHandle = paper.circle(position.x + this.width + 20, position.y + this.height / 2, handleRadius).attr(handleAttrs);
+        var sonarItem = this;
+        var startHandle = function () {
+            if (!worldModel.getDrawMode()) {
+                this.cx = this.attr("cx");
+                this.cy = this.attr("cy");
+                this.rotation = sonarItem.image.matrix.split().rotate;
+                this.sonarTransformation = sonarItem.getSonarTransformation();
+                this.sonarRegionTransformation = sonarItem.getRegionTransformation();
+            }
+            return this;
+        }, moveHandle = function (dx, dy) {
+            if (!worldModel.getDrawMode()) {
+                var newX = this.cx + dx;
+                var newY = this.cy + dy;
+                var offsetX = newX - sonarItem.centerX;
+                var offsetY = newY - sonarItem.centerY;
+                var tan = offsetY / offsetX;
+                var angle = Math.atan(tan) / (Math.PI / 180);
+                if (offsetX < 0) {
+                    angle += 180;
+                }
+                angle -= this.rotation;
+                sonarItem.rotate(this.sonarTransformation, this.sonarRegionTransformation, angle);
+                var newCx = sonarItem.image.matrix.x(sonarItem.startCx + sonarItem.width / 2 + 20, sonarItem.startCy);
+                var newCy = sonarItem.image.matrix.y(sonarItem.startCx + sonarItem.width / 2 + 20, sonarItem.startCy);
+                this.attr({ cx: newCx, cy: newCy });
+            }
+            return this;
+        }, upHandle = function () {
+            return this;
+        };
+        sonarItem.rotateHandle.drag(moveHandle, startHandle, upHandle);
+        var start = function () {
+            if (!worldModel.getDrawMode()) {
+                this.sonarTransformation = sonarItem.getSonarTransformation();
+                this.sonarRegionTransformation = sonarItem.getRegionTransformation();
+                this.handle_cx = sonarItem.rotateHandle.attr("cx");
+                this.handle_cy = sonarItem.rotateHandle.attr("cy");
+                worldModel.setCurrentElement(sonarItem);
+            }
+            return this;
+        }, move = function (dx, dy) {
+            if (!worldModel.getDrawMode()) {
+                sonarItem.setSonarTransformation(this.sonarTransformation + "T" + dx + "," + dy);
+                sonarItem.setRegionTransformation(this.sonarRegionTransformation + "T" + dx + "," + dy);
+                sonarItem.rotateHandle.attr({ "cx": this.handle_cx + dx, "cy": this.handle_cy + dy });
+            }
+            return this;
+        }, up = function () {
+            if (!worldModel.getDrawMode()) {
+                sonarItem.centerX = this.matrix.x(sonarItem.startCx, sonarItem.startCy);
+                sonarItem.centerY = this.matrix.y(sonarItem.startCx, sonarItem.startCy);
+            }
+            return this;
+        };
+        this.image.drag(move, start, up);
+        this.hideHandles();
     }
+    SonarSensorItem.prototype.setSonarTransformation = function (transformationString) {
+        this.image.transform(transformationString);
+        var newCx = this.image.matrix.x(this.startCx + this.width / 2 + 20, this.startCy);
+        var newCy = this.image.matrix.y(this.startCx + this.width / 2 + 20, this.startCy);
+        this.rotateHandle.attr({ cx: newCx, cy: newCy });
+    };
+    SonarSensorItem.prototype.setRegionTransformation = function (transformationString) {
+        this.scanningRegion.transform(transformationString);
+    };
+    SonarSensorItem.prototype.getSonarTransformation = function () {
+        return this.image.transform();
+    };
+    SonarSensorItem.prototype.getRegionTransformation = function () {
+        return this.scanningRegion.transform();
+    };
+    SonarSensorItem.prototype.rotate = function (sonarTransformation, regionTransformation, angle) {
+        this.image.transform(sonarTransformation + "R" + angle);
+        var regionRotationX = this.image.matrix.x(this.regionStartX, this.regionStartY);
+        var regionRotationY = this.image.matrix.y(this.regionStartX, this.regionStartY);
+        this.scanningRegion.transform(regionTransformation + "R" + angle + "," + regionRotationX + "," + regionRotationY);
+    };
+    SonarSensorItem.prototype.hideHandles = function () {
+        this.rotateHandle.hide();
+    };
+    SonarSensorItem.prototype.showHandles = function () {
+        this.rotateHandle.toFront();
+        this.rotateHandle.show();
+    };
     return SonarSensorItem;
 })(SensorItem);
 var WallItemImpl = (function () {
@@ -1377,6 +1503,14 @@ var WallItemImpl = (function () {
         this.path.remove();
     };
     return WallItemImpl;
+})();
+var Constants = (function () {
+    function Constants() {
+    }
+    Constants.robotWheelDiameterInPx = 16;
+    Constants.robotWheelDiameterInCm = 5.6;
+    Constants.pixelsInCm = Constants.robotWheelDiameterInPx / Constants.robotWheelDiameterInCm;
+    return Constants;
 })();
 var ModelImpl = (function () {
     function ModelImpl() {

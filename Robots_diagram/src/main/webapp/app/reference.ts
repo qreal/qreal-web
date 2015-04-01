@@ -45,6 +45,7 @@
 /// <reference path="twoDModel/implementations/engine/items/SensorItem.ts" />
 /// <reference path="twoDModel/implementations/engine/items/SonarSensorItem.ts" />
 /// <reference path="twoDModel/implementations/engine/items/WallItemImpl.ts" />
+/// <reference path="twoDModel/implementations/engine/model/Constants.ts" />
 /// <reference path="twoDModel/implementations/engine/model/ModelImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/model/RobotModelImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/model/TimelineImpl.ts" />
