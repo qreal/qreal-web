@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="Robots_diagram:war">
-    <output-path>$PROJECT_DIR$/../qreal-web/Robots_diagram/target</output-path>
-    <root id="archive" name="Robots_diagram.war">
-      <element id="artifact" artifact-name="Robots_diagram:war exploded" />
-    </root>
-  </artifact>
-</component>
