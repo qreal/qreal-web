@@ -42,12 +42,7 @@ class ModelConfig {
             "initScript"()
             devicePorts.each { key, value ->
                 "$key" {
-                    typeProperties.each {
-                        if (it.key == value) {
-                            "$value"(it.value)
-                        }
-
-                    }
+                    "$value"(typeProperties.get(value))
                 }
             }
         }
