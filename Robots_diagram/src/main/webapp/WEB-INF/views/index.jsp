@@ -69,14 +69,15 @@
                 });
             });
 
-            $('[name="saveModelConfig').click(function (event) {
+
+            $('[name="saveModelConfig"]').click(function (event) {
                 var robotName = event.target.id.substring(18);
                 var name = robotName + "-port";
                 var o = [];
                 $('[name="' + name + '"]').each(function (index, value) {
+                    var obj = {};
                     var key = $(value).text();
                     var valueElementName = '[name="' + robotName + '-' + key + '"]';
-                    var obj = {};
                     var attr = $(valueElementName).attr("data-content");
 
                     if (typeof attr !== typeof undefined && attr !== false) {
@@ -86,7 +87,21 @@
                     }
                     o.push(obj); // push in the "o" object created
                 });
-                var data = "robotName=" + robotName + "&modelConfigJson=" + JSON.stringify(o);
+
+                var typeProperties = []
+                $('[name="propertyForm"]').each(function (index, value) {
+                    var obj = {};
+                    obj["type"] = $(value).attr("id").substring(9);
+                    $(value).find(':input').each(function (index2, value2) {
+                        obj[$(value2).attr("name")] = $(value2).attr("value");
+                    });
+                    typeProperties.push(obj);
+                });
+
+                var data = "robotName=" + robotName + "&modelConfigJson=" + JSON.stringify(o) +
+                        "&typeProperties=" + JSON.stringify(typeProperties);
+
+
                 $.ajax({
                     type: 'POST',
                     url: 'saveModelConfig',
@@ -120,6 +135,15 @@
                     $("#" + id).attr("data-content", $(this).text());
                 }
                 $("#" + id).html(option);
+            });
+
+            $("#configureDeviceMenu a").click(function (event) {
+                event.preventDefault(); //prevent synchronous loading
+                var option = $(this).text();
+                $("#deviceType").attr("data-content", option);
+                $("#deviceType").html(option);
+                $('[name="propertyType"]').hide();
+                $("#property-" + option).show();
             });
 
             $('[data-toggle="tooltip"]').tooltip({
@@ -261,6 +285,7 @@
                                             <h4 class="modal-title" id="sendDiagramLabel">Send diagram</h4>
                                         </div>
                                         <div class="modal-body">
+
                                             <h4>Select diagram</h4>
                                             <select class="form-control">
                                                 <c:forEach var="diagram" items="${user.diagrams}">
@@ -290,22 +315,30 @@
                                             <button type="button" class="close"
                                                     data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title" id="configureModaLabel">Configure robot</h4>
+                                            <h4 class="modal-title" id="configureModalLabel">Configure robot</h4>
 
                                             <div id="validationError" class="error" hidden></div>
 
                                         </div>
                                         <div class="modal-body">
-                                            <div class="row">
 
+                                            <ul class="nav nav-tabs">
+                                                <li class="active"><a href="#portsConfig"
+                                                                      data-toggle="tab">Ports</a>
+                                                </li>
+                                                <li><a href="#devicesConfig" data-toggle="tab">Devices</a></li>
+                                            </ul>
+                                            <div id="myTabContent33" class="tab-content">
                                                 <c:set var="systemConfig"
                                                        value="${robotWrapper.robotInfo.systemConfig}"/>
-                                                <c:set var="modelConfig"
-                                                       value="${robotWrapper.robotInfo.modelConfig}"/>
-                                                <c:forEach var="port" items="${systemConfig.ports}">
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <div class="input-group">
+                                                <div class="tab-pane active in" id="portsConfig">
+                                                    <div class="row">
+                                                        <c:set var="modelConfig"
+                                                               value="${robotWrapper.robotInfo.modelConfig}"/>
+                                                        <c:forEach var="port" items="${systemConfig.ports}">
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <div class="input-group">
                                                                 <span class="input-group-addon"
                                                                       name="${robot.name}-port">${port.name}</span>
                                                             <span class="input-group-addon">
@@ -314,7 +347,8 @@
                                                                        class="btn btn-default" data-target="#">
                                                                         <div id="${port.name}"
                                                                              name="${robot.name}-${port.name}"
-                                                                             data-toggle="popover">${modelConfig.getDeviceName(port.name)}<span
+                                                                             data-toggle="popover"
+                                                                             name="popover">${modelConfig.getDeviceName(port.name)}<span
                                                                                 class="caret"></span></div>
                                                                     </a>
                                                                     <ul id="configureMenu"
@@ -347,10 +381,83 @@
                                                                         </c:forEach>
                                                                     </ul>
                                                             </span>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        </c:forEach>
                                                     </div>
-                                                </c:forEach>
+                                                </div>
+
+
+                                                <div class="tab-pane fade" id="devicesConfig">
+
+                                                    <div class="row" style="margin-top:20px;" id="configureDeviceMenu">
+
+                                                        <!-- Form Name -->
+
+
+                                                        <div class="btn-group show-on-hover">
+                                                            <button type="button"
+                                                                    class="btn btn-default dropdown-toggle"
+                                                                    data-toggle="dropdown"
+                                                                    id="deviceType">
+                                                                Device hello world <span
+                                                                    class="caret"></span>
+                                                            </button>
+                                                            <ul class="dropdown-menu" role="menu">
+                                                                <c:forEach var="device"
+                                                                           items="${systemConfig.devices}">
+                                                                    <c:forEach var="type"
+                                                                               items="${device.types}">
+                                                                        <li><a href="#">${type.name}</a>
+                                                                        </li>
+                                                                    </c:forEach>
+                                                                </c:forEach>
+                                                            </ul>
+                                                        </div>
+
+                                                        <c:forEach var="device"
+                                                                   items="${systemConfig.devices}">
+                                                            <c:forEach var="type"
+                                                                       items="${device.types}">
+
+                                                                <div class="panel" hidden
+
+                                                                     name="propertyType">
+                                                                    <div class="well">
+                                                                        <div name="propertyForm"
+                                                                             class="panel-body form-horizontal payment-form"
+                                                                             id="property-${type.name}">
+                                                                            <c:forEach var="entry"
+                                                                                       items="${type.properties}">
+                                                                                <div class="form-group">
+                                                                                    <label for="concept"
+                                                                                           name="label-${type.name}"
+                                                                                           class="col-sm-3 control-label">${entry.key}</label>
+
+                                                                                    <div class="col-sm-9">
+                                                                                        <input type="text"
+                                                                                               class="form-control"
+                                                                                               value="${entry.value}"
+                                                                                               name="${entry.key}">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </c:forEach>
+
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- / panel preview -->
+                                                            </c:forEach>
+                                                        </c:forEach>
+
+
+                                                    </div>
+                                                    <!-- /.row -->
+
+
+                                                </div>
                                             </div>
 
 

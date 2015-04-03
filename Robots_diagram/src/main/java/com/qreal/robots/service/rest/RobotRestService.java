@@ -72,8 +72,9 @@ public class RobotRestService {
 
     @ResponseBody
     @RequestMapping(value = "/saveModelConfig", method = RequestMethod.POST)
-    public String saveModelConfig(@RequestParam("robotName") String name, @RequestParam("modelConfigJson") String modelConfigJson) throws IOException {
-        ModelConfig modelConfig = getModelConfig(modelConfigJson);
+    public String saveModelConfig(@RequestParam("robotName") String name, @RequestParam("modelConfigJson") String modelConfigJson,
+                                  @RequestParam("typeProperties") String typeProperties) throws IOException {
+        ModelConfig modelConfig = getModelConfig(modelConfigJson, typeProperties);
         String systemConfigXml = IOUtils.toString(this.getClass().getResourceAsStream("/system-config.xml"));
         SystemConfig systemConfig = new SystemConfigParser().parse(systemConfigXml);
         ModelConfigValidator validator = new ModelConfigValidator(systemConfig);
@@ -86,8 +87,11 @@ public class RobotRestService {
         return String.format("{\"status\":\"%s\", \"errors\":\"%s\"}", result.isOk(), result.getErrorsString());
     }
 
-    private ModelConfig getModelConfig(String modelConfigJson) throws IOException {
+    private ModelConfig getModelConfig(String modelConfigJson, String typeProperties) throws IOException {
         List<Map<String, String>> mapList = mapper.readValue(modelConfigJson,
+                new TypeReference<List<HashMap<String, String>>>() {
+                });
+        List<Map<String, String>> propertyList = mapper.readValue(typeProperties,
                 new TypeReference<List<HashMap<String, String>>>() {
                 });
 
@@ -96,7 +100,7 @@ public class RobotRestService {
             map.putAll(lMap);
         }
 
-        return new ModelConfig(map);
+        return new ModelConfig(map, propertyList);
     }
 
 

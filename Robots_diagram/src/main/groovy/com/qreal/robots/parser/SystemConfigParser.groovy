@@ -5,7 +5,7 @@ package com.qreal.robots.parser
  */
 class SystemConfigParser {
 
-    List<String> unsupportedAttributes = ["class"]
+    List<String> unsupportedAttributes = ["class", "type"]
 
     SystemConfig parse(String systemConfigXml) {
         List<Device> deviceClassesList = []
