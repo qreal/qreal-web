@@ -5,6 +5,8 @@ package com.qreal.robots.parser
  */
 class SystemConfigParser {
 
+    List<String> unsupportedAttributes = ["class"]
+
     SystemConfig parse(String systemConfigXml) {
         List<Device> deviceClassesList = []
         List<Port> ports = []
@@ -48,7 +50,10 @@ class SystemConfigParser {
         deviceClassesList.each { device ->
             deviceTypes[0].children().each { deviceType ->
                 if (device.name == deviceType.@class) {
-                    device.types.add(deviceType.name())
+                    def attributes = deviceType.attributes().findAll {
+                        !unsupportedAttributes.contains(it.key)
+                    }
+                    device.types.add(new DeviceType(deviceType.name(), attributes))
                 }
             }
         }

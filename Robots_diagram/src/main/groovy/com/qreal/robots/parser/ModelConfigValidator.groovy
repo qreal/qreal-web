@@ -19,7 +19,7 @@ class ModelConfigValidator {
         modelConfig.devicePorts.each { key, value ->
             systemConfig.devices.each { device ->
                 if (device.name == value && device.types.size() > 0) {
-                    validationResult.addError("Unable to set $device.name, when it has deviceTypes")
+                    validationResult.addError("Unable to set $device.name to port $key, when it has deviceTypes")
                 }
             }
 

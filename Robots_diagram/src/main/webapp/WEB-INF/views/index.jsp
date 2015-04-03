@@ -6,6 +6,7 @@
 
     <script src="<c:url value='/resources/js/jquery-1.11.0.min.js' />"></script>
     <jsp:include page="include/scripts.jsp"/>
+    <link rel="stylesheet" href="<c:url value='/resources/css/error.css'/>"/>
     <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
     <script src="<c:url value='/resources/js/map.js' />"></script>
     <script src="<c:url value='/resources/js/robot.js' />"></script>
@@ -91,10 +92,19 @@
                     url: 'saveModelConfig',
                     data: data,
                     success: function (response) {
-                        alert(JSON.parse(response).message);
+                        var result = JSON.parse(response);
+                        if (result.status == "OK") {
+                            $('#configureRobotModal').modal('hide');
+                            $('#validationError').hide();
+                            alert("Successfully saved ");
+                        } else {
+                            $('#validationError').show();
+                            $('#validationError').text(result.errors);
+                        }
                     },
                     error: function (response, status, error) {
-                        console.log("error");
+                        alert(JSON.parse(response).message);
+
                     }
                 });
             });
@@ -256,7 +266,7 @@
                                                 <c:forEach var="diagram" items="${user.diagrams}">
                                                     <option>${diagram.name}</option>
                                                 </c:forEach>
-                                            </select>
+                                            </select>Lines 284-285 chang
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" name="sendDiagram"
@@ -281,6 +291,9 @@
                                                     data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span></button>
                                             <h4 class="modal-title" id="configureModaLabel">Configure robot</h4>
+
+                                            <div id="validationError" class="error" hidden></div>
+
                                         </div>
                                         <div class="modal-body">
                                             <div class="row">
@@ -316,7 +329,7 @@
                                                                                         <c:forEach var="type"
                                                                                                    items="${device.types}">
                                                                                             <li><a href="#"
-                                                                                                   id="s-${port.name}">${type}</a>
+                                                                                                   id="s-${port.name}">${type.name}</a>
                                                                                             </li>
                                                                                         </c:forEach>
 

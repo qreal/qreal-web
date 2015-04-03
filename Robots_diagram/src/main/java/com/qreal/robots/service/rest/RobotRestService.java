@@ -10,10 +10,7 @@ import com.qreal.robots.model.auth.User;
 import com.qreal.robots.model.robot.Message;
 import com.qreal.robots.model.robot.Robot;
 import com.qreal.robots.model.robot.RobotInfo;
-import com.qreal.robots.parser.ModelConfig;
-import com.qreal.robots.parser.ModelConfigValidator;
-import com.qreal.robots.parser.SystemConfig;
-import com.qreal.robots.parser.SystemConfigParser;
+import com.qreal.robots.parser.*;
 import com.qreal.robots.socket.SocketClient;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -80,9 +77,13 @@ public class RobotRestService {
         String systemConfigXml = IOUtils.toString(this.getClass().getResourceAsStream("/system-config.xml"));
         SystemConfig systemConfig = new SystemConfigParser().parse(systemConfigXml);
         ModelConfigValidator validator = new ModelConfigValidator(systemConfig);
-        validator.validate(modelConfig);
+        ValidationResult result = validator.validate(modelConfig);
+        return buildResultMessage(result);
 
-        return "{\"message\":\"OK\"}";
+    }
+
+    private String buildResultMessage(ValidationResult result) {
+        return String.format("{\"status\":\"%s\", \"errors\":\"%s\"}", result.isOk(), result.getErrorsString());
     }
 
     private ModelConfig getModelConfig(String modelConfigJson) throws IOException {

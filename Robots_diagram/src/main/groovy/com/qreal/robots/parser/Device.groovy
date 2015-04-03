@@ -11,7 +11,7 @@ class Device {
     String name
     Map<String, String> properties
     List<String> availablePorts
-    List<String> types
+    List<DeviceType> types
 
     def Device(String name) {
         this.name = name

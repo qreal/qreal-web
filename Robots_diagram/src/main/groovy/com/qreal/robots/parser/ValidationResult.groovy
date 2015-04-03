@@ -18,4 +18,12 @@ class ValidationResult {
         errors.add(error);
     }
 
+    def getErrorsString() {
+        return errors.join(",")
+    }
+
+    def isOk() {
+        return errors.size() == 0 ? "OK" : "FAIL"
+    }
+
 }
