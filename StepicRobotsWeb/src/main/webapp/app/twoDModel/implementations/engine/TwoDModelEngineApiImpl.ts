@@ -1,0 +1,3 @@
+class TwoDModelEngineApiImpl implements TwoDModelEngineApi {
+
+}

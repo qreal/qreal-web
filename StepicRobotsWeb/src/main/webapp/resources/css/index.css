@@ -1,0 +1,151 @@
+html,body,.container
+{
+    height:100%;
+    overflow: hidden;
+}
+
+body {
+    background: lavender;
+}
+
+.container
+{
+    display:table;
+    width: 100%;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#diagram_container {
+    padding: 0px;
+    margin: 0px;
+}
+
+.row
+{
+    height: 100%;
+    display: table-row;
+}
+.col-md-2.no-float, .col-md-4.no-float , .col-md-6.no-float, .col-md-8.no-float{
+    float: none;
+}
+
+.col-md-3.no-float, .col-md-9.no-float {
+    float: none;
+}
+.col-md-2
+{
+    display: table-cell;
+    padding: 0px;
+}
+
+.col-md-3
+{
+    display: table-cell;
+    padding: 0px;
+}
+
+.col-md-4
+{
+    display: table-cell;
+    padding: 0px;
+}
+.col-md-6
+{
+    display: table-cell;
+    padding: 0px;
+}
+
+.col-md-8 {
+    display: table-cell;
+    padding: 0px;
+}
+
+.col-md-9 {
+    display: table-cell;
+    padding: 0px;
+}
+
+.background_div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+}
+
+#diagram_paper {
+    height: 100%;
+    border: 1px solid gray;
+    background: #ffffff url('bg.png');
+}
+
+#twoDModel_stage {
+    height: 100%;
+    border: 1px solid gray;
+    background: #ffffff;
+}
+
+#palette {
+    height: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid gray;
+    background: #ffffff;
+}
+
+#properties {
+    height: 250px;
+    width: 100%;
+}
+
+#property_table {
+    text-align: center;
+    width: 100%;
+}
+
+.table th {
+    text-align: center;
+    width: 45%;
+    font-size: 1.2em;
+}
+
+.table tbody > tr > td.vert-align {
+    vertical-align: middle;
+}
+
+.mydropdown {
+    width: 100%;
+    max-width: 100%;
+}
+
+.spinner {
+    width: 100%;
+    max-width: 100%;
+}
+
+.tree_element {
+    cursor:pointer;
+    display: inline-block
+}
+
+#elements {
+    width: 100%;
+}
+
+#elements_tree {
+    position: absolute;
+    top: 320px;
+    left: 10px;
+    right: 10px;
+    bottom: 15px;
+    overflow: auto;
+    border: 1px solid lightgray;
+}
+
+#remove {
+    cursor: pointer;
+}
+
+#remove:active {
+    color: #7c7c7c;
+}

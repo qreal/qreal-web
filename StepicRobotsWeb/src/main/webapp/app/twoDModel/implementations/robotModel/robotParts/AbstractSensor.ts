@@ -1,0 +1,3 @@
+class AbstractSensor extends DeviceImpl {
+
+}

@@ -1,0 +1,3 @@
+class DeviceImpl implements Device {
+
+}
