@@ -114,7 +114,9 @@ class DiagramController {
                 var type: string = $(ui.draggable.context).text();
                 var image: string = controller.nodeTypesMap[type].image;
                 var properties: PropertiesMap = controller.nodeTypesMap[type].properties;
-                controller.createDefaultNode(type, leftElementPos, topElementPos, properties, image);
+                var node = controller.createDefaultNode(type, leftElementPos, topElementPos, properties, image);
+                controller.currentNode = node;
+                controller.setNodeProperties(node);
             }
         });
     }
@@ -132,12 +134,13 @@ class DiagramController {
         return PropertyManager.getPropertyHtml(typeName, propertyName, property);
     }
 
-    createDefaultNode(type: string, x: number, y: number, properties: PropertiesMap, image: string): void {
+    createDefaultNode(type: string, x: number, y: number, properties: PropertiesMap, image: string): DefaultDiagramNode {
         this.nodeIndex++;
         var name: string = "Node" + this.nodeIndex;
         var node: DefaultDiagramNode = new DefaultDiagramNode(name, type, x, y, properties, image);
         this.nodesList[node.getElement().id] = node;
         this.graph.addCell(node.getElement());
+        return node;
     }
 
     clear(): void {

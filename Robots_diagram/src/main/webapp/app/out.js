@@ -332,7 +332,9 @@ var DiagramController = (function () {
                 var type = $(ui.draggable.context).text();
                 var image = controller.nodeTypesMap[type].image;
                 var properties = controller.nodeTypesMap[type].properties;
-                controller.createDefaultNode(type, leftElementPos, topElementPos, properties, image);
+                var node = controller.createDefaultNode(type, leftElementPos, topElementPos, properties, image);
+                controller.currentNode = node;
+                controller.setNodeProperties(node);
             }
         });
     };
@@ -353,6 +355,7 @@ var DiagramController = (function () {
         var node = new DefaultDiagramNode(name, type, x, y, properties, image);
         this.nodesList[node.getElement().id] = node;
         this.graph.addCell(node.getElement());
+        return node;
     };
     DiagramController.prototype.clear = function () {
         this.graph.clear();
