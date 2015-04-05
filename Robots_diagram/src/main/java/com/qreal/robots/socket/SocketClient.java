@@ -1,5 +1,7 @@
 package com.qreal.robots.socket;
 
+import org.apache.log4j.Logger;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -8,6 +10,8 @@ import java.net.Socket;
  */
 public class SocketClient {
 
+    public static final String ERROR_MESSAGE = "ERROR";
+    private static final Logger LOG = Logger.getLogger(SocketClient.class);
     private final String hostName;
     private final int port;
 
@@ -16,26 +20,39 @@ public class SocketClient {
         this.port = port;
     }
 
+    public boolean hostAvailable() {
+        try (Socket s = new Socket(hostName, port)) {
+            return true;
+        } catch (IOException ex) {
+        /* ignore */
+        }
+        return false;
+    }
+
+
     public String sendMessage(String message) {
         Socket socket = null;
         DataOutputStream outToServer = null;
         BufferedReader inFromServer = null;
-        String result = "ERROR";
-        try {
-            socket = new Socket(hostName, port);
+        String result = ERROR_MESSAGE;
+        if (hostAvailable()) {
+            try {
+                socket = new Socket(hostName, port);
 
-            outToServer = new DataOutputStream(socket.getOutputStream());
-            inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                outToServer = new DataOutputStream(socket.getOutputStream());
+                inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            outToServer.writeBytes(message + "\n");
-            result = getResultMessage(inFromServer);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "ERROR ERROR ERROR";
-        } finally {
-            close(inFromServer);
-            close(outToServer);
-            close(socket);
+                outToServer.writeBytes(message + "\n");
+                result = getResultMessage(inFromServer);
+            } catch (IOException e) {
+                LOG.error("Failed to send message", e);
+            } finally {
+                close(inFromServer);
+                close(outToServer);
+                close(socket);
+            }
+        } else {
+            LOG.warn("Robot routing server is offline. Robot data is unavailable ");
         }
         return result;
     }

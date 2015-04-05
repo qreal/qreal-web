@@ -76,15 +76,21 @@ public class MainController {
 
     private List<RobotInfo> getOnlineRobots(User user) {
         SocketClient socketClient = new SocketClient(HOST_NAME, PORT);
-        try {
-            String response = socketClient.sendMessage(getUserOnlineRobots(user));
-            return mapper.readValue(response,
-                    new TypeReference<List<RobotInfo>>() {
-                    });
-        } catch (IOException e) {
-            LOG.error("Error getting online robots", e);
+
+        if (socketClient.hostAvailable()) {
+            try {
+                String response = socketClient.sendMessage(getUserOnlineRobots(user));
+                return mapper.readValue(response,
+                        new TypeReference<List<RobotInfo>>() {
+                        });
+            } catch (IOException e) {
+                LOG.error("Error getting online robots", e);
+            }
+        } else {
+            LOG.warn("Robot routing server is offline. Robot data is unavailable ");
         }
         return Collections.emptyList();
+
     }
 
 
