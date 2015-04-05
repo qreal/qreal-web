@@ -424,19 +424,21 @@
                                                                 <div class="panel" hidden
                                                                      name="propertyType" id="property-${type.name}">
                                                                     <div class="well">
-                                                                        <div name="propertyForm"
-                                                                             class="panel-body form-horizontal payment-form"
-                                                                             id="form-${type.name}">
+                                                                        <div
+                                                                                class="panel-body form-horizontal payment-form"
+                                                                                id="form-${type.name}"
+                                                                                name="propertyForm"
+                                                                                id="input-${type.name}">
                                                                             <c:forEach var="entry"
                                                                                        items="${type.properties}">
-                                                                                <div class="form-group"
-                                                                                     id="property-${type.name}">
+                                                                                <div class="form-group">
                                                                                     <label
                                                                                             name="label-${type.name}"
                                                                                             class="col-sm-3 control-label">${entry.key}</label>
 
                                                                                     <div class="col-sm-9">
-                                                                                        <input type="text"
+                                                                                        <input id="input-${type.name}"
+                                                                                               type="text"
                                                                                                class="form-control"
                                                                                                value="${entry.value}"
                                                                                                name="${entry.key}">
