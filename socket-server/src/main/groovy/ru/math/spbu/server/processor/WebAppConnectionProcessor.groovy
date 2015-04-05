@@ -10,7 +10,7 @@ import ru.math.spbu.server.connection.RobotsConnectionInfoManager
  */
 class WebAppConnectionProcessor implements ConnectionProcessor {
 
-    public static final String SUCCESS_MESSAGE = "Successfully sended"
+    public static final String SUCCESS_MESSAGE = "{\"status\":\"OK\"}"
     RobotsConnectionInfoManager robotsConnectionInfoManager = RobotsConnectionInfoManager.instance
 
     @Override
