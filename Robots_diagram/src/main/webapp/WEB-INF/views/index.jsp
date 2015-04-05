@@ -291,7 +291,7 @@
                                                 <c:forEach var="diagram" items="${user.diagrams}">
                                                     <option>${diagram.name}</option>
                                                 </c:forEach>
-                                            </select>Lines 284-285 chang
+                                            </select>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" name="sendDiagram"
