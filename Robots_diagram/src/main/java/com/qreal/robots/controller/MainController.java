@@ -11,7 +11,6 @@ import com.qreal.robots.model.robot.Robot;
 import com.qreal.robots.model.robot.RobotInfo;
 import com.qreal.robots.model.robot.RobotWrapper;
 import com.qreal.robots.socket.SocketClient;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,10 +46,7 @@ public class MainController {
         User user = userDao.findByUserName(getUserName());
         ModelAndView model = new ModelAndView();
         model.addObject("user", user);
-        // model.addObject("robotsWrapper", getFullRobotInfo(user.getRobots(), getOnlineRobots(user)));
-        model.addObject("robotsWrapper", getFakeList(user));
-
-
+        model.addObject("robotsWrapper", getFullRobotInfo(user.getRobots(), getOnlineRobots(user)));
         model.setViewName("index");
         return model;
     }
@@ -58,34 +54,20 @@ public class MainController {
     private List<RobotWrapper> getFullRobotInfo(Set<Robot> robots, List<RobotInfo> onlineUserRobots) {
         List<RobotWrapper> robotsWrapper = Lists.newArrayList();
         for (Robot robot : robots) {
+            boolean found = false;
             for (RobotInfo robotInfo : onlineUserRobots) {
-                boolean found = false;
                 if (robot.getSecretCode().equals(robotInfo.getSecretCode())) {
                     found = true;
                     robotsWrapper.add(new RobotWrapper(robot, robotInfo, "Online"));
                 }
-                if (!found) {
-                    robotsWrapper.add(new RobotWrapper(robot, "Offline"));
-                }
+            }
+            if (!found) {
+                robotsWrapper.add(new RobotWrapper(robot, "Offline"));
             }
         }
         return robotsWrapper;
     }
 
-    private List<RobotWrapper> getFakeList(User user) {
-        List<RobotWrapper> robotWrappers = Lists.newArrayList();
-
-        Robot robot = new Robot("Robot", "SecretCode", user);
-        try {
-            String modelConfig = IOUtils.toString(this.getClass().getResourceAsStream("/model-config.xml"));
-            String systemConfig = IOUtils.toString(this.getClass().getResourceAsStream("/system-config.xml"));
-            RobotInfo robotInfo = new RobotInfo("SecretCode", systemConfig, modelConfig);
-            robotWrappers.add(new RobotWrapper(robot, robotInfo, "Online"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return robotWrappers;
-    }
 
     private List<RobotInfo> getOnlineRobots(User user) {
         SocketClient socketClient = new SocketClient(HOST_NAME, PORT);

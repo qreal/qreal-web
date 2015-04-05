@@ -13,7 +13,6 @@ import com.qreal.robots.model.robot.RobotInfo;
 import com.qreal.robots.parser.*;
 import com.qreal.robots.socket.SocketClient;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +30,6 @@ import java.util.Map;
 public class RobotRestService {
 
     private static final ObjectMapper mapper = new ObjectMapper();
-
-    private static final Logger LOG = Logger.getLogger(RobotRestService.class);
-
 
     @Autowired
     private UserDAO userDao;
@@ -72,14 +68,23 @@ public class RobotRestService {
 
     @ResponseBody
     @RequestMapping(value = "/saveModelConfig", method = RequestMethod.POST)
-    public String saveModelConfig(@RequestParam("robotName") String name, @RequestParam("modelConfigJson") String modelConfigJson,
+    public String saveModelConfig(@RequestParam("robotName") String robotName, @RequestParam("modelConfigJson") String modelConfigJson,
                                   @RequestParam("typeProperties") String typeProperties) throws IOException {
         ModelConfig modelConfig = getModelConfig(modelConfigJson, typeProperties);
+        Robot robot = robotDao.findByName(robotName);
+
+        // TODO get fix config from robot
         String systemConfigXml = IOUtils.toString(this.getClass().getResourceAsStream("/system-config.xml"));
+
         SystemConfig systemConfig = new SystemConfigParser().parse(systemConfigXml);
         ModelConfigValidator validator = new ModelConfigValidator(systemConfig);
         ValidationResult result = validator.validate(modelConfig);
-        return buildResultMessage(result);
+        if (!result.hasErrors()) {
+            SocketClient socketClient = new SocketClient(MainController.HOST_NAME, MainController.PORT);
+            return socketClient.sendMessage(generateSendModelConfigRequest(robot.getSecretCode(), modelConfig));
+        } else {
+            return buildResultMessage(result);
+        }
 
     }
 
@@ -105,9 +110,19 @@ public class RobotRestService {
 
 
     private String generateSendProgramRequest(String secretCode, String program) throws JsonProcessingException {
-        RobotInfo robotInfo = new RobotInfo(getUserName(), secretCode, program);
+        RobotInfo robotInfo = new RobotInfo(getUserName(), secretCode);
+        robotInfo.setProgram(program);
         Message message = new Message("WebApp", "sendDiagram", robotInfo);
         return mapper.writeValueAsString(message);
+    }
+
+
+    private String generateSendModelConfigRequest(String secretCode, ModelConfig modelConfig) throws JsonProcessingException {
+        RobotInfo robotInfo = new RobotInfo(getUserName(), secretCode);
+        robotInfo.setModelConfig(modelConfig.convertToXml());
+        Message message = new Message("WebApp", "sendModelConfig", robotInfo);
+        return mapper.writeValueAsString(message);
+
     }
 
     private String getUserName() {

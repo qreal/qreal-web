@@ -10,7 +10,7 @@ class ValidationResult {
 
     List<String> errors
 
-    def hasErrors() {
+    boolean hasErrors() {
         return errors.size() > 0
     }
 

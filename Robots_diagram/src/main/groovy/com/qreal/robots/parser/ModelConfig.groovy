@@ -35,7 +35,7 @@ class ModelConfig {
         return devicePorts.get(portName)
     }
 
-    def convertToXml() {
+    String convertToXml() {
         def sw = new StringWriter()
         MarkupBuilder builder = new MarkupBuilder(sw)
         builder.config {

@@ -1,5 +1,6 @@
 package com.qreal.robots.model.robot;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.qreal.robots.parser.ModelConfig;
 import com.qreal.robots.parser.ModelConfigParser;
 import com.qreal.robots.parser.SystemConfig;
@@ -10,21 +11,21 @@ import com.qreal.robots.parser.SystemConfigParser;
  */
 public class RobotInfo {
 
+    private String owner;
     private String secretCode;
-    private ModelConfig modelConfig;
-    private SystemConfig systemConfig;
+    private String modelConfig;
+    private String systemConfig;
+    private String program;
 
     public RobotInfo() {
 
     }
 
 
-    public RobotInfo(String secretCode, String systemConfig, String modelConfig) {
-
+    public RobotInfo(String owner, String secretCode) {
+        this.owner = owner;
         this.secretCode = secretCode;
-        this.modelConfig = new ModelConfigParser().parse(modelConfig);
-        this.systemConfig = new SystemConfigParser().parse(systemConfig);
-
+        this.modelConfig = "";
     }
 
     public String getSecretCode() {
@@ -35,19 +36,45 @@ public class RobotInfo {
         this.secretCode = secretCode;
     }
 
-    public ModelConfig getModelConfig() {
+    public String getModelConfig() {
         return modelConfig;
     }
 
     public void setModelConfig(String modelConfig) {
-        this.modelConfig = new ModelConfigParser().parse(modelConfig);
+        this.modelConfig = modelConfig;
     }
 
-    public SystemConfig getSystemConfig() {
+    public String getSystemConfig() {
         return systemConfig;
     }
 
     public void setSystemConfig(String systemConfig) {
-        this.systemConfig = new SystemConfigParser().parse(systemConfig);
+        this.systemConfig = systemConfig;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getProgram() {
+        return program;
+    }
+
+    public void setProgram(String program) {
+        this.program = program;
+    }
+
+    @JsonIgnore
+    public SystemConfig getSystemConfigObject() {
+        return new SystemConfigParser().parse(systemConfig);
+    }
+
+    @JsonIgnore
+    public ModelConfig getModelConfigObject() {
+        return new ModelConfigParser().parse(modelConfig);
     }
 }

@@ -91,7 +91,7 @@
                 var typeProperties = []
                 $('[name="propertyForm"]').each(function (index, value) {
                     var obj = {};
-                    obj["type"] = $(value).attr("id").substring(9);
+                    obj["type"] = $(value).attr("id").substring(5);
                     $(value).find(':input').each(function (index2, value2) {
                         obj[$(value2).attr("name")] = $(value2).attr("value");
                     });
@@ -330,11 +330,11 @@
                                             </ul>
                                             <div id="myTabContent33" class="tab-content">
                                                 <c:set var="systemConfig"
-                                                       value="${robotWrapper.robotInfo.systemConfig}"/>
+                                                       value="${robotWrapper.robotInfo.systemConfigObject}"/>
                                                 <div class="tab-pane active in" id="portsConfig">
                                                     <div class="row">
                                                         <c:set var="modelConfig"
-                                                               value="${robotWrapper.robotInfo.modelConfig}"/>
+                                                               value="${robotWrapper.robotInfo.modelConfigObject}"/>
                                                         <c:forEach var="port" items="${systemConfig.ports}">
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
@@ -401,7 +401,7 @@
                                                                     class="btn btn-default dropdown-toggle"
                                                                     data-toggle="dropdown"
                                                                     id="deviceType">
-                                                                Device hello world <span
+                                                                Device <span
                                                                     class="caret"></span>
                                                             </button>
                                                             <ul class="dropdown-menu" role="menu">
@@ -422,18 +422,18 @@
                                                                        items="${device.types}">
 
                                                                 <div class="panel" hidden
-
-                                                                     name="propertyType">
+                                                                     name="propertyType" id="property-${type.name}">
                                                                     <div class="well">
                                                                         <div name="propertyForm"
                                                                              class="panel-body form-horizontal payment-form"
-                                                                             id="property-${type.name}">
+                                                                             id="form-${type.name}">
                                                                             <c:forEach var="entry"
                                                                                        items="${type.properties}">
-                                                                                <div class="form-group">
-                                                                                    <label for="concept"
-                                                                                           name="label-${type.name}"
-                                                                                           class="col-sm-3 control-label">${entry.key}</label>
+                                                                                <div class="form-group"
+                                                                                     id="property-${type.name}">
+                                                                                    <label
+                                                                                            name="label-${type.name}"
+                                                                                            class="col-sm-3 control-label">${entry.key}</label>
 
                                                                                     <div class="col-sm-9">
                                                                                         <input type="text"
@@ -507,13 +507,14 @@
                                                                data-target="#sendDiagramModal"><span
                                                                 class="icon-wrench"></span> Send diagram</a>
                                                         </li>
+                                                        <li><a href="#" data-toggle="modal"
+                                                               data-target="#configureRobotModal"><span
+                                                                class="icon-wrench"></span> Configure</a>
+                                                        </li>
 
 
                                                     </c:if>
-                                                    <li><a href="#" data-toggle="modal"
-                                                           data-target="#configureRobotModal"><span
-                                                            class="icon-wrench"></span> Configure</a>
-                                                    </li>
+
                                                     <li><a href='#' name="deleteRobot"
                                                            id="delete-${robot.name}">
                                                         <span class="icon-trash"></span>
