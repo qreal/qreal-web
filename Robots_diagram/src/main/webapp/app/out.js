@@ -846,10 +846,23 @@ var TwoDModelEngineFacadeImpl = (function () {
         this.setPortsSelectsListeners(twoDRobotModel);
     };
     TwoDModelEngineFacadeImpl.prototype.setPortsSelectsListeners = function (twoDRobotModel) {
+        var facade = this;
         twoDRobotModel.getConfigurablePorts().forEach(function (port) {
-            var htmlId = "#" + port.getName() + "Select";
+            var portName = port.getName();
+            var htmlId = "#" + portName + "Select";
             $(htmlId).change(function () {
-                console.log($(htmlId).val());
+                var newValue = $(htmlId).val();
+                switch (newValue) {
+                    case "Unused":
+                        facade.model.getRobotModels()[0].removeSensorItem(portName);
+                        break;
+                    case "Light Sensor":
+                        break;
+                    case "Infrared Sensor":
+                        facade.model.getRobotModels()[0].addSonarSensorItem(portName);
+                        break;
+                    default:
+                }
             });
         });
     };
@@ -1173,7 +1186,10 @@ var RobotItemImpl = (function () {
     function RobotItemImpl(worldModel, position, imageFileName, robot) {
         this.width = 50;
         this.height = 50;
+        this.sensors = {};
+        this.worldModel = worldModel;
         this.robot = robot;
+        this.startPosition = position;
         var paper = worldModel.getPaper();
         this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
         this.centerX = position.x + this.width / 2;
@@ -1189,15 +1205,13 @@ var RobotItemImpl = (function () {
         };
         this.rotateHandle = paper.circle(position.x + this.width + 20, position.y + this.height / 2, handleRadius).attr(handleAttrs);
         var robotItem = this;
-        var sonar = new SonarSensorItem(worldModel, { x: position.x + this.width + 10, y: position.y - 15 + this.height / 2 });
         var startHandle = function () {
             if (!worldModel.getDrawMode()) {
                 this.transformation = robotItem.image.transform();
+                robotItem.updateSensorsTransformations();
                 this.rotation = robotItem.image.matrix.split().rotate;
                 this.cx = this.attr("cx");
                 this.cy = this.attr("cy");
-                this.sonarTransformation = sonar.getSonarTransformation();
-                this.sonarRegionTransformation = sonar.getRegionTransformation();
             }
             return this;
         }, moveHandle = function (dx, dy) {
@@ -1213,22 +1227,23 @@ var RobotItemImpl = (function () {
                 }
                 angle -= this.rotation;
                 robotItem.image.transform(this.transformation + "R" + angle + "," + robotItem.centerX + "," + robotItem.centerY);
-                sonar.setSonarTransformation(this.sonarTransformation + "R" + angle + "," + robotItem.centerX + "," + robotItem.centerY);
-                sonar.setRegionTransformation(this.sonarRegionTransformation + "R" + angle + "," + robotItem.centerX + "," + robotItem.centerY);
+                robotItem.transformSensorsItems("R" + angle + "," + robotItem.centerX + "," + robotItem.centerY);
                 var newCx = robotItem.image.matrix.x(startCx + robotItem.width / 2 + 20, startCy);
                 var newCy = robotItem.image.matrix.y(startCx + robotItem.width / 2 + 20, startCy);
                 this.attr({ cx: newCx, cy: newCy });
             }
             return this;
         }, upHandle = function () {
+            if (!worldModel.getDrawMode()) {
+                robotItem.updateSensorsTransformations();
+            }
             return this;
         };
         robotItem.rotateHandle.drag(moveHandle, startHandle, upHandle);
         var start = function () {
             if (!worldModel.getDrawMode()) {
                 this.transformation = this.transform();
-                this.sonarTransformation = sonar.getSonarTransformation();
-                this.sonarRegionTransformation = sonar.getRegionTransformation();
+                robotItem.updateSensorsTransformations();
                 this.handle_cx = robotItem.rotateHandle.attr("cx");
                 this.handle_cy = robotItem.rotateHandle.attr("cy");
                 worldModel.setCurrentElement(robotItem);
@@ -1237,8 +1252,7 @@ var RobotItemImpl = (function () {
         }, move = function (dx, dy) {
             if (!worldModel.getDrawMode()) {
                 this.transform(this.transformation + "T" + dx + "," + dy);
-                sonar.setSonarTransformation(this.sonarTransformation + "T" + dx + "," + dy);
-                sonar.setRegionTransformation(this.sonarRegionTransformation + "T" + dx + "," + dy);
+                robotItem.transformSensorsItems("T" + dx + "," + dy);
                 robotItem.rotateHandle.attr({ "cx": this.handle_cx + dx, "cy": this.handle_cy + dy });
             }
             return this;
@@ -1246,6 +1260,7 @@ var RobotItemImpl = (function () {
             if (!worldModel.getDrawMode()) {
                 robotItem.centerX = this.matrix.x(startCx, startCy);
                 robotItem.centerY = this.matrix.y(startCx, startCy);
+                robotItem.updateSensorsTransformations();
             }
             return this;
         };
@@ -1262,13 +1277,48 @@ var RobotItemImpl = (function () {
         this.rotateHandle.toFront();
         this.rotateHandle.show();
     };
+    RobotItemImpl.prototype.removeSensorItem = function (portName) {
+        var sensor = this.sensors[portName];
+        if (sensor) {
+            sensor.remove();
+            delete this.sensors[portName];
+        }
+    };
+    RobotItemImpl.prototype.addSonarSensorItem = function (portName) {
+        var sonar = new SonarSensorItem(this.worldModel, { x: this.startPosition.x + this.width + 10, y: this.startPosition.y - 15 + this.height / 2 });
+        sonar.transform(this.image.transform());
+        sonar.updateTransformationString();
+        this.sensors[portName] = sonar;
+    };
+    RobotItemImpl.prototype.updateSensorsTransformations = function () {
+        for (var portName in this.sensors) {
+            var sensor = this.sensors[portName];
+            sensor.updateTransformationString();
+        }
+    };
+    RobotItemImpl.prototype.transformSensorsItems = function (transformationString) {
+        for (var portName in this.sensors) {
+            var sensor = this.sensors[portName];
+            sensor.transform(transformationString);
+        }
+    };
     return RobotItemImpl;
 })();
 var SensorItem = (function () {
     function SensorItem(worldModel, position) {
         this.width = 30;
         this.height = 30;
+        this.transformationString = "";
     }
+    SensorItem.prototype.remove = function () {
+        this.image.remove();
+    };
+    SensorItem.prototype.transform = function (transformationString) {
+        this.image.transform(this.transformationString + transformationString);
+    };
+    SensorItem.prototype.updateTransformationString = function () {
+        this.transformationString = this.image.transform();
+    };
     return SensorItem;
 })();
 var SonarSensorItem = (function (_super) {
@@ -1276,6 +1326,7 @@ var SonarSensorItem = (function (_super) {
     function SonarSensorItem(worldModel, position) {
         _super.call(this, worldModel, position);
         this.sonarRange = 255;
+        this.regionTransformationString = "";
         var paper = worldModel.getPaper();
         this.image = paper.image("images/2dmodel/twoDIrRangeSensor.svg", position.x, position.y, this.width, this.height);
         this.regionStartX = position.x + this.width / 2;
@@ -1288,7 +1339,7 @@ var SonarSensorItem = (function (_super) {
         var regionBottomX = regionTopX;
         var regionBottomY = this.regionStartY + Math.sin(halfRegAngleInRad) * rangeInPixels;
         this.scanningRegion = paper.path("M" + this.regionStartX + "," + this.regionStartY + "L" + regionTopX + "," + regionTopY + "Q" + (this.regionStartX + rangeInPixels) + "," + this.regionStartY + " " + regionBottomX + "," + regionBottomY + "Z");
-        this.scanningRegion.attr({ fill: "#c5d0de", stroke: "#b1bbc7" });
+        this.scanningRegion.attr({ fill: "#c5d0de", stroke: "#b1bbc7", opacity: 0.5 });
         this.centerX = position.x + this.width / 2;
         this.centerY = position.y + this.height / 2;
         this.startCx = this.centerX;
@@ -1307,8 +1358,6 @@ var SonarSensorItem = (function (_super) {
                 this.cx = this.attr("cx");
                 this.cy = this.attr("cy");
                 this.rotation = sonarItem.image.matrix.split().rotate;
-                this.sonarTransformation = sonarItem.getSonarTransformation();
-                this.sonarRegionTransformation = sonarItem.getRegionTransformation();
             }
             return this;
         }, moveHandle = function (dx, dy) {
@@ -1323,20 +1372,19 @@ var SonarSensorItem = (function (_super) {
                     angle += 180;
                 }
                 angle -= this.rotation;
-                sonarItem.rotate(this.sonarTransformation, this.sonarRegionTransformation, angle);
+                sonarItem.rotate(angle);
                 var newCx = sonarItem.image.matrix.x(sonarItem.startCx + sonarItem.width / 2 + 20, sonarItem.startCy);
                 var newCy = sonarItem.image.matrix.y(sonarItem.startCx + sonarItem.width / 2 + 20, sonarItem.startCy);
                 this.attr({ cx: newCx, cy: newCy });
             }
             return this;
         }, upHandle = function () {
+            sonarItem.updateTransformationString();
             return this;
         };
         sonarItem.rotateHandle.drag(moveHandle, startHandle, upHandle);
         var start = function () {
             if (!worldModel.getDrawMode()) {
-                this.sonarTransformation = sonarItem.getSonarTransformation();
-                this.sonarRegionTransformation = sonarItem.getRegionTransformation();
                 this.handle_cx = sonarItem.rotateHandle.attr("cx");
                 this.handle_cy = sonarItem.rotateHandle.attr("cy");
                 worldModel.setCurrentElement(sonarItem);
@@ -1344,8 +1392,7 @@ var SonarSensorItem = (function (_super) {
             return this;
         }, move = function (dx, dy) {
             if (!worldModel.getDrawMode()) {
-                sonarItem.setSonarTransformation(this.sonarTransformation + "T" + dx + "," + dy);
-                sonarItem.setRegionTransformation(this.sonarRegionTransformation + "T" + dx + "," + dy);
+                sonarItem.transform("T" + dx + "," + dy);
                 sonarItem.rotateHandle.attr({ "cx": this.handle_cx + dx, "cy": this.handle_cy + dy });
             }
             return this;
@@ -1354,31 +1401,28 @@ var SonarSensorItem = (function (_super) {
                 sonarItem.centerX = this.matrix.x(sonarItem.startCx, sonarItem.startCy);
                 sonarItem.centerY = this.matrix.y(sonarItem.startCx, sonarItem.startCy);
             }
+            sonarItem.updateTransformationString();
             return this;
         };
         this.image.drag(move, start, up);
         this.hideHandles();
     }
-    SonarSensorItem.prototype.setSonarTransformation = function (transformationString) {
-        this.image.transform(transformationString);
+    SonarSensorItem.prototype.transform = function (transformationString) {
+        _super.prototype.transform.call(this, transformationString);
+        this.scanningRegion.transform(this.regionTransformationString + transformationString);
         var newCx = this.image.matrix.x(this.startCx + this.width / 2 + 20, this.startCy);
         var newCy = this.image.matrix.y(this.startCx + this.width / 2 + 20, this.startCy);
         this.rotateHandle.attr({ cx: newCx, cy: newCy });
     };
-    SonarSensorItem.prototype.setRegionTransformation = function (transformationString) {
-        this.scanningRegion.transform(transformationString);
+    SonarSensorItem.prototype.updateTransformationString = function () {
+        _super.prototype.updateTransformationString.call(this);
+        this.regionTransformationString = this.scanningRegion.transform();
     };
-    SonarSensorItem.prototype.getSonarTransformation = function () {
-        return this.image.transform();
-    };
-    SonarSensorItem.prototype.getRegionTransformation = function () {
-        return this.scanningRegion.transform();
-    };
-    SonarSensorItem.prototype.rotate = function (sonarTransformation, regionTransformation, angle) {
-        this.image.transform(sonarTransformation + "R" + angle);
+    SonarSensorItem.prototype.rotate = function (angle) {
+        this.image.transform(this.transformationString + "R" + angle);
         var regionRotationX = this.image.matrix.x(this.regionStartX, this.regionStartY);
         var regionRotationY = this.image.matrix.y(this.regionStartX, this.regionStartY);
-        this.scanningRegion.transform(regionTransformation + "R" + angle + "," + regionRotationX + "," + regionRotationY);
+        this.scanningRegion.transform(this.regionTransformationString + "R" + angle + "," + regionRotationX + "," + regionRotationY);
     };
     SonarSensorItem.prototype.hideHandles = function () {
         this.rotateHandle.hide();
@@ -1386,6 +1430,11 @@ var SonarSensorItem = (function (_super) {
     SonarSensorItem.prototype.showHandles = function () {
         this.rotateHandle.toFront();
         this.rotateHandle.show();
+    };
+    SonarSensorItem.prototype.remove = function () {
+        _super.prototype.remove.call(this);
+        this.scanningRegion.remove();
+        this.rotateHandle.remove();
     };
     return SonarSensorItem;
 })(SensorItem);
@@ -1551,6 +1600,12 @@ var RobotModelImpl = (function () {
     }
     RobotModelImpl.prototype.info = function () {
         return this.twoDRobotModel;
+    };
+    RobotModelImpl.prototype.removeSensorItem = function (portName) {
+        this.robotItem.removeSensorItem(portName);
+    };
+    RobotModelImpl.prototype.addSonarSensorItem = function (portName) {
+        this.robotItem.addSonarSensorItem(portName);
     };
     RobotModelImpl.prototype.nextFragment = function () {
         this.robotItem.ride();

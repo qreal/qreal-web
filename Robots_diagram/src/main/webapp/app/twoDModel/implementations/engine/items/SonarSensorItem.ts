@@ -8,6 +8,7 @@ class SonarSensorItem extends SensorItem {
     private centerY: number;
     private startCx: number;
     private startCy: number;
+    private regionTransformationString = "";
 
     constructor(worldModel: WorldModel, position: TwoDPosition) {
         super(worldModel, position);
@@ -32,7 +33,7 @@ class SonarSensorItem extends SensorItem {
             "L" + regionTopX + "," + regionTopY +
             "Q" + (this.regionStartX + rangeInPixels) + "," + this.regionStartY + " " + regionBottomX + "," + regionBottomY +
             "Z");
-        this.scanningRegion.attr({fill: "#c5d0de", stroke: "#b1bbc7"});
+        this.scanningRegion.attr({fill: "#c5d0de", stroke: "#b1bbc7", opacity: 0.5});
 
         this.centerX = position.x + this.width / 2;
         this.centerY = position.y + this.height / 2;
@@ -60,8 +61,6 @@ class SonarSensorItem extends SensorItem {
                     this.cy = this.attr("cy");
 
                     this.rotation = sonarItem.image.matrix.split().rotate;
-                    this.sonarTransformation = sonarItem.getSonarTransformation();
-                    this.sonarRegionTransformation = sonarItem.getRegionTransformation();
                 }
                 return this;
             },
@@ -78,9 +77,7 @@ class SonarSensorItem extends SensorItem {
                     }
 
                     angle -= this.rotation;
-
-                    sonarItem.rotate(this.sonarTransformation, this.sonarRegionTransformation, angle);
-
+                    sonarItem.rotate(angle);
 
                     var newCx = sonarItem.image.matrix.x(sonarItem.startCx + sonarItem.width / 2 + 20, sonarItem.startCy);
                     var newCy = sonarItem.image.matrix.y(sonarItem.startCx + sonarItem.width / 2 + 20, sonarItem.startCy);
@@ -89,6 +86,7 @@ class SonarSensorItem extends SensorItem {
                 return this;
             },
             upHandle = function () {
+                sonarItem.updateTransformationString();
                 return this;
             };
 
@@ -96,9 +94,6 @@ class SonarSensorItem extends SensorItem {
 
         var start = function () {
                 if (!worldModel.getDrawMode()) {
-                    this.sonarTransformation = sonarItem.getSonarTransformation();
-                    this.sonarRegionTransformation = sonarItem.getRegionTransformation();
-
                     this.handle_cx = sonarItem.rotateHandle.attr("cx");
                     this.handle_cy = sonarItem.rotateHandle.attr("cy");
                     worldModel.setCurrentElement(sonarItem);
@@ -107,8 +102,7 @@ class SonarSensorItem extends SensorItem {
             }
             ,move = function (dx, dy) {
                 if (!worldModel.getDrawMode()) {
-                    sonarItem.setSonarTransformation(this.sonarTransformation + "T" + dx + "," + dy);
-                    sonarItem.setRegionTransformation(this.sonarRegionTransformation + "T" + dx + "," + dy);
+                    sonarItem.transform("T" + dx + "," + dy);
 
                     sonarItem.rotateHandle.attr({"cx": this.handle_cx + dx, "cy": this.handle_cy + dy});
                 }
@@ -119,40 +113,34 @@ class SonarSensorItem extends SensorItem {
                     sonarItem.centerX = this.matrix.x(sonarItem.startCx, sonarItem.startCy);
                     sonarItem.centerY = this.matrix.y(sonarItem.startCx, sonarItem.startCy);
                 }
+                sonarItem.updateTransformationString();
                 return this;
             }
         this.image.drag(move, start, up);
         this.hideHandles();
     }
 
-    setSonarTransformation(transformationString: string) {
-        this.image.transform(transformationString);
-
+    transform(transformationString: string) {
+        super.transform(transformationString);
+        this.scanningRegion.transform(this.regionTransformationString + transformationString);
         var newCx = this.image.matrix.x(this.startCx + this.width / 2 + 20, this.startCy);
         var newCy = this.image.matrix.y(this.startCx + this.width / 2 + 20, this.startCy);
         this.rotateHandle.attr({cx: newCx, cy: newCy});
     }
 
-    setRegionTransformation(transformationString: string) {
-        this.scanningRegion.transform(transformationString);
+    updateTransformationString(): void {
+        super.updateTransformationString();
+        this.regionTransformationString = this.scanningRegion.transform();
     }
 
-    getSonarTransformation(): string {
-        return this.image.transform();
-    }
-
-    getRegionTransformation(): string {
-        return this.scanningRegion.transform();
-    }
-
-    rotate(sonarTransformation: string, regionTransformation:string, angle: number) {
-        this.image.transform(sonarTransformation + "R" + angle);
+    rotate(angle: number) {
+        this.image.transform(this.transformationString + "R" + angle);
 
 
         var regionRotationX = this.image.matrix.x(this.regionStartX, this.regionStartY);
         var regionRotationY = this.image.matrix.y(this.regionStartX, this.regionStartY);
 
-        this.scanningRegion.transform(regionTransformation + "R" + angle + "," +
+        this.scanningRegion.transform(this.regionTransformationString + "R" + angle + "," +
             regionRotationX + "," + regionRotationY);
     }
 
@@ -163,5 +151,11 @@ class SonarSensorItem extends SensorItem {
     showHandles(): void {
         this.rotateHandle.toFront();
         this.rotateHandle.show();
+    }
+
+    remove(): void {
+        super.remove();
+        this.scanningRegion.remove();
+        this.rotateHandle.remove();
     }
 }

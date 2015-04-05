@@ -1,5 +1,7 @@
 class RobotItemImpl implements RobotItem {
+    private worldModel: WorldModel;
     private robot: RobotModel;
+    private startPosition: TwoDPosition;
     private image;
     private rotateHandle: RaphaelElement;
     private centerX: number;
@@ -7,8 +9,12 @@ class RobotItemImpl implements RobotItem {
     private width: number = 50;
     private height: number = 50;
 
+    private sensors: {string?: SensorItem} = {};
+
     constructor(worldModel: WorldModel, position: TwoDPosition, imageFileName: string, robot: RobotModel) {
+        this.worldModel = worldModel;
         this.robot = robot;
+        this.startPosition = position;
         var paper = worldModel.getPaper();
         this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
 
@@ -32,18 +38,14 @@ class RobotItemImpl implements RobotItem {
 
         var robotItem = this;
 
-        var sonar: SonarSensorItem = new SonarSensorItem(worldModel,
-            {x: position.x + this.width + 10, y: position.y - 15 + this.height / 2});
-
         var startHandle = function () {
                 if (!worldModel.getDrawMode()) {
                     this.transformation = robotItem.image.transform();
+                    robotItem.updateSensorsTransformations();
+
                     this.rotation = robotItem.image.matrix.split().rotate;
                     this.cx = this.attr("cx");
                     this.cy = this.attr("cy");
-
-                    this.sonarTransformation = sonar.getSonarTransformation();
-                    this.sonarRegionTransformation = sonar.getRegionTransformation();
                 }
                 return this;
             },
@@ -63,11 +65,7 @@ class RobotItemImpl implements RobotItem {
                     robotItem.image.transform(this.transformation + "R" + angle + "," +
                         robotItem.centerX + "," + robotItem.centerY);
 
-                    sonar.setSonarTransformation(this.sonarTransformation + "R" + angle + "," +
-                        robotItem.centerX + "," + robotItem.centerY);
-                    sonar.setRegionTransformation(this.sonarRegionTransformation + "R" + angle + "," +
-                        robotItem.centerX + "," + robotItem.centerY);
-
+                    robotItem.transformSensorsItems("R" + angle + "," + robotItem.centerX + "," + robotItem.centerY);
 
                     var newCx = robotItem.image.matrix.x(startCx + robotItem.width / 2 + 20, startCy);
                     var newCy = robotItem.image.matrix.y(startCx + robotItem.width / 2 + 20, startCy);
@@ -76,6 +74,9 @@ class RobotItemImpl implements RobotItem {
                 return this;
             },
             upHandle = function () {
+                if (!worldModel.getDrawMode()) {
+                    robotItem.updateSensorsTransformations();
+                }
                 return this;
             };
 
@@ -84,9 +85,7 @@ class RobotItemImpl implements RobotItem {
         var start = function () {
                 if (!worldModel.getDrawMode()) {
                     this.transformation = this.transform();
-
-                    this.sonarTransformation = sonar.getSonarTransformation();
-                    this.sonarRegionTransformation = sonar.getRegionTransformation();
+                    robotItem.updateSensorsTransformations();
 
                     this.handle_cx = robotItem.rotateHandle.attr("cx");
                     this.handle_cy = robotItem.rotateHandle.attr("cy");
@@ -98,8 +97,7 @@ class RobotItemImpl implements RobotItem {
                 if (!worldModel.getDrawMode()) {
                     this.transform(this.transformation + "T" + dx + "," + dy);
 
-                    sonar.setSonarTransformation(this.sonarTransformation + "T" + dx + "," + dy);
-                    sonar.setRegionTransformation(this.sonarRegionTransformation + "T" + dx + "," + dy);
+                    robotItem.transformSensorsItems("T" + dx + "," + dy);
 
                     robotItem.rotateHandle.attr({"cx": this.handle_cx + dx, "cy": this.handle_cy + dy});
                 }
@@ -109,6 +107,7 @@ class RobotItemImpl implements RobotItem {
                 if (!worldModel.getDrawMode()) {
                     robotItem.centerX = this.matrix.x(startCx, startCy);
                     robotItem.centerY = this.matrix.y(startCx, startCy);
+                    robotItem.updateSensorsTransformations();
                 }
                 return this;
             }
@@ -127,5 +126,35 @@ class RobotItemImpl implements RobotItem {
     showHandles(): void {
         this.rotateHandle.toFront();
         this.rotateHandle.show();
+    }
+
+    removeSensorItem(portName: string): void {
+        var sensor = this.sensors[portName];
+        if (sensor) {
+            sensor.remove();
+            delete this.sensors[portName];
+        }
+    }
+
+    addSonarSensorItem(portName: string): void {
+        var sonar: SonarSensorItem = new SonarSensorItem(this.worldModel,
+            {x: this.startPosition.x + this.width + 10, y: this.startPosition.y - 15 + this.height / 2});
+        sonar.transform(this.image.transform());
+        sonar.updateTransformationString();
+        this.sensors[portName] = sonar;
+    }
+
+    private updateSensorsTransformations(): void {
+        for(var portName in this.sensors) {
+            var sensor = this.sensors[portName];
+            sensor.updateTransformationString();
+        }
+    }
+
+    private transformSensorsItems(transformationString: string): void {
+        for(var portName in this.sensors) {
+            var sensor = this.sensors[portName];
+            sensor.transform(transformationString);
+        }
     }
 }
