@@ -29,7 +29,7 @@ class ModelImpl implements Model {
     addRobotModel(robotModel: TwoDRobotModel): void {
         var model = this;
         $(document).ready(function() {
-            var robot:RobotModel = new RobotModelImpl(model.worldModel, robotModel, new TwoDPosition(20, 300));
+            var robot:RobotModel = new RobotModelImpl(model.worldModel, robotModel, new TwoDPosition(300, 300));
             model.robotModels.push(robot);
             model.timeline.addRobotModel(robot);
         });
