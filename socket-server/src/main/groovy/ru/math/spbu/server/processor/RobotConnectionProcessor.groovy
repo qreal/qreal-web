@@ -26,8 +26,8 @@ class RobotConnectionProcessor implements ConnectionProcessor {
     }
 
     def connect(Socket socket, def robot) {
-        connectionInfoManager.createRobotConnection(robot.owner, robot.code, robot, socket)
-        String key = RobotConnectionInfo.getKey(robot.owner, robot.code)
+        connectionInfoManager.createRobotConnection(robot.owner, robot.secretCode, robot, socket)
+        String key = RobotConnectionInfo.getKey(robot.owner, robot.secretCode)
         log.info "The connection is established"
         log.info "$robot.owner's robot accepted"
         socket.withStreams { input, output ->
@@ -35,17 +35,14 @@ class RobotConnectionProcessor implements ConnectionProcessor {
 
             sendMessage "Robot accepted", w
 
-
-
             while (connectionInfoManager.isRobotConnected(key)) {
 
-                while (connectionInfoManager.isRobotConnected(key) && !connectionInfoManager.hasProgram(key)) {
+                while (connectionInfoManager.isRobotConnected(key) && !connectionInfoManager.hasMessage(key)) {
                     Thread.sleep(3000);
                 }
 
-
-                if (connectionInfoManager.hasProgram(key)) {
-                    sendMessage connectionInfoManager.getProgram(key), w
+                if (connectionInfoManager.hasMessage(key)) {
+                    sendMessage connectionInfoManager.getMessages(key), w
                     connectionInfoManager.markAsRead(key)
                 }
             }

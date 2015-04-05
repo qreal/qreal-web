@@ -1,7 +1,7 @@
 package ru.math.spbu.server.connection
 
+import groovy.json.JsonOutput
 import groovy.util.logging.Slf4j
-import org.apache.commons.lang3.StringUtils
 
 import java.util.concurrent.ConcurrentHashMap
 
@@ -17,7 +17,7 @@ class RobotsConnectionInfoManager {
 
 
     def createRobotConnection(String owner, String code, def desc, Socket socket) {
-        RobotConnectionInfo robotsConnectionInfo = new RobotConnectionInfo(owner: owner, description: desc, socket: socket, secretCode: code)
+        RobotConnectionInfo robotsConnectionInfo = new RobotConnectionInfo(owner: owner, robotJson: desc, socket: socket, secretCode: code, messages: [])
         def key = RobotConnectionInfo.getKey(owner, code)
         robotConnections.put(key, robotsConnectionInfo)
     }
@@ -41,43 +41,37 @@ class RobotsConnectionInfoManager {
     }
 
 
-    def addProgram(String key, String program) {
+    def addMessage(String key, Message message) {
         if (!robotConnections.containsKey(key)) {
-            log.error "Unable to add program. Robot is offline"
+            log.error "Unable to add message. Robot is offline"
             return
         }
         RobotConnectionInfo info = robotConnections.get(key)
-        info.program = program
+        info.messages.add(message)
     }
 
     def getOnlineRobots() {
-
-        def list = []
-        robotConnections.each { key, value ->
-            list.add(key)
-        }
-
-        return list
+        return robotConnections
     }
 
-    def hasProgram(String key) {
+    def hasMessage(String key) {
         if (!robotConnections.containsKey(key)) {
             return false
         }
         RobotConnectionInfo robotConnectionInfo = robotConnections.get(key)
-        return StringUtils.isNotBlank(robotConnectionInfo.program)
+        return robotConnectionInfo.messages.size() > 0;
     }
 
-    def getProgram(String key) {
+    def getMessages(String key) {
         if (!robotConnections.containsKey(key)) {
-            throw new IllegalArgumentException("Unable to find program for robot $key")
+            throw new IllegalArgumentException("Unable to find messages for robot $key")
         }
-        return robotConnections.get(key).program
+        return JsonOutput.toJson(robotConnections.get(key).messages)
     }
 
     def markAsRead(String key) {
         RobotConnectionInfo robotConnectionInfo = robotConnections.get(key)
-        robotConnectionInfo.program = null
+        robotConnectionInfo.messages = []
     }
 
 

@@ -11,8 +11,8 @@ class RobotConnectionInfo {
 
     String owner
     String secretCode
-    String program
-    def description
+    List<Message> messages
+    def robotJson
     Socket socket
 
     public static String getKey(String owner, String code) {
