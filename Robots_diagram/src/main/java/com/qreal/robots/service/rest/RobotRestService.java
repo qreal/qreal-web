@@ -10,13 +10,17 @@ import com.qreal.robots.model.auth.User;
 import com.qreal.robots.model.robot.Message;
 import com.qreal.robots.model.robot.Robot;
 import com.qreal.robots.model.robot.RobotInfo;
-import com.qreal.robots.parser.*;
+import com.qreal.robots.model.robot.RobotWrapper;
+import com.qreal.robots.parser.ModelConfig;
+import com.qreal.robots.parser.ModelConfigValidator;
+import com.qreal.robots.parser.SystemConfig;
+import com.qreal.robots.parser.ValidationResult;
 import com.qreal.robots.socket.SocketClient;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -68,15 +72,16 @@ public class RobotRestService {
 
     @ResponseBody
     @RequestMapping(value = "/saveModelConfig", method = RequestMethod.POST)
-    public String saveModelConfig(@RequestParam("robotName") String robotName, @RequestParam("modelConfigJson") String modelConfigJson,
+    public String saveModelConfig(HttpSession session, @RequestParam("robotName") String robotName, @RequestParam("modelConfigJson") String modelConfigJson,
                                   @RequestParam("typeProperties") String typeProperties) throws IOException {
         ModelConfig modelConfig = getModelConfig(modelConfigJson, typeProperties);
         Robot robot = robotDao.findByName(robotName);
 
-        // TODO get fix config from robot
-        String systemConfigXml = IOUtils.toString(this.getClass().getResourceAsStream("/system-config.xml"));
+        List<RobotWrapper> fullRobotInfo = (List<RobotWrapper>) session.getAttribute("fullRobotInfo");
 
-        SystemConfig systemConfig = new SystemConfigParser().parse(systemConfigXml);
+        SystemConfig systemConfig = getSystemConfig(robot, fullRobotInfo);
+        assert systemConfig != null;
+
         ModelConfigValidator validator = new ModelConfigValidator(systemConfig);
         ValidationResult result = validator.validate(modelConfig);
         if (!result.hasErrors()) {
@@ -86,6 +91,15 @@ public class RobotRestService {
             return buildResultMessage(result);
         }
 
+    }
+
+    private SystemConfig getSystemConfig(Robot robot, List<RobotWrapper> fullRobotInfo) {
+        for (RobotWrapper robotWrapper : fullRobotInfo) {
+            if (robotWrapper.getRobot().getName().equals(robot.getName())) {
+                return robotWrapper.getRobotInfo().getSystemConfigObject();
+            }
+        }
+        return null;
     }
 
     private String buildResultMessage(ValidationResult result) {
@@ -127,7 +141,6 @@ public class RobotRestService {
 
     private String getUserName() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
-
     }
 
 

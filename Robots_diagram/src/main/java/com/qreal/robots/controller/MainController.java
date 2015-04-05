@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -42,11 +43,15 @@ public class MainController {
 
 
     @RequestMapping("/")
-    public ModelAndView home() {
+    public ModelAndView home(HttpSession session) {
         User user = userDao.findByUserName(getUserName());
+
+        List<RobotWrapper> fullRobotInfo = getFullRobotInfo(user.getRobots(), getOnlineRobots(user));
+        session.setAttribute("fullRobotInfo", fullRobotInfo);
+
         ModelAndView model = new ModelAndView();
         model.addObject("user", user);
-        model.addObject("robotsWrapper", getFullRobotInfo(user.getRobots(), getOnlineRobots(user)));
+        model.addObject("robotsWrapper", fullRobotInfo);
         model.setViewName("index");
         return model;
     }

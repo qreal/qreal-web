@@ -93,7 +93,7 @@
                     var obj = {};
                     obj["type"] = $(value).attr("id").substring(5);
                     $(value).find(':input').each(function (index2, value2) {
-                        obj[$(value2).attr("name")] = $(value2).attr("value");
+                        obj[$(value2).attr("name")] = $(value2).val();
                     });
                     typeProperties.push(obj);
                 });
