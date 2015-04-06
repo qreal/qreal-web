@@ -19,6 +19,12 @@
             <div class="col-md-8 no-float">
                 <div id="diagram_container" class="container"  ng-controller="DiagramController">
                     <div class="row">
+                        <div class="col-md-9 no-float">
+                            <div class="background_div">
+                                <div id="diagram_paper">
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-3 no-float">
                             <div class="background_div">
                                 <div id="palette">
@@ -45,12 +51,6 @@
                                             </ul>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-9 no-float">
-                            <div class="background_div">
-                                <div id="diagram_paper">
                                 </div>
                             </div>
                         </div>
