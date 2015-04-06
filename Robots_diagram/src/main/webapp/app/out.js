@@ -14,6 +14,7 @@ var AbstractSensor = (function (_super) {
     function AbstractSensor() {
         _super.apply(this, arguments);
     }
+    AbstractSensor.parentType = DeviceImpl;
     return AbstractSensor;
 })(DeviceImpl);
 var ScalarSensor = (function (_super) {
@@ -21,6 +22,7 @@ var ScalarSensor = (function (_super) {
     function ScalarSensor() {
         _super.apply(this, arguments);
     }
+    ScalarSensor.parentType = AbstractSensor;
     return ScalarSensor;
 })(AbstractSensor);
 var VectorSensor = (function (_super) {
@@ -28,6 +30,7 @@ var VectorSensor = (function (_super) {
     function VectorSensor() {
         _super.apply(this, arguments);
     }
+    VectorSensor.parentType = AbstractSensor;
     return VectorSensor;
 })(AbstractSensor);
 var AccelerometerSensor = (function (_super) {
@@ -35,6 +38,7 @@ var AccelerometerSensor = (function (_super) {
     function AccelerometerSensor() {
         _super.apply(this, arguments);
     }
+    AccelerometerSensor.parentType = ScalarSensor;
     AccelerometerSensor.name = "accelerometer";
     AccelerometerSensor.friendlyName = "Accelerometer";
     return AccelerometerSensor;
@@ -44,6 +48,7 @@ var Button = (function (_super) {
     function Button() {
         _super.apply(this, arguments);
     }
+    Button.parentType = ScalarSensor;
     Button.name = "button";
     Button.friendlyName = "Button";
     return Button;
@@ -53,6 +58,7 @@ var ColorSensor = (function (_super) {
     function ColorSensor() {
         _super.apply(this, arguments);
     }
+    ColorSensor.parentType = ScalarSensor;
     ColorSensor.name = "color";
     ColorSensor.friendlyName = "Color sensor";
     return ColorSensor;
@@ -62,6 +68,7 @@ var ColorSensorBlue = (function (_super) {
     function ColorSensorBlue() {
         _super.apply(this, arguments);
     }
+    ColorSensorBlue.parentType = ColorSensor;
     ColorSensorBlue.name = "colorBlue";
     ColorSensorBlue.friendlyName = "Color sensor (blue)";
     return ColorSensorBlue;
@@ -71,6 +78,7 @@ var ColorSensorFull = (function (_super) {
     function ColorSensorFull() {
         _super.apply(this, arguments);
     }
+    ColorSensorFull.parentType = ColorSensor;
     ColorSensorFull.name = "colorRecognition";
     ColorSensorFull.friendlyName = "Color sensor (full)";
     return ColorSensorFull;
@@ -80,6 +88,7 @@ var ColorSensorGreen = (function (_super) {
     function ColorSensorGreen() {
         _super.apply(this, arguments);
     }
+    ColorSensorGreen.parentType = ColorSensor;
     ColorSensorGreen.name = "colorGreen";
     ColorSensorGreen.friendlyName = "Color sensor (green)";
     return ColorSensorGreen;
@@ -89,6 +98,7 @@ var ColorSensorPassive = (function (_super) {
     function ColorSensorPassive() {
         _super.apply(this, arguments);
     }
+    ColorSensorPassive.parentType = ColorSensor;
     ColorSensorPassive.name = "colorNone";
     ColorSensorPassive.friendlyName = "Color sensor (passive)";
     return ColorSensorPassive;
@@ -98,6 +108,7 @@ var ColorSensorRed = (function (_super) {
     function ColorSensorRed() {
         _super.apply(this, arguments);
     }
+    ColorSensorRed.parentType = ColorSensor;
     ColorSensorRed.name = "colorRed";
     ColorSensorRed.friendlyName = "Color sensor (red)";
     return ColorSensorRed;
@@ -107,6 +118,7 @@ var Display = (function (_super) {
     function Display() {
         _super.apply(this, arguments);
     }
+    Display.parentType = DeviceImpl;
     Display.name = "display";
     Display.friendlyName = "Display";
     return Display;
@@ -116,6 +128,7 @@ var EncoderSensor = (function (_super) {
     function EncoderSensor() {
         _super.apply(this, arguments);
     }
+    EncoderSensor.parentType = ScalarSensor;
     EncoderSensor.name = "encoder";
     EncoderSensor.friendlyName = "Encoder";
     return EncoderSensor;
@@ -124,15 +137,10 @@ var GyroscopeSensor = (function (_super) {
     __extends(GyroscopeSensor, _super);
     function GyroscopeSensor() {
         _super.apply(this, arguments);
-        this.name = "gyroscope";
-        this.friendlyName = "Gyroscope";
     }
-    GyroscopeSensor.prototype.getName = function () {
-        return this.name;
-    };
-    GyroscopeSensor.prototype.getFriendlyName = function () {
-        return this.friendlyName;
-    };
+    GyroscopeSensor.parentType = ScalarSensor;
+    GyroscopeSensor.name = "gyroscope";
+    GyroscopeSensor.friendlyName = "Gyroscope";
     return GyroscopeSensor;
 })(ScalarSensor);
 var LightSensor = (function (_super) {
@@ -140,6 +148,7 @@ var LightSensor = (function (_super) {
     function LightSensor() {
         _super.apply(this, arguments);
     }
+    LightSensor.parentType = ScalarSensor;
     LightSensor.name = "light";
     LightSensor.friendlyName = "Light sensor";
     return LightSensor;
@@ -149,6 +158,7 @@ var Motor = (function (_super) {
     function Motor() {
         _super.apply(this, arguments);
     }
+    Motor.parentType = DeviceImpl;
     Motor.name = "motor";
     Motor.friendlyName = "Motor";
     return Motor;
@@ -158,6 +168,7 @@ var RangeSensor = (function (_super) {
     function RangeSensor() {
         _super.apply(this, arguments);
     }
+    RangeSensor.parentType = ScalarSensor;
     RangeSensor.name = "sonar";
     RangeSensor.friendlyName = "Range sensor";
     return RangeSensor;
@@ -167,6 +178,7 @@ var SoundSensor = (function (_super) {
     function SoundSensor() {
         _super.apply(this, arguments);
     }
+    SoundSensor.parentType = ScalarSensor;
     SoundSensor.name = "sound";
     SoundSensor.friendlyName = "Sound sensor";
     return SoundSensor;
@@ -176,6 +188,7 @@ var Speaker = (function (_super) {
     function Speaker() {
         _super.apply(this, arguments);
     }
+    Speaker.parentType = DeviceImpl;
     Speaker.name = "speaker";
     Speaker.friendlyName = "Speaker";
     return Speaker;
@@ -185,6 +198,7 @@ var TouchSensor = (function (_super) {
     function TouchSensor() {
         _super.apply(this, arguments);
     }
+    TouchSensor.parentType = ScalarSensor;
     TouchSensor.name = "touch";
     TouchSensor.friendlyName = "Touch sensor";
     return TouchSensor;
@@ -1825,6 +1839,13 @@ var DeviceInfoImpl = (function () {
     DeviceInfoImpl.prototype.getFriendlyName = function () {
         return this.friendlyName;
     };
+    DeviceInfoImpl.prototype.isA = function (type) {
+        var currentParent = this.deviceType;
+        while (currentParent && currentParent.parentType !== type) {
+            currentParent = currentParent.parentType;
+        }
+        return currentParent != undefined;
+    };
     return DeviceInfoImpl;
 })();
 var PortInfoImpl = (function () {
@@ -2001,6 +2022,7 @@ var TrikColorSensor = (function (_super) {
     function TrikColorSensor() {
         _super.apply(this, arguments);
     }
+    TrikColorSensor.parentType = VectorSensor;
     TrikColorSensor.name = "trikColorSensor";
     TrikColorSensor.friendlyName = "Color Sensor";
     return TrikColorSensor;
@@ -2010,6 +2032,7 @@ var TrikDisplay = (function (_super) {
     function TrikDisplay() {
         _super.apply(this, arguments);
     }
+    TrikDisplay.parentType = Display;
     return TrikDisplay;
 })(Display);
 var TrikGamepadButton = (function (_super) {
@@ -2017,6 +2040,7 @@ var TrikGamepadButton = (function (_super) {
     function TrikGamepadButton() {
         _super.apply(this, arguments);
     }
+    TrikGamepadButton.parentType = Button;
     TrikGamepadButton.name = "gamepadButton";
     TrikGamepadButton.friendlyName = "Android Gamepad Button";
     return TrikGamepadButton;
@@ -2026,6 +2050,7 @@ var TrikGamepadConnectionIndicator = (function (_super) {
     function TrikGamepadConnectionIndicator() {
         _super.apply(this, arguments);
     }
+    TrikGamepadConnectionIndicator.parentType = ScalarSensor;
     TrikGamepadConnectionIndicator.name = "gamepadConnectionIndicator";
     TrikGamepadConnectionIndicator.friendlyName = "Android Gamepad Connection Indicator";
     return TrikGamepadConnectionIndicator;
@@ -2035,6 +2060,7 @@ var TrikGamepadPad = (function (_super) {
     function TrikGamepadPad() {
         _super.apply(this, arguments);
     }
+    TrikGamepadPad.parentType = VectorSensor;
     TrikGamepadPad.name = "gamepadPad";
     TrikGamepadPad.friendlyName = "Android Gamepad Pad";
     return TrikGamepadPad;
@@ -2044,6 +2070,7 @@ var TrikGamepadPadPressSensor = (function (_super) {
     function TrikGamepadPadPressSensor() {
         _super.apply(this, arguments);
     }
+    TrikGamepadPadPressSensor.parentType = Button;
     TrikGamepadPadPressSensor.name = "gamepadPadPressSensor";
     TrikGamepadPadPressSensor.friendlyName = "Android Gamepad Pad as Button";
     return TrikGamepadPadPressSensor;
@@ -2053,6 +2080,7 @@ var TrikGamepadWheel = (function (_super) {
     function TrikGamepadWheel() {
         _super.apply(this, arguments);
     }
+    TrikGamepadWheel.parentType = ScalarSensor;
     TrikGamepadWheel.name = "gamepadWheel";
     TrikGamepadWheel.friendlyName = "Android Gamepad Wheel";
     return TrikGamepadWheel;
@@ -2062,6 +2090,7 @@ var TrikInfraredSensor = (function (_super) {
     function TrikInfraredSensor() {
         _super.apply(this, arguments);
     }
+    TrikInfraredSensor.parentType = RangeSensor;
     TrikInfraredSensor.name = "infrared";
     TrikInfraredSensor.friendlyName = "Infrared Sensor";
     return TrikInfraredSensor;
@@ -2071,6 +2100,7 @@ var TrikLed = (function (_super) {
     function TrikLed() {
         _super.apply(this, arguments);
     }
+    TrikLed.parentType = DeviceImpl;
     TrikLed.name = "led";
     TrikLed.friendlyName = "Led";
     return TrikLed;
@@ -2080,6 +2110,7 @@ var TrikLineSensor = (function (_super) {
     function TrikLineSensor() {
         _super.apply(this, arguments);
     }
+    TrikLineSensor.parentType = VectorSensor;
     TrikLineSensor.name = "trikLineSensor";
     TrikLineSensor.friendlyName = "Line Sensor";
     return TrikLineSensor;
@@ -2089,6 +2120,7 @@ var TrikMotionSensor = (function (_super) {
     function TrikMotionSensor() {
         _super.apply(this, arguments);
     }
+    TrikMotionSensor.parentType = ScalarSensor;
     TrikMotionSensor.name = "motion";
     TrikMotionSensor.friendlyName = "Motion Sensor";
     return TrikMotionSensor;
@@ -2098,6 +2130,7 @@ var TrikObjectSensor = (function (_super) {
     function TrikObjectSensor() {
         _super.apply(this, arguments);
     }
+    TrikObjectSensor.parentType = VectorSensor;
     TrikObjectSensor.name = "trikObjectSensor";
     TrikObjectSensor.friendlyName = "Object Sensor";
     return TrikObjectSensor;
@@ -2107,6 +2140,7 @@ var TrikPowerMotor = (function (_super) {
     function TrikPowerMotor() {
         _super.apply(this, arguments);
     }
+    TrikPowerMotor.parentType = Motor;
     TrikPowerMotor.name = "power";
     TrikPowerMotor.friendlyName = "Power Motor";
     return TrikPowerMotor;
@@ -2116,6 +2150,7 @@ var TrikServoMotor = (function (_super) {
     function TrikServoMotor() {
         _super.apply(this, arguments);
     }
+    TrikServoMotor.parentType = Motor;
     TrikServoMotor.name = "servo";
     TrikServoMotor.friendlyName = "Servo Motor";
     return TrikServoMotor;
@@ -2125,6 +2160,7 @@ var TrikShell = (function (_super) {
     function TrikShell() {
         _super.apply(this, arguments);
     }
+    TrikShell.parentType = DeviceImpl;
     TrikShell.name = "shell";
     TrikShell.friendlyName = "Shell";
     return TrikShell;
@@ -2134,6 +2170,7 @@ var TrikSonarSensor = (function (_super) {
     function TrikSonarSensor() {
         _super.apply(this, arguments);
     }
+    TrikSonarSensor.parentType = RangeSensor;
     TrikSonarSensor.friendlyName = "Sonic Sensor";
     return TrikSonarSensor;
 })(RangeSensor);
@@ -2142,6 +2179,7 @@ var TrikSpeaker = (function (_super) {
     function TrikSpeaker() {
         _super.apply(this, arguments);
     }
+    TrikSpeaker.parentType = Speaker;
     return TrikSpeaker;
 })(Speaker);
 var TwoDRobotModel = (function (_super) {

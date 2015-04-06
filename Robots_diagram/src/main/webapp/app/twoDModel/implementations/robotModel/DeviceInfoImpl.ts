@@ -16,4 +16,14 @@ class DeviceInfoImpl implements DeviceInfo {
     getFriendlyName(): string {
         return this.friendlyName;
     }
+
+    isA(type): boolean {
+        var currentParent = this.deviceType;
+
+        while(currentParent && currentParent.parentType !== type) {
+            currentParent = currentParent.parentType;
+        }
+
+        return currentParent != undefined;
+    }
 }
