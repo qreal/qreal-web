@@ -100,6 +100,7 @@ class DiagramController {
             helper: function () {
                 var clone =  $(this).find('.elementImg').clone();
                 clone.css('position','fixed');
+                clone.css('z-index', '1000');
                 return clone;
             },
             revert:"invalid"
