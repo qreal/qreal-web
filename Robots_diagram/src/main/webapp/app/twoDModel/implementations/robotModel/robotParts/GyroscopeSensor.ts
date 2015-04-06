@@ -1,12 +1,5 @@
 class GyroscopeSensor extends ScalarSensor {
-    private name: string = "gyroscope";
-    private friendlyName: string = "Gyroscope";
-
-    getName(): string {
-        return this.name;
-    }
-
-    getFriendlyName(): string {
-        return this.friendlyName;
-    }
+    static parentType = ScalarSensor;
+    static name: string = "gyroscope";
+    static friendlyName: string = "Gyroscope";
 }
