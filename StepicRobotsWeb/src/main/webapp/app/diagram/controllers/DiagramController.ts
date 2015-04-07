@@ -10,7 +10,7 @@ class DiagramController {
     constructor($scope, $compile) {
         var controller: DiagramController = this;
         $scope.vm = controller;
-        controller.nodeTypesMap = XmlManager.loadElementsFromXml("configs/elements.xml", $scope, $compile);
+        XmlManager.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
 
         this.paper.on('cell:pointerdown',
             function (cellView, evt, x, y) {
@@ -32,16 +32,22 @@ class DiagramController {
                 controller.currentNode = undefined;
             }
         );
-
-        this.setInputStringListener(controller);
-        this.setCheckboxListener(controller);
-        this.setDropdownListener(controller);
-        this.setSpinnerListener(controller);
-
-        this.initDragAndDrop(controller);
     }
 
-    setInputStringListener(controller: DiagramController): void {
+    setNodeTypesMap(nodeTypesMap: NodeTypesMap): void {
+        this.nodeTypesMap = nodeTypesMap;
+    }
+
+    initPalette() {
+        this.setInputStringListener();
+        this.setCheckboxListener();
+        this.setDropdownListener();
+        this.setSpinnerListener();
+        this.initDragAndDrop();
+    }
+
+    setInputStringListener(): void {
+        var controller: DiagramController = this;
         $(document).on('change', '.form-control', function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
@@ -52,7 +58,8 @@ class DiagramController {
         });
     }
 
-    setCheckboxListener(controller: DiagramController): void {
+    setCheckboxListener(): void {
+        var controller: DiagramController = this;
         $(document).on('change', '.checkbox', function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
@@ -71,7 +78,8 @@ class DiagramController {
         });
     }
 
-    setDropdownListener(controller: DiagramController): void {
+    setDropdownListener(): void {
+        var controller: DiagramController = this;
         $(document).on('change', '.mydropdown', function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
@@ -82,7 +90,8 @@ class DiagramController {
         });
     }
 
-    setSpinnerListener(controller: DiagramController): void {
+    setSpinnerListener(): void {
+        var controller: DiagramController = this;
         $(document).on('change', '.spinner', function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
@@ -95,7 +104,8 @@ class DiagramController {
         });
     }
 
-    initDragAndDrop(controller: DiagramController): void {
+    initDragAndDrop(): void {
+        var controller: DiagramController = this;
         $(".tree_element").draggable({
             helper: function () {
                 var clone =  $(this).find('.elementImg').clone();
