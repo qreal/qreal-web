@@ -1,6 +1,6 @@
 class XmlManager {
     static loadElementsFromXml(controller: DiagramController, pathToXML: string, $scope, $compile): void {
-        var req: any = XmlFactory.createXMLHTTPObject();
+        var req: any = XmlHttpFactory.createXMLHTTPObject();
         if (!req) {
             alert("Can't load xml document!");
             return null;
