@@ -6,8 +6,9 @@ class WorldModelImpl implements WorldModel {
     private wallItems: WallItem[] = [];
 
     constructor() {
-        this.paper = Raphael("twoDModel_stage", "100%", "100%");
+        this.paper = Raphael("twoDModel_stage", 2000, 2000);
         $(this.paper.canvas).attr("id", "twoDModel_paper");
+        $(this.paper.canvas).css('overflow', 'auto');
 
         var wall_pattern = '<pattern id="wall_pattern" patternUnits="userSpaceOnUse" width="85" height="80">\
                                         <image xlink:href="images/2dmodel/2d_wall.png" width="85" height="80" />\

@@ -108,8 +108,8 @@ class DiagramController {
 
         $("#diagram_paper").droppable({
             drop: function(event, ui) {
-                var topElementPos: number = ui.offset.top - $(this).offset().top;
-                var leftElementPos: number = ui.offset.left - $(this).offset().left;
+                var topElementPos: number = ui.offset.top - $(this).offset().top + $(this).scrollTop();
+                var leftElementPos: number = ui.offset.left - $(this).offset().left + $(this).scrollLeft();
                 var gridSize: number = controller.paper.getGridSizeValue();
                 topElementPos -= topElementPos % gridSize;
                 leftElementPos -= leftElementPos % gridSize;

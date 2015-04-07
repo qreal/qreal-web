@@ -76,6 +76,10 @@ body {
 #diagram_paper {
     height: 100%;
     border: 1px solid gray;
+    overflow: scroll;
+}
+
+#diagram_paper svg {
     background: #ffffff url('bg.png');
 }
 
@@ -83,6 +87,7 @@ body {
     height: 100%;
     border: 1px solid gray;
     background: #ffffff;
+    overflow: scroll;
 }
 
 #palette {
