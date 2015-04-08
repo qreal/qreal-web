@@ -2,10 +2,10 @@ class RobotItemImpl implements RobotItem {
     private worldModel: WorldModel;
     private robot: RobotModel;
     private startPosition: TwoDPosition;
+    private startCenter: TwoDPosition = new TwoDPosition();
+    private center: TwoDPosition = new TwoDPosition();
     private image;
     private rotateHandle: RaphaelElement;
-    private centerX: number;
-    private centerY: number;
     private width: number = 50;
     private height: number = 50;
 
@@ -18,11 +18,11 @@ class RobotItemImpl implements RobotItem {
         var paper = worldModel.getPaper();
         this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
 
-        this.centerX = position.x + this.width / 2;
-        this.centerY = position.y + this.height / 2;
+        this.center.x = position.x + this.width / 2
+        this.center.y = position.y + this.height / 2;
 
-        var startCx = this.centerX;
-        var startCy = this.centerY;
+        this.startCenter.x = this.center.x
+        this.startCenter.y = this.center.y;
 
         var handleRadius: number = 10;
 
@@ -53,8 +53,8 @@ class RobotItemImpl implements RobotItem {
                 if (!worldModel.getDrawMode()) {
                     var newX = this.cx + dx;
                     var newY = this.cy + dy;
-                    var offsetX = newX - robotItem.centerX;
-                    var offsetY = newY - robotItem.centerY;
+                    var offsetX = newX - robotItem.center.x;
+                    var offsetY = newY - robotItem.center.y;
                     var tan = offsetY / offsetX;
                     var angle = Math.atan(tan) / (Math.PI / 180);
                     if (offsetX < 0) {
@@ -63,12 +63,14 @@ class RobotItemImpl implements RobotItem {
 
                     angle -= this.rotation;
                     robotItem.image.transform(this.transformation + "R" + angle + "," +
-                        robotItem.centerX + "," + robotItem.centerY);
+                        robotItem.center.x + "," + robotItem.center.y);
 
-                    robotItem.transformSensorsItems("R" + angle + "," + robotItem.centerX + "," + robotItem.centerY);
+                    robotItem.transformSensorsItems("R" + angle + "," + robotItem.center.x + "," + robotItem.center.y);
 
-                    var newCx = robotItem.image.matrix.x(startCx + robotItem.width / 2 + 20, startCy);
-                    var newCy = robotItem.image.matrix.y(startCx + robotItem.width / 2 + 20, startCy);
+                    var newCx = robotItem.image.matrix.x(robotItem.startCenter.x + robotItem.width / 2 + 20,
+                        robotItem.startCenter.y);
+                    var newCy = robotItem.image.matrix.y(robotItem.startCenter.x + robotItem.width / 2 + 20,
+                        robotItem.startCenter.y);
                     this.attr({cx: newCx, cy: newCy});
                 }
                 return this;
@@ -105,14 +107,26 @@ class RobotItemImpl implements RobotItem {
             }
             ,up = function () {
                 if (!worldModel.getDrawMode()) {
-                    robotItem.centerX = this.matrix.x(startCx, startCy);
-                    robotItem.centerY = this.matrix.y(startCx, startCy);
+                    robotItem.center.x = this.matrix.x(robotItem.startCenter.x, robotItem.startCenter.y);
+                    robotItem.center.y = this.matrix.y(robotItem.startCenter.x, robotItem.startCenter.y);
                     robotItem.updateSensorsTransformations();
                 }
                 return this;
             }
         this.image.drag(move, start, up);
         this.hideHandles();
+    }
+
+    setStartPosition(position: TwoDPosition, direction: number): void {
+        this.startPosition = position;
+        this.image.attr({x: position.x, y: position.y});
+        this.center.x = position.x + this.width / 2
+        this.center.y = position.y + this.height / 2;
+        this.startCenter.x = this.center.x
+        this.startCenter.y = this.center.y;
+        this.image.transform("R" + direction + "," + this.center.x + "," + this.center.y);
+        this.rotateHandle.attr({"cx": + position.x + this.width + 20, "cy": position.y + this.height / 2 });
+
     }
 
     ride(): void {

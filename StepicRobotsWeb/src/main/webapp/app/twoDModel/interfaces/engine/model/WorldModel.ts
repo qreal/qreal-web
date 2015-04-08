@@ -8,4 +8,5 @@ interface WorldModel {
     getPaper(): RaphaelPaper;
     setCurrentElement(element): void;
     clearPaper(): void;
+    deserialize(xml, offsetX: number, offsetY: number): void;
 }

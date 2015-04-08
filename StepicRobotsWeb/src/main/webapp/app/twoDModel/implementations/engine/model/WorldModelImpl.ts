@@ -118,6 +118,12 @@ class WorldModelImpl implements WorldModel {
         });
     }
 
+    addWall(xStart: number, yStart: number, xEnd: number, yEnd: number): void {
+        var wall = new WallItemImpl(this, xStart, yStart, xEnd, yEnd);
+        wall.hideHandles();
+        this.wallItems.push(wall);
+    }
+
     getMousePosition(e) {
         var offset = $("#twoDModel_stage").offset();
         var position = {
@@ -172,6 +178,51 @@ class WorldModelImpl implements WorldModel {
         while (this.colorFields.length) {
             var item = this.colorFields.pop();
             item.remove();
+        }
+    }
+
+    private parsePositionString(positionStr: string): TwoDPosition {
+        var regExp = /(-?\d+):(-?\d+)/gi;
+        regExp.exec(positionStr);
+        var x = parseFloat(RegExp.$1);
+        var y = parseFloat(RegExp.$2);
+        return new TwoDPosition(x, y);
+    }
+
+    deserialize(xml, offsetX: number, offsetY: number) {
+        var walls = xml.getElementsByTagName("wall");
+
+        for (var i = 0; i < walls.length; i++) {
+            var beginPosStr: string = walls[i].getAttribute('begin');
+            var beginPos = this.parsePositionString(beginPosStr);
+            var endPosStr: string = walls[i].getAttribute('end');
+            var endPos = this.parsePositionString(endPosStr);
+
+            this.addWall(beginPos.x + offsetX, beginPos.y + offsetY, endPos.x + offsetX, endPos.y + offsetY);
+        }
+
+        var regions = xml.getElementsByTagName("region");
+
+        for (var i = 0; i < regions.length; i++) {
+            var x = parseFloat(regions[i].getAttribute('x'));
+            var y = parseFloat(regions[i].getAttribute('y'));
+        }
+
+        var robots = xml.getElementsByTagName("robot");
+
+        for (var i = 0; i < robots.length; i++) {
+            var posString = robots[i].getAttribute('position');
+            var pos = this.parsePositionString(posString);
+
+            var sensors = robots[i].getElementsByTagName("sensor");
+            for (var j = 0; j < sensors.length; j++) {
+                var posString = sensors[j].getAttribute('position');
+                var pos = this.parsePositionString(posString);
+            }
+
+            var startPosition = robots[i].getElementsByTagName("startPosition")[0];
+            var x = parseFloat(startPosition.getAttribute('x'));
+            var y = parseFloat(startPosition.getAttribute('y'));
         }
     }
 }

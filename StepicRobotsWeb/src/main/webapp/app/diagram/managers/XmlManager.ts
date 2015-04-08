@@ -84,8 +84,7 @@ class XmlManager {
                     alert("Can't load palette:\n" + req.statusText);
                 }
             }
-        }
-        catch(e) {
+        } catch(e) {
             alert("Error: " + e.message);
         }
     }

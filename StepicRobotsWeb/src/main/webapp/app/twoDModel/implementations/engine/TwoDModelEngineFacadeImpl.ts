@@ -12,6 +12,8 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
 
         this.model.addRobotModel(robotModel);
 
+        this.load("configs/labyrinth-without-sensors.xml");
+
         $(document).ready(function() {
             $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
                 facade.model.getWorldModel().clearPaper();
@@ -20,6 +22,35 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
 
             facade.initPortsConfigation($scope, $compile, robotModel);
         });
+    }
+
+    load(pathToXML: string): void {
+        var facade = this;
+        var req: any = XmlHttpFactory.createXMLHTTPObject();
+        if (!req) {
+            alert("Can't load xml document!");
+            return null;
+        }
+
+        req.open("GET", pathToXML, true);
+        req.onreadystatechange = function() {
+            facade.xmlLoadReady(req);
+        };
+        req.send(null);
+    }
+
+    private xmlLoadReady(req): void {
+        /*try {*/
+            if (req.readyState == 4) {
+                if (req.status == 200) {
+                    this.model.deserialize(req.responseXML);
+                } else {
+                    alert("Can't load 2d model:\n" + req.statusText);
+                }
+            }
+        /*} catch(e) {
+            alert("Error: " + e.message);
+        }*/
     }
 
     setDrawLineMode(): void {
@@ -46,7 +77,6 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         $("#twoDModelContent").hide();
         $("#diagramContent").show();
     }
-
 
     initPortsConfigation($scope, $compile, twoDRobotModel: TwoDRobotModel): void {
         var configurationDropdownsContent = "<p>";

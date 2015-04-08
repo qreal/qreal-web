@@ -22,4 +22,33 @@ class RobotModelImpl implements RobotModel {
     nextFragment(): void {
         this.robotItem.ride();
     }
+
+    private parsePositionString(positionStr: string): TwoDPosition {
+        var regExp = /(-?\d+):(-?\d+)/gi;
+        regExp.exec(positionStr);
+        var x = parseFloat(RegExp.$1);
+        var y = parseFloat(RegExp.$2);
+        return new TwoDPosition(x, y);
+    }
+
+    deserialize(xml, offsetX: number, offsetY: number): void {
+        var posString = xml.getAttribute('position');
+        var pos = this.parsePositionString(posString);
+        pos.x += offsetX;
+        pos.y += offsetY;
+        var direction = parseFloat(xml.getAttribute('direction'));
+        this.robotItem.setStartPosition(pos, direction);
+
+        var sensors = xml.getElementsByTagName("sensor");
+        for (var j = 0; j < sensors.length; j++) {
+            var posString = sensors[j].getAttribute('position');
+            var pos = this.parsePositionString(posString);
+            //TODO: set sensor
+        }
+
+        var startPosition = xml.getElementsByTagName("startPosition")[0];
+        var x = parseFloat(startPosition.getAttribute('x'));
+        var y = parseFloat(startPosition.getAttribute('y'));
+        //TODO: set start pos
+    }
 }

@@ -34,4 +34,80 @@ class ModelImpl implements Model {
             model.timeline.addRobotModel(robot);
         });
     }
+
+    private parsePositionString(positionStr: string): TwoDPosition {
+        var regExp = /(-?\d+):(-?\d+)/gi;
+        regExp.exec(positionStr);
+        var x = parseFloat(RegExp.$1);
+        var y = parseFloat(RegExp.$2);
+        return new TwoDPosition(x, y);
+    }
+
+    private min(a: number, b: number): number {
+        return (a < b) ? a : b;
+    }
+
+    private findMinPos(xml): TwoDPosition {
+        var minX = 2000;
+        var minY = 2000;
+
+        var walls = xml.getElementsByTagName("wall");
+
+        for (var i = 0; i < walls.length; i++) {
+            var beginPosStr: string = walls[i].getAttribute('begin');
+            var beginPos = this.parsePositionString(beginPosStr);
+            minX = this.min(beginPos.x, minX);
+            minY = this.min(beginPos.y, minY);
+
+            var endPosStr: string = walls[i].getAttribute('end');
+            var endPos = this.parsePositionString(endPosStr);
+            minX = this.min(endPos.x, minX);
+            minY = this.min(endPos.y, minY);
+        }
+
+        var regions = xml.getElementsByTagName("region");
+
+        for (var i = 0; i < regions.length; i++) {
+            var x = parseFloat(regions[i].getAttribute('x'));
+            var y = parseFloat(regions[i].getAttribute('y'));
+            minX = this.min(x, minX);
+            minY = this.min(y, minY);
+        }
+
+        var robots = xml.getElementsByTagName("robot");
+
+        for (var i = 0; i < robots.length; i++) {
+            var posString = robots[i].getAttribute('position');
+            var pos = this.parsePositionString(posString);
+            minX = this.min(pos.x, minX);
+            minY = this.min(pos.y, minY);
+
+            var sensors = robots[i].getElementsByTagName("sensor");
+            for (var j = 0; j < sensors.length; j++) {
+                var posString = sensors[j].getAttribute('position');
+                var pos = this.parsePositionString(posString);
+                minX = this.min(pos.x, minX);
+                minY = this.min(pos.y, minY);
+            }
+
+            var startPosition = robots[i].getElementsByTagName("startPosition")[0];
+            var x = parseFloat(startPosition.getAttribute('x'));
+            var y = parseFloat(startPosition.getAttribute('y'));
+        }
+
+        return new TwoDPosition(minX, minY);
+    }
+
+    deserialize(xml): void {
+        var minPos: TwoDPosition = this.findMinPos(xml);
+        var offsetX = (minPos.x < 0) ? (-minPos.x + 100) : 0;
+        var offsetY = (minPos.y < 0) ? (-minPos.y + 100) : 0;
+        this.worldModel.deserialize(xml, offsetX, offsetY);
+
+        var robots = xml.getElementsByTagName("robot");
+
+        for (var i = 0; i < robots.length; i++) {
+            this.robotModels[i].deserialize(robots[i], offsetX, offsetY);
+        }
+    }
 }
