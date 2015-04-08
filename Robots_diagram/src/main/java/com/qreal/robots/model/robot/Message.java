@@ -11,7 +11,7 @@ public class Message {
     private String type;
     private RobotInfo robot;
     private String user;
-    private List<String> secretCodes;
+    private List<RobotInfo> robots;
 
     public Message() {
 
@@ -29,11 +29,10 @@ public class Message {
         this.type = type;
     }
 
-    public Message(String from, String type, String user, List<String> secretCodes) {
+    public Message(String from, String type, List<RobotInfo> robots) {
         this.from = from;
         this.type = type;
-        this.secretCodes = secretCodes;
-        this.user = user;
+        this.robots = robots;
     }
 
     public String getFrom() {
@@ -60,19 +59,19 @@ public class Message {
         this.robot = robot;
     }
 
-    public List<String> getSecretCodes() {
-        return secretCodes;
-    }
-
-    public void setSecretCodes(List<String> secretCodes) {
-        this.secretCodes = secretCodes;
-    }
-
     public String getUser() {
         return user;
     }
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public List<RobotInfo> getRobots() {
+        return robots;
+    }
+
+    public void setRobots(List<RobotInfo> robots) {
+        this.robots = robots;
     }
 }

@@ -95,12 +95,12 @@ public class MainController {
 
 
     private String getUserOnlineRobots(User user) throws JsonProcessingException {
-        List<String> secretCodes = Lists.newArrayList();
+        List<RobotInfo> robots = Lists.newArrayList();
         for (Robot robot : user.getRobots()) {
-            secretCodes.add(robot.getSecretCode());
+            robots.add(new RobotInfo(user.getUsername(), robot.getName(), robot.getSecretCode()));
         }
 
-        Message message = new Message("WebApp", "getOnlineRobots", user.getUsername(), secretCodes);
+        Message message = new Message("WebApp", "getOnlineRobots", robots);
         return mapper.writeValueAsString(message);
     }
 

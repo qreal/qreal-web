@@ -47,7 +47,7 @@ public class RobotRestService {
     public String sendProgram(@RequestParam("robotName") String robotName, @RequestParam("program") String program) throws JsonProcessingException {
         Robot robot = robotDao.findByName(robotName);
         SocketClient socketClient = new SocketClient(MainController.HOST_NAME, MainController.PORT);
-        return socketClient.sendMessage(generateSendProgramRequest(robot.getSecretCode(), program));
+        return socketClient.sendMessage(generateSendProgramRequest(robotName, robot.getSecretCode(), program));
     }
 
 
@@ -98,7 +98,7 @@ public class RobotRestService {
         ValidationResult result = validator.validate(modelConfig);
         if (!result.hasErrors()) {
             SocketClient socketClient = new SocketClient(MainController.HOST_NAME, MainController.PORT);
-            return socketClient.sendMessage(generateSendModelConfigRequest(robot.getSecretCode(), modelConfig));
+            return socketClient.sendMessage(generateSendModelConfigRequest(robotName, robot.getSecretCode(), modelConfig));
         } else {
             return buildResultMessage(result);
         }
@@ -135,16 +135,16 @@ public class RobotRestService {
     }
 
 
-    private String generateSendProgramRequest(String secretCode, String program) throws JsonProcessingException {
-        RobotInfo robotInfo = new RobotInfo(getUserName(), secretCode);
+    private String generateSendProgramRequest(String robotName, String secretCode, String program) throws JsonProcessingException {
+        RobotInfo robotInfo = new RobotInfo(getUserName(), robotName, secretCode);
         robotInfo.setProgram(program);
         Message message = new Message("WebApp", "sendDiagram", robotInfo);
         return mapper.writeValueAsString(message);
     }
 
 
-    private String generateSendModelConfigRequest(String secretCode, ModelConfig modelConfig) throws JsonProcessingException {
-        RobotInfo robotInfo = new RobotInfo(getUserName(), secretCode);
+    private String generateSendModelConfigRequest(String robotName, String secretCode, ModelConfig modelConfig) throws JsonProcessingException {
+        RobotInfo robotInfo = new RobotInfo(getUserName(), robotName, secretCode);
         robotInfo.setModelConfig(modelConfig.convertToXml());
         Message message = new Message("WebApp", "sendModelConfig", robotInfo);
         return mapper.writeValueAsString(message);

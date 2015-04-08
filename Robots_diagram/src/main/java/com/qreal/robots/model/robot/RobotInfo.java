@@ -12,6 +12,7 @@ import com.qreal.robots.parser.SystemConfigParser;
 public class RobotInfo {
 
     private String owner;
+    private String name;
     private String secretCode;
     private String modelConfig;
     private String systemConfig;
@@ -22,10 +23,11 @@ public class RobotInfo {
     }
 
 
-    public RobotInfo(String owner, String secretCode) {
+    public RobotInfo(String owner, String name, String secretCode) {
         this.owner = owner;
+        this.name = name;
         this.secretCode = secretCode;
-        this.modelConfig = "";
+
     }
 
     public String getSecretCode() {
@@ -76,5 +78,13 @@ public class RobotInfo {
     @JsonIgnore
     public ModelConfig getModelConfigObject() {
         return new ModelConfigParser().parse(modelConfig);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -555,7 +555,7 @@
                                     Register robot
                                 </a>
 
-                                <div class="modal" id="myModal" tabindex="-1" role="dialog"
+                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
                                      aria-labelledby="myModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -582,7 +582,7 @@
                                                         <label>Secret code</label>
 
                                                         <div class="controls">
-                                                            <input id="secretCode" type="text" class="form-control"
+                                                            <input id="secretCode" type="password" class="form-control"
                                                                    placeholder="Secret code">
 
                                                         </div>
