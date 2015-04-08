@@ -27,8 +27,14 @@
                     type: 'POST',
                     url: 'registerRobot',
                     data: data,
-                    success: function (data) {
-                        location.reload();
+                    success: function (response) {
+                        var result = JSON.parse(response);
+                        if (result.status == "OK") {
+                            location.reload();
+                        } else {
+                            $('#registerError').text(result.message);
+                            $('#registerError').show();
+                        }
                     },
                     error: function (response, status, error) {
                         console.log("error");
@@ -560,6 +566,7 @@
                                                 <h4 class="modal-title" id="myModalLabel">Register new robot</h4>
                                             </div>
                                             <div class="modal-body">
+                                                <div id="registerError" class="error" hidden></div>
                                                 <form class="form form-vertical">
                                                     <div class="control-group">
                                                         <label>Name</label>

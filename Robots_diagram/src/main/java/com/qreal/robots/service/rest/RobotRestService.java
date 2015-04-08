@@ -51,13 +51,25 @@ public class RobotRestService {
     }
 
 
-    // TODO CHECK FOR EXISTING ROBOT
     @ResponseBody
     @RequestMapping(value = "/registerRobot", method = RequestMethod.POST)
     public String register(@RequestParam("robotName") String name, @RequestParam("secretCode") String secretCode) {
         User user = userDao.findByUserName(getUserName());
-        robotDao.save(new Robot(name, secretCode, user));
-        return "{\"message\":\"OK\"}";
+        if (!userRobotExists(user, name)) {
+            robotDao.save(new Robot(name, secretCode, user));
+            return "{\"status\":\"OK\"}";
+        } else {
+            return String.format("{\"status\":\"ERROR\", \"message\":\"Robot with name %s is already exists\"}", name);
+        }
+    }
+
+    private boolean userRobotExists(User user, String name) {
+        for (Robot robot : user.getRobots()) {
+            if (robot.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
