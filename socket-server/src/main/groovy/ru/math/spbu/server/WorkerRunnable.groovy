@@ -44,7 +44,7 @@ class WorkerRunnable implements Runnable {
                         robotProcessor.process(socket, json)
                         break
                     default:
-                        sendMessage "Unknown from type. Should be [Robot, WebApp]", w
+                        sendMessage "Unknown 'from' type. Should be [Robot, WebApp]", w
                 }
 
             } else {

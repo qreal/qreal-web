@@ -26,10 +26,10 @@ class RobotConnectionProcessor implements ConnectionProcessor {
     }
 
     def connect(Socket socket, def robot) {
-        connectionInfoManager.createRobotConnection(robot.owner, robot.secretCode, robot, socket)
-        String key = RobotConnectionInfo.getKey(robot.owner, robot.secretCode)
+        connectionInfoManager.createRobotConnection(robot.owner, robot.name, robot.secretCode, robot, socket)
+        String key = RobotConnectionInfo.getKey(robot.owner, robot.name)
         log.info "The connection is established"
-        log.info "$robot.owner's robot accepted"
+        log.info "$robot.owner's robot $robot.name accepted"
         socket.withStreams { input, output ->
             def w = new BufferedWriter(new OutputStreamWriter(output))
 

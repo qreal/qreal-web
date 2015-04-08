@@ -10,6 +10,7 @@ import groovy.transform.TupleConstructor
 class RobotConnectionInfo {
 
     String owner
+    String name
     String secretCode
     List<Message> messages
     def robotJson

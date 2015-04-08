@@ -16,9 +16,10 @@ class RobotsConnectionInfoManager {
     Map<String, RobotConnectionInfo> robotConnections = new ConcurrentHashMap<>()
 
 
-    def createRobotConnection(String owner, String code, def desc, Socket socket) {
-        RobotConnectionInfo robotsConnectionInfo = new RobotConnectionInfo(owner: owner, robotJson: desc, socket: socket, secretCode: code, messages: [])
-        def key = RobotConnectionInfo.getKey(owner, code)
+    def createRobotConnection(String owner, String name, String code, def desc, Socket socket) {
+        RobotConnectionInfo robotsConnectionInfo = new RobotConnectionInfo(owner: owner, robotJson: desc,
+                name: name, socket: socket, secretCode: code, messages: [])
+        def key = RobotConnectionInfo.getKey(owner, name)
         robotConnections.put(key, robotsConnectionInfo)
     }
 
@@ -40,6 +41,10 @@ class RobotsConnectionInfoManager {
         return true
     }
 
+    def getRobot(String key) {
+        return robotConnections.get(key)
+    }
+
 
     def addMessage(String key, Message message) {
         if (!robotConnections.containsKey(key)) {
@@ -48,10 +53,6 @@ class RobotsConnectionInfoManager {
         }
         RobotConnectionInfo info = robotConnections.get(key)
         info.messages.add(message)
-    }
-
-    def getOnlineRobots() {
-        return robotConnections
     }
 
     def hasMessage(String key) {

@@ -18,7 +18,7 @@ class WebAppConnectionProcessor implements ConnectionProcessor {
         def result
         switch (message.type) {
             case "getOnlineRobots":
-                result = getOnlineRobots(message.user, message.secretCodes);
+                result = getOnlineRobots(message.robots);
                 break;
             case "sendDiagram":
                 result = sendDiagram(message.robot)
@@ -35,33 +35,39 @@ class WebAppConnectionProcessor implements ConnectionProcessor {
     }
 
     def closeConnection(def robot) {
-        def key = RobotConnectionInfo.getKey(robot.owner, robot.secretCode)
+        def key = RobotConnectionInfo.getKey(robot.owner, robot.name)
         robotsConnectionInfoManager.closeConnection(key)
         return "Closed connection for robot $robot.id"
     }
 
 
-    def getOnlineRobots(def user, def secretCodes) {
+    def getOnlineRobots(def robots) {
         def onlineUserRobots = []
-        def robots = robotsConnectionInfoManager.getOnlineRobots()
-        secretCodes.each { secretCode ->
-            def key = RobotConnectionInfo.getKey(user, secretCode)
-            if (robots.containsKey(key)) {
-                onlineUserRobots.add(robots.get(key).robotJson)
+
+        robots.each { robot ->
+            String key = RobotConnectionInfo.getKey(robot.owner, robot.name)
+            RobotConnectionInfo robotConnectionInfo = robotsConnectionInfoManager.getRobot(key)
+            if (robotConnectionInfo != null) {
+                if (robotConnectionInfo.getSecretCode() == robot.secretCode) {
+                    onlineUserRobots.add(robotConnectionInfo.robotJson)
+                }
             }
+
         }
+
         return JsonOutput.toJson(onlineUserRobots)
     }
 
+
     def sendDiagram(def robot) {
-        String key = RobotConnectionInfo.getKey(robot.owner, robot.secretCode)
+        String key = RobotConnectionInfo.getKey(robot.owner, robot.name)
         Message message = new Message(type: "sendDiagram", text: robot.program)
         robotsConnectionInfoManager.addMessage(key, message)
         return SUCCESS_MESSAGE
     }
 
     def sendModelConfig(def robot) {
-        String key = RobotConnectionInfo.getKey(robot.owner, robot.secretCode)
+        String key = RobotConnectionInfo.getKey(robot.owner, robot.name)
         Message message = new Message(type: "sendModelConfig", text: robot.modelConfig)
         robotsConnectionInfoManager.addMessage(key, message)
         return SUCCESS_MESSAGE
