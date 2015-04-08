@@ -85,12 +85,4 @@
             </div>
         </div>
     </div>
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#navigation").treeview({
-                persist: "location"
-            });
-        });
-    </script>
 </div>

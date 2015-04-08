@@ -245,6 +245,38 @@ var RootDiagramController = (function () {
     };
     return RootDiagramController;
 })();
+var XmlHttpFactory = (function () {
+    function XmlHttpFactory() {
+    }
+    XmlHttpFactory.createXMLHTTPObject = function () {
+        var xmlHttp = undefined;
+        for (var i = 0; i < this.XMLHttpFactories.length; i++) {
+            try {
+                xmlHttp = this.XMLHttpFactories[i]();
+            }
+            catch (e) {
+                continue;
+            }
+            break;
+        }
+        return xmlHttp;
+    };
+    XmlHttpFactory.XMLHttpFactories = [
+        function () {
+            return new XMLHttpRequest();
+        },
+        function () {
+            return new ActiveXObject("Msxml2.XMLHTTP");
+        },
+        function () {
+            return new ActiveXObject("Msxml3.XMLHTTP");
+        },
+        function () {
+            return new ActiveXObject("Microsoft.XMLHTTP");
+        }
+    ];
+    return XmlHttpFactory;
+})();
 var DiagramController = (function () {
     function DiagramController($scope, $compile) {
         this.graph = new joint.dia.Graph;
@@ -254,7 +286,7 @@ var DiagramController = (function () {
         this.nodeIndex = -1;
         var controller = this;
         $scope.vm = controller;
-        controller.nodeTypesMap = XmlManager.loadElementsFromXml("configs/elements.xml", $scope, $compile);
+        XmlManager.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
         this.paper.on('cell:pointerdown', function (cellView, evt, x, y) {
             console.log('cell view ' + cellView.model.id + ' was clicked');
             var node = controller.nodesList[cellView.model.id];
@@ -271,13 +303,19 @@ var DiagramController = (function () {
             $(".property").remove();
             controller.currentNode = undefined;
         });
-        this.setInputStringListener(controller);
-        this.setCheckboxListener(controller);
-        this.setDropdownListener(controller);
-        this.setSpinnerListener(controller);
-        this.initDragAndDrop(controller);
     }
-    DiagramController.prototype.setInputStringListener = function (controller) {
+    DiagramController.prototype.setNodeTypesMap = function (nodeTypesMap) {
+        this.nodeTypesMap = nodeTypesMap;
+    };
+    DiagramController.prototype.initPalette = function () {
+        this.setInputStringListener();
+        this.setCheckboxListener();
+        this.setDropdownListener();
+        this.setSpinnerListener();
+        this.initDragAndDrop();
+    };
+    DiagramController.prototype.setInputStringListener = function () {
+        var controller = this;
         $(document).on('change', '.form-control', function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
@@ -287,7 +325,8 @@ var DiagramController = (function () {
             controller.currentNode.setProperty(name, property);
         });
     };
-    DiagramController.prototype.setCheckboxListener = function (controller) {
+    DiagramController.prototype.setCheckboxListener = function () {
+        var controller = this;
         $(document).on('change', '.checkbox', function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
@@ -306,7 +345,8 @@ var DiagramController = (function () {
             controller.currentNode.setProperty(name, property);
         });
     };
-    DiagramController.prototype.setDropdownListener = function (controller) {
+    DiagramController.prototype.setDropdownListener = function () {
+        var controller = this;
         $(document).on('change', '.mydropdown', function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
@@ -316,7 +356,8 @@ var DiagramController = (function () {
             controller.currentNode.setProperty(name, property);
         });
     };
-    DiagramController.prototype.setSpinnerListener = function (controller) {
+    DiagramController.prototype.setSpinnerListener = function () {
+        var controller = this;
         $(document).on('change', '.spinner', function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
@@ -328,18 +369,21 @@ var DiagramController = (function () {
             }
         });
     };
-    DiagramController.prototype.initDragAndDrop = function (controller) {
+    DiagramController.prototype.initDragAndDrop = function () {
+        var controller = this;
         $(".tree_element").draggable({
             helper: function () {
-                return $(this).find('.elementImg').clone();
+                var clone = $(this).find('.elementImg').clone();
+                clone.css('position', 'fixed');
+                clone.css('z-index', '1000');
+                return clone;
             },
             revert: "invalid"
         });
         $("#diagram_paper").droppable({
             drop: function (event, ui) {
-                var paperPos = $("#diagram_paper").position();
-                var topElementPos = ui.position.top - paperPos.top;
-                var leftElementPos = ui.position.left - paperPos.left;
+                var topElementPos = ui.offset.top - $(this).offset().top + $(this).scrollTop();
+                var leftElementPos = ui.offset.left - $(this).offset().left + $(this).scrollLeft();
                 var gridSize = controller.paper.getGridSizeValue();
                 topElementPos -= topElementPos % gridSize;
                 leftElementPos -= leftElementPos % gridSize;
@@ -641,22 +685,17 @@ var PropertyManager = (function () {
 var XmlManager = (function () {
     function XmlManager() {
     }
-    XmlManager.loadXMLDoc = function (name) {
-        var xmlDoc;
-        if (XMLHttpRequest) {
-            xmlDoc = new XMLHttpRequest();
-            xmlDoc.open("GET", name, false);
-            xmlDoc.send("");
-            return xmlDoc.responseXML;
+    XmlManager.loadElementsFromXml = function (controller, pathToXML, $scope, $compile) {
+        var req = XmlHttpFactory.createXMLHTTPObject();
+        if (!req) {
+            alert("Can't load xml document!");
+            return null;
         }
-        else {
-            xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-            xmlDoc.async = false;
-            xmlDoc.load(name);
-            return xmlDoc;
-        }
-        alert("Error loading document!");
-        return null;
+        req.open("GET", pathToXML, true);
+        req.onreadystatechange = function () {
+            XmlManager.parseElementsXml(req, controller, $scope, $compile);
+        };
+        req.send(null);
     };
     XmlManager.addDropdownList = function (typeName, propertyName, variants) {
         var list = [];
@@ -665,48 +704,64 @@ var XmlManager = (function () {
         }
         DropdownListManager.addDropdownList(typeName, propertyName, list);
     };
-    XmlManager.loadElementsFromXml = function (pathToXML, $scope, $compile) {
-        var xmlDoc = this.loadXMLDoc(pathToXML);
-        var nodeTypesMap = {};
-        var content = '';
-        var categories = xmlDoc.getElementsByTagName("Category");
-        for (var k = 0; k < categories.length; k++) {
-            content += '<li><p>' + categories[k].getAttribute('name') + '</p><ul>';
-            var elements = categories[k].getElementsByTagName("Element");
-            for (var i = 0; i < elements.length; i++) {
-                var typeName = elements[i].getAttribute('name');
-                nodeTypesMap[typeName] = new NodeType();
-                content += '<li><div class="tree_element">';
-                var elementProperties = elements[i].getElementsByTagName("Property");
-                var properties = {};
-                for (var j = 0; j < elementProperties.length; j++) {
-                    var propertyName = elementProperties[j].getAttribute('name');
-                    var propertyType = elementProperties[j].getAttribute('type');
-                    if (propertyType === "dropdown") {
-                        this.addDropdownList(typeName, propertyName, elementProperties[j].getElementsByTagName("Variants")[0].getElementsByTagName("variant"));
+    XmlManager.parseElementsXml = function (req, controller, $scope, $compile) {
+        try {
+            if (req.readyState == 4) {
+                if (req.status == 200) {
+                    var xmlDoc = req.responseXML;
+                    var nodeTypesMap = {};
+                    var content = '';
+                    var categories = xmlDoc.getElementsByTagName("Category");
+                    for (var k = 0; k < categories.length; k++) {
+                        content += '<li><p>' + categories[k].getAttribute('name') + '</p><ul>';
+                        var elements = categories[k].getElementsByTagName("Element");
+                        for (var i = 0; i < elements.length; i++) {
+                            var typeName = elements[i].getAttribute('name');
+                            nodeTypesMap[typeName] = new NodeType();
+                            content += '<li><div class="tree_element">';
+                            var elementProperties = elements[i].getElementsByTagName("Property");
+                            var properties = {};
+                            for (var j = 0; j < elementProperties.length; j++) {
+                                var propertyName = elementProperties[j].getAttribute('name');
+                                var propertyType = elementProperties[j].getAttribute('type');
+                                if (propertyType === "dropdown") {
+                                    this.addDropdownList(typeName, propertyName, elementProperties[j].getElementsByTagName("Variants")[0].getElementsByTagName("variant"));
+                                }
+                                var propertyValue;
+                                var valueElement = elementProperties[j].getElementsByTagName("value")[0];
+                                if (valueElement.childNodes[0]) {
+                                    propertyValue = valueElement.childNodes[0].nodeValue;
+                                }
+                                else {
+                                    propertyValue = '';
+                                }
+                                var property = new Property(propertyValue, propertyType);
+                                properties[propertyName] = property;
+                            }
+                            var image = elements[i].getElementsByTagName("Image")[0].getAttribute('src');
+                            nodeTypesMap[typeName].image = image;
+                            nodeTypesMap[typeName].properties = properties;
+                            content += '<img class="elementImg" src="' + image + '" width="30" height="30"' + '/>';
+                            content += typeName;
+                            content += '</div></li>';
+                        }
+                        content += '</ul></li>';
                     }
-                    var propertyValue;
-                    var valueElement = elementProperties[j].getElementsByTagName("value")[0];
-                    if (valueElement.childNodes[0]) {
-                        propertyValue = valueElement.childNodes[0].nodeValue;
-                    }
-                    else {
-                        propertyValue = '';
-                    }
-                    var property = new Property(propertyValue, propertyType);
-                    properties[propertyName] = property;
+                    $('#navigation').append($compile(content)($scope));
+                    $("#navigation").treeview({
+                        persist: "location"
+                    });
+                    controller.setNodeTypesMap(nodeTypesMap);
+                    controller.initPalette();
                 }
-                var image = elements[i].getElementsByTagName("Image")[0].getAttribute('src');
-                nodeTypesMap[typeName].image = image;
-                nodeTypesMap[typeName].properties = properties;
-                content += '<img class="elementImg" src="' + image + '" width="30" height="30"' + '/>';
-                content += typeName;
-                content += '</div></li>';
+                else {
+                    alert("Can't load palette:\n" + req.statusText);
+                }
             }
-            content += '</ul></li>';
         }
-        $('#navigation').append($compile(content)($scope));
-        return nodeTypesMap;
+        catch (e) {
+            alert("Error: " + e.message);
+        }
     };
     return XmlManager;
 })();

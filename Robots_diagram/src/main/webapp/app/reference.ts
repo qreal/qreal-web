@@ -23,6 +23,7 @@
 /// <reference path="twoDModel/implementations/robotModel/CommonRobotModelImpl.ts" />
 //grunt-start
 /// <reference path="RootDiagramController.ts" />
+/// <reference path="XmlHttpFactory.ts" />
 /// <reference path="diagram/controllers/DiagramController.ts" />
 /// <reference path="diagram/managers/DropdownListManager.ts" />
 /// <reference path="diagram/managers/ExportManager.ts" />

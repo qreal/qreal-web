@@ -68,6 +68,10 @@ body{
     margin-bottom: 10px;
 }
 
+.elementImg {
+    margin-right: 5px;
+}
+
 #property_table {
     width: 100%;
 }
