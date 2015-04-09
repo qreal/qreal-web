@@ -307,12 +307,23 @@ var DiagramController = (function () {
     DiagramController.prototype.setNodeTypesMap = function (nodeTypesMap) {
         this.nodeTypesMap = nodeTypesMap;
     };
+    DiagramController.prototype.makeUnselectable = function (element) {
+        if (element.nodeType == 1) {
+            element.setAttribute("unselectable", "on");
+        }
+        var child = element.firstChild;
+        while (child) {
+            this.makeUnselectable(child);
+            child = child.nextSibling;
+        }
+    };
     DiagramController.prototype.initPalette = function () {
         this.setInputStringListener();
         this.setCheckboxListener();
         this.setDropdownListener();
         this.setSpinnerListener();
         this.initDragAndDrop();
+        this.makeUnselectable(document.getElementById("diagramContent"));
     };
     DiagramController.prototype.setInputStringListener = function () {
         var controller = this;
@@ -872,8 +883,19 @@ var TwoDModelEngineFacadeImpl = (function () {
                 $('#confirmDelete').modal('hide');
             });
             facade.initPortsConfigation($scope, $compile, robotModel);
+            facade.makeUnselectable(document.getElementById("twoDModelContent"));
         });
     }
+    TwoDModelEngineFacadeImpl.prototype.makeUnselectable = function (element) {
+        if (element.nodeType == 1) {
+            element.setAttribute("unselectable", "on");
+        }
+        var child = element.firstChild;
+        while (child) {
+            this.makeUnselectable(child);
+            child = child.nextSibling;
+        }
+    };
     TwoDModelEngineFacadeImpl.prototype.setDrawLineMode = function () {
         this.model.getWorldModel().setDrawLineMode();
     };
