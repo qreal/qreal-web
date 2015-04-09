@@ -17,10 +17,14 @@ class DeviceInfoImpl implements DeviceInfo {
         return this.friendlyName;
     }
 
+    getType() {
+        return this.deviceType;
+    }
+
     isA(type): boolean {
         var currentParent = this.deviceType;
 
-        while(currentParent && currentParent.parentType !== type) {
+        while(currentParent && currentParent !== type) {
             currentParent = currentParent.parentType;
         }
 

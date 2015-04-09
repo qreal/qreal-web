@@ -40,7 +40,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
     }
 
     private xmlLoadReady(req): void {
-        /*try {*/
+        try {
             if (req.readyState == 4) {
                 if (req.status == 200) {
                     this.model.deserialize(req.responseXML);
@@ -48,9 +48,9 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
                     alert("Can't load 2d model:\n" + req.statusText);
                 }
             }
-        /*} catch(e) {
+        } catch(e) {
             alert("Error: " + e.message);
-        }*/
+        }
     }
 
     setDrawLineMode(): void {
@@ -78,6 +78,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         $("#diagramContent").show();
     }
 
+
     initPortsConfigation($scope, $compile, twoDRobotModel: TwoDRobotModel): void {
         var configurationDropdownsContent = "<p>";
         twoDRobotModel.getConfigurablePorts().forEach(function(port) {
@@ -102,6 +103,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
 
     setPortsSelectsListeners(twoDRobotModel: TwoDRobotModel): void {
         var facade = this;
+        var sensorsConfiguration = facade.model.getRobotModels()[0].getSensorsConfiguration();
         twoDRobotModel.getConfigurablePorts().forEach(function(port) {
             var portName: string = port.getName();
             var htmlId = "#" + portName + "Select";
@@ -110,14 +112,11 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
                 var newValue: string = $(htmlId).val();
                 switch (newValue) {
                     case "Unused":
-                        facade.model.getRobotModels()[0].removeSensorItem(portName);
-                        break
-                    case "Light Sensor":
-                        break
-                    case "Infrared Sensor":
-                        facade.model.getRobotModels()[0].addSonarSensorItem(portName);
+                        sensorsConfiguration.removeSensor(portName);
                         break
                     default:
+                        var device = twoDRobotModel.getAllowedDevices(port)[$(htmlId + " option:selected").index() - 1];
+                        sensorsConfiguration.addSensor(portName, device);
                 }
             });
         });

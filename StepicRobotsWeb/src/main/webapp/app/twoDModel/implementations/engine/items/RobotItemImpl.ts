@@ -63,7 +63,7 @@ class RobotItemImpl implements RobotItem {
 
                     angle -= this.rotation;
                     robotItem.image.transform(this.transformation + "R" + angle + "," +
-                        robotItem.center.x + "," + robotItem.center.y);
+                    robotItem.center.x + "," + robotItem.center.y);
 
                     robotItem.transformSensorsItems("R" + angle + "," + robotItem.center.x + "," + robotItem.center.y);
 
@@ -142,6 +142,18 @@ class RobotItemImpl implements RobotItem {
         this.rotateHandle.show();
     }
 
+    getWidth(): number {
+        return this.width;
+    }
+
+    getHeight(): number {
+        return this.height;
+    }
+
+    getStartPosition(): TwoDPosition {
+        return this.startPosition;
+    }
+
     removeSensorItem(portName: string): void {
         var sensor = this.sensors[portName];
         if (sensor) {
@@ -150,12 +162,16 @@ class RobotItemImpl implements RobotItem {
         }
     }
 
-    addSonarSensorItem(portName: string): void {
-        var sonar: SonarSensorItem = new SonarSensorItem(this.worldModel,
-            {x: this.startPosition.x + this.width + 10, y: this.startPosition.y - 15 + this.height / 2});
-        sonar.transform(this.image.transform());
-        sonar.updateTransformationString();
-        this.sensors[portName] = sonar;
+    addSensorItem(portName: string, sensorType: DeviceInfo, pathToImage: string): void {
+        var sensor: SensorItem;
+        if (sensorType.isA(RangeSensor)) {
+            sensor = new SonarSensorItem(this, this.worldModel, sensorType, pathToImage);
+        } else {
+            sensor = new SensorItem(this, this.worldModel, sensorType, pathToImage);
+        }
+        sensor.transform(this.image.transform());
+        sensor.updateTransformationString();
+        this.sensors[portName] = sensor;
     }
 
     private updateSensorsTransformations(): void {

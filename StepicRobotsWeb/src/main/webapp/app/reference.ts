@@ -82,6 +82,7 @@
 /// <reference path="twoDModel/interfaces/engine/items/WallItem.ts" />
 /// <reference path="twoDModel/interfaces/engine/model/Model.ts" />
 /// <reference path="twoDModel/interfaces/engine/model/RobotModel.ts" />
+/// <reference path="twoDModel/interfaces/engine/model/SensorsConfiguration.ts" />
 /// <reference path="twoDModel/interfaces/engine/model/Settings.ts" />
 /// <reference path="twoDModel/interfaces/engine/model/Timeline.ts" />
 /// <reference path="twoDModel/interfaces/engine/model/WorldModel.ts" />
