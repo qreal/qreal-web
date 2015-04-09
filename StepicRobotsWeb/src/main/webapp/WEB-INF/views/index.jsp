@@ -16,7 +16,7 @@
 <body ng-app ng-controller="RootDiagramController">
     <div class="container">
         <div class="row">
-            <div class="col-md-8 no-float">
+            <div id="diagramContent" class="col-md-8 no-float unselectable">
                 <div id="diagram_container" class="container"  ng-controller="DiagramController">
                     <div class="row">
                         <div class="col-md-9 no-float">
@@ -45,6 +45,7 @@
                                         <legend style="margin-bottom: 5px">Palette</legend>
                                         <p>
                                             <span id="remove" class="glyphicon glyphicon-trash" ng-click="vm.removeCurrentElement()"></span>
+                                            Delete node
                                         </p>
                                         <div id="elements_tree">
                                             <ul id="navigation">
@@ -57,7 +58,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 no-float">
+            <div id="twoDModelContent" class="col-md-4 no-float unselectable">
                 <div class="background_div">
                     <div id="twoDModel_stage"  ng-controller="TwoDModelEngineFacadeImpl">
 

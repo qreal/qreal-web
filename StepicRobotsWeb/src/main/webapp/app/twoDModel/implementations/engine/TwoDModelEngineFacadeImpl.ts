@@ -21,7 +21,19 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
             });
 
             facade.initPortsConfigation($scope, $compile, robotModel);
+            facade.makeUnselectable(document.getElementById("twoDModelContent"));
         });
+    }
+
+    private makeUnselectable(element) {
+        if (element.nodeType == 1) {
+            element.setAttribute("unselectable", "on");
+        }
+        var child = element.firstChild;
+        while (child) {
+            this.makeUnselectable(child);
+            child = child.nextSibling;
+        }
     }
 
     load(pathToXML: string): void {
