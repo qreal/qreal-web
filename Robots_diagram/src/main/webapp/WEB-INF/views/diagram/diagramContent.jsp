@@ -1,4 +1,4 @@
-<div id="diagramContent" ng-controller="DiagramController">
+<div id="diagramContent" class="unselectable" ng-controller="DiagramController">
     <div class="navbar navbar-inverse navbar-static-top">
         <div class="container-fluid">
             <div class="navbar-header">

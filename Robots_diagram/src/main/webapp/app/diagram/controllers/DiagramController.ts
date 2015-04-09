@@ -38,12 +38,24 @@ class DiagramController {
         this.nodeTypesMap = nodeTypesMap;
     }
 
+    private makeUnselectable(element) {
+        if (element.nodeType == 1) {
+            element.setAttribute("unselectable", "on");
+        }
+        var child = element.firstChild;
+        while (child) {
+            this.makeUnselectable(child);
+            child = child.nextSibling;
+        }
+    }
+
     initPalette() {
         this.setInputStringListener();
         this.setCheckboxListener();
         this.setDropdownListener();
         this.setSpinnerListener();
         this.initDragAndDrop();
+        this.makeUnselectable(document.getElementById("diagramContent"));
     }
 
     setInputStringListener(): void {
