@@ -72,6 +72,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
 
     setPortsSelectsListeners(twoDRobotModel: TwoDRobotModel): void {
         var facade = this;
+        var sensorsConfiguration = facade.model.getRobotModels()[0].getSensorsConfiguration();
         twoDRobotModel.getConfigurablePorts().forEach(function(port) {
             var portName: string = port.getName();
             var htmlId = "#" + portName + "Select";
@@ -80,15 +81,11 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
                 var newValue: string = $(htmlId).val();
                 switch (newValue) {
                     case "Unused":
-                        facade.model.getRobotModels()[0].removeSensorItem(portName);
-                        break
-                    case "Light sensor":
-                        facade.model.getRobotModels()[0].addSensorItem(portName, new DeviceInfoImpl(LightSensor));
-                        break
-                    case "Infrared Sensor":
-                        facade.model.getRobotModels()[0].addSensorItem(portName, new DeviceInfoImpl(TrikInfraredSensor));
+                        sensorsConfiguration.removeSensor(portName);
                         break
                     default:
+                        var device = twoDRobotModel.getAllowedDevices(port)[$(htmlId + " option:selected").index() - 1];
+                        sensorsConfiguration.addSensor(portName, device);
                 }
             });
         });

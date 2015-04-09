@@ -49,6 +49,7 @@
 /// <reference path="twoDModel/implementations/engine/model/Constants.ts" />
 /// <reference path="twoDModel/implementations/engine/model/ModelImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/model/RobotModelImpl.ts" />
+/// <reference path="twoDModel/implementations/engine/model/SensorsConfiguration.ts" />
 /// <reference path="twoDModel/implementations/engine/model/TimelineImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/model/WorldModelImpl.ts" />
 /// <reference path="twoDModel/implementations/robotModel/DeviceInfoImpl.ts" />

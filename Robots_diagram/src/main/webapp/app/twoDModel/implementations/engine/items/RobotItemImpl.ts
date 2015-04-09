@@ -162,19 +162,16 @@ class RobotItemImpl implements RobotItem {
         }
     }
 
-    addSensorItem(portName: string, deviceType: DeviceInfo, pathToImage: string): void {
-        if (this.sensors[portName]) {
-            this.removeSensorItem(portName);
-        }
-        var sonar: SensorItem;
-        if (deviceType.isA(TrikInfraredSensor)) {
-            sonar = new SonarSensorItem(this, this.worldModel, deviceType, pathToImage);
+    addSensorItem(portName: string, sensorType: DeviceInfo, pathToImage: string): void {
+        var sensor: SensorItem;
+        if (sensorType.isA(RangeSensor)) {
+            sensor = new SonarSensorItem(this, this.worldModel, sensorType, pathToImage);
         } else {
-            sonar = new SensorItem(this, this.worldModel, deviceType, pathToImage);
+            sensor = new SensorItem(this, this.worldModel, sensorType, pathToImage);
         }
-        sonar.transform(this.image.transform());
-        sonar.updateTransformationString();
-        this.sensors[portName] = sonar;
+        sensor.transform(this.image.transform());
+        sensor.updateTransformationString();
+        this.sensors[portName] = sensor;
     }
 
     private updateSensorsTransformations(): void {

@@ -1,10 +1,12 @@
 class RobotModelImpl implements RobotModel {
     private robotItem: RobotItem;
     private twoDRobotModel: TwoDRobotModel;
+    private sensorsConfiguration: SensorsConfiguration;
 
     constructor(worldModel: WorldModel, twoDRobotModel: TwoDRobotModel, position: TwoDPosition) {
         this.twoDRobotModel = twoDRobotModel;
         this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), this);
+        this.sensorsConfiguration = new SensorsConfiguration(this);
     }
 
     info(): TwoDRobotModel {
@@ -13,6 +15,10 @@ class RobotModelImpl implements RobotModel {
 
     removeSensorItem(portName: string): void {
         this.robotItem.removeSensorItem(portName);
+    }
+
+    getSensorsConfiguration(): SensorsConfiguration {
+        return this.sensorsConfiguration;
     }
 
     addSensorItem(portName: string, deviceType: DeviceInfo): void {

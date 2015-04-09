@@ -916,6 +916,7 @@ var TwoDModelEngineFacadeImpl = (function () {
     };
     TwoDModelEngineFacadeImpl.prototype.setPortsSelectsListeners = function (twoDRobotModel) {
         var facade = this;
+        var sensorsConfiguration = facade.model.getRobotModels()[0].getSensorsConfiguration();
         twoDRobotModel.getConfigurablePorts().forEach(function (port) {
             var portName = port.getName();
             var htmlId = "#" + portName + "Select";
@@ -923,15 +924,11 @@ var TwoDModelEngineFacadeImpl = (function () {
                 var newValue = $(htmlId).val();
                 switch (newValue) {
                     case "Unused":
-                        facade.model.getRobotModels()[0].removeSensorItem(portName);
-                        break;
-                    case "Light sensor":
-                        facade.model.getRobotModels()[0].addSensorItem(portName, new DeviceInfoImpl(LightSensor));
-                        break;
-                    case "Infrared Sensor":
-                        facade.model.getRobotModels()[0].addSensorItem(portName, new DeviceInfoImpl(TrikInfraredSensor));
+                        sensorsConfiguration.removeSensor(portName);
                         break;
                     default:
+                        var device = twoDRobotModel.getAllowedDevices(port)[$(htmlId + " option:selected").index() - 1];
+                        sensorsConfiguration.addSensor(portName, device);
                 }
             });
         });
@@ -1375,20 +1372,17 @@ var RobotItemImpl = (function () {
             delete this.sensors[portName];
         }
     };
-    RobotItemImpl.prototype.addSensorItem = function (portName, deviceType, pathToImage) {
-        if (this.sensors[portName]) {
-            this.removeSensorItem(portName);
-        }
-        var sonar;
-        if (deviceType.isA(TrikInfraredSensor)) {
-            sonar = new SonarSensorItem(this, this.worldModel, deviceType, pathToImage);
+    RobotItemImpl.prototype.addSensorItem = function (portName, sensorType, pathToImage) {
+        var sensor;
+        if (sensorType.isA(RangeSensor)) {
+            sensor = new SonarSensorItem(this, this.worldModel, sensorType, pathToImage);
         }
         else {
-            sonar = new SensorItem(this, this.worldModel, deviceType, pathToImage);
+            sensor = new SensorItem(this, this.worldModel, sensorType, pathToImage);
         }
-        sonar.transform(this.image.transform());
-        sonar.updateTransformationString();
-        this.sensors[portName] = sonar;
+        sensor.transform(this.image.transform());
+        sensor.updateTransformationString();
+        this.sensors[portName] = sensor;
     };
     RobotItemImpl.prototype.updateSensorsTransformations = function () {
         for (var portName in this.sensors) {
@@ -1756,12 +1750,16 @@ var RobotModelImpl = (function () {
     function RobotModelImpl(worldModel, twoDRobotModel, position) {
         this.twoDRobotModel = twoDRobotModel;
         this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), this);
+        this.sensorsConfiguration = new SensorsConfiguration(this);
     }
     RobotModelImpl.prototype.info = function () {
         return this.twoDRobotModel;
     };
     RobotModelImpl.prototype.removeSensorItem = function (portName) {
         this.robotItem.removeSensorItem(portName);
+    };
+    RobotModelImpl.prototype.getSensorsConfiguration = function () {
+        return this.sensorsConfiguration;
     };
     RobotModelImpl.prototype.addSensorItem = function (portName, deviceType) {
         this.robotItem.addSensorItem(portName, deviceType, this.twoDRobotModel.sensorImagePath(deviceType));
@@ -1770,6 +1768,34 @@ var RobotModelImpl = (function () {
         this.robotItem.ride();
     };
     return RobotModelImpl;
+})();
+var SensorsConfiguration = (function () {
+    function SensorsConfiguration(robotModel) {
+        this.sensors = {};
+        this.robotModel = robotModel;
+    }
+    SensorsConfiguration.prototype.isSensorHaveView = function (sensorType) {
+        return sensorType.isA(TouchSensor) || sensorType.isA(ColorSensor) || sensorType.isA(LightSensor) || sensorType.isA(RangeSensor) || sensorType.isA(VectorSensor);
+    };
+    SensorsConfiguration.prototype.addSensor = function (portName, sensorType) {
+        if (this.sensors[portName]) {
+            this.removeSensor(portName);
+        }
+        this.sensors[portName] = sensorType;
+        if (this.isSensorHaveView(sensorType)) {
+            this.robotModel.addSensorItem(portName, sensorType);
+        }
+    };
+    SensorsConfiguration.prototype.removeSensor = function (portName) {
+        var sensor = this.sensors[portName];
+        if (sensor) {
+            if (this.isSensorHaveView(this.sensors[portName])) {
+                this.robotModel.removeSensorItem(portName);
+            }
+            delete this.sensors[portName];
+        }
+    };
+    return SensorsConfiguration;
 })();
 var TimelineImpl = (function () {
     function TimelineImpl() {
@@ -1983,6 +2009,9 @@ var DeviceInfoImpl = (function () {
     };
     DeviceInfoImpl.prototype.getFriendlyName = function () {
         return this.friendlyName;
+    };
+    DeviceInfoImpl.prototype.getType = function () {
+        return this.deviceType;
     };
     DeviceInfoImpl.prototype.isA = function (type) {
         var currentParent = this.deviceType;
