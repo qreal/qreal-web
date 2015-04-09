@@ -142,6 +142,18 @@ class RobotItemImpl implements RobotItem {
         this.rotateHandle.show();
     }
 
+    getWidth(): number {
+        return this.width;
+    }
+
+    getHeight(): number {
+        return this.height;
+    }
+
+    getStartPosition(): TwoDPosition {
+        return this.startPosition;
+    }
+
     removeSensorItem(portName: string): void {
         var sensor = this.sensors[portName];
         if (sensor) {
@@ -150,9 +162,16 @@ class RobotItemImpl implements RobotItem {
         }
     }
 
-    addSonarSensorItem(portName: string): void {
-        var sonar: SonarSensorItem = new SonarSensorItem(this.worldModel,
-            {x: this.startPosition.x + this.width + 10, y: this.startPosition.y - 15 + this.height / 2});
+    addSensorItem(portName: string, deviceType: DeviceInfo, pathToImage: string): void {
+        if (this.sensors[portName]) {
+            this.removeSensorItem(portName);
+        }
+        var sonar: SensorItem;
+        if (deviceType.isA(TrikInfraredSensor)) {
+            sonar = new SonarSensorItem(this, this.worldModel, deviceType, pathToImage);
+        } else {
+            sonar = new SensorItem(this, this.worldModel, deviceType, pathToImage);
+        }
         sonar.transform(this.image.transform());
         sonar.updateTransformationString();
         this.sensors[portName] = sonar;

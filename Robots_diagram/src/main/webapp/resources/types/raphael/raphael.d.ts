@@ -223,6 +223,7 @@ interface RaphaelPaper {
     text(x: number, y: number, text: string): RaphaelElement;
     top: RaphaelElement;
     width: number;
+    customAttributes;
 }
 
 interface RaphaelStatic {

@@ -15,8 +15,8 @@ class RobotModelImpl implements RobotModel {
         this.robotItem.removeSensorItem(portName);
     }
 
-    addSonarSensorItem(portName: string): void {
-        this.robotItem.addSonarSensorItem(portName);
+    addSensorItem(portName: string, deviceType: DeviceInfo): void {
+        this.robotItem.addSensorItem(portName, deviceType, this.twoDRobotModel.sensorImagePath(deviceType));
     }
 
     nextFragment(): void {

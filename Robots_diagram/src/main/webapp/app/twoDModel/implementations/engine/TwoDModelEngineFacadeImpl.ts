@@ -82,10 +82,11 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
                     case "Unused":
                         facade.model.getRobotModels()[0].removeSensorItem(portName);
                         break
-                    case "Light Sensor":
+                    case "Light sensor":
+                        facade.model.getRobotModels()[0].addSensorItem(portName, new DeviceInfoImpl(LightSensor));
                         break
                     case "Infrared Sensor":
-                        facade.model.getRobotModels()[0].addSonarSensorItem(portName);
+                        facade.model.getRobotModels()[0].addSensorItem(portName, new DeviceInfoImpl(TrikInfraredSensor));
                         break
                     default:
                 }

@@ -20,7 +20,7 @@ class DeviceInfoImpl implements DeviceInfo {
     isA(type): boolean {
         var currentParent = this.deviceType;
 
-        while(currentParent && currentParent.parentType !== type) {
+        while(currentParent && currentParent !== type) {
             currentParent = currentParent.parentType;
         }
 
