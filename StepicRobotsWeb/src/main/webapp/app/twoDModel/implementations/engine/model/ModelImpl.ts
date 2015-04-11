@@ -36,10 +36,9 @@ class ModelImpl implements Model {
     }
 
     private parsePositionString(positionStr: string): TwoDPosition {
-        var regExp = /(-?\d+):(-?\d+)/gi;
-        regExp.exec(positionStr);
-        var x = parseFloat(RegExp.$1);
-        var y = parseFloat(RegExp.$2);
+        var splittedStr = positionStr.split(":");
+        var x = parseFloat(splittedStr[0]);
+        var y = parseFloat(splittedStr[1]);
         return new TwoDPosition(x, y);
     }
 
