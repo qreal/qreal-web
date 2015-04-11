@@ -951,8 +951,8 @@ var TwoDModelEngineFacadeImpl = (function () {
             configurationDropdownsContent += "<option value='Unused'>Unused</option>";
             var devices = twoDRobotModel.getAllowedDevices(port);
             devices.forEach(function (device) {
-                var friendlyName = device.getFriendlyName();
-                configurationDropdownsContent += "<option value='" + friendlyName + "'>" + friendlyName + "</option>";
+                configurationDropdownsContent += "<option value='" + device.getName() + "'>" + device.getFriendlyName();
+                +"</option>";
             });
             configurationDropdownsContent += "</select>";
             configurationDropdownsContent += "</p>";
@@ -974,7 +974,7 @@ var TwoDModelEngineFacadeImpl = (function () {
                         sensorsConfiguration.removeSensor(portName);
                         break;
                     default:
-                        var device = twoDRobotModel.getAllowedDevices(port)[$(htmlId + " option:selected").index() - 1];
+                        var device = DeviceInfoImpl.fromString(newValue);
                         sensorsConfiguration.addSensor(portName, device);
                 }
             });
@@ -2053,6 +2053,24 @@ var DeviceInfoImpl = (function () {
         this.name = deviceType.name;
         this.friendlyName = deviceType.friendlyName;
     }
+    DeviceInfoImpl.fromString = function (str) {
+        if (!DeviceInfoImpl.createdInfos[str]) {
+            throw new Error("DeviceInfo for " + str + " not found");
+        }
+        else {
+            return DeviceInfoImpl.createdInfos[str];
+        }
+    };
+    DeviceInfoImpl.getInstance = function (deviceType) {
+        if (!DeviceInfoImpl.createdInfos[deviceType.name]) {
+            var deviceInfo = new DeviceInfoImpl(deviceType);
+            DeviceInfoImpl.createdInfos[deviceType.name] = deviceInfo;
+            return deviceInfo;
+        }
+        else {
+            return DeviceInfoImpl.createdInfos[deviceType.name];
+        }
+    };
     DeviceInfoImpl.prototype.getName = function () {
         return this.name;
     };
@@ -2069,6 +2087,7 @@ var DeviceInfoImpl = (function () {
         }
         return currentParent != undefined;
     };
+    DeviceInfoImpl.createdInfos = {};
     return DeviceInfoImpl;
 })();
 var PortInfoImpl = (function () {
@@ -2173,70 +2192,70 @@ var TrikRobotModelBase = (function (_super) {
         return _super.prototype.getConfigurablePorts.call(this).concat(this.digitalPorts);
     };
     TrikRobotModelBase.prototype.displayInfo = function () {
-        return new DeviceInfoImpl(Display);
+        return DeviceInfoImpl.getInstance(Display);
     };
     TrikRobotModelBase.prototype.speakerInfo = function () {
-        return new DeviceInfoImpl(Speaker);
+        return DeviceInfoImpl.getInstance(Speaker);
     };
     TrikRobotModelBase.prototype.buttonInfo = function () {
-        return new DeviceInfoImpl(Button);
+        return DeviceInfoImpl.getInstance(Button);
     };
     TrikRobotModelBase.prototype.powerMotorInfo = function () {
-        return new DeviceInfoImpl(Motor);
+        return DeviceInfoImpl.getInstance(Motor);
     };
     TrikRobotModelBase.prototype.servoMotorInfo = function () {
-        return new DeviceInfoImpl(Motor);
+        return DeviceInfoImpl.getInstance(Motor);
     };
     TrikRobotModelBase.prototype.encoderInfo = function () {
-        return new DeviceInfoImpl(EncoderSensor);
+        return DeviceInfoImpl.getInstance(EncoderSensor);
     };
     TrikRobotModelBase.prototype.lightSensorInfo = function () {
-        return new DeviceInfoImpl(LightSensor);
+        return DeviceInfoImpl.getInstance(LightSensor);
     };
     TrikRobotModelBase.prototype.infraredSensorInfo = function () {
-        return new DeviceInfoImpl(TrikInfraredSensor);
+        return DeviceInfoImpl.getInstance(TrikInfraredSensor);
     };
     TrikRobotModelBase.prototype.sonarSensorInfo = function () {
-        return new DeviceInfoImpl(TrikSonarSensor);
+        return DeviceInfoImpl.getInstance(TrikSonarSensor);
     };
     TrikRobotModelBase.prototype.motionSensorInfo = function () {
-        return new DeviceInfoImpl(TrikMotionSensor);
+        return DeviceInfoImpl.getInstance(TrikMotionSensor);
     };
     TrikRobotModelBase.prototype.gyroscopeInfo = function () {
-        return new DeviceInfoImpl(GyroscopeSensor);
+        return DeviceInfoImpl.getInstance(GyroscopeSensor);
     };
     TrikRobotModelBase.prototype.accelerometerInfo = function () {
-        return new DeviceInfoImpl(AccelerometerSensor);
+        return DeviceInfoImpl.getInstance(AccelerometerSensor);
     };
     TrikRobotModelBase.prototype.ledInfo = function () {
-        return new DeviceInfoImpl(TrikLed);
+        return DeviceInfoImpl.getInstance(TrikLed);
     };
     TrikRobotModelBase.prototype.lineSensorInfo = function () {
-        return new DeviceInfoImpl(TrikLineSensor);
+        return DeviceInfoImpl.getInstance(TrikLineSensor);
     };
     TrikRobotModelBase.prototype.colorSensorInfo = function () {
-        return new DeviceInfoImpl(TrikColorSensor);
+        return DeviceInfoImpl.getInstance(TrikColorSensor);
     };
     TrikRobotModelBase.prototype.objectSensorInfo = function () {
-        return new DeviceInfoImpl(TrikObjectSensor);
+        return DeviceInfoImpl.getInstance(TrikObjectSensor);
     };
     TrikRobotModelBase.prototype.shellInfo = function () {
-        return new DeviceInfoImpl(TrikShell);
+        return DeviceInfoImpl.getInstance(TrikShell);
     };
     TrikRobotModelBase.prototype.gamepadButtonInfo = function () {
-        return new DeviceInfoImpl(TrikGamepadButton);
+        return DeviceInfoImpl.getInstance(TrikGamepadButton);
     };
     TrikRobotModelBase.prototype.gamepadPadInfo = function () {
-        return new DeviceInfoImpl(TrikGamepadPad);
+        return DeviceInfoImpl.getInstance(TrikGamepadPad);
     };
     TrikRobotModelBase.prototype.gamepadPadPressSensorInfo = function () {
-        return new DeviceInfoImpl(TrikGamepadPadPressSensor);
+        return DeviceInfoImpl.getInstance(TrikGamepadPadPressSensor);
     };
     TrikRobotModelBase.prototype.gamepadWheelInfo = function () {
-        return new DeviceInfoImpl(TrikGamepadWheel);
+        return DeviceInfoImpl.getInstance(TrikGamepadWheel);
     };
     TrikRobotModelBase.prototype.gamepadConnectionIndicatorInfo = function () {
-        return new DeviceInfoImpl(TrikGamepadConnectionIndicator);
+        return DeviceInfoImpl.getInstance(TrikGamepadConnectionIndicator);
     };
     return TrikRobotModelBase;
 })(CommonRobotModelImpl);
