@@ -21,6 +21,7 @@
 /// <reference path="twoDModel/implementations/robotModel/robotParts/TouchSensor.ts" />
 
 /// <reference path="twoDModel/implementations/robotModel/CommonRobotModelImpl.ts" />
+/// <reference path="twoDModel/implementations/robotModel/DevicesConfigurationProvider.ts" />
 //grunt-start
 /// <reference path="RootDiagramController.ts" />
 /// <reference path="XmlHttpFactory.ts" />

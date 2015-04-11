@@ -231,6 +231,31 @@ var CommonRobotModelImpl = (function () {
     };
     return CommonRobotModelImpl;
 })();
+var DevicesConfigurationProvider = (function () {
+    function DevicesConfigurationProvider() {
+        this.currentConfiguration = {};
+    }
+    DevicesConfigurationProvider.prototype.deviceConfigurationChanged = function (robotModelName, portName, device) {
+        if (!this.currentConfiguration[robotModelName]) {
+            this.currentConfiguration[robotModelName] = {};
+        }
+        if (device == null) {
+            if (this.currentConfiguration[robotModelName][portName]) {
+                delete this.currentConfiguration[robotModelName][portName];
+            }
+        }
+        else {
+            this.currentConfiguration[robotModelName][portName] = device;
+        }
+    };
+    DevicesConfigurationProvider.prototype.getCurrentConfiguration = function (robotModelName, portName) {
+        if (!this.currentConfiguration[robotModelName] || !this.currentConfiguration[robotModelName][portName]) {
+            return null;
+        }
+        return this.currentConfiguration[robotModelName][portName];
+    };
+    return DevicesConfigurationProvider;
+})();
 var RootDiagramController = (function () {
     function RootDiagramController($scope, $compile) {
         $scope.root = this;
@@ -1791,34 +1816,36 @@ var RobotModelImpl = (function () {
     };
     return RobotModelImpl;
 })();
-var SensorsConfiguration = (function () {
+var SensorsConfiguration = (function (_super) {
+    __extends(SensorsConfiguration, _super);
     function SensorsConfiguration(robotModel) {
-        this.sensors = {};
+        _super.call(this);
         this.robotModel = robotModel;
+        this.robotModelName = robotModel.info().getName();
     }
     SensorsConfiguration.prototype.isSensorHaveView = function (sensorType) {
         return sensorType.isA(TouchSensor) || sensorType.isA(ColorSensor) || sensorType.isA(LightSensor) || sensorType.isA(RangeSensor) || sensorType.isA(VectorSensor);
     };
     SensorsConfiguration.prototype.addSensor = function (portName, sensorType) {
-        if (this.sensors[portName]) {
+        if (this.getCurrentConfiguration(this.robotModelName, portName)) {
             this.removeSensor(portName);
         }
-        this.sensors[portName] = sensorType;
+        this.deviceConfigurationChanged(this.robotModel.info().getName(), portName, sensorType);
         if (this.isSensorHaveView(sensorType)) {
             this.robotModel.addSensorItem(portName, sensorType);
         }
     };
     SensorsConfiguration.prototype.removeSensor = function (portName) {
-        var sensor = this.sensors[portName];
+        var sensor = this.getCurrentConfiguration(this.robotModelName, portName);
         if (sensor) {
-            if (this.isSensorHaveView(this.sensors[portName])) {
+            if (this.isSensorHaveView(sensor)) {
                 this.robotModel.removeSensorItem(portName);
             }
-            delete this.sensors[portName];
+            this.deviceConfigurationChanged(this.robotModelName, portName, null);
         }
     };
     return SensorsConfiguration;
-})();
+})(DevicesConfigurationProvider);
 var TimelineImpl = (function () {
     function TimelineImpl() {
         this.timeInterval = 10;

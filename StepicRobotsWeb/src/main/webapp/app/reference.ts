@@ -21,6 +21,7 @@
 /// <reference path="twoDModel/implementations/robotModel/robotParts/TouchSensor.ts" />
 
 /// <reference path="twoDModel/implementations/robotModel/CommonRobotModelImpl.ts" />
+/// <reference path="twoDModel/implementations/robotModel/DevicesConfigurationProvider.ts" />
 //grunt-start
 /// <reference path="RootDiagramController.ts" />
 /// <reference path="XmlHttpFactory.ts" />
@@ -49,6 +50,7 @@
 /// <reference path="twoDModel/implementations/engine/model/Constants.ts" />
 /// <reference path="twoDModel/implementations/engine/model/ModelImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/model/RobotModelImpl.ts" />
+/// <reference path="twoDModel/implementations/engine/model/SensorsConfiguration.ts" />
 /// <reference path="twoDModel/implementations/engine/model/TimelineImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/model/WorldModelImpl.ts" />
 /// <reference path="twoDModel/implementations/robotModel/DeviceInfoImpl.ts" />
@@ -82,7 +84,6 @@
 /// <reference path="twoDModel/interfaces/engine/items/WallItem.ts" />
 /// <reference path="twoDModel/interfaces/engine/model/Model.ts" />
 /// <reference path="twoDModel/interfaces/engine/model/RobotModel.ts" />
-/// <reference path="twoDModel/implementations/engine/model/SensorsConfiguration.ts" />
 /// <reference path="twoDModel/interfaces/engine/model/Settings.ts" />
 /// <reference path="twoDModel/interfaces/engine/model/Timeline.ts" />
 /// <reference path="twoDModel/interfaces/engine/model/WorldModel.ts" />

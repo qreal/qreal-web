@@ -1,9 +1,11 @@
-class SensorsConfiguration {
+class SensorsConfiguration extends DevicesConfigurationProvider {
     private robotModel: RobotModel;
-    private sensors: {string?: DeviceInfo} = {};
+    private robotModelName: string;
 
     constructor(robotModel: RobotModel) {
+        super();
         this.robotModel = robotModel;
+        this.robotModelName = robotModel.info().getName();
     }
 
     private isSensorHaveView(sensorType: DeviceInfo): boolean {
@@ -15,22 +17,22 @@ class SensorsConfiguration {
     }
 
     addSensor(portName: string, sensorType: DeviceInfo): void {
-        if (this.sensors[portName]) {
+        if (this.getCurrentConfiguration(this.robotModelName, portName)) {
             this.removeSensor(portName);
         }
-        this.sensors[portName] = sensorType;
+        this.deviceConfigurationChanged(this.robotModel.info().getName(), portName, sensorType);
         if (this.isSensorHaveView(sensorType)) {
             this.robotModel.addSensorItem(portName, sensorType);
         }
     }
 
     removeSensor(portName: string): void {
-        var sensor = this.sensors[portName];
+        var sensor = this.getCurrentConfiguration(this.robotModelName, portName);
         if (sensor) {
-            if (this.isSensorHaveView(this.sensors[portName])) {
+            if (this.isSensorHaveView(sensor)) {
                 this.robotModel.removeSensorItem(portName);
             }
-            delete this.sensors[portName];
+            this.deviceConfigurationChanged(this.robotModelName, portName, null);
         }
     }
 }
