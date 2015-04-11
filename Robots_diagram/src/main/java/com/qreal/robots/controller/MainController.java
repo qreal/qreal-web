@@ -61,7 +61,7 @@ public class MainController {
         for (Robot robot : robots) {
             boolean found = false;
             for (RobotInfo robotInfo : onlineUserRobots) {
-                if (robot.getSecretCode().equals(robotInfo.getSecretCode())) {
+                if (robot.getSsid().equals(robotInfo.getSsid())) {
                     found = true;
                     robotsWrapper.add(new RobotWrapper(robot, robotInfo, "Online"));
                 }
@@ -97,7 +97,7 @@ public class MainController {
     private String getUserOnlineRobots(User user) throws JsonProcessingException {
         List<RobotInfo> robots = Lists.newArrayList();
         for (Robot robot : user.getRobots()) {
-            robots.add(new RobotInfo(user.getUsername(), robot.getName(), robot.getSecretCode()));
+            robots.add(new RobotInfo(user.getUsername(), robot.getName(), robot.getSsid()));
         }
 
         Message message = new Message("WebApp", "getOnlineRobots", robots);

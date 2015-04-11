@@ -13,7 +13,7 @@ public class RobotInfo {
 
     private String owner;
     private String name;
-    private String secretCode;
+    private String ssid;
     private String modelConfig;
     private String systemConfig;
     private String program;
@@ -23,19 +23,19 @@ public class RobotInfo {
     }
 
 
-    public RobotInfo(String owner, String name, String secretCode) {
+    public RobotInfo(String owner, String name, String ssid) {
         this.owner = owner;
         this.name = name;
-        this.secretCode = secretCode;
+        this.ssid = ssid;
 
     }
 
-    public String getSecretCode() {
-        return secretCode;
+    public String getSsid() {
+        return ssid;
     }
 
-    public void setSecretCode(String secretCode) {
-        this.secretCode = secretCode;
+    public void setSsid(String ssid) {
+        this.ssid = ssid;
     }
 
     public String getModelConfig() {

@@ -47,16 +47,16 @@ public class RobotRestService {
     public String sendProgram(@RequestParam("robotName") String robotName, @RequestParam("program") String program) throws JsonProcessingException {
         Robot robot = robotDao.findByName(robotName);
         SocketClient socketClient = new SocketClient(MainController.HOST_NAME, MainController.PORT);
-        return socketClient.sendMessage(generateSendProgramRequest(robotName, robot.getSecretCode(), program));
+        return socketClient.sendMessage(generateSendProgramRequest(robotName, robot.getSsid(), program));
     }
 
 
     @ResponseBody
     @RequestMapping(value = "/registerRobot", method = RequestMethod.POST)
-    public String register(@RequestParam("robotName") String name, @RequestParam("secretCode") String secretCode) {
+    public String register(@RequestParam("robotName") String name, @RequestParam("ssid") String ssid) {
         User user = userDao.findByUserName(getUserName());
         if (!userRobotExists(user, name)) {
-            robotDao.save(new Robot(name, secretCode, user));
+            robotDao.save(new Robot(name, ssid, user));
             return "{\"status\":\"OK\"}";
         } else {
             return String.format("{\"status\":\"ERROR\", \"message\":\"Robot with name %s is already exists\"}", name);
@@ -98,7 +98,7 @@ public class RobotRestService {
         ValidationResult result = validator.validate(modelConfig);
         if (!result.hasErrors()) {
             SocketClient socketClient = new SocketClient(MainController.HOST_NAME, MainController.PORT);
-            return socketClient.sendMessage(generateSendModelConfigRequest(robotName, robot.getSecretCode(), modelConfig));
+            return socketClient.sendMessage(generateSendModelConfigRequest(robotName, robot.getSsid(), modelConfig));
         } else {
             return buildResultMessage(result);
         }
@@ -135,16 +135,16 @@ public class RobotRestService {
     }
 
 
-    private String generateSendProgramRequest(String robotName, String secretCode, String program) throws JsonProcessingException {
-        RobotInfo robotInfo = new RobotInfo(getUserName(), robotName, secretCode);
+    private String generateSendProgramRequest(String robotName, String ssid, String program) throws JsonProcessingException {
+        RobotInfo robotInfo = new RobotInfo(getUserName(), robotName, ssid);
         robotInfo.setProgram(program);
         Message message = new Message("WebApp", "sendDiagram", robotInfo);
         return mapper.writeValueAsString(message);
     }
 
 
-    private String generateSendModelConfigRequest(String robotName, String secretCode, ModelConfig modelConfig) throws JsonProcessingException {
-        RobotInfo robotInfo = new RobotInfo(getUserName(), robotName, secretCode);
+    private String generateSendModelConfigRequest(String robotName, String ssid, ModelConfig modelConfig) throws JsonProcessingException {
+        RobotInfo robotInfo = new RobotInfo(getUserName(), robotName, ssid);
         robotInfo.setModelConfig(modelConfig.convertToXml());
         Message message = new Message("WebApp", "sendModelConfig", robotInfo);
         return mapper.writeValueAsString(message);

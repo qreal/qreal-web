@@ -16,16 +16,16 @@ public class Robot {
 
     private Integer id;
     private String name;
-    private String secretCode;
+    private String ssid;
     private User owner;
 
     public Robot() {
     }
 
-    public Robot(String name, String secretCode, User owner) {
+    public Robot(String name, String ssid, User owner) {
         this.owner = owner;
         this.name = name;
-        this.secretCode = secretCode;
+        this.ssid = ssid;
     }
 
 
@@ -60,13 +60,13 @@ public class Robot {
         this.name = name;
     }
 
-    @Column(name = "secretCode", nullable = false, length = 45)
-    public String getSecretCode() {
-        return secretCode;
+    @Column(name = "ssid", nullable = false, length = 45)
+    public String getSsid() {
+        return ssid;
     }
 
-    public void setSecretCode(String secretCode) {
-        this.secretCode = secretCode;
+    public void setSsid(String ssid) {
+        this.ssid = ssid;
     }
 
 

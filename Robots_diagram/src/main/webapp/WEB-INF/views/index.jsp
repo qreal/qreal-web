@@ -21,8 +21,8 @@
 
             $("#registerRobot").click(function () {
                 var name = $('#robotName').val();
-                var code = $('#secretCode').val();
-                var data = "robotName=" + name + "&secretCode=" + code;
+                var code = $('#ssid').val();
+                var data = "robotName=" + name + "&ssid=" + code;
                 $.ajax({
                     type: 'POST',
                     url: 'registerRobot',
@@ -579,11 +579,11 @@
                                                     <br/>
 
                                                     <div class="control-group">
-                                                        <label>Secret code</label>
+                                                        <label>Robot ssid</label>
 
                                                         <div class="controls">
-                                                            <input id="secretCode" type="password" class="form-control"
-                                                                   placeholder="Secret code">
+                                                            <input id="ssid" type="password" class="form-control"
+                                                                   placeholder="ssid">
 
                                                         </div>
                                                     </div>

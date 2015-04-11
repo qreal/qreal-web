@@ -86,7 +86,7 @@ CREATE TABLE user_roles (
 CREATE TABLE robots (
   id         INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   name       VARCHAR(45)     NOT NULL,
-  secretCode VARCHAR(45)     NOT NULL,
+  ssid VARCHAR(45) NOT NULL,
   username   VARCHAR(45)     NOT NULL,
   status VARCHAR(45),
   UNIQUE KEY uni_robotName_username (name, username),
