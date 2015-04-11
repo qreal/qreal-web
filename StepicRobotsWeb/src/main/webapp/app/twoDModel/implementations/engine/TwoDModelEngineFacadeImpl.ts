@@ -102,8 +102,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
             configurationDropdownsContent += "<option value='Unused'>Unused</option>";
             var devices = twoDRobotModel.getAllowedDevices(port);
             devices.forEach(function (device) {
-                var friendlyName = device.getFriendlyName();
-                configurationDropdownsContent += "<option value='" + friendlyName + "'>" + friendlyName + "</option>";
+                configurationDropdownsContent += "<option value='" + device.getName() + "'>" + device.getFriendlyName(); + "</option>";
             });
             configurationDropdownsContent += "</select>";
             configurationDropdownsContent += "</p>";
@@ -127,7 +126,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
                         sensorsConfiguration.removeSensor(portName);
                         break
                     default:
-                        var device = twoDRobotModel.getAllowedDevices(port)[$(htmlId + " option:selected").index() - 1];
+                        var device = DeviceInfoImpl.fromString(newValue);
                         sensorsConfiguration.addSensor(portName, device);
                 }
             });

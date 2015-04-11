@@ -100,77 +100,77 @@ class TrikRobotModelBase extends CommonRobotModelImpl {
     }
 
     displayInfo(): DeviceInfo {
-        return new DeviceInfoImpl(Display);
+        return DeviceInfoImpl.getInstance(Display);
     }
     speakerInfo(): DeviceInfo {
-        return new DeviceInfoImpl(Speaker);
+        return DeviceInfoImpl.getInstance(Speaker);
     }
     buttonInfo(): DeviceInfo {
-        return new DeviceInfoImpl(Button);
+        return DeviceInfoImpl.getInstance(Button);
     }
 
     powerMotorInfo(): DeviceInfo {
-        return new DeviceInfoImpl(Motor);
+        return DeviceInfoImpl.getInstance(Motor);
     }
     servoMotorInfo(): DeviceInfo {
-        return new DeviceInfoImpl(Motor);
+        return DeviceInfoImpl.getInstance(Motor);
     }
     encoderInfo(): DeviceInfo {
-        return new DeviceInfoImpl(EncoderSensor);
+        return DeviceInfoImpl.getInstance(EncoderSensor);
     }
 
     lightSensorInfo(): DeviceInfo {
-        return new DeviceInfoImpl(LightSensor);
+        return DeviceInfoImpl.getInstance(LightSensor);
     }
 
     infraredSensorInfo(): DeviceInfo {
-        return new DeviceInfoImpl(TrikInfraredSensor);
+        return DeviceInfoImpl.getInstance(TrikInfraredSensor);
     }
 
     sonarSensorInfo(): DeviceInfo {
-        return new DeviceInfoImpl(TrikSonarSensor);
+        return DeviceInfoImpl.getInstance(TrikSonarSensor);
     }
 
     motionSensorInfo(): DeviceInfo {
-        return new DeviceInfoImpl(TrikMotionSensor);
+        return DeviceInfoImpl.getInstance(TrikMotionSensor);
     }
 
     gyroscopeInfo(): DeviceInfo {
-        return new DeviceInfoImpl(GyroscopeSensor);
+        return DeviceInfoImpl.getInstance(GyroscopeSensor);
     }
     accelerometerInfo(): DeviceInfo {
-        return new DeviceInfoImpl(AccelerometerSensor);
+        return DeviceInfoImpl.getInstance(AccelerometerSensor);
     }
 
     ledInfo(): DeviceInfo {
-        return new DeviceInfoImpl(TrikLed);
+        return DeviceInfoImpl.getInstance(TrikLed);
     }
     lineSensorInfo(): DeviceInfo {
-        return new DeviceInfoImpl(TrikLineSensor);
+        return DeviceInfoImpl.getInstance(TrikLineSensor);
     }
     colorSensorInfo(): DeviceInfo {
-        return new DeviceInfoImpl(TrikColorSensor);
+        return DeviceInfoImpl.getInstance(TrikColorSensor);
     }
     objectSensorInfo(): DeviceInfo {
-        return new DeviceInfoImpl(TrikObjectSensor);
+        return DeviceInfoImpl.getInstance(TrikObjectSensor);
     }
     shellInfo(): DeviceInfo {
-        return new DeviceInfoImpl(TrikShell);
+        return DeviceInfoImpl.getInstance(TrikShell);
     }
 
     gamepadButtonInfo(): DeviceInfo {
-        return new DeviceInfoImpl(TrikGamepadButton);
+        return DeviceInfoImpl.getInstance(TrikGamepadButton);
     }
     gamepadPadInfo(): DeviceInfo {
-        return new DeviceInfoImpl(TrikGamepadPad);
+        return DeviceInfoImpl.getInstance(TrikGamepadPad);
     }
     gamepadPadPressSensorInfo(): DeviceInfo {
-        return new DeviceInfoImpl(TrikGamepadPadPressSensor);
+        return DeviceInfoImpl.getInstance(TrikGamepadPadPressSensor);
     }
     gamepadWheelInfo(): DeviceInfo {
-        return new DeviceInfoImpl(TrikGamepadWheel);
+        return DeviceInfoImpl.getInstance(TrikGamepadWheel);
     }
     gamepadConnectionIndicatorInfo(): DeviceInfo {
-        return new DeviceInfoImpl(TrikGamepadConnectionIndicator);
+        return DeviceInfoImpl.getInstance(TrikGamepadConnectionIndicator);
     }
 }

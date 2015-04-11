@@ -35,4 +35,19 @@ class SensorsConfiguration extends DevicesConfigurationProvider {
             this.deviceConfigurationChanged(this.robotModelName, portName, null);
         }
     }
+
+    private parsePositionString(positionStr: string): TwoDPosition {
+        var splittedStr = positionStr.split(":");
+        var x = parseFloat(splittedStr[0]);
+        var y = parseFloat(splittedStr[1]);
+        return new TwoDPosition(x, y);
+    }
+
+    deserialize(xml, offsetX: number, offsetY: number): void {
+        var sensors = xml.getElementsByTagName("sensor");
+        for (var j = 0; j < sensors.length; j++) {
+            var posString = sensors[j].getAttribute('position');
+            var pos = this.parsePositionString(posString);
+        }
+    }
 }
