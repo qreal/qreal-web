@@ -21,8 +21,9 @@ class RobotModelImpl implements RobotModel {
         return this.sensorsConfiguration;
     }
 
-    addSensorItem(portName: string, deviceType: DeviceInfo): void {
-        this.robotItem.addSensorItem(portName, deviceType, this.twoDRobotModel.sensorImagePath(deviceType));
+    addSensorItem(portName: string, deviceType: DeviceInfo, position?: TwoDPosition, direction?: number): void {
+        this.robotItem.addSensorItem(portName, deviceType, this.twoDRobotModel.sensorImagePath(deviceType),
+            position, direction);
     }
 
     nextFragment(): void {

@@ -11,17 +11,18 @@ class SensorItem {
     protected startCy: number;
     protected sensorType: DeviceInfo;
 
-    constructor(robotItem: RobotItem, worldModel: WorldModel, sensorType: DeviceInfo, pathToImage: string) {
+    constructor(robotItem: RobotItem, worldModel: WorldModel, sensorType: DeviceInfo,
+                pathToImage: string, position?: TwoDPosition) {
         this.robotItem = robotItem;
         var paper: RaphaelPaper = worldModel.getPaper();
         this.sensorType = sensorType;
         this.degineImageSizes(sensorType);
-        var defaultPosition = this.getDefaultPosition();
+        var startPosition = this.getStartPosition(position);
         this.image = paper.image((pathToImage) ? pathToImage : this.pathToImage(),
-            defaultPosition.x, defaultPosition.y, this.width, this.height);
+            startPosition.x, startPosition.y, this.width, this.height);
 
-        this.centerX = defaultPosition.x + this.width / 2;
-        this.centerY = defaultPosition.y + this.height / 2;
+        this.centerX = startPosition.x + this.width / 2;
+        this.centerY = startPosition.y + this.height / 2;
 
         this.startCx = this.centerX;
         this.startCy = this.centerY;
@@ -37,8 +38,8 @@ class SensorItem {
 
         var sensorItem = this;
 
-        this.rotateHandle = paper.circle(defaultPosition.x + this.width + 20,
-            defaultPosition.y + this.height / 2, handleRadius).attr(handleAttrs);
+        this.rotateHandle = paper.circle(startPosition.x + this.width + 20,
+            startPosition.y + this.height / 2, handleRadius).attr(handleAttrs);
 
         var startHandle = function () {
                 if (!worldModel.getDrawMode()) {
@@ -105,9 +106,16 @@ class SensorItem {
         this.hideHandles();
     }
 
-    getDefaultPosition(): TwoDPosition {
-        var startX = this.robotItem.getStartPosition().x + this.robotItem.getWidth() + 15;
-        var startY = this.robotItem.getStartPosition().y + this.robotItem.getHeight() / 2 - this.height / 2;
+    getStartPosition(position: TwoDPosition): TwoDPosition {
+        var startX = this.robotItem.getStartPosition().x;
+        var startY = this.robotItem.getStartPosition().y;
+        if (position) {
+            startX += position.x;
+            startY += position.y;
+        } else {
+            startX = startX + this.robotItem.getWidth() + 15;
+            startY = startY + this.robotItem.getHeight() / 2 - this.height / 2;
+        }
         return new TwoDPosition(startX, startY);
     }
 

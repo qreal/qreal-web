@@ -5,10 +5,10 @@ class SonarSensorItem extends SensorItem {
     private regionStartY: number;
     private regionTransformationString = "";
 
-    constructor(robotItem: RobotItem, worldModel: WorldModel, sensorType: DeviceInfo, pathToImage: string) {
-        super(robotItem, worldModel, sensorType, pathToImage);
+    constructor(robotItem: RobotItem, worldModel: WorldModel, sensorType: DeviceInfo, pathToImage: string,  position?: TwoDPosition) {
+        super(robotItem, worldModel, sensorType, pathToImage, position);
         var paper: RaphaelPaper = worldModel.getPaper();
-        var defaultPosition = this.getDefaultPosition();
+        var defaultPosition = this.getStartPosition(position);
 
         this.regionStartX = defaultPosition.x + this.width / 2;
         this.regionStartY = defaultPosition.y + this.height / 2
@@ -48,7 +48,7 @@ class SonarSensorItem extends SensorItem {
         var regionRotationY = this.image.matrix.y(this.regionStartX, this.regionStartY);
 
         this.scanningRegion.transform(this.regionTransformationString + "R" + angle + "," +
-        regionRotationX + "," + regionRotationY);
+            regionRotationX + "," + regionRotationY);
     }
 
     remove(): void {

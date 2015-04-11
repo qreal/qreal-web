@@ -12,7 +12,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
 
         this.model.addRobotModel(robotModel);
 
-        this.load("configs/labyrinth-without-sensors.xml");
+        this.load("configs/labyrinth-with-sensors.xml");
 
         $(document).ready(function() {
             $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){

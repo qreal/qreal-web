@@ -16,13 +16,13 @@ class SensorsConfiguration extends DevicesConfigurationProvider {
             || sensorType.isA(VectorSensor);
     }
 
-    addSensor(portName: string, sensorType: DeviceInfo): void {
+    addSensor(portName: string, sensorType: DeviceInfo, position?: TwoDPosition, direction?: number): void {
         if (this.getCurrentConfiguration(this.robotModelName, portName)) {
             this.removeSensor(portName);
         }
         this.deviceConfigurationChanged(this.robotModel.info().getName(), portName, sensorType);
         if (this.isSensorHaveView(sensorType)) {
-            this.robotModel.addSensorItem(portName, sensorType);
+            this.robotModel.addSensorItem(portName, sensorType, position, direction);
         }
     }
 
@@ -45,9 +45,16 @@ class SensorsConfiguration extends DevicesConfigurationProvider {
 
     deserialize(xml, offsetX: number, offsetY: number): void {
         var sensors = xml.getElementsByTagName("sensor");
-        for (var j = 0; j < sensors.length; j++) {
-            var posString = sensors[j].getAttribute('position');
+        for (var i = 0; i < sensors.length; i++) {
+            var portName: string = sensors[i].getAttribute('port').split("###")[0];
+            var typeSplittedStr = sensors[i].getAttribute('type').split("::");
+            var device: DeviceInfo = DeviceInfoImpl.fromString(typeSplittedStr[typeSplittedStr.length - 1]);
+
+            var posString = sensors[i].getAttribute('position');
             var pos = this.parsePositionString(posString);
+            var direction: number = parseFloat(sensors[i].getAttribute('direction'));
+
+            this.addSensor(portName, device, pos, direction);
         }
     }
 }
