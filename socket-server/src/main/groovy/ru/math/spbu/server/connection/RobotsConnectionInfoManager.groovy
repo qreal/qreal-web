@@ -6,7 +6,8 @@ import groovy.util.logging.Slf4j
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * Created by ageevdenis on 02-3-15.
+ * @author Ageev Denis
+ *  Created  02-3-15 14:50.
  */
 
 @Slf4j
@@ -16,10 +17,9 @@ class RobotsConnectionInfoManager {
     Map<String, RobotConnectionInfo> robotConnections = new ConcurrentHashMap<>()
 
 
-    def createRobotConnection(String owner, String name, String code, def desc, Socket socket) {
-        RobotConnectionInfo robotsConnectionInfo = new RobotConnectionInfo(owner: owner, robotJson: desc,
-                name: name, socket: socket, secretCode: code, messages: [])
-        def key = RobotConnectionInfo.getKey(owner, name)
+    def createRobotConnection(String ssid, def desc, Socket socket) {
+        RobotConnectionInfo robotsConnectionInfo = new RobotConnectionInfo(robotJson: desc, socket: socket, ssid: ssid, messages: [])
+        def key = ssid
         robotConnections.put(key, robotsConnectionInfo)
     }
 

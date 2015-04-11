@@ -9,14 +9,8 @@ import groovy.transform.TupleConstructor
 @TupleConstructor
 class RobotConnectionInfo {
 
-    String owner
-    String name
-    String secretCode
+    String ssid
     List<Message> messages
     def robotJson
     Socket socket
-
-    public static String getKey(String owner, String code) {
-        return "$owner-$code"
-    }
 }

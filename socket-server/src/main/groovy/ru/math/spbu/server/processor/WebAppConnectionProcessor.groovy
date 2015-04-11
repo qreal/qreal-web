@@ -35,7 +35,7 @@ class WebAppConnectionProcessor implements ConnectionProcessor {
     }
 
     def closeConnection(def robot) {
-        def key = RobotConnectionInfo.getKey(robot.owner, robot.name)
+        def key = robot.ssid
         robotsConnectionInfoManager.closeConnection(key)
         return "Closed connection for robot $robot.id"
     }
@@ -45,14 +45,11 @@ class WebAppConnectionProcessor implements ConnectionProcessor {
         def onlineUserRobots = []
 
         robots.each { robot ->
-            String key = RobotConnectionInfo.getKey(robot.owner, robot.name)
+            String key = robot.ssid
             RobotConnectionInfo robotConnectionInfo = robotsConnectionInfoManager.getRobot(key)
             if (robotConnectionInfo != null) {
-                if (robotConnectionInfo.getSecretCode() == robot.secretCode) {
-                    onlineUserRobots.add(robotConnectionInfo.robotJson)
-                }
+                onlineUserRobots.add(robotConnectionInfo.robotJson)
             }
-
         }
 
         return JsonOutput.toJson(onlineUserRobots)
@@ -60,14 +57,14 @@ class WebAppConnectionProcessor implements ConnectionProcessor {
 
 
     def sendDiagram(def robot) {
-        String key = RobotConnectionInfo.getKey(robot.owner, robot.name)
+        String key = robot.ssid
         Message message = new Message(type: "sendDiagram", text: robot.program)
         robotsConnectionInfoManager.addMessage(key, message)
         return SUCCESS_MESSAGE
     }
 
     def sendModelConfig(def robot) {
-        String key = RobotConnectionInfo.getKey(robot.owner, robot.name)
+        String key = robot.ssid
         Message message = new Message(type: "sendModelConfig", text: robot.modelConfig)
         robotsConnectionInfoManager.addMessage(key, message)
         return SUCCESS_MESSAGE

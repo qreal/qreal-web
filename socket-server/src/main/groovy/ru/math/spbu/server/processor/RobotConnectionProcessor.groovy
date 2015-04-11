@@ -1,7 +1,6 @@
 package ru.math.spbu.server.processor
 
 import groovy.util.logging.Slf4j
-import ru.math.spbu.server.connection.RobotConnectionInfo
 import ru.math.spbu.server.connection.RobotsConnectionInfoManager
 
 /**
@@ -10,7 +9,6 @@ import ru.math.spbu.server.connection.RobotsConnectionInfoManager
 @Slf4j
 class RobotConnectionProcessor implements ConnectionProcessor {
 
-    private static final String OK = "OK"
     RobotsConnectionInfoManager connectionInfoManager = RobotsConnectionInfoManager.instance
 
     @Override
@@ -26,10 +24,10 @@ class RobotConnectionProcessor implements ConnectionProcessor {
     }
 
     def connect(Socket socket, def robot) {
-        connectionInfoManager.createRobotConnection(robot.owner, robot.name, robot.secretCode, robot, socket)
-        String key = RobotConnectionInfo.getKey(robot.owner, robot.name)
+        connectionInfoManager.createRobotConnection(robot.ssid, robot, socket)
+        String key = robot.ssid
         log.info "The connection is established"
-        log.info "$robot.owner's robot $robot.name accepted"
+        log.info "Robot $robot.ssid accepted"
         socket.withStreams { input, output ->
             def w = new BufferedWriter(new OutputStreamWriter(output))
 
@@ -47,7 +45,7 @@ class RobotConnectionProcessor implements ConnectionProcessor {
                 }
             }
 
-            log.info "$robot.owner's robot disconnected"
+            log.info "$robot.ssid disconnected"
         }
 
 
