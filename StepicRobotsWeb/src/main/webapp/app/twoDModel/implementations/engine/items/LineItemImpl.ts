@@ -1,14 +1,15 @@
 class LineItemImpl implements LineItem {
     private path: RaphaelPath;
+    private worldModel: WorldModel;
     private handleStart: RaphaelElement;
     private handleEnd: RaphaelElement;
     private pathArray;
 
     constructor(worldModel: WorldModel, xStart: number, yStart: number, xEnd: number, yEnd: number, width: number, color: string) {
         var paper = worldModel.getPaper();
+        this.worldModel = worldModel;
         this.path = paper.path("M" + xStart + " " + yStart + " L" + xEnd + " " + yEnd);
         this.path.attr({
-            cursor: "pointer",
             "stroke": color,
             "stroke-width": width
         });
@@ -25,18 +26,21 @@ class LineItemImpl implements LineItem {
 
         this.handleStart = paper.circle(xStart, yStart, handleRadius).attr(handleAttrs);
         this.handleEnd = paper.circle(xEnd, yEnd, handleRadius).attr(handleAttrs);
+    }
 
+    setDraggable(): void {
         var line = this;
+        line.path.attr({cursor: "pointer"});
 
         var startHandle = function () {
-                if (!worldModel.getDrawMode()) {
+                if (!line.worldModel.getDrawMode()) {
                     this.cx = this.attr("cx");
                     this.cy = this.attr("cy");
                 }
                 return this;
             },
             moveHandleStart = function (dx, dy) {
-                if (!worldModel.getDrawMode()) {
+                if (!line.worldModel.getDrawMode()) {
                     var newX = this.cx + dx;
                     var newY = this.cy + dy;
                     line.updateStart(newX, newY)
@@ -44,7 +48,7 @@ class LineItemImpl implements LineItem {
                 return this;
             },
             moveHandleEnd = function (dx, dy) {
-                if (!worldModel.getDrawMode()) {
+                if (!line.worldModel.getDrawMode()) {
                     var newX = this.cx + dx;
                     var newY = this.cy + dy;
                     line.updateEnd(newX, newY);
@@ -60,19 +64,19 @@ class LineItemImpl implements LineItem {
 
 
         var startPath = function () {
-                if (!worldModel.getDrawMode()) {
+                if (!line.worldModel.getDrawMode()) {
                     this.startX = line.pathArray[0][1];
                     this.startY = line.pathArray[0][2]
                     this.endX = line.pathArray[1][1];
                     this.endY = line.pathArray[1][2]
                     this.ox = this.attr("x");
                     this.oy = this.attr("y");
-                    worldModel.setCurrentElement(line);
+                    line.worldModel.setCurrentElement(line);
                 }
                 return this;
             },
             movePath = function (dx, dy) {
-                if (!worldModel.getDrawMode()) {
+                if (!line.worldModel.getDrawMode()) {
                     var trans_x = dx - this.ox;
                     var trans_y = dy - this.oy;
 

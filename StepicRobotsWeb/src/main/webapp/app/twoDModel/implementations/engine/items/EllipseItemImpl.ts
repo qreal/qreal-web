@@ -1,5 +1,6 @@
 class EllipseItemImpl implements EllipseItem {
     private ellipse: RaphaelElement;
+    private worldModel: WorldModel;
     private handleTopLeft: RaphaelElement;
     private handleTopRight: RaphaelElement;
     private handleBottomLeft: RaphaelElement;
@@ -8,15 +9,13 @@ class EllipseItemImpl implements EllipseItem {
 
     constructor(worldModel: WorldModel, xStart: number, yStart: number, width: number, color: string) {
         var paper = worldModel.getPaper();
+        this.worldModel = worldModel;
         this.ellipse = paper.ellipse(xStart, yStart, 0, 0);
         this.ellipse.attr({
             fill: "transparent",
-            cursor: "pointer",
             "stroke": color,
             "stroke-width": width
         })
-
-        var ellipseItem = this;
 
         var handleAttrs = {
             fill: "transparent",
@@ -29,9 +28,13 @@ class EllipseItemImpl implements EllipseItem {
         this.handleTopRight = paper.rect(xStart - this.handleSize, yStart, this.handleSize, this.handleSize).attr(handleAttrs);
         this.handleBottomLeft = paper.rect(xStart, yStart - this.handleSize, this.handleSize, this.handleSize).attr(handleAttrs);
         this.handleBottomRight = paper.rect(xStart - this.handleSize, yStart - this.handleSize, this.handleSize, this.handleSize).attr(handleAttrs);
+    }
 
+    setDraggable(): void {
+        var ellipseItem = this;
+        ellipseItem.ellipse.attr({cursor: "pointer"});
         var startTopLeftHandle = function () {
-                if (!worldModel.getDrawMode()) {
+                if (!ellipseItem.worldModel.getDrawMode()) {
                     this.ox = this.attr("x");
                     this.oy = this.attr("y");
                     this.oppositeCornerX = ellipseItem.handleBottomRight.attr("x") + ellipseItem.handleSize;
@@ -40,7 +43,7 @@ class EllipseItemImpl implements EllipseItem {
                 return this;
             },
             startTopRightHandle = function () {
-                if (!worldModel.getDrawMode()) {
+                if (!ellipseItem.worldModel.getDrawMode()) {
                     this.ox = this.attr("x") + ellipseItem.handleSize;
                     this.oy = this.attr("y");
                     this.oppositeCornerX = ellipseItem.handleBottomLeft.attr("x");
@@ -49,7 +52,7 @@ class EllipseItemImpl implements EllipseItem {
                 return this;
             },
             startBottomLeftHandle = function () {
-                if (!worldModel.getDrawMode()) {
+                if (!ellipseItem.worldModel.getDrawMode()) {
                     this.ox = this.attr("x");
                     this.oy = this.attr("y") + ellipseItem.handleSize;
                     this.oppositeCornerX = ellipseItem.handleTopRight.attr("x") + ellipseItem.handleSize;
@@ -58,7 +61,7 @@ class EllipseItemImpl implements EllipseItem {
                 return this;
             },
             startBottomRightHandle = function () {
-                if (!worldModel.getDrawMode()) {
+                if (!ellipseItem.worldModel.getDrawMode()) {
                     this.ox = this.attr("x") + ellipseItem.handleSize;
                     this.oy = this.attr("y") + ellipseItem.handleSize;
                     this.oppositeCornerX = ellipseItem.handleTopLeft.attr("x");
@@ -67,7 +70,7 @@ class EllipseItemImpl implements EllipseItem {
                 return this;
             },
             moveHandle = function (dx, dy) {
-                if (!worldModel.getDrawMode()) {
+                if (!ellipseItem.worldModel.getDrawMode()) {
                     var newX = this.ox + dx;
                     var newY = this.oy + dy;
                     ellipseItem.updateCorner(this.oppositeCornerX, this.oppositeCornerY, newX, newY);
@@ -84,7 +87,7 @@ class EllipseItemImpl implements EllipseItem {
         ellipseItem.handleBottomRight.drag(moveHandle, startBottomRightHandle, upHandle);
 
         var startEllipse = function () {
-                if (!worldModel.getDrawMode()) {
+                if (!ellipseItem.worldModel.getDrawMode()) {
                     this.cx = this.attr("cx");
                     this.cy = this.attr("cy");
                     this.handleTopLeftCoord = {
@@ -103,12 +106,12 @@ class EllipseItemImpl implements EllipseItem {
                         x: ellipseItem.handleBottomRight.attr("x"),
                         y: ellipseItem.handleBottomRight.attr("y")
                     };
-                    worldModel.setCurrentElement(ellipseItem);
+                    ellipseItem.worldModel.setCurrentElement(ellipseItem);
                 }
                 return this;
             },
             moveEllipse = function (dx, dy) {
-                if (!worldModel.getDrawMode()) {
+                if (!ellipseItem.worldModel.getDrawMode()) {
                     var newX = this.cx + dx;
                     var newY = this.cy + dy;
                     ellipseItem.ellipse.attr({cx: newX, cy: newY});

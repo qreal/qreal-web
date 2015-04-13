@@ -1,7 +1,7 @@
 class WorldModelImpl implements WorldModel {
     private drawMode: number = 0;
     private paper: RaphaelPaper;
-    private currentElement = null;
+    private currentElement: AbstractItem = null;
     private colorFields: ColorFieldItem[] = [];
     private wallItems: WallItem[] = [];
 

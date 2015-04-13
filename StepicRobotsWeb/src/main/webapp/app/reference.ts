@@ -76,6 +76,7 @@
 /// <reference path="twoDModel/implementations/robotModel/TwoDRobotModel.ts" />
 /// <reference path="twoDModel/interfaces/engine/TwoDModelEngineApi.ts" />
 /// <reference path="twoDModel/interfaces/engine/TwoDModelEngineFacade.ts" />
+/// <reference path="twoDModel/interfaces/engine/items/AbstractItem.ts" />
 /// <reference path="twoDModel/interfaces/engine/items/ColorFieldItem.ts" />
 /// <reference path="twoDModel/interfaces/engine/items/EllipseItem.ts" />
 /// <reference path="twoDModel/interfaces/engine/items/LineItem.ts" />

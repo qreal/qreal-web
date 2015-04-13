@@ -1,5 +1,6 @@
 class SensorItem {
     protected robotItem: RobotItem;
+    protected worldModel: WorldModel;
     protected image: RaphaelElement;
     protected width: number;
     protected height: number;
@@ -14,6 +15,7 @@ class SensorItem {
     constructor(robotItem: RobotItem, worldModel: WorldModel, sensorType: DeviceInfo,
                 pathToImage: string, position?: TwoDPosition) {
         this.robotItem = robotItem;
+        this.worldModel = worldModel;
         var paper: RaphaelPaper = worldModel.getPaper();
         this.sensorType = sensorType;
         this.degineImageSizes(sensorType);
@@ -36,13 +38,17 @@ class SensorItem {
             stroke: "black"
         };
 
-        var sensorItem = this;
-
         this.rotateHandle = paper.circle(startPosition.x + this.width + 20,
             startPosition.y + this.height / 2, handleRadius).attr(handleAttrs);
+        this.hideHandles();
+    }
+
+    setDraggable(): void {
+        var sensorItem = this;
+        sensorItem.image.attr({cursor: "pointer"});
 
         var startHandle = function () {
-                if (!worldModel.getDrawMode()) {
+                if (!sensorItem.worldModel.getDrawMode()) {
                     this.cx = this.attr("cx");
                     this.cy = this.attr("cy");
 
@@ -51,7 +57,7 @@ class SensorItem {
                 return this;
             },
             moveHandle = function (dx, dy) {
-                if (!worldModel.getDrawMode()) {
+                if (!sensorItem.worldModel.getDrawMode()) {
                     var newX = this.cx + dx;
                     var newY = this.cy + dy;
                     var offsetX = newX - sensorItem.centerX;
@@ -79,15 +85,15 @@ class SensorItem {
         sensorItem.rotateHandle.drag(moveHandle, startHandle, upHandle);
 
         var start = function () {
-                if (!worldModel.getDrawMode()) {
+                if (!sensorItem.worldModel.getDrawMode()) {
                     this.handle_cx = sensorItem.rotateHandle.attr("cx");
                     this.handle_cy = sensorItem.rotateHandle.attr("cy");
-                    worldModel.setCurrentElement(sensorItem);
+                    sensorItem.worldModel.setCurrentElement(sensorItem);
                 }
                 return this;
             }
             ,move = function (dx, dy) {
-                if (!worldModel.getDrawMode()) {
+                if (!sensorItem.worldModel.getDrawMode()) {
                     sensorItem.transform("T" + dx + "," + dy);
 
                     sensorItem.rotateHandle.attr({"cx": this.handle_cx + dx, "cy": this.handle_cy + dy});
@@ -95,7 +101,7 @@ class SensorItem {
                 return this;
             }
             ,up = function () {
-                if (!worldModel.getDrawMode()) {
+                if (!sensorItem.worldModel.getDrawMode()) {
                     sensorItem.centerX = this.matrix.x(sensorItem.startCx, sensorItem.startCy);
                     sensorItem.centerY = this.matrix.y(sensorItem.startCx, sensorItem.startCy);
                 }
@@ -103,7 +109,6 @@ class SensorItem {
                 return this;
             }
         this.image.drag(move, start, up);
-        this.hideHandles();
     }
 
     getStartPosition(position: TwoDPosition): TwoDPosition {

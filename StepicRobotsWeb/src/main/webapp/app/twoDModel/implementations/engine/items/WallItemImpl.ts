@@ -1,5 +1,6 @@
 class WallItemImpl implements WallItem {
     private path: RaphaelPath;
+    private worldModel: WorldModel;
     private handleStart: RaphaelElement;
     private handleEnd: RaphaelElement;
     private pathArray;
@@ -7,12 +8,11 @@ class WallItemImpl implements WallItem {
 
     constructor(worldModel: WorldModel, xStart: number, yStart: number, xEnd: number, yEnd: number) {
         var paper = worldModel.getPaper();
-        var wall = this;
+        this.worldModel = worldModel;
         this.width = 15;
         this.path = paper.path("M" + xStart + " " + yStart + " L" + xEnd + " " + yEnd);
         this.path.attr({
-            cursor: "pointer",
-            "stroke-width": wall.width
+            "stroke-width": this.width
         });
         $(this.path.node).attr("class", "path");
         $(".path").attr("stroke", "url(#wall_pattern)");
@@ -35,16 +35,21 @@ class WallItemImpl implements WallItem {
         });
         $(this.handleEnd.node).attr("class", "handleEnd");
         $(".handleEnd").attr("fill", "url(#wall_pattern)");
+    }
+
+    setDraggable() {
+        var wall = this;
+        wall.path.attr({cursor: "pointer"});
 
         var start = function () {
-                if (!worldModel.getDrawMode()) {
+                if (!wall.worldModel.getDrawMode()) {
                     this.cx = this.attr("cx");
                     this.cy = this.attr("cy");
                 }
                 return this;
             },
             moveStart = function (dx, dy) {
-                if (!worldModel.getDrawMode()) {
+                if (!wall.worldModel.getDrawMode()) {
                     var newX = this.cx + dx;
                     var newY = this.cy + dy;
                     wall.updateStart(newX, newY)
@@ -52,7 +57,7 @@ class WallItemImpl implements WallItem {
                 return this;
             },
             moveEnd = function (dx, dy) {
-                if (!worldModel.getDrawMode()) {
+                if (!wall.worldModel.getDrawMode()) {
                     var newX = this.cx + dx;
                     var newY = this.cy + dy;
                     wall.updateEnd(newX, newY);
@@ -68,19 +73,19 @@ class WallItemImpl implements WallItem {
 
 
         var startPath = function () {
-                if (!worldModel.getDrawMode()) {
+                if (!wall.worldModel.getDrawMode()) {
                     this.startX = wall.pathArray[0][1];
                     this.startY = wall.pathArray[0][2]
                     this.endX = wall.pathArray[1][1];
                     this.endY = wall.pathArray[1][2]
                     this.ox = this.attr("x");
                     this.oy = this.attr("y");
-                    worldModel.setCurrentElement(wall);
+                    wall.worldModel.setCurrentElement(wall);
                 }
                 return this;
             },
             movePath = function (dx, dy) {
-                if (!worldModel.getDrawMode()) {
+                if (!wall.worldModel.getDrawMode()) {
                     var trans_x = dx - this.ox;
                     var trans_y = dy - this.oy;
 

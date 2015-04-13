@@ -1,5 +1,3 @@
-interface ColorFieldItem {
-    hideHandles(): void;
-    showHandles(): void;
+interface ColorFieldItem extends AbstractItem {
     remove(): void;
 }

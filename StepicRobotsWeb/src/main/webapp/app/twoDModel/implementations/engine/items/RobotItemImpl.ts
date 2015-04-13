@@ -35,11 +35,15 @@ class RobotItemImpl implements RobotItem {
 
         this.rotateHandle = paper.circle(position.x + this.width + 20,
             position.y + this.height / 2, handleRadius).attr(handleAttrs);
+        this.hideHandles();
+    }
 
+    setDraggable(): void {
         var robotItem = this;
+        robotItem.image.attr({cursor: "pointer"});
 
         var startHandle = function () {
-                if (!worldModel.getDrawMode()) {
+                if (!robotItem.worldModel.getDrawMode()) {
                     this.transformation = robotItem.image.transform();
                     robotItem.updateSensorsTransformations();
 
@@ -50,7 +54,7 @@ class RobotItemImpl implements RobotItem {
                 return this;
             },
             moveHandle = function (dx, dy) {
-                if (!worldModel.getDrawMode()) {
+                if (!robotItem.worldModel.getDrawMode()) {
                     var newX = this.cx + dx;
                     var newY = this.cy + dy;
                     var offsetX = newX - robotItem.center.x;
@@ -76,7 +80,7 @@ class RobotItemImpl implements RobotItem {
                 return this;
             },
             upHandle = function () {
-                if (!worldModel.getDrawMode()) {
+                if (!robotItem.worldModel.getDrawMode()) {
                     robotItem.updateSensorsTransformations();
                 }
                 return this;
@@ -85,18 +89,18 @@ class RobotItemImpl implements RobotItem {
         robotItem.rotateHandle.drag(moveHandle, startHandle, upHandle);
 
         var start = function () {
-                if (!worldModel.getDrawMode()) {
+                if (!robotItem.worldModel.getDrawMode()) {
                     this.transformation = this.transform();
                     robotItem.updateSensorsTransformations();
 
                     this.handle_cx = robotItem.rotateHandle.attr("cx");
                     this.handle_cy = robotItem.rotateHandle.attr("cy");
-                    worldModel.setCurrentElement(robotItem);
+                    robotItem.worldModel.setCurrentElement(robotItem);
                 }
                 return this;
             }
             ,move = function (dx, dy) {
-                if (!worldModel.getDrawMode()) {
+                if (!robotItem.worldModel.getDrawMode()) {
                     this.transform(this.transformation + "T" + dx + "," + dy);
 
                     robotItem.transformSensorsItems("T" + dx + "," + dy);
@@ -106,7 +110,7 @@ class RobotItemImpl implements RobotItem {
                 return this;
             }
             ,up = function () {
-                if (!worldModel.getDrawMode()) {
+                if (!robotItem.worldModel.getDrawMode()) {
                     robotItem.center.x = this.matrix.x(robotItem.startCenter.x, robotItem.startCenter.y);
                     robotItem.center.y = this.matrix.y(robotItem.startCenter.x, robotItem.startCenter.y);
                     robotItem.updateSensorsTransformations();
@@ -114,7 +118,6 @@ class RobotItemImpl implements RobotItem {
                 return this;
             }
         this.image.drag(move, start, up);
-        this.hideHandles();
     }
 
     setStartPosition(position: TwoDPosition, direction: number): void {
