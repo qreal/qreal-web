@@ -19,6 +19,7 @@
 /// <reference path="twoDModel/implementations/robotModel/robotParts/SoundSensor.ts" />
 /// <reference path="twoDModel/implementations/robotModel/robotParts/Speaker.ts" />
 /// <reference path="twoDModel/implementations/robotModel/robotParts/TouchSensor.ts" />
+/// <reference path="twoDModel/implementations/engine/items/regions/RegionItem.ts" />
 
 /// <reference path="twoDModel/implementations/robotModel/CommonRobotModelImpl.ts" />
 /// <reference path="twoDModel/implementations/robotModel/DevicesConfigurationProvider.ts" />
@@ -47,6 +48,7 @@
 /// <reference path="twoDModel/implementations/engine/items/SensorItem.ts" />
 /// <reference path="twoDModel/implementations/engine/items/SonarSensorItem.ts" />
 /// <reference path="twoDModel/implementations/engine/items/WallItemImpl.ts" />
+/// <reference path="twoDModel/implementations/engine/items/regions/RectangularRegion.ts" />
 /// <reference path="twoDModel/implementations/engine/model/Constants.ts" />
 /// <reference path="twoDModel/implementations/engine/model/ModelImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/model/RobotModelImpl.ts" />

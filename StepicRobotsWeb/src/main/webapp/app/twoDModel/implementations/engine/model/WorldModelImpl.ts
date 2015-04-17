@@ -4,6 +4,7 @@ class WorldModelImpl implements WorldModel {
     private currentElement: AbstractItem = null;
     private colorFields: ColorFieldItem[] = [];
     private wallItems: WallItem[] = [];
+    private regions: RegionItem[] = [];
 
     constructor() {
         this.paper = Raphael("twoDModel_stage", 2000, 2000);
@@ -189,6 +190,21 @@ class WorldModelImpl implements WorldModel {
     }
 
     deserialize(xml, offsetX: number, offsetY: number) {
+        var regions = xml.getElementsByTagName("region");
+
+        for (var i = 0; i < regions.length; i++) {
+            var type = regions[i].getAttribute("type");
+
+            switch (type) {
+                case "rectangle":
+                    var region = new RectangularRegion(this);
+                    region.deserialize(regions[i], offsetX, offsetY);
+                    this.regions.push(region);
+                    break;
+                default:
+            }
+        }
+        
         var walls = xml.getElementsByTagName("wall");
 
         for (var i = 0; i < walls.length; i++) {
@@ -198,13 +214,6 @@ class WorldModelImpl implements WorldModel {
             var endPos = this.parsePositionString(endPosStr);
 
             this.addWall(beginPos.x + offsetX, beginPos.y + offsetY, endPos.x + offsetX, endPos.y + offsetY);
-        }
-
-        var regions = xml.getElementsByTagName("region");
-
-        for (var i = 0; i < regions.length; i++) {
-            var x = parseFloat(regions[i].getAttribute('x'));
-            var y = parseFloat(regions[i].getAttribute('y'));
         }
 
         var robots = xml.getElementsByTagName("robot");
