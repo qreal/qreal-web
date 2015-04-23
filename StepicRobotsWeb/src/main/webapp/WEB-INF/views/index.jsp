@@ -17,7 +17,7 @@
     <div class="container">
         <div class="row">
             <div id="diagramContent" class="col-md-8 no-float unselectable">
-                <div id="diagram_container" class="container"  ng-controller="DiagramController">
+                <div id="diagram_container" class="container" ng-controller="DiagramController" task="${taskId}">
                     <div class="row">
                         <div class="col-md-9 no-float">
                             <div class="background_div">
@@ -60,7 +60,7 @@
             </div>
             <div id="twoDModelContent" class="col-md-4 no-float unselectable">
                 <div class="background_div">
-                    <div id="twoDModel_stage"  ng-controller="TwoDModelEngineFacadeImpl">
+                    <div id="twoDModel_stage"  ng-controller="TwoDModelEngineFacadeImpl" task="${taskId}">
 
                     </div>
                 </div>

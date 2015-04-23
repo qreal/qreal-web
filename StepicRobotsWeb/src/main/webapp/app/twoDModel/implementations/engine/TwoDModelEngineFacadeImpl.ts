@@ -2,7 +2,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
     private robotModelName: string;
     private model: Model;
 
-    constructor($scope, $compile) {
+    constructor($scope, $compile, $attrs) {
         $scope.vm = this;
         var facade = this;
         var robotModel = $scope.root.getRobotModel();
@@ -12,7 +12,8 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
 
         this.model.addRobotModel(robotModel);
 
-        this.load("configs/labyrinth-with-sensors.xml");
+        var taskId = $attrs.task;
+        this.load("tasks/" + taskId + "/2dmodel.xml");
 
         $(document).ready(function() {
             $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){

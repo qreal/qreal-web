@@ -1,6 +1,8 @@
 package com.qreal.stepic.robots.config.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,8 +18,9 @@ public class DiagramController {
         return new ModelAndView("index");
     }
 
-    @RequestMapping(value = "/diagram", method = RequestMethod.GET)
-    public ModelAndView diagram() {
-        return new ModelAndView("diagram/diagram");
+    @RequestMapping(value = "{taskId}", method = RequestMethod.GET)
+    public ModelAndView showTask(@PathVariable String taskId, Model model) {
+        model.addAttribute("taskId", taskId);
+        return new ModelAndView("index");
     }
 }
