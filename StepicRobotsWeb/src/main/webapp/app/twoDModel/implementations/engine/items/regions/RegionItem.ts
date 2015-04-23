@@ -34,6 +34,10 @@ class RegionItem {
         return $(this.shape.node).css("display") !== "none";
     }
 
+    getPosition(): TwoDPosition {
+        return new TwoDPosition(this.shape.attr("x"), this.shape.attr("y"));
+    }
+
     getWith(): number {
         return this.shape.attr("width");
     }
@@ -59,10 +63,12 @@ class RegionItem {
             this.setColor(color);
         }
 
-        var text = element.getAttribute("text");
-        if (text) {
-            //TODO: set text
+        var xAttr = element.getAttribute("x");
+        var yAttr = element.getAttribute("y");
+        if (xAttr !== undefined && yAttr !== undefined) {
+            this.setPosition(this.deserializePoint(element, xAttr, yAttr, offsetX, offsetY));
         }
+
 
         var textX = element.getAttribute("textX");
         var textY = element.getAttribute("textY");
@@ -70,10 +76,11 @@ class RegionItem {
             //TODO: set text pos
         }
 
-        var xAttr = element.getAttribute("x");
-        var yAttr = element.getAttribute("y");
-        if (xAttr !== undefined && yAttr !== undefined) {
-            this.setPosition(this.deserializePoint(element, xAttr, yAttr, offsetX, offsetY));
+        var text = element.getAttribute("text");
+        if (text) {
+            var textPos = this.getPosition();
+            this.worldModel.getPaper().text(textPos.x + 5, textPos.y + 10, text).
+                attr({"text-anchor":"start", fill: color, "font-size": 14});
         }
 
         var visible = element.getAttribute("visible");

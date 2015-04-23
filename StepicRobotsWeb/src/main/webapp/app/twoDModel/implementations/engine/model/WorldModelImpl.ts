@@ -204,7 +204,7 @@ class WorldModelImpl implements WorldModel {
                 default:
             }
         }
-        
+
         var walls = xml.getElementsByTagName("wall");
 
         for (var i = 0; i < walls.length; i++) {
