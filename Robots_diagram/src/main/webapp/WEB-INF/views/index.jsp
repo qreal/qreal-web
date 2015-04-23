@@ -7,7 +7,6 @@
     <script src="<c:url value='/resources/js/jquery-1.11.0.min.js' />"></script>
     <jsp:include page="include/scripts.jsp"/>
     <link rel="stylesheet" href="<c:url value='/resources/css/error.css'/>"/>
-    <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
     <script src="<c:url value='/resources/js/map.js' />"></script>
     <script src="<c:url value='/resources/js/robot.js' />"></script>
     <script type="text/javascript">
@@ -494,9 +493,8 @@
                                 <div class="container-fluid well">
                                     <div class="row-fluid">
                                         <div class="col-md-4">
-
-                                            <img src="http://vz.iminent.com/vz/ebbaaad3-77d8-4522-a8b7-45c10811941e/2/cute-rusty-robot-laughing.gif"
-                                                 class="img-circle">
+                                            <img src="images/trik_smile_normal.png"
+                                                 height="65" width="65" class="img-circle">
                                         </div>
 
                                         <div class="col-md-4">
@@ -626,9 +624,6 @@
                     <div class="col-md-8">
                         <div class="container-fluid">
                             <div class="row text-center">
-
-                                <img width="350" height="350"
-                                     src="http://d2pwjbxfeqzy45.cloudfront.net/wp-content/uploads/2013/10/coming-soon.jpg"/>
                             </div>
                         </div>
                     </div>
