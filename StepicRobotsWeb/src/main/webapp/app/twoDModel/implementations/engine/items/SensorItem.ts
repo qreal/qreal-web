@@ -115,8 +115,8 @@ class SensorItem {
         var startX = this.robotItem.getStartPosition().x;
         var startY = this.robotItem.getStartPosition().y;
         if (position) {
-            startX += position.x;
-            startY += position.y;
+            startX += position.x - this.width / 2;
+            startY += position.y - this.height / 2;
         } else {
             startX = startX + this.robotItem.getWidth() + 15;
             startY = startY + this.robotItem.getHeight() / 2 - this.height / 2;
