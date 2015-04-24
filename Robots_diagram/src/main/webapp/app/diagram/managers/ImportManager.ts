@@ -1,5 +1,5 @@
 class ImportManager {
-    static import(response, graph: joint.dia.Graph, nodesList): number {
+    static import(response, graph: joint.dia.Graph, nodesMap, nodeTypesMap: NodeTypesMap): number {
         console.log("import diagram");
         for (var i = 0; i < response.nodes.length; i++) {
             var nodeObject = response.nodes[i];
@@ -12,13 +12,13 @@ class ImportManager {
                 properties[propertiesObject[j].name] = property;
             }
 
-            this.importNode(graph, nodesList, nodeObject.name, nodeObject.type, nodeObject.x,
-                nodeObject.y, properties, nodeObject.image);
+            this.importNode(graph, nodesMap, nodeObject.name, nodeObject.type, nodeObject.x,
+                nodeObject.y, properties, nodeTypesMap[nodeObject.type].image);
         }
 
         for (var i = 0; i < response.links.length; i++) {
             var linkObject = response.links[i];
-            this.importLink(graph, nodesList, linkObject.source, linkObject.target, linkObject.vertices);
+            this.importLink(graph, nodesMap, linkObject.source, linkObject.target, linkObject.vertices);
         }
 
         return response.nodeIndex;

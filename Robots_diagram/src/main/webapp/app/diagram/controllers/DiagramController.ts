@@ -3,20 +3,21 @@ class DiagramController {
     private paper: DiagramPaper = new DiagramPaper(this.graph);
 
     private nodeTypesMap: NodeTypesMap = {};
-    private nodesList = {};
+    private nodesMap = {};
     private currentNode: DiagramNode;
     private nodeIndex: number = -1;
+    private isPaletteLoaded = false;
 
     constructor($scope, $compile) {
         var controller: DiagramController = this;
         $scope.vm = controller;
-        XmlManager.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
+        PaletteLoader.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
 
         this.paper.on('cell:pointerdown',
             function (cellView, evt, x, y) {
                 console.log('cell view ' + cellView.model.id + ' was clicked');
 
-                var node:DiagramNode = controller.nodesList[cellView.model.id];
+                var node:DiagramNode = controller.nodesMap[cellView.model.id];
                 if (node) {
                     controller.currentNode = node;
                     controller.setNodeProperties(node);
@@ -56,6 +57,7 @@ class DiagramController {
         this.setSpinnerListener();
         this.initDragAndDrop();
         this.makeUnselectable(document.getElementById("diagramContent"));
+        this.isPaletteLoaded = true;
     }
 
     setInputStringListener(): void {
@@ -162,7 +164,7 @@ class DiagramController {
         this.nodeIndex++;
         var name: string = "Node" + this.nodeIndex;
         var node: DefaultDiagramNode = new DefaultDiagramNode(name, type, x, y, properties, image);
-        this.nodesList[node.getElement().id] = node;
+        this.nodesMap[node.getElement().id] = node;
         this.graph.addCell(node.getElement());
         return node;
     }
@@ -170,7 +172,7 @@ class DiagramController {
     clear(): void {
         this.graph.clear();
         this.nodeIndex = -1;
-        this.nodesList = {};
+        this.nodesMap = {};
         $(".property").remove();
         this.currentNode = undefined;
     }
@@ -178,7 +180,7 @@ class DiagramController {
     removeCurrentElement(): void {
         if (this.currentNode) {
             console.log("Node was deleted");
-            delete this.nodesList[this.currentNode.getElement().id];
+            delete this.nodesMap[this.currentNode.getElement().id];
             this.currentNode.getElement().remove();
             $(".property").remove();
             this.currentNode = undefined;
@@ -186,14 +188,17 @@ class DiagramController {
     }
 
     saveDiagram(): void {
+        if (!this.isPaletteLoaded) {
+            alert("Palette is not loaded!");
+            return;
+        }
         var name: string = prompt("input name");
-        console.log(ExportManager.exportDiagramStateToJSON(this.graph, name, this.nodeIndex, this.nodesList));
         $.ajax({
             type: 'POST',
             url: 'save',
             dataType: 'json',
             contentType: 'application/json',
-            data: (ExportManager.exportDiagramStateToJSON(this.graph, name, this.nodeIndex, this.nodesList)),
+            data: (ExportManager.exportDiagramStateToJSON(this.graph, name, this.nodeIndex, this.nodesMap)),
             success: function (response) {
                 console.log(response.message);
             },
@@ -204,6 +209,10 @@ class DiagramController {
     }
 
     openDiagram(): void {
+        if (!this.isPaletteLoaded) {
+            alert("Palette is not loaded!");
+            return;
+        }
         var controller = this;
         var name: string = prompt("input diagram name");
         $.ajax({
@@ -214,10 +223,14 @@ class DiagramController {
             data: (JSON.stringify({name: name})),
             success: function (response) {
                 controller.clear();
-                controller.nodeIndex = ImportManager.import(response, controller.graph, controller.nodesList);
+                controller.nodeIndex = ImportManager.import(response, controller.graph,
+                    controller.nodesMap, controller.nodeTypesMap);
                 console.log(response.nodeIndex);
             },
             error: function (response, status, error) {
+                if (status === "parsererror") {
+                    alert("Diagarm with this name does not exist");
+                }
                 console.log("error: " + status + " " + error);
             }
         });

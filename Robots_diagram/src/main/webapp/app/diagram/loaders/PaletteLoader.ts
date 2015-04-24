@@ -1,4 +1,4 @@
-class XmlManager {
+class PaletteLoader {
     static loadElementsFromXml(controller: DiagramController, pathToXML: string, $scope, $compile): void {
         var req: any = XmlHttpFactory.createXMLHTTPObject();
         if (!req) {
@@ -8,7 +8,7 @@ class XmlManager {
 
         req.open("GET", pathToXML, true);
         req.onreadystatechange = function() {
-            XmlManager.parseElementsXml(req, controller, $scope, $compile);
+            PaletteLoader.parseElementsXml(req, controller, $scope, $compile);
         };
         req.send(null);
     }
@@ -85,7 +85,7 @@ class XmlManager {
                 }
             }
         } catch(e) {
-            alert("Error: " + e.message);
+            alert("Palette loading error: " + e.message);
         }
     }
 }

@@ -29,9 +29,6 @@ public class DefaultDiagramNode implements Serializable {
     @Column(name = "y")
     private double y;
 
-    @Column(name = "image")
-    private String image;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "node_id", referencedColumnName = "node_id")
     @OrderBy("position")
@@ -75,14 +72,6 @@ public class DefaultDiagramNode implements Serializable {
 
     public void setY(double y) {
         this.y = y;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     public Set<Property> getProperties() {

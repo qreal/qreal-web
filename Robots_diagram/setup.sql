@@ -35,7 +35,6 @@ CREATE TABLE nodes (
   type       VARCHAR(50)  NOT NULL,
   x          DOUBLE       NOT NULL,
   y          DOUBLE       NOT NULL,
-  image      VARCHAR(255) NOT NULL,
   diagram_id BIGINT,
   PRIMARY KEY (node_id),
   FOREIGN KEY (diagram_id) REFERENCES diagrams (diagram_id)
