@@ -1,4 +1,4 @@
-class XmlManager {
+class PaletteLoader {
     static loadElementsFromXml(controller: DiagramController, pathToXML: string, $scope, $compile): void {
         var req: any = XmlHttpFactory.createXMLHTTPObject();
         if (!req) {
@@ -8,7 +8,7 @@ class XmlManager {
 
         req.open("GET", pathToXML, true);
         req.onreadystatechange = function() {
-            XmlManager.parseElementsXml(req, controller, $scope, $compile);
+            PaletteLoader.parseElementsXml(req, controller, $scope, $compile);
         };
         req.send(null);
     }
@@ -34,7 +34,8 @@ class XmlManager {
                         var elements = categories[k].getElementsByTagName("Element");
 
                         for (var i = 0; i < elements.length; i++) {
-                            var typeName: string = elements[i].getAttribute('name');
+                            var name: string = elements[i].getAttribute('name');
+                            var typeName: string = elements[i].getAttribute('typef');
                             nodeTypesMap[typeName] = new NodeType();
                             content += '<li><div class="tree_element">';
 
@@ -65,7 +66,7 @@ class XmlManager {
                             nodeTypesMap[typeName].properties = properties;
 
                             content += '<img class="elementImg" src="' + image + '" width="30" height="30"' + '/>';
-                            content += typeName;
+                            content += name;
                             content += '</div></li>';
                         }
 
@@ -85,7 +86,7 @@ class XmlManager {
                 }
             }
         } catch(e) {
-            alert("Error: " + e.message);
+            alert("Palette loading error: " + e.message);
         }
     }
 }

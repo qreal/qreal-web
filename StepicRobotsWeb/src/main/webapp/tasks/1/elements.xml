@@ -2,15 +2,15 @@
 <Elements>
 	<Category name="Algorithms">
 
-		<Element name="Initial Node">
+		<Element name="Initial Node" type="InitialNode">
 			<Image src="images/initialBlock.svg"/>
 		</Element>
 
-		<Element name="Final Node">
+		<Element name="Final Node" type="FinalNode">
 			<Image src="images/finalBlock.svg"/>
 		</Element>
 
-		<Element name="Function">
+		<Element name="Function" type="Function">
 			<Property name="Body" type="string">
                 <value></value>
 			</Property>
@@ -20,25 +20,25 @@
 			<Image src="images/functionBlock.svg"/>
 		</Element>
 
-		<Element name="Condition">
+		<Element name="Condition" type="Condition">
 			<Property name="Condition" type="string">
                 <value>0</value>
 			</Property>
 			<Image src="images/ifBlock.svg"/>
 		</Element>
 
-		<Element name="Loop">
+		<Element name="Loop" type="Loop">
 			<Property name="Iterations" type="string">
                 <value>10</value>
 			</Property>
 			<Image src="images/loopBlock.svg"/>
 		</Element>
 
-		<Element name="Fork">
+		<Element name="Fork" type="Fork">
 			<Image src="images/forkBlock.svg"/>
 		</Element>
 
-		<Element name="Variable Initialization">
+		<Element name="Variable Initialization" type="VariableInit">
 			<Property name="Value" type="string">
                 <value>0</value>
 			</Property>
@@ -51,14 +51,14 @@
 	</Category>
 	<Category name="Actions">
 
-        <Element name="Play Tone">
+        <Element name="Play Tone" type="PlayTone">
             <Property name="File Name" type="string">
                 <value>media/beep.wav</value>
             </Property>
             <Image src="images/playToneBlock.svg"/>
         </Element>
 
-		<Element name="Motors Forward">
+		<Element name="Motors Forward" type="TrikV6EnginesForward">
 			<Property name="Ports" type="string">
                 <value>M3, M4</value>
 			</Property>
@@ -68,7 +68,7 @@
 			<Image src="images/enginesForwardBlock.svg"/>
 		</Element>
 
-		<Element name="Motors Backward">
+		<Element name="Motors Backward" type="TrikV6EnginesBackward">
 			<Property name="Ports" type="string">
                 <value>M3, M4</value>
 			</Property>
@@ -78,21 +78,21 @@
 			<Image src="images/enginesBackwardBlock.svg"/>
 		</Element>
 
-		<Element name="Stop Motors">
+		<Element name="Stop Motors" type="TrikV6EnginesStop">
 			<Property name="Ports" type="string">
                 <value>M1, M2, M3, M4</value>
 			</Property>
 			<Image src="images/enginesStopBlock.svg"/>
 		</Element>
 
-		<Element name="Clear Encoder">
+		<Element name="Clear Encoder" type="TrikV6ClearEncoder">
 			<Property name="Ports" type="string">
                 <value>B1, B2, B3, B4</value>
 			</Property>
 			<Image src="images/nullificationEncoderBlock.svg"/>
 		</Element>
 
-		<Element name="Angular Servo">
+		<Element name="Angular Servo" type="TrikAngularServo">
 			<Property name="Ports" type="string">
                 <value>E1</value>
 			</Property>
@@ -102,7 +102,7 @@
 			<Image src="images/angularServoBlock.svg"/>
 		</Element>
 
-		<Element name="Led">
+		<Element name="Led" type="TrikAngularServo">
 			<Property name="Color" type="dropdown">
                 <value>red</value>
                 <Variants>
@@ -117,14 +117,14 @@
 	</Category>
 	<Category name="Wait">
 
-		<Element name="Timer">
+		<Element name="Timer" type="Timer">
 			<Property name="Delay (ms)" type="string">
                 <value>1000</value>
 			</Property>
 			<Image src="images/timerBlock.svg"/>
 		</Element>
 
-		<Element name="Wait for Light">
+		<Element name="Wait for Light" type="TrikWaitForLight">
 			<Property name="Percents" type="string">
                 <value>0</value>
 			</Property>
@@ -154,7 +154,7 @@
 	</Category>
 	<Category name="Drawing">
 
-		<Element name="Draw Pixel">
+		<Element name="Draw Pixel" type="DrawPixel">
 			<Property name="X" type="spinner">
                 <value>0</value>
 			</Property>
@@ -164,11 +164,11 @@
 			<Image src="images/drawPixelBlock.svg"/>
 		</Element>
 
-		<Element name="Smile">
+		<Element name="Smile" type="Smile">
 			<Image src="images/smileBlock.svg"/>
 		</Element>
 
-		<Element name="Background Color">
+		<Element name="Background Color" type="BackgroundColor">
 			<Property name="Color" type="dropdown">
                 <value>white</value>
                 <Variants>
