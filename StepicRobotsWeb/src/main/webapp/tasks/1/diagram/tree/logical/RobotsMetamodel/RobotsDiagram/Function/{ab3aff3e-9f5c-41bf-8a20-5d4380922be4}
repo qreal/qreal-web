@@ -1,0 +1,17 @@
+<object id="qrm:/RobotsMetamodel/RobotsDiagram/Function/{ab3aff3e-9f5c-41bf-8a20-5d4380922be4}" parent="qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID">
+  <children/>
+  <properties>
+    <QString value="S=sensorA1; Sold=S;" key="Body"/>
+    <QString value="" key="Init"/>
+    <qReal::Id value="qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID" key="from"/>
+    <incomingExplosions type="qReal::IdList"/>
+    <int value="-1" key="linkShape"/>
+    <links type="qReal::IdList">
+      <object id="qrm:/RobotsMetamodel/RobotsDiagram/ControlFlow/{9545a6c3-3cee-4227-a18e-8774dfb063b0}"/>
+      <object id="qrm:/RobotsMetamodel/RobotsDiagram/ControlFlow/{e167d348-0538-4bfa-9a28-61516b20b07e}"/>
+    </links>
+    <QString value="Функция" key="name"/>
+    <qReal::Id value="qrm:/" key="outgoingExplosion"/>
+    <qReal::Id value="qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID" key="to"/>
+  </properties>
+</object>

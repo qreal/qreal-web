@@ -1,0 +1,29 @@
+<object logicalId="qrm:/RobotsMetamodel/RobotsDiagram/RobotsDiagramNode/{bec30320-c3d1-4d72-89fd-babdfacb9c21}" id="qrm:/RobotsMetamodel/RobotsDiagram/RobotsDiagramNode/{9779a316-9926-4309-9f9d-76f207f2bdd8}" parent="qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID">
+  <children>
+    <object id="qrm:/RobotsMetamodel/RobotsDiagram/InitialNode/{28b94878-1ca6-4d60-834a-5d7b5b5bf9ea}"/>
+    <object id="qrm:/RobotsMetamodel/RobotsDiagram/Function/{55740557-ebb3-45c0-a1d6-6921d2ec5acb}"/>
+    <object id="qrm:/RobotsMetamodel/RobotsDiagram/Function/{20d979fe-1382-42ba-a473-95ef5d2ed91f}"/>
+    <object id="qrm:/RobotsMetamodel/RobotsDiagram/TrikV6EnginesForward/{a93fe57a-3da8-48de-99cd-e467e433c245}"/>
+    <object id="qrm:/RobotsMetamodel/RobotsDiagram/TrikV6EnginesForward/{7efeff42-0b2c-4b29-b91a-d71f3547870e}"/>
+    <object id="qrm:/RobotsMetamodel/RobotsDiagram/Timer/{97cddb7e-5fc0-485d-a243-bcf970a16eb5}"/>
+    <object id="qrm:/RobotsMetamodel/RobotsDiagram/ControlFlow/{b374c0f3-a6c8-4626-b79d-6cc0080aaeef}"/>
+    <object id="qrm:/RobotsMetamodel/RobotsDiagram/ControlFlow/{0cd7b158-8f57-473e-b0d6-33b15840b5ed}"/>
+    <object id="qrm:/RobotsMetamodel/RobotsDiagram/ControlFlow/{485add93-4200-4661-b341-c7096565745d}"/>
+    <object id="qrm:/RobotsMetamodel/RobotsDiagram/ControlFlow/{41a0210b-180f-4dce-b34a-dfdecf5cfc60}"/>
+    <object id="qrm:/RobotsMetamodel/RobotsDiagram/ControlFlow/{1846d1c0-6e3d-42a3-ab67-6057aaa17a55}"/>
+    <object id="qrm:/RobotsMetamodel/RobotsDiagram/Timer/{e02f38c9-c891-41a7-b5f1-c5229e4a6e92}"/>
+    <object id="qrm:/RobotsMetamodel/RobotsDiagram/ControlFlow/{aac8171e-9d1d-4d8a-bd97-58b967f29964}"/>
+    <object id="qrm:/RobotsMetamodel/RobotsDiagram/ControlFlow/{045b2f28-231a-4464-bdfd-6f2d17e93e76}"/>
+  </children>
+  <properties>
+    <QPolygon value="" key="configuration"/>
+    <qReal::Id value="qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID" key="from"/>
+    <double value="0" key="fromPort"/>
+    <links type="qReal::IdList"/>
+    <QString value="Диаграмма поведения робота" key="name"/>
+    <QPointF value="-102, 0" key="position"/>
+    <qReal::Id value="qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID" key="to"/>
+    <double value="0" key="toPort"/>
+  </properties>
+  <graphicalParts/>
+</object>
