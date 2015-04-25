@@ -6,13 +6,14 @@ class DiagramController {
     private nodesMap = {};
     private currentNode: DiagramNode;
     private nodeIndex: number = -1;
+    private isPaletteLoaded = false;
 
     constructor($scope, $compile, $attrs) {
         var controller: DiagramController = this;
         $scope.vm = controller;
 
         var taskId = $attrs.task;
-        XmlManager.loadElementsFromXml(controller, "tasks/" + taskId + "/elements.xml", $scope, $compile);
+        PaletteLoader.loadElementsFromXml(controller, "tasks/" + taskId + "/elements.xml", $scope, $compile);
 
         this.paper.on('cell:pointerdown',
             function (cellView, evt, x, y) {
@@ -58,6 +59,7 @@ class DiagramController {
         this.setSpinnerListener();
         this.initDragAndDrop();
         this.makeUnselectable(document.getElementById("diagramContent"));
+        this.isPaletteLoaded = true;
     }
 
     setInputStringListener(): void {
@@ -188,8 +190,11 @@ class DiagramController {
     }
 
     saveDiagram(): void {
+        if (!this.isPaletteLoaded) {
+            alert("Palette is not loaded!");
+            return;
+        }
         var name: string = prompt("input name");
-        console.log(ExportManager.exportDiagramStateToJSON(this.graph, name, this.nodeIndex, this.nodesMap));
         $.ajax({
             type: 'POST',
             url: 'save',
@@ -206,6 +211,10 @@ class DiagramController {
     }
 
     openDiagram(): void {
+        if (!this.isPaletteLoaded) {
+            alert("Palette is not loaded!");
+            return;
+        }
         var controller = this;
         var name: string = prompt("input diagram name");
         $.ajax({
@@ -216,7 +225,8 @@ class DiagramController {
             data: (JSON.stringify({name: name})),
             success: function (response) {
                 controller.clear();
-                controller.nodeIndex = ImportManager.import(response, controller.graph, controller.nodesMap);
+                controller.nodeIndex = ImportManager.import(response, controller.graph,
+                    controller.nodesMap, controller.nodeTypesMap);
                 console.log(response.nodeIndex);
             },
             error: function (response, status, error) {

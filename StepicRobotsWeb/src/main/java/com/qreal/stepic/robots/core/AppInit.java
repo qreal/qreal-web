@@ -1,6 +1,6 @@
-package com.qreal.stepic.robots.config.core;
+package com.qreal.stepic.robots.core;
 
-import com.qreal.stepic.robots.config.WebConfig;
+import com.qreal.stepic.robots.WebConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class AppInit extends AbstractAnnotationConfigDispatcherServletInitializer {

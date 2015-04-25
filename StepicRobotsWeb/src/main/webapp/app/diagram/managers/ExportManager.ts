@@ -30,7 +30,6 @@ class ExportManager {
                     'type': node.getType(),
                     'x': node.getX(),
                     'y': node.getY(),
-                    'image': node.getImagePath(),
                     'properties': []
                 };
 
