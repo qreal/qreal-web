@@ -102,7 +102,7 @@
 			<Image src="images/angularServoBlock.svg"/>
 		</Element>
 
-		<Element name="Led" type="TrikAngularServo">
+		<Element name="Led" type="TrikLed">
 			<Property name="Color" type="dropdown">
                 <value>red</value>
                 <Variants>
