@@ -29,14 +29,6 @@ public class Property implements Serializable {
         this.value = value;
     }
 
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
     public String getType() {
         return type;
     }
@@ -48,5 +40,4 @@ public class Property implements Serializable {
     private String name;
     private String value;
     private String type;
-    private int position;
 }

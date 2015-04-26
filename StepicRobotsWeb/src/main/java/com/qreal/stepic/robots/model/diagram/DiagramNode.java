@@ -9,18 +9,20 @@ import java.util.Set;
  */
 public class DiagramNode implements Serializable {
 
-    public DiagramNode(String id, String type) {
-        this.id = id;
-        this.type = type;
-        this.properties = new HashSet<Property>();
+    public String getLogicalId() {
+        return logicalId;
     }
 
-    public void addProperties(Set<Property> properties) {
-        this.properties.addAll(properties);
+    public void setLogicalId(String logicalId) {
+        this.logicalId = logicalId;
     }
 
-    public String getId() {
-        return this.id;
+    public String getGraphicalId() {
+        return graphicalId;
+    }
+
+    public void setGraphicalId(String graphicalId) {
+        this.graphicalId = graphicalId;
     }
 
     public String getType() {
@@ -31,16 +33,26 @@ public class DiagramNode implements Serializable {
         this.type = type;
     }
 
-    public Set<Property> getProperties() {
-        return properties;
+    public Set<Property> getLogicalProperties() {
+        return logicalProperties;
     }
 
-    public void setProperties(Set<Property> properties) {
-        this.properties = properties;
+    public void setLogicalProperties(Set<Property> logicalProperties) {
+        this.logicalProperties = logicalProperties;
     }
 
-    private String id;
+    public Set<Property> getGraphicalProperties() {
+        return graphicalProperties;
+    }
+
+    public void setGraphicalProperties(Set<Property> graphicalProperties) {
+        this.graphicalProperties = graphicalProperties;
+    }
+
+    private String logicalId;
+    private String graphicalId;
     private String type;
-    private Set<Property> properties;
+    private Set<Property> logicalProperties;
+    private Set<Property> graphicalProperties;
 
 }

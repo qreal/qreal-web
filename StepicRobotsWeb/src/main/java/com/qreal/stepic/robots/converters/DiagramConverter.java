@@ -61,36 +61,44 @@ public class DiagramConverter {
         }
     }
 
-    private void convertGraphicalPart(Element element, Map<String, DiagramNode> nodesMap) {
-        String logicalId = element.getAttribute("logicalId");
-        String parts[] = logicalId.split("/");
+    private void convertLogicalPart(Element element, Map<String, DiagramNode> nodesMap) {
+        String logicalIdAttr = element.getAttribute("id");
+        String parts[] = logicalIdAttr.split("/");
 
-        String id = parts[parts.length - 1];
+        String logicalId = parts[parts.length - 1];
         String type = parts[parts.length - 2];
 
-        if (!nodesMap.containsKey(id)) {
-            nodesMap.put(id, new DiagramNode(id, type));
+        if (!nodesMap.containsKey(logicalId)) {
+            nodesMap.put(logicalId, new DiagramNode());
         }
-        DiagramNode node = nodesMap.get(id);
+        DiagramNode node = nodesMap.get(logicalId);
+        node.setLogicalId(logicalId);
+        node.setType(type);
 
         Element propertiesElement = (Element) element.getElementsByTagName("properties").item(0);
-        node.addProperties(convertProperties(propertiesElement));
+        node.setLogicalProperties(convertProperties(propertiesElement));
     }
 
-    private void convertLogicalPart(Element element, Map<String, DiagramNode> nodesMap) {
-        String logicalId = element.getAttribute("id");
-        String parts[] = logicalId.split("/");
+    private void convertGraphicalPart(Element element, Map<String, DiagramNode> nodesMap) {
+        String logicalIdAttr = element.getAttribute("logicalId");
+        String logicalIdParts[] = logicalIdAttr.split("/");
 
-        String id = parts[parts.length - 1];
-        String type = parts[parts.length - 2];
+        String logicalId = logicalIdParts[logicalIdParts.length - 1];
 
-        if (!nodesMap.containsKey(id)) {
-            nodesMap.put(id, new DiagramNode(id, type));
+        if (!nodesMap.containsKey(logicalId)) {
+            nodesMap.put(logicalId, new DiagramNode());
         }
-        DiagramNode node = nodesMap.get(id);
+        DiagramNode node = nodesMap.get(logicalId);
+
+        String graphicalIdAttr = element.getAttribute("id");
+        String graphicalIdParts[] = graphicalIdAttr.split("/");
+
+        String graphicalId = graphicalIdParts[graphicalIdParts.length - 1];
+
+        node.setGraphicalId(graphicalId);
 
         Element propertiesElement = (Element) element.getElementsByTagName("properties").item(0);
-        node.addProperties(convertProperties(propertiesElement));
+        node.setGraphicalProperties(convertProperties(propertiesElement));
     }
 
     private Set<Property> convertProperties(Element propertiesElement) {

@@ -239,7 +239,7 @@ class DiagramController {
                 /*controller.nodeIndex = ImportManager.import(response, controller.graph,
                     controller.nodesMap, controller.nodeTypesMap);
                 console.log(response.nodeIndex);*/
-                console.log(response);
+                console.log(JSON.stringify(response));
             },
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);
