@@ -493,8 +493,14 @@
                                 <div class="container-fluid well">
                                     <div class="row-fluid">
                                         <div class="col-md-4">
+                                            <c:if test="${robotWrapper.status == 'Online'}">
                                             <img src="images/trik_smile_normal.png"
                                                  height="65" width="65" class="img-circle">
+                                            </c:if>
+                                            <c:if test="${robotWrapper.status != 'Online'}">
+                                                <img src="images/trik_smile_sad.png"
+                                                     height="65" width="65" class="img-circle">
+                                            </c:if>
                                         </div>
 
                                         <div class="col-md-4">
