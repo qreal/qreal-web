@@ -67,7 +67,7 @@ public class DiagramConverter {
         String logicalIdAttr = element.getAttribute("id");
         String parts[] = logicalIdAttr.split("/");
 
-        String logicalId = parts[parts.length - 1];
+        String logicalId = getId(parts[parts.length - 1]);
         String type = parts[parts.length - 2];
 
         if (!nodesMap.containsKey(logicalId)) {
@@ -97,7 +97,7 @@ public class DiagramConverter {
         String logicalIdAttr = element.getAttribute("logicalId");
         String logicalIdParts[] = logicalIdAttr.split("/");
 
-        String logicalId = logicalIdParts[logicalIdParts.length - 1];
+        String logicalId = getId(logicalIdParts[logicalIdParts.length - 1]);
         String type = logicalIdParts[logicalIdParts.length - 2];
 
         if (!nodesMap.containsKey(logicalId)) {
@@ -118,7 +118,7 @@ public class DiagramConverter {
         String graphicalIdAttr = element.getAttribute("id");
         String graphicalIdParts[] = graphicalIdAttr.split("/");
 
-        String graphicalId = graphicalIdParts[graphicalIdParts.length - 1];
+        String graphicalId = getId(graphicalIdParts[graphicalIdParts.length - 1]);
 
         node.setGraphicalId(graphicalId);
 
@@ -140,5 +140,10 @@ public class DiagramConverter {
             }
         }
         return properties;
+    }
+
+    private String getId(String idString) {
+        String pattern = "\\{(.*)\\}";
+        return idString.replaceAll(pattern, "$1");
     }
 }
