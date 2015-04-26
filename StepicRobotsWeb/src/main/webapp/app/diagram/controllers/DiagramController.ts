@@ -3,17 +3,19 @@ class DiagramController {
     private paper: DiagramPaper = new DiagramPaper(this.graph);
 
     private nodeTypesMap: NodeTypesMap = {};
+    private nameTypeMap: {string?: string} = {};
     private nodesMap = {};
     private currentNode: DiagramNode;
     private nodeIndex: number = -1;
     private isPaletteLoaded = false;
+    private taskId: string;
 
     constructor($scope, $compile, $attrs) {
         var controller: DiagramController = this;
         $scope.vm = controller;
 
-        var taskId = $attrs.task;
-        PaletteLoader.loadElementsFromXml(controller, "tasks/" + taskId + "/elements.xml", $scope, $compile);
+        controller.taskId = $attrs.task;
+        PaletteLoader.loadElementsFromXml(controller, "tasks/" + controller.taskId + "/elements.xml", $scope, $compile);
 
         this.paper.on('cell:pointerdown',
             function (cellView, evt, x, y) {
@@ -41,6 +43,10 @@ class DiagramController {
         this.nodeTypesMap = nodeTypesMap;
     }
 
+    setNameTypeMap(nameTypeMap: {string?: string}): void {
+        this.nameTypeMap = nameTypeMap;
+    }
+
     private makeUnselectable(element) {
         if (element.nodeType == 1) {
             element.setAttribute("unselectable", "on");
@@ -53,13 +59,9 @@ class DiagramController {
     }
 
     initPalette() {
-        this.setInputStringListener();
-        this.setCheckboxListener();
-        this.setDropdownListener();
-        this.setSpinnerListener();
         this.initDragAndDrop();
-        this.makeUnselectable(document.getElementById("diagramContent"));
         this.isPaletteLoaded = true;
+        this.afterPaletteLoaded();
     }
 
     setInputStringListener(): void {
@@ -139,7 +141,8 @@ class DiagramController {
                 var gridSize: number = controller.paper.getGridSizeValue();
                 topElementPos -= topElementPos % gridSize;
                 leftElementPos -= leftElementPos % gridSize;
-                var type: string = $(ui.draggable.context).text();
+                var name: string = $(ui.draggable.context).text();
+                var type = controller.nameTypeMap[name];
                 var image: string = controller.nodeTypesMap[type].image;
                 var properties: PropertiesMap = controller.nodeTypesMap[type].properties;
                 var node = controller.createDefaultNode(type, leftElementPos, topElementPos, properties, image);
@@ -160,6 +163,15 @@ class DiagramController {
 
     getPropertyHtml(typeName, propertyName: string, property: Property): string {
         return PropertyManager.getPropertyHtml(typeName, propertyName, property);
+    }
+
+    afterPaletteLoaded() {
+        this.setInputStringListener();
+        this.setCheckboxListener();
+        this.setDropdownListener();
+        this.setSpinnerListener();
+        this.makeUnselectable(document.getElementById("diagramContent"));
+        this.openDiagram(this.taskId);
     }
 
     createDefaultNode(type: string, x: number, y: number, properties: PropertiesMap, image: string): DefaultDiagramNode {
@@ -210,24 +222,24 @@ class DiagramController {
         });
     }
 
-    openDiagram(): void {
+    openDiagram(taskId: string): void {
         if (!this.isPaletteLoaded) {
             alert("Palette is not loaded!");
             return;
         }
         var controller = this;
-        var name: string = prompt("input diagram name");
         $.ajax({
             type: 'POST',
             url: 'open',
             dataType: 'json',
             contentType: 'application/json',
-            data: (JSON.stringify({name: name})),
+            data: (JSON.stringify({id: taskId})),
             success: function (response) {
                 controller.clear();
-                controller.nodeIndex = ImportManager.import(response, controller.graph,
+                /*controller.nodeIndex = ImportManager.import(response, controller.graph,
                     controller.nodesMap, controller.nodeTypesMap);
-                console.log(response.nodeIndex);
+                console.log(response.nodeIndex);*/
+                console.log(response);
             },
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);

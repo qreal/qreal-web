@@ -1,6 +1,7 @@
 package com.qreal.stepic.robots.model.diagram;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -8,20 +9,18 @@ import java.util.Set;
  */
 public class DiagramNode implements Serializable {
 
-    public Long getNodeId() {
-        return nodeId;
+    public DiagramNode(String id, String type) {
+        this.id = id;
+        this.type = type;
+        this.properties = new HashSet<Property>();
     }
 
-    public void setNodeId(Long nodeId) {
-        this.nodeId = nodeId;
+    public void addProperties(Set<Property> properties) {
+        this.properties.addAll(properties);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public String getId() {
+        return this.id;
     }
 
     public String getType() {
@@ -32,22 +31,6 @@ public class DiagramNode implements Serializable {
         this.type = type;
     }
 
-    public double getX() {
-        return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-
     public Set<Property> getProperties() {
         return properties;
     }
@@ -56,11 +39,8 @@ public class DiagramNode implements Serializable {
         this.properties = properties;
     }
 
-    private Long nodeId;
-    private String name;
+    private String id;
     private String type;
-    private double x;
-    private double y;
     private Set<Property> properties;
 
 }

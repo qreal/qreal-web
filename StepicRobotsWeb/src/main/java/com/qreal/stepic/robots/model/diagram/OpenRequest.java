@@ -7,13 +7,13 @@ import java.io.Serializable;
  */
 public class OpenRequest implements Serializable {
 
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    private String name;
+    private String id;
 }

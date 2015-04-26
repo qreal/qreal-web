@@ -7,12 +7,10 @@ import java.io.Serializable;
  */
 public class Property implements Serializable {
 
-    public Long getPropertyId() {
-        return propertyId;
-    }
-
-    public void setPropertyId(Long propertyId) {
-        this.propertyId = propertyId;
+    public Property(String name, String value, String type) {
+        this.name = name;
+        this.value = value;
+        this.type = type;
     }
 
     public String getName() {
@@ -47,7 +45,6 @@ public class Property implements Serializable {
         this.type = type;
     }
 
-    private Long propertyId;
     private String name;
     private String value;
     private String type;

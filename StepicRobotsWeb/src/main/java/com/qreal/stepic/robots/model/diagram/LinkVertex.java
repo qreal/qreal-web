@@ -23,14 +23,6 @@ public class LinkVertex implements Serializable {
         this.y = y;
     }
 
-    public Long getVertexId() {
-        return vertexId;
-    }
-
-    public void setVertexId(Long vertexId) {
-        this.vertexId = vertexId;
-    }
-
     public int getNumber() {
         return number;
     }
@@ -39,7 +31,6 @@ public class LinkVertex implements Serializable {
         this.number = number;
     }
 
-    private Long vertexId;
     private double x;
     private double y;
     private int number;

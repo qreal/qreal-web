@@ -27,6 +27,7 @@ class PaletteLoader {
                 if (req.status == 200) {
                     var xmlDoc = req.responseXML;
                     var nodeTypesMap: NodeTypesMap = {};
+                    var nameTypeMap: {string?: string} = {};
                     var content: string = '';
                     var categories = xmlDoc.getElementsByTagName("Category");
                     for (var k = 0; k < categories.length; k++) {
@@ -35,7 +36,8 @@ class PaletteLoader {
 
                         for (var i = 0; i < elements.length; i++) {
                             var name: string = elements[i].getAttribute('name');
-                            var typeName: string = elements[i].getAttribute('typef');
+                            var typeName: string = elements[i].getAttribute('type');
+                            nameTypeMap[name] = typeName;
                             nodeTypesMap[typeName] = new NodeType();
                             content += '<li><div class="tree_element">';
 
@@ -80,6 +82,7 @@ class PaletteLoader {
                     });
 
                     controller.setNodeTypesMap(nodeTypesMap);
+                    controller.setNameTypeMap(nameTypeMap);
                     controller.initPalette();
                 } else {
                     alert("Can't load palette:\n" + req.statusText);

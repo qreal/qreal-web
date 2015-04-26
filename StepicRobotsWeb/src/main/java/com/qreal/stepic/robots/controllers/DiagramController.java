@@ -1,13 +1,15 @@
 package com.qreal.stepic.robots.controllers;
 
+import com.qreal.stepic.robots.converters.DiagramConverter;
+import com.qreal.stepic.robots.model.diagram.Diagram;
+import com.qreal.stepic.robots.model.diagram.DiagramNode;
+import com.qreal.stepic.robots.model.diagram.OpenRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -18,6 +20,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * Created by vladzx on 25.10.14.
@@ -36,57 +39,35 @@ public class DiagramController {
     @RequestMapping(value = "{taskId}", method = RequestMethod.GET)
     public ModelAndView showTask(@PathVariable String taskId, Model model) {
         model.addAttribute("taskId", taskId);
-
-        Resource resource = resourceLoader.getResource("tasks/" + taskId + "/diagram/tree");
-
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setIgnoringElementContentWhitespace(true);
-        try {
-            DocumentBuilder builder = factory.newDocumentBuilder();
-
-            File folder = resource.getFile();
-            for (final File fileEntry : folder.listFiles()) {
-                convertModel(fileEntry, builder);
-            }
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         return new ModelAndView("index");
     }
 
-    private void convertModel(final File folder, final DocumentBuilder builder) {
-        for (final File fileEntry : folder.listFiles()) {
-            if (fileEntry.isDirectory()) {
-                convertModel(fileEntry, builder);
-            } else {
-                try {
-                    Document doc = builder.parse(fileEntry);
-                    Element element = doc.getDocumentElement();
+    @ResponseBody
+    @RequestMapping(value = "/open", method = RequestMethod.POST)
+    public Diagram open(@RequestBody OpenRequest request) {
+        Resource resource = resourceLoader.getResource("tasks/" + request.getId());
+        DiagramConverter converter= new DiagramConverter();
 
-                    if (element.hasAttribute("logicalId") && element.getAttribute("logicalId") != "qrm:/") {
-                        System.out.println("GRAPHICAL " + element.getAttribute("logicalId"));
-                    } else {
-                        System.out.println("LOGICAL " + element.getAttribute("id"));
-                    }
-                } catch (SAXException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+        try {
+            File folder = resource.getFile();
+            String folderPath = folder.getPath();
+            File diagramDirectory = new File(folderPath + "/diagram");
 
-    private void listFilesForFolder(final File folder) {
-        for (final File fileEntry : folder.listFiles()) {
-            if (fileEntry.isDirectory()) {
-                listFilesForFolder(fileEntry);
-            } else {
-                System.out.println(fileEntry.getName());
+            if (!diagramDirectory.exists()) {
+                ProcessBuilder processBuilder = new ProcessBuilder("compressor", "diagram.qrs");
+                processBuilder.directory(folder);
+                processBuilder.start().waitFor();
+                diagramDirectory = new File(folderPath + "/diagram");
             }
+
+            File treeDirectory = new File(diagramDirectory.getPath() + "/tree");
+            Diagram diagram = converter.convertToJavaModel(treeDirectory);
+            return diagram;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 }
