@@ -8,8 +8,9 @@ import java.util.Set;
  */
 public class Diagram implements Serializable {
 
-    public Diagram(Set<DiagramNode> nodes) {
+    public Diagram(Set<DiagramNode> nodes, Set<DiagramNode> links) {
         this.nodes = nodes;
+        this.links = links;
     }
 
     public Set<DiagramNode> getNodes() {
@@ -20,5 +21,14 @@ public class Diagram implements Serializable {
         this.nodes = nodes;
     }
 
+    public Set<DiagramNode> getLinks() {
+        return links;
+    }
+
+    public void setLinks(Set<DiagramNode> links) {
+        this.links = links;
+    }
+
     private Set<DiagramNode> nodes;
+    private Set<DiagramNode> links;
 }

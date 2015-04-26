@@ -1,6 +1,5 @@
 class DiagramLoader {
     static load(response, graph: joint.dia.Graph, nodesMap, nodeTypesMap: NodeTypesMap): number {
-        console.log("import diagram");
         for (var i = 0; i < response.nodes.length; i++) {
             var nodeObject = response.nodes[i];
 

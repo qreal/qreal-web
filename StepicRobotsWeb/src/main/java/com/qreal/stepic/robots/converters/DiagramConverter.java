@@ -27,10 +27,11 @@ public class DiagramConverter {
             DocumentBuilder builder = factory.newDocumentBuilder();
 
             Map<String, DiagramNode> nodesMap = new HashMap<String, DiagramNode>();
+            Map<String, DiagramNode> linksMap = new HashMap<String, DiagramNode>();
             for (final File fileEntry : folder.listFiles()) {
-                convertModel(fileEntry, builder, nodesMap);
+                convertModel(fileEntry, builder, nodesMap, linksMap);
             }
-            return new Diagram(new HashSet<DiagramNode>(nodesMap.values()));
+            return new Diagram(new HashSet<DiagramNode>(nodesMap.values()), new HashSet<DiagramNode>(linksMap.values()));
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         }
@@ -38,19 +39,19 @@ public class DiagramConverter {
     }
 
     private void convertModel(final File folder, final DocumentBuilder builder,
-                              Map<String, DiagramNode> nodesMap) {
+                              Map<String, DiagramNode> nodesMap, Map<String, DiagramNode> linksMap) {
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
-                convertModel(fileEntry, builder, nodesMap);
+                convertModel(fileEntry, builder, nodesMap, linksMap);
             } else {
                 try {
                     Document doc = builder.parse(fileEntry);
                     Element element = doc.getDocumentElement();
 
                     if (element.hasAttribute("logicalId") && element.getAttribute("logicalId") != "qrm:/") {
-                        convertGraphicalPart(element, nodesMap);
+                        convertGraphicalPart(element, nodesMap, linksMap);
                     } else {
-                        convertLogicalPart(element, nodesMap);
+                        convertLogicalPart(element, nodesMap, linksMap);
                     }
                 } catch (SAXException e) {
                     e.printStackTrace();
@@ -61,7 +62,8 @@ public class DiagramConverter {
         }
     }
 
-    private void convertLogicalPart(Element element, Map<String, DiagramNode> nodesMap) {
+    private void convertLogicalPart(Element element, Map<String, DiagramNode> nodesMap,
+                                    Map<String, DiagramNode> linksMap) {
         String logicalIdAttr = element.getAttribute("id");
         String parts[] = logicalIdAttr.split("/");
 
@@ -69,9 +71,20 @@ public class DiagramConverter {
         String type = parts[parts.length - 2];
 
         if (!nodesMap.containsKey(logicalId)) {
-            nodesMap.put(logicalId, new DiagramNode());
+            if (type.equals("ControlFlow")) {
+                linksMap.put(logicalId, new DiagramNode());
+            } else {
+                nodesMap.put(logicalId, new DiagramNode());
+            }
         }
-        DiagramNode node = nodesMap.get(logicalId);
+
+        DiagramNode node;
+        if (type.equals("ControlFlow")) {
+            node = linksMap.get(logicalId);
+        } else {
+            node = nodesMap.get(logicalId);
+        }
+
         node.setLogicalId(logicalId);
         node.setType(type);
 
@@ -79,16 +92,28 @@ public class DiagramConverter {
         node.setLogicalProperties(convertProperties(propertiesElement));
     }
 
-    private void convertGraphicalPart(Element element, Map<String, DiagramNode> nodesMap) {
+    private void convertGraphicalPart(Element element, Map<String, DiagramNode> nodesMap,
+                                      Map<String, DiagramNode> linksMap) {
         String logicalIdAttr = element.getAttribute("logicalId");
         String logicalIdParts[] = logicalIdAttr.split("/");
 
         String logicalId = logicalIdParts[logicalIdParts.length - 1];
+        String type = logicalIdParts[logicalIdParts.length - 2];
 
         if (!nodesMap.containsKey(logicalId)) {
-            nodesMap.put(logicalId, new DiagramNode());
+            if (type.equals("ControlFlow")) {
+                linksMap.put(logicalId, new DiagramNode());
+            } else {
+                nodesMap.put(logicalId, new DiagramNode());
+            }
         }
-        DiagramNode node = nodesMap.get(logicalId);
+
+        DiagramNode node;
+        if (type.equals("ControlFlow")) {
+            node = linksMap.get(logicalId);
+        } else {
+            node = nodesMap.get(logicalId);
+        }
 
         String graphicalIdAttr = element.getAttribute("id");
         String graphicalIdParts[] = graphicalIdAttr.split("/");
