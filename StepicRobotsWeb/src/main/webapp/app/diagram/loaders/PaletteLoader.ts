@@ -44,6 +44,7 @@ class PaletteLoader {
                             var elementProperties = elements[i].getElementsByTagName("Property");
                             var properties:PropertiesMap = {};
                             for (var j = 0; j < elementProperties.length; j++) {
+                                var propertyKey: string = elementProperties[j].getAttribute('key');
                                 var propertyName: string = elementProperties[j].getAttribute('name');
                                 var propertyType: string = elementProperties[j].getAttribute('type');
 
@@ -59,8 +60,8 @@ class PaletteLoader {
                                 } else {
                                     propertyValue = '';
                                 }
-                                var property: Property = new Property(propertyValue, propertyType);
-                                properties[propertyName] = property;
+                                var property: Property = new Property(propertyName, propertyValue, propertyType);
+                                properties[propertyKey] = property;
                             }
 
                             var image: string = elements[i].getElementsByTagName("Image")[0].getAttribute('src');

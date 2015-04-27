@@ -1,31 +1,31 @@
 class PropertyManager {
-    static getPropertyHtml(typeName: string, propertyName: string, property: Property): string {
+    static getPropertyHtml(typeName: string, property: Property): string {
         switch (property.type) {
             case "string":
-                return this.getHtmlForString(propertyName, property);
+                return this.getHtmlForString(property);
             case "checkbox":
-                return this.getHtmlForCheckBox(propertyName, property);
+                return this.getHtmlForCheckBox(property);
             case "dropdown":
-                return this.getHtmlForDropdown(typeName, propertyName, property);
+                return this.getHtmlForDropdown(typeName, property);
             case "spinner":
-                return this.getHtmlForSpinner(propertyName, property);
+                return this.getHtmlForSpinner(property);
             default:
                 return undefined;
         }
     }
 
-    static getHtmlForString(propertyName: string, property: Property): string {
+    static getHtmlForString(property: Property): string {
         var content: string = '<tr class="property">';
-        content += '<td class="vert-align">' + propertyName + '</td>';
+        content += '<td class="vert-align">' + property.name + '</td>';
         content += '<td class="vert-align"><div class="input-group">';
         content += '<input type="text" class="form-control" value="' + property.value + '">';
         content += '</div></td></tr>';
         return content;
     }
 
-    static getHtmlForCheckBox(propertyName: string, property: Property): string {
+    static getHtmlForCheckBox(property: Property): string {
         var content: string = '<tr class="property">';
-        content += '<td class="vert-align">' + propertyName + '</td>';
+        content += '<td class="vert-align">' + property.name + '</td>';
         content += '<td class="vert-align"><div class="checkbox">';
         var state: string = "";
         if (property.value === "True") {
@@ -36,11 +36,11 @@ class PropertyManager {
         return content;
     }
 
-    static getHtmlForDropdown(typeName: string, propertyName: string, property: Property): string {
+    static getHtmlForDropdown(typeName: string, property: Property): string {
         var content: string = '<tr class="property">';
-        content += '<td class="vert-align">' + propertyName + '</td>';
+        content += '<td class="vert-align">' + property.name + '</td>';
         content += '<td class="vert-align"><select class="mydropdown">';
-        var dropdownList = DropdownListManager.getDropdownList(typeName, propertyName);
+        var dropdownList = DropdownListManager.getDropdownList(typeName, property.name);
         for (var i in dropdownList) {
             var variant = dropdownList[i];
             var selected = "";
@@ -53,9 +53,9 @@ class PropertyManager {
         return content;
     }
 
-    static getHtmlForSpinner(propertyName: string, property: Property): string {
+    static getHtmlForSpinner(property: Property): string {
         var content: string = '<tr class="property">';
-        content += '<td class="vert-align">' + propertyName + '</td>';
+        content += '<td class="vert-align">' + property.name + '</td>';
         content += '<td class="vert-align"><input type="number" class="spinner" value="' + property.value +'">';
         content += '</td></tr>';
         return content;

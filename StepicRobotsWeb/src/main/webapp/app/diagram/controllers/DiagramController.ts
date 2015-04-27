@@ -155,13 +155,13 @@ class DiagramController {
         var properties: PropertiesMap = node.getProperties();
         var content: string = '';
         for (var property in properties) {
-            content += this.getPropertyHtml(node.getType(), property, properties[property]);
+            content += this.getPropertyHtml(node.getType(), properties[property]);
         }
         $('#property_table tbody').html(content);
     }
 
-    getPropertyHtml(typeName, propertyName: string, property: Property): string {
-        return PropertyManager.getPropertyHtml(typeName, propertyName, property);
+    getPropertyHtml(typeName, property: Property): string {
+        return PropertyManager.getPropertyHtml(typeName, property);
     }
 
     afterPaletteLoaded() {

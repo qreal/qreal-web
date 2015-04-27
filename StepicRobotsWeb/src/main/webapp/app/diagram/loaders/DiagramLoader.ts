@@ -17,7 +17,8 @@ class DiagramLoader {
                 for (var j = 0; j < logicalPropertiesObject.length; j++) {
                     var propertyName = logicalPropertiesObject[j].name;
                     if (typeProperties.hasOwnProperty(propertyName)) {
-                        var property: Property = new Property(logicalPropertiesObject[j].value, typeProperties[propertyName].type);
+                        var property: Property = new Property(typeProperties[propertyName].name,
+                            logicalPropertiesObject[j].value, typeProperties[propertyName].type);
                         logicalProperties[propertyName] = property;
                     }
                 }

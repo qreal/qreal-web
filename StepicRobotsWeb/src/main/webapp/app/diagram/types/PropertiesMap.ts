@@ -1,3 +1,3 @@
 interface PropertiesMap {
-    [name: string]: Property;
+    [key: string]: Property;
 }
