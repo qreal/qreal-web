@@ -70,10 +70,12 @@ public class DiagramConverter {
         String logicalId = getId(parts[parts.length - 1]);
         String type = parts[parts.length - 2];
 
-        if (!nodesMap.containsKey(logicalId)) {
-            if (type.equals("ControlFlow")) {
+        if (type.equals("ControlFlow")) {
+            if (!linksMap.containsKey(logicalId)) {
                 linksMap.put(logicalId, new DiagramNode());
-            } else {
+            }
+        } else {
+            if (!nodesMap.containsKey(logicalId)) {
                 nodesMap.put(logicalId, new DiagramNode());
             }
         }
@@ -100,10 +102,12 @@ public class DiagramConverter {
         String logicalId = getId(logicalIdParts[logicalIdParts.length - 1]);
         String type = logicalIdParts[logicalIdParts.length - 2];
 
-        if (!nodesMap.containsKey(logicalId)) {
-            if (type.equals("ControlFlow")) {
+        if (type.equals("ControlFlow")) {
+            if (!linksMap.containsKey(logicalId)) {
                 linksMap.put(logicalId, new DiagramNode());
-            } else {
+            }
+        } else {
+            if (!nodesMap.containsKey(logicalId)) {
                 nodesMap.put(logicalId, new DiagramNode());
             }
         }

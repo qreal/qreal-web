@@ -15,10 +15,9 @@ class ExportManager {
         return newVertices;
     }
 
-    static exportDiagramStateToJSON(graph: joint.dia.Graph,  name: string, nodeIndex: number, nodesList): string {
+    static exportDiagramStateToJSON(graph: joint.dia.Graph, name: string, nodesList): string {
         var json = {
             'name': name,
-            'nodeIndex': nodeIndex,
             'nodes': [],
             'links': []
         };
@@ -26,7 +25,6 @@ class ExportManager {
             if (nodesList.hasOwnProperty(id)) {
                 var node: DiagramNode = nodesList[id];
                 var newNode = {
-                    'name': node.getName(),
                     'type': node.getType(),
                     'x': node.getX(),
                     'y': node.getY(),

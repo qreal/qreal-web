@@ -31,7 +31,6 @@
 /// <reference path="diagram/loaders/PaletteLoader.ts" />
 /// <reference path="diagram/managers/DropdownListManager.ts" />
 /// <reference path="diagram/managers/ExportManager.ts" />
-/// <reference path="diagram/managers/ImportManager.ts" />
 /// <reference path="diagram/managers/PropertyManager.ts" />
 /// <reference path="diagram/models/DefaultDiagramNode.ts" />
 /// <reference path="diagram/models/DiagramNode.ts" />

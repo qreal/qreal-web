@@ -6,7 +6,6 @@ class DiagramController {
     private nameTypeMap: {string?: string} = {};
     private nodesMap = {};
     private currentNode: DiagramNode;
-    private nodeIndex: number = -1;
     private isPaletteLoaded = false;
     private taskId: string;
 
@@ -145,7 +144,7 @@ class DiagramController {
                 var type = controller.nameTypeMap[name];
                 var image: string = controller.nodeTypesMap[type].image;
                 var properties: PropertiesMap = controller.nodeTypesMap[type].properties;
-                var node = controller.createDefaultNode(type, leftElementPos, topElementPos, properties, image);
+                var node = controller.createNode(type, leftElementPos, topElementPos, properties, image);
                 controller.currentNode = node;
                 controller.setNodeProperties(node);
             }
@@ -174,18 +173,16 @@ class DiagramController {
         this.openDiagram(this.taskId);
     }
 
-    createDefaultNode(type: string, x: number, y: number, properties: PropertiesMap, image: string): DefaultDiagramNode {
-        this.nodeIndex++;
-        var name: string = "Node" + this.nodeIndex;
-        var node: DefaultDiagramNode = new DefaultDiagramNode(name, type, x, y, properties, image);
+    createNode(type: string, x: number, y: number, properties: PropertiesMap, image: string): DiagramNode {
+        var node: DiagramNode = new DefaultDiagramNode(type, x, y, properties, image);
         this.nodesMap[node.getElement().id] = node;
         this.graph.addCell(node.getElement());
+
         return node;
     }
 
     clear(): void {
         this.graph.clear();
-        this.nodeIndex = -1;
         this.nodesMap = {};
         $(".property").remove();
         this.currentNode = undefined;
@@ -212,7 +209,7 @@ class DiagramController {
             url: 'save',
             dataType: 'json',
             contentType: 'application/json',
-            data: (ExportManager.exportDiagramStateToJSON(this.graph, name, this.nodeIndex, this.nodesMap)),
+            data: (ExportManager.exportDiagramStateToJSON(this.graph, name, this.nodesMap)),
             success: function (response) {
                 console.log(response.message);
             },
@@ -236,10 +233,7 @@ class DiagramController {
             data: (JSON.stringify({id: taskId})),
             success: function (response) {
                 controller.clear();
-                /*controller.nodeIndex = ImportManager.import(response, controller.graph,
-                    controller.nodesMap, controller.nodeTypesMap);
-                console.log(response.nodeIndex);*/
-                console.log(JSON.stringify(response));
+                DiagramLoader.load(response, controller.graph, controller.nodesMap, controller.nodeTypesMap);
             },
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);

@@ -2,19 +2,18 @@
  * Created by vladzx on 10.10.14.
  */
 class DefaultDiagramNode implements DiagramNode {
-    name: string;
-    element: joint.shapes.devs.ImageWithPorts;
-    type: string;
-    text: string;
-    properties: PropertiesMap;
-    image: string;
 
-    constructor(name: string, type: string, x: number, y: number, properties: PropertiesMap, image: string) {
-        this.name = name;
+    private element: joint.shapes.devs.ImageWithPorts;
+    private type: string;
+    private text: string;
+    private properties: PropertiesMap;
+    private image: string;
+
+    constructor(type: string, x: number, y: number, properties: PropertiesMap, image: string, id?: string) {
         this.text = 'Default';
         this.type = type;
 
-        this.element = new joint.shapes.devs.ImageWithPorts({
+        var elementAttributes = {
             position: { x: x, y: y },
             size: { width: 50, height: 50 },
             outPorts: [''],
@@ -23,17 +22,19 @@ class DefaultDiagramNode implements DiagramNode {
                     'xlink:href': image
                 }
             }
-        });
+        }
+
+        if (id) {
+            jQuery.extend(elementAttributes, {id: id});
+        }
+
+        this.element = new joint.shapes.devs.ImageWithPorts(elementAttributes);
         this.properties = properties;
         this.image = image;
     }
 
     setText(text:string): void {
         this.text = text;
-    }
-
-    getName(): string {
-        return this.name;
     }
 
     getType(): string {
