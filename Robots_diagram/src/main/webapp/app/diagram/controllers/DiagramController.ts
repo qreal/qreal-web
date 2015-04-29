@@ -229,7 +229,7 @@ class DiagramController {
             },
             error: function (response, status, error) {
                 if (status === "parsererror") {
-                    alert("Diagarm with this name does not exist");
+                    alert("Diagram with this name does not exist");
                 }
                 console.log("error: " + status + " " + error);
             }
