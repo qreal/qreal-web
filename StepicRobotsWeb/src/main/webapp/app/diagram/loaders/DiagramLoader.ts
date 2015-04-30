@@ -1,5 +1,5 @@
 class DiagramLoader {
-    static load(response, graph: joint.dia.Graph, nodesMap, nodeTypesMap: NodeTypesMap): number {
+    static load(response, graph: joint.dia.Graph, nodesMap, nodeTypesMap: NodeTypesMap): void {
         var minPos: {x: number; y: number} = this.findMinPosition(response, nodeTypesMap);
         var offsetX = (minPos.x < 0) ? (-minPos.x + 100) : 0;
         var offsetY = (minPos.y < 0) ? (-minPos.y + 100) : 0;
@@ -30,9 +30,9 @@ class DiagramLoader {
                 for (var j = 0; j < graphicalPropertiesObject.length; j++) {
                     if (graphicalPropertiesObject[j].name === "position") {
                         var position: string = graphicalPropertiesObject[j].value;
-                        var parts = position.split(", ");
-                        x = parseFloat(parts[0]);
-                        y = parseFloat(parts[1]);
+                        var positionNums = this.parsePosition(position);
+                        x = positionNums.x;
+                        y = positionNums.y;
                     }
                 }
 
@@ -42,27 +42,8 @@ class DiagramLoader {
         }
 
         for (var i = 0; i < response.links.length; i++) {
-            var linkObject = response.links[i];
-            var source: string = "";
-            var target: string = "";
-
-            var logicalPropertiesObject = linkObject.logicalProperties;
-
-            for (var j = 0; j < logicalPropertiesObject.length; j++) {
-                switch (logicalPropertiesObject[j].name) {
-                    case "from":
-                        source = this.parseId(logicalPropertiesObject[j].value);
-                        break;
-                    case "to":
-                        target = this.parseId(logicalPropertiesObject[j].value);
-                        break
-                }
-            }
-
-            this.loadLink(graph, nodesMap, source, target, []);
+            this.loadLink(graph, response.links[i], offsetX, offsetY);
         }
-
-        return response.nodeIndex;
     }
 
     static loadNode(graph: joint.dia.Graph, nodesMap, id: string,
@@ -72,31 +53,73 @@ class DiagramLoader {
         graph.addCell(node.getElement());
     }
 
-    static loadLink(graph: joint.dia.Graph, nodesMap, source: string, target: string, vertices): void {
-        //var newVertices = this.loadVertices(vertices);
+    static loadLink(graph: joint.dia.Graph, linkObject, offsetX: number, offsetY: number): void {
+        var source: string = "";
+        var target: string = "";
+
+        var logicalPropertiesObject = linkObject.logicalProperties;
+
+        for (var j = 0; j < logicalPropertiesObject.length; j++) {
+            switch (logicalPropertiesObject[j].name) {
+                case "from":
+                    source = this.parseId(logicalPropertiesObject[j].value);
+                    break;
+                case "to":
+                    target = this.parseId(logicalPropertiesObject[j].value);
+                    break
+            }
+        }
+
+        var graphicalPropertiesObject = linkObject.graphicalProperties;
+        var vertices =  this.loadVertices(graphicalPropertiesObject, offsetX, offsetY);
+
         var link: joint.dia.Link = new joint.dia.Link({
             attrs: {
                 '.connection': { stroke: 'black' },
                 '.marker-target': { fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z' }
             },
             source: { id: source },
-            target: { id: target }
-            //vertices: newVertices
+            target: { id: target },
+            vertices: vertices
         });
         graph.addCell(link);
     }
 
-    static loadVertices(vertices) {
-        var newVertices = [];
-        vertices.forEach(function (vertex) {
-            newVertices.push(
-                {
-                    x : vertex.x,
-                    y : vertex.y
+    static loadVertices(graphicalPropertiesObject, offsetX: number, offsetY: number) {
+        var vertices = [];
+        var linkPosition: {x: number; y: number};
+        for (var j = 0; j < graphicalPropertiesObject.length; j++) {
+            if (graphicalPropertiesObject[j].name === "configuration") {
+                var configuration: string = graphicalPropertiesObject[j].value;
+                var parts = configuration.split(" : ");
+
+                for (var k = 1; k < parts.length - 2; k++) {
+                    var positionNums = this.parsePosition(parts[k]);
+
+                    vertices.push(
+                        {
+                            x : positionNums.x,
+                            y : positionNums.y
+                        }
+                    )
                 }
-            )
+            }
+            if (graphicalPropertiesObject[j].name === "position") {
+                linkPosition = this.parsePosition(graphicalPropertiesObject[j].value);
+            }
+        }
+
+        vertices.forEach(function (vertex: {x: number; y: number}) {
+            vertex.x += linkPosition.x + offsetX;
+            vertex.y += linkPosition.y + offsetY;
         });
-        return newVertices;
+
+        return vertices;
+    }
+
+    static parsePosition(position: string): {x: number; y: number} {
+        var parts = position.split(", ");
+        return {x: parseFloat(parts[0]), y: parseFloat(parts[1])};
     }
 
     static parseId(idString: string): string {
