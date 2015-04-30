@@ -2,7 +2,6 @@ package com.qreal.stepic.robots.controllers;
 
 import com.qreal.stepic.robots.converters.DiagramConverter;
 import com.qreal.stepic.robots.model.diagram.Diagram;
-import com.qreal.stepic.robots.model.diagram.DiagramNode;
 import com.qreal.stepic.robots.model.diagram.OpenRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -11,16 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 /**
  * Created by vladzx on 25.10.14.

@@ -14,6 +14,12 @@ class DiagramLoader {
 
                 var typeProperties = nodeTypesMap[nodeObject.type].properties;
 
+                logicalPropertiesObject.sort(function(a: any, b: any){
+                    if(a.name < b.name) return -1;
+                    if(a.name > b.name) return 1;
+                    return 0;
+                })
+
                 for (var j = 0; j < logicalPropertiesObject.length; j++) {
                     var propertyName = logicalPropertiesObject[j].name;
                     if (typeProperties.hasOwnProperty(propertyName)) {
