@@ -16,6 +16,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.saveDiagram()">Save</a></li>
                             <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.openDiagram()">Open</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.interpretDiagram()">Interpret</a></li>
                         </ul>
                     </li>
                     <li>

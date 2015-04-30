@@ -236,6 +236,10 @@ class DiagramController {
         });
     }
 
+    interpretDiagram(): void {
+        alert(InterpretManager.interpret(this.graph, this.nodesMap));
+    }
+
     openTwoDModel(): void {
         $("#diagramContent").hide();
         $("#twoDModelContent").show();

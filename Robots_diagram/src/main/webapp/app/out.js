@@ -509,11 +509,14 @@ var DiagramController = (function () {
             },
             error: function (response, status, error) {
                 if (status === "parsererror") {
-                    alert("Diagarm with this name does not exist");
+                    alert("Diagram with this name does not exist");
                 }
                 console.log("error: " + status + " " + error);
             }
         });
+    };
+    DiagramController.prototype.interpretDiagram = function () {
+        alert(InterpretManager.interpret(this.graph, this.nodesMap));
     };
     DiagramController.prototype.openTwoDModel = function () {
         $("#diagramContent").hide();
@@ -899,6 +902,72 @@ var Property = (function () {
         this.type = type;
     }
     return Property;
+})();
+var InitialBlock = (function () {
+    function InitialBlock() {
+    }
+    InitialBlock.run = function (node) {
+        var name = "Initial: " + node.getName();
+        return name;
+    };
+    return InitialBlock;
+})();
+var Factory = (function () {
+    function Factory() {
+    }
+    Factory.run = function (node) {
+        var output = "";
+        switch (node.type) {
+            case "Initial Node":
+                output += InitialBlock.run(node);
+                break;
+            default:
+                output += "Not yet";
+        }
+        return output;
+    };
+    return Factory;
+})();
+var InterpretManager = (function () {
+    function InterpretManager() {
+    }
+    InterpretManager.interpret = function (graph, nodesList) {
+        var elements = graph.getElements();
+        var links = graph.getLinks();
+        var output = "";
+        if (elements.length > 0) {
+            if (links.length > 0) {
+                var firstNodeId = InterpretManager.findInitialNode(nodesList);
+                if (firstNodeId != "") {
+                    output += Factory.run(nodesList[firstNodeId]);
+                }
+                else {
+                    output += "No initial node";
+                }
+            }
+            else {
+                output += "No links";
+            }
+        }
+        else {
+            output += "No elements";
+        }
+        return output;
+    };
+    InterpretManager.findInitialNode = function (nodesList) {
+        var firstNodeId = "";
+        for (var id in nodesList) {
+            if (nodesList.hasOwnProperty(id)) {
+                var node = nodesList[id];
+                if (node.type == "Initial Node") {
+                    firstNodeId = id;
+                    break;
+                }
+            }
+        }
+        return firstNodeId;
+    };
+    return InterpretManager;
 })();
 var TwoDModelEngineApiImpl = (function () {
     function TwoDModelEngineApiImpl() {
