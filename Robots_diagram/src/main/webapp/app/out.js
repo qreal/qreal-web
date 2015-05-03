@@ -1068,14 +1068,16 @@ var EllipseItemImpl = (function () {
         var paper = worldModel.getPaper();
         this.ellipse = paper.ellipse(xStart, yStart, 0, 0);
         this.ellipse.attr({
-            fill: "transparent",
+            fill: "#fff",
+            "fill-opacity": 0,
             cursor: "pointer",
             "stroke": color,
             "stroke-width": width
         });
         var ellipseItem = this;
         var handleAttrs = {
-            fill: "transparent",
+            fill: "#fff",
+            "fill-opacity": 0,
             cursor: "pointer",
             "stroke-width": 1,
             stroke: "black"
@@ -1234,7 +1236,8 @@ var LineItemImpl = (function () {
         this.pathArray = this.path.attr("path");
         var handleRadius = 10;
         var handleAttrs = {
-            fill: "transparent",
+            fill: "#fff",
+            "fill-opacity": 0,
             cursor: "pointer",
             "stroke-width": 1,
             stroke: "black"
@@ -1394,7 +1397,8 @@ var RobotItemImpl = (function () {
         this.startCenter.y = this.center.y;
         var handleRadius = 10;
         var handleAttrs = {
-            fill: "transparent",
+            fill: "#fff",
+            "fill-opacity": 0,
             cursor: "pointer",
             "stroke-width": 1,
             stroke: "black"
@@ -1540,7 +1544,8 @@ var SensorItem = (function () {
         this.startCy = this.centerY;
         var handleRadius = 10;
         var handleAttrs = {
-            fill: "transparent",
+            fill: "#fff",
+            "fill-opacity": 0,
             cursor: "pointer",
             "stroke-width": 1,
             stroke: "black"
@@ -1732,20 +1737,15 @@ var WallItemImpl = (function () {
         $(".path").attr("stroke", "url(#wall_pattern)");
         this.pathArray = this.path.attr("path");
         var handleRadius = 10;
-        this.handleStart = paper.circle(xStart, yStart, handleRadius).attr({
+        var handleAttrs = {
+            fill: "#fff",
+            "fill-opacity": 0,
             cursor: "pointer",
             "stroke-width": 1,
             stroke: "black"
-        });
-        $(this.handleStart.node).attr("class", "handleStart");
-        $(".handleStart").attr("fill", "url(#wall_pattern)");
-        this.handleEnd = paper.circle(xEnd, yEnd, handleRadius).attr({
-            cursor: "pointer",
-            "stroke-width": 1,
-            stroke: "black"
-        });
-        $(this.handleEnd.node).attr("class", "handleEnd");
-        $(".handleEnd").attr("fill", "url(#wall_pattern)");
+        };
+        this.handleStart = paper.circle(xStart, yStart, handleRadius).attr(handleAttrs);
+        this.handleEnd = paper.circle(xEnd, yEnd, handleRadius).attr(handleAttrs);
         var start = function () {
             if (!worldModel.getDrawMode()) {
                 this.cx = this.attr("cx");

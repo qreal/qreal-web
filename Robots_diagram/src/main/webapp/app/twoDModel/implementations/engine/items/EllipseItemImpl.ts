@@ -10,7 +10,8 @@ class EllipseItemImpl implements EllipseItem {
         var paper = worldModel.getPaper();
         this.ellipse = paper.ellipse(xStart, yStart, 0, 0);
         this.ellipse.attr({
-            fill: "transparent",
+            fill: "#fff",
+            "fill-opacity": 0,
             cursor: "pointer",
             "stroke": color,
             "stroke-width": width
@@ -19,7 +20,8 @@ class EllipseItemImpl implements EllipseItem {
         var ellipseItem = this;
 
         var handleAttrs = {
-            fill: "transparent",
+            fill: "#fff",
+            "fill-opacity": 0,
             cursor: "pointer",
             "stroke-width": 1,
             stroke: "black"

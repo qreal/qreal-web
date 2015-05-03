@@ -1,7 +1,5 @@
-interface RobotItem {
+interface RobotItem extends AbstractItem {
     ride(): void;
-    hideHandles(): void;
-    showHandles(): void;
     getWidth(): number;
     getHeight(): number;
     getStartPosition(): TwoDPosition;
