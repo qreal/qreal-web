@@ -912,6 +912,15 @@ var InitialBlock = (function () {
     };
     return InitialBlock;
 })();
+var SmileBlock = (function () {
+    function SmileBlock() {
+    }
+    SmileBlock.run = function (node) {
+        var name = "Smile: " + node.getName();
+        return name;
+    };
+    return SmileBlock;
+})();
 var Factory = (function () {
     function Factory() {
     }
@@ -920,6 +929,9 @@ var Factory = (function () {
         switch (node.type) {
             case "Initial Node":
                 output += InitialBlock.run(node);
+                break;
+            case "Smile":
+                output += SmileBlock.run(node);
                 break;
             default:
                 output += "Not yet";
