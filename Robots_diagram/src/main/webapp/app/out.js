@@ -1547,7 +1547,7 @@ var SensorItem = (function () {
         this.robotItem = robotItem;
         var paper = worldModel.getPaper();
         this.sensorType = sensorType;
-        this.degineImageSizes(sensorType);
+        this.defineImageSizes(sensorType);
         var defaultPosition = this.getDefaultPosition();
         this.image = paper.image((pathToImage) ? pathToImage : this.pathToImage(), defaultPosition.x, defaultPosition.y, this.width, this.height);
         this.centerX = defaultPosition.x + this.width / 2;
@@ -1653,7 +1653,7 @@ var SensorItem = (function () {
     SensorItem.prototype.pathToImage = function () {
         return "images/2dmodel/sensors/2d_" + this.name() + ".png";
     };
-    SensorItem.prototype.degineImageSizes = function (sensorType) {
+    SensorItem.prototype.defineImageSizes = function (sensorType) {
         if (sensorType.isA(TouchSensor)) {
             this.width = 25;
             this.height = 25;

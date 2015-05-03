@@ -15,7 +15,7 @@ class SensorItem implements AbstractItem {
         this.robotItem = robotItem;
         var paper: RaphaelPaper = worldModel.getPaper();
         this.sensorType = sensorType;
-        this.degineImageSizes(sensorType);
+        this.defineImageSizes(sensorType);
         var defaultPosition = this.getDefaultPosition();
         this.image = paper.image((pathToImage) ? pathToImage : this.pathToImage(),
             defaultPosition.x, defaultPosition.y, this.width, this.height);
@@ -138,7 +138,7 @@ class SensorItem implements AbstractItem {
         return "images/2dmodel/sensors/2d_" + this.name() + ".png";
     }
 
-    protected degineImageSizes(sensorType): void {
+    protected defineImageSizes(sensorType): void {
         if (sensorType.isA(TouchSensor)) {
             this.width = 25;
             this.height = 25;
