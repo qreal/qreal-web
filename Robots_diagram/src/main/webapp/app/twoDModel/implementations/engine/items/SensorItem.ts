@@ -1,4 +1,4 @@
-class SensorItem {
+class SensorItem implements AbstractItem {
     protected robotItem: RobotItem;
     protected image: RaphaelElement;
     protected width: number;
