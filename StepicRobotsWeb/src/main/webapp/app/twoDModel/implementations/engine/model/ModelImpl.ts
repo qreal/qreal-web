@@ -52,25 +52,29 @@ class ModelImpl implements Model {
 
         var walls = xml.getElementsByTagName("wall");
 
-        for (var i = 0; i < walls.length; i++) {
-            var beginPosStr: string = walls[i].getAttribute('begin');
-            var beginPos = this.parsePositionString(beginPosStr);
-            minX = this.min(beginPos.x, minX);
-            minY = this.min(beginPos.y, minY);
+        if (walls) {
+            for (var i = 0; i < walls.length; i++) {
+                var beginPosStr: string = walls[i].getAttribute('begin');
+                var beginPos = this.parsePositionString(beginPosStr);
+                minX = this.min(beginPos.x, minX);
+                minY = this.min(beginPos.y, minY);
 
-            var endPosStr: string = walls[i].getAttribute('end');
-            var endPos = this.parsePositionString(endPosStr);
-            minX = this.min(endPos.x, minX);
-            minY = this.min(endPos.y, minY);
+                var endPosStr: string = walls[i].getAttribute('end');
+                var endPos = this.parsePositionString(endPosStr);
+                minX = this.min(endPos.x, minX);
+                minY = this.min(endPos.y, minY);
+            }
         }
 
         var regions = xml.getElementsByTagName("region");
 
-        for (var i = 0; i < regions.length; i++) {
-            var x = parseFloat(regions[i].getAttribute('x'));
-            var y = parseFloat(regions[i].getAttribute('y'));
-            minX = this.min(x, minX);
-            minY = this.min(y, minY);
+        if (regions) {
+            for (var i = 0; i < regions.length; i++) {
+                var x = parseFloat(regions[i].getAttribute('x'));
+                var y = parseFloat(regions[i].getAttribute('y'));
+                minX = this.min(x, minX);
+                minY = this.min(y, minY);
+            }
         }
 
         var robots = xml.getElementsByTagName("robot");
@@ -90,8 +94,10 @@ class ModelImpl implements Model {
             }
 
             var startPosition = robots[i].getElementsByTagName("startPosition")[0];
-            var x = parseFloat(startPosition.getAttribute('x'));
-            var y = parseFloat(startPosition.getAttribute('y'));
+            if (startPosition) {
+                var x = parseFloat(startPosition.getAttribute('x'));
+                var y = parseFloat(startPosition.getAttribute('y'));
+            }
         }
 
         return new TwoDPosition(minX, minY);

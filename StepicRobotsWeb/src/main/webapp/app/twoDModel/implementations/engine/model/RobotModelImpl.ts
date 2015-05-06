@@ -48,8 +48,10 @@ class RobotModelImpl implements RobotModel {
         this.sensorsConfiguration.deserialize(xml, offsetX, offsetY);
 
         var startPosition = xml.getElementsByTagName("startPosition")[0];
-        var x = parseFloat(startPosition.getAttribute('x'));
-        var y = parseFloat(startPosition.getAttribute('y'));
-        //TODO: set start pos
+        if (startPosition) {
+            var x = parseFloat(startPosition.getAttribute('x'));
+            var y = parseFloat(startPosition.getAttribute('y'));
+            //TODO: set start pos
+        }
     }
 }

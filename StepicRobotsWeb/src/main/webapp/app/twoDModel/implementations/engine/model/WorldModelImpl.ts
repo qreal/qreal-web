@@ -192,45 +192,33 @@ class WorldModelImpl implements WorldModel {
     deserialize(xml, offsetX: number, offsetY: number) {
         var regions = xml.getElementsByTagName("region");
 
-        for (var i = 0; i < regions.length; i++) {
-            var type = regions[i].getAttribute("type");
+        if (regions) {
+            for (var i = 0; i < regions.length; i++) {
+                var type = regions[i].getAttribute("type");
 
-            switch (type) {
-                case "rectangle":
-                    var region = new RectangularRegion(this);
-                    region.deserialize(regions[i], offsetX, offsetY);
-                    this.regions.push(region);
-                    break;
-                default:
+                switch (type) {
+                    case "rectangle":
+                        var region = new RectangularRegion(this);
+                        region.deserialize(regions[i], offsetX, offsetY);
+                        this.regions.push(region);
+                        break;
+                    default:
+                }
             }
         }
+
 
         var walls = xml.getElementsByTagName("wall");
 
-        for (var i = 0; i < walls.length; i++) {
-            var beginPosStr: string = walls[i].getAttribute('begin');
-            var beginPos = this.parsePositionString(beginPosStr);
-            var endPosStr: string = walls[i].getAttribute('end');
-            var endPos = this.parsePositionString(endPosStr);
+        if (walls) {
+            for (var i = 0; i < walls.length; i++) {
+                var beginPosStr: string = walls[i].getAttribute('begin');
+                var beginPos = this.parsePositionString(beginPosStr);
+                var endPosStr: string = walls[i].getAttribute('end');
+                var endPos = this.parsePositionString(endPosStr);
 
-            this.addWall(beginPos.x + offsetX, beginPos.y + offsetY, endPos.x + offsetX, endPos.y + offsetY);
-        }
-
-        var robots = xml.getElementsByTagName("robot");
-
-        for (var i = 0; i < robots.length; i++) {
-            var posString = robots[i].getAttribute('position');
-            var pos = this.parsePositionString(posString);
-
-            var sensors = robots[i].getElementsByTagName("sensor");
-            for (var j = 0; j < sensors.length; j++) {
-                var posString = sensors[j].getAttribute('position');
-                var pos = this.parsePositionString(posString);
+                this.addWall(beginPos.x + offsetX, beginPos.y + offsetY, endPos.x + offsetX, endPos.y + offsetY);
             }
-
-            var startPosition = robots[i].getElementsByTagName("startPosition")[0];
-            var x = parseFloat(startPosition.getAttribute('x'));
-            var y = parseFloat(startPosition.getAttribute('y'));
         }
     }
 }
