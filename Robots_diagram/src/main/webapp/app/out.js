@@ -903,6 +903,40 @@ var Property = (function () {
     }
     return Property;
 })();
+var FinalBlock = (function () {
+    function FinalBlock() {
+    }
+    FinalBlock.run = function (node) {
+        var name = "Final: " + node.getName();
+        return name;
+    };
+    return FinalBlock;
+})();
+var FunctionBlock = (function () {
+    function FunctionBlock() {
+    }
+    FunctionBlock.run = function (node) {
+        var name = "Function: " + node.getName();
+        var properties = node.getProperties();
+        var body = "";
+        var initialization = true;
+        for (var p in properties) {
+            if (properties.hasOwnProperty(p)) {
+                if (properties[p].type == "string") {
+                    body = properties[p].value;
+                }
+                else if (properties[p].type == "bool") {
+                    initialization = properties[p].value;
+                }
+                else {
+                    name += "Error, cannot get properties of" + node.getName();
+                }
+            }
+        }
+        return name;
+    };
+    return FunctionBlock;
+})();
 var InitialBlock = (function () {
     function InitialBlock() {
     }
@@ -930,6 +964,12 @@ var Factory = (function () {
             case "Initial Node":
                 output += InitialBlock.run(node);
                 break;
+            case "Final Node":
+                output += FinalBlock.run(node);
+                break;
+            case "Function":
+                output += FunctionBlock.run(node);
+                break;
             case "Smile":
                 output += SmileBlock.run(node);
                 break;
@@ -952,6 +992,8 @@ var InterpretManager = (function () {
                 var firstNodeId = InterpretManager.findInitialNode(nodesList);
                 if (firstNodeId != "") {
                     output += Factory.run(nodesList[firstNodeId]);
+                    var links = InterpretManager.getOutboundLinks(graph, firstNodeId);
+                    output += Factory.run(nodesList[links[0].get('target').id]);
                 }
                 else {
                     output += "No initial node";
@@ -978,6 +1020,11 @@ var InterpretManager = (function () {
             }
         }
         return firstNodeId;
+    };
+    InterpretManager.getOutboundLinks = function (graph, nodeId) {
+        var e = graph.getCell(nodeId);
+        var outboundLinks = graph.getConnectedLinks(e, { outbound: true });
+        return outboundLinks;
     };
     return InterpretManager;
 })();
