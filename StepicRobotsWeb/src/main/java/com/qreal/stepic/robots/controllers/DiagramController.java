@@ -1,8 +1,12 @@
 package com.qreal.stepic.robots.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qreal.stepic.robots.converters.DiagramConverter;
+import com.qreal.stepic.robots.model.diagram.SubmitRequest;
 import com.qreal.stepic.robots.model.diagram.Diagram;
 import com.qreal.stepic.robots.model.diagram.OpenRequest;
+import com.qreal.stepic.robots.model.two_d.Point;
+import com.qreal.stepic.robots.model.two_d.Trace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -60,6 +64,20 @@ public class DiagramController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/submit", method = RequestMethod.POST)
+    public Trace submit(@RequestBody SubmitRequest request) {
+        ObjectMapper mapper = new ObjectMapper();
+        Resource resource = resourceLoader.getResource("tasks/" + request.getId() + "/trace.json");
+        try {
+            return mapper.readValue(resource.getFile(), Trace.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 }

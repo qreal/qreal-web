@@ -7,6 +7,10 @@ class RootDiagramController {
 
         this.realModel = new TrikRobotModelBase();
         this.robotModel = new TwoDRobotModel(this.realModel, "model");
+
+        $scope.$on("emitDisplayTrace", function(event, traceJson) {
+            $scope.$broadcast("DisplayTrace", traceJson);
+        });
     }
 
     setRobotModel(robotModel: TwoDRobotModel) {

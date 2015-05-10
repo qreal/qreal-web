@@ -8,10 +8,12 @@ class DiagramController {
     private currentNode: DiagramNode;
     private isPaletteLoaded = false;
     private taskId: string;
+    private rootController: RootDiagramController;
 
     constructor($scope, $compile, $attrs) {
         var controller: DiagramController = this;
         $scope.vm = controller;
+        this.rootController = $scope.root;
 
         controller.taskId = $attrs.task;
         PaletteLoader.loadElementsFromXml(controller, "tasks/" + controller.taskId + "/elements.xml", $scope, $compile);
@@ -36,6 +38,8 @@ class DiagramController {
                 controller.currentNode = undefined;
             }
         );
+
+        $scope.submit = function() { controller.submit($scope) };
     }
 
     setNodeTypesMap(nodeTypesMap: NodeTypesMap): void {
@@ -198,6 +202,27 @@ class DiagramController {
         }
     }
 
+    submit($scope): void {
+        if (!this.isPaletteLoaded) {
+            alert("Palette is not loaded!");
+            return;
+        }
+        var controller = this;
+        $.ajax({
+            type: 'POST',
+            url: 'submit',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: (JSON.stringify({id: controller.taskId})),
+            success: function (response) {
+                $scope.$emit("emitDisplayTrace", response);
+            },
+            error: function (response, status, error) {
+                console.log("error: " + status + " " + error);
+            }
+        });
+    }
+
     saveDiagram(): void {
         if (!this.isPaletteLoaded) {
             alert("Palette is not loaded!");
@@ -239,10 +264,5 @@ class DiagramController {
                 console.log("error: " + status + " " + error);
             }
         });
-    }
-
-    openTwoDModel(): void {
-        $("#diagramContent").hide();
-        $("#twoDModelContent").show();
     }
 }

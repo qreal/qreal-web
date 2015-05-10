@@ -2,6 +2,7 @@ class RobotItemImpl implements RobotItem {
     private worldModel: WorldModel;
     private robot: RobotModel;
     private startPosition: TwoDPosition;
+    private startDirection: number;
     private startCenter: TwoDPosition = new TwoDPosition();
     private center: TwoDPosition = new TwoDPosition();
     private image;
@@ -15,6 +16,7 @@ class RobotItemImpl implements RobotItem {
         this.worldModel = worldModel;
         this.robot = robot;
         this.startPosition = position;
+        this.startDirection = 0;
         var paper = worldModel.getPaper();
         this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
 
@@ -67,7 +69,7 @@ class RobotItemImpl implements RobotItem {
 
                     angle -= this.rotation;
                     robotItem.image.transform(this.transformation + "R" + angle + "," +
-                    robotItem.center.x + "," + robotItem.center.y);
+                        robotItem.center.x + "," + robotItem.center.y);
 
                     robotItem.transformSensorsItems("R" + angle + "," + robotItem.center.x + "," + robotItem.center.y);
 
@@ -122,6 +124,7 @@ class RobotItemImpl implements RobotItem {
 
     setStartPosition(position: TwoDPosition, direction: number): void {
         this.startPosition = position;
+        this.startDirection = direction;
         this.image.attr({x: position.x, y: position.y});
         this.center.x = position.x + this.width / 2
         this.center.y = position.y + this.height / 2;
@@ -176,8 +179,7 @@ class RobotItemImpl implements RobotItem {
         sensor.transform(this.image.transform());
         sensor.updateTransformationString();
         if (direction) {
-            sensor.rotate(direction);
-            sensor.updateTransformationString();
+            sensor.setStartDirection(direction);
         }
         this.sensors[portName] = sensor;
     }
@@ -190,9 +192,71 @@ class RobotItemImpl implements RobotItem {
     }
 
     private transformSensorsItems(transformationString: string): void {
-        for(var portName in this.sensors) {
+        for (var portName in this.sensors) {
             var sensor = this.sensors[portName];
             sensor.transform(transformationString);
         }
+    }
+
+    private animateSensors(element, transformationString: string, animation, timestamp): void {
+        for (var portName in this.sensors) {
+            var sensor = this.sensors[portName];
+            sensor.animate(element, transformationString, animation, timestamp);
+        }
+    }
+
+    private clearSensorsPosition() {
+        for (var portName in this.sensors) {
+            var sensor = this.sensors[portName];
+            sensor.stopAnimation();
+            sensor.setStartPosition();
+            sensor.transform(this.image.transform());
+            sensor.updateTransformationString();
+            sensor.restoreStartDirection();
+        }
+    }
+
+    clearCurrentPosition(): void {
+        this.image.stop();
+        this.setStartPosition(this.startPosition, this.startDirection);
+        this.clearSensorsPosition();
+    }
+
+    rideTrace(traceJson) {
+        this.clearCurrentPosition();
+        var animation = this.createAnimationSequence(traceJson, 0);
+        this.image.animate(animation);
+        this.animateSensors(this.image, "T" + traceJson.points[0].x + "," + traceJson.points[0].y, animation, traceJson.points[0].timestamp);
+
+    }
+
+    private createAnimationSequence(traceJson, seqNumber: number): RaphaelAnimation {
+        this.updateSensorsTransformations();
+        this.center.x = this.image.matrix.x(this.startCenter.x, this.startCenter.y);
+        this.center.y = this.image.matrix.y(this.startCenter.x, this.startCenter.y);
+        var point = traceJson.points[seqNumber];
+        var angle = point.direction - this.image.matrix.split().rotate;
+        var currentTransformation = this.image.transform();
+
+        this.image.transform(currentTransformation + "R" + angle + "," + this.center.x + "," + this.center.y);
+        this.transformSensorsItems("R" + angle + "," + this.center.x + "," + this.center.y);
+        this.updateSensorsTransformations();
+
+        var robotTransform = this.image.transform() + "T" + point.x + "," + point.y;
+        this.updateSensorsTransformations();
+
+        var robotItem = this;
+
+        if (seqNumber < traceJson.points.length - 1) {
+            return Raphael.animation({ transform: robotTransform }, point.timestamp, "linear",
+                function() {
+                    var animation = robotItem.createAnimationSequence(traceJson, seqNumber + 1);
+                    robotItem.image.animate(animation);
+                    robotItem.animateSensors(this.image,
+                        "T" + traceJson.points[seqNumber + 1].x + "," + traceJson.points[seqNumber + 1].y, animation, traceJson.points[seqNumber + 1].timestamp);
+                });
+        }
+
+        return Raphael.animation({ transform: robotTransform }, point.timestamp);
     }
 }
