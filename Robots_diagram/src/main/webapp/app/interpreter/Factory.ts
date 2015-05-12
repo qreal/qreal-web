@@ -1,23 +1,31 @@
 class Factory {
-    static run(node):string {
+    static run(node, graph, nodesList): string {
         var output = "";
         switch (node.type) {
             case "Initial Node":
-                output += InitialBlock.run(node);
+                output += InitialBlock.run(node, graph, nodesList);
                 break;
 
             case "Final Node":
-                output += FinalBlock.run(node);
+                output += FinalBlock.run(node, graph);
                 break;
 
-            case "Function":
-                output += FunctionBlock.run(node);
+            case "Condition":
+                output += IfBlock.run(node, graph, nodesList);
                 break;
 
-            case "Smile":
-                output += SmileBlock.run(node);
+            case "Motors Forward":
+                output += Motors.run(node, graph, nodesList, true);
                 break;
-            
+
+            case "Motors Backward":
+                output += Motors.run(node, graph, nodesList, false);
+                break;
+
+            case "Stop Motors":
+                output += MotorsStop.run(node, graph, nodesList);
+                break;
+
             default:
                 output += "Not yet";
         }

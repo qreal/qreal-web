@@ -1,3 +1,3 @@
-interface Block {
+class Block {
     run(node): void;
 }

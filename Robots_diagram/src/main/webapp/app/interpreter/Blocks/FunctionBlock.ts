@@ -1,23 +1,27 @@
-class FunctionBlock {
-    static run(node): string {
-        var name = "Function: " + node.getName();
+class FunctionBlock extends Block {
+    static run(node, graph): string {
+        var output = "Function: " + node.getName() + "\n";
         var properties = node.getProperties();
         var body = "";
         var initialization = true;
         for (var p in properties) {
             if (properties.hasOwnProperty(p)) {
-                if (properties[p].type == "string") {
+                if (p == "Body") {
                     body = properties[p].value;
+
+                    // evaluation of body
+
+
                 }
-                else if (properties[p].type == "bool") {
+                else if (p == "Initialization") {
                     initialization = properties[p].value;
                 }
                 else {
-                    name += "Error, cannot get properties of" + node.getName();
+                    output += "Error, cannot get properties of " + node.getName() + "\n";
                 }
 
             }
         }
-        return name;
+        return output;
     }
 }

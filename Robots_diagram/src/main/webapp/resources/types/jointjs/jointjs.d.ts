@@ -35,6 +35,8 @@ declare module joint {
             getLinks();
 
             getElements();
+
+            getCell(id);
         }
 
         class Cell extends Backbone.Model {

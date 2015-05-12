@@ -8,9 +8,7 @@ class InterpretManager {
             if (links.length > 0) {
                 var firstNodeId = InterpretManager.findInitialNode(nodesList);
                 if (firstNodeId != "") {
-                    output += Factory.run(nodesList[firstNodeId]);
-                    var links = InterpretManager.getOutboundLinks(graph, firstNodeId);
-                    output += Factory.run(nodesList[links[0].get('target').id]);
+                    output += Factory.run(nodesList[firstNodeId], graph, nodesList);
                 }
                 else {
                     output += "No initial node";
@@ -46,4 +44,13 @@ class InterpretManager {
         var outboundLinks = graph.getConnectedLinks(e, { outbound : true });
         return outboundLinks;
     }
+
+    static getIdByNode(node, nodesList): string {
+        for (var property in nodesList) {
+            if (nodesList.hasOwnProperty(property)) {
+                if (nodesList[property] === node)
+                    return property;
+            }
+    }
+}
 }

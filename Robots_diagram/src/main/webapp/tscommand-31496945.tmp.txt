@@ -1,0 +1,1 @@
+"/home/lada/Documents/projects/qreal-web/Robots_diagram/src/main/webapp/app/reference.ts" --sourcemap --removeComments --target ES5 --module amd --out app/out.js

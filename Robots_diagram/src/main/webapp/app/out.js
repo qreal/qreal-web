@@ -903,75 +903,188 @@ var Property = (function () {
     }
     return Property;
 })();
-var FinalBlock = (function () {
-    function FinalBlock() {
+var Block = (function () {
+    function Block() {
     }
-    FinalBlock.run = function (node) {
-        var name = "Final: " + node.getName();
-        return name;
+    return Block;
+})();
+var FinalBlock = (function (_super) {
+    __extends(FinalBlock, _super);
+    function FinalBlock() {
+        _super.apply(this, arguments);
+    }
+    FinalBlock.run = function (node, graph) {
+        var output = "Final: " + node.getName() + "\n";
+        return output;
     };
     return FinalBlock;
-})();
-var FunctionBlock = (function () {
+})(Block);
+var FunctionBlock = (function (_super) {
+    __extends(FunctionBlock, _super);
     function FunctionBlock() {
+        _super.apply(this, arguments);
     }
-    FunctionBlock.run = function (node) {
-        var name = "Function: " + node.getName();
+    FunctionBlock.run = function (node, graph) {
+        var output = "Function: " + node.getName() + "\n";
         var properties = node.getProperties();
         var body = "";
         var initialization = true;
         for (var p in properties) {
             if (properties.hasOwnProperty(p)) {
-                if (properties[p].type == "string") {
+                if (p == "Body") {
                     body = properties[p].value;
                 }
-                else if (properties[p].type == "bool") {
+                else if (p == "Initialization") {
                     initialization = properties[p].value;
                 }
                 else {
-                    name += "Error, cannot get properties of" + node.getName();
+                    output += "Error, cannot get properties of " + node.getName() + "\n";
                 }
             }
         }
-        return name;
+        return output;
     };
     return FunctionBlock;
-})();
-var InitialBlock = (function () {
-    function InitialBlock() {
+})(Block);
+var IfBlock = (function (_super) {
+    __extends(IfBlock, _super);
+    function IfBlock() {
+        _super.apply(this, arguments);
     }
-    InitialBlock.run = function (node) {
-        var name = "Initial: " + node.getName();
-        return name;
+    IfBlock.run = function (node, graph, nodesList) {
+        var output = "If: " + node.getName() + "\n";
+        var condition = "";
+        var nodeId = InterpretManager.getIdByNode(node, nodesList);
+        var links = InterpretManager.getOutboundLinks(graph, nodeId);
+        var properties = node.getProperties();
+        for (var p in properties) {
+            if (p == "Condition") {
+                condition = properties[p].value;
+            }
+        }
+        output += "Condition: " + condition + "\n";
+        if (links.length == 2) {
+        }
+        else {
+        }
+        return output;
     };
-    return InitialBlock;
-})();
-var SmileBlock = (function () {
+    return IfBlock;
+})(Block);
+var Motors = (function (_super) {
+    __extends(Motors, _super);
+    function Motors() {
+        _super.apply(this, arguments);
+    }
+    Motors.run = function (node, graph, nodesList, forward) {
+        var output = "Motors forward/backward: " + node.getName() + "\n";
+        var ports = [];
+        var power = 0;
+        var nodeId = InterpretManager.getIdByNode(node, nodesList);
+        var links = InterpretManager.getOutboundLinks(graph, nodeId);
+        var properties = node.getProperties();
+        for (var p in properties) {
+            if (p == "Ports") {
+                ports += properties[p].value.split(", ");
+            }
+            if (p == "Power (%)") {
+                power = parseInt(properties[p].value);
+            }
+        }
+        output += "Ports: " + ports + "\n" + "Power: " + power + "\n";
+        if (links.length == 1) {
+            var nextNode = nodesList[links[0].get('target').id];
+            output += Factory.run(nextNode, graph, nodesList);
+        }
+        else if (links.length > 1) {
+            output += "Error: too many links\n";
+        }
+        return output;
+    };
+    return Motors;
+})(Block);
+var MotorsStop = (function (_super) {
+    __extends(MotorsStop, _super);
+    function MotorsStop() {
+        _super.apply(this, arguments);
+    }
+    MotorsStop.run = function (node, graph, nodesList) {
+        var output = "Motors stop: " + node.getName() + "\n";
+        var ports = [];
+        var nodeId = InterpretManager.getIdByNode(node, nodesList);
+        var links = InterpretManager.getOutboundLinks(graph, nodeId);
+        var properties = node.getProperties();
+        for (var p in properties) {
+            if (p == "Ports") {
+                ports += properties[p].value.split(",");
+            }
+        }
+        output += "Ports: " + ports + "\n";
+        if (links.length == 1) {
+            var nextNode = nodesList[links[0].get('target').id];
+            output += Factory.run(nextNode, graph, nodesList);
+        }
+        else if (links.length > 1) {
+            output += "Error: too many links\n";
+        }
+        return output;
+    };
+    return MotorsStop;
+})(Block);
+var SmileBlock = (function (_super) {
+    __extends(SmileBlock, _super);
     function SmileBlock() {
+        _super.apply(this, arguments);
     }
     SmileBlock.run = function (node) {
         var name = "Smile: " + node.getName();
         return name;
     };
     return SmileBlock;
-})();
+})(Block);
+var InitialBlock = (function (_super) {
+    __extends(InitialBlock, _super);
+    function InitialBlock() {
+        _super.apply(this, arguments);
+    }
+    InitialBlock.run = function (node, graph, nodesList) {
+        var output = "Initial: " + node.getName() + "\n";
+        var nodeId = InterpretManager.getIdByNode(node, nodesList);
+        var links = InterpretManager.getOutboundLinks(graph, nodeId);
+        if (links.length == 1) {
+            var nextNode = nodesList[links[0].get('target').id];
+            output += Factory.run(nextNode, graph, nodesList) + "\n";
+        }
+        else if (links.length > 1) {
+            output += "Error: too many links\n";
+        }
+        return output;
+    };
+    return InitialBlock;
+})(Block);
 var Factory = (function () {
     function Factory() {
     }
-    Factory.run = function (node) {
+    Factory.run = function (node, graph, nodesList) {
         var output = "";
         switch (node.type) {
             case "Initial Node":
-                output += InitialBlock.run(node);
+                output += InitialBlock.run(node, graph, nodesList);
                 break;
             case "Final Node":
-                output += FinalBlock.run(node);
+                output += FinalBlock.run(node, graph);
                 break;
-            case "Function":
-                output += FunctionBlock.run(node);
+            case "Condition":
+                output += IfBlock.run(node, graph, nodesList);
                 break;
-            case "Smile":
-                output += SmileBlock.run(node);
+            case "Motors Forward":
+                output += Motors.run(node, graph, nodesList, true);
+                break;
+            case "Motors Backward":
+                output += Motors.run(node, graph, nodesList, false);
+                break;
+            case "Stop Motors":
+                output += MotorsStop.run(node, graph, nodesList);
                 break;
             default:
                 output += "Not yet";
@@ -991,9 +1104,7 @@ var InterpretManager = (function () {
             if (links.length > 0) {
                 var firstNodeId = InterpretManager.findInitialNode(nodesList);
                 if (firstNodeId != "") {
-                    output += Factory.run(nodesList[firstNodeId]);
-                    var links = InterpretManager.getOutboundLinks(graph, firstNodeId);
-                    output += Factory.run(nodesList[links[0].get('target').id]);
+                    output += Factory.run(nodesList[firstNodeId], graph, nodesList);
                 }
                 else {
                     output += "No initial node";
@@ -1025,6 +1136,14 @@ var InterpretManager = (function () {
         var e = graph.getCell(nodeId);
         var outboundLinks = graph.getConnectedLinks(e, { outbound: true });
         return outboundLinks;
+    };
+    InterpretManager.getIdByNode = function (node, nodesList) {
+        for (var property in nodesList) {
+            if (nodesList.hasOwnProperty(property)) {
+                if (nodesList[property] === node)
+                    return property;
+            }
+        }
     };
     return InterpretManager;
 })();
