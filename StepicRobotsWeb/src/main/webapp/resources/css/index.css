@@ -166,3 +166,15 @@ body {
 #remove:active {
     color: #7c7c7c;
 }
+
+#submit_button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+#stop_button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}

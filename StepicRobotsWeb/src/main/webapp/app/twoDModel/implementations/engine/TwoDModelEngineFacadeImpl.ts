@@ -4,6 +4,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
 
     constructor($scope, $compile, $attrs) {
         $scope.vm = this;
+
         var facade = this;
         var robotModel = $scope.root.getRobotModel();
         this.robotModelName = robotModel.getName();
@@ -24,6 +25,12 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
             facade.initPortsConfigation($scope, $compile, robotModel);
             facade.makeUnselectable(document.getElementById("twoDModelContent"));
         });
+
+        $scope.$on("DisplayTrace", function(event, traceJson) {
+            facade.displayTrace(traceJson);
+        });
+
+        $compile($("#stop_button"))($scope);
     }
 
     private makeUnselectable(element) {
@@ -91,7 +98,6 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         $("#diagramContent").show();
     }
 
-
     initPortsConfigation($scope, $compile, twoDRobotModel: TwoDRobotModel): void {
         var configurationDropdownsContent = "<p>";
         twoDRobotModel.getConfigurablePorts().forEach(function(port) {
@@ -132,5 +138,15 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
                 }
             });
         });
+    }
+
+    displayTrace(traceJson): void {
+        var robotModel = this.model.getRobotModels()[0];
+        robotModel.rideTrace(traceJson);
+    }
+
+    stopPlay(): void {
+        var robotModel = this.model.getRobotModels()[0];
+        robotModel.stopPlay();
     }
 }

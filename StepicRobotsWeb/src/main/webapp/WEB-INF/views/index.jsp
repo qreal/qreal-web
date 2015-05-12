@@ -22,6 +22,7 @@
                         <div class="col-md-9 no-float">
                             <div class="background_div">
                                 <div id="diagram_paper">
+                                    <button id="submit_button" class="btn btn-success btn-lg" type="button" ng-click="submit()">Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -60,8 +61,8 @@
             </div>
             <div id="twoDModelContent" class="col-md-4 no-float unselectable">
                 <div class="background_div">
-                    <div id="twoDModel_stage"  ng-controller="TwoDModelEngineFacadeImpl" task="${taskId}">
-
+                    <div id="twoDModel_stage" ng-controller="TwoDModelEngineFacadeImpl" task="${taskId}">
+                        <button id="stop_button" class="btn btn-danger btn-lg" type="button" ng-click="vm.stopPlay()">Stop</button>
                     </div>
                 </div>
             </div>

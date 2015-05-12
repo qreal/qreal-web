@@ -54,4 +54,12 @@ class RobotModelImpl implements RobotModel {
             //TODO: set start pos
         }
     }
+
+    rideTrace(traceJson) {
+        this.robotItem.rideTrace(traceJson);
+    }
+
+    stopPlay(): void {
+        this.robotItem.clearCurrentPosition();
+    }
 }
