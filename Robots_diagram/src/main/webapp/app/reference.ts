@@ -24,6 +24,7 @@
 /// <reference path="twoDModel/implementations/robotModel/DevicesConfigurationProvider.ts" />
 /// <reference path="twoDModel/interfaces/engine/items/AbstractItem.ts" />
 /// <reference path="diagram/models/DiagramElement.ts" />
+/// <reference path="interpreter/Blocks/AbstractBlock.ts" />
 //grunt-start
 /// <reference path="RootDiagramController.ts" />
 /// <reference path="XmlHttpFactory.ts" />
@@ -41,7 +42,6 @@
 /// <reference path="diagram/types/NodeTypesMap.ts" />
 /// <reference path="diagram/types/PropertiesMap.ts" />
 /// <reference path="diagram/types/Property.ts" />
-/// <reference path="interpreter/Blocks/AbstractBlock.ts" />
 /// <reference path="interpreter/Blocks/FinalBlock.ts" />
 /// <reference path="interpreter/Blocks/FunctionBlock.ts" />
 /// <reference path="interpreter/Blocks/IfBlock.ts" />

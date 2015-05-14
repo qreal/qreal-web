@@ -256,6 +256,13 @@ var DevicesConfigurationProvider = (function () {
     };
     return DevicesConfigurationProvider;
 })();
+var Block = (function () {
+    function Block() {
+    }
+    Block.prototype.run = function (node) {
+    };
+    return Block;
+})();
 var RootDiagramController = (function () {
     function RootDiagramController($scope, $compile) {
         $scope.root = this;
@@ -975,11 +982,6 @@ var Property = (function () {
         this.type = type;
     }
     return Property;
-})();
-var Block = (function () {
-    function Block() {
-    }
-    return Block;
 })();
 var FinalBlock = (function (_super) {
     __extends(FinalBlock, _super);

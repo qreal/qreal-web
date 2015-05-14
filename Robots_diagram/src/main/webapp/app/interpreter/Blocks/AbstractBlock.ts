@@ -1,3 +1,4 @@
 class Block {
-    run(node): void;
+    run(node): void {
+    }
 }
