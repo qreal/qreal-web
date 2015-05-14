@@ -1,5 +1,5 @@
 class DiagramLoader {
-    static load(response, graph: joint.dia.Graph, nodesMap, nodeTypesMap: NodeTypesMap): void {
+    static load(response, graph: joint.dia.Graph, nodesMap, linksMap, nodeTypesMap: NodeTypesMap): void {
         var minPos: {x: number; y: number} = this.findMinPosition(response, nodeTypesMap);
         var offsetX = (minPos.x < 0) ? (-minPos.x + 100) : 0;
         var offsetY = (minPos.y < 0) ? (-minPos.y + 100) : 0;
@@ -48,47 +48,55 @@ class DiagramLoader {
         }
 
         for (var i = 0; i < response.links.length; i++) {
-            this.loadLink(graph, response.links[i], offsetX, offsetY);
+            this.loadLink(graph, linksMap, response.links[i], offsetX, offsetY);
         }
     }
 
     static loadNode(graph: joint.dia.Graph, nodesMap, id: string,
                       type: string, x: number, y: number, properties, image: string): void {
         var node: DiagramNode = new DefaultDiagramNode(type, x, y, properties, image, id);
-        nodesMap[node.getElement().id] = node;
-        graph.addCell(node.getElement());
+        nodesMap[node.getJointObject().id] = node;
+        graph.addCell(node.getJointObject());
     }
 
-    static loadLink(graph: joint.dia.Graph, linkObject, offsetX: number, offsetY: number): void {
-        var source: string = "";
-        var target: string = "";
+    static loadLink(graph: joint.dia.Graph, linksMap, linkObject, offsetX: number, offsetY: number): void {
+        var sourceId: string = "";
+        var targetId: string = "";
 
+        var properties: PropertiesMap = {};
         var logicalPropertiesObject = linkObject.logicalProperties;
 
         for (var j = 0; j < logicalPropertiesObject.length; j++) {
             switch (logicalPropertiesObject[j].name) {
                 case "from":
-                    source = this.parseId(logicalPropertiesObject[j].value);
+                    sourceId = this.parseId(logicalPropertiesObject[j].value);
                     break;
                 case "to":
-                    target = this.parseId(logicalPropertiesObject[j].value);
+                    targetId = this.parseId(logicalPropertiesObject[j].value);
                     break
+                case "Guard":
+                    var property: Property = new Property("Guard", logicalPropertiesObject[j].value, "dropdown");
+                    properties["Guard"] = property;
             }
         }
 
         var graphicalPropertiesObject = linkObject.graphicalProperties;
         var vertices =  this.loadVertices(graphicalPropertiesObject, offsetX, offsetY);
+        var jointObjectId = linkObject.logicalId;
 
-        var link: joint.dia.Link = new joint.dia.Link({
+        var jointObject: joint.dia.Link = new joint.dia.Link({
+            id: jointObjectId,
             attrs: {
                 '.connection': { stroke: 'black' },
                 '.marker-target': { fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z' }
             },
-            source: { id: source },
-            target: { id: target },
+            source: { id: sourceId },
+            target: { id: targetId },
             vertices: vertices
         });
-        graph.addCell(link);
+
+        linksMap[jointObjectId] = new Link(jointObject, properties);
+        graph.addCell(jointObject);
     }
 
     static loadVertices(graphicalPropertiesObject, offsetX: number, offsetY: number) {

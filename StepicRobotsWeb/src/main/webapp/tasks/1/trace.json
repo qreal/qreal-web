@@ -10,19 +10,19 @@
 	  "x": 0,
 	  "y": 150,
 	  "direction": 90,
-	  "timestamp": 2000
+	  "timestamp": 1000
 	},
 	{
 	  "x": -320,
 	  "y": 0,
 	  "direction": 180,
-	  "timestamp": 3000
+	  "timestamp": 2100
 	},
 	{
 	  "x": 0,
 	  "y": 150,
 	  "direction": 90,
-	  "timestamp": 2000
+	  "timestamp": 1000
 	},
 	{
 	  "x": 450,
@@ -34,13 +34,13 @@
 	  "x": 0,
 	  "y": -300,
 	  "direction": -90,
-	  "timestamp": 4000
+	  "timestamp": 2000
 	},
 	{
 	  "x": 320,
 	  "y": 0,
 	  "direction": 0,
-	  "timestamp": 3000
+	  "timestamp": 2100
 	}
   ]
 }

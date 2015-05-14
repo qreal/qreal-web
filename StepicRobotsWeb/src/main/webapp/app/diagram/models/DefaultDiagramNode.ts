@@ -2,39 +2,32 @@
  * Created by vladzx on 10.10.14.
  */
 class DefaultDiagramNode implements DiagramNode {
-
-    private element: joint.shapes.devs.ImageWithPorts;
+    private jointObject: joint.shapes.devs.ImageWithPorts;
     private type: string;
-    private text: string;
     private properties: PropertiesMap;
-    private image: string;
+    private imagePath: string;
 
-    constructor(type: string, x: number, y: number, properties: PropertiesMap, image: string, id?: string) {
-        this.text = 'Default';
+    constructor(type: string, x: number, y: number, properties: PropertiesMap, imagePath: string, id?: string) {
         this.type = type;
 
-        var elementAttributes = {
+        var jointObjectAttributes = {
             position: { x: x, y: y },
             size: { width: 50, height: 50 },
             outPorts: [''],
             attrs: {
                 image: {
-                    'xlink:href': image
+                    'xlink:href': imagePath
                 }
             }
         }
 
         if (id) {
-            jQuery.extend(elementAttributes, {id: id});
+            jQuery.extend(jointObjectAttributes, {id: id});
         }
 
-        this.element = new joint.shapes.devs.ImageWithPorts(elementAttributes);
+        this.jointObject = new joint.shapes.devs.ImageWithPorts(jointObjectAttributes);
         this.properties = properties;
-        this.image = image;
-    }
-
-    setText(text:string): void {
-        this.text = text;
+        this.imagePath = imagePath;
     }
 
     getType(): string {
@@ -42,19 +35,19 @@ class DefaultDiagramNode implements DiagramNode {
     }
 
     getX(): number {
-        return (this.element.get("position"))['x'];
+        return (this.jointObject.get("position"))['x'];
     }
 
     getY(): number {
-        return (this.element.get("position"))['y'];
+        return (this.jointObject.get("position"))['y'];
     }
 
     getImagePath(): string {
-        return this.image;
+        return this.imagePath;
     }
 
-    getElement() {
-        return this.element;
+    getJointObject() {
+        return this.jointObject;
     }
 
     setProperty(name:string, property: Property): void {
