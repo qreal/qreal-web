@@ -21477,6 +21477,7 @@ joint.dia.Paper = Backbone.View.extend({
         gridSize: 50,
         perpendicularLinks: false,
         elementView: joint.dia.ElementView,
+        diagramElementView: joint.dia.ElementView,
         linkView: joint.dia.LinkView,
         snapLinks: false, // false, true, { radius: value }
 
@@ -21593,8 +21594,11 @@ joint.dia.Paper = Backbone.View.extend({
         var module = type.split('.')[0];
         var entity = type.split('.')[1];
 
-        // If there is a special view defined for this model, use that one instead of the default `elementView`/`linkView`.
-        if (joint.shapes[module] && joint.shapes[module][entity + 'View']) {
+        // If there is a special view defined for this model, use that one instead of the default `elementView`/`linkView`if
+        if (joint.shapes[module] && entity == 'ImageWithPorts') {
+            view = new this.options.diagramElementView({ model: cell, interactive: this.options.interactive });
+
+        } else if (joint.shapes[module] && joint.shapes[module][entity + 'View']) {
 
             view = new joint.shapes[module][entity + 'View']({ model: cell, interactive: this.options.interactive });
 
@@ -22442,10 +22446,10 @@ joint.shapes.devs.Link = joint.dia.Link.extend({
 
 
 joint.shapes.devs.ModelView = joint.dia.ElementView.extend(joint.shapes.basic.PortsViewInterface);
-joint.shapes.devs.ImageWithPortsView = joint.dia.ElementView.extend(joint.shapes.basic.PortsViewInterface);
 joint.shapes.devs.EllipseWithPortsView = joint.shapes.devs.ModelView;
 joint.shapes.devs.RectWithPortsView = joint.shapes.devs.ModelView;
 joint.shapes.devs.DiamondView = joint.dia.ElementView.extend(joint.shapes.basic.PortsViewInterface);
+joint.shapes.devs.ImageWithPortsView = joint.dia.ElementView.extend(joint.shapes.basic.PortsViewInterface);
 
 
 if (typeof exports === 'object') {

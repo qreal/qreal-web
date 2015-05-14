@@ -1,74 +1,72 @@
 class ImportManager {
-    static import(response, graph: joint.dia.Graph, nodesMap, nodeTypesMap: NodeTypesMap): number {
-        console.log("import diagram");
+    static import(response, graph: joint.dia.Graph, nodesMap, linksMap, nodeTypesMap: NodeTypesMap): number {
         for (var i = 0; i < response.nodes.length; i++) {
             var nodeObject = response.nodes[i];
 
-            var properties: PropertiesMap = {};
-            var propertiesObject = nodeObject.properties;
+            var properties: PropertiesMap = ImportManager.importProperties(nodeObject.properties);
 
-            for (var j = 0; j < propertiesObject.length; j++) {
-                var property: Property = new Property(propertiesObject[j].value, propertiesObject[j].type);
-                properties[propertiesObject[j].name] = property;
-            }
-
-            this.importNode(graph, nodesMap, nodeObject.name, nodeObject.type, nodeObject.x,
+            this.importNode(graph, nodesMap, nodeObject.jointObjectId, nodeObject.type, nodeObject.x,
                 nodeObject.y, properties, nodeTypesMap[nodeObject.type].image);
         }
 
         for (var i = 0; i < response.links.length; i++) {
             var linkObject = response.links[i];
-            this.importLink(graph, nodesMap, linkObject.source, linkObject.target, linkObject.vertices);
+
+            var properties: PropertiesMap = ImportManager.importProperties(linkObject.properties);
+            var vertices = this.importVertices(linkObject.vertices);
+
+            this.importLink(graph, linksMap, linkObject.jointObjectId,
+                linkObject.source, linkObject.target, vertices, properties);
         }
 
         return response.nodeIndex;
     }
 
-    static importNode(graph: joint.dia.Graph, nodesList, name: string,
-                      type: string, x: number, y: number, properties, image: string): void {
-        var node: DefaultDiagramNode = new DefaultDiagramNode(name, type, x, y, properties, image);
-        nodesList[node.getElement().id] = node;
-        graph.addCell(node.getElement());
+    static importProperties(propertiesObject): PropertiesMap {
+        var properties: PropertiesMap = {};
+
+        for (var j = 0; j < propertiesObject.length; j++) {
+            var property: Property = new Property(propertiesObject[j].value, propertiesObject[j].type);
+            properties[propertiesObject[j].name] = property;
+        }
+
+        return properties;
     }
 
-    static importLink(graph: joint.dia.Graph, nodesList, sourceNodeId:string, targetNodeId:string, vertices): void {
-        var sourceId: string = this.getElementIdByNodeId(nodesList, sourceNodeId);
-        var targetId: string = this.getElementIdByNodeId(nodesList, targetNodeId);
-        var newVertices = this.importVertices(vertices);
-        var link: joint.dia.Link = new joint.dia.Link({
+    static importNode(graph: joint.dia.Graph, nodesMap, jointObjectId: string,
+                      type: string, x: number, y: number, properties, imagePath: string): void {
+        var node: DefaultDiagramNode = new DefaultDiagramNode(type, x, y, properties, imagePath, jointObjectId);
+        nodesMap[jointObjectId] = node;
+        graph.addCell(node.getJointObject());
+    }
+
+    static importLink(graph: joint.dia.Graph, linksMap, jointObjectId: string,
+                      sourceId:string, targetId:string, vertices, properties): void {
+        var jointObject: joint.dia.Link = new joint.dia.Link({
+            id: jointObjectId,
             attrs: {
                 '.connection': { stroke: 'black' },
                 '.marker-target': { fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z' }
             },
             source: { id: sourceId },
             target: { id: targetId },
-            vertices: newVertices
+            vertices: vertices
         });
-        graph.addCell(link);
+
+        linksMap[jointObjectId] = new Link(jointObject, properties);
+        graph.addCell(jointObject);
     }
 
-    static importVertices(vertices) {
-        var newVertices = [];
-        vertices.forEach(function (vertex) {
-            newVertices.push(
+    static importVertices(verticesJSON) {
+        var vertices = [];
+        verticesJSON.forEach(function (vertex) {
+            vertices.push(
                 {
                     x : vertex.x,
                     y : vertex.y
                 }
             )
         });
-        return newVertices;
-    }
-
-    static getElementIdByNodeId(nodesList, nodeId:string): string {
-        for (var id in nodesList) {
-            if (nodesList.hasOwnProperty(id)) {
-                var node = nodesList[id];
-                if (node.getName() === nodeId) {
-                    return id;
-                }
-            }
-        }
-        return undefined;
+        return vertices;
     }
 }

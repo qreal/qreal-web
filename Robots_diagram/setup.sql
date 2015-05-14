@@ -24,14 +24,13 @@ CREATE TABLE diagrams (
   diagram_id BIGINT      NOT NULL AUTO_INCREMENT,
   name       VARCHAR(50) NOT NULL,
   username   VARCHAR(50) NOT NULL,
-  node_index BIGINT      NOT NULL,
   PRIMARY KEY (diagram_id),
   FOREIGN KEY (username) REFERENCES users (username)
 );
 
 CREATE TABLE nodes (
   node_id    BIGINT       NOT NULL AUTO_INCREMENT,
-  name       VARCHAR(50)  NOT NULL,
+  joint_object_id         VARCHAR(50)  NOT NULL,
   type       VARCHAR(50)  NOT NULL,
   x          DOUBLE       NOT NULL,
   y          DOUBLE       NOT NULL,
@@ -42,6 +41,7 @@ CREATE TABLE nodes (
 
 CREATE TABLE links (
   link_id    BIGINT      NOT NULL AUTO_INCREMENT,
+  joint_object_id        VARCHAR(50)  NOT NULL,
   source     VARCHAR(50) NOT NULL,
   target     VARCHAR(50) NOT NULL,
   diagram_id BIGINT,
@@ -56,8 +56,10 @@ CREATE TABLE properties (
   type        VARCHAR(50) NOT NULL,
   position    INT         NOT NULL,
   node_id     BIGINT,
+  link_id     BIGINT,
   PRIMARY KEY (property_id),
-  FOREIGN KEY (node_id) REFERENCES nodes (node_id)
+  FOREIGN KEY (node_id) REFERENCES nodes (node_id),
+  FOREIGN KEY (link_id) REFERENCES links (link_id)
 );
 
 CREATE TABLE vertices (

@@ -86,6 +86,7 @@ declare module joint {
             gridSize: number;
             perpendicularLinks: boolean;
             elementView: ElementView;
+            diagramElementView: ElementView;
             linkView: LinkView;
         }
 
@@ -115,6 +116,11 @@ declare module joint {
             scale(sx:number, sy:number);
         }
         class CellView extends Backbone.View {
+            paper;
+            _linkView;
+            _dx;
+            _dy;
+
             getBBox():{ x: number; y: number; width: number; height: number;
             };
 
@@ -125,6 +131,8 @@ declare module joint {
             findMagnet(el:any);
 
             getSelector(el:any);
+
+            pointerdown(evt, x, y);
         }
 
         class LinkView extends CellView {
@@ -151,6 +159,9 @@ declare module joint {
             }
 
             class Path extends Generic {
+            }
+
+            class PortsViewInterface {
             }
         }
 

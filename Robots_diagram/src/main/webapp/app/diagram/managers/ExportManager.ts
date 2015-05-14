@@ -1,9 +1,77 @@
 class ExportManager {
+    static exportDiagramStateToJSON(name: string, nodesMap, linksMap): string {
+        var json = {
+            'name': name,
+            'nodes': [],
+            'links': []
+        };
+
+        ExportManager.exportNodes(json, nodesMap);
+        ExportManager.exportLinks(json, linksMap)
+
+        return JSON.stringify(json);
+    }
+
+    static exportNodes(json, nodesMap) {
+        for (var id in nodesMap) {
+            var node: DiagramNode = nodesMap[id];
+            var nodeJSON = {
+                'jointObjectId': node.getJointObject().id,
+                'type': node.getType(),
+                'x': node.getX(),
+                'y': node.getY(),
+                'properties': []
+            };
+
+            nodeJSON.properties = ExportManager.exportProperties(node.getProperties());
+
+            json.nodes.push(nodeJSON);
+        }
+    }
+
+    static exportLinks(json, linksMap) {
+        for (var id in linksMap) {
+            var link: Link = linksMap[id];
+            var jointObject = link.getJointObject();
+            var vertices = [];
+            if (jointObject.get('vertices')) {
+                vertices = ExportManager.exportVertices(jointObject.get('vertices'));
+            }
+            var linkJSON = {
+                'jointObjectId': jointObject.id,
+                'source': jointObject.get('source').id,
+                'target': jointObject.get('target').id,
+                'vertices' : vertices,
+                'properties': []
+            }
+
+            linkJSON.properties = ExportManager.exportProperties(link.getProperties());
+
+            json.links.push(linkJSON);
+        }
+    }
+
+    static exportProperties(properties: PropertiesMap) {
+        var propertiesJSON = [];
+        var position: number = 1;
+        for (var propertyName in properties) {
+            var property = {
+                'name': propertyName,
+                'value': properties[propertyName].value,
+                'type': properties[propertyName].type,
+                'position': position
+            };
+            propertiesJSON.push(property);
+            position++;
+        }
+        return propertiesJSON;
+    }
+
     static exportVertices(vertices) {
+        var verticesJSON = [];
         var count: number = 1;
-        var newVertices = [];
         vertices.forEach(function (vertex) {
-            newVertices.push(
+            verticesJSON.push(
                 {
                     x : vertex.x,
                     y : vertex.y,
@@ -12,60 +80,6 @@ class ExportManager {
             )
             count++;
         });
-        return newVertices;
-    }
-
-    static exportDiagramStateToJSON(graph: joint.dia.Graph,  name: string, nodeIndex: number, nodesList): string {
-        var json = {
-            'name': name,
-            'nodeIndex': nodeIndex,
-            'nodes': [],
-            'links': []
-        };
-        for (var id in nodesList) {
-            if (nodesList.hasOwnProperty(id)) {
-                var node: DiagramNode = nodesList[id];
-                var newNode = {
-                    'name': node.getName(),
-                    'type': node.getType(),
-                    'x': node.getX(),
-                    'y': node.getY(),
-                    'properties': []
-                };
-
-                var properties: PropertiesMap = node.getProperties();
-                var position: number = 1;
-                for (var propertyName in properties) {
-                    var property = {
-                        'name': propertyName,
-                        'value': properties[propertyName].value,
-                        'type': properties[propertyName].type,
-                        'position': position
-                    };
-                    newNode.properties.push(property);
-                    position++;
-                }
-
-                json.nodes.push(newNode);
-            }
-        }
-
-        graph.getLinks().forEach(function (link) {
-            console.log(link.get('target'));
-            var src: string = nodesList[link.get('source').id].getName();
-            var target: string = nodesList[link.get('target').id].getName();
-            var vertices;
-            if (link.get('vertices')) {
-                vertices = ExportManager.exportVertices(link.get('vertices'));
-            }
-            var newLink = {
-                'source' : src,
-                'target' : target,
-                'vertices' : vertices
-            };
-            json.links.push(newLink);
-        });
-
-        return JSON.stringify(json);
+        return verticesJSON;
     }
 }

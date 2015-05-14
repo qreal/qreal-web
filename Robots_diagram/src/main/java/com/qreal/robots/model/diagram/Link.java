@@ -16,6 +16,9 @@ public class Link implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long linkId;
 
+    @Column(name = "joint_object_id")
+    private String jointObjectId;
+
     @Column(name = "source")
     private String source;
 
@@ -26,6 +29,11 @@ public class Link implements Serializable {
     @JoinColumn(name = "link_id", referencedColumnName = "link_id")
     @OrderBy("number")
     private Set<LinkVertex> vertices;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "link_id", referencedColumnName = "link_id")
+    @OrderBy("position")
+    private Set<Property> properties;
 
     public Long getLinkId() {
         return linkId;
@@ -57,5 +65,21 @@ public class Link implements Serializable {
 
     public void setVertices(Set<LinkVertex> vertices) {
         this.vertices = vertices;
+    }
+
+    public String getJointObjectId() {
+        return jointObjectId;
+    }
+
+    public void setJointObjectId(String jointObjectId) {
+        this.jointObjectId = jointObjectId;
+    }
+
+    public Set<Property> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Set<Property> properties) {
+        this.properties = properties;
     }
 }

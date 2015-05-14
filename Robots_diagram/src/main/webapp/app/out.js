@@ -305,29 +305,37 @@ var XmlHttpFactory = (function () {
 var DiagramController = (function () {
     function DiagramController($scope, $compile) {
         this.graph = new joint.dia.Graph;
-        this.paper = new DiagramPaper(this.graph);
+        this.paper = new DiagramPaper(this, this.graph);
         this.nodeTypesMap = {};
         this.nodesMap = {};
-        this.nodeIndex = -1;
+        this.linksMap = {};
         this.isPaletteLoaded = false;
         var controller = this;
         $scope.vm = controller;
         PaletteLoader.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
+        DropdownListManager.addDropdownList("Link", "Guard", ["", "fasle", "iteration", "true"]);
         this.paper.on('cell:pointerdown', function (cellView, evt, x, y) {
             console.log('cell view ' + cellView.model.id + ' was clicked');
             var node = controller.nodesMap[cellView.model.id];
             if (node) {
-                controller.currentNode = node;
+                controller.currentElement = node;
                 controller.setNodeProperties(node);
             }
             else {
-                controller.currentNode = undefined;
+                var link = controller.linksMap[cellView.model.id];
+                if (link) {
+                    controller.currentElement = link;
+                    controller.setNodeProperties(link);
+                }
+                else {
+                    controller.currentElement = undefined;
+                }
             }
         });
         this.paper.on('blank:pointerdown', function (evt, x, y) {
             console.log('blank was clicked');
             $(".property").remove();
-            controller.currentNode = undefined;
+            controller.currentElement = undefined;
         });
     }
     DiagramController.prototype.setNodeTypesMap = function (nodeTypesMap) {
@@ -358,9 +366,9 @@ var DiagramController = (function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
             var value = $(this).val();
-            var property = controller.currentNode.getProperties()[name];
+            var property = controller.currentElement.getProperties()[name];
             property.value = value;
-            controller.currentNode.setProperty(name, property);
+            controller.currentElement.setProperty(name, property);
         });
     };
     DiagramController.prototype.setCheckboxListener = function () {
@@ -378,9 +386,9 @@ var DiagramController = (function () {
                 value = "True";
                 label.contents().last()[0].textContent = value;
             }
-            var property = controller.currentNode.getProperties()[name];
+            var property = controller.currentElement.getProperties()[name];
             property.value = value;
-            controller.currentNode.setProperty(name, property);
+            controller.currentElement.setProperty(name, property);
         });
     };
     DiagramController.prototype.setDropdownListener = function () {
@@ -389,9 +397,9 @@ var DiagramController = (function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
             var value = $(this).val();
-            var property = controller.currentNode.getProperties()[name];
+            var property = controller.currentElement.getProperties()[name];
             property.value = value;
-            controller.currentNode.setProperty(name, property);
+            controller.currentElement.setProperty(name, property);
         });
     };
     DiagramController.prototype.setSpinnerListener = function () {
@@ -401,9 +409,9 @@ var DiagramController = (function () {
             var name = tr.find('td:first').html();
             var value = $(this).val();
             if (value !== "" && !isNaN(value)) {
-                var property = controller.currentNode.getProperties()[name];
+                var property = controller.currentElement.getProperties()[name];
                 property.value = value;
-                controller.currentNode.setProperty(name, property);
+                controller.currentElement.setProperty(name, property);
             }
         });
     };
@@ -429,44 +437,46 @@ var DiagramController = (function () {
                 var image = controller.nodeTypesMap[type].image;
                 var properties = controller.nodeTypesMap[type].properties;
                 var node = controller.createDefaultNode(type, leftElementPos, topElementPos, properties, image);
-                controller.currentNode = node;
+                controller.currentElement = node;
                 controller.setNodeProperties(node);
             }
         });
     };
-    DiagramController.prototype.setNodeProperties = function (node) {
-        var properties = node.getProperties();
+    DiagramController.prototype.setNodeProperties = function (element) {
+        var properties = element.getProperties();
         var content = '';
         for (var property in properties) {
-            content += this.getPropertyHtml(node.getType(), property, properties[property]);
+            content += this.getPropertyHtml(element.getType(), property, properties[property]);
         }
         $('#property_table tbody').html(content);
     };
     DiagramController.prototype.getPropertyHtml = function (typeName, propertyName, property) {
         return PropertyManager.getPropertyHtml(typeName, propertyName, property);
     };
-    DiagramController.prototype.createDefaultNode = function (type, x, y, properties, image) {
-        this.nodeIndex++;
-        var name = "Node" + this.nodeIndex;
-        var node = new DefaultDiagramNode(name, type, x, y, properties, image);
-        this.nodesMap[node.getElement().id] = node;
-        this.graph.addCell(node.getElement());
+    DiagramController.prototype.addLink = function (linkId, linkObject) {
+        this.linksMap[linkId] = linkObject;
+    };
+    DiagramController.prototype.createDefaultNode = function (type, x, y, properties, imagePath, id) {
+        var node = new DefaultDiagramNode(type, x, y, properties, imagePath, id);
+        this.nodesMap[node.getJointObject().id] = node;
+        this.graph.addCell(node.getJointObject());
         return node;
     };
     DiagramController.prototype.clear = function () {
         this.graph.clear();
-        this.nodeIndex = -1;
         this.nodesMap = {};
         $(".property").remove();
-        this.currentNode = undefined;
+        this.currentElement = undefined;
     };
     DiagramController.prototype.removeCurrentElement = function () {
-        if (this.currentNode) {
-            console.log("Node was deleted");
-            delete this.nodesMap[this.currentNode.getElement().id];
-            this.currentNode.getElement().remove();
-            $(".property").remove();
-            this.currentNode = undefined;
+        if (this.currentElement) {
+            var node = this.nodesMap[this.currentElement.getJointObject().id];
+            if (node) {
+                delete this.nodesMap[this.currentElement.getJointObject().id];
+                this.currentElement.getJointObject().remove();
+                $(".property").remove();
+                this.currentElement = undefined;
+            }
         }
     };
     DiagramController.prototype.saveDiagram = function () {
@@ -480,7 +490,7 @@ var DiagramController = (function () {
             url: 'save',
             dataType: 'json',
             contentType: 'application/json',
-            data: (ExportManager.exportDiagramStateToJSON(this.graph, name, this.nodeIndex, this.nodesMap)),
+            data: (ExportManager.exportDiagramStateToJSON(name, this.nodesMap, this.linksMap)),
             success: function (response) {
                 console.log(response.message);
             },
@@ -504,8 +514,7 @@ var DiagramController = (function () {
             data: (JSON.stringify({ name: name })),
             success: function (response) {
                 controller.clear();
-                controller.nodeIndex = ImportManager.import(response, controller.graph, controller.nodesMap, controller.nodeTypesMap);
-                console.log(response.nodeIndex);
+                ImportManager.import(response, controller.graph, controller.nodesMap, controller.linksMap, controller.nodeTypesMap);
             },
             error: function (response, status, error) {
                 if (status === "parsererror") {
@@ -625,131 +634,132 @@ var DropdownListManager = (function () {
 var ExportManager = (function () {
     function ExportManager() {
     }
+    ExportManager.exportDiagramStateToJSON = function (name, nodesMap, linksMap) {
+        var json = {
+            'name': name,
+            'nodes': [],
+            'links': []
+        };
+        ExportManager.exportNodes(json, nodesMap);
+        ExportManager.exportLinks(json, linksMap);
+        return JSON.stringify(json);
+    };
+    ExportManager.exportNodes = function (json, nodesMap) {
+        for (var id in nodesMap) {
+            var node = nodesMap[id];
+            var nodeJSON = {
+                'jointObjectId': node.getJointObject().id,
+                'type': node.getType(),
+                'x': node.getX(),
+                'y': node.getY(),
+                'properties': []
+            };
+            nodeJSON.properties = ExportManager.exportProperties(node.getProperties());
+            json.nodes.push(nodeJSON);
+        }
+    };
+    ExportManager.exportLinks = function (json, linksMap) {
+        for (var id in linksMap) {
+            var link = linksMap[id];
+            var jointObject = link.getJointObject();
+            var vertices = [];
+            if (jointObject.get('vertices')) {
+                vertices = ExportManager.exportVertices(jointObject.get('vertices'));
+            }
+            var linkJSON = {
+                'jointObjectId': jointObject.id,
+                'source': jointObject.get('source').id,
+                'target': jointObject.get('target').id,
+                'vertices': vertices,
+                'properties': []
+            };
+            linkJSON.properties = ExportManager.exportProperties(link.getProperties());
+            json.links.push(linkJSON);
+        }
+    };
+    ExportManager.exportProperties = function (properties) {
+        var propertiesJSON = [];
+        var position = 1;
+        for (var propertyName in properties) {
+            var property = {
+                'name': propertyName,
+                'value': properties[propertyName].value,
+                'type': properties[propertyName].type,
+                'position': position
+            };
+            propertiesJSON.push(property);
+            position++;
+        }
+        return propertiesJSON;
+    };
     ExportManager.exportVertices = function (vertices) {
+        var verticesJSON = [];
         var count = 1;
-        var newVertices = [];
         vertices.forEach(function (vertex) {
-            newVertices.push({
+            verticesJSON.push({
                 x: vertex.x,
                 y: vertex.y,
                 number: count
             });
             count++;
         });
-        return newVertices;
-    };
-    ExportManager.exportDiagramStateToJSON = function (graph, name, nodeIndex, nodesList) {
-        var json = {
-            'name': name,
-            'nodeIndex': nodeIndex,
-            'nodes': [],
-            'links': []
-        };
-        for (var id in nodesList) {
-            if (nodesList.hasOwnProperty(id)) {
-                var node = nodesList[id];
-                var newNode = {
-                    'name': node.getName(),
-                    'type': node.getType(),
-                    'x': node.getX(),
-                    'y': node.getY(),
-                    'properties': []
-                };
-                var properties = node.getProperties();
-                var position = 1;
-                for (var propertyName in properties) {
-                    var property = {
-                        'name': propertyName,
-                        'value': properties[propertyName].value,
-                        'type': properties[propertyName].type,
-                        'position': position
-                    };
-                    newNode.properties.push(property);
-                    position++;
-                }
-                json.nodes.push(newNode);
-            }
-        }
-        graph.getLinks().forEach(function (link) {
-            console.log(link.get('target'));
-            var src = nodesList[link.get('source').id].getName();
-            var target = nodesList[link.get('target').id].getName();
-            var vertices;
-            if (link.get('vertices')) {
-                vertices = ExportManager.exportVertices(link.get('vertices'));
-            }
-            var newLink = {
-                'source': src,
-                'target': target,
-                'vertices': vertices
-            };
-            json.links.push(newLink);
-        });
-        return JSON.stringify(json);
+        return verticesJSON;
     };
     return ExportManager;
 })();
 var ImportManager = (function () {
     function ImportManager() {
     }
-    ImportManager.import = function (response, graph, nodesMap, nodeTypesMap) {
-        console.log("import diagram");
+    ImportManager.import = function (response, graph, nodesMap, linksMap, nodeTypesMap) {
         for (var i = 0; i < response.nodes.length; i++) {
             var nodeObject = response.nodes[i];
-            var properties = {};
-            var propertiesObject = nodeObject.properties;
-            for (var j = 0; j < propertiesObject.length; j++) {
-                var property = new Property(propertiesObject[j].value, propertiesObject[j].type);
-                properties[propertiesObject[j].name] = property;
-            }
-            this.importNode(graph, nodesMap, nodeObject.name, nodeObject.type, nodeObject.x, nodeObject.y, properties, nodeTypesMap[nodeObject.type].image);
+            var properties = ImportManager.importProperties(nodeObject.properties);
+            this.importNode(graph, nodesMap, nodeObject.jointObjectId, nodeObject.type, nodeObject.x, nodeObject.y, properties, nodeTypesMap[nodeObject.type].image);
         }
         for (var i = 0; i < response.links.length; i++) {
             var linkObject = response.links[i];
-            this.importLink(graph, nodesMap, linkObject.source, linkObject.target, linkObject.vertices);
+            var properties = ImportManager.importProperties(linkObject.properties);
+            var vertices = this.importVertices(linkObject.vertices);
+            this.importLink(graph, linksMap, linkObject.jointObjectId, linkObject.source, linkObject.target, vertices, properties);
         }
         return response.nodeIndex;
     };
-    ImportManager.importNode = function (graph, nodesList, name, type, x, y, properties, image) {
-        var node = new DefaultDiagramNode(name, type, x, y, properties, image);
-        nodesList[node.getElement().id] = node;
-        graph.addCell(node.getElement());
+    ImportManager.importProperties = function (propertiesObject) {
+        var properties = {};
+        for (var j = 0; j < propertiesObject.length; j++) {
+            var property = new Property(propertiesObject[j].value, propertiesObject[j].type);
+            properties[propertiesObject[j].name] = property;
+        }
+        return properties;
     };
-    ImportManager.importLink = function (graph, nodesList, sourceNodeId, targetNodeId, vertices) {
-        var sourceId = this.getElementIdByNodeId(nodesList, sourceNodeId);
-        var targetId = this.getElementIdByNodeId(nodesList, targetNodeId);
-        var newVertices = this.importVertices(vertices);
-        var link = new joint.dia.Link({
+    ImportManager.importNode = function (graph, nodesMap, jointObjectId, type, x, y, properties, imagePath) {
+        var node = new DefaultDiagramNode(type, x, y, properties, imagePath, jointObjectId);
+        nodesMap[jointObjectId] = node;
+        graph.addCell(node.getJointObject());
+    };
+    ImportManager.importLink = function (graph, linksMap, jointObjectId, sourceId, targetId, vertices, properties) {
+        var jointObject = new joint.dia.Link({
+            id: jointObjectId,
             attrs: {
                 '.connection': { stroke: 'black' },
                 '.marker-target': { fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z' }
             },
             source: { id: sourceId },
             target: { id: targetId },
-            vertices: newVertices
+            vertices: vertices
         });
-        graph.addCell(link);
+        linksMap[jointObjectId] = new Link(jointObject, properties);
+        graph.addCell(jointObject);
     };
-    ImportManager.importVertices = function (vertices) {
-        var newVertices = [];
-        vertices.forEach(function (vertex) {
-            newVertices.push({
+    ImportManager.importVertices = function (verticesJSON) {
+        var vertices = [];
+        verticesJSON.forEach(function (vertex) {
+            vertices.push({
                 x: vertex.x,
                 y: vertex.y
             });
         });
-        return newVertices;
-    };
-    ImportManager.getElementIdByNodeId = function (nodesList, nodeId) {
-        for (var id in nodesList) {
-            if (nodesList.hasOwnProperty(id)) {
-                var node = nodesList[id];
-                if (node.getName() === nodeId) {
-                    return id;
-                }
-            }
-        }
-        return undefined;
+        return vertices;
     };
     return ImportManager;
 })();
@@ -816,43 +826,39 @@ var PropertyManager = (function () {
     return PropertyManager;
 })();
 var DefaultDiagramNode = (function () {
-    function DefaultDiagramNode(name, type, x, y, properties, image) {
-        this.name = name;
-        this.text = 'Default';
+    function DefaultDiagramNode(type, x, y, properties, imagePath, id) {
         this.type = type;
-        this.element = new joint.shapes.devs.ImageWithPorts({
+        var jointObjectAttributes = {
             position: { x: x, y: y },
             size: { width: 50, height: 50 },
             outPorts: [''],
             attrs: {
                 image: {
-                    'xlink:href': image
+                    'xlink:href': imagePath
                 }
             }
-        });
+        };
+        if (id) {
+            jQuery.extend(jointObjectAttributes, { id: id });
+        }
+        this.jointObject = new joint.shapes.devs.ImageWithPorts(jointObjectAttributes);
         this.properties = properties;
-        this.image = image;
+        this.imagePath = imagePath;
     }
-    DefaultDiagramNode.prototype.setText = function (text) {
-        this.text = text;
-    };
-    DefaultDiagramNode.prototype.getName = function () {
-        return this.name;
-    };
     DefaultDiagramNode.prototype.getType = function () {
         return this.type;
     };
     DefaultDiagramNode.prototype.getX = function () {
-        return (this.element.get("position"))['x'];
+        return (this.jointObject.get("position"))['x'];
     };
     DefaultDiagramNode.prototype.getY = function () {
-        return (this.element.get("position"))['y'];
+        return (this.jointObject.get("position"))['y'];
     };
     DefaultDiagramNode.prototype.getImagePath = function () {
-        return this.image;
+        return this.imagePath;
     };
-    DefaultDiagramNode.prototype.getElement = function () {
-        return this.element;
+    DefaultDiagramNode.prototype.getJointObject = function () {
+        return this.jointObject;
     };
     DefaultDiagramNode.prototype.setProperty = function (name, property) {
         this.properties[name] = property;
@@ -864,7 +870,8 @@ var DefaultDiagramNode = (function () {
 })();
 var DiagramPaper = (function (_super) {
     __extends(DiagramPaper, _super);
-    function DiagramPaper(graph) {
+    function DiagramPaper(controller, graph) {
+        this.controller = controller;
         this.gridSizeValue = 25;
         _super.call(this, {
             el: $('#diagram_paper'),
@@ -883,14 +890,80 @@ var DiagramPaper = (function (_super) {
             },
             validateMagnet: function (cellView, magnet) {
                 return magnet.getAttribute('magnet') !== 'passive';
-            }
+            },
+            diagramElementView: joint.dia.ElementView.extend(this.getDiagramElementView())
         });
     }
     DiagramPaper.prototype.getGridSizeValue = function () {
         return this.gridSizeValue;
     };
+    DiagramPaper.prototype.getDiagramElementView = function () {
+        var controller = this.controller;
+        return jQuery.extend(joint.shapes.basic.PortsViewInterface, {
+            pointerdown: function (evt, x, y) {
+                if (evt.target.getAttribute('magnet') && this.paper.options.validateMagnet.call(this.paper, this, evt.target)) {
+                    this.model.trigger('batch:start');
+                    var link = this.paper.getDefaultLink(this, evt.target);
+                    if (evt.target.tagName === "circle") {
+                        link.set({
+                            source: {
+                                id: this.model.id
+                            },
+                            target: { x: x, y: y }
+                        });
+                    }
+                    else {
+                        link.set({
+                            source: {
+                                id: this.model.id,
+                                selector: this.getSelector(evt.target),
+                                port: $(evt.target).attr('port')
+                            },
+                            target: { x: x, y: y }
+                        });
+                    }
+                    var linkObject = new Link(link);
+                    controller.addLink(link.id, linkObject);
+                    this.paper.model.addCell(link);
+                    this._linkView = this.paper.findViewByModel(link);
+                    this._linkView.startArrowheadMove('target');
+                }
+                else {
+                    this._dx = x;
+                    this._dy = y;
+                    joint.dia.CellView.prototype.pointerdown.apply(this, arguments);
+                }
+            }
+        });
+    };
     return DiagramPaper;
 })(joint.dia.Paper);
+var Link = (function () {
+    function Link(jointObject, properties) {
+        this.properties = {};
+        this.type = "Link";
+        this.jointObject = jointObject;
+        if (properties) {
+            this.properties = properties;
+        }
+        else {
+            this.properties["Guard"] = new Property("", "dropdown");
+        }
+    }
+    Link.prototype.getJointObject = function () {
+        return this.jointObject;
+    };
+    Link.prototype.getType = function () {
+        return this.type;
+    };
+    Link.prototype.getProperties = function () {
+        return this.properties;
+    };
+    Link.prototype.setProperty = function (name, property) {
+        this.properties[name] = property;
+    };
+    return Link;
+})();
 var NodeType = (function () {
     function NodeType() {
     }

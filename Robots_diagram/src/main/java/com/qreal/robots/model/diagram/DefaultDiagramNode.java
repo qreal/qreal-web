@@ -17,8 +17,8 @@ public class DefaultDiagramNode implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long nodeId;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "joint_object_id")
+    private String jointObjectId;
 
     @Column(name = "type")
     private String type;
@@ -42,12 +42,12 @@ public class DefaultDiagramNode implements Serializable {
         this.nodeId = nodeId;
     }
 
-    public String getName() {
-        return name;
+    public String getJointObjectId() {
+        return jointObjectId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setJointObjectId(String jointObjectId) {
+        this.jointObjectId = jointObjectId;
     }
 
     public String getType() {

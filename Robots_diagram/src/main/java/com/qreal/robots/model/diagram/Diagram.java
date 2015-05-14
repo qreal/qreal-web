@@ -21,9 +21,6 @@ public class Diagram implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "node_index")
-    private Long nodeIndex;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username", nullable = false)
     private User creator;
@@ -51,14 +48,6 @@ public class Diagram implements Serializable {
 
     public void setDiagramId(Long diagramId) {
         this.diagramId = diagramId;
-    }
-
-    public Long getNodeIndex() {
-        return nodeIndex;
-    }
-
-    public void setNodeIndex(Long nodeIndex) {
-        this.nodeIndex = nodeIndex;
     }
 
     public Set<DefaultDiagramNode> getNodes() {

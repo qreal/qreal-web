@@ -1,11 +1,11 @@
 class DiagramController {
     private graph: joint.dia.Graph = new joint.dia.Graph;
-    private paper: DiagramPaper = new DiagramPaper(this.graph);
+    private paper: DiagramPaper = new DiagramPaper(this, this.graph);
 
     private nodeTypesMap: NodeTypesMap = {};
     private nodesMap = {};
-    private currentNode: DiagramNode;
-    private nodeIndex: number = -1;
+    private linksMap = {};
+    private currentElement: DiagramElement;
     private isPaletteLoaded = false;
 
     constructor($scope, $compile) {
@@ -13,16 +13,24 @@ class DiagramController {
         $scope.vm = controller;
         PaletteLoader.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
 
+        DropdownListManager.addDropdownList("Link", "Guard", ["", "fasle", "iteration", "true"]);
+
         this.paper.on('cell:pointerdown',
             function (cellView, evt, x, y) {
                 console.log('cell view ' + cellView.model.id + ' was clicked');
 
-                var node:DiagramNode = controller.nodesMap[cellView.model.id];
+                var node: DiagramNode = controller.nodesMap[cellView.model.id];
                 if (node) {
-                    controller.currentNode = node;
+                    controller.currentElement = node;
                     controller.setNodeProperties(node);
                 } else {
-                    controller.currentNode = undefined;
+                    var link: Link = controller.linksMap[cellView.model.id];
+                    if (link) {
+                        controller.currentElement = link;
+                        controller.setNodeProperties(link);
+                    } else {
+                        controller.currentElement = undefined;
+                    }
                 }
             }
         );
@@ -30,7 +38,7 @@ class DiagramController {
             function (evt, x, y) {
                 console.log('blank was clicked');
                 $(".property").remove();
-                controller.currentNode = undefined;
+                controller.currentElement = undefined;
             }
         );
     }
@@ -66,9 +74,9 @@ class DiagramController {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
             var value = $(this).val();
-            var property: Property = controller.currentNode.getProperties()[name];
+            var property: Property = controller.currentElement.getProperties()[name];
             property.value = value;
-            controller.currentNode.setProperty(name, property);
+            controller.currentElement.setProperty(name, property);
         });
     }
 
@@ -86,9 +94,9 @@ class DiagramController {
                 value = "True"
                 label.contents().last()[0].textContent = value;
             }
-            var property: Property = controller.currentNode.getProperties()[name];
+            var property: Property = controller.currentElement.getProperties()[name];
             property.value = value;
-            controller.currentNode.setProperty(name, property);
+            controller.currentElement.setProperty(name, property);
         });
     }
 
@@ -98,9 +106,9 @@ class DiagramController {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
             var value = $(this).val();
-            var property: Property = controller.currentNode.getProperties()[name];
+            var property: Property = controller.currentElement.getProperties()[name];
             property.value = value;
-            controller.currentNode.setProperty(name, property);
+            controller.currentElement.setProperty(name, property);
         });
     }
 
@@ -111,9 +119,9 @@ class DiagramController {
             var name = tr.find('td:first').html();
             var value = $(this).val();
             if (value !== "" && !isNaN(value)) {
-                var property: Property = controller.currentNode.getProperties()[name];
+                var property: Property = controller.currentElement.getProperties()[name];
                 property.value = value;
-                controller.currentNode.setProperty(name, property);
+                controller.currentElement.setProperty(name, property);
             }
         });
     }
@@ -141,17 +149,17 @@ class DiagramController {
                 var image: string = controller.nodeTypesMap[type].image;
                 var properties: PropertiesMap = controller.nodeTypesMap[type].properties;
                 var node = controller.createDefaultNode(type, leftElementPos, topElementPos, properties, image);
-                controller.currentNode = node;
+                controller.currentElement = node;
                 controller.setNodeProperties(node);
             }
         });
     }
 
-    setNodeProperties(node: DiagramNode): void {
-        var properties: PropertiesMap = node.getProperties();
+    setNodeProperties(element): void {
+        var properties: PropertiesMap = element.getProperties();
         var content: string = '';
         for (var property in properties) {
-            content += this.getPropertyHtml(node.getType(), property, properties[property]);
+            content += this.getPropertyHtml(element.getType(), property, properties[property]);
         }
         $('#property_table tbody').html(content);
     }
@@ -160,30 +168,34 @@ class DiagramController {
         return PropertyManager.getPropertyHtml(typeName, propertyName, property);
     }
 
-    createDefaultNode(type: string, x: number, y: number, properties: PropertiesMap, image: string): DefaultDiagramNode {
-        this.nodeIndex++;
-        var name: string = "Node" + this.nodeIndex;
-        var node: DefaultDiagramNode = new DefaultDiagramNode(name, type, x, y, properties, image);
-        this.nodesMap[node.getElement().id] = node;
-        this.graph.addCell(node.getElement());
+    addLink(linkId: string, linkObject: Link) {
+        this.linksMap[linkId] = linkObject;
+    }
+
+    createDefaultNode(type: string, x: number, y: number, properties: PropertiesMap,
+                      imagePath: string, id?: string): DefaultDiagramNode {
+        var node: DefaultDiagramNode = new DefaultDiagramNode(type, x, y, properties, imagePath, id);
+        this.nodesMap[node.getJointObject().id] = node;
+        this.graph.addCell(node.getJointObject());
         return node;
     }
 
     clear(): void {
         this.graph.clear();
-        this.nodeIndex = -1;
         this.nodesMap = {};
         $(".property").remove();
-        this.currentNode = undefined;
+        this.currentElement = undefined;
     }
 
     removeCurrentElement(): void {
-        if (this.currentNode) {
-            console.log("Node was deleted");
-            delete this.nodesMap[this.currentNode.getElement().id];
-            this.currentNode.getElement().remove();
-            $(".property").remove();
-            this.currentNode = undefined;
+        if (this.currentElement) {
+            var node = this.nodesMap[this.currentElement.getJointObject().id];
+            if (node) {
+                delete this.nodesMap[this.currentElement.getJointObject().id];
+                this.currentElement.getJointObject().remove();
+                $(".property").remove();
+                this.currentElement = undefined;
+            }
         }
     }
 
@@ -198,7 +210,7 @@ class DiagramController {
             url: 'save',
             dataType: 'json',
             contentType: 'application/json',
-            data: (ExportManager.exportDiagramStateToJSON(this.graph, name, this.nodeIndex, this.nodesMap)),
+            data: (ExportManager.exportDiagramStateToJSON(name, this.nodesMap, this.linksMap)),
             success: function (response) {
                 console.log(response.message);
             },
@@ -223,9 +235,8 @@ class DiagramController {
             data: (JSON.stringify({name: name})),
             success: function (response) {
                 controller.clear();
-                controller.nodeIndex = ImportManager.import(response, controller.graph,
-                    controller.nodesMap, controller.nodeTypesMap);
-                console.log(response.nodeIndex);
+                ImportManager.import(response, controller.graph, controller.nodesMap,
+                    controller.linksMap, controller.nodeTypesMap);
             },
             error: function (response, status, error) {
                 if (status === "parsererror") {
