@@ -51,6 +51,7 @@
 /// <reference path="interpreter/Blocks/initialBlock.ts" />
 /// <reference path="interpreter/Factory.ts" />
 /// <reference path="interpreter/InterpretManager.ts" />
+/// <reference path="interpreter/Parser/Parser.ts" />
 /// <reference path="twoDModel/implementations/engine/TwoDModelEngineApiImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/TwoDModelEngineFacadeImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/items/EllipseItemImpl.ts" />

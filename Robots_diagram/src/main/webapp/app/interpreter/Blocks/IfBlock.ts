@@ -1,6 +1,6 @@
 class IfBlock extends Block {
-    static run(node, graph, nodesList): string {
-        var output = "If: " + node.getName() + "\n";
+    static run(node, graph, nodesList, env): string {
+        var output = "If" + "\n";
         var condition = "";
         var nodeId = InterpretManager.getIdByNode(node, nodesList);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
@@ -11,7 +11,15 @@ class IfBlock extends Block {
                 condition = properties[p].value;
             }
         }
-        output += "Condition: " + condition + "\n";
+
+        var parser = new Parser(condition, env);
+        parser.parseExpression();
+        if (parser.error == null) {
+            output += "Condition: " + parser.result + "\n";
+        }
+        else {
+            output += "Condition: " + parser.error + "\n";
+        }
 
         if (links.length == 2) {
            // var nextNode = nodesList[links[0].get('target').id];

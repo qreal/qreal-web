@@ -1,6 +1,6 @@
 class Motors extends Block {
-    static run(node, graph, nodesList, forward): string {
-        var output = "Motors forward/backward: " + node.getName() + "\n";
+    static run(node, graph, nodesList, forward, env): string {
+        var output = "Motors forward/backward" + "\n";
         var ports = [];
         var power = 0;
         var nodeId = InterpretManager.getIdByNode(node, nodesList);
@@ -19,7 +19,7 @@ class Motors extends Block {
 
         if (links.length == 1) {
              var nextNode = nodesList[links[0].get('target').id];
-             output += Factory.run(nextNode, graph, nodesList);
+             output += Factory.run(nextNode, graph, nodesList, env);
         }
         else if (links.length > 1) {
             output += "Error: too many links\n";

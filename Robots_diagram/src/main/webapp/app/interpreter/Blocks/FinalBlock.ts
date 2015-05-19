@@ -1,6 +1,6 @@
 class FinalBlock extends Block {
     static run(node, graph): string {
-        var output = "Final: " + node.getName() + "\n";
+        var output = "Final" + "\n";
         return output;
     }
 }

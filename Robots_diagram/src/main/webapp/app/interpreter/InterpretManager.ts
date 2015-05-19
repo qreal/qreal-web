@@ -3,12 +3,13 @@ class InterpretManager {
         var elements = graph.getElements();
         var links = graph.getLinks();
         var output = "";
+        var env = {};
 
         if (elements.length > 0) {
             if (links.length > 0) {
                 var firstNodeId = InterpretManager.findInitialNode(nodesList);
                 if (firstNodeId != "") {
-                    output += Factory.run(nodesList[firstNodeId], graph, nodesList);
+                    output += Factory.run(nodesList[firstNodeId], graph, nodesList, env);
                 }
                 else {
                     output += "No initial node";
