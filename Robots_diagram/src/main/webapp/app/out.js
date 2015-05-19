@@ -320,7 +320,7 @@ var DiagramController = (function () {
         var controller = this;
         $scope.vm = controller;
         PaletteLoader.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
-        DropdownListManager.addDropdownList("Link", "Guard", ["", "fasle", "iteration", "true"]);
+        DropdownListManager.addDropdownList("Link", "Guard", ["", "false", "iteration", "true"]);
         this.paper.on('cell:pointerdown', function (cellView, evt, x, y) {
             console.log('cell view ' + cellView.model.id + ' was clicked');
             var node = controller.nodesMap[cellView.model.id];

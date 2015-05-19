@@ -13,7 +13,7 @@ class DiagramController {
         $scope.vm = controller;
         PaletteLoader.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
 
-        DropdownListManager.addDropdownList("Link", "Guard", ["", "fasle", "iteration", "true"]);
+        DropdownListManager.addDropdownList("Link", "Guard", ["", "false", "iteration", "true"]);
 
         this.paper.on('cell:pointerdown',
             function (cellView, evt, x, y) {
