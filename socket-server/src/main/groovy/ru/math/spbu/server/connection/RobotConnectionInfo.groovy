@@ -10,7 +10,6 @@ import groovy.transform.TupleConstructor
 class RobotConnectionInfo {
 
     String ssid
-    List<Message> messages
     def robotJson
     Socket socket
 }

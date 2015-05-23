@@ -15,10 +15,11 @@ import java.util.concurrent.ConcurrentHashMap
 class RobotsConnectionInfoManager {
 
     Map<String, RobotConnectionInfo> robotConnections = new ConcurrentHashMap<>()
+    Map<String, List<Message>> robotMessages = new ConcurrentHashMap<>()
 
 
     def createRobotConnection(String ssid, def desc, Socket socket) {
-        RobotConnectionInfo robotsConnectionInfo = new RobotConnectionInfo(robotJson: desc, socket: socket, ssid: ssid, messages: [])
+        RobotConnectionInfo robotsConnectionInfo = new RobotConnectionInfo(robotJson: desc, socket: socket, ssid: ssid)
         def key = ssid
         robotConnections.put(key, robotsConnectionInfo)
     }
@@ -47,32 +48,31 @@ class RobotsConnectionInfoManager {
 
 
     def addMessage(String key, Message message) {
-        if (!robotConnections.containsKey(key)) {
-            log.error "Unable to add message. Robot is offline"
-            return
+        if (robotMessages.containsKey(key)) {
+            robotMessages.get(key).add(message);
+        } else {
+            robotMessages.put(key, [message])
         }
-        RobotConnectionInfo info = robotConnections.get(key)
-        info.messages.add(message)
     }
 
     def hasMessage(String key) {
-        if (!robotConnections.containsKey(key)) {
+        if (!robotMessages.containsKey(key)) {
             return false
         }
-        RobotConnectionInfo robotConnectionInfo = robotConnections.get(key)
-        return robotConnectionInfo.messages.size() > 0;
+        return robotMessages.get(key).size() > 0;
     }
 
     def getMessages(String key) {
-        if (!robotConnections.containsKey(key)) {
+        if (!robotMessages.containsKey(key)) {
             throw new IllegalArgumentException("Unable to find messages for robot $key")
         }
-        return JsonOutput.toJson(robotConnections.get(key).messages)
+        return JsonOutput.toJson(robotMessages.get(key))
     }
 
     def markAsRead(String key) {
-        RobotConnectionInfo robotConnectionInfo = robotConnections.get(key)
-        robotConnectionInfo.messages = []
+        if (robotMessages.containsKey(key)) {
+            robotMessages.remove(key)
+        }
     }
 
 
