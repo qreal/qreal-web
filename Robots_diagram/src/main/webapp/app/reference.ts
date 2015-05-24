@@ -42,7 +42,6 @@
 /// <reference path="diagram/types/NodeTypesMap.ts" />
 /// <reference path="diagram/types/PropertiesMap.ts" />
 /// <reference path="diagram/types/Property.ts" />
-/// <reference path="generator/codeGenerator.ts" />
 /// <reference path="interpreter/Blocks/FinalBlock.ts" />
 /// <reference path="interpreter/Blocks/FunctionBlock.ts" />
 /// <reference path="interpreter/Blocks/IfBlock.ts" />

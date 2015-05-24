@@ -318,6 +318,7 @@ var DiagramController = (function () {
         this.linksMap = {};
         this.isPaletteLoaded = false;
         var controller = this;
+        DiagramController.instance = this;
         $scope.vm = controller;
         PaletteLoader.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
         DropdownListManager.addDropdownList("Link", "Guard", ["", "false", "iteration", "true"]);
@@ -345,6 +346,9 @@ var DiagramController = (function () {
             controller.currentElement = undefined;
         });
     }
+    DiagramController.getInstance = function () {
+        return DiagramController.instance;
+    };
     DiagramController.prototype.setNodeTypesMap = function (nodeTypesMap) {
         this.nodeTypesMap = nodeTypesMap;
     };
@@ -448,6 +452,13 @@ var DiagramController = (function () {
                 controller.setNodeProperties(node);
             }
         });
+    };
+    DiagramController.prototype.createNode = function (type) {
+        var image = this.nodeTypesMap[type].image;
+        var properties = this.nodeTypesMap[type].properties;
+        var node = this.createDefaultNode(type, 0, 0, properties, image);
+        this.currentElement = node;
+        this.setNodeProperties(node);
     };
     DiagramController.prototype.setNodeProperties = function (element) {
         var properties = element.getProperties();

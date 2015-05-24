@@ -7,9 +7,11 @@ class DiagramController {
     private linksMap = {};
     private currentElement: DiagramElement;
     private isPaletteLoaded = false;
+    private static instance: DiagramController;
 
     constructor($scope, $compile) {
         var controller: DiagramController = this;
+        DiagramController.instance = this;
         $scope.vm = controller;
         PaletteLoader.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
 
@@ -41,6 +43,10 @@ class DiagramController {
                 controller.currentElement = undefined;
             }
         );
+    }
+
+    public static getInstance(): DiagramController {
+        return DiagramController.instance;
     }
 
     setNodeTypesMap(nodeTypesMap: NodeTypesMap): void {
@@ -153,6 +159,14 @@ class DiagramController {
                 controller.setNodeProperties(node);
             }
         });
+    }
+
+    createNode(type): void {
+        var image: string = this.nodeTypesMap[type].image;
+        var properties: PropertiesMap = this.nodeTypesMap[type].properties;
+        var node = this.createDefaultNode(type, 0, 0, properties, image);
+        this.currentElement = node;
+        this.setNodeProperties(node);
     }
 
     setNodeProperties(element): void {
