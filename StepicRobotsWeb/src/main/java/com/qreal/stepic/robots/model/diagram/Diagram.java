@@ -1,5 +1,8 @@
 package com.qreal.stepic.robots.model.diagram;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.util.Set;
 
@@ -8,7 +11,8 @@ import java.util.Set;
  */
 public class Diagram implements Serializable {
 
-    public Diagram(Set<DiagramNode> nodes, Set<DiagramNode> links) {
+    @JsonCreator
+    public Diagram(@JsonProperty("nodes") Set<DiagramNode> nodes, @JsonProperty("links") Set<DiagramNode> links) {
         this.nodes = nodes;
         this.links = links;
     }

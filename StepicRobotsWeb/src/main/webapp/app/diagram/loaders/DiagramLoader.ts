@@ -42,7 +42,7 @@ class DiagramLoader {
                     }
                 }
 
-                this.loadNode(graph, nodesMap, nodeObject.logicalId, nodeObject.type, x + offsetX, y + offsetY,
+                this.loadNode(graph, nodesMap, nodeObject.graphicalId, nodeObject.type, x + offsetX, y + offsetY,
                     logicalProperties, nodeTypesMap[nodeObject.type].image);
             }
         }
@@ -68,12 +68,6 @@ class DiagramLoader {
 
         for (var j = 0; j < logicalPropertiesObject.length; j++) {
             switch (logicalPropertiesObject[j].name) {
-                case "from":
-                    sourceId = this.parseId(logicalPropertiesObject[j].value);
-                    break;
-                case "to":
-                    targetId = this.parseId(logicalPropertiesObject[j].value);
-                    break
                 case "Guard":
                     var property: Property = new Property("Guard", logicalPropertiesObject[j].value, "dropdown");
                     properties["Guard"] = property;
@@ -81,8 +75,31 @@ class DiagramLoader {
         }
 
         var graphicalPropertiesObject = linkObject.graphicalProperties;
-        var vertices =  this.loadVertices(graphicalPropertiesObject, offsetX, offsetY);
-        var jointObjectId = linkObject.logicalId;
+        var vertices = [];
+        var linkPosition: {x: number; y: number};
+
+        for (var j = 0; j < graphicalPropertiesObject.length; j++) {
+            switch (graphicalPropertiesObject[j].name) {
+                case "from":
+                    sourceId = this.parseId(graphicalPropertiesObject[j].value);
+                    break;
+                case "to":
+                    targetId = this.parseId(graphicalPropertiesObject[j].value);
+                    break
+                case "position":
+                    linkPosition = this.parsePosition(graphicalPropertiesObject[j].value);
+                    break
+                case "configuration":
+                    vertices = this.loadVertices(graphicalPropertiesObject[j].value);
+            }
+        }
+
+        vertices.forEach(function (vertex: {x: number; y: number}) {
+            vertex.x += linkPosition.x + offsetX;
+            vertex.y += linkPosition.y + offsetY;
+        });
+
+        var jointObjectId = linkObject.graphicalId;
 
         var jointObject: joint.dia.Link = new joint.dia.Link({
             id: jointObjectId,
@@ -99,35 +116,20 @@ class DiagramLoader {
         graph.addCell(jointObject);
     }
 
-    static loadVertices(graphicalPropertiesObject, offsetX: number, offsetY: number) {
+    static loadVertices(configuration: string) {
         var vertices = [];
-        var linkPosition: {x: number; y: number};
-        for (var j = 0; j < graphicalPropertiesObject.length; j++) {
-            if (graphicalPropertiesObject[j].name === "configuration") {
-                var configuration: string = graphicalPropertiesObject[j].value;
-                var parts = configuration.split(" : ");
+        var parts = configuration.split(" : ");
 
-                for (var k = 1; k < parts.length - 2; k++) {
-                    var positionNums = this.parsePosition(parts[k]);
+        for (var k = 1; k < parts.length - 2; k++) {
+            var positionNums = this.parsePosition(parts[k]);
 
-                    vertices.push(
-                        {
-                            x : positionNums.x,
-                            y : positionNums.y
-                        }
-                    )
+            vertices.push(
+                {
+                    x: positionNums.x,
+                    y: positionNums.y
                 }
-            }
-            if (graphicalPropertiesObject[j].name === "position") {
-                linkPosition = this.parsePosition(graphicalPropertiesObject[j].value);
-            }
+            )
         }
-
-        vertices.forEach(function (vertex: {x: number; y: number}) {
-            vertex.x += linkPosition.x + offsetX;
-            vertex.y += linkPosition.y + offsetY;
-        });
-
         return vertices;
     }
 

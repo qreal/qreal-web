@@ -1,5 +1,8 @@
 package com.qreal.stepic.robots.model.diagram;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 /**
@@ -7,7 +10,10 @@ import java.io.Serializable;
  */
 public class Property implements Serializable {
 
-    public Property(String name, String value, String type) {
+    @JsonCreator
+    public Property(@JsonProperty("name") String name,
+                    @JsonProperty("value") String value,
+                    @JsonProperty("type") String type) {
         this.name = name;
         this.value = value;
         this.type = type;

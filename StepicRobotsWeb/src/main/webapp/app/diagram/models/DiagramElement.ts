@@ -1,4 +1,5 @@
 interface DiagramElement {
+    getLogicalId(): string;
     getJointObject();
     getType(): string;
     getProperties(): PropertiesMap;

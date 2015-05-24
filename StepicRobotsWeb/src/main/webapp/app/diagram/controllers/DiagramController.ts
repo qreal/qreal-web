@@ -19,7 +19,7 @@ class DiagramController {
         controller.taskId = $attrs.task;
         PaletteLoader.loadElementsFromXml(controller, "tasks/" + controller.taskId + "/elements.xml", $scope, $compile);
 
-        DropdownListManager.addDropdownList("Link", "Guard", ["", "fasle", "iteration", "true"]);
+        DropdownListManager.addDropdownList("Link", "Guard", ["", "false", "iteration", "true"]);
 
         this.paper.on('cell:pointerdown',
             function (cellView, evt, x, y) {
@@ -229,7 +229,8 @@ class DiagramController {
             url: 'submit',
             dataType: 'json',
             contentType: 'application/json',
-            data: (JSON.stringify({id: controller.taskId})),
+            data: (JSON.stringify({id: controller.taskId,
+                diagram: ExportManager.exportDiagramStateToJSON(controller.nodesMap, controller.linksMap)})),
             success: function (response) {
                 $scope.$emit("emitDisplayTrace", response);
             },

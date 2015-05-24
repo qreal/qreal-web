@@ -1,9 +1,11 @@
 class Link implements DiagramElement {
+    private logicalId: string;
     private jointObject: joint.dia.Link;
     private properties: PropertiesMap = {};
     private type = "Link";
 
     constructor(jointObject: joint.dia.Link, properties?: PropertiesMap) {
+        this.logicalId = UIDGenerator.generate();
         this.jointObject = jointObject;
 
         if (properties) {
@@ -12,6 +14,10 @@ class Link implements DiagramElement {
         else {
             this.properties["Guard"] = new Property("Guard", "", "dropdown");
         }
+    }
+
+    getLogicalId(): string {
+        return this.logicalId;
     }
 
     getJointObject() {

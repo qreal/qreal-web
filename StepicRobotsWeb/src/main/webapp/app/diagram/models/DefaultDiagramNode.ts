@@ -2,12 +2,14 @@
  * Created by vladzx on 10.10.14.
  */
 class DefaultDiagramNode implements DiagramNode {
+    private logicalId: string;
     private jointObject: joint.shapes.devs.ImageWithPorts;
     private type: string;
     private properties: PropertiesMap;
     private imagePath: string;
 
     constructor(type: string, x: number, y: number, properties: PropertiesMap, imagePath: string, id?: string) {
+        this.logicalId = UIDGenerator.generate();
         this.type = type;
 
         var jointObjectAttributes = {
@@ -28,6 +30,10 @@ class DefaultDiagramNode implements DiagramNode {
         this.jointObject = new joint.shapes.devs.ImageWithPorts(jointObjectAttributes);
         this.properties = properties;
         this.imagePath = imagePath;
+    }
+
+    getLogicalId(): string {
+        return this.logicalId;
     }
 
     getType(): string {
