@@ -101,7 +101,7 @@ class SensorItem implements AbstractItem {
                 }
                 sensorItem.updateTransformationString();
                 return this;
-            }
+            };
         this.image.drag(move, start, up);
         this.hideHandles();
     }

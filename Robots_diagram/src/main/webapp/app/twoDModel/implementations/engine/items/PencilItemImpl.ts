@@ -1,6 +1,6 @@
 class PencilItemImpl {
     private path: RaphaelPath;
-    private pathArray = new Array();
+    private pathArray = [];
 
     constructor(worldModel: WorldModel, xStart: number, yStart: number, width: number, color: string) {
         var paper = worldModel.getPaper();

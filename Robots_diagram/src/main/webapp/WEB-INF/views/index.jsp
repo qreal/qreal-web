@@ -65,7 +65,7 @@
                     url: 'sendDiagram',
                     data: data,
                     success: function (data) {
-                        $('#sendDiagramModal-' + robotName).modal('hide')
+                        $('#sendDiagramModal-' + robotName).modal('hide');
                         alert("Successfully sent ");
                     },
                     error: function (response, status, error) {
@@ -93,7 +93,7 @@
                     o.push(obj); // push in the "o" object created
                 });
 
-                var typeProperties = []
+                var typeProperties = [];
                 $('[name="propertyForm-' + robotName + '"]').each(function (index, value) {
                     var obj = {};
                     obj["type"] = $(value).attr("id").substring(5);

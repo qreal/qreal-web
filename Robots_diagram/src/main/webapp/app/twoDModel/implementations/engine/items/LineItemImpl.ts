@@ -63,9 +63,9 @@ class LineItemImpl implements LineItem {
         var startPath = function () {
                 if (!worldModel.getDrawMode()) {
                     this.startX = line.pathArray[0][1];
-                    this.startY = line.pathArray[0][2]
+                    this.startY = line.pathArray[0][2];
                     this.endX = line.pathArray[1][1];
-                    this.endY = line.pathArray[1][2]
+                    this.endY = line.pathArray[1][2];
                     this.ox = this.attr("x");
                     this.oy = this.attr("y");
                     worldModel.setCurrentElement(line);

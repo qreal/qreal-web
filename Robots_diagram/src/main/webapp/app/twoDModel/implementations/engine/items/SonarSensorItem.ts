@@ -11,10 +11,10 @@ class SonarSensorItem extends SensorItem {
         var defaultPosition = this.getDefaultPosition();
 
         this.regionStartX = defaultPosition.x + this.width / 2;
-        this.regionStartY = defaultPosition.y + this.height / 2
+        this.regionStartY = defaultPosition.y + this.height / 2;
 
         var regAngle = 20;
-        var halfRegAngleInRad = regAngle / 2 * (Math.PI / 180)
+        var halfRegAngleInRad = regAngle / 2 * (Math.PI / 180);
 
         var rangeInPixels = this.sonarRange * Constants.pixelsInCm;
 

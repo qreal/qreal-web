@@ -18,10 +18,10 @@ class RobotItemImpl implements RobotItem {
         var paper = worldModel.getPaper();
         this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
 
-        this.center.x = position.x + this.width / 2
+        this.center.x = position.x + this.width / 2;
         this.center.y = position.y + this.height / 2;
 
-        this.startCenter.x = this.center.x
+        this.startCenter.x = this.center.x;
         this.startCenter.y = this.center.y;
 
         var handleRadius: number = 10;
@@ -113,7 +113,7 @@ class RobotItemImpl implements RobotItem {
                     robotItem.updateSensorsTransformations();
                 }
                 return this;
-            }
+            };
         this.image.drag(move, start, up);
         this.hideHandles();
     }
@@ -121,9 +121,9 @@ class RobotItemImpl implements RobotItem {
     setStartPosition(position: TwoDPosition, direction: number): void {
         this.startPosition = position;
         this.image.attr({x: position.x, y: position.y});
-        this.center.x = position.x + this.width / 2
+        this.center.x = position.x + this.width / 2;
         this.center.y = position.y + this.height / 2;
-        this.startCenter.x = this.center.x
+        this.startCenter.x = this.center.x;
         this.startCenter.y = this.center.y;
         this.image.transform("R" + direction + "," + this.center.x + "," + this.center.y);
         this.rotateHandle.attr({"cx": + position.x + this.width + 20, "cy": position.y + this.height / 2 });

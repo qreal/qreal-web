@@ -93,7 +93,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
                 switch (newValue) {
                     case "Unused":
                         sensorsConfiguration.removeSensor(portName);
-                        break
+                        break;
                     default:
                         var device = DeviceInfoImpl.fromString(newValue);
                         sensorsConfiguration.addSensor(portName, device);

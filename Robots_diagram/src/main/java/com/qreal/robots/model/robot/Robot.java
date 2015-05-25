@@ -77,9 +77,8 @@ public class Robot {
 
         Robot robot = (Robot) o;
 
-        if (!name.equals(robot.name)) return false;
+        return name.equals(robot.name);
 
-        return true;
     }
 
     @Override

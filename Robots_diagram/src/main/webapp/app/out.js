@@ -318,12 +318,16 @@ var DiagramController = (function () {
         this.linksMap = {};
         this.isPaletteLoaded = false;
         var controller = this;
-        DiagramController.instance = this;
         $scope.vm = controller;
         PaletteLoader.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
         DropdownListManager.addDropdownList("Link", "Guard", ["", "false", "iteration", "true"]);
+        DiagramController.loadGestures();
+        DiagramController.flagDraw = false;
+        DiagramController.flagDraw = false;
+        DiagramController.list = [];
+        console.log(window.location.href.toString());
         this.paper.on('cell:pointerdown', function (cellView, evt, x, y) {
-            console.log('cell view ' + cellView.model.id + ' was clicked');
+            console.log('cell view ' + cellView.model.id + ' was clicked 123');
             var node = controller.nodesMap[cellView.model.id];
             if (node) {
                 controller.currentElement = node;
@@ -341,13 +345,66 @@ var DiagramController = (function () {
             }
         });
         this.paper.on('blank:pointerdown', function (evt, x, y) {
-            console.log('blank was clicked');
+            console.log('alt was clicked');
+            var n = DiagramController.d.getTime();
+            DiagramController.currentTime = n;
+            DiagramController.flagAdd = false;
+            clearTimeout(DiagramController.timer);
+            DiagramController.flagDraw = true;
+            console.log(DiagramController.flagDraw.toString());
             $(".property").remove();
             controller.currentElement = undefined;
         });
+        this.example = document.getElementById('diagram_paper');
+        this.onMouseUp = controller.onMouseUp.bind(this);
+        document.addEventListener('mouseup', this.onMouseUp);
+        this.onMouseUp = controller.onMouseMove.bind(this);
+        this.example.addEventListener('mousemove', this.onMouseMove);
     }
-    DiagramController.getInstance = function () {
-        return DiagramController.instance;
+    DiagramController.smoothing = function (pair1, pair2, diff) {
+        var a = 1;
+        var c = 0.0275;
+        var b = Math.exp(-c * diff);
+        return new utils.Pair(pair2.first * b + (1 - b) * pair1.first, pair2.second + (1 - b) * pair1.second);
+    };
+    DiagramController.prototype.onMouseMove = function (e) {
+        var controller = this;
+        if (DiagramController.flagDraw === false)
+            return;
+        var p = new utils.Pair(e.pageX, e.pageY);
+        if (DiagramController.flagAdd) {
+            var currentPair = DiagramController.list[DiagramController.list.length - 1];
+            var n = DiagramController.d.getTime();
+            var diff = n - DiagramController.currentTime;
+            DiagramController.currentTime = n;
+            p = DiagramController.smoothing(currentPair, new utils.Pair(e.pageX, e.pageY), diff);
+            $('#diagram_paper').line(currentPair.first, currentPair.second, p.first, p.second);
+        }
+        DiagramController.flagAdd = true;
+        DiagramController.list.push(p);
+        console.log("move");
+        console.log(DiagramController.list[DiagramController.list.length - 1].first.toString());
+    };
+    DiagramController.prototype.onMouseUp = function () {
+        var _this = this;
+        if (DiagramController.flagDraw === false)
+            return;
+        var controller = this;
+        DiagramController.flagDraw = false;
+        DiagramController.timer = setTimeout(function () { return _this.finishDraw(); }, 1000);
+        console.log("mouseup");
+        console.log(DiagramController.list[0].first.toString());
+    };
+    DiagramController.prototype.finishDraw = function () {
+        if (DiagramController.flagDraw === true)
+            return;
+        var o = document.getElementsByClassName('pencil');
+        for (var i = o.length; i > 0; i--) {
+            o[i - 1].parentNode.removeChild(o[i - 1]);
+        }
+        var keyG = new KeyGiver(DiagramController.list, DiagramController.data);
+        var newKey = keyG.getKey();
+        DiagramController.list = [];
     };
     DiagramController.prototype.setNodeTypesMap = function (nodeTypesMap) {
         this.nodeTypesMap = nodeTypesMap;
@@ -453,13 +510,6 @@ var DiagramController = (function () {
             }
         });
     };
-    DiagramController.prototype.createNode = function (type) {
-        var image = this.nodeTypesMap[type].image;
-        var properties = this.nodeTypesMap[type].properties;
-        var node = this.createDefaultNode(type, 0, 0, properties, image);
-        this.currentElement = node;
-        this.setNodeProperties(node);
-    };
     DiagramController.prototype.setNodeProperties = function (element) {
         var properties = element.getProperties();
         var content = '';
@@ -549,8 +599,202 @@ var DiagramController = (function () {
         $("#diagramContent").hide();
         $("#twoDModelContent").show();
     };
+    DiagramController.downloadData = function (url, success) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.onreadystatechange = function (e) {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200) {
+                    success(xhr);
+                }
+            }
+        };
+        xhr.send();
+    };
+    DiagramController.loadGestures = function () {
+        var url = "app/gestures.json";
+        DiagramController.downloadData(url, DiagramController.processGestures.bind(this));
+    };
+    DiagramController.processGestures = function (xhr) {
+        var fileData = JSON.parse(xhr.responseText);
+        DiagramController.data = [];
+        for (var i = 0; i < fileData.length; i++)
+            DiagramController.data[i] = new Gesture(fileData[i].name, fileData[i].key, fileData[i].factor);
+    };
+    DiagramController.flagDraw = false;
+    DiagramController.list = [];
+    DiagramController.d = new Date();
     return DiagramController;
 })();
+var Gesture = (function () {
+    function Gesture(newName, newKey, newFactor) {
+        this.newName = newName;
+        this.newKey = newKey;
+        this.newFactor = newFactor;
+        this.name = newName;
+        this.key = newKey;
+        this.factor = newFactor;
+    }
+    return Gesture;
+})();
+var KeyGiver = (function () {
+    function KeyGiver(newList, oldGesture) {
+        this.newList = newList;
+        this.oldGesture = oldGesture;
+        this.list = [];
+        this.listS = [];
+        this.gestures = oldGesture;
+        this.list = newList;
+        this.minX = newList[0].first;
+        this.minY = newList[0].second;
+        this.maxX = newList[0].first;
+        this.maxY = newList[0].second;
+        for (var i = 1; i < this.list.length; i++) {
+            if (this.list[i].first < this.minX)
+                this.minX = this.list[i].first;
+            if (this.list[i].first > this.maxX)
+                this.maxX = this.list[i].first;
+            if (this.list[i].second < this.minY)
+                this.minY = this.list[i].second;
+            if (this.list[i].second > this.maxY)
+                this.maxY = this.list[i].second;
+        }
+        if (this.maxX - this.minX > this.maxY - this.minY) {
+            var ratio = (this.maxY - this.minY) / (this.maxX - this.minX);
+            var midValue = (this.maxY + this.minY) / 2;
+            for (var i = 0; i < this.list.length; i++) {
+                this.list[i].second = midValue - (midValue - this.list[i].second) * ratio;
+            }
+        }
+        if (this.maxX - this.minX < this.maxY - this.minY) {
+            var ratio = (this.maxX - this.minX) / (this.maxY - this.minY);
+            var midValue = (this.maxX + this.minX) / 2;
+            for (var i = 0; i < this.list.length; i++) {
+                this.list[i].first = midValue - (midValue - this.list[i].first) * ratio;
+            }
+        }
+        this.minX = newList[0].first;
+        this.minY = newList[0].second;
+        for (var i = 1; i < this.list.length; i++) {
+            if (this.list[i].first < this.minX)
+                this.minX = this.list[i].first;
+            if (this.list[i].second < this.minY)
+                this.minY = this.list[i].second;
+        }
+    }
+    KeyGiver.prototype.getSymbol = function (pair) {
+        var curAr1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+        var curNumX = pair.first - this.minX;
+        var curNumY = pair.second - this.minY;
+        return curAr1[Math.floor(curNumX * 9 / (this.maxX + 1 - this.minX))] + +(Math.floor(curNumY * 9 / Math.floor(this.maxY + 1 - this.minY)));
+    };
+    KeyGiver.prototype.getKey = function () {
+        var key = [];
+        var index = 0;
+        var str1 = this.getSymbol(this.list[0]);
+        key[index] = str1;
+        index++;
+        for (var i = 1; i < this.list.length; i++) {
+            var str2 = this.getSymbol(this.list[i]);
+            if (str2 != str1) {
+                str1 = str2;
+                key[index] = str1;
+                index++;
+            }
+        }
+        key.sort();
+        for (var i = key.length - 2; i >= 0; i--) {
+            if (key[i] === key[i + 1])
+                key.splice(i, 1);
+        }
+        console.log(key.toString());
+        this.isGesture(key);
+        return key;
+    };
+    KeyGiver.prototype.isGesture = function (key) {
+        var result = 1000;
+        var num = -1;
+        for (var i = 0; i < this.gestures.length; i++) {
+            var curr = this.gestures[i];
+            this.prevKey = i - 1;
+            var curRes = this.levenshtein(this.gestures[i].key, key) / Math.max(this.gestures[i].key.length, key.length);
+            while (this.prevKey >= 0 && this.levenshtein(this.gestures[this.prevKey].key, key) / Math.max(this.gestures[this.prevKey].key.length, key.length) > curRes) {
+                this.gestures[this.prevKey + 1] = this.gestures[this.prevKey];
+                this.gestures[this.prevKey] = curr;
+                this.prevKey--;
+            }
+        }
+        var str = "";
+        this.prevKey = 0;
+        while (this.prevKey < this.gestures.length) {
+            var t = 0;
+            var q = Math.max(this.gestures[this.prevKey].key.length, key.length);
+            t = this.levenshtein(this.gestures[this.prevKey].key, key) / q;
+            if (t > this.gestures[this.prevKey].factor)
+                break;
+            this.prevKey++;
+        }
+        if (this.prevKey === 0)
+            return;
+        for (var i = 0; i < this.prevKey; ++i)
+            str += this.gestures[i].name + "\n";
+        var names = new Array();
+        for (var i = 0; i < this.prevKey; ++i)
+            names[i] = this.gestures[i].name;
+        console.log("Gesture!!! " + str);
+    };
+    KeyGiver.prototype.levenshtein = function (s1, s2) {
+        var ans = 0;
+        for (var i = 0; i < s1.length; i++) {
+            var minDist = 1000;
+            for (var j = 0; j < s2.length; j++) {
+                var d1 = Math.abs(s1[i].charCodeAt(0) - s2[j].charCodeAt(0));
+                var d2 = Math.abs(s1[i][1] - s2[j][1]);
+                if (d1 + d2 < minDist)
+                    minDist = d1 + d2;
+            }
+            ans += minDist;
+        }
+        for (var i = 0; i < s2.length; i++) {
+            var minDist = 1000;
+            for (var j = 0; j < s1.length; j++) {
+                var d1 = Math.abs(s2[i].charCodeAt(0) - s1[j].charCodeAt(0));
+                var d2 = Math.abs(s2[i][1] - s1[j][1]);
+                if (d1 + d2 < minDist)
+                    minDist = d1 + d2;
+            }
+            ans += minDist;
+        }
+        return ans / 2;
+    };
+    return KeyGiver;
+})();
+var utils;
+(function (utils) {
+    var Pair = (function () {
+        function Pair(newFirst, newSecond) {
+            this.newFirst = newFirst;
+            this.newSecond = newSecond;
+            this.first = newFirst;
+            this.second = newSecond;
+        }
+        return Pair;
+    })();
+    utils.Pair = Pair;
+    var PairString = (function () {
+        function PairString(curString) {
+            this.curString = curString;
+            var index = curString.indexOf(" ");
+            this.first = curString.substr(0, index);
+            this.second = curString.substr(index, curString.length - index);
+        }
+        PairString.prototype.getString = function () {
+            return this.first + " - " + this.second;
+        };
+        return PairString;
+    })();
+    utils.PairString = PairString;
+})(utils || (utils = {}));
 var PaletteLoader = (function () {
     function PaletteLoader() {
     }
@@ -1973,7 +2217,7 @@ var LineItemImpl = (function () {
 })();
 var PencilItemImpl = (function () {
     function PencilItemImpl(worldModel, xStart, yStart, width, color) {
-        this.pathArray = new Array();
+        this.pathArray = [];
         var paper = worldModel.getPaper();
         this.pathArray[0] = ["M", xStart, yStart];
         this.path = paper.path(this.pathArray);

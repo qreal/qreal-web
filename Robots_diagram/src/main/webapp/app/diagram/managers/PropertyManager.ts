@@ -31,7 +31,7 @@ class PropertyManager {
         if (property.value === "True") {
             state = "checked";
         }
-        content += '<label class="active"><input type="checkbox" ' + state + ' >' + property.value + '</label>'
+        content += '<label class="active"><input type="checkbox" ' + state + ' >' + property.value + '</label>';
         content += '</div></td></tr>';
         return content;
     }
