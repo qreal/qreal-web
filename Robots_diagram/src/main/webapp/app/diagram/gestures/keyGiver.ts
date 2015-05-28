@@ -114,14 +114,12 @@ class KeyGiver {
 		if (this.prevKey === 0)
 			return;
 
-		for (var i = 0; i < this.prevKey; ++i)
-			str += this.gestures[i].name + "\n";
-
 		var names = new Array();
 		for (var i = 0; i < this.prevKey; ++i)
 			names[i] = this.gestures[i].name;
 
-		console.log("Gesture!!! " + str);
+		if (names.length)
+			DiagramController.getInstance().createNode(names[0]);
 	}
 
 	// Calculate levenshtain's distance between s1 and s2

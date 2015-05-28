@@ -16,10 +16,12 @@ class DiagramController {
     static d : Date = new Date();
     static data : Gesture[];
     static flagAdd : boolean;
+    private static instance: DiagramController;
 
     constructor($scope, $compile) {
 
         var controller: DiagramController = this;
+        DiagramController.instance = this;
         $scope.vm = controller;
         PaletteLoader.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
 
@@ -78,6 +80,10 @@ class DiagramController {
         this.onMouseUp = <any>controller.onMouseMove.bind(this);
         this.example.addEventListener('mousemove', this.onMouseMove);
 
+    }
+
+    public static getInstance(): DiagramController {
+        return DiagramController.instance;
     }
 
     static smoothing(pair1 : utils.Pair, pair2 : utils.Pair, diff : number) {
@@ -271,6 +277,14 @@ class DiagramController {
         this.nodesMap[node.getJointObject().id] = node;
         this.graph.addCell(node.getJointObject());
         return node;
+    }
+
+    createNode(type): void {
+        var image: string = this.nodeTypesMap[type].image;
+        var properties: PropertiesMap = this.nodeTypesMap[type].properties;
+        var node = this.createDefaultNode(type, 0, 0, properties, image);
+        this.currentElement = node;
+        this.setNodeProperties(node);
     }
 
     clear(): void {

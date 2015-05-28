@@ -318,6 +318,7 @@ var DiagramController = (function () {
         this.linksMap = {};
         this.isPaletteLoaded = false;
         var controller = this;
+        DiagramController.instance = this;
         $scope.vm = controller;
         PaletteLoader.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
         DropdownListManager.addDropdownList("Link", "Guard", ["", "false", "iteration", "true"]);
@@ -361,6 +362,9 @@ var DiagramController = (function () {
         this.onMouseUp = controller.onMouseMove.bind(this);
         this.example.addEventListener('mousemove', this.onMouseMove);
     }
+    DiagramController.getInstance = function () {
+        return DiagramController.instance;
+    };
     DiagramController.smoothing = function (pair1, pair2, diff) {
         var a = 1;
         var c = 0.0275;
@@ -529,6 +533,13 @@ var DiagramController = (function () {
         this.nodesMap[node.getJointObject().id] = node;
         this.graph.addCell(node.getJointObject());
         return node;
+    };
+    DiagramController.prototype.createNode = function (type) {
+        var image = this.nodeTypesMap[type].image;
+        var properties = this.nodeTypesMap[type].properties;
+        var node = this.createDefaultNode(type, 0, 0, properties, image);
+        this.currentElement = node;
+        this.setNodeProperties(node);
     };
     DiagramController.prototype.clear = function () {
         this.graph.clear();
@@ -736,12 +747,11 @@ var KeyGiver = (function () {
         }
         if (this.prevKey === 0)
             return;
-        for (var i = 0; i < this.prevKey; ++i)
-            str += this.gestures[i].name + "\n";
         var names = new Array();
         for (var i = 0; i < this.prevKey; ++i)
             names[i] = this.gestures[i].name;
-        console.log("Gesture!!! " + str);
+        if (names.length)
+            DiagramController.getInstance().createNode(names[0]);
     };
     KeyGiver.prototype.levenshtein = function (s1, s2) {
         var ans = 0;
