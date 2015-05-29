@@ -171,7 +171,7 @@
 
                     <tr>
                         <td colspan="2">
-                            <button class="twoDModel_button" style="width: 204px; height: 70px;">
+                            <button class="twoDModel_button" style="width: 204px; height: 70px;" ng-click="vm.start()">
                                 <img src="images/2dmodel/2d_run.png"
                                      style="width: 40px; height: 40px; vertical-align: middle"/>
                             </button>
