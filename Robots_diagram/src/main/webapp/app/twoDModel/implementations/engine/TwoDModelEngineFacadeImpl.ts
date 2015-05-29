@@ -1,6 +1,7 @@
 class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
     private robotModelName: string;
     private model: Model;
+    private scope;
 
     constructor($scope, $compile) {
         $scope.vm = this;
@@ -21,6 +22,8 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
             facade.initPortsConfigation($scope, $compile, robotModel);
             facade.makeUnselectable(document.getElementById("twoDModelContent"));
         });
+
+        this.scope = $scope;
     }
 
     private makeUnselectable(element) {
@@ -59,6 +62,13 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         $("#diagramContent").show();
     }
 
+    start() {
+        var timeline = this.model.getTimeline();
+
+        this.scope.$emit("timeline", timeline);
+        //timeline.start();
+        //setTimeout(function() { timeline.stop(); }, 5000);
+    }
 
     initPortsConfigation($scope, $compile, twoDRobotModel: TwoDRobotModel): void {
         var configurationDropdownsContent = "<p>";

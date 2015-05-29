@@ -41,6 +41,10 @@ class DiagramController {
                 controller.currentElement = undefined;
             }
         );
+
+        $scope.$on("interpret", function(event, timeline) {
+            console.log(InterpretManager.interpret(controller.graph, controller.nodesMap, controller.linksMap, timeline));
+        });
     }
 
     setNodeTypesMap(nodeTypesMap: NodeTypesMap): void {
@@ -148,7 +152,15 @@ class DiagramController {
                 var type: string = $(ui.draggable.context).text();
                 var image: string = controller.nodeTypesMap[type].image;
                 var properties: PropertiesMap = controller.nodeTypesMap[type].properties;
-                var node = controller.createDefaultNode(type, leftElementPos, topElementPos, properties, image);
+
+                ///////////////////////////////////////////////////////////////////////////////////
+                var newProperties: PropertiesMap = {};
+                for (var prop in properties) {
+                    newProperties[prop] = new Property("", properties[prop].type);
+                }
+                ///////////////////////////////////////////////////////////////////////////////////
+
+                var node = controller.createDefaultNode(type, leftElementPos, topElementPos, newProperties, image);
                 controller.currentElement = node;
                 controller.setNodeProperties(node);
             }
@@ -245,10 +257,6 @@ class DiagramController {
                 console.log("error: " + status + " " + error);
             }
         });
-    }
-
-    interpretDiagram(): void {
-        alert(InterpretManager.interpret(this.graph, this.nodesMap));
     }
 
     openTwoDModel(): void {
