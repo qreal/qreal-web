@@ -1,5 +1,5 @@
 class InterpretManager {
-    static interpret(graph: joint.dia.Graph, nodesList): string {
+    static interpret(graph: joint.dia.Graph, nodesMap, linksMap, timeline): string {
         var elements = graph.getElements();
         var links = graph.getLinks();
         var output = "";
@@ -7,9 +7,10 @@ class InterpretManager {
 
         if (elements.length > 0) {
             if (links.length > 0) {
-                var firstNodeId = InterpretManager.findInitialNode(nodesList);
+                var firstNodeId = InterpretManager.findInitialNode(nodesMap);
                 if (firstNodeId != "") {
-                    output += Factory.run(nodesList[firstNodeId], graph, nodesList, env);
+                    timeline.start();
+                    output += Factory.run(nodesMap[firstNodeId], graph, nodesMap, linksMap, env, timeline);
                 }
                 else {
                     output += "No initial node";
@@ -26,11 +27,11 @@ class InterpretManager {
         return output;
     }
 
-    static findInitialNode(nodesList) {
+    static findInitialNode(nodesMap) {
         var firstNodeId = "";
-        for (var id in nodesList) {
-            if (nodesList.hasOwnProperty(id)) {
-                var node = nodesList[id];
+        for (var id in nodesMap) {
+            if (nodesMap.hasOwnProperty(id)) {
+                var node = nodesMap[id];
                 if (node.type == "Initial Node") {
                     firstNodeId = id;
                     break;
@@ -46,10 +47,10 @@ class InterpretManager {
         return outboundLinks;
     }
 
-    static getIdByNode(node, nodesList): string {
-        for (var property in nodesList) {
-            if (nodesList.hasOwnProperty(property)) {
-                if (nodesList[property] === node)
+    static getIdByNode(node, nodesMap): string {
+        for (var property in nodesMap) {
+            if (nodesMap.hasOwnProperty(property)) {
+                if (nodesMap[property] === node)
                     return property;
             }
     }

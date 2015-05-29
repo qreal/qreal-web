@@ -1,33 +1,37 @@
 class Factory {
-    static run(node, graph, nodesList, env): string {
+    static run(node, graph, nodesMap, linksMap, env, timeline): string {
         var output = "";
         switch (node.type) {
             case "Initial Node":
-                output += InitialBlock.run(node, graph, nodesList, env);
+                output += InitialBlock.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;
 
             case "Final Node":
-                output += FinalBlock.run(node, graph);
+                output += FinalBlock.run(node, graph, timeline);
                 break;
 
             case "Condition":
-                output += IfBlock.run(node, graph, nodesList, env);
+                output += IfBlock.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;
 
             case "Function":
-                output += FunctionBlock.run(node, graph, nodesList, env);
+                output += FunctionBlock.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;
 
             case "Motors Forward":
-                output += Motors.run(node, graph, nodesList, true, env);
+                output += Motors.run(node, graph, nodesMap, linksMap, true, env, timeline);
                 break;
 
             case "Motors Backward":
-                output += Motors.run(node, graph, nodesList, false, env);
+                output += Motors.run(node, graph, nodesMap, linksMap, false, env, timeline);
                 break;
 
             case "Stop Motors":
-                output += MotorsStop.run(node, graph, nodesList, env);
+                output += MotorsStop.run(node, graph, nodesMap, linksMap, env, timeline);
+                break;
+
+            case "Timer":
+                output += Timer.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;
 
             default:
