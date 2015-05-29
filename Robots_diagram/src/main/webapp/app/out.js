@@ -648,6 +648,17 @@ var Gesture = (function () {
     }
     return Gesture;
 })();
+var context_menu = new ContextMenu();
+var StandardsCustomEvent = (function () {
+    function StandardsCustomEvent() {
+    }
+    StandardsCustomEvent.get = function (eventType, data) {
+        var customEvent = CustomEvent;
+        var event = new customEvent(eventType, data);
+        return event;
+    };
+    return StandardsCustomEvent;
+})();
 var KeyGiver = (function () {
     function KeyGiver(newList, oldGesture) {
         this.newList = newList;
@@ -750,8 +761,41 @@ var KeyGiver = (function () {
         var names = new Array();
         for (var i = 0; i < this.prevKey; ++i)
             names[i] = this.gestures[i].name;
-        if (names.length)
-            DiagramController.getInstance().createNode(names[0]);
+        var getItems = function () {
+            var items = new Array();
+            for (var i = 0; i < this.prevKey; ++i) {
+                items.push({ "name": names[i], "action": function (text) {
+                    DiagramController.getInstance().createNode(text);
+                }.bind(null, names[i]) });
+            }
+            return items;
+        };
+        var x = StandardsCustomEvent.get("myevent", {
+            detail: {
+                message: "Hello World!",
+                time: new Date(),
+            },
+            bubbles: true,
+            cancelable: true
+        });
+        function temp(keyGiver, e) {
+            e.preventDefault();
+            var menuDiv = document.createElement("div");
+            menuDiv.style.top = "200px";
+            menuDiv.style.left = "200px";
+            menuDiv.style.width = "320px";
+            menuDiv.style.height = "240px";
+            menuDiv.style.position = "absolute";
+            menuDiv.style["z-index"] = 100;
+            document.body.appendChild(menuDiv);
+            context_menu.showMenu("myevent", menuDiv, getItems.bind(keyGiver)());
+        }
+        var diagramPaper = document.getElementById('diagram_paper');
+        var bindTemp = temp.bind(null, this);
+        diagramPaper.addEventListener("myevent", bindTemp, false);
+        diagramPaper.setAttribute("oncontextmenu", "javascript: context_menu.showMenu('myevent', this, getItems());");
+        diagramPaper.dispatchEvent(x);
+        diagramPaper.removeEventListener("myevent", bindTemp, false);
     };
     KeyGiver.prototype.levenshtein = function (s1, s2) {
         var ans = 0;
