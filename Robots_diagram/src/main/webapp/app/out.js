@@ -268,6 +268,9 @@ var RootDiagramController = (function () {
         $scope.root = this;
         this.realModel = new TrikRobotModelBase();
         this.robotModel = new TwoDRobotModel(this.realModel, "model");
+        $scope.$on("timeline", function (event, timeline) {
+            $scope.$broadcast("interpret", timeline);
+        });
     }
     RootDiagramController.prototype.setRobotModel = function (robotModel) {
         this.robotModel = robotModel;
@@ -343,6 +346,9 @@ var DiagramController = (function () {
             console.log('blank was clicked');
             $(".property").remove();
             controller.currentElement = undefined;
+        });
+        $scope.$on("interpret", function (event, timeline) {
+            console.log(InterpretManager.interpret(controller.graph, controller.nodesMap, controller.linksMap, timeline));
         });
     }
     DiagramController.prototype.setNodeTypesMap = function (nodeTypesMap) {
@@ -443,7 +449,11 @@ var DiagramController = (function () {
                 var type = $(ui.draggable.context).text();
                 var image = controller.nodeTypesMap[type].image;
                 var properties = controller.nodeTypesMap[type].properties;
-                var node = controller.createDefaultNode(type, leftElementPos, topElementPos, properties, image);
+                var newProperties = {};
+                for (var prop in properties) {
+                    newProperties[prop] = new Property("", properties[prop].type);
+                }
+                var node = controller.createDefaultNode(type, leftElementPos, topElementPos, newProperties, image);
                 controller.currentElement = node;
                 controller.setNodeProperties(node);
             }
@@ -530,9 +540,6 @@ var DiagramController = (function () {
                 console.log("error: " + status + " " + error);
             }
         });
-    };
-    DiagramController.prototype.interpretDiagram = function () {
-        alert(InterpretManager.interpret(this.graph, this.nodesMap));
     };
     DiagramController.prototype.openTwoDModel = function () {
         $("#diagramContent").hide();
@@ -988,8 +995,9 @@ var FinalBlock = (function (_super) {
     function FinalBlock() {
         _super.apply(this, arguments);
     }
-    FinalBlock.run = function (node, graph) {
+    FinalBlock.run = function (node, graph, timeline) {
         var output = "Final" + "\n";
+        timeline.stop();
         return output;
     };
     return FinalBlock;
@@ -999,8 +1007,8 @@ var FunctionBlock = (function (_super) {
     function FunctionBlock() {
         _super.apply(this, arguments);
     }
-    FunctionBlock.run = function (node, graph, nodesList, env) {
-        var nodeId = InterpretManager.getIdByNode(node, nodesList);
+    FunctionBlock.run = function (node, graph, nodesMap, linksMap, env, timeline) {
+        var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
         var output = "Function: ";
         var properties = node.getProperties();
@@ -1010,6 +1018,7 @@ var FunctionBlock = (function (_super) {
             if (properties.hasOwnProperty(p)) {
                 if (p == "Body") {
                     body = properties[p].value;
+                    output += body + "\n";
                 }
                 else if (p == "Initialization") {
                     initialization = properties[p].value;
@@ -1025,10 +1034,11 @@ var FunctionBlock = (function (_super) {
             output += parser.error + "\n";
         }
         else if (links.length == 1) {
-            var nextNode = nodesList[links[0].get('target').id];
-            output += Factory.run(nextNode, graph, nodesList, env) + "\n";
+            var nextNode = nodesMap[links[0].get('target').id];
+            output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
         }
         else {
+            output += "Error: more than one link from Function node";
         }
         return output;
     };
@@ -1039,17 +1049,11 @@ var IfBlock = (function (_super) {
     function IfBlock() {
         _super.apply(this, arguments);
     }
-    IfBlock.run = function (node, graph, nodesList, env) {
+    IfBlock.run = function (node, graph, nodesMap, linksMap, env, timeline) {
         var output = "If" + "\n";
-        var condition = "";
-        var nodeId = InterpretManager.getIdByNode(node, nodesList);
+        var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
-        var properties = node.getProperties();
-        for (var p in properties) {
-            if (p == "Condition") {
-                condition = properties[p].value;
-            }
-        }
+        var condition = IfBlock.getCondition(node);
         var parser = new Parser(condition, env);
         parser.parseExpression();
         if (parser.error == null) {
@@ -1059,10 +1063,57 @@ var IfBlock = (function (_super) {
             output += "Condition: " + parser.error + "\n";
         }
         if (links.length == 2) {
+            var link0 = links[0];
+            var link1 = links[1];
+            var link0Guard = IfBlock.getGuard(linksMap[link0.id]);
+            var link1Guard = IfBlock.getGuard(linksMap[link1.id]);
+            var nextNode;
+            if (link0Guard == "true" && link1Guard == "false") {
+                if (parser.result) {
+                    nextNode = nodesMap[link0.get('target').id];
+                }
+                else {
+                    nextNode = nodesMap[link1.get('target').id];
+                }
+                output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+            }
+            else if (link0Guard == "false" && link1Guard == "true") {
+                if (parser.result) {
+                    nextNode = nodesMap[link1.get('target').id];
+                }
+                else {
+                    nextNode = nodesMap[link0.get('target').id];
+                }
+                output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+            }
+            else {
+                output += "Error: there must be both true and false links";
+            }
         }
         else {
+            output += "Error: must be 2 links from If Node";
         }
         return output;
+    };
+    IfBlock.getCondition = function (node) {
+        var condition = "";
+        var properties = node.getProperties();
+        for (var p in properties) {
+            if (p == "Condition") {
+                condition = properties[p].value;
+            }
+        }
+        return condition;
+    };
+    IfBlock.getGuard = function (link) {
+        var guard = "";
+        var properties = link.getProperties();
+        for (var p in properties) {
+            if (p == "Guard") {
+                guard = properties[p].value;
+            }
+        }
+        return guard;
     };
     return IfBlock;
 })(Block);
@@ -1071,28 +1122,66 @@ var Motors = (function (_super) {
     function Motors() {
         _super.apply(this, arguments);
     }
-    Motors.run = function (node, graph, nodesList, forward, env) {
+    Motors.run = function (node, graph, nodesMap, linksMap, forward, env, timeline) {
         var output = "Motors forward/backward" + "\n";
         var ports = [];
         var power = 0;
-        var nodeId = InterpretManager.getIdByNode(node, nodesList);
+        var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
         var properties = node.getProperties();
         for (var p in properties) {
             if (p == "Ports") {
-                ports += properties[p].value.split(", ");
+                ports = properties[p].value.replace(/ /g, '').split(",");
             }
             if (p == "Power (%)") {
-                power = parseInt(properties[p].value);
+                var parser = new Parser(properties[p].value, env);
+                parser.parseExpression();
+                if (parser.error == null) {
+                    power = parser.result;
+                    if (power < 0 || power > 100) {
+                        output += "Error: incorrect power value";
+                    }
+                    else {
+                        output += "Ports: " + ports + "\n" + "Power: " + power + "\n";
+                        power = (forward) ? power : -power;
+                        var models = timeline.getRobotModels();
+                        var model = models[0];
+                        if (ports.length == 1) {
+                            if (ports[0] == "M3") {
+                                model.setMotor1(power);
+                            }
+                            else if (ports[0] == "M4") {
+                                model.setMotor2(power);
+                            }
+                            else {
+                                output += "Error: Incorrect port name";
+                            }
+                        }
+                        else if (ports.length == 2) {
+                            if (ports[0] == "M3" && ports[1] == "M4" || ports[0] == "M4" && ports[1] == "M3") {
+                                model.setMotor1(power);
+                                model.setMotor2(power);
+                            }
+                            else {
+                                output += "Error: Incorrect port names";
+                            }
+                        }
+                        else {
+                            output += "Error: Incorrect number of ports";
+                        }
+                        if (links.length == 1) {
+                            var nextNode = nodesMap[links[0].get('target').id];
+                            output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline);
+                        }
+                        else if (links.length > 1) {
+                            output += "Error: too many links\n";
+                        }
+                    }
+                }
+                else {
+                    output += "Error: " + parser.error + "\n";
+                }
             }
-        }
-        output += "Ports: " + ports + "\n" + "Power: " + power + "\n";
-        if (links.length == 1) {
-            var nextNode = nodesList[links[0].get('target').id];
-            output += Factory.run(nextNode, graph, nodesList, env);
-        }
-        else if (links.length > 1) {
-            output += "Error: too many links\n";
         }
         return output;
     };
@@ -1103,21 +1192,46 @@ var MotorsStop = (function (_super) {
     function MotorsStop() {
         _super.apply(this, arguments);
     }
-    MotorsStop.run = function (node, graph, nodesList, env) {
+    MotorsStop.run = function (node, graph, nodesMap, linksMap, env, timeline) {
         var output = "Motors stop" + "\n";
         var ports = [];
-        var nodeId = InterpretManager.getIdByNode(node, nodesList);
+        var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
         var properties = node.getProperties();
         for (var p in properties) {
             if (p == "Ports") {
-                ports += properties[p].value.split(",");
+                ports += properties[p].value.replace(/ /g, '').split(",");
             }
         }
         output += "Ports: " + ports + "\n";
+        var models = timeline.getRobotModels();
+        var model = models[0];
+        if (ports.length == 1) {
+            if (ports[0] == "M3") {
+                model.setMotor1(0);
+            }
+            else if (ports[0] == "M4") {
+                model.setMotor2(0);
+            }
+            else {
+                output += "Error: Incorrect port name";
+            }
+        }
+        else if (ports.length == 2) {
+            if (ports[0] == "M3" && ports[1] == "M4" || ports[0] == "M4" && ports[1] == "M3") {
+                model.setMotor1(0);
+                model.setMotor2(0);
+            }
+            else {
+                output += "Error: Incorrect port names";
+            }
+        }
+        else {
+            output += "Error: Incorrect number of ports";
+        }
         if (links.length == 1) {
-            var nextNode = nodesList[links[0].get('target').id];
-            output += Factory.run(nextNode, graph, nodesList, env);
+            var nextNode = nodesMap[links[0].get('target').id];
+            output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline);
         }
         else if (links.length > 1) {
             output += "Error: too many links\n";
@@ -1137,18 +1251,60 @@ var SmileBlock = (function (_super) {
     };
     return SmileBlock;
 })(Block);
+var Timer = (function (_super) {
+    __extends(Timer, _super);
+    function Timer() {
+        _super.apply(this, arguments);
+    }
+    Timer.run = function (node, graph, nodesMap, linksMap, env, timeline) {
+        var output = "Timer" + "\n";
+        var delay = 0;
+        var nodeId = InterpretManager.getIdByNode(node, nodesMap);
+        var links = InterpretManager.getOutboundLinks(graph, nodeId);
+        var properties = node.getProperties();
+        for (var p in properties) {
+            if (p == "Delay (ms)") {
+                var parser = new Parser(properties[p].value, env);
+                parser.parseExpression();
+                if (parser.error == null) {
+                    delay = parser.result;
+                    if (delay < 0) {
+                        output += "Error: incorrect delay value";
+                    }
+                    else {
+                        output += "Delay: " + delay + "\n";
+                        if (links.length == 1) {
+                            var nextNode = nodesMap[links[0].get('target').id];
+                            setTimeout(function () {
+                                output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline);
+                            }, delay);
+                        }
+                        else if (links.length > 1) {
+                            output += "Error: too many links\n";
+                        }
+                    }
+                }
+                else {
+                    output += "Error: " + parser.error + "\n";
+                }
+            }
+        }
+        return output;
+    };
+    return Timer;
+})(Block);
 var InitialBlock = (function (_super) {
     __extends(InitialBlock, _super);
     function InitialBlock() {
         _super.apply(this, arguments);
     }
-    InitialBlock.run = function (node, graph, nodesList, env) {
+    InitialBlock.run = function (node, graph, nodesMap, linksMap, env, timeline) {
         var output = "Initial" + "\n";
-        var nodeId = InterpretManager.getIdByNode(node, nodesList);
+        var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
         if (links.length == 1) {
-            var nextNode = nodesList[links[0].get('target').id];
-            output += Factory.run(nextNode, graph, nodesList, env) + "\n";
+            var nextNode = nodesMap[links[0].get('target').id];
+            output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
         }
         else if (links.length > 1) {
             output += "Error: too many links\n";
@@ -1160,29 +1316,32 @@ var InitialBlock = (function (_super) {
 var Factory = (function () {
     function Factory() {
     }
-    Factory.run = function (node, graph, nodesList, env) {
+    Factory.run = function (node, graph, nodesMap, linksMap, env, timeline) {
         var output = "";
         switch (node.type) {
             case "Initial Node":
-                output += InitialBlock.run(node, graph, nodesList, env);
+                output += InitialBlock.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;
             case "Final Node":
-                output += FinalBlock.run(node, graph);
+                output += FinalBlock.run(node, graph, timeline);
                 break;
             case "Condition":
-                output += IfBlock.run(node, graph, nodesList, env);
+                output += IfBlock.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;
             case "Function":
-                output += FunctionBlock.run(node, graph, nodesList, env);
+                output += FunctionBlock.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;
             case "Motors Forward":
-                output += Motors.run(node, graph, nodesList, true, env);
+                output += Motors.run(node, graph, nodesMap, linksMap, true, env, timeline);
                 break;
             case "Motors Backward":
-                output += Motors.run(node, graph, nodesList, false, env);
+                output += Motors.run(node, graph, nodesMap, linksMap, false, env, timeline);
                 break;
             case "Stop Motors":
-                output += MotorsStop.run(node, graph, nodesList, env);
+                output += MotorsStop.run(node, graph, nodesMap, linksMap, env, timeline);
+                break;
+            case "Timer":
+                output += Timer.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;
             default:
                 output += "Not yet";
@@ -1194,16 +1353,17 @@ var Factory = (function () {
 var InterpretManager = (function () {
     function InterpretManager() {
     }
-    InterpretManager.interpret = function (graph, nodesList) {
+    InterpretManager.interpret = function (graph, nodesMap, linksMap, timeline) {
         var elements = graph.getElements();
         var links = graph.getLinks();
         var output = "";
         var env = {};
         if (elements.length > 0) {
             if (links.length > 0) {
-                var firstNodeId = InterpretManager.findInitialNode(nodesList);
+                var firstNodeId = InterpretManager.findInitialNode(nodesMap);
                 if (firstNodeId != "") {
-                    output += Factory.run(nodesList[firstNodeId], graph, nodesList, env);
+                    timeline.start();
+                    output += Factory.run(nodesMap[firstNodeId], graph, nodesMap, linksMap, env, timeline);
                 }
                 else {
                     output += "No initial node";
@@ -1218,11 +1378,11 @@ var InterpretManager = (function () {
         }
         return output;
     };
-    InterpretManager.findInitialNode = function (nodesList) {
+    InterpretManager.findInitialNode = function (nodesMap) {
         var firstNodeId = "";
-        for (var id in nodesList) {
-            if (nodesList.hasOwnProperty(id)) {
-                var node = nodesList[id];
+        for (var id in nodesMap) {
+            if (nodesMap.hasOwnProperty(id)) {
+                var node = nodesMap[id];
                 if (node.type == "Initial Node") {
                     firstNodeId = id;
                     break;
@@ -1236,10 +1396,10 @@ var InterpretManager = (function () {
         var outboundLinks = graph.getConnectedLinks(e, { outbound: true });
         return outboundLinks;
     };
-    InterpretManager.getIdByNode = function (node, nodesList) {
-        for (var property in nodesList) {
-            if (nodesList.hasOwnProperty(property)) {
-                if (nodesList[property] === node)
+    InterpretManager.getIdByNode = function (node, nodesMap) {
+        for (var property in nodesMap) {
+            if (nodesMap.hasOwnProperty(property)) {
+                if (nodesMap[property] === node)
                     return property;
             }
         }
@@ -1615,6 +1775,7 @@ var TwoDModelEngineFacadeImpl = (function () {
             facade.initPortsConfigation($scope, $compile, robotModel);
             facade.makeUnselectable(document.getElementById("twoDModelContent"));
         });
+        this.scope = $scope;
     }
     TwoDModelEngineFacadeImpl.prototype.makeUnselectable = function (element) {
         if (element.nodeType == 1) {
@@ -1644,6 +1805,10 @@ var TwoDModelEngineFacadeImpl = (function () {
     TwoDModelEngineFacadeImpl.prototype.openDiagram = function () {
         $("#twoDModelContent").hide();
         $("#diagramContent").show();
+    };
+    TwoDModelEngineFacadeImpl.prototype.start = function () {
+        var timeline = this.model.getTimeline();
+        this.scope.$emit("timeline", timeline);
     };
     TwoDModelEngineFacadeImpl.prototype.initPortsConfigation = function ($scope, $compile, twoDRobotModel) {
         var configurationDropdownsContent = "<p>";
@@ -2013,13 +2178,16 @@ var RobotItemImpl = (function () {
         this.sensors = {};
         this.worldModel = worldModel;
         this.robot = robot;
-        this.startPosition = position;
         var paper = worldModel.getPaper();
-        this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
-        this.center.x = position.x + this.width / 2;
-        this.center.y = position.y + this.height / 2;
+        this.image = paper.image(imageFileName, 0, 0, this.width, this.height);
+        this.center.x = position.x;
+        this.center.y = position.y;
+        this.startPosition = new TwoDPosition();
+        this.startPosition.x = position.x - this.width / 2;
+        this.startPosition.y = position.y - this.height / 2;
         this.startCenter.x = this.center.x;
         this.startCenter.y = this.center.y;
+        this.angle = 0;
         var handleRadius = 10;
         var handleAttrs = {
             fill: "#fff",
@@ -2028,7 +2196,8 @@ var RobotItemImpl = (function () {
             "stroke-width": 1,
             stroke: "black"
         };
-        this.rotateHandle = paper.circle(position.x + this.width + 20, position.y + this.height / 2, handleRadius).attr(handleAttrs);
+        this.rotateHandle = paper.circle(0, 0, handleRadius).attr(handleAttrs);
+        this.rotateHandle.attr({ cx: this.center.x + this.width / 2 + 20, cy: this.center.y });
         var robotItem = this;
         var startHandle = function () {
             if (!worldModel.getDrawMode()) {
@@ -2046,15 +2215,17 @@ var RobotItemImpl = (function () {
                 var offsetX = newX - robotItem.center.x;
                 var offsetY = newY - robotItem.center.y;
                 var tan = offsetY / offsetX;
-                var angle = Math.atan(tan) / (Math.PI / 180);
+                robotItem.angle = Math.atan(tan);
                 if (offsetX < 0) {
-                    angle += 180;
+                    robotItem.angle += Math.PI;
                 }
+                var angle = robotItem.angle / (Math.PI / 180);
+                robotItem.robot.setAngle(robotItem.angle);
                 angle -= this.rotation;
                 robotItem.image.transform(this.transformation + "R" + angle + "," + robotItem.center.x + "," + robotItem.center.y);
                 robotItem.transformSensorsItems("R" + angle + "," + robotItem.center.x + "," + robotItem.center.y);
-                var newCx = robotItem.image.matrix.x(robotItem.startCenter.x + robotItem.width / 2 + 20, robotItem.startCenter.y);
-                var newCy = robotItem.image.matrix.y(robotItem.startCenter.x + robotItem.width / 2 + 20, robotItem.startCenter.y);
+                var newCx = (robotItem.width / 2 + 20) * Math.cos(robotItem.angle) + robotItem.center.x;
+                var newCy = (robotItem.width / 2 + 20) * Math.sin(robotItem.angle) + robotItem.center.y;
                 this.attr({ cx: newCx, cy: newCy });
             }
             return this;
@@ -2066,6 +2237,8 @@ var RobotItemImpl = (function () {
         };
         robotItem.rotateHandle.drag(moveHandle, startHandle, upHandle);
         var start = function () {
+            robotItem.lastDx = 0;
+            robotItem.lastDy = 0;
             if (!worldModel.getDrawMode()) {
                 this.transformation = this.transform();
                 robotItem.updateSensorsTransformations();
@@ -2078,19 +2251,23 @@ var RobotItemImpl = (function () {
             if (!worldModel.getDrawMode()) {
                 this.transform(this.transformation + "T" + dx + "," + dy);
                 robotItem.transformSensorsItems("T" + dx + "," + dy);
+                robotItem.lastDx = dx;
+                robotItem.lastDy = dy;
                 robotItem.rotateHandle.attr({ "cx": this.handle_cx + dx, "cy": this.handle_cy + dy });
             }
             return this;
         }, up = function () {
             if (!worldModel.getDrawMode()) {
-                robotItem.center.x = this.matrix.x(robotItem.startCenter.x, robotItem.startCenter.y);
-                robotItem.center.y = this.matrix.y(robotItem.startCenter.x, robotItem.startCenter.y);
                 robotItem.updateSensorsTransformations();
+                robotItem.center.x += robotItem.lastDx;
+                robotItem.center.y += robotItem.lastDy;
+                robotItem.robot.setPosition(robotItem.center);
             }
             return this;
         };
         this.image.drag(move, start, up);
         this.hideHandles();
+        this.redraw();
     }
     RobotItemImpl.prototype.setStartPosition = function (position, direction) {
         this.startPosition = position;
@@ -2102,8 +2279,20 @@ var RobotItemImpl = (function () {
         this.image.transform("R" + direction + "," + this.center.x + "," + this.center.y);
         this.rotateHandle.attr({ "cx": +position.x + this.width + 20, "cy": position.y + this.height / 2 });
     };
-    RobotItemImpl.prototype.ride = function () {
-        console.log("robot ride");
+    RobotItemImpl.prototype.redraw = function () {
+        var newCx = (this.width / 2 + 20) * Math.cos(this.angle) + this.center.x;
+        var newCy = (this.width / 2 + 20) * Math.sin(this.angle) + this.center.y;
+        this.rotateHandle.attr({ cx: newCx, cy: newCy });
+        var x = this.center.x - this.width / 2;
+        var y = this.center.y - this.height / 2;
+        var angle = this.angle * 180 / Math.PI;
+        console.log("x: " + this.center.x + " y: " + this.center.y);
+        this.image.transform("t" + x + "," + y + "r" + angle);
+    };
+    RobotItemImpl.prototype.updateRobotLocation = function (position, angle) {
+        this.center.x = position.x;
+        this.center.y = position.y;
+        this.angle = angle;
     };
     RobotItemImpl.prototype.hideHandles = function () {
         this.rotateHandle.hide();
@@ -2500,9 +2689,16 @@ var ModelImpl = (function () {
 })();
 var RobotModelImpl = (function () {
     function RobotModelImpl(worldModel, twoDRobotModel, position) {
+        this.maxSpeed1 = 3;
+        this.maxSpeed2 = 3;
         this.twoDRobotModel = twoDRobotModel;
         this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), this);
         this.sensorsConfiguration = new SensorsConfiguration(this);
+        this.position = new TwoDPosition(position.x, position.y);
+        this.angle = 0;
+        this.speed1 = 0;
+        this.speed2 = 0;
+        this.robotItem.updateRobotLocation(position, this.angle);
     }
     RobotModelImpl.prototype.info = function () {
         return this.twoDRobotModel;
@@ -2516,8 +2712,54 @@ var RobotModelImpl = (function () {
     RobotModelImpl.prototype.addSensorItem = function (portName, deviceType) {
         this.robotItem.addSensorItem(portName, deviceType, this.twoDRobotModel.sensorImagePath(deviceType));
     };
+    RobotModelImpl.prototype.setMotor1 = function (power) {
+        this.speed1 = this.maxSpeed1 * power / 100;
+    };
+    RobotModelImpl.prototype.setMotor2 = function (power) {
+        this.speed2 = this.maxSpeed2 * power / 100;
+    };
+    RobotModelImpl.prototype.setAngle = function (angle) {
+        this.angle = angle;
+    };
+    RobotModelImpl.prototype.getAngle = function () {
+        return this.angle;
+    };
+    RobotModelImpl.prototype.setPosition = function (position) {
+        this.position.x = position.x;
+        this.position.y = position.y;
+    };
+    RobotModelImpl.prototype.recalculateParams = function () {
+        var robotHeight = 50;
+        var timeInterval = 1;
+        var averageSpeed = (this.speed1 + this.speed2) / 2;
+        if (this.speed1 != this.speed2) {
+            var radius = this.speed1 * robotHeight / (this.speed1 - this.speed2);
+            var averageRadius = radius - robotHeight / 2;
+            var angularSpeed = 0;
+            var actualRadius = 0;
+            if (this.speed1 == -this.speed2) {
+                angularSpeed = this.speed1 / radius;
+                actualRadius = 0;
+            }
+            else {
+                angularSpeed = averageSpeed / averageRadius;
+                actualRadius = averageRadius;
+            }
+            var gammaRadians = timeInterval * angularSpeed;
+            var gammaDegrees = gammaRadians * 180 / Math.PI;
+            this.angle += gammaRadians;
+            this.position.x += averageSpeed * Math.cos(this.angle);
+            this.position.y += averageSpeed * Math.sin(this.angle);
+        }
+        else {
+            this.position.x += averageSpeed * Math.cos(this.angle);
+            this.position.y += averageSpeed * Math.sin(this.angle);
+        }
+        this.robotItem.updateRobotLocation(this.position, this.angle);
+    };
     RobotModelImpl.prototype.nextFragment = function () {
-        this.robotItem.ride();
+        this.robotItem.redraw();
+        console.log("modX: " + this.position.x + " modY: " + this.position.y);
     };
     return RobotModelImpl;
 })();
@@ -2554,7 +2796,7 @@ var SensorsConfiguration = (function (_super) {
 var TimelineImpl = (function () {
     function TimelineImpl() {
         this.timeInterval = 10;
-        this.fps = 28;
+        this.fps = 60;
         this.defaultFrameLength = 1000 / this.fps;
         this.slowSpeedFactor = 2;
         this.normalSpeedFactor = 5;
@@ -2562,11 +2804,13 @@ var TimelineImpl = (function () {
         this.immediateSpeedFactor = 100000000;
         this.defaultRealTimeInterval = 0;
         this.ticksPerCycle = 3;
+        this.speedFactor = 1;
         this.frameLength = this.defaultFrameLength;
         this.robotModels = [];
     }
     TimelineImpl.prototype.start = function () {
         var timeline = this;
+        this.cyclesCount = 0;
         this.intervalId = setInterval(function () {
             timeline.onTimer(timeline);
         }, this.defaultFrameLength);
@@ -2576,8 +2820,15 @@ var TimelineImpl = (function () {
     };
     TimelineImpl.prototype.onTimer = function (timeline) {
         timeline.getRobotModels().forEach(function (model) {
-            model.nextFragment();
+            model.recalculateParams();
         });
+        this.cyclesCount++;
+        if (this.cyclesCount > this.speedFactor) {
+            timeline.getRobotModels().forEach(function (model) {
+                model.nextFragment();
+            });
+            this.cyclesCount = 0;
+        }
     };
     TimelineImpl.prototype.setSpeedFactor = function (factor) {
         this.speedFactor = factor;
