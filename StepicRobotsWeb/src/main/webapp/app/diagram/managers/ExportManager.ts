@@ -1,23 +1,62 @@
 class ExportManager {
-    static exportDiagramStateToJSON(nodesMap, linksMap) {
+    static exportDiagramStateToJSON(graph, nodesMap, linksMap) {
         var json = {
             'nodes': [],
             'links': []
         };
 
-        ExportManager.exportNodes(json, nodesMap);
+        ExportManager.exportRobotsDiagramNode(json, nodesMap, linksMap);
+        ExportManager.exportNodes(graph, json, nodesMap, linksMap);
         ExportManager.exportLinks(json, nodesMap, linksMap)
 
         return json;
     }
 
-    static exportNodes(json, nodesMap) {
+    static exportRobotsDiagramNode(json, nodesMap, linksMap): void {
+        var robotsDiagramNode : RobotsDiagramNode = DiagramController.robotsDiagramNode;
+
+        var graphicalChildren = [];
+        for (var id in nodesMap) {
+            var childrenId = {'id': nodesMap[id].getType() + "/{" + id + "}"};
+            graphicalChildren.push(childrenId);
+        }
+
+        for (var id in linksMap) {
+            var childrenId = {'id': linksMap[id].getType() + "/{" + id + "}"};
+            graphicalChildren.push(childrenId);
+        }
+
+        var nodeJSON = {
+            'logicalId': robotsDiagramNode.getLogicalId(),
+            'graphicalId': robotsDiagramNode.getGraphicalId(),
+            'graphicalParent': "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID",
+            'type': robotsDiagramNode.getType(),
+            'logicalChildren': [],
+            'graphicalChildren': graphicalChildren,
+            'logicalLinksIds': [],
+            'graphicalLinksIds': [],
+            'logicalProperties': [],
+            'graphicalProperties': []
+        }
+
+        nodeJSON.logicalProperties = ExportManager.exportLogicalProperties(robotsDiagramNode.getProperties());
+
+        json.nodes.push(nodeJSON);
+    }
+
+    static exportNodes(graph, json, nodesMap, linksMap): void {
         for (var id in nodesMap) {
             var node: DiagramNode = nodesMap[id];
             var nodeJSON = {
                 'logicalId': node.getLogicalId(),
                 'graphicalId': node.getJointObject().id,
+                'graphicalParent': "qrm:/RobotsMetamodel/RobotsDiagram/RobotsDiagramNode/{" +
+                    DiagramController.robotsDiagramNode.getGraphicalId() + "}",
                 'type': node.getType(),
+                'logicalChildren': [],
+                'graphicalChildren': [],
+                'logicalLinksIds': [],
+                'graphicalLinksIds': [],
                 'logicalProperties': [],
                 'graphicalProperties': [
                     {
@@ -30,11 +69,18 @@ class ExportManager {
 
             nodeJSON.logicalProperties = ExportManager.exportLogicalProperties(node.getProperties());
 
+            var graphicalLinks = graph.getConnectedLinks(node.getJointObject(), { inbound: true, outbound: true });
+
+            graphicalLinks.forEach(function (link) {
+                nodeJSON.graphicalLinksIds.push({'id': link.id});
+                nodeJSON.logicalLinksIds.push({'id': linksMap[link.id].getLogicalId()});
+            });
+
             json.nodes.push(nodeJSON);
         }
     }
 
-    static exportLinks(json, nodesMap, linksMap) {
+    static exportLinks(json, nodesMap, linksMap): void {
         for (var id in linksMap) {
             var link: Link = linksMap[id];
             var jointObject = link.getJointObject();
@@ -45,22 +91,30 @@ class ExportManager {
             var linkJSON = {
                 'logicalId': link.getLogicalId(),
                 'graphicalId': jointObject.id,
-                'type': "ControlFlow",
+                'graphicalParent': "qrm:/RobotsMetamodel/RobotsDiagram/RobotsDiagramNode/{" +
+                    DiagramController.robotsDiagramNode.getGraphicalId() + "}",
+                'type': link.getType(),
+                'children': [],
+                'logicalLinksIds': [],
+                'graphicalLinksIds': [],
                 'logicalProperties': [],
                 'graphicalProperties': []
             }
 
             linkJSON.logicalProperties = ExportManager.exportLogicalProperties(link.getProperties());
 
+            var sourceObject = nodesMap[jointObject.get('source').id];
+            var targetObject = nodesMap[jointObject.get('target').id];
+
             var logicalSource = {
                 'name': "from",
-                'value': nodesMap[jointObject.get('source').id].getLogicalId(),
+                'value': sourceObject.getType() + "/{" + sourceObject.getLogicalId() + "}",
                 'type': "qReal::Id"
             }
 
             var logicalTarget = {
                 'name': "to",
-                'value': nodesMap[jointObject.get('target').id].getLogicalId(),
+                'value': targetObject.getType() + "/{" + targetObject.getLogicalId() + "}",
                 'type': "qReal::Id"
             }
 
@@ -69,13 +123,13 @@ class ExportManager {
 
             var graphicalSource = {
                 'name': "from",
-                'value': jointObject.get('source').id,
+                'value': sourceObject.getType() + "/{" + jointObject.get('source').id + "}",
                 'type': "qReal::Id"
             }
 
             var graphicalTarget = {
                 'name': "to",
-                'value': jointObject.get('target').id,
+                'value': targetObject.getType() + "/{" + jointObject.get('target').id + "}",
                 'type': "qReal::Id"
             }
 

@@ -1,4 +1,5 @@
 class DiagramController {
+    static robotsDiagramNode: RobotsDiagramNode;
     private graph: joint.dia.Graph = new joint.dia.Graph;
     private paper: DiagramPaper = new DiagramPaper(this, this.graph);
 
@@ -19,7 +20,7 @@ class DiagramController {
         controller.taskId = $attrs.task;
         PaletteLoader.loadElementsFromXml(controller, "tasks/" + controller.taskId + "/elements.xml", $scope, $compile);
 
-        DropdownListManager.addDropdownList("Link", "Guard", ["", "false", "iteration", "true"]);
+        DropdownListManager.addDropdownList("ControlFlow", "Guard", ["", "false", "iteration", "true"]);
 
         this.paper.on('cell:pointerdown',
             function (cellView, evt, x, y) {
@@ -49,6 +50,10 @@ class DiagramController {
         );
 
         $scope.submit = function() { controller.submit($scope) };
+    }
+
+    setRobotsDiagramNode(robotsDiagramNode: DiagramNode) {
+
     }
 
     setNodeTypesMap(nodeTypesMap: NodeTypesMap): void {
@@ -230,7 +235,8 @@ class DiagramController {
             dataType: 'json',
             contentType: 'application/json',
             data: (JSON.stringify({id: controller.taskId,
-                diagram: ExportManager.exportDiagramStateToJSON(controller.nodesMap, controller.linksMap)})),
+                diagram: ExportManager.exportDiagramStateToJSON(controller.graph,
+                    controller.nodesMap, controller.linksMap)})),
             success: function (response) {
                 $scope.$emit("emitDisplayTrace", response);
             },

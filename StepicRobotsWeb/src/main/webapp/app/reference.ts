@@ -38,6 +38,7 @@
 /// <reference path="diagram/models/DiagramNode.ts" />
 /// <reference path="diagram/models/DiagramPaper.ts" />
 /// <reference path="diagram/models/Link.ts" />
+/// <reference path="diagram/models/RobotsDiagramNode.ts" />
 /// <reference path="diagram/types/NodeType.ts" />
 /// <reference path="diagram/types/NodeTypesMap.ts" />
 /// <reference path="diagram/types/PropertiesMap.ts" />

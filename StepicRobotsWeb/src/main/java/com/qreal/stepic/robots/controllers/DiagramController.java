@@ -1,11 +1,11 @@
 package com.qreal.stepic.robots.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.qreal.stepic.robots.converters.DiagramConverter;
+import com.qreal.stepic.robots.converters.JavaModelConverter;
+import com.qreal.stepic.robots.converters.XmlSaveConverter;
 import com.qreal.stepic.robots.model.diagram.SubmitRequest;
 import com.qreal.stepic.robots.model.diagram.Diagram;
 import com.qreal.stepic.robots.model.diagram.OpenRequest;
-import com.qreal.stepic.robots.model.two_d.Point;
 import com.qreal.stepic.robots.model.two_d.Trace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -42,7 +42,7 @@ public class DiagramController {
     @RequestMapping(value = "/open", method = RequestMethod.POST)
     public Diagram open(@RequestBody OpenRequest request) {
         Resource resource = resourceLoader.getResource("tasks/" + request.getId());
-        DiagramConverter converter= new DiagramConverter();
+        XmlSaveConverter converter= new XmlSaveConverter();
 
         try {
             File folder = resource.getFile();
@@ -70,8 +70,24 @@ public class DiagramController {
     @ResponseBody
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
     public Trace submit(@RequestBody SubmitRequest request) {
+        final String taskId = request.getId();
+        JavaModelConverter javaModelConverter = new JavaModelConverter();
+        javaModelConverter.convertToXmlSave(request.getDiagram(), resourceLoader, taskId);
+
+        try {
+            Resource resource = resourceLoader.getResource("tasks/" + request.getId());
+            File folder = resource.getFile();
+            ProcessBuilder processBuilder = new ProcessBuilder("compressor", "test");
+            processBuilder.directory(folder);
+            processBuilder.start().waitFor();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         ObjectMapper mapper = new ObjectMapper();
-        Resource resource = resourceLoader.getResource("tasks/" + request.getId() + "/trace.json");
+        Resource resource = resourceLoader.getResource("tasks/" + taskId + "/trace.json");
         try {
             return mapper.readValue(resource.getFile(), Trace.class);
         } catch (IOException e) {

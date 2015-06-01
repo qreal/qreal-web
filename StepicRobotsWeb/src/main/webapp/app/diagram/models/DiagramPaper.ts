@@ -8,8 +8,8 @@ class DiagramPaper extends joint.dia.Paper {
 
         super({
             el: $('#diagram_paper'),
-            width: $('#diagram_paper').width(),
-            height: $('#diagram_paper').height(),
+            width: 2000,
+            height: 2000,
             model: graph,
             gridSize: this.gridSizeValue,
             defaultLink: new joint.dia.Link({

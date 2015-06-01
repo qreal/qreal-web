@@ -1,5 +1,6 @@
 class DiagramLoader {
-    static load(response, graph: joint.dia.Graph, nodesMap, linksMap, nodeTypesMap: NodeTypesMap): void {
+    static load(response, graph: joint.dia.Graph,
+                nodesMap, linksMap, nodeTypesMap: NodeTypesMap): void {
         var minPos: {x: number; y: number} = this.findMinPosition(response, nodeTypesMap);
         var offsetX = (minPos.x < 0) ? (-minPos.x + 100) : 0;
         var offsetY = (minPos.y < 0) ? (-minPos.y + 100) : 0;
@@ -8,48 +9,68 @@ class DiagramLoader {
             var nodeObject = response.nodes[i];
             var type = nodeObject.type;
 
-            if (nodeTypesMap[type]) {
-                var logicalProperties: PropertiesMap = {};
-                var logicalPropertiesObject = nodeObject.logicalProperties;
+            if (type === "RobotsDiagramNode") {
+                DiagramLoader.loadRobotsDiagramNode(nodeObject);
+            } else {
+                if (nodeTypesMap[type]) {
+                    var logicalProperties: PropertiesMap = {};
+                    var logicalPropertiesObject = nodeObject.logicalProperties;
 
-                var typeProperties = nodeTypesMap[nodeObject.type].properties;
+                    var typeProperties = nodeTypesMap[nodeObject.type].properties;
 
-                logicalPropertiesObject.sort(function(a: any, b: any){
-                    if(a.name < b.name) return -1;
-                    if(a.name > b.name) return 1;
-                    return 0;
-                })
+                    logicalPropertiesObject.sort(function (a:any, b:any) {
+                        if (a.name < b.name) return -1;
+                        if (a.name > b.name) return 1;
+                        return 0;
+                    })
 
-                for (var j = 0; j < logicalPropertiesObject.length; j++) {
-                    var propertyName = logicalPropertiesObject[j].name;
-                    if (typeProperties.hasOwnProperty(propertyName)) {
-                        var property: Property = new Property(typeProperties[propertyName].name,
-                            logicalPropertiesObject[j].value, typeProperties[propertyName].type);
-                        logicalProperties[propertyName] = property;
+                    for (var j = 0; j < logicalPropertiesObject.length; j++) {
+                        var propertyName = logicalPropertiesObject[j].name;
+                        if (typeProperties.hasOwnProperty(propertyName)) {
+                            var property:Property = new Property(typeProperties[propertyName].name,
+                                logicalPropertiesObject[j].value, typeProperties[propertyName].type);
+                            logicalProperties[propertyName] = property;
+                        }
                     }
-                }
 
-                var graphicalPropertiesObject = nodeObject.graphicalProperties;
+                    var graphicalPropertiesObject = nodeObject.graphicalProperties;
 
-                var x: number = 0;
-                var y: number = 0;
-                for (var j = 0; j < graphicalPropertiesObject.length; j++) {
-                    if (graphicalPropertiesObject[j].name === "position") {
-                        var position: string = graphicalPropertiesObject[j].value;
-                        var positionNums = this.parsePosition(position);
-                        x = positionNums.x;
-                        y = positionNums.y;
+                    var x:number = 0;
+                    var y:number = 0;
+                    for (var j = 0; j < graphicalPropertiesObject.length; j++) {
+                        if (graphicalPropertiesObject[j].name === "position") {
+                            var position:string = graphicalPropertiesObject[j].value;
+                            var positionNums = this.parsePosition(position);
+                            x = positionNums.x;
+                            y = positionNums.y;
+                        }
                     }
-                }
 
-                this.loadNode(graph, nodesMap, nodeObject.graphicalId, nodeObject.type, x + offsetX, y + offsetY,
-                    logicalProperties, nodeTypesMap[nodeObject.type].image);
+                    this.loadNode(graph, nodesMap, nodeObject.graphicalId, nodeObject.type, x + offsetX, y + offsetY,
+                        logicalProperties, nodeTypesMap[nodeObject.type].image);
+                }
             }
         }
 
         for (var i = 0; i < response.links.length; i++) {
             this.loadLink(graph, linksMap, response.links[i], offsetX, offsetY);
         }
+    }
+
+    static loadRobotsDiagramNode(nodeObject) {
+        var logicalProperties: PropertiesMap = {};
+        var logicalPropertiesObject = nodeObject.logicalProperties;
+        for (var i = 0; i < logicalPropertiesObject.length; i++) {
+            var propertyName = logicalPropertiesObject[i].name;
+            if (propertyName === "devicesConfiguration" || propertyName === "worldModel") {
+                var property:Property = new Property(propertyName,
+                    logicalPropertiesObject[i].value, logicalPropertiesObject[i].type);
+                logicalProperties[propertyName] = property;
+            }
+        }
+
+        DiagramController.robotsDiagramNode = new RobotsDiagramNode(nodeObject.logicalId, nodeObject.graphicalId,
+            logicalProperties);
     }
 
     static loadNode(graph: joint.dia.Graph, nodesMap, id: string,

@@ -2,7 +2,7 @@ class Link implements DiagramElement {
     private logicalId: string;
     private jointObject: joint.dia.Link;
     private properties: PropertiesMap = {};
-    private type = "Link";
+    private type = "ControlFlow";
 
     constructor(jointObject: joint.dia.Link, properties?: PropertiesMap) {
         this.logicalId = UIDGenerator.generate();

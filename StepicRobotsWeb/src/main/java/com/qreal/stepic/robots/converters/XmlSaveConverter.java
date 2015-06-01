@@ -19,7 +19,7 @@ import java.util.Set;
 /**
  * Created by vladzx on 25.04.15.
  */
-public class DiagramConverter {
+public class XmlSaveConverter {
     public Diagram convertToJavaModel(File folder) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setIgnoringElementContentWhitespace(true);
