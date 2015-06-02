@@ -151,16 +151,15 @@ class DiagramController {
                 leftElementPos -= leftElementPos % gridSize;
                 var type: string = $(ui.draggable.context).text();
                 var image: string = controller.nodeTypesMap[type].image;
-                var properties: PropertiesMap = controller.nodeTypesMap[type].properties;
+                var typeProperties: PropertiesMap = controller.nodeTypesMap[type].properties;
 
-                ///////////////////////////////////////////////////////////////////////////////////
-                var newProperties: PropertiesMap = {};
-                for (var prop in properties) {
-                    newProperties[prop] = new Property("", properties[prop].type);
+                var nodeProperties: PropertiesMap = {};
+                for (var property in typeProperties) {
+                    nodeProperties[property] = new Property(typeProperties[property].value,
+                        typeProperties[property].type);
                 }
-                ///////////////////////////////////////////////////////////////////////////////////
 
-                var node = controller.createDefaultNode(type, leftElementPos, topElementPos, newProperties, image);
+                var node = controller.createDefaultNode(type, leftElementPos, topElementPos, nodeProperties, image);
                 controller.currentElement = node;
                 controller.setNodeProperties(node);
             }

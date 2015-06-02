@@ -448,12 +448,12 @@ var DiagramController = (function () {
                 leftElementPos -= leftElementPos % gridSize;
                 var type = $(ui.draggable.context).text();
                 var image = controller.nodeTypesMap[type].image;
-                var properties = controller.nodeTypesMap[type].properties;
-                var newProperties = {};
-                for (var prop in properties) {
-                    newProperties[prop] = new Property("", properties[prop].type);
+                var typeProperties = controller.nodeTypesMap[type].properties;
+                var nodeProperties = {};
+                for (var property in typeProperties) {
+                    nodeProperties[property] = new Property(typeProperties[property].value, typeProperties[property].type);
                 }
-                var node = controller.createDefaultNode(type, leftElementPos, topElementPos, newProperties, image);
+                var node = controller.createDefaultNode(type, leftElementPos, topElementPos, nodeProperties, image);
                 controller.currentElement = node;
                 controller.setNodeProperties(node);
             }
