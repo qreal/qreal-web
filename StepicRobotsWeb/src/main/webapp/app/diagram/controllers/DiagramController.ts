@@ -52,10 +52,6 @@ class DiagramController {
         $scope.submit = function() { controller.submit($scope) };
     }
 
-    setRobotsDiagramNode(robotsDiagramNode: DiagramNode) {
-
-    }
-
     setNodeTypesMap(nodeTypesMap: NodeTypesMap): void {
         this.nodeTypesMap = nodeTypesMap;
     }
@@ -161,8 +157,16 @@ class DiagramController {
                 var name: string = $(ui.draggable.context).text();
                 var type = controller.nameTypeMap[name];
                 var image: string = controller.nodeTypesMap[type].image;
-                var properties: PropertiesMap = controller.nodeTypesMap[type].properties;
-                var node = controller.createNode(type, leftElementPos, topElementPos, properties, image);
+
+                var typeProperties: PropertiesMap = controller.nodeTypesMap[type].properties;
+
+                var nodeProperties: PropertiesMap = {};
+                for (var property in typeProperties) {
+                    nodeProperties[property] = new Property(typeProperties[property].name,
+                        typeProperties[property].value, typeProperties[property].type);
+                }
+
+                var node = controller.createNode(type, leftElementPos, topElementPos, nodeProperties, image);
                 controller.currentElement = node;
                 controller.setNodeProperties(node);
             }
