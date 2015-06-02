@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * Created by vladzx on 25.10.14.
@@ -72,12 +73,12 @@ public class DiagramController {
     public Trace submit(@RequestBody SubmitRequest request) {
         final String taskId = request.getId();
         JavaModelConverter javaModelConverter = new JavaModelConverter();
-        javaModelConverter.convertToXmlSave(request.getDiagram(), resourceLoader, taskId);
+        UUID uuid = javaModelConverter.convertToXmlSave(request.getDiagram(), resourceLoader, taskId);
 
         try {
             Resource resource = resourceLoader.getResource("tasks/" + request.getId());
             File folder = resource.getFile();
-            ProcessBuilder processBuilder = new ProcessBuilder("compressor", "test");
+            ProcessBuilder processBuilder = new ProcessBuilder("compressor", String.valueOf(uuid));
             processBuilder.directory(folder);
             processBuilder.start().waitFor();
         } catch (IOException e) {

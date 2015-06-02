@@ -22,15 +22,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Created by vladzx on 25.05.15.
  */
 public class JavaModelConverter {
-    public void convertToXmlSave(Diagram diagram, ResourceLoader resourceLoader, String taskId) {
+    public UUID convertToXmlSave(Diagram diagram, ResourceLoader resourceLoader, String taskId) {
         try {
             String directoryPath = resourceLoader.getResource("tasks/" + taskId).getFile().getPath();
-            File targetDirectory = new File(directoryPath + "/test");
+
+            this.uuid = UUID.randomUUID();
+
+            File targetDirectory = new File(directoryPath + "/" + String.valueOf(this.uuid));
             targetDirectory.mkdir();
             File patternsDirectory = resourceLoader.getResource("resources/xml_patterns/diagram").getFile();
             FileUtils.copyDirectory(patternsDirectory, targetDirectory);
@@ -50,7 +54,6 @@ public class JavaModelConverter {
             }
 
             createRootIdFile(directoryPath, documentBuilder, transformer);
-
         } catch (IOException ioe) {
             ioe.printStackTrace();
         } catch (ParserConfigurationException pce) {
@@ -58,11 +61,12 @@ public class JavaModelConverter {
         } catch (TransformerException tfe) {
             tfe.printStackTrace();
         }
+        return uuid;
     }
 
     private void createRootIdFile(String directoryPath, DocumentBuilder documentBuilder, Transformer transformer) {
         try {
-            File rootIdFile = new File(directoryPath + "/test/tree/logical/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
+            File rootIdFile = new File(directoryPath + "/" + this.uuid + "/tree/logical/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
             rootIdFile.createNewFile();
 
             Document xml = documentBuilder.newDocument();
@@ -101,7 +105,8 @@ public class JavaModelConverter {
     private void convertElement(DiagramNode element, String directoryPath,
                                        DocumentBuilder documentBuilder, Transformer transformer) {
         try {
-            String logicalXmlTargetPath = directoryPath + "/test/tree/logical/RobotsMetamodel/RobotsDiagram/" + element.getType();
+            String logicalXmlTargetPath = directoryPath + "/" + this.uuid +
+                    "/tree/logical/RobotsMetamodel/RobotsDiagram/" + element.getType();
             File logicalXmlTargetDirectory = new File(logicalXmlTargetPath);
             logicalXmlTargetDirectory.mkdir();
 
@@ -117,7 +122,8 @@ public class JavaModelConverter {
             StreamResult logicalResult = new StreamResult(logicalTargetFile);
             transformer.transform(logicalSource, logicalResult);
 
-            String graphicalXmlTargetPath = directoryPath + "/test/tree/graphical/RobotsMetamodel/RobotsDiagram/" + element.getType();
+            String graphicalXmlTargetPath = directoryPath + "/" + this.uuid +
+                    "/tree/graphical/RobotsMetamodel/RobotsDiagram/" + element.getType();
             File graphicalXmlTargetDirectory = new File(graphicalXmlTargetPath);
             graphicalXmlTargetDirectory.mkdir();
 
@@ -159,6 +165,11 @@ public class JavaModelConverter {
 
         Element properties = logicalXML.createElement("properties");
         rootElement.appendChild(properties);
+
+        Element name = logicalXML.createElement("QString");
+        name.setAttribute("key", "name");
+        name.setAttribute("value", node.getType());
+        properties.appendChild(name);
 
         for (Property property : node.getLogicalProperties()) {
             Element propertyElement = logicalXML.createElement("QString");
@@ -216,6 +227,16 @@ public class JavaModelConverter {
         Element properties = graphicalXML.createElement("properties");
         rootElement.appendChild(properties);
 
+        Element configuration = graphicalXML.createElement("QPolygon");
+        configuration.setAttribute("key", "configuration");
+        configuration.setAttribute("value", "0, 0 : 0, 0 : ");
+        properties.appendChild(configuration);
+
+        Element name = graphicalXML.createElement("QString");
+        name.setAttribute("key", "name");
+        name.setAttribute("value", node.getType());
+        properties.appendChild(name);
+
         Element from = graphicalXML.createElement("qReal::Id");
         from.setAttribute("key", "from");
         from.setAttribute("value", "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
@@ -225,6 +246,16 @@ public class JavaModelConverter {
         to.setAttribute("key", "to");
         to.setAttribute("value", "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
         properties.appendChild(to);
+
+        Element fromPort = graphicalXML.createElement("double");
+        fromPort.setAttribute("key", "fromPort");
+        fromPort.setAttribute("value", "0");
+        properties.appendChild(fromPort);
+
+        Element toPort = graphicalXML.createElement("double");
+        toPort.setAttribute("key", "toPort");
+        toPort.setAttribute("value", "0");
+        properties.appendChild(toPort);
 
         Element links = graphicalXML.createElement("links");
         links.setAttribute("type", "qReal::IdList");
@@ -237,6 +268,9 @@ public class JavaModelConverter {
         }
 
         properties.appendChild(links);
+
+        Element graphicalParts = graphicalXML.createElement("graphicalParts");
+        rootElement.appendChild(graphicalParts);
 
         return graphicalXML;
     }
@@ -254,6 +288,11 @@ public class JavaModelConverter {
 
         Element properties = logicalXML.createElement("properties");
         rootElement.appendChild(properties);
+
+        Element name = logicalXML.createElement("QString");
+        name.setAttribute("key", "name");
+        name.setAttribute("value", node.getType());
+        properties.appendChild(name);
 
         for (Property property : node.getLogicalProperties()) {
             if (property.getType().equals("qReal::Id")) {
@@ -295,6 +334,16 @@ public class JavaModelConverter {
         Element properties = graphicalXML.createElement("properties");
         rootElement.appendChild(properties);
 
+        Element configuration = graphicalXML.createElement("QPolygon");
+        configuration.setAttribute("key", "configuration");
+        configuration.setAttribute("value", "0, 0 : 0, 0 : ");
+        properties.appendChild(configuration);
+
+        Element name = graphicalXML.createElement("QString");
+        name.setAttribute("key", "name");
+        name.setAttribute("value", node.getType());
+        properties.appendChild(name);
+
         for (Property property : node.getGraphicalProperties()) {
             if (property.getType().equals("qReal::Id")) {
                 Element propertyElement = graphicalXML.createElement("qReal::Id");
@@ -305,9 +354,27 @@ public class JavaModelConverter {
             }
         }
 
+        Element position = graphicalXML.createElement("QPointF");
+        position.setAttribute("key", "position");
+        position.setAttribute("value", "0, 0");
+        properties.appendChild(position);
+
+        Element fromPort = graphicalXML.createElement("double");
+        fromPort.setAttribute("key", "fromPort");
+        fromPort.setAttribute("value", "0");
+        properties.appendChild(fromPort);
+
+        Element toPort = graphicalXML.createElement("double");
+        toPort.setAttribute("key", "toPort");
+        toPort.setAttribute("value", "0");
+        properties.appendChild(toPort);
+
         Element links = graphicalXML.createElement("links");
         links.setAttribute("type", "qReal::IdList");
         properties.appendChild(links);
+
+        Element graphicalParts = graphicalXML.createElement("graphicalParts");
+        rootElement.appendChild(graphicalParts);
 
         return graphicalXML;
     }
@@ -318,7 +385,7 @@ public class JavaModelConverter {
         properties.appendChild(incomingExplosions);
 
         Element outgoingExplosion = logicalXML.createElement("qReal::Id");
-        incomingExplosions.setAttribute("key", "outgoingExplosion");
+        outgoingExplosion.setAttribute("key", "outgoingExplosion");
         outgoingExplosion.setAttribute("value", "qrm:/");
         properties.appendChild(outgoingExplosion);
 
@@ -329,4 +396,5 @@ public class JavaModelConverter {
     }
 
     private Set<String> elementsIds = new HashSet<String>();
+    private UUID uuid;
 }
