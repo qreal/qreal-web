@@ -22,6 +22,8 @@ class DiagramController {
 
         DropdownListManager.addDropdownList("ControlFlow", "Guard", ["", "false", "iteration", "true"]);
 
+        this.initDeleteListener();
+
         this.paper.on('cell:pointerdown',
             function (cellView, evt, x, y) {
                 console.log('cell view ' + cellView.model.id + ' was clicked');
@@ -50,6 +52,16 @@ class DiagramController {
         );
 
         $scope.submit = function() { controller.submit($scope) };
+    }
+
+    initDeleteListener(): void {
+        var controller = this;
+        var deleteKey: number = 46;
+        $('html').keyup(function(e){
+            if(e.keyCode == deleteKey) {
+                controller.removeCurrentElement();
+            }
+        })
     }
 
     setNodeTypesMap(nodeTypesMap: NodeTypesMap): void {
