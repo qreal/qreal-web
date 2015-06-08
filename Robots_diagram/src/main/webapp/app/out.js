@@ -482,13 +482,19 @@ var DiagramController = (function () {
     DiagramController.prototype.clear = function () {
         this.graph.clear();
         this.nodesMap = {};
+        this.linksMap = {};
         $(".property").remove();
         this.currentElement = undefined;
     };
     DiagramController.prototype.removeCurrentElement = function () {
+        var controller = this;
         if (this.currentElement) {
             var node = this.nodesMap[this.currentElement.getJointObject().id];
             if (node) {
+                var links = this.graph.getConnectedLinks(node.getJointObject(), { inbound: true, outbound: true });
+                links.forEach(function (link) {
+                    delete controller.linksMap[link.id];
+                });
                 delete this.nodesMap[this.currentElement.getJointObject().id];
                 this.currentElement.getJointObject().remove();
                 $(".property").remove();
