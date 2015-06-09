@@ -7,9 +7,15 @@ class WorldModelImpl implements WorldModel {
     private regions: RegionItem[] = [];
 
     constructor() {
-        this.paper = Raphael("twoDModel_stage", 2000, 2000);
+        this.paper = Raphael("twoDModel_stage", 3000, 3000);
+
         $(this.paper.canvas).attr("id", "twoDModel_paper");
         $(this.paper.canvas).css('overflow', 'auto');
+
+
+        this.paper.setViewBox(0, 0, 3000, 3000, true);
+        this.paper.canvas.setAttribute('preserveAspectRatio', 'none');
+        $('#twoDModel_paper').attr('width', 2000).attr('height', 2000);
 
         var wall_pattern = '<pattern id="wall_pattern" patternUnits="userSpaceOnUse" width="85" height="80">\
                                         <image xlink:href="images/2dmodel/2d_wall.png" width="85" height="80" />\

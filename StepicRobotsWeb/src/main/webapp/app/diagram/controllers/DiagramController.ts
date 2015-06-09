@@ -11,8 +11,10 @@ class DiagramController {
     private isPaletteLoaded = false;
     private taskId: string;
     private rootController: RootDiagramController;
+    private paperZoom: number = 0.8;
 
     constructor($scope, $compile, $attrs) {
+        this.paper.scale(this.paperZoom, this.paperZoom);
         var controller: DiagramController = this;
         $scope.vm = controller;
         this.rootController = $scope.root;
@@ -23,6 +25,8 @@ class DiagramController {
         DropdownListManager.addDropdownList("ControlFlow", "Guard", ["", "false", "iteration", "true"]);
 
         this.initDeleteListener();
+
+        this.makeUnselectable(document.getElementById("diagramContent"));
 
         this.paper.on('cell:pointerdown',
             function (cellView, evt, x, y) {
@@ -161,8 +165,8 @@ class DiagramController {
 
         $("#diagram_paper").droppable({
             drop: function(event, ui) {
-                var topElementPos: number = ui.offset.top - $(this).offset().top + $(this).scrollTop();
-                var leftElementPos: number = ui.offset.left - $(this).offset().left + $(this).scrollLeft();
+                var topElementPos: number = (ui.offset.top - $(this).offset().top + $(this).scrollTop()) / controller.paperZoom;
+                var leftElementPos: number = (ui.offset.left - $(this).offset().left + $(this).scrollLeft()) / controller.paperZoom;
                 var gridSize: number = controller.paper.getGridSizeValue();
                 topElementPos -= topElementPos % gridSize;
                 leftElementPos -= leftElementPos % gridSize;
@@ -203,7 +207,7 @@ class DiagramController {
         this.setCheckboxListener();
         this.setDropdownListener();
         this.setSpinnerListener();
-        this.makeUnselectable(document.getElementById("diagramContent"));
+        this.makeUnselectable(document.getElementById("palette"));
         this.openDiagram(this.taskId);
     }
 

@@ -13,60 +13,55 @@
     <link rel="stylesheet" href="<c:url value='/resources/treeview/jquery.treeview.css' />"/>
     <script type="text/javascript" src="<c:url value='/resources/treeview/jquery.treeview.js' />"></script>
 </head>
-<body ng-app ng-controller="RootDiagramController">
+<div ng-app ng-controller="RootDiagramController">
     <div class="container">
-        <div class="row">
-            <div id="diagramContent" class="col-md-8 no-float unselectable">
-                <div id="diagram_container" class="container" ng-controller="DiagramController" task="${taskId}">
-                    <div class="row">
-                        <div class="col-md-9 no-float">
-                            <div class="background_div">
-                                <div id="diagram_paper">
-                                    <button id="submit_button" class="btn btn-success btn-lg" type="button" ng-click="submit()">Submit</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 no-float">
-                            <div class="background_div">
-                                <div id="palette">
-                                    <div id="properties">
-                                        <legend style="padding: 10px">Property Editor</legend>
-                                        <table class="table table-condensed" id="property_table">
-                                            <thead>
-                                            <tr>
-                                                <th>Property</th>
-                                                <th>Value</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div id="elements">
-                                        <legend style="margin-bottom: 5px">Palette</legend>
-                                        <p>
-                                            <span id="remove" class="glyphicon glyphicon-trash" ng-click="vm.removeCurrentElement()"></span>
-                                            Delete node
-                                        </p>
-                                        <div id="elements_tree">
-                                            <ul id="navigation">
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="col-md-9">
+            <div id="diagramContent" class="row unselectable" ng-controller="DiagramController" task="${taskId}">
+                <div id="diagram_paper">
                 </div>
+                <button id="submit_button" class="btn btn-success btn-lg" type="button" ng-click="submit()">Submit
+                </button>
             </div>
-            <div id="twoDModelContent" class="col-md-4 no-float unselectable">
-                <div class="background_div">
-                    <div id="twoDModel_stage" ng-controller="TwoDModelEngineFacadeImpl" task="${taskId}">
-                        <button id="stop_button" class="btn btn-danger btn-lg" type="button" ng-click="vm.stopPlay()">Stop</button>
+            <div  id="twoDModelContent" class="row unselectable">
+                <div id="twoDModel_stage" ng-controller="TwoDModelEngineFacadeImpl" task="${taskId}">
+                </div>
+                <button id="stop_button" class="btn btn-danger btn-lg" type="button" ng-click="vm.stopPlay()">Stop
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div id="palette">
+                    <div id="properties">
+                        <legend style="padding: 10px">Property Editor</legend>
+                        <table class="table table-condensed" id="property_table">
+                            <thead>
+                            <tr>
+                                <th>Property</th>
+                                <th>Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="elements">
+                        <legend style="margin-bottom: 5px">Palette</legend>
+                        <p>
+                            <span id="remove" class="glyphicon glyphicon-trash"
+                                  ng-click="vm.removeCurrentElement()"></span>
+                            Delete node
+                        </p>
+
+                        <div id="elements_tree">
+                            <ul id="navigation">
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>
