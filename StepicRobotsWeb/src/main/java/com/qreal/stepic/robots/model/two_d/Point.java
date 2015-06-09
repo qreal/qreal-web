@@ -6,6 +6,13 @@ import java.io.Serializable;
  * Created by vladzx on 10.05.15.
  */
 public class Point implements Serializable {
+    public Point(double x, double y, double direction, double timestamp) {
+        this.x = x;
+        this.y = y;
+        this.direction = direction;
+        this.timestamp = timestamp;
+    }
+
     public double getX() {
         return x;
     }

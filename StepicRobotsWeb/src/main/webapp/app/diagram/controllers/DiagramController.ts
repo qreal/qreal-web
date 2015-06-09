@@ -262,7 +262,8 @@ class DiagramController {
                 diagram: ExportManager.exportDiagramStateToJSON(controller.graph,
                     controller.nodesMap, controller.linksMap)})),
             success: function (response) {
-                $scope.$emit("emitDisplayTrace", response);
+                console.log(response.report.messages[0].message);
+                $scope.$emit("emitDisplayTrace", response.trace);
             },
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);

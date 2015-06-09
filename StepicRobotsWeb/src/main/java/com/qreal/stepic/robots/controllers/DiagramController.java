@@ -3,9 +3,8 @@ package com.qreal.stepic.robots.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qreal.stepic.robots.converters.JavaModelConverter;
 import com.qreal.stepic.robots.converters.XmlSaveConverter;
-import com.qreal.stepic.robots.model.diagram.SubmitRequest;
-import com.qreal.stepic.robots.model.diagram.Diagram;
-import com.qreal.stepic.robots.model.diagram.OpenRequest;
+import com.qreal.stepic.robots.model.diagram.*;
+import com.qreal.stepic.robots.model.two_d.Point;
 import com.qreal.stepic.robots.model.two_d.Trace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -15,9 +14,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
 
 /**
  * Created by vladzx on 25.10.14.
@@ -70,31 +73,74 @@ public class DiagramController {
 
     @ResponseBody
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
-    public Trace submit(@RequestBody SubmitRequest request) {
+    public SubmitResponse submit(@RequestBody SubmitRequest request) {
         final String taskId = request.getId();
         JavaModelConverter javaModelConverter = new JavaModelConverter();
-        UUID uuid = javaModelConverter.convertToXmlSave(request.getDiagram(), resourceLoader, taskId);
+        String uuidStr = String.valueOf(javaModelConverter.convertToXmlSave(request.getDiagram(), resourceLoader, taskId));
 
         try {
-            Resource resource = resourceLoader.getResource("tasks/" + request.getId());
+            Resource resource = resourceLoader.getResource("tasks/" + request.getId() + "/solutions/" + uuidStr);
             File folder = resource.getFile();
-            ProcessBuilder processBuilder = new ProcessBuilder("compressor", String.valueOf(uuid));
-            processBuilder.directory(folder);
-            processBuilder.start().waitFor();
+            ProcessBuilder compressorProcBuilder = new ProcessBuilder("compressor", "diagram");
+            compressorProcBuilder.directory(folder);
+            compressorProcBuilder.start().waitFor();
+
+            ProcessBuilder interpreterProcBuilder = new ProcessBuilder("2D-model",
+                    "-b", "--platform", "minimal", "--report", "report.json", "--trajectory", "trajectory.fifo", "diagram.qrs");
+            interpreterProcBuilder.directory(folder);
+            interpreterProcBuilder.start().waitFor();
+
+            /*Path trajectoryPath = resourceLoader.getResource("tasks/" + request.getId() +
+                    "/solutions/" + uuidStr + "/trajectory.fifo").getFile().toPath();
+
+            Report report = parseReportFile(resourceLoader.getResource("tasks/" + request.getId() +
+                    "/solutions/" + uuidStr + "/report.json").getFile());*/
+
+
+            Path trajectoryPath = resourceLoader.getResource("tasks/" + request.getId() + "/trajectory.fifo").getFile().toPath();
+
+            Report report = parseReportFile(resourceLoader.getResource("tasks/" + request.getId() + "/report.json").getFile());
+
+            Trace trace = parseTrajectoryFile(trajectoryPath);
+            return new SubmitResponse(report, trace);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+        return null;
+    }
+
+    private Report parseReportFile(File file) {
         ObjectMapper mapper = new ObjectMapper();
-        Resource resource = resourceLoader.getResource("tasks/" + taskId + "/trace.json");
         try {
-            return mapper.readValue(resource.getFile(), Trace.class);
+            List<ReportMessage> messages = mapper.readValue(file, List.class);
+            return new Report(messages);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return null;
+    }
+
+    private Trace parseTrajectoryFile(Path file) {
+        Trace trace = new Trace();
+        List<Point> points = new LinkedList<Point>();
+        Charset charset = Charset.forName("UTF-8");
+        try (BufferedReader reader = Files.newBufferedReader(file, charset)) {
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                points.add(parseTrajectoryLine(line));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        trace.setPoints(points);
+        return trace;
+    }
+
+    private Point parseTrajectoryLine(String line) {
+        String parts[] = line.split(" ");
+        return new Point(Double.valueOf(parts[2]), Double.valueOf(parts[3]), Double.valueOf(parts[4]), Double.valueOf(parts[1]));
     }
 }

@@ -34,7 +34,8 @@ public class JavaModelConverter {
 
             this.uuid = UUID.randomUUID();
 
-            File targetDirectory = new File(directoryPath + "/" + String.valueOf(this.uuid));
+            String targetPath = directoryPath + "/solutions/" + String.valueOf(this.uuid) + "/diagram";
+            File targetDirectory = new File(targetPath);
             targetDirectory.mkdir();
             File patternsDirectory = resourceLoader.getResource("resources/xml_patterns/diagram").getFile();
             FileUtils.copyDirectory(patternsDirectory, targetDirectory);
@@ -46,14 +47,14 @@ public class JavaModelConverter {
             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 
             for (DiagramNode node : diagram.getNodes()) {
-                convertElement(node, directoryPath, documentBuilder, transformer);
+                convertElement(node, targetPath, documentBuilder, transformer);
             }
 
             for (DiagramNode link : diagram.getLinks()) {
-                convertElement(link, directoryPath, documentBuilder, transformer);
+                convertElement(link, targetPath, documentBuilder, transformer);
             }
 
-            createRootIdFile(directoryPath, documentBuilder, transformer);
+            createRootIdFile(targetPath, documentBuilder, transformer);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         } catch (ParserConfigurationException pce) {
@@ -64,9 +65,9 @@ public class JavaModelConverter {
         return uuid;
     }
 
-    private void createRootIdFile(String directoryPath, DocumentBuilder documentBuilder, Transformer transformer) {
+    private void createRootIdFile(String targetPath, DocumentBuilder documentBuilder, Transformer transformer) {
         try {
-            File rootIdFile = new File(directoryPath + "/" + this.uuid + "/tree/logical/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
+            File rootIdFile = new File(targetPath + "/tree/logical/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
             rootIdFile.createNewFile();
 
             Document xml = documentBuilder.newDocument();
@@ -102,11 +103,10 @@ public class JavaModelConverter {
         }
     }
 
-    private void convertElement(DiagramNode element, String directoryPath,
+    private void convertElement(DiagramNode element, String targetPath,
                                        DocumentBuilder documentBuilder, Transformer transformer) {
         try {
-            String logicalXmlTargetPath = directoryPath + "/" + this.uuid +
-                    "/tree/logical/RobotsMetamodel/RobotsDiagram/" + element.getType();
+            String logicalXmlTargetPath = targetPath + "/tree/logical/RobotsMetamodel/RobotsDiagram/" + element.getType();
             File logicalXmlTargetDirectory = new File(logicalXmlTargetPath);
             logicalXmlTargetDirectory.mkdir();
 
@@ -122,8 +122,7 @@ public class JavaModelConverter {
             StreamResult logicalResult = new StreamResult(logicalTargetFile);
             transformer.transform(logicalSource, logicalResult);
 
-            String graphicalXmlTargetPath = directoryPath + "/" + this.uuid +
-                    "/tree/graphical/RobotsMetamodel/RobotsDiagram/" + element.getType();
+            String graphicalXmlTargetPath = targetPath + "/tree/graphical/RobotsMetamodel/RobotsDiagram/" + element.getType();
             File graphicalXmlTargetDirectory = new File(graphicalXmlTargetPath);
             graphicalXmlTargetDirectory.mkdir();
 
