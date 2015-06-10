@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="<c:url value='/resources/treeview/jquery.treeview.css' />"/>
     <script type="text/javascript" src="<c:url value='/resources/treeview/jquery.treeview.js' />"></script>
 </head>
+<body>
 <div ng-app ng-controller="RootDiagramController">
     <div class="container">
         <div class="col-md-9">
@@ -24,6 +25,8 @@
             </div>
             <div  id="twoDModelContent" class="row unselectable">
                 <div id="twoDModel_stage" ng-controller="TwoDModelEngineFacadeImpl" task="${taskId}">
+                    <div id="submitSpinner" class="centerSpinner">
+                    </div>
                 </div>
                 <button id="stop_button" class="btn btn-danger btn-lg" type="button" ng-click="vm.stopPlay()">Stop
                 </button>

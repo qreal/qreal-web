@@ -41,7 +41,7 @@ public class JavaModelConverter {
             FileUtils.copyDirectory(patternsDirectory, targetDirectory);
 
             File taskMetaInfo = new File(directoryPath + "/diagram/metaInfo.xml");
-            File targetMetaInfo = new File(targetDirectory + "/metaInfo.xml");
+            File targetMetaInfo = new File(targetPath + "/metaInfo.xml");
             targetMetaInfo.createNewFile();
             FileUtils.copyFile(taskMetaInfo, targetMetaInfo);
 
@@ -235,7 +235,7 @@ public class JavaModelConverter {
 
         Element configuration = graphicalXML.createElement("QPolygon");
         configuration.setAttribute("key", "configuration");
-        configuration.setAttribute("value", "0, 0 : 0, 0 : ");
+        configuration.setAttribute("value", "0, 0 : 50, 0 : 50, 50 : 0, 50 : ");
         properties.appendChild(configuration);
 
         Element from = graphicalXML.createElement("qReal::Id");

@@ -56,6 +56,20 @@ class DiagramController {
         );
 
         $scope.submit = function() { controller.submit($scope) };
+        this.initSubmitSpinner();
+    }
+
+    initSubmitSpinner(): void {
+        var submitSpinner = $('#submitSpinner');
+        submitSpinner.hide();
+        $(document)
+            .ajaxStart(function () {
+                submitSpinner.show();
+            })
+            .ajaxStop(function () {
+                submitSpinner.hide();
+            }
+        );
     }
 
     initDeleteListener(): void {

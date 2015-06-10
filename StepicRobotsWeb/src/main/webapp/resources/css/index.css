@@ -25,6 +25,15 @@
     overflow: scroll;
 }
 
+.centerSpinner {
+    position: absolute;
+    top: 40%;
+    left: 45%;
+    width: 100px;
+    height: 100px;
+    background: url('ajax-loader.gif') no-repeat;
+}
+
 #diagram_paper svg {
     background: #ffffff url('bg.png');
 }
