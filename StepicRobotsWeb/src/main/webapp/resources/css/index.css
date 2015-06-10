@@ -6,6 +6,8 @@
     user-select: none;
 }
 
+.link-tools .tool-remove { display: none }
+
 .container
 {
     padding-top: 10px;

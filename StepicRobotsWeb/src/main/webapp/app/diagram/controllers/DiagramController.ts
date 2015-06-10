@@ -207,7 +207,7 @@ class DiagramController {
         this.setCheckboxListener();
         this.setDropdownListener();
         this.setSpinnerListener();
-        this.makeUnselectable(document.getElementById("palette"));
+        this.makeUnselectable(document.getElementById("paletteContent"));
         this.openDiagram(this.taskId);
     }
 
@@ -244,10 +244,15 @@ class DiagramController {
                 });
 
                 delete this.nodesMap[this.currentElement.getJointObject().id];
-                this.currentElement.getJointObject().remove();
-                $(".property").remove();
-                this.currentElement = undefined;
+            } else {
+                var link = this.linksMap[this.currentElement.getJointObject().id];
+                if (link) {
+                    delete this.linksMap[this.currentElement.getJointObject().id];
+                }
             }
+            this.currentElement.getJointObject().remove();
+            $(".property").remove();
+            this.currentElement = undefined;
         }
     }
 

@@ -29,7 +29,7 @@
                 </button>
             </div>
         </div>
-        <div class="row">
+        <div id="paletteContent" class="row unselectable">
             <div class="col-md-3">
                 <div id="palette">
                     <div id="properties">
