@@ -40,6 +40,11 @@ public class JavaModelConverter {
             File patternsDirectory = resourceLoader.getResource("resources/xml_patterns/diagram").getFile();
             FileUtils.copyDirectory(patternsDirectory, targetDirectory);
 
+            File taskMetaInfo = new File(directoryPath + "/diagram/metaInfo.xml");
+            File targetMetaInfo = new File(targetPath + "/metaInfo.xml");
+            targetMetaInfo.createNewFile();
+            FileUtils.copyFile(taskMetaInfo, targetMetaInfo);
+
             DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
