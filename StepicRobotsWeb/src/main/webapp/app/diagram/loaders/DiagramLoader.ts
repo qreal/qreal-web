@@ -8,6 +8,7 @@ class DiagramLoader {
         for (var i = 0; i < response.nodes.length; i++) {
             var nodeObject = response.nodes[i];
             var type = nodeObject.type;
+            var name = "";
 
             if (type === "RobotsDiagramNode") {
                 DiagramLoader.loadRobotsDiagramNode(nodeObject);
@@ -26,6 +27,11 @@ class DiagramLoader {
 
                     for (var j = 0; j < logicalPropertiesObject.length; j++) {
                         var propertyName = logicalPropertiesObject[j].name;
+
+                        if (propertyName === "name") {
+                            name  = logicalPropertiesObject[j].value;
+                        }
+
                         if (typeProperties.hasOwnProperty(propertyName)) {
                             var property:Property = new Property(typeProperties[propertyName].name,
                                 logicalPropertiesObject[j].value, typeProperties[propertyName].type);
@@ -46,8 +52,8 @@ class DiagramLoader {
                         }
                     }
 
-                    this.loadNode(graph, nodesMap, nodeObject.graphicalId, nodeObject.type, x + offsetX, y + offsetY,
-                        logicalProperties, nodeTypesMap[nodeObject.type].image);
+                    this.loadNode(graph, nodesMap, nodeObject.graphicalId, name, type,
+                        x + offsetX, y + offsetY, logicalProperties, nodeTypesMap[nodeObject.type].image);
                 }
             }
         }
@@ -73,9 +79,9 @@ class DiagramLoader {
             logicalProperties);
     }
 
-    static loadNode(graph: joint.dia.Graph, nodesMap, id: string,
+    static loadNode(graph: joint.dia.Graph, nodesMap, id: string, name: string,
                       type: string, x: number, y: number, properties, image: string): void {
-        var node: DiagramNode = new DefaultDiagramNode(type, x, y, properties, image, id);
+        var node: DiagramNode = new DefaultDiagramNode(name, type, x, y, properties, image, id);
         nodesMap[node.getJointObject().id] = node;
         graph.addCell(node.getJointObject());
     }

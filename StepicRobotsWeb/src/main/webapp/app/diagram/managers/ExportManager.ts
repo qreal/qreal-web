@@ -41,6 +41,14 @@ class ExportManager {
 
         nodeJSON.logicalProperties = ExportManager.exportLogicalProperties(robotsDiagramNode.getProperties());
 
+        var nameProperty = {
+            'name': "name",
+            'value': robotsDiagramNode.getName(),
+            'type': "string",
+        };
+        nodeJSON.logicalProperties.push(nameProperty);
+        nodeJSON.graphicalProperties.push(nameProperty);
+
         json.nodes.push(nodeJSON);
     }
 
@@ -68,6 +76,14 @@ class ExportManager {
             };
 
             nodeJSON.logicalProperties = ExportManager.exportLogicalProperties(node.getProperties());
+
+            var nameProperty = {
+                'name': "name",
+                'value': node.getName(),
+                'type': "string",
+            };
+            nodeJSON.logicalProperties.push(nameProperty);
+            nodeJSON.graphicalProperties.push(nameProperty);
 
             var graphicalLinks = graph.getConnectedLinks(node.getJointObject(), { inbound: true, outbound: true });
 
@@ -102,6 +118,14 @@ class ExportManager {
             }
 
             linkJSON.logicalProperties = ExportManager.exportLogicalProperties(link.getProperties());
+
+            var nameProperty = {
+                'name': "name",
+                'value': link.getName(),
+                'type': "string",
+            };
+            linkJSON.logicalProperties.push(nameProperty);
+            linkJSON.graphicalProperties.push(nameProperty);
 
             var sourceObject = nodesMap[jointObject.get('source').id];
             var targetObject = nodesMap[jointObject.get('target').id];

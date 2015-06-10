@@ -4,12 +4,14 @@
 class DefaultDiagramNode implements DiagramNode {
     private logicalId: string;
     private jointObject: joint.shapes.devs.ImageWithPorts;
+    private name: string;
     private type: string;
     private properties: PropertiesMap;
     private imagePath: string;
 
-    constructor(type: string, x: number, y: number, properties: PropertiesMap, imagePath: string, id?: string) {
+    constructor(name: string, type: string, x: number, y: number, properties: PropertiesMap, imagePath: string, id?: string) {
         this.logicalId = UIDGenerator.generate();
+        this.name = name;
         this.type = type;
 
         var jointObjectAttributes = {
@@ -34,6 +36,10 @@ class DefaultDiagramNode implements DiagramNode {
 
     getLogicalId(): string {
         return this.logicalId;
+    }
+
+    getName(): string {
+        return this.name;
     }
 
     getType(): string {

@@ -2,6 +2,7 @@ class Link implements DiagramElement {
     private logicalId: string;
     private jointObject: joint.dia.Link;
     private properties: PropertiesMap = {};
+    private name = "Link"
     private type = "ControlFlow";
 
     constructor(jointObject: joint.dia.Link, properties?: PropertiesMap) {
@@ -22,6 +23,10 @@ class Link implements DiagramElement {
 
     getJointObject() {
         return this.jointObject;
+    }
+
+    getName(): string {
+        return this.name;
     }
 
     getType(): string {

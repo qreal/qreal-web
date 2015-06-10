@@ -182,7 +182,7 @@ class DiagramController {
                         typeProperties[property].value, typeProperties[property].type);
                 }
 
-                var node = controller.createNode(type, leftElementPos, topElementPos, nodeProperties, image);
+                var node = controller.createNode(name, type, leftElementPos, topElementPos, nodeProperties, image);
                 controller.currentElement = node;
                 controller.setNodeProperties(node);
             }
@@ -216,9 +216,9 @@ class DiagramController {
         this.linksMap[linkId] = linkObject;
     }
 
-    createNode(type: string, x: number, y: number, properties: PropertiesMap,
+    createNode(name: string, type: string, x: number, y: number, properties: PropertiesMap,
                       imagePath: string, id?: string): DiagramNode {
-        var node: DiagramNode = new DefaultDiagramNode(type, x, y, properties, imagePath, id);
+        var node: DiagramNode = new DefaultDiagramNode(name, type, x, y, properties, imagePath, id);
         this.nodesMap[node.getJointObject().id] = node;
         this.graph.addCell(node.getJointObject());
         return node;

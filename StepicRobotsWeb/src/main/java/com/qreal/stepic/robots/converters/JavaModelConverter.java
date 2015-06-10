@@ -41,7 +41,7 @@ public class JavaModelConverter {
             FileUtils.copyDirectory(patternsDirectory, targetDirectory);
 
             File taskMetaInfo = new File(directoryPath + "/diagram/metaInfo.xml");
-            File targetMetaInfo = new File(targetPath + "/metaInfo.xml");
+            File targetMetaInfo = new File(targetDirectory + "/metaInfo.xml");
             targetMetaInfo.createNewFile();
             FileUtils.copyFile(taskMetaInfo, targetMetaInfo);
 
@@ -170,11 +170,6 @@ public class JavaModelConverter {
         Element properties = logicalXML.createElement("properties");
         rootElement.appendChild(properties);
 
-        Element name = logicalXML.createElement("QString");
-        name.setAttribute("key", "name");
-        name.setAttribute("value", node.getType());
-        properties.appendChild(name);
-
         for (Property property : node.getLogicalProperties()) {
             Element propertyElement = logicalXML.createElement("QString");
             propertyElement.setAttribute("key", property.getName());
@@ -231,15 +226,17 @@ public class JavaModelConverter {
         Element properties = graphicalXML.createElement("properties");
         rootElement.appendChild(properties);
 
+        for (Property property : node.getGraphicalProperties()) {
+            Element propertyElement = graphicalXML.createElement("QString");
+            propertyElement.setAttribute("key", property.getName());
+            propertyElement.setAttribute("value", property.getValue());
+            properties.appendChild(propertyElement);
+        }
+
         Element configuration = graphicalXML.createElement("QPolygon");
         configuration.setAttribute("key", "configuration");
         configuration.setAttribute("value", "0, 0 : 0, 0 : ");
         properties.appendChild(configuration);
-
-        Element name = graphicalXML.createElement("QString");
-        name.setAttribute("key", "name");
-        name.setAttribute("value", node.getType());
-        properties.appendChild(name);
 
         Element from = graphicalXML.createElement("qReal::Id");
         from.setAttribute("key", "from");
@@ -293,11 +290,6 @@ public class JavaModelConverter {
         Element properties = logicalXML.createElement("properties");
         rootElement.appendChild(properties);
 
-        Element name = logicalXML.createElement("QString");
-        name.setAttribute("key", "name");
-        name.setAttribute("value", node.getType());
-        properties.appendChild(name);
-
         for (Property property : node.getLogicalProperties()) {
             if (property.getType().equals("qReal::Id")) {
                 Element propertyElement = logicalXML.createElement("qReal::Id");
@@ -343,17 +335,17 @@ public class JavaModelConverter {
         configuration.setAttribute("value", "0, 0 : 0, 0 : ");
         properties.appendChild(configuration);
 
-        Element name = graphicalXML.createElement("QString");
-        name.setAttribute("key", "name");
-        name.setAttribute("value", node.getType());
-        properties.appendChild(name);
-
         for (Property property : node.getGraphicalProperties()) {
             if (property.getType().equals("qReal::Id")) {
                 Element propertyElement = graphicalXML.createElement("qReal::Id");
                 propertyElement.setAttribute("key", property.getName());
                 propertyElement.setAttribute("value",
                         String.format("qrm:/RobotsMetamodel/RobotsDiagram/%s", property.getValue()));
+                properties.appendChild(propertyElement);
+            } else {
+                Element propertyElement = graphicalXML.createElement("QString");
+                propertyElement.setAttribute("key", property.getName());
+                propertyElement.setAttribute("value", property.getValue());
                 properties.appendChild(propertyElement);
             }
         }

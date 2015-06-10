@@ -2,6 +2,7 @@ class RobotsDiagramNode {
     private logicalId: string;
     private graphicalId: string;
     private properties: PropertiesMap;
+    private name: string = "Robot`s Behaviour Diagram";
     private type: string = "RobotsDiagramNode";
 
     constructor(logicalId: string, graphicalId: string, properties: PropertiesMap) {
@@ -20,6 +21,10 @@ class RobotsDiagramNode {
 
     getProperties(): PropertiesMap {
         return this.properties;
+    }
+
+    getName(): string {
+        return this.name;
     }
 
     getType(): string {
