@@ -11,6 +11,10 @@ class RootDiagramController {
         $scope.$on("emitDisplayTrace", function(event, traceJson) {
             $scope.$broadcast("DisplayTrace", traceJson);
         });
+
+        $scope.$on("emit2dModelLoad", function(event) {
+            $scope.$broadcast("2dModelLoad");
+        });
     }
 
     setRobotModel(robotModel: TwoDRobotModel) {

@@ -6,6 +6,7 @@ class RobotModelImpl implements RobotModel {
     constructor(worldModel: WorldModel, twoDRobotModel: TwoDRobotModel, position: TwoDPosition) {
         this.twoDRobotModel = twoDRobotModel;
         this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), this);
+        this.robotItem.hide();
         this.sensorsConfiguration = new SensorsConfiguration(this);
     }
 
@@ -53,6 +54,8 @@ class RobotModelImpl implements RobotModel {
             var y = parseFloat(startPosition.getAttribute('y'));
             //TODO: set start pos
         }
+
+        this.robotItem.show();
     }
 
     rideTrace(traceJson) {

@@ -87,10 +87,10 @@ class DiagramController {
         }
     }
 
-    initPalette() {
+    initPalette($scope) {
         this.initDragAndDrop();
         this.isPaletteLoaded = true;
-        this.afterPaletteLoaded();
+        this.afterPaletteLoaded($scope);
     }
 
     setInputStringListener(): void {
@@ -202,13 +202,13 @@ class DiagramController {
         return PropertyManager.getPropertyHtml(typeName, property);
     }
 
-    afterPaletteLoaded() {
+    afterPaletteLoaded($scope) {
         this.setInputStringListener();
         this.setCheckboxListener();
         this.setDropdownListener();
         this.setSpinnerListener();
         this.makeUnselectable(document.getElementById("paletteContent"));
-        this.openDiagram(this.taskId);
+        this.openDiagram($scope, this.taskId);
     }
 
 
@@ -280,7 +280,7 @@ class DiagramController {
         });
     }
 
-    openDiagram(taskId: string): void {
+    openDiagram($scope, taskId: string): void {
         if (!this.isPaletteLoaded) {
             alert("Palette is not loaded!");
             return;
@@ -294,6 +294,7 @@ class DiagramController {
             data: (JSON.stringify({id: taskId})),
             success: function (response) {
                 controller.clear();
+                $scope.$emit("emit2dModelLoad");
                 DiagramLoader.load(response, controller.graph,
                     controller.nodesMap, controller.linksMap, controller.nodeTypesMap);
             },

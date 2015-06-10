@@ -9,4 +9,6 @@ interface RobotItem extends AbstractItem {
     setStartPosition(position: TwoDPosition, direction: number): void;
     rideTrace(traceJson);
     clearCurrentPosition(): void;
+    hide(): void;
+    show(): void;
 }

@@ -259,4 +259,12 @@ class RobotItemImpl implements RobotItem {
 
         return Raphael.animation({ transform: robotTransform }, point.timestamp);
     }
+
+    hide(): void {
+        this.image.hide();
+    }
+
+    show(): void {
+        this.image.show();
+    }
 }

@@ -105,8 +105,8 @@ class ModelImpl implements Model {
 
     deserialize(xml): void {
         var minPos: TwoDPosition = this.findMinPos(xml);
-        var offsetX = (minPos.x < 0) ? (-minPos.x + 100) : 0;
-        var offsetY = (minPos.y < 0) ? (-minPos.y + 100) : 0;
+        var offsetX = (minPos.x < 0) ? (-minPos.x + 100) : 100;
+        var offsetY = (minPos.y < 0) ? (-minPos.y + 100) : 100;
         this.worldModel.deserialize(xml, offsetX, offsetY);
 
         var robots = xml.getElementsByTagName("robot");

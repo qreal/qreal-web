@@ -14,7 +14,6 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         this.model.addRobotModel(robotModel);
 
         var taskId = $attrs.task;
-        this.load("tasks/" + taskId + "/2dmodel.xml");
 
         $(document).ready(function() {
             $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
@@ -28,6 +27,10 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
 
         $scope.$on("DisplayTrace", function(event, traceJson) {
             facade.displayTrace(traceJson);
+        });
+
+        $scope.$on("2dModelLoad", function(event) {
+            facade.load("tasks/" + taskId + "/diagram/metaInfo.xml");
         });
 
         $compile($("#stop_button"))($scope);
@@ -59,13 +62,22 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         req.send(null);
     }
 
-    private xmlLoadReady(req): void {
+    private xmlLoadReady(request): void {
         try {
-            if (req.readyState == 4) {
-                if (req.status == 200) {
-                    this.model.deserialize(req.responseXML);
+            if (request.readyState == 4) {
+                if (request.status == 200) {
+                    var responseXml = request.responseXML;
+                    var worldModelXml;
+                    var infos = responseXml.getElementsByTagName("info");
+                    for (var i = 0; i < infos.length; i++) {
+                        if (infos[i].getAttribute("key") === "worldModel") {
+                            worldModelXml = infos[i].getAttribute("value");
+                            break;
+                        }
+                    }
+                    this.model.deserialize($.parseXML(worldModelXml));
                 } else {
-                    alert("Can't load 2d model:\n" + req.statusText);
+                    alert("Can't load 2d model:\n" + request.statusText);
                 }
             }
         } catch(e) {

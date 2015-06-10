@@ -84,7 +84,7 @@ class PaletteLoader {
 
                     controller.setNodeTypesMap(nodeTypesMap);
                     controller.setNameTypeMap(nameTypeMap);
-                    controller.initPalette();
+                    controller.initPalette($scope);
                 } else {
                     alert("Can't load palette:\n" + req.statusText);
                 }
