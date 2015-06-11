@@ -58,6 +58,9 @@ class DiagramController {
         $scope.submit = function() { controller.submit($scope) };
         $('#diagramSpinner').hide();
         $('#twoDModelSpinner').hide();
+        $('#remove').click(function() {
+            controller.removeCurrentElement();
+        })
     }
 
     initDeleteListener(): void {
@@ -212,7 +215,6 @@ class DiagramController {
         this.makeUnselectable(document.getElementById("paletteContent"));
         this.openDiagram($scope, this.taskId);
     }
-
 
     addLink(linkId: string, linkObject: Link) {
         this.linksMap[linkId] = linkObject;
