@@ -292,9 +292,11 @@ class RobotItemImpl implements RobotItem {
             messageText += message.message;
         });
         if (level === "info") {
+            $("#infoAlert").removeClass("alert-danger");
             $("#infoAlert").addClass("alert-success");
         } else {
             if (level === "error") {
+                $("#infoAlert").removeClass("alert-success");
                 $("#infoAlert").addClass("alert-danger");
             }
         }
