@@ -224,10 +224,11 @@ class RobotItemImpl implements RobotItem {
         this.clearSensorsPosition();
     }
 
-    rideTrace(traceJson) {
+    showCheckResult(result) {
+        var traceJson = result.trace;
         this.clearCurrentPosition();
         if (traceJson.points.length > 1) {
-            var animation = this.createAnimationSequence(traceJson, 1);
+            var animation = this.createAnimationSequence(traceJson, result.report, 1);
             this.image.animate(animation);
             var robotX = this.image.matrix.x(this.startPosition.x, this.startPosition.y);
             var robotY = this.image.matrix.y(this.startPosition.x, this.startPosition.y);
@@ -238,7 +239,7 @@ class RobotItemImpl implements RobotItem {
         }
     }
 
-    private createAnimationSequence(traceJson, seqNumber: number): RaphaelAnimation {
+    private createAnimationSequence(traceJson, report, seqNumber: number): RaphaelAnimation {
         this.updateSensorsTransformations();
         this.center.x = this.image.matrix.x(this.startCenter.x, this.startCenter.y);
         this.center.y = this.image.matrix.y(this.startCenter.x, this.startCenter.y);
@@ -266,7 +267,7 @@ class RobotItemImpl implements RobotItem {
         if (seqNumber < traceJson.points.length - 1) {
             return Raphael.animation({ transform: robotTransform }, deltaTime, "linear",
                 function() {
-                    var animation = robotItem.createAnimationSequence(traceJson, seqNumber + 1);
+                    var animation = robotItem.createAnimationSequence(traceJson, report, seqNumber + 1);
                     robotItem.image.animate(animation);
 
                     var deltaX = (traceJson.points[seqNumber + 1].x + this.offsetX) - robotX;
@@ -278,7 +279,27 @@ class RobotItemImpl implements RobotItem {
                 });
         }
 
-        return Raphael.animation({ transform: robotTransform }, deltaTime);
+        return Raphael.animation({ transform: robotTransform }, deltaTime, "linear",
+            function() {
+                robotItem.parseReport(report);
+            });
+    }
+
+    parseReport(report) {
+        var messageText = "";
+        var level = report.messages[0].level;
+        report.messages.forEach( function(message) {
+            messageText += message.message;
+        });
+        if (level === "info") {
+            $("#infoAlert").addClass("alert-success");
+        } else {
+            if (level === "error") {
+                $("#infoAlert").addClass("alert-danger");
+            }
+        }
+        $("#infoAlert").contents().last()[0].textContent = messageText;
+        $("#infoAlert").show();
     }
 
     setOffsetX(offsetX: number): void {

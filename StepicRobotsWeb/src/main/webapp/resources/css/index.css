@@ -6,6 +6,16 @@
     user-select: none;
 }
 
+#infoAlert {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.close {
+    margin-left: 5px;
+}
+
 .link-tools .tool-remove { display: none }
 
 .container

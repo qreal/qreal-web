@@ -276,19 +276,12 @@ class DiagramController {
                     controller.nodesMap, controller.linksMap)})),
             success: function (response) {
                 twoDModelSpinner.hide();
-                console.log(response.report);
-                $scope.$emit("emitDisplayTrace", response.trace);
+                $scope.$emit("emitDisplayResult", response);
             },
             error: function (response, status, error) {
                 twoDModelSpinner.hide();
                 console.log("error: " + status + " " + error);
             }
-        });
-    }
-
-    private parseReport(report) {
-        report.messages.forEach( function (message) {
-
         });
     }
 

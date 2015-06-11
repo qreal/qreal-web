@@ -60,8 +60,8 @@ class RobotModelImpl implements RobotModel {
         this.robotItem.show();
     }
 
-    rideTrace(traceJson) {
-        this.robotItem.rideTrace(traceJson);
+    showCheckResult(result) {
+        this.robotItem.showCheckResult(result);
     }
 
     stopPlay(): void {

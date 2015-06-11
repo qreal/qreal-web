@@ -27,6 +27,9 @@
             </div>
             <div  id="twoDModelContent" class="row unselectable">
                 <div id="twoDModel_stage" ng-controller="TwoDModelEngineFacadeImpl" task="${taskId}">
+                    <div id="infoAlert" class="alert fade in">
+                        <a href="#" class="close" aria-label="close">&times;</a>
+                    </div>
                     <div id="twoDModelSpinner" class="centerSpinner">
                     </div>
                 </div>

@@ -7,7 +7,7 @@ interface RobotItem extends AbstractItem {
     addSensorItem(portName: string, deviceType: DeviceInfo, pathToImage: string,
                   position?: TwoDPosition, direction?: number): void;
     setStartPosition(position: TwoDPosition, direction: number): void;
-    rideTrace(traceJson);
+    showCheckResult(result);
     clearCurrentPosition(): void;
     hide(): void;
     show(): void;

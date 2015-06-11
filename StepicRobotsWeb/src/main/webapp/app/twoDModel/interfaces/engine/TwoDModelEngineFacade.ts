@@ -5,6 +5,6 @@ interface TwoDModelEngineFacade {
     setDrawEllipseMode(): void;
     setNoneMode(): void;
     openDiagram(): void;
-    displayTrace(traceJson): void;
+    showCheckResult(result): void;
     stopPlay(): void;
 }
