@@ -11,4 +11,6 @@ interface RobotItem extends AbstractItem {
     clearCurrentPosition(): void;
     hide(): void;
     show(): void;
+    setOffsetX(offsetX: number): void;
+    setOffsetY(offsetY: number): void;
 }

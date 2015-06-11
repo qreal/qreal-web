@@ -56,20 +56,8 @@ class DiagramController {
         );
 
         $scope.submit = function() { controller.submit($scope) };
-        this.initSubmitSpinner();
-    }
-
-    initSubmitSpinner(): void {
-        var submitSpinner = $('#submitSpinner');
-        submitSpinner.hide();
-        $(document)
-            .ajaxStart(function () {
-                submitSpinner.show();
-            })
-            .ajaxStop(function () {
-                submitSpinner.hide();
-            }
-        );
+        $('#diagramSpinner').hide();
+        $('#twoDModelSpinner').hide();
     }
 
     initDeleteListener(): void {
@@ -275,6 +263,8 @@ class DiagramController {
             alert("Palette is not loaded!");
             return;
         }
+        var twoDModelSpinner = $('#twoDModelSpinner');
+        twoDModelSpinner.show();
         var controller = this;
         $.ajax({
             type: 'POST',
@@ -285,12 +275,20 @@ class DiagramController {
                 diagram: ExportManager.exportDiagramStateToJSON(controller.graph,
                     controller.nodesMap, controller.linksMap)})),
             success: function (response) {
-                console.log(response.report.messages[0].message);
+                twoDModelSpinner.hide();
+                console.log(response.report);
                 $scope.$emit("emitDisplayTrace", response.trace);
             },
             error: function (response, status, error) {
+                twoDModelSpinner.hide();
                 console.log("error: " + status + " " + error);
             }
+        });
+    }
+
+    private parseReport(report) {
+        report.messages.forEach( function (message) {
+
         });
     }
 
@@ -299,6 +297,10 @@ class DiagramController {
             alert("Palette is not loaded!");
             return;
         }
+        var diagramSpinner = $('#diagramSpinner');
+        diagramSpinner.show();
+        var twoDModelSpinner = $('#twoDModelSpinner');
+        twoDModelSpinner.show();
         var controller = this;
         $.ajax({
             type: 'POST',
@@ -308,11 +310,15 @@ class DiagramController {
             data: (JSON.stringify({id: taskId})),
             success: function (response) {
                 controller.clear();
+                diagramSpinner.hide();
+                twoDModelSpinner.hide();
                 $scope.$emit("emit2dModelLoad");
                 DiagramLoader.load(response, controller.graph,
                     controller.nodesMap, controller.linksMap, controller.nodeTypesMap);
             },
             error: function (response, status, error) {
+                diagramSpinner.hide();
+                twoDModelSpinner.hide();
                 console.log("error: " + status + " " + error);
             }
         });

@@ -45,6 +45,8 @@ class RobotModelImpl implements RobotModel {
         pos.y += offsetY;
         var direction = parseFloat(xml.getAttribute('direction'));
         this.robotItem.setStartPosition(pos, direction);
+        this.robotItem.setOffsetX(offsetX);
+        this.robotItem.setOffsetY(offsetY);
 
         this.sensorsConfiguration.deserialize(xml, offsetX, offsetY);
 

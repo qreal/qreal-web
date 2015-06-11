@@ -9,6 +9,8 @@ class RobotItemImpl implements RobotItem {
     private rotateHandle: RaphaelElement;
     private width: number = 50;
     private height: number = 50;
+    private offsetX: number = 0;
+    private offsetY: number = 0;
 
     private sensors: {string?: SensorItem} = {};
 
@@ -224,40 +226,67 @@ class RobotItemImpl implements RobotItem {
 
     rideTrace(traceJson) {
         this.clearCurrentPosition();
-        var animation = this.createAnimationSequence(traceJson, 0);
-        this.image.animate(animation);
-        this.animateSensors(this.image, "T" + traceJson.points[0].x + "," + traceJson.points[0].y, animation, traceJson.points[0].timestamp);
-
+        if (traceJson.points.length > 1) {
+            var animation = this.createAnimationSequence(traceJson, 1);
+            this.image.animate(animation);
+            var robotX = this.image.matrix.x(this.startPosition.x, this.startPosition.y);
+            var robotY = this.image.matrix.y(this.startPosition.x, this.startPosition.y);
+            var deltaX = (traceJson.points[1].x + this.offsetX) - robotX;
+            var deltaY = (traceJson.points[1].y + this.offsetY) - robotY;
+            var deltaTime = traceJson.points[1].timestamp - traceJson.points[0].timestamp;
+            this.animateSensors(this.image, "T" + deltaX + "," + deltaY, animation, deltaTime);
+        }
     }
 
     private createAnimationSequence(traceJson, seqNumber: number): RaphaelAnimation {
         this.updateSensorsTransformations();
         this.center.x = this.image.matrix.x(this.startCenter.x, this.startCenter.y);
         this.center.y = this.image.matrix.y(this.startCenter.x, this.startCenter.y);
-        var point = traceJson.points[seqNumber];
-        var angle = point.direction - this.image.matrix.split().rotate;
+        var currentPoint = traceJson.points[seqNumber];
+        var previousPoint = traceJson.points[seqNumber - 1];
+        var angle = currentPoint.direction - this.image.matrix.split().rotate;
         var currentTransformation = this.image.transform();
 
         this.image.transform(currentTransformation + "R" + angle + "," + this.center.x + "," + this.center.y);
         this.transformSensorsItems("R" + angle + "," + this.center.x + "," + this.center.y);
         this.updateSensorsTransformations();
 
-        var robotTransform = this.image.transform() + "T" + point.x + "," + point.y;
+        var robotX = this.image.matrix.x(this.startPosition.x, this.startPosition.y);
+        var robotY = this.image.matrix.y(this.startPosition.x, this.startPosition.y);
+        var deltaX = (currentPoint.x + this.offsetX) - robotX;
+        var deltaY = (currentPoint.y + this.offsetY) - robotY;
+
+        var deltaTime = (currentPoint.timestamp - previousPoint.timestamp) / 2;
+
+        var robotTransform = this.image.transform() + "T" + deltaX + "," + deltaY;
         this.updateSensorsTransformations();
 
         var robotItem = this;
 
         if (seqNumber < traceJson.points.length - 1) {
-            return Raphael.animation({ transform: robotTransform }, point.timestamp, "linear",
+            return Raphael.animation({ transform: robotTransform }, deltaTime, "linear",
                 function() {
                     var animation = robotItem.createAnimationSequence(traceJson, seqNumber + 1);
                     robotItem.image.animate(animation);
-                    robotItem.animateSensors(this.image,
-                        "T" + traceJson.points[seqNumber + 1].x + "," + traceJson.points[seqNumber + 1].y, animation, traceJson.points[seqNumber + 1].timestamp);
+
+                    var deltaX = (traceJson.points[seqNumber + 1].x + this.offsetX) - robotX;
+                    var deltaY = (traceJson.points[seqNumber + 1].y + this.offsetY) - robotY;
+                    var deltaTime = (traceJson.points[seqNumber + 1].timestamp - currentPoint.timestamp) / 2;
+
+                    robotItem.animateSensors(this.image, "T" + deltaX + "," + deltaY,
+                        animation, deltaTime);
                 });
         }
 
-        return Raphael.animation({ transform: robotTransform }, point.timestamp);
+        return Raphael.animation({ transform: robotTransform }, deltaTime);
+    }
+
+    setOffsetX(offsetX: number): void {
+        this.offsetX = offsetX;
+    }
+
+    setOffsetY(offsetY: number): void {
+        this.offsetY = offsetY;
     }
 
     hide(): void {
