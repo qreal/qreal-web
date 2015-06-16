@@ -6,6 +6,7 @@ class DiagramController {
     private nodeTypesMap: NodeTypesMap = {};
     private nameTypeMap: {string?: string} = {};
     private nodesMap = {};
+    private propertyNameMap: {string?: string};
     private linksMap = {};
     private currentElement: DiagramElement
     private isPaletteLoaded = false;
@@ -81,6 +82,10 @@ class DiagramController {
         this.nameTypeMap = nameTypeMap;
     }
 
+    setPropertyNameMap(propertyNameMap: {string?: string}) {
+        this.propertyNameMap = propertyNameMap;
+    }
+
     private makeUnselectable(element) {
         if (element.nodeType == 1) {
             element.setAttribute("unselectable", "on");
@@ -103,10 +108,11 @@ class DiagramController {
         $(document).on('change', '.form-control', function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
+            var key = controller.propertyNameMap[name];
             var value = $(this).val();
-            var property: Property = controller.currentElement.getProperties()[name];
+            var property: Property = controller.currentElement.getProperties()[key];
             property.value = value;
-            controller.currentElement.setProperty(name, property);
+            controller.currentElement.setProperty(key, property);
         });
     }
 
@@ -115,6 +121,7 @@ class DiagramController {
         $(document).on('change', '.checkbox', function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
+            var key = controller.propertyNameMap[name];
             var label = tr.find('label');
             var value = label.contents().last()[0].textContent;
             if (value === "True") {
@@ -124,9 +131,9 @@ class DiagramController {
                 value = "True"
                 label.contents().last()[0].textContent = value;
             }
-            var property: Property = controller.currentElement.getProperties()[name];
+            var property: Property = controller.currentElement.getProperties()[key];
             property.value = value;
-            controller.currentElement.setProperty(name, property);
+            controller.currentElement.setProperty(key, property);
         });
     }
 
@@ -135,10 +142,11 @@ class DiagramController {
         $(document).on('change', '.mydropdown', function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
+            var key = controller.propertyNameMap[name];
             var value = $(this).val();
-            var property: Property = controller.currentElement.getProperties()[name];
+            var property: Property = controller.currentElement.getProperties()[key];
             property.value = value;
-            controller.currentElement.setProperty(name, property);
+            controller.currentElement.setProperty(key, property);
         });
     }
 
@@ -147,11 +155,12 @@ class DiagramController {
         $(document).on('change', '.spinner', function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
+            var key = controller.propertyNameMap[name];
             var value = $(this).val();
             if (value !== "" && !isNaN(value)) {
-                var property: Property = controller.currentElement.getProperties()[name];
+                var property: Property = controller.currentElement.getProperties()[key];
                 property.value = value;
-                controller.currentElement.setProperty(name, property);
+                controller.currentElement.setProperty(key, property);
             }
         });
     }

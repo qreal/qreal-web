@@ -279,7 +279,7 @@ class RobotItemImpl implements RobotItem {
         var messageText = "";
         var level = report.messages[0].level;
         report.messages.forEach( function(message) {
-            messageText += message.message;
+            messageText += message.message + " ";
         });
         if (level === "info") {
             $("#infoAlert").removeClass("alert-danger");

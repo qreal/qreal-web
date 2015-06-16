@@ -37,7 +37,7 @@ class Link implements DiagramElement {
         return this.properties;
     }
 
-    setProperty(name:string, property: Property): void {
-        this.properties[name] = property;
+    setProperty(key: string, property: Property): void {
+        this.properties[key] = property;
     }
 }

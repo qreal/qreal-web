@@ -62,8 +62,8 @@ class DefaultDiagramNode implements DiagramNode {
         return this.jointObject;
     }
 
-    setProperty(name:string, property: Property): void {
-        this.properties[name] = property;
+    setProperty(key: string, property: Property): void {
+        this.properties[key] = property;
     }
 
     getProperties(): PropertiesMap {

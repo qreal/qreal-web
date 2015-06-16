@@ -90,16 +90,11 @@ public class DiagramController {
             interpreterProcBuilder.directory(folder);
             interpreterProcBuilder.start().waitFor();
 
-            /*Path trajectoryPath = resourceLoader.getResource("tasks/" + request.getId() +
+            Path trajectoryPath = resourceLoader.getResource("tasks/" + request.getId() +
                     "/solutions/" + uuidStr + "/trajectory.fifo").getFile().toPath();
 
             Report report = parseReportFile(resourceLoader.getResource("tasks/" + request.getId() +
-                    "/solutions/" + uuidStr + "/report.json").getFile());*/
-
-
-            Path trajectoryPath = resourceLoader.getResource("tasks/" + request.getId() + "/trajectory.fifo").getFile().toPath();
-
-            Report report = parseReportFile(resourceLoader.getResource("tasks/" + request.getId() + "/report.json").getFile());
+                    "/solutions/" + uuidStr + "/report.json").getFile());
 
             Trace trace = parseTrajectoryFile(trajectoryPath);
             return new SubmitResponse(report, trace);
