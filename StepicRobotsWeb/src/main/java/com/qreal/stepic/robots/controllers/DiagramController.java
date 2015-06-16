@@ -6,6 +6,7 @@ import com.qreal.stepic.robots.converters.XmlSaveConverter;
 import com.qreal.stepic.robots.model.diagram.*;
 import com.qreal.stepic.robots.model.two_d.Point;
 import com.qreal.stepic.robots.model.two_d.Trace;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -97,6 +98,7 @@ public class DiagramController {
                     "/solutions/" + uuidStr + "/report.json").getFile());
 
             Trace trace = parseTrajectoryFile(trajectoryPath);
+            FileUtils.deleteDirectory(folder);
             return new SubmitResponse(report, trace);
         } catch (IOException e) {
             e.printStackTrace();
