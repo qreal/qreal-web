@@ -97,6 +97,7 @@
 /// <reference path="twoDModel/interfaces/robotModel/PortInfo.ts" />
 /// <reference path="twoDModel/interfaces/robotModel/RobotModelInterface.ts" />
 /// <reference path="twoDModel/interfaces/robotModel/robotParts/Device.ts" />
+/// <reference path="twoDModel/types/AnimationQueue.ts" />
 /// <reference path="twoDModel/types/Direction.ts" />
 /// <reference path="twoDModel/types/ReservedVariableType.ts" />
 /// <reference path="twoDModel/types/TwoDPosition.ts" />

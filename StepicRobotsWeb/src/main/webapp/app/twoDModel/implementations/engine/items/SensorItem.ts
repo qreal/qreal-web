@@ -13,6 +13,8 @@ class SensorItem {
     protected startPosition: TwoDPosition;
     protected startDirection: number;
     protected sensorType: DeviceInfo;
+    protected currentTranslation: string;
+    protected currentRotation: string;
 
     constructor(robotItem: RobotItem, worldModel: WorldModel, sensorType: DeviceInfo,
                 pathToImage: string, position?: TwoDPosition) {
@@ -20,7 +22,7 @@ class SensorItem {
         this.worldModel = worldModel;
         var paper: RaphaelPaper = worldModel.getPaper();
         this.sensorType = sensorType;
-        this.degineImageSizes(sensorType);
+        this.defineImageSizes(sensorType);
         this.startPosition = this.getStartPosition(position);
         this.startDirection = 0;
         this.image = paper.image((pathToImage) ? pathToImage : this.pathToImage(),
@@ -44,12 +46,14 @@ class SensorItem {
         this.rotateHandle = paper.circle(this.startPosition.x + this.width + 20,
             this.startPosition.y + this.height / 2, handleRadius).attr(handleAttrs);
         this.hideHandles();
+
+        this.currentTranslation = "T0,0";
+        this.currentRotation = "R0";
     }
 
     setStartDirection(direction: number) {
         this.startDirection = direction;
         this.rotate(direction);
-        this.updateTransformationString();
     }
 
     setStartPosition() {
@@ -175,7 +179,7 @@ class SensorItem {
         return "images/2dmodel/sensors/2d_" + this.name() + ".png";
     }
 
-    protected degineImageSizes(sensorType): void {
+    protected defineImageSizes(sensorType): void {
         if (sensorType.isA(TouchSensor)) {
             this.width = 25;
             this.height = 25;
@@ -197,11 +201,9 @@ class SensorItem {
         this.rotateHandle.attr({cx: newCx, cy: newCy});
     }
 
-    animate(element, transformationString, animation, timestamp): void {
-        var sensorAnimation = Raphael.animation({ transform: this.transformationString + transformationString }, timestamp);
-        this.image.animateWith(element, animation, sensorAnimation);
-        var newCx = this.image.matrix.x(this.startCx + this.width / 2 + 20, this.startCy);
-        var newCy = this.image.matrix.y(this.startCx + this.width / 2 + 20, this.startCy);
+    animate(positionOffsetX: number, positionOffsetY: number): void {
+        this.currentTranslation = "T" + positionOffsetX + "," + positionOffsetY;
+        this.image.transform(this.getTransformation());
     }
 
     stopAnimation(): void {
@@ -212,8 +214,15 @@ class SensorItem {
         this.transformationString = this.image.transform();
     }
 
-    rotate(angle: number) {
-        this.image.transform(this.transformationString + "R" + angle)
+    rotate(angle: number): void {
+        this.currentRotation = "R" + angle;
+        this.image.transform(this.getTransformation());
+    }
+
+    rotateByRobot(angle: number, centerX: number, centerY: number) {
+        var direction = this.startDirection + angle;
+        this.currentRotation = "R" + direction;
+        this.image.transform(this.getTransformation());
     }
 
     hideHandles(): void {
@@ -228,5 +237,9 @@ class SensorItem {
     remove(): void {
         this.image.remove();
         this.rotateHandle.remove();
+    }
+
+    private getTransformation(): string {
+        return this.currentRotation + this.currentTranslation;
     }
 }

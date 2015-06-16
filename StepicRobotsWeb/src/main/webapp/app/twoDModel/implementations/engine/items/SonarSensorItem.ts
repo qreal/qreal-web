@@ -1,9 +1,11 @@
 class SonarSensorItem extends SensorItem {
-    private scanningRegion:RaphaelPath;
+    private scanningRegion: RaphaelPath;
     private sonarRange = 255;
     private regionStartX:number;
     private regionStartY:number;
     private regionTransformationString = "";
+    protected regionTranslation: string;
+    protected regionRotation: string;
 
     constructor(robotItem:RobotItem, worldModel:WorldModel, sensorType:DeviceInfo,
                 pathToImage:string, position?:TwoDPosition) {
@@ -30,6 +32,9 @@ class SonarSensorItem extends SensorItem {
         "Q" + (this.regionStartX + rangeInPixels) + "," + this.regionStartY + " " + regionBottomX + "," + regionBottomY +
         "Z");
         this.scanningRegion.attr({fill: "#c5d0de", stroke: "#b1bbc7", opacity: 0.5});
+
+        this.regionTranslation = "T0,0";
+        this.regionRotation = "R0";
     }
 
     setStartPosition() {
@@ -56,39 +61,47 @@ class SonarSensorItem extends SensorItem {
         this.regionTransformationString = "";
     }
 
-    transform(transformationString:string) {
+    transform(transformationString: string) {
         super.transform(transformationString);
         this.scanningRegion.transform(this.regionTransformationString + transformationString);
     }
 
-    animate(element, transformationString, animation, timestamp):void {
-        super.animate(element, transformationString, animation, timestamp);
-        var sensorAnimation = Raphael.animation({transform: this.regionTransformationString + transformationString}, timestamp);
-        this.scanningRegion.animateWith(element, animation, sensorAnimation);
+    animate(positionOffsetX: number, positionOffsetY: number): void {
+        super.animate(positionOffsetX, positionOffsetY);
+
+        this.regionTranslation = "T" + positionOffsetX + "," + positionOffsetY;
+        this.scanningRegion.transform(this.getRegionTransformation());
     }
 
-    stopAnimation():void {
+    stopAnimation(): void {
         super.stopAnimation();
         this.scanningRegion.stop();
     }
 
-    updateTransformationString():void {
+    updateTransformationString(): void {
         super.updateTransformationString();
         this.regionTransformationString = this.scanningRegion.transform();
     }
 
-    rotate(angle:number) {
+    rotate(angle: number): void {
         super.rotate(angle);
+        this.regionRotation = "R" + angle + "," + this.regionStartX + "," + this.regionStartY;
+        this.scanningRegion.transform(this.getRegionTransformation());
+    }
 
-        var regionRotationX = this.image.matrix.x(this.regionStartX, this.regionStartY);
-        var regionRotationY = this.image.matrix.y(this.regionStartX, this.regionStartY);
-
-        this.scanningRegion.transform(this.regionTransformationString + "R" + angle + "," +
-        regionRotationX + "," + regionRotationY);
+    rotateByRobot(angle: number, centerX: number, centerY: number) {
+        super.rotateByRobot(angle, centerX, centerY);
+        var direction = this.startDirection + angle;
+        this.regionRotation = "R" + direction + "," + this.regionStartX + "," + this.regionStartY;
+        this.scanningRegion.transform(this.getRegionTransformation());
     }
 
     remove():void {
         super.remove();
         this.scanningRegion.remove();
+    }
+
+    private getRegionTransformation(): string {
+        return this.regionRotation + this.regionTranslation;
     }
 }

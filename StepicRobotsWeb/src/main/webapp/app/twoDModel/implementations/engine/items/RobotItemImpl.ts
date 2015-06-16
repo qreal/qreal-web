@@ -134,7 +134,6 @@ class RobotItemImpl implements RobotItem {
         this.startCenter.y = this.center.y;
         this.image.transform("R" + direction + "," + this.center.x + "," + this.center.y);
         this.rotateHandle.attr({"cx": + position.x + this.width + 20, "cy": position.y + this.height / 2 });
-
     }
 
     ride(): void {
@@ -200,10 +199,17 @@ class RobotItemImpl implements RobotItem {
         }
     }
 
-    private animateSensors(element, transformationString: string, animation, timestamp): void {
+    private rotateSensors(angle: number, centerX: number, centerY: number) {
         for (var portName in this.sensors) {
             var sensor = this.sensors[portName];
-            sensor.animate(element, transformationString, animation, timestamp);
+            sensor.rotateByRobot(angle, centerX, centerY);
+        }
+    }
+
+    private animateSensors(positionOffsetX: number, positionOffsetY: number): void {
+        for (var portName in this.sensors) {
+            var sensor = this.sensors[portName];
+            sensor.animate(positionOffsetX, positionOffsetY);
         }
     }
 
@@ -225,64 +231,48 @@ class RobotItemImpl implements RobotItem {
     }
 
     showCheckResult(result) {
+        var robotItem  = this;
         var traceJson = result.trace;
         this.clearCurrentPosition();
-        if (traceJson.points.length > 1) {
-            var animation = this.createAnimationSequence(traceJson, result.report, 1);
-            this.image.animate(animation);
-            var robotX = this.image.matrix.x(this.startPosition.x, this.startPosition.y);
-            var robotY = this.image.matrix.y(this.startPosition.x, this.startPosition.y);
-            var deltaX = (traceJson.points[1].x + this.offsetX) - robotX;
-            var deltaY = (traceJson.points[1].y + this.offsetY) - robotY;
-            var deltaTime = traceJson.points[1].timestamp - traceJson.points[0].timestamp;
-            this.animateSensors(this.image, "T" + deltaX + "," + deltaY, animation, deltaTime);
-        }
-    }
 
-    private createAnimationSequence(traceJson, report, seqNumber: number): RaphaelAnimation {
-        this.updateSensorsTransformations();
-        this.center.x = this.image.matrix.x(this.startCenter.x, this.startCenter.y);
-        this.center.y = this.image.matrix.y(this.startCenter.x, this.startCenter.y);
-        var currentPoint = traceJson.points[seqNumber];
-        var previousPoint = traceJson.points[seqNumber - 1];
-        var angle = currentPoint.direction - this.image.matrix.split().rotate;
-        var currentTransformation = this.image.transform();
+        var animationQueue: AnimationQueue = new AnimationQueue();
 
-        this.image.transform(currentTransformation + "R" + angle + "," + this.center.x + "," + this.center.y);
-        this.transformSensorsItems("R" + angle + "," + this.center.x + "," + this.center.y);
-        this.updateSensorsTransformations();
+        var points = traceJson.points;
+        var seqNumber = 1;
 
-        var robotX = this.image.matrix.x(this.startPosition.x, this.startPosition.y);
-        var robotY = this.image.matrix.y(this.startPosition.x, this.startPosition.y);
-        var deltaX = (currentPoint.x + this.offsetX) - robotX;
-        var deltaY = (currentPoint.y + this.offsetY) - robotY;
+        for (var i = 1; i < points.length - 1; i++) {
+            animationQueue.push(function() {
+                var currentPoint = points[seqNumber];
+                var previousPoint = points[seqNumber - 1];
 
-        var deltaTime = (currentPoint.timestamp - previousPoint.timestamp) / 2;
+                var newX = currentPoint.x + robotItem.offsetX;
+                var newY = currentPoint.y + robotItem.offsetY;
+                robotItem.center.x = newX + robotItem.width / 2
+                robotItem.center.y = newY + robotItem.height / 2;
 
-        var robotTransform = this.image.transform() + "T" + deltaX + "," + deltaY;
-        this.updateSensorsTransformations();
+                robotItem.image.transform("R" + currentPoint.direction);
+                robotItem.rotateSensors(currentPoint.direction, robotItem.center.x,  robotItem.center.y);
 
-        var robotItem = this;
+                var deltaTime = (currentPoint.timestamp - previousPoint.timestamp) / 10;
+                seqNumber++;
 
-        if (seqNumber < traceJson.points.length - 1) {
-            return Raphael.animation({ transform: robotTransform }, deltaTime, "linear",
-                function() {
-                    var animation = robotItem.createAnimationSequence(traceJson, report, seqNumber + 1);
-                    robotItem.image.animate(animation);
+                var matrixCx = robotItem.image.matrix.x(robotItem.center.x, robotItem.center.y);
+                var matrixCy = robotItem.image.matrix.y(robotItem.center.x, robotItem.center.y);
 
-                    var deltaX = (traceJson.points[seqNumber + 1].x + this.offsetX) - robotX;
-                    var deltaY = (traceJson.points[seqNumber + 1].y + this.offsetY) - robotY;
-                    var deltaTime = (traceJson.points[seqNumber + 1].timestamp - currentPoint.timestamp) / 2;
+                robotItem.animateSensors(matrixCx - robotItem.startCenter.x, matrixCy - robotItem.startCenter.y);
 
-                    robotItem.animateSensors(this.image, "T" + deltaX + "," + deltaY,
-                        animation, deltaTime);
-                });
-        }
-
-        return Raphael.animation({ transform: robotTransform }, deltaTime, "linear",
-            function() {
-                robotItem.parseReport(report);
+                robotItem.image.attr({x: newX, y: newY});
             });
+        }
+        animationQueue.push(function() {
+            robotItem.parseReport(result.report);
+        });
+        setTimeout(function run() {
+            if (animationQueue.hasNext()) {
+                animationQueue.next().call(this);
+                setTimeout(run, 10);
+            }
+        }, 10);
     }
 
     parseReport(report) {

@@ -12,7 +12,6 @@ class WorldModelImpl implements WorldModel {
         $(this.paper.canvas).attr("id", "twoDModel_paper");
         $(this.paper.canvas).css('overflow', 'auto');
 
-
         this.paper.setViewBox(0, 0, 3000, 3000, true);
         this.paper.canvas.setAttribute('preserveAspectRatio', 'none');
         $('#twoDModel_paper').attr('width', 2000).attr('height', 2000);
