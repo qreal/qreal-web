@@ -46,9 +46,6 @@ class SensorItem {
         this.rotateHandle = paper.circle(this.startPosition.x + this.width + 20,
             this.startPosition.y + this.height / 2, handleRadius).attr(handleAttrs);
         this.hideHandles();
-
-        this.currentTranslation = "T0,0";
-        this.currentRotation = "R0";
     }
 
     setStartDirection(direction: number) {
@@ -57,6 +54,8 @@ class SensorItem {
     }
 
     setStartPosition() {
+        this.currentTranslation = "T0,0";
+        this.currentRotation = "R0";
         this.image.attr({x: this.startPosition.x, y: this.startPosition.y});
         this.centerX = this.startPosition.x + this.width / 2;
         this.centerY = this.startPosition.y + this.height / 2;
@@ -204,10 +203,6 @@ class SensorItem {
     animate(positionOffsetX: number, positionOffsetY: number): void {
         this.currentTranslation = "T" + positionOffsetX + "," + positionOffsetY;
         this.image.transform(this.getTransformation());
-    }
-
-    stopAnimation(): void {
-        this.image.stop();
     }
 
     updateTransformationString(): void {

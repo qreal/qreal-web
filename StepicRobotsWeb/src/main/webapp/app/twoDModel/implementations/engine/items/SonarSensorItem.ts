@@ -39,6 +39,8 @@ class SonarSensorItem extends SensorItem {
 
     setStartPosition() {
         super.setStartPosition();
+        this.regionTranslation = "T0,0";
+        this.regionRotation = "R0";
         var regAngle = 20;
         var halfRegAngleInRad = regAngle / 2 * (Math.PI / 180)
 
@@ -71,11 +73,6 @@ class SonarSensorItem extends SensorItem {
 
         this.regionTranslation = "T" + positionOffsetX + "," + positionOffsetY;
         this.scanningRegion.transform(this.getRegionTransformation());
-    }
-
-    stopAnimation(): void {
-        super.stopAnimation();
-        this.scanningRegion.stop();
     }
 
     updateTransformationString(): void {

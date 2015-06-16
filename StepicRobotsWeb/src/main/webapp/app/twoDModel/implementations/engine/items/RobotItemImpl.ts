@@ -11,7 +11,7 @@ class RobotItemImpl implements RobotItem {
     private height: number = 50;
     private offsetX: number = 0;
     private offsetY: number = 0;
-
+    private timeoutId: number;
     private sensors: {string?: SensorItem} = {};
 
     constructor(worldModel: WorldModel, position: TwoDPosition, imageFileName: string, robot: RobotModel) {
@@ -216,7 +216,6 @@ class RobotItemImpl implements RobotItem {
     private clearSensorsPosition() {
         for (var portName in this.sensors) {
             var sensor = this.sensors[portName];
-            sensor.stopAnimation();
             sensor.setStartPosition();
             sensor.transform(this.image.transform());
             sensor.updateTransformationString();
@@ -225,7 +224,10 @@ class RobotItemImpl implements RobotItem {
     }
 
     clearCurrentPosition(): void {
-        this.image.stop();
+        if (this.timeoutId) {
+            clearTimeout(this.timeoutId);
+            this.timeoutId = undefined;
+        }
         this.setStartPosition(this.startPosition, this.startDirection);
         this.clearSensorsPosition();
     }
@@ -267,10 +269,10 @@ class RobotItemImpl implements RobotItem {
         animationQueue.push(function() {
             robotItem.parseReport(result.report);
         });
-        setTimeout(function run() {
+        robotItem.timeoutId = setTimeout(function run() {
             if (animationQueue.hasNext()) {
                 animationQueue.next().call(this);
-                setTimeout(run, 10);
+                robotItem.timeoutId = setTimeout(run, 10);
             }
         }, 10);
     }
