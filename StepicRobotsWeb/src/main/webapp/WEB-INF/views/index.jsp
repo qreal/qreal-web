@@ -18,6 +18,9 @@
     <div class="container">
         <div class="col-md-9">
             <div id="diagramContent" class="row unselectable" ng-controller="DiagramController" task="${taskId}">
+                <ul class='custom-menu'>
+                    <li data-action="delete">Delete</li>
+                </ul>
                 <div id="diagram_paper">
                     <div id="diagramSpinner" class="centerSpinner">
                     </div>

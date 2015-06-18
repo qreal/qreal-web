@@ -30,8 +30,10 @@ class DiagramController {
         this.makeUnselectable(document.getElementById("diagramContent"));
 
         this.paper.on('cell:pointerdown',
-            function (cellView, evt, x, y) {
-                console.log('cell view ' + cellView.model.id + ' was clicked');
+            function (cellView, event, x, y) {
+                if (!($(event.target).parents(".custom-menu").length > 0)) {
+                    $(".custom-menu").hide(100);
+                }
 
                 var node: DiagramNode = controller.nodesMap[cellView.model.id];
                 if (node) {
@@ -46,11 +48,22 @@ class DiagramController {
                         controller.currentElement = undefined;
                     }
                 }
+
+                if (event.button == 2) {
+                    console.log("right-click");
+                    $(".custom-menu").finish().toggle(100).
+                        css({
+                            top: event.offsetY + "px",
+                            left: event.offsetX + "px"
+                        });
+                }
             }
         );
         this.paper.on('blank:pointerdown',
             function (evt, x, y) {
-                console.log('blank was clicked');
+                if (!($(event.target).parents(".custom-menu").length > 0)) {
+                    $(".custom-menu").hide(100);
+                }
                 $(".property").remove();
                 controller.currentElement = undefined;
             }
@@ -62,6 +75,25 @@ class DiagramController {
         $('#remove').click(function() {
             controller.removeCurrentElement();
         })
+
+        this.initCustomContextMenu();
+    }
+
+    initCustomContextMenu(): void {
+        var controller = this;
+        $("#diagramContent").bind("contextmenu", function (event) {
+            event.preventDefault();
+        });
+
+        $(".custom-menu li").click(function(){
+            switch($(this).attr("data-action")) {
+                case "delete":
+                    controller.removeCurrentElement();
+                    break;
+            }
+
+            $(".custom-menu").hide(100);
+        });
     }
 
     initDeleteListener(): void {
