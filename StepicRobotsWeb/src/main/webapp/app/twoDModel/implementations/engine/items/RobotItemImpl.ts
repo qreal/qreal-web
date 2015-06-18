@@ -243,10 +243,9 @@ class RobotItemImpl implements RobotItem {
         var seqNumber = 1;
 
         for (var i = 1; i < points.length - 1; i++) {
+            var delay = points[i].timestamp - points[i - 1].timestamp;
             animationQueue.push(function() {
                 var currentPoint = points[seqNumber];
-                var previousPoint = points[seqNumber - 1];
-
                 var newX = currentPoint.x + robotItem.offsetX;
                 var newY = currentPoint.y + robotItem.offsetY;
                 robotItem.center.x = newX + robotItem.width / 2
@@ -255,7 +254,6 @@ class RobotItemImpl implements RobotItem {
                 robotItem.image.transform("R" + currentPoint.direction);
                 robotItem.rotateSensors(currentPoint.direction, robotItem.center.x,  robotItem.center.y);
 
-                var deltaTime = (currentPoint.timestamp - previousPoint.timestamp) / 10;
                 seqNumber++;
 
                 var matrixCx = robotItem.image.matrix.x(robotItem.center.x, robotItem.center.y);
@@ -264,17 +262,17 @@ class RobotItemImpl implements RobotItem {
                 robotItem.animateSensors(matrixCx - robotItem.startCenter.x, matrixCy - robotItem.startCenter.y);
 
                 robotItem.image.attr({x: newX, y: newY});
-            });
+            }, delay);
         }
         animationQueue.push(function() {
             robotItem.parseReport(result.report);
-        });
+        }, 0);
         robotItem.timeoutId = setTimeout(function run() {
             if (animationQueue.hasNext()) {
                 animationQueue.next().call(this);
-                robotItem.timeoutId = setTimeout(run, 10);
+                robotItem.timeoutId = setTimeout(run, animationQueue.getNextDelay());
             }
-        }, 10);
+        }, 0);
     }
 
     parseReport(report) {
