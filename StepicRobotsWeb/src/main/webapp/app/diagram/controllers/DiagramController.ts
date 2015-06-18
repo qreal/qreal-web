@@ -72,9 +72,6 @@ class DiagramController {
         $scope.submit = function() { controller.submit($scope) };
         $('#diagramSpinner').hide();
         $('#twoDModelSpinner').hide();
-        $('#remove').click(function() {
-            controller.removeCurrentElement();
-        })
 
         this.initCustomContextMenu();
     }

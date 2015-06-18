@@ -114,20 +114,12 @@
 
 #elements_tree {
     position: absolute;
-    top: 320px;
+    top: 290px;
     left: 17px;
     right: 17px;
-    bottom: 15px;
+    bottom: 5px;
     overflow: auto;
     border: 1px solid lightgray;
-}
-
-#remove {
-    cursor: pointer;
-}
-
-#remove:active {
-    color: #7c7c7c;
 }
 
 #submit_button {

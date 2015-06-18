@@ -59,11 +59,6 @@
                     </div>
                     <div id="elements">
                         <legend style="margin-bottom: 5px">Palette</legend>
-                        <p>
-                            <span id="remove" class="glyphicon glyphicon-trash"></span>
-                            Delete node
-                        </p>
-
                         <div id="elements_tree">
                             <ul id="navigation">
                             </ul>
