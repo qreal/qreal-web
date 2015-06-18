@@ -113,6 +113,7 @@ class DiagramController {
 
     setPropertyNameMap(propertyNameMap: {string?: string}) {
         this.propertyNameMap = propertyNameMap;
+        this.propertyNameMap["Guard"] = "Guard"
     }
 
     private makeUnselectable(element) {
