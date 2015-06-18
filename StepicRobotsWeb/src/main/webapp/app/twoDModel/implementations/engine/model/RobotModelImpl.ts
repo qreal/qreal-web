@@ -2,8 +2,10 @@ class RobotModelImpl implements RobotModel {
     private robotItem: RobotItem;
     private twoDRobotModel: TwoDRobotModel;
     private sensorsConfiguration: SensorsConfiguration;
+    private worldModel: WorldModel;
 
     constructor(worldModel: WorldModel, twoDRobotModel: TwoDRobotModel, position: TwoDPosition) {
+        this.worldModel = worldModel;
         this.twoDRobotModel = twoDRobotModel;
         this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), this);
         this.robotItem.hide();
@@ -48,13 +50,14 @@ class RobotModelImpl implements RobotModel {
         this.robotItem.setOffsetX(offsetX);
         this.robotItem.setOffsetY(offsetY);
 
-        this.sensorsConfiguration.deserialize(xml, offsetX, offsetY);
+        this.sensorsConfiguration.deserialize(xml);
 
         var startPosition = xml.getElementsByTagName("startPosition")[0];
         if (startPosition) {
             var x = parseFloat(startPosition.getAttribute('x'));
             var y = parseFloat(startPosition.getAttribute('y'));
-            //TODO: set start pos
+            var direction = parseFloat(startPosition.getAttribute('direction'));
+            this.robotItem.setStartPositionCross(x, y, direction);
         }
 
         this.robotItem.show();

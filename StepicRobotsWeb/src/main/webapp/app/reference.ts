@@ -50,6 +50,7 @@
 /// <reference path="twoDModel/implementations/engine/items/RobotItemImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/items/SensorItem.ts" />
 /// <reference path="twoDModel/implementations/engine/items/SonarSensorItem.ts" />
+/// <reference path="twoDModel/implementations/engine/items/StartPositionItem.ts" />
 /// <reference path="twoDModel/implementations/engine/items/WallItemImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/items/regions/RectangularRegion.ts" />
 /// <reference path="twoDModel/implementations/engine/model/Constants.ts" />

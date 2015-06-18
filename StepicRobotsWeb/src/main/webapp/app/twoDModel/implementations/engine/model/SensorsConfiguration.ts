@@ -43,7 +43,7 @@ class SensorsConfiguration extends DevicesConfigurationProvider {
         return new TwoDPosition(x, y);
     }
 
-    deserialize(xml, offsetX: number, offsetY: number): void {
+    deserialize(xml): void {
         var sensors = xml.getElementsByTagName("sensor");
         for (var i = 0; i < sensors.length; i++) {
             var portName: string = sensors[i].getAttribute('port').split("###")[0];

@@ -13,4 +13,5 @@ interface RobotItem extends AbstractItem {
     show(): void;
     setOffsetX(offsetX: number): void;
     setOffsetY(offsetY: number): void;
+    setStartPositionCross(x: number, y: number, direction: number): void;
 }
