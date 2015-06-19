@@ -19,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import java.sql.SQLException;
 import java.util.Properties;
 
 @Configuration
@@ -56,6 +57,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         dataSource.setUrl("jdbc:mysql://localhost:3306/diagram");
         dataSource.setUsername("user");
         dataSource.setPassword("user");
+        dataSource.setValidationQuery("SELECT 1");
+        dataSource.setTestOnBorrow(true);
+        try {
+            dataSource.setLoginTimeout(300);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return dataSource;
     }
