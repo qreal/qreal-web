@@ -59,11 +59,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         dataSource.setPassword("user");
         dataSource.setValidationQuery("SELECT 1");
         dataSource.setTestOnBorrow(true);
-        try {
-            dataSource.setLoginTimeout(300);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
         return dataSource;
     }
