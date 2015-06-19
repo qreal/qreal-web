@@ -1,6 +1,6 @@
 class TimelineImpl implements Timeline {
     private timeInterval: number = 10;
-    private fps: number = 60;
+    private fps: number = 28;
     private defaultFrameLength: number = 1000 / this.fps;
 
     private slowSpeedFactor: number = 2;
@@ -10,7 +10,7 @@ class TimelineImpl implements Timeline {
 
     private defaultRealTimeInterval: number = 0;
     private ticksPerCycle: number = 3;
-    private speedFactor: number = 1;
+    private speedFactor: number;
     private cyclesCount: number;
     private frameLength: number = this.defaultFrameLength;
 
@@ -23,7 +23,6 @@ class TimelineImpl implements Timeline {
 
     start(): void {
         var timeline = this;
-        this.cyclesCount = 0;
         this.intervalId = setInterval(function() { timeline.onTimer(timeline); }, this.defaultFrameLength);
     }
 
@@ -33,15 +32,8 @@ class TimelineImpl implements Timeline {
 
     onTimer(timeline: Timeline): void {
         timeline.getRobotModels().forEach(function(model) {
-            model.recalculateParams();
+           model.nextFragment();
         });
-        this.cyclesCount++;
-        if (this.cyclesCount > this.speedFactor) {
-            timeline.getRobotModels().forEach(function(model) {
-                model.nextFragment();
-            });
-            this.cyclesCount = 0;
-        }
     }
 
     setSpeedFactor(factor: number): void {

@@ -2184,16 +2184,13 @@ var RobotItemImpl = (function () {
         this.sensors = {};
         this.worldModel = worldModel;
         this.robot = robot;
+        this.startPosition = position;
         var paper = worldModel.getPaper();
-        this.image = paper.image(imageFileName, 0, 0, this.width, this.height);
-        this.center.x = position.x;
-        this.center.y = position.y;
-        this.startPosition = new TwoDPosition();
-        this.startPosition.x = position.x - this.width / 2;
-        this.startPosition.y = position.y - this.height / 2;
+        this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
+        this.center.x = position.x + this.width / 2;
+        this.center.y = position.y + this.height / 2;
         this.startCenter.x = this.center.x;
         this.startCenter.y = this.center.y;
-        this.angle = 0;
         var handleRadius = 10;
         var handleAttrs = {
             fill: "#fff",
@@ -2202,8 +2199,7 @@ var RobotItemImpl = (function () {
             "stroke-width": 1,
             stroke: "black"
         };
-        this.rotateHandle = paper.circle(0, 0, handleRadius).attr(handleAttrs);
-        this.rotateHandle.attr({ cx: this.center.x + this.width / 2 + 20, cy: this.center.y });
+        this.rotateHandle = paper.circle(position.x + this.width + 20, position.y + this.height / 2, handleRadius).attr(handleAttrs);
         var robotItem = this;
         var startHandle = function () {
             if (!worldModel.getDrawMode()) {
@@ -2221,17 +2217,15 @@ var RobotItemImpl = (function () {
                 var offsetX = newX - robotItem.center.x;
                 var offsetY = newY - robotItem.center.y;
                 var tan = offsetY / offsetX;
-                robotItem.angle = Math.atan(tan);
+                var angle = Math.atan(tan) / (Math.PI / 180);
                 if (offsetX < 0) {
-                    robotItem.angle += Math.PI;
+                    angle += 180;
                 }
-                var angle = robotItem.angle / (Math.PI / 180);
-                robotItem.robot.setAngle(robotItem.angle);
                 angle -= this.rotation;
                 robotItem.image.transform(this.transformation + "R" + angle + "," + robotItem.center.x + "," + robotItem.center.y);
                 robotItem.transformSensorsItems("R" + angle + "," + robotItem.center.x + "," + robotItem.center.y);
-                var newCx = (robotItem.width / 2 + 20) * Math.cos(robotItem.angle) + robotItem.center.x;
-                var newCy = (robotItem.width / 2 + 20) * Math.sin(robotItem.angle) + robotItem.center.y;
+                var newCx = robotItem.image.matrix.x(robotItem.startCenter.x + robotItem.width / 2 + 20, robotItem.startCenter.y);
+                var newCy = robotItem.image.matrix.y(robotItem.startCenter.x + robotItem.width / 2 + 20, robotItem.startCenter.y);
                 this.attr({ cx: newCx, cy: newCy });
             }
             return this;
@@ -2243,8 +2237,6 @@ var RobotItemImpl = (function () {
         };
         robotItem.rotateHandle.drag(moveHandle, startHandle, upHandle);
         var start = function () {
-            robotItem.lastDx = 0;
-            robotItem.lastDy = 0;
             if (!worldModel.getDrawMode()) {
                 this.transformation = this.transform();
                 robotItem.updateSensorsTransformations();
@@ -2257,23 +2249,19 @@ var RobotItemImpl = (function () {
             if (!worldModel.getDrawMode()) {
                 this.transform(this.transformation + "T" + dx + "," + dy);
                 robotItem.transformSensorsItems("T" + dx + "," + dy);
-                robotItem.lastDx = dx;
-                robotItem.lastDy = dy;
                 robotItem.rotateHandle.attr({ "cx": this.handle_cx + dx, "cy": this.handle_cy + dy });
             }
             return this;
         }, up = function () {
             if (!worldModel.getDrawMode()) {
+                robotItem.center.x = this.matrix.x(robotItem.startCenter.x, robotItem.startCenter.y);
+                robotItem.center.y = this.matrix.y(robotItem.startCenter.x, robotItem.startCenter.y);
                 robotItem.updateSensorsTransformations();
-                robotItem.center.x += robotItem.lastDx;
-                robotItem.center.y += robotItem.lastDy;
-                robotItem.robot.setPosition(robotItem.center);
             }
             return this;
         };
         this.image.drag(move, start, up);
         this.hideHandles();
-        this.redraw();
     }
     RobotItemImpl.prototype.setStartPosition = function (position, direction) {
         this.startPosition = position;
@@ -2285,20 +2273,8 @@ var RobotItemImpl = (function () {
         this.image.transform("R" + direction + "," + this.center.x + "," + this.center.y);
         this.rotateHandle.attr({ "cx": +position.x + this.width + 20, "cy": position.y + this.height / 2 });
     };
-    RobotItemImpl.prototype.redraw = function () {
-        var newCx = (this.width / 2 + 20) * Math.cos(this.angle) + this.center.x;
-        var newCy = (this.width / 2 + 20) * Math.sin(this.angle) + this.center.y;
-        this.rotateHandle.attr({ cx: newCx, cy: newCy });
-        var x = this.center.x - this.width / 2;
-        var y = this.center.y - this.height / 2;
-        var angle = this.angle * 180 / Math.PI;
-        console.log("x: " + this.center.x + " y: " + this.center.y);
-        this.image.transform("t" + x + "," + y + "r" + angle);
-    };
-    RobotItemImpl.prototype.updateRobotLocation = function (position, angle) {
-        this.center.x = position.x;
-        this.center.y = position.y;
-        this.angle = angle;
+    RobotItemImpl.prototype.ride = function () {
+        console.log("robot ride");
     };
     RobotItemImpl.prototype.hideHandles = function () {
         this.rotateHandle.hide();
@@ -2695,16 +2671,9 @@ var ModelImpl = (function () {
 })();
 var RobotModelImpl = (function () {
     function RobotModelImpl(worldModel, twoDRobotModel, position) {
-        this.maxSpeed1 = 3;
-        this.maxSpeed2 = 3;
         this.twoDRobotModel = twoDRobotModel;
         this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), this);
         this.sensorsConfiguration = new SensorsConfiguration(this);
-        this.position = new TwoDPosition(position.x, position.y);
-        this.angle = 0;
-        this.speed1 = 0;
-        this.speed2 = 0;
-        this.robotItem.updateRobotLocation(position, this.angle);
     }
     RobotModelImpl.prototype.info = function () {
         return this.twoDRobotModel;
@@ -2718,54 +2687,8 @@ var RobotModelImpl = (function () {
     RobotModelImpl.prototype.addSensorItem = function (portName, deviceType) {
         this.robotItem.addSensorItem(portName, deviceType, this.twoDRobotModel.sensorImagePath(deviceType));
     };
-    RobotModelImpl.prototype.setMotor1 = function (power) {
-        this.speed1 = this.maxSpeed1 * power / 100;
-    };
-    RobotModelImpl.prototype.setMotor2 = function (power) {
-        this.speed2 = this.maxSpeed2 * power / 100;
-    };
-    RobotModelImpl.prototype.setAngle = function (angle) {
-        this.angle = angle;
-    };
-    RobotModelImpl.prototype.getAngle = function () {
-        return this.angle;
-    };
-    RobotModelImpl.prototype.setPosition = function (position) {
-        this.position.x = position.x;
-        this.position.y = position.y;
-    };
-    RobotModelImpl.prototype.recalculateParams = function () {
-        var robotHeight = 50;
-        var timeInterval = 1;
-        var averageSpeed = (this.speed1 + this.speed2) / 2;
-        if (this.speed1 != this.speed2) {
-            var radius = this.speed1 * robotHeight / (this.speed1 - this.speed2);
-            var averageRadius = radius - robotHeight / 2;
-            var angularSpeed = 0;
-            var actualRadius = 0;
-            if (this.speed1 == -this.speed2) {
-                angularSpeed = this.speed1 / radius;
-                actualRadius = 0;
-            }
-            else {
-                angularSpeed = averageSpeed / averageRadius;
-                actualRadius = averageRadius;
-            }
-            var gammaRadians = timeInterval * angularSpeed;
-            var gammaDegrees = gammaRadians * 180 / Math.PI;
-            this.angle += gammaRadians;
-            this.position.x += averageSpeed * Math.cos(this.angle);
-            this.position.y += averageSpeed * Math.sin(this.angle);
-        }
-        else {
-            this.position.x += averageSpeed * Math.cos(this.angle);
-            this.position.y += averageSpeed * Math.sin(this.angle);
-        }
-        this.robotItem.updateRobotLocation(this.position, this.angle);
-    };
     RobotModelImpl.prototype.nextFragment = function () {
-        this.robotItem.redraw();
-        console.log("modX: " + this.position.x + " modY: " + this.position.y);
+        this.robotItem.ride();
     };
     return RobotModelImpl;
 })();
@@ -2802,7 +2725,7 @@ var SensorsConfiguration = (function (_super) {
 var TimelineImpl = (function () {
     function TimelineImpl() {
         this.timeInterval = 10;
-        this.fps = 60;
+        this.fps = 28;
         this.defaultFrameLength = 1000 / this.fps;
         this.slowSpeedFactor = 2;
         this.normalSpeedFactor = 5;
@@ -2810,13 +2733,11 @@ var TimelineImpl = (function () {
         this.immediateSpeedFactor = 100000000;
         this.defaultRealTimeInterval = 0;
         this.ticksPerCycle = 3;
-        this.speedFactor = 1;
         this.frameLength = this.defaultFrameLength;
         this.robotModels = [];
     }
     TimelineImpl.prototype.start = function () {
         var timeline = this;
-        this.cyclesCount = 0;
         this.intervalId = setInterval(function () {
             timeline.onTimer(timeline);
         }, this.defaultFrameLength);
@@ -2826,15 +2747,8 @@ var TimelineImpl = (function () {
     };
     TimelineImpl.prototype.onTimer = function (timeline) {
         timeline.getRobotModels().forEach(function (model) {
-            model.recalculateParams();
+            model.nextFragment();
         });
-        this.cyclesCount++;
-        if (this.cyclesCount > this.speedFactor) {
-            timeline.getRobotModels().forEach(function (model) {
-                model.nextFragment();
-            });
-            this.cyclesCount = 0;
-        }
     };
     TimelineImpl.prototype.setSpeedFactor = function (factor) {
         this.speedFactor = factor;
