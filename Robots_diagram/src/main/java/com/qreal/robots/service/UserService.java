@@ -1,11 +1,11 @@
-package com.qreal.robots.dao;
+package com.qreal.robots.service;
 
 import com.qreal.robots.model.auth.User;
 
 /**
  * Created by vladzx on 22.06.15.
  */
-public interface UserDAO {
+public interface UserService {
 
     public void save(User user);
 

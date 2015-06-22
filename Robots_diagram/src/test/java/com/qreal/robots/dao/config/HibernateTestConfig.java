@@ -1,8 +1,6 @@
 package com.qreal.robots.dao.config;
 
-import com.qreal.robots.dao.DiagramDAO;
-import com.qreal.robots.dao.RobotDAO;
-import com.qreal.robots.dao.UserDAO;
+import com.qreal.robots.dao.*;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -58,9 +56,7 @@ public class HibernateTestConfig {
         ds.setPassword("");
 
         return ds;
-
     }
-
 
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
@@ -68,21 +64,21 @@ public class HibernateTestConfig {
     }
 
     @Autowired
-    @Bean(name = "diagramDao")
+    @Bean(name = "diagramDAO")
     public DiagramDAO getDiagramDao(SessionFactory sessionFactory) {
-        return new DiagramDAO(sessionFactory);
+        return new DiagramDAOImpl(sessionFactory);
     }
 
     @Autowired
-    @Bean(name = "userDao")
+    @Bean(name = "userDAO")
     public UserDAO getUserDao(SessionFactory sessionFactory) {
-        return new UserDAO(sessionFactory);
+        return new UserDAOImpl(sessionFactory);
     }
 
     @Autowired
     @Bean(name = "robotDao")
     public RobotDAO getRobotDao(SessionFactory sessionFactory) {
-        return new RobotDAO(sessionFactory);
+        return new RobotDAOImpl(sessionFactory);
     }
 
 }

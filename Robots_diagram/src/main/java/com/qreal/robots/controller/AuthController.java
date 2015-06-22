@@ -2,6 +2,7 @@ package com.qreal.robots.controller;
 
 import com.qreal.robots.dao.UserDAO;
 import com.qreal.robots.model.auth.User;
+import com.qreal.robots.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -22,9 +23,8 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserDAO userDAO;
+    private UserService userService;
 
-    //Spring Security see this :
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login(@RequestParam(value = "error", required = false) String error) {
 
@@ -36,9 +36,7 @@ public class AuthController {
         model.setViewName("auth/login");
 
         return model;
-
     }
-
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public ModelAndView register() {
@@ -47,14 +45,13 @@ public class AuthController {
         return model;
     }
 
-
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ModelAndView register(@RequestParam(value = "username") String username,
                                  @RequestParam(value = "password") String password,
                                  @RequestParam(value = "password2") String password2,
                                  RedirectAttributes redirectAttributes) {
         ModelAndView model = new ModelAndView();
-        if (userDAO.isUserExist(username)) {
+        if (userService.isUserExist(username)) {
             return registerError(model, String.format("User with %s name is already exist", username));
         }
 
@@ -63,8 +60,7 @@ public class AuthController {
         }
 
         User user = new User(username, passwordEncoder.encode(password), true);
-        userDAO.save(user);
-
+        userService.save(user);
 
         redirectAttributes.addFlashAttribute("msg", "Registered successfully. Log in to continue working");
         model.setViewName("redirect:/login");
@@ -76,6 +72,4 @@ public class AuthController {
         modelAndView.setViewName("auth/register");
         return modelAndView;
     }
-
-
 }

@@ -1802,11 +1802,6 @@ var Parser = (function () {
     };
     return Parser;
 })();
-var TwoDModelEngineApiImpl = (function () {
-    function TwoDModelEngineApiImpl() {
-    }
-    return TwoDModelEngineApiImpl;
-})();
 var TwoDModelEngineFacadeImpl = (function () {
     function TwoDModelEngineFacadeImpl($scope, $compile) {
         $scope.vm = this;

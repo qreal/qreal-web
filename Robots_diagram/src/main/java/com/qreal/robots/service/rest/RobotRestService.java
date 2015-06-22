@@ -15,6 +15,7 @@ import com.qreal.robots.parser.ModelConfig;
 import com.qreal.robots.parser.ModelConfigValidator;
 import com.qreal.robots.parser.SystemConfig;
 import com.qreal.robots.parser.ValidationResult;
+import com.qreal.robots.service.UserService;
 import com.qreal.robots.socket.SocketClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,27 +37,25 @@ public class RobotRestService {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    private UserDAO userDao;
+    private UserService userService;
 
     @Autowired
-    private RobotDAO robotDao;
-
+    private RobotDAO robotDAO;
 
     @ResponseBody
     @RequestMapping(value = "/sendDiagram", method = RequestMethod.POST)
     public String sendProgram(@RequestParam("robotName") String robotName, @RequestParam("program") String program) throws JsonProcessingException {
-        Robot robot = robotDao.findByName(robotName);
+        Robot robot = robotDAO.findByName(robotName);
         SocketClient socketClient = new SocketClient(MainController.HOST_NAME, MainController.PORT);
         return socketClient.sendMessage(generateSendProgramRequest(robotName, robot.getSsid(), program));
     }
 
-
     @ResponseBody
     @RequestMapping(value = "/registerRobot", method = RequestMethod.POST)
     public String register(@RequestParam("robotName") String name, @RequestParam("ssid") String ssid) {
-        User user = userDao.findByUserName(getUserName());
+        User user = userService.findByUserName(getUserName());
         if (!userRobotExists(user, name)) {
-            robotDao.save(new Robot(name, ssid, user));
+            robotDAO.save(new Robot(name, ssid, user));
             return "{\"status\":\"OK\"}";
         } else {
             return String.format("{\"status\":\"ERROR\", \"message\":\"Robot with name %s is already exists\"}", name);
@@ -76,8 +75,8 @@ public class RobotRestService {
     @ResponseBody
     @RequestMapping(value = "/deleteRobot", method = RequestMethod.POST)
     public String delete(@RequestParam("robotName") String name) {
-        Robot robot = robotDao.findByName(name);
-        robotDao.delete(robot);
+        Robot robot = robotDAO.findByName(name);
+        robotDAO.delete(robot);
         return "{\"message\":\"OK\"}";
 
     }
@@ -87,7 +86,7 @@ public class RobotRestService {
     public String saveModelConfig(HttpSession session, @RequestParam("robotName") String robotName, @RequestParam("modelConfigJson") String modelConfigJson,
                                   @RequestParam("typeProperties") String typeProperties) throws IOException {
         ModelConfig modelConfig = getModelConfig(modelConfigJson, typeProperties);
-        Robot robot = robotDao.findByName(robotName);
+        Robot robot = robotDAO.findByName(robotName);
 
         List<RobotWrapper> fullRobotInfo = (List<RobotWrapper>) session.getAttribute("fullRobotInfo");
 
@@ -134,14 +133,12 @@ public class RobotRestService {
         return new ModelConfig(map, propertyList);
     }
 
-
     private String generateSendProgramRequest(String robotName, String ssid, String program) throws JsonProcessingException {
         RobotInfo robotInfo = new RobotInfo(getUserName(), robotName, ssid);
         robotInfo.setProgram(program);
         Message message = new Message("WebApp", "sendDiagram", robotInfo);
         return mapper.writeValueAsString(message);
     }
-
 
     private String generateSendModelConfigRequest(String robotName, String ssid, ModelConfig modelConfig) throws JsonProcessingException {
         RobotInfo robotInfo = new RobotInfo(getUserName(), robotName, ssid);
@@ -154,6 +151,5 @@ public class RobotRestService {
     private String getUserName() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
-
 
 }

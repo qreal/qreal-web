@@ -24,19 +24,19 @@ public class RobotDAOTest extends BaseDAOTest {
 
     public static final String CODE = "CODE";
     @Autowired
-    private RobotDAO robotDao;
+    private RobotDAO robotDAO;
 
     @Autowired
-    private UserDAO userDao;
+    private UserDAO userDAO;
 
 
     @Test
     public void testFindByNameRobot() {
-        User user = getAndSaveUser(USER_NAME, userDao);
+        User user = getAndSaveUser(USER_NAME, userDAO);
         Robot robot = new Robot(ROBOT_NAME, CODE, user);
-        robotDao.save(robot);
+        robotDAO.save(robot);
 
-        Robot savedRobot = robotDao.findByName(ROBOT_NAME);
+        Robot savedRobot = robotDAO.findByName(ROBOT_NAME);
 
         assertNotNull(savedRobot);
         assertEquals(robot.getName(), savedRobot.getName());
@@ -44,11 +44,11 @@ public class RobotDAOTest extends BaseDAOTest {
 
     @Test
     public void testSaveRobot() {
-        User user = getAndSaveUser(USER_NAME2, userDao);
+        User user = getAndSaveUser(USER_NAME2, userDAO);
         Robot robot = new Robot(ROBOT_NAME2, CODE, user);
-        robotDao.save(robot);
+        robotDAO.save(robot);
 
-        User savedUser = userDao.findByUserName(USER_NAME2);
+        User savedUser = userDAO.findByUserName(USER_NAME2);
 
         Set<Robot> robots = savedUser.getRobots();
         assertEquals(1, robots.size());
@@ -57,12 +57,12 @@ public class RobotDAOTest extends BaseDAOTest {
 
     @Test
     public void testDelete() {
-        User user = getAndSaveUser(USER_NAME3, userDao);
+        User user = getAndSaveUser(USER_NAME3, userDAO);
         Robot robot = new Robot(ROBOT_NAME, CODE, user);
-        robotDao.save(robot);
-        assertTrue(robotDao.isRobotExists(ROBOT_NAME));
-        robotDao.delete(robot);
-        assertFalse(robotDao.isRobotExists(ROBOT_NAME));
+        robotDAO.save(robot);
+        assertTrue(robotDAO.isRobotExists(ROBOT_NAME));
+        robotDAO.delete(robot);
+        assertFalse(robotDAO.isRobotExists(ROBOT_NAME));
     }
 
 }

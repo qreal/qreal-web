@@ -1,10 +1,7 @@
 package com.qreal.robots.config;
 
 
-import com.qreal.robots.dao.DiagramDAO;
-import com.qreal.robots.dao.UserDAO;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -83,19 +80,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public HibernateTransactionManager txManager() {
         return new HibernateTransactionManager(sessionFactory());
-    }
-
-
-    @Autowired
-    @Bean(name = "diagramDao")
-    public DiagramDAO getDiagramDao(SessionFactory sessionFactory) {
-        return new DiagramDAO(sessionFactory);
-    }
-
-    @Autowired
-    @Bean(name = "userDao")
-    public UserDAO getUserDao(SessionFactory sessionFactory) {
-        return new UserDAO(sessionFactory);
     }
 
     private Properties getHibernateProperties() {

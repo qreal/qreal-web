@@ -1,11 +1,11 @@
-package com.qreal.robots.dao;
+package com.qreal.robots.service;
 
 import com.qreal.robots.model.diagram.Diagram;
 
 /**
  * Created by vladzx on 22.06.15.
  */
-public interface DiagramDAO {
+public interface DiagramService {
 
     public void save(Diagram diagram);
 

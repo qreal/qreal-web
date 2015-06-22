@@ -10,6 +10,7 @@ import com.qreal.robots.model.robot.Message;
 import com.qreal.robots.model.robot.Robot;
 import com.qreal.robots.model.robot.RobotInfo;
 import com.qreal.robots.model.robot.RobotWrapper;
+import com.qreal.robots.service.UserService;
 import com.qreal.robots.socket.SocketClient;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +40,11 @@ public class MainController {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    private UserDAO userDao;
-
+    private UserService userService;
 
     @RequestMapping("/")
     public ModelAndView home(HttpSession session) {
-        User user = userDao.findByUserName(getUserName());
+        User user = userService.findByUserName(getUserName());
 
         List<RobotWrapper> fullRobotInfo = getFullRobotInfo(user.getRobots(), getOnlineRobots(user));
         session.setAttribute("fullRobotInfo", fullRobotInfo);
@@ -73,7 +73,6 @@ public class MainController {
         return robotsWrapper;
     }
 
-
     private List<RobotInfo> getOnlineRobots(User user) {
         SocketClient socketClient = new SocketClient(HOST_NAME, PORT);
 
@@ -93,7 +92,6 @@ public class MainController {
 
     }
 
-
     private String getUserOnlineRobots(User user) throws JsonProcessingException {
         List<RobotInfo> robots = Lists.newArrayList();
         for (Robot robot : user.getRobots()) {
@@ -103,7 +101,6 @@ public class MainController {
         Message message = new Message("WebApp", "getOnlineRobots", robots);
         return mapper.writeValueAsString(message);
     }
-
 
     private String getUserName() {
         return SecurityContextHolder.getContext().getAuthentication().getName();

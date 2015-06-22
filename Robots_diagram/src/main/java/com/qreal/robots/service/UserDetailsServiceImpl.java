@@ -22,14 +22,14 @@ import java.util.Set;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UserDAO userDAO;
+    private UserService userService;
 
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(final String username)
             throws UsernameNotFoundException {
 
-        com.qreal.robots.model.auth.User user = userDAO.findByUserName(username);
+        com.qreal.robots.model.auth.User user = userService.findByUserName(username);
         List<GrantedAuthority> authorities =
                 buildUserAuthority(user.getUserRole());
 
