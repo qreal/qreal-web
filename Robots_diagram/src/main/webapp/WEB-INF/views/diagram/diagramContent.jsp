@@ -1,4 +1,7 @@
 <div id="diagramContent" class="unselectable" ng-controller="DiagramController">
+    <ul class='custom-menu'>
+        <li data-action="delete">Delete</li>
+    </ul>
     <div class="navbar navbar-inverse navbar-static-top">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -17,11 +20,6 @@
                             <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.saveDiagram()">Save</a></li>
                             <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.openDiagram()">Open</a></li>
                         </ul>
-                    </li>
-                    <li>
-                        <p class="navbar-text" ng-click="vm.removeCurrentElement()">
-                            <span id="remove" class="glyphicon glyphicon-trash" style="vertical-align: middle"></span>
-                        </p>
                     </li>
                     <li>
                         <p class="navbar-text" ng-click="vm.openTwoDModel()">

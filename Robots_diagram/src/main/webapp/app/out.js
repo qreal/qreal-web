@@ -324,8 +324,10 @@ var DiagramController = (function () {
         $scope.vm = controller;
         PaletteLoader.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
         DropdownListManager.addDropdownList("Link", "Guard", ["", "false", "iteration", "true"]);
-        this.paper.on('cell:pointerdown', function (cellView, evt, x, y) {
-            console.log('cell view ' + cellView.model.id + ' was clicked');
+        this.paper.on('cell:pointerdown', function (cellView, event, x, y) {
+            if (!($(event.target).parents(".custom-menu").length > 0)) {
+                $(".custom-menu").hide(100);
+            }
             var node = controller.nodesMap[cellView.model.id];
             if (node) {
                 controller.currentElement = node;
@@ -341,16 +343,50 @@ var DiagramController = (function () {
                     controller.currentElement = undefined;
                 }
             }
+            if (event.button == 2) {
+                console.log("right-click");
+                $(".custom-menu").finish().toggle(100).css({
+                    top: event.pageY + "px",
+                    left: event.pageX + "px"
+                });
+            }
         });
         this.paper.on('blank:pointerdown', function (evt, x, y) {
-            console.log('blank was clicked');
+            if (!($(event.target).parents(".custom-menu").length > 0)) {
+                $(".custom-menu").hide(100);
+            }
             $(".property").remove();
             controller.currentElement = undefined;
         });
         $scope.$on("interpret", function (event, timeline) {
             console.log(InterpretManager.interpret(controller.graph, controller.nodesMap, controller.linksMap, timeline));
         });
+        this.initDeleteListener();
+        this.initCustomContextMenu();
     }
+    DiagramController.prototype.initCustomContextMenu = function () {
+        var controller = this;
+        $("#diagramContent").bind("contextmenu", function (event) {
+            event.preventDefault();
+        });
+        $(".custom-menu li").click(function () {
+            switch ($(this).attr("data-action")) {
+                case "delete":
+                    controller.removeCurrentElement();
+                    break;
+            }
+            $(".custom-menu").hide(100);
+        });
+    };
+    DiagramController.prototype.initDeleteListener = function () {
+        var controller = this;
+        var deleteKey = 46;
+        $('html').keyup(function (e) {
+            if (e.keyCode == deleteKey) {
+                controller.removeCurrentElement();
+            }
+        });
+    };
     DiagramController.prototype.setNodeTypesMap = function (nodeTypesMap) {
         this.nodeTypesMap = nodeTypesMap;
     };
@@ -496,10 +532,16 @@ var DiagramController = (function () {
                     delete controller.linksMap[link.id];
                 });
                 delete this.nodesMap[this.currentElement.getJointObject().id];
-                this.currentElement.getJointObject().remove();
-                $(".property").remove();
-                this.currentElement = undefined;
             }
+            else {
+                var link = this.linksMap[this.currentElement.getJointObject().id];
+                if (link) {
+                    delete this.linksMap[this.currentElement.getJointObject().id];
+                }
+            }
+            this.currentElement.getJointObject().remove();
+            $(".property").remove();
+            this.currentElement = undefined;
         }
     };
     DiagramController.prototype.saveDiagram = function () {
