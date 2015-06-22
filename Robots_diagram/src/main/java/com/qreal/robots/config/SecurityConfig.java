@@ -33,9 +33,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     //.csrf() is optional, enabled by default, if using WebSecurityConfigurerAdapter constructor
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-        http.authorizeRequests()
+        httpSecurity.authorizeRequests()
                 .antMatchers("/resources/**").permitAll()
                 .antMatchers("/register").permitAll()
                 .antMatchers("/**").authenticated()
@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().loginPage("/login").permitAll().loginProcessingUrl("/j_spring_security_check").failureUrl("/login?error")
                 .usernameParameter("username").passwordParameter("password")
                 .and()
-                .logout().logoutSuccessUrl("/login?logout").logoutUrl("/j_spring_security_logout")
+                .logout().logoutSuccessUrl("/login").logoutUrl("/j_spring_security_logout")
                 .and()
                 .csrf().disable().httpBasic()
                 .and().exceptionHandling().accessDeniedPage("/login");
