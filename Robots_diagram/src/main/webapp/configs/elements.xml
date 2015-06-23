@@ -3,11 +3,11 @@
 	<Category name="Algorithms">
 
 		<Element name="Initial Node">
-			<Image src="images/initialBlock.svg"/>
+			<Image src="images/initialBlock.png"/>
 		</Element>
 
 		<Element name="Final Node">
-			<Image src="images/finalBlock.svg"/>
+			<Image src="images/finalBlock.png"/>
 		</Element>
 
 		<Element name="Function">
@@ -17,25 +17,25 @@
 			<Property name="Initialization" type="checkbox">
                 <value>True</value>
 			</Property>
-			<Image src="images/functionBlock.svg"/>
+			<Image src="images/functionBlock.png"/>
 		</Element>
 
 		<Element name="Condition">
 			<Property name="Condition" type="string">
                 <value>0</value>
 			</Property>
-			<Image src="images/ifBlock.svg"/>
+			<Image src="images/ifBlock.png"/>
 		</Element>
 
 		<Element name="Loop">
 			<Property name="Iterations" type="string">
                 <value>10</value>
 			</Property>
-			<Image src="images/loopBlock.svg"/>
+			<Image src="images/loopBlock.png"/>
 		</Element>
 
 		<Element name="Fork">
-			<Image src="images/forkBlock.svg"/>
+			<Image src="images/forkBlock.png"/>
 		</Element>
 
 		<Element name="Variable Initialization">
@@ -45,7 +45,7 @@
 			<Property name="Variable" type="string">
                 <value>x</value>
 			</Property>
-			<Image src="images/variableInitBlock.svg"/>
+			<Image src="images/variableInitBlock.png"/>
 		</Element>
 
 	</Category>
@@ -55,7 +55,7 @@
             <Property name="File Name" type="string">
                 <value>media/beep.wav</value>
             </Property>
-            <Image src="images/playToneBlock.svg"/>
+            <Image src="images/playToneBlock.png"/>
         </Element>
 
 		<Element name="Motors Forward">
@@ -65,7 +65,7 @@
 			<Property name="Power (%)" type="string">
                 <value>100</value>
 			</Property>
-			<Image src="images/enginesForwardBlock.svg"/>
+			<Image src="images/enginesForwardBlock.png"/>
 		</Element>
 
 		<Element name="Motors Backward">
@@ -75,21 +75,21 @@
 			<Property name="Power (%)" type="string">
                 <value>100</value>
 			</Property>
-			<Image src="images/enginesBackwardBlock.svg"/>
+			<Image src="images/enginesBackwardBlock.png"/>
 		</Element>
 
 		<Element name="Stop Motors">
 			<Property name="Ports" type="string">
                 <value>M1, M2, M3, M4</value>
 			</Property>
-			<Image src="images/enginesStopBlock.svg"/>
+			<Image src="images/enginesStopBlock.png"/>
 		</Element>
 
 		<Element name="Clear Encoder">
 			<Property name="Ports" type="string">
                 <value>B1, B2, B3, B4</value>
 			</Property>
-			<Image src="images/nullificationEncoderBlock.svg"/>
+			<Image src="images/nullificationEncoderBlock.png"/>
 		</Element>
 
 		<Element name="Angular Servo">
@@ -99,7 +99,7 @@
 			<Property name="Angle (degrees)" type="string">
                 <value>0</value>
 			</Property>
-			<Image src="images/angularServoBlock.svg"/>
+			<Image src="images/angularServoBlock.png"/>
 		</Element>
 
 		<Element name="Led">
@@ -111,7 +111,7 @@
                     <variant>red</variant>
                 </Variants>
 			</Property>
-			<Image src="images/ledBlock.svg"/>
+			<Image src="images/ledBlock.png"/>
 		</Element>
 
 	</Category>
@@ -121,7 +121,7 @@
 			<Property name="Delay (ms)" type="string">
                 <value>1000</value>
 			</Property>
-			<Image src="images/timerBlock.svg"/>
+			<Image src="images/timerBlock.png"/>
 		</Element>
 
 		<Element name="Wait for Light">
@@ -148,7 +148,7 @@
                     <variant>not less</variant>
                 </Variants>
 			</Property>
-			<Image src="images/waitForLightBlock.svg"/>
+			<Image src="images/waitForLightBlock.png"/>
 		</Element>
 
 	</Category>
@@ -161,11 +161,11 @@
 			<Property name="Y" type="spinner">
                 <value>0</value>
 			</Property>
-			<Image src="images/drawPixelBlock.svg"/>
+			<Image src="images/drawPixelBlock.png"/>
 		</Element>
 
 		<Element name="Smile">
-			<Image src="images/smileBlock.svg"/>
+			<Image src="images/smileBlock.png"/>
 		</Element>
 
 		<Element name="Background Color">
@@ -190,7 +190,7 @@
                     <variant>white</variant>
                 </Variants>
 			</Property>
-			<Image src="images/setBackgroundBlock.svg"/>
+			<Image src="images/setBackgroundBlock.png"/>
 		</Element>
 
 	</Category>

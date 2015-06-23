@@ -658,7 +658,7 @@ var PaletteLoader = (function () {
                             var image = elements[i].getElementsByTagName("Image")[0].getAttribute('src');
                             nodeTypesMap[typeName].image = image;
                             nodeTypesMap[typeName].properties = properties;
-                            content += '<img class="elementImg" src="' + image + '" width="30" height="30"' + '/>';
+                            content += '<img class="elementImg" src="' + image + '" />';
                             content += typeName;
                             content += '</div></li>';
                         }
