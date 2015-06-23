@@ -22,7 +22,7 @@ class ImportManager {
         return response.nodeIndex;
     }
 
-    static importProperties(propertiesObject): PropertiesMap {
+    private static importProperties(propertiesObject): PropertiesMap {
         var properties: PropertiesMap = {};
 
         for (var j = 0; j < propertiesObject.length; j++) {
@@ -33,14 +33,14 @@ class ImportManager {
         return properties;
     }
 
-    static importNode(graph: joint.dia.Graph, nodesMap, jointObjectId: string,
+    private static importNode(graph: joint.dia.Graph, nodesMap, jointObjectId: string,
                       type: string, x: number, y: number, properties, imagePath: string): void {
         var node: DefaultDiagramNode = new DefaultDiagramNode(type, x, y, properties, imagePath, jointObjectId);
         nodesMap[jointObjectId] = node;
         graph.addCell(node.getJointObject());
     }
 
-    static importLink(graph: joint.dia.Graph, linksMap, jointObjectId: string,
+    private static importLink(graph: joint.dia.Graph, linksMap, jointObjectId: string,
                       sourceId:string, targetId:string, vertices, properties): void {
         var jointObject: joint.dia.Link = new joint.dia.Link({
             id: jointObjectId,
@@ -57,7 +57,7 @@ class ImportManager {
         graph.addCell(jointObject);
     }
 
-    static importVertices(verticesJSON) {
+    private static importVertices(verticesJSON) {
         var vertices = [];
         verticesJSON.forEach(function (vertex) {
             vertices.push(

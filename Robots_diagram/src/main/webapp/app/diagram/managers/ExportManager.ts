@@ -12,7 +12,7 @@ class ExportManager {
         return JSON.stringify(json);
     }
 
-    static exportNodes(json, nodesMap) {
+    private static exportNodes(json, nodesMap) {
         for (var id in nodesMap) {
             var node: DiagramNode = nodesMap[id];
             var nodeJSON = {
@@ -29,7 +29,7 @@ class ExportManager {
         }
     }
 
-    static exportLinks(json, linksMap) {
+    private static exportLinks(json, linksMap) {
         for (var id in linksMap) {
             var link: Link = linksMap[id];
             var jointObject = link.getJointObject();
@@ -51,7 +51,7 @@ class ExportManager {
         }
     }
 
-    static exportProperties(properties: PropertiesMap) {
+    private static exportProperties(properties: PropertiesMap) {
         var propertiesJSON = [];
         var position: number = 1;
         for (var propertyName in properties) {
@@ -67,7 +67,7 @@ class ExportManager {
         return propertiesJSON;
     }
 
-    static exportVertices(vertices) {
+    private static exportVertices(vertices) {
         var verticesJSON = [];
         var count: number = 1;
         vertices.forEach(function (vertex) {

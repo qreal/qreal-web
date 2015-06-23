@@ -13,7 +13,7 @@ class PaletteLoader {
         req.send(null);
     }
 
-    static addDropdownList(typeName: string, propertyName: string, variants): void {
+    private static addDropdownList(typeName: string, propertyName: string, variants): void {
         var list = [];
         for (var i = 0; i < variants.length; i++) {
             list.push(variants[i].childNodes[0].nodeValue);
@@ -21,7 +21,7 @@ class PaletteLoader {
         DropdownListManager.addDropdownList(typeName, propertyName, list);
     }
 
-    static parseElementsXml(req, controller: DiagramController, $scope, $compile): void {
+    private static parseElementsXml(req, controller: DiagramController, $scope, $compile): void {
         try {
             if (req.readyState == 4) {
                 if (req.status == 200) {

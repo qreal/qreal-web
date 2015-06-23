@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qreal.robots.controller.MainController;
 import com.qreal.robots.dao.RobotDAO;
-import com.qreal.robots.dao.UserDAO;
 import com.qreal.robots.model.auth.User;
 import com.qreal.robots.model.robot.Message;
 import com.qreal.robots.model.robot.Robot;

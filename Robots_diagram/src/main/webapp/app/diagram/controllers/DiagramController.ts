@@ -1,7 +1,6 @@
 class DiagramController {
     private graph: joint.dia.Graph = new joint.dia.Graph;
     private paper: DiagramPaper = new DiagramPaper(this, this.graph);
-
     private nodeTypesMap: NodeTypesMap = {};
     private nodesMap = {};
     private linksMap = {};
@@ -15,6 +14,99 @@ class DiagramController {
 
         DropdownListManager.addDropdownList("Link", "Guard", ["", "false", "iteration", "true"]);
 
+        this.initPointerdownListener();
+        this.initDeleteListener();
+        this.initCustomContextMenu();
+
+        $scope.$on("interpret", function(event, timeline) {
+            console.log(InterpretManager.interpret(controller.graph, controller.nodesMap, controller.linksMap, timeline));
+        });
+    }
+
+    initPalette() {
+        this.setInputStringListener();
+        this.setCheckboxListener();
+        this.setDropdownListener();
+        this.setSpinnerListener();
+        this.initDragAndDrop();
+        this.makeUnselectable(document.getElementById("diagramContent"));
+        this.isPaletteLoaded = true;
+    }
+
+    setNodeTypesMap(nodeTypesMap: NodeTypesMap): void {
+        this.nodeTypesMap = nodeTypesMap;
+    }
+
+    private createDefaultNode(type: string, x: number, y: number, properties: PropertiesMap,
+                              imagePath: string, id?: string): DefaultDiagramNode {
+        var node: DefaultDiagramNode = new DefaultDiagramNode(type, x, y, properties, imagePath, id);
+        this.nodesMap[node.getJointObject().id] = node;
+        this.graph.addCell(node.getJointObject());
+        return node;
+    }
+
+    private removeCurrentElement(): void {
+        var controller = this;
+        if (this.currentElement) {
+            var node = this.nodesMap[this.currentElement.getJointObject().id];
+            if (node) {
+                var links = this.graph.getConnectedLinks(node.getJointObject(), { inbound: true, outbound: true });
+
+                links.forEach(function (link) {
+                    delete controller.linksMap[link.id];
+                });
+
+                delete this.nodesMap[this.currentElement.getJointObject().id];
+            } else {
+                var link = this.linksMap[this.currentElement.getJointObject().id];
+                if (link) {
+                    delete this.linksMap[this.currentElement.getJointObject().id];
+                }
+            }
+            this.currentElement.getJointObject().remove();
+            $(".property").remove();
+            this.currentElement = undefined;
+        }
+    }
+
+    private initDragAndDrop(): void {
+        var controller: DiagramController = this;
+        $(".tree_element").draggable({
+            helper: function () {
+                var clone =  $(this).find('.elementImg').clone();
+                clone.css('position','fixed');
+                clone.css('z-index', '1000');
+                return clone;
+            },
+            revert:"invalid"
+        });
+
+        $("#diagram_paper").droppable({
+            drop: function(event, ui) {
+                var topElementPos: number = ui.offset.top - $(this).offset().top + $(this).scrollTop();
+                var leftElementPos: number = ui.offset.left - $(this).offset().left + $(this).scrollLeft();
+                var gridSize: number = controller.paper.getGridSizeValue();
+                topElementPos -= topElementPos % gridSize;
+                leftElementPos -= leftElementPos % gridSize;
+                var type: string = $(ui.draggable.context).text();
+                var image: string = controller.nodeTypesMap[type].image;
+                var typeProperties: PropertiesMap = controller.nodeTypesMap[type].properties;
+
+                var nodeProperties: PropertiesMap = {};
+                for (var property in typeProperties) {
+                    nodeProperties[property] = new Property(typeProperties[property].value,
+                        typeProperties[property].type);
+                }
+
+                var node = controller.createDefaultNode(type, leftElementPos, topElementPos, nodeProperties, image);
+                controller.currentElement = node;
+                controller.setNodeProperties(node);
+            }
+        });
+    }
+
+    private initPointerdownListener(): void {
+        var controller: DiagramController = this;
         this.paper.on('cell:pointerdown',
             function (cellView, event, x, y) {
                 if (!($(event.target).parents(".custom-menu").length > 0)) {
@@ -54,16 +146,9 @@ class DiagramController {
                 controller.currentElement = undefined;
             }
         );
-
-        $scope.$on("interpret", function(event, timeline) {
-            console.log(InterpretManager.interpret(controller.graph, controller.nodesMap, controller.linksMap, timeline));
-        });
-
-        this.initDeleteListener();
-        this.initCustomContextMenu();
     }
 
-    initCustomContextMenu(): void {
+    private initCustomContextMenu(): void {
         var controller = this;
         $("#diagramContent").bind("contextmenu", function (event) {
             event.preventDefault();
@@ -80,7 +165,7 @@ class DiagramController {
         });
     }
 
-    initDeleteListener(): void {
+    private initDeleteListener(): void {
         var controller = this;
         var deleteKey: number = 46;
         $('html').keyup(function(e){
@@ -90,32 +175,7 @@ class DiagramController {
         })
     }
 
-    setNodeTypesMap(nodeTypesMap: NodeTypesMap): void {
-        this.nodeTypesMap = nodeTypesMap;
-    }
-
-    private makeUnselectable(element) {
-        if (element.nodeType == 1) {
-            element.setAttribute("unselectable", "on");
-        }
-        var child = element.firstChild;
-        while (child) {
-            this.makeUnselectable(child);
-            child = child.nextSibling;
-        }
-    }
-
-    initPalette() {
-        this.setInputStringListener();
-        this.setCheckboxListener();
-        this.setDropdownListener();
-        this.setSpinnerListener();
-        this.initDragAndDrop();
-        this.makeUnselectable(document.getElementById("diagramContent"));
-        this.isPaletteLoaded = true;
-    }
-
-    setInputStringListener(): void {
+    private setInputStringListener(): void {
         var controller: DiagramController = this;
         $(document).on('change', '.form-control', function () {
             var tr = $(this).closest('tr');
@@ -127,7 +187,7 @@ class DiagramController {
         });
     }
 
-    setCheckboxListener(): void {
+    private setCheckboxListener(): void {
         var controller: DiagramController = this;
         $(document).on('change', '.checkbox', function () {
             var tr = $(this).closest('tr');
@@ -147,7 +207,7 @@ class DiagramController {
         });
     }
 
-    setDropdownListener(): void {
+    private setDropdownListener(): void {
         var controller: DiagramController = this;
         $(document).on('change', '.mydropdown', function () {
             var tr = $(this).closest('tr');
@@ -159,7 +219,7 @@ class DiagramController {
         });
     }
 
-    setSpinnerListener(): void {
+    private setSpinnerListener(): void {
         var controller: DiagramController = this;
         $(document).on('change', '.spinner', function () {
             var tr = $(this).closest('tr');
@@ -173,43 +233,7 @@ class DiagramController {
         });
     }
 
-    initDragAndDrop(): void {
-        var controller: DiagramController = this;
-        $(".tree_element").draggable({
-            helper: function () {
-                var clone =  $(this).find('.elementImg').clone();
-                clone.css('position','fixed');
-                clone.css('z-index', '1000');
-                return clone;
-            },
-            revert:"invalid"
-        });
-
-        $("#diagram_paper").droppable({
-            drop: function(event, ui) {
-                var topElementPos: number = ui.offset.top - $(this).offset().top + $(this).scrollTop();
-                var leftElementPos: number = ui.offset.left - $(this).offset().left + $(this).scrollLeft();
-                var gridSize: number = controller.paper.getGridSizeValue();
-                topElementPos -= topElementPos % gridSize;
-                leftElementPos -= leftElementPos % gridSize;
-                var type: string = $(ui.draggable.context).text();
-                var image: string = controller.nodeTypesMap[type].image;
-                var typeProperties: PropertiesMap = controller.nodeTypesMap[type].properties;
-
-                var nodeProperties: PropertiesMap = {};
-                for (var property in typeProperties) {
-                    nodeProperties[property] = new Property(typeProperties[property].value,
-                        typeProperties[property].type);
-                }
-
-                var node = controller.createDefaultNode(type, leftElementPos, topElementPos, nodeProperties, image);
-                controller.currentElement = node;
-                controller.setNodeProperties(node);
-            }
-        });
-    }
-
-    setNodeProperties(element): void {
+    private setNodeProperties(element): void {
         var properties: PropertiesMap = element.getProperties();
         var content: string = '';
         for (var property in properties) {
@@ -218,23 +242,15 @@ class DiagramController {
         $('#property_table tbody').html(content);
     }
 
-    getPropertyHtml(typeName, propertyName: string, property: Property): string {
+    private getPropertyHtml(typeName, propertyName: string, property: Property): string {
         return PropertyManager.getPropertyHtml(typeName, propertyName, property);
     }
 
-    addLink(linkId: string, linkObject: Link) {
+    private addLink(linkId: string, linkObject: Link) {
         this.linksMap[linkId] = linkObject;
     }
 
-    createDefaultNode(type: string, x: number, y: number, properties: PropertiesMap,
-                      imagePath: string, id?: string): DefaultDiagramNode {
-        var node: DefaultDiagramNode = new DefaultDiagramNode(type, x, y, properties, imagePath, id);
-        this.nodesMap[node.getJointObject().id] = node;
-        this.graph.addCell(node.getJointObject());
-        return node;
-    }
-
-    clear(): void {
+    private clear(): void {
         this.graph.clear();
         this.nodesMap = {};
         this.linksMap = {};
@@ -242,31 +258,7 @@ class DiagramController {
         this.currentElement = undefined;
     }
 
-    removeCurrentElement(): void {
-        var controller = this;
-        if (this.currentElement) {
-            var node = this.nodesMap[this.currentElement.getJointObject().id];
-            if (node) {
-                var links = this.graph.getConnectedLinks(node.getJointObject(), { inbound: true, outbound: true });
-
-                links.forEach(function (link) {
-                    delete controller.linksMap[link.id];
-                });
-
-                delete this.nodesMap[this.currentElement.getJointObject().id];
-            } else {
-                var link = this.linksMap[this.currentElement.getJointObject().id];
-                if (link) {
-                    delete this.linksMap[this.currentElement.getJointObject().id];
-                }
-            }
-            this.currentElement.getJointObject().remove();
-            $(".property").remove();
-            this.currentElement = undefined;
-        }
-    }
-
-    saveDiagram(): void {
+    private saveDiagram(): void {
         if (!this.isPaletteLoaded) {
             alert("Palette is not loaded!");
             return;
@@ -287,7 +279,7 @@ class DiagramController {
         });
     }
 
-    openDiagram(): void {
+    private openDiagram(): void {
         if (!this.isPaletteLoaded) {
             alert("Palette is not loaded!");
             return;
@@ -314,8 +306,19 @@ class DiagramController {
         });
     }
 
-    openTwoDModel(): void {
+    private openTwoDModel(): void {
         $("#diagramContent").hide();
         $("#twoDModelContent").show();
+    }
+
+    private makeUnselectable(element) {
+        if (element.nodeType == 1) {
+            element.setAttribute("unselectable", "on");
+        }
+        var child = element.firstChild;
+        while (child) {
+            this.makeUnselectable(child);
+            child = child.nextSibling;
+        }
     }
 }

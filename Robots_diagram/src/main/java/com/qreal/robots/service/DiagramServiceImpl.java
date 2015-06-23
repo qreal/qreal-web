@@ -1,7 +1,6 @@
 package com.qreal.robots.service;
 
 import com.qreal.robots.dao.DiagramDAO;
-import com.qreal.robots.dao.UserDAO;
 import com.qreal.robots.model.diagram.Diagram;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;

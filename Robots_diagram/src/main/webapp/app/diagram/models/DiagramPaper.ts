@@ -32,7 +32,7 @@ class DiagramPaper extends joint.dia.Paper {
         return this.gridSizeValue;
     }
 
-    getDiagramElementView() {
+    private getDiagramElementView() {
         var controller = this.controller;
         return jQuery.extend(joint.shapes.basic.PortsViewInterface,
             {

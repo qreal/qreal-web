@@ -1,6 +1,5 @@
 package com.qreal.robots.service;
 
-import com.qreal.robots.dao.UserDAO;
 import com.qreal.robots.model.auth.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
