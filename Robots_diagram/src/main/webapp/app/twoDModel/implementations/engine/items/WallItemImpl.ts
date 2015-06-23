@@ -10,10 +10,13 @@ class WallItemImpl implements WallItem {
         var wall = this;
         this.width = 15;
         this.path = paper.path("M" + xStart + " " + yStart + " L" + xEnd + " " + yEnd);
+        this.path.toBack();
+
         this.path.attr({
             cursor: "pointer",
             "stroke-width": wall.width
         });
+
         $(this.path.node).attr("class", "path");
         $(".path").attr("stroke", "url(#wall_pattern)");
         this.pathArray = this.path.attr("path");

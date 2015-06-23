@@ -9,6 +9,8 @@ class EllipseItemImpl implements EllipseItem {
     constructor(worldModel: WorldModel, xStart: number, yStart: number, width: number, color: string) {
         var paper = worldModel.getPaper();
         this.ellipse = paper.ellipse(xStart, yStart, 0, 0);
+        this.ellipse.toBack();
+
         this.ellipse.attr({
             fill: "#fff",
             "fill-opacity": 0,

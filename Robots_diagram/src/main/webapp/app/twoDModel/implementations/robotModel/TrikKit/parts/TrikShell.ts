@@ -1,5 +1,5 @@
-class TrikShell extends DeviceImpl {
-    static parentType = DeviceImpl;
+class TrikShell extends Device {
+    static parentType = Device;
     static name = "shell";
     static friendlyName = "Shell";
 }

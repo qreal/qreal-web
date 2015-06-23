@@ -1,14 +1,5 @@
 class DeviceInfoImpl implements DeviceInfo {
-    static createdInfos: {string?: DeviceInfo} = {};
-
-    static fromString(str: string): DeviceInfo {
-        if (!DeviceInfoImpl.createdInfos[str]) {
-            throw new Error("DeviceInfo for " + str + " not found");
-        } else {
-            return DeviceInfoImpl.createdInfos[str];
-        }
-    }
-
+    private static createdInfos: {string?: DeviceInfo} = {};
     private name: string;
     private friendlyName: string;
     private deviceType;
@@ -26,6 +17,14 @@ class DeviceInfoImpl implements DeviceInfo {
             return deviceInfo;
         } else {
             return DeviceInfoImpl.createdInfos[deviceType.name];
+        }
+    }
+
+    static fromString(str: string): DeviceInfo {
+        if (!DeviceInfoImpl.createdInfos[str]) {
+            throw new Error("DeviceInfo for " + str + " not found");
+        } else {
+            return DeviceInfoImpl.createdInfos[str];
         }
     }
 

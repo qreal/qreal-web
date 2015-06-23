@@ -26,17 +26,6 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         this.scope = $scope;
     }
 
-    private makeUnselectable(element) {
-        if (element.nodeType == 1) {
-            element.setAttribute("unselectable", "on");
-        }
-        var child = element.firstChild;
-        while (child) {
-            this.makeUnselectable(child);
-            child = child.nextSibling;
-        }
-    }
-
     setDrawLineMode(): void {
         this.model.getWorldModel().setDrawLineMode();
     }
@@ -62,7 +51,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         $("#diagramContent").show();
     }
 
-    start() {
+    start(): void {
         var timeline = this.model.getTimeline();
 
         this.scope.$emit("timeline", timeline);
@@ -70,7 +59,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         //setTimeout(function() { timeline.stop(); }, 5000);
     }
 
-    initPortsConfigation($scope, $compile, twoDRobotModel: TwoDRobotModel): void {
+    private initPortsConfigation($scope, $compile, twoDRobotModel: TwoDRobotModel): void {
         var configurationDropdownsContent = "<p>";
         twoDRobotModel.getConfigurablePorts().forEach(function(port) {
             var portName = port.getName();
@@ -91,7 +80,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         this.setPortsSelectsListeners(twoDRobotModel);
     }
 
-    setPortsSelectsListeners(twoDRobotModel: TwoDRobotModel): void {
+    private setPortsSelectsListeners(twoDRobotModel: TwoDRobotModel): void {
         var facade = this;
         var sensorsConfiguration = facade.model.getRobotModels()[0].getSensorsConfiguration();
         twoDRobotModel.getConfigurablePorts().forEach(function (port) {
@@ -110,5 +99,16 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
                 }
             });
         });
+    }
+
+    private makeUnselectable(element) {
+        if (element.nodeType == 1) {
+            element.setAttribute("unselectable", "on");
+        }
+        var child = element.firstChild;
+        while (child) {
+            this.makeUnselectable(child);
+            child = child.nextSibling;
+        }
     }
 }

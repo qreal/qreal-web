@@ -1,5 +1,5 @@
-class Motor extends DeviceImpl {
-    static parentType  = DeviceImpl;
+class Motor extends Device {
+    static parentType  = Device;
     static name: string = "motor";
     static friendlyName: string = "Motor";
 }

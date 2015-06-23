@@ -5,4 +5,5 @@ interface TwoDModelEngineFacade {
     setDrawEllipseMode(): void;
     setNoneMode(): void;
     openDiagram(): void;
+    start(): void;
 }

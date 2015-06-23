@@ -7,6 +7,8 @@ class LineItemImpl implements LineItem {
     constructor(worldModel: WorldModel, xStart: number, yStart: number, xEnd: number, yEnd: number, width: number, color: string) {
         var paper = worldModel.getPaper();
         this.path = paper.path("M" + xStart + " " + yStart + " L" + xEnd + " " + yEnd);
+        this.path.toBack();
+
         this.path.attr({
             cursor: "pointer",
             "stroke": color,

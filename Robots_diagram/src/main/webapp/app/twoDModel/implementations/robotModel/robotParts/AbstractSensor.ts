@@ -1,3 +1,3 @@
-class AbstractSensor extends DeviceImpl {
-    static parentType = DeviceImpl;
+class AbstractSensor extends Device {
+    static parentType = Device;
 }

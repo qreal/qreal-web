@@ -102,9 +102,11 @@ class TrikRobotModelBase extends CommonRobotModelImpl {
     displayInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(Display);
     }
+
     speakerInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(Speaker);
     }
+
     buttonInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(Button);
     }
@@ -112,9 +114,11 @@ class TrikRobotModelBase extends CommonRobotModelImpl {
     powerMotorInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(Motor);
     }
+
     servoMotorInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(Motor);
     }
+
     encoderInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(EncoderSensor);
     }
@@ -138,6 +142,7 @@ class TrikRobotModelBase extends CommonRobotModelImpl {
     gyroscopeInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(GyroscopeSensor);
     }
+
     accelerometerInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(AccelerometerSensor);
     }
@@ -145,15 +150,19 @@ class TrikRobotModelBase extends CommonRobotModelImpl {
     ledInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(TrikLed);
     }
+
     lineSensorInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(TrikLineSensor);
     }
+
     colorSensorInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(TrikColorSensor);
     }
+
     objectSensorInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(TrikObjectSensor);
     }
+
     shellInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(TrikShell);
     }
@@ -161,15 +170,19 @@ class TrikRobotModelBase extends CommonRobotModelImpl {
     gamepadButtonInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(TrikGamepadButton);
     }
+
     gamepadPadInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(TrikGamepadPad);
     }
+
     gamepadPadPressSensorInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(TrikGamepadPadPressSensor);
     }
+
     gamepadWheelInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(TrikGamepadWheel);
     }
+
     gamepadConnectionIndicatorInfo(): DeviceInfo {
         return DeviceInfoImpl.getInstance(TrikGamepadConnectionIndicator);
     }

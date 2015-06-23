@@ -1,5 +1,5 @@
-class TrikLed extends DeviceImpl {
-    static parentType = DeviceImpl;
+class TrikLed extends Device {
+    static parentType = Device;
     static name = "led";
     static friendlyName = "Led";
 }

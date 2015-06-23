@@ -1,7 +1,7 @@
-var DeviceImpl = (function () {
-    function DeviceImpl() {
+var Device = (function () {
+    function Device() {
     }
-    return DeviceImpl;
+    return Device;
 })();
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -14,9 +14,9 @@ var AbstractSensor = (function (_super) {
     function AbstractSensor() {
         _super.apply(this, arguments);
     }
-    AbstractSensor.parentType = DeviceImpl;
+    AbstractSensor.parentType = Device;
     return AbstractSensor;
-})(DeviceImpl);
+})(Device);
 var ScalarSensor = (function (_super) {
     __extends(ScalarSensor, _super);
     function ScalarSensor() {
@@ -118,11 +118,11 @@ var Display = (function (_super) {
     function Display() {
         _super.apply(this, arguments);
     }
-    Display.parentType = DeviceImpl;
+    Display.parentType = Device;
     Display.name = "display";
     Display.friendlyName = "Display";
     return Display;
-})(DeviceImpl);
+})(Device);
 var EncoderSensor = (function (_super) {
     __extends(EncoderSensor, _super);
     function EncoderSensor() {
@@ -158,11 +158,11 @@ var Motor = (function (_super) {
     function Motor() {
         _super.apply(this, arguments);
     }
-    Motor.parentType = DeviceImpl;
+    Motor.parentType = Device;
     Motor.name = "motor";
     Motor.friendlyName = "Motor";
     return Motor;
-})(DeviceImpl);
+})(Device);
 var RangeSensor = (function (_super) {
     __extends(RangeSensor, _super);
     function RangeSensor() {
@@ -188,11 +188,11 @@ var Speaker = (function (_super) {
     function Speaker() {
         _super.apply(this, arguments);
     }
-    Speaker.parentType = DeviceImpl;
+    Speaker.parentType = Device;
     Speaker.name = "speaker";
     Speaker.friendlyName = "Speaker";
     return Speaker;
-})(DeviceImpl);
+})(Device);
 var TouchSensor = (function (_super) {
     __extends(TouchSensor, _super);
     function TouchSensor() {
@@ -342,6 +342,10 @@ var DiagramController = (function () {
     };
     DiagramController.prototype.setNodeTypesMap = function (nodeTypesMap) {
         this.nodeTypesMap = nodeTypesMap;
+    };
+    DiagramController.prototype.openTwoDModel = function () {
+        $("#diagramContent").hide();
+        $("#twoDModelContent").show();
     };
     DiagramController.prototype.createDefaultNode = function (type, x, y, properties, imagePath, id) {
         var node = new DefaultDiagramNode(type, x, y, properties, imagePath, id);
@@ -582,10 +586,6 @@ var DiagramController = (function () {
                 console.log("error: " + status + " " + error);
             }
         });
-    };
-    DiagramController.prototype.openTwoDModel = function () {
-        $("#diagramContent").hide();
-        $("#twoDModelContent").show();
     };
     DiagramController.prototype.makeUnselectable = function (element) {
         if (element.nodeType == 1) {
@@ -1824,16 +1824,6 @@ var TwoDModelEngineFacadeImpl = (function () {
         });
         this.scope = $scope;
     }
-    TwoDModelEngineFacadeImpl.prototype.makeUnselectable = function (element) {
-        if (element.nodeType == 1) {
-            element.setAttribute("unselectable", "on");
-        }
-        var child = element.firstChild;
-        while (child) {
-            this.makeUnselectable(child);
-            child = child.nextSibling;
-        }
-    };
     TwoDModelEngineFacadeImpl.prototype.setDrawLineMode = function () {
         this.model.getWorldModel().setDrawLineMode();
     };
@@ -1897,6 +1887,16 @@ var TwoDModelEngineFacadeImpl = (function () {
             });
         });
     };
+    TwoDModelEngineFacadeImpl.prototype.makeUnselectable = function (element) {
+        if (element.nodeType == 1) {
+            element.setAttribute("unselectable", "on");
+        }
+        var child = element.firstChild;
+        while (child) {
+            this.makeUnselectable(child);
+            child = child.nextSibling;
+        }
+    };
     return TwoDModelEngineFacadeImpl;
 })();
 var EllipseItemImpl = (function () {
@@ -1904,6 +1904,7 @@ var EllipseItemImpl = (function () {
         this.handleSize = 10;
         var paper = worldModel.getPaper();
         this.ellipse = paper.ellipse(xStart, yStart, 0, 0);
+        this.ellipse.toBack();
         this.ellipse.attr({
             fill: "#fff",
             "fill-opacity": 0,
@@ -2065,6 +2066,7 @@ var LineItemImpl = (function () {
     function LineItemImpl(worldModel, xStart, yStart, xEnd, yEnd, width, color) {
         var paper = worldModel.getPaper();
         this.path = paper.path("M" + xStart + " " + yStart + " L" + xEnd + " " + yEnd);
+        this.path.toBack();
         this.path.attr({
             cursor: "pointer",
             "stroke": color,
@@ -2178,6 +2180,7 @@ var PencilItemImpl = (function () {
         var paper = worldModel.getPaper();
         this.pathArray[0] = ["M", xStart, yStart];
         this.path = paper.path(this.pathArray);
+        this.path.toBack();
         this.path.attr({
             cursor: "pointer",
             "stroke": color,
@@ -2566,6 +2569,7 @@ var WallItemImpl = (function () {
         var wall = this;
         this.width = 15;
         this.path = paper.path("M" + xStart + " " + yStart + " L" + xEnd + " " + yEnd);
+        this.path.toBack();
         this.path.attr({
             cursor: "pointer",
             "stroke-width": wall.width
@@ -2970,14 +2974,6 @@ var DeviceInfoImpl = (function () {
         this.name = deviceType.name;
         this.friendlyName = deviceType.friendlyName;
     }
-    DeviceInfoImpl.fromString = function (str) {
-        if (!DeviceInfoImpl.createdInfos[str]) {
-            throw new Error("DeviceInfo for " + str + " not found");
-        }
-        else {
-            return DeviceInfoImpl.createdInfos[str];
-        }
-    };
     DeviceInfoImpl.getInstance = function (deviceType) {
         if (!DeviceInfoImpl.createdInfos[deviceType.name]) {
             var deviceInfo = new DeviceInfoImpl(deviceType);
@@ -2986,6 +2982,14 @@ var DeviceInfoImpl = (function () {
         }
         else {
             return DeviceInfoImpl.createdInfos[deviceType.name];
+        }
+    };
+    DeviceInfoImpl.fromString = function (str) {
+        if (!DeviceInfoImpl.createdInfos[str]) {
+            throw new Error("DeviceInfo for " + str + " not found");
+        }
+        else {
+            return DeviceInfoImpl.createdInfos[str];
         }
     };
     DeviceInfoImpl.prototype.getName = function () {
@@ -3259,11 +3263,11 @@ var TrikLed = (function (_super) {
     function TrikLed() {
         _super.apply(this, arguments);
     }
-    TrikLed.parentType = DeviceImpl;
+    TrikLed.parentType = Device;
     TrikLed.name = "led";
     TrikLed.friendlyName = "Led";
     return TrikLed;
-})(DeviceImpl);
+})(Device);
 var TrikLineSensor = (function (_super) {
     __extends(TrikLineSensor, _super);
     function TrikLineSensor() {
@@ -3319,11 +3323,11 @@ var TrikShell = (function (_super) {
     function TrikShell() {
         _super.apply(this, arguments);
     }
-    TrikShell.parentType = DeviceImpl;
+    TrikShell.parentType = Device;
     TrikShell.name = "shell";
     TrikShell.friendlyName = "Shell";
     return TrikShell;
-})(DeviceImpl);
+})(Device);
 var TrikSonarSensor = (function (_super) {
     __extends(TrikSonarSensor, _super);
     function TrikSonarSensor() {

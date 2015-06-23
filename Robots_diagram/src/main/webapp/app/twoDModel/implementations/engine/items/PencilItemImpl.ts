@@ -6,6 +6,8 @@ class PencilItemImpl {
         var paper = worldModel.getPaper();
         this.pathArray[0] = ["M", xStart, yStart];
         this.path = paper.path(this.pathArray);
+        this.path.toBack();
+
         this.path.attr({
             cursor: "pointer",
             "stroke": color,
