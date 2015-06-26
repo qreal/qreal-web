@@ -17,20 +17,28 @@
 * MySQL
 * Log4j
 
-## Инструкция по сборке ##
+## Инструкция по сборке (Windows) ##
 
-* установить Apache Maven
-* установить mysql-server, mysql-client
-* создать нового пользвотеля user с паролем user
-* дать пользователю user все права
-* зайти в mysql, выполнить скрипт setup.sql из папки /Robots_diagram
-* установить npm, nodejs
-* установить grunt-cli (в линуксе делается так: sudo npm install -g grunt-cli)
-* в папке /Robots_diagram/src/main/webapp сделать следующие действия:
+* скачать и установить JDK (http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+* скачать и распаковать архив Apache Maven (http://maven.apache.org/download.cgi)
+* указать в системной переменной Path путь до директории bin распакованного архива
+* скачать и установить nodejs (https://nodejs.org/download/)
+* в консоли выполнить npm install -g grunt-cli
+* в консоли в директории /Robots_diagram/src/main/webapp выполнить следующие команды:
 	* npm install
-	* grunt (в линуксе при появлении ошибки /usr/bin/env: node: No such file or directory, сделать следующее: sudo ln -s /usr/bin/nodejs /usr/bin/node)
-* проверить, что правильно установлена переменная JAVA_HOME
-* в папке /Robots_diagram выполнить mvn clean install tomcat7:run (если все закончится успешно, можно перейти по ссылке localhost:8080/Robots_diagram/)
+	* grunt (запустится система сборки, которая скомпилирует файлы typescript в javascript и продолжит следить за изменениями)
+* в консоли в директории /Robots_diagram выполнить mvn clean tomcat7:run (если все закончится успешно, можно перейти по ссылке localhost:8080/Robots_diagram/)
+
+## Инструкция по сборке (Linux_ ##
+
+* установить JDK (sudo apt-get install default-jdk)
+* установить Apache Maven (sudo apt-get install maven)
+* установить npm (sudo apt-get install npm), nodejs (sudo apt-get install nodejs)
+* установить grunt-cli (sudo npm install -g grunt-cli)
+* в директории /Robots_diagram/src/main/webapp выполнить следующие команды:
+	* npm install
+	* grunt (при появлении ошибки /usr/bin/env: node: No such file or directory, сделать следующее: sudo ln -s /usr/bin/nodejs /usr/bin/node)
+* в директории /Robots_diagram выполнить mvn clean tomcat7:run (если все закончится успешно, можно перейти по ссылке localhost:8080/Robots_diagram/)
 
 ### Запуск через IntelliJ IDEA Ultimate ###
 
