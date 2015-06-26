@@ -7,6 +7,7 @@
 * TypeScript (+JavaScript)
 * AngularJS
 * JointJS
+* Raphael
 * jQuery
 * Ajax
 * TreeView (http://bassistance.de/jquery-plugins/jquery-plugin-treeview/)
@@ -29,7 +30,7 @@
 	* grunt (запустится система сборки, которая скомпилирует файлы typescript в javascript и продолжит следить за изменениями)
 * в консоли в директории /Robots_diagram выполнить mvn clean tomcat7:run (если все закончится успешно, можно перейти по ссылке localhost:8080/Robots_diagram/)
 
-## Инструкция по сборке (Linux_ ##
+## Инструкция по сборке (Linux) ##
 
 * установить JDK (sudo apt-get install default-jdk)
 * установить Apache Maven (sudo apt-get install maven)
