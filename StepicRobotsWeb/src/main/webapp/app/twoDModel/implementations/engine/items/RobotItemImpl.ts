@@ -304,8 +304,7 @@ class RobotItemImpl implements RobotItem {
     }
 
     setStartPositionCross(x: number, y: number, direction: number) {
-        this.startPositionCross = new StartPositionItem(this.worldModel,
-            x + this.startPosition.x, y + this.startPosition.y, direction);
+        this.startPositionCross = new StartPositionItem(this.worldModel, x + this.offsetX, y + this.offsetY, direction);
     }
 
     hide(): void {

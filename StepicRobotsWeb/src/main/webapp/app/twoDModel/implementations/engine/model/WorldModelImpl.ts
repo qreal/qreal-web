@@ -203,10 +203,12 @@ class WorldModelImpl implements WorldModel {
 
                 switch (type) {
                     case "rectangle":
-                        var region = new RectangularRegion(this);
-                        region.deserialize(regions[i], offsetX, offsetY);
-                        this.regions.push(region);
-                        break;
+                        if (regions[i].getAttribute("visible") == "true") {
+                            var region = new RectangularRegion(this);
+                            region.deserialize(regions[i], offsetX, offsetY);
+                            this.regions.push(region);
+                            break;
+                        }
                     default:
                 }
             }
