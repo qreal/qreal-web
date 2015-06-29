@@ -15,6 +15,7 @@ class SensorItem {
     protected sensorType: DeviceInfo;
     protected currentTranslation: string;
     protected currentRotation: string;
+    protected currentRobotRotation: string;
     protected offsetPosition: TwoDPosition;
 
     constructor(robotItem: RobotItem, worldModel: WorldModel, sensorType: DeviceInfo,
@@ -56,7 +57,8 @@ class SensorItem {
 
     setStartPosition() {
         this.currentTranslation = "t0,0";
-        this.currentRotation = "R0";
+        this.currentRobotRotation = "R0"
+        this.currentRotation = "r0";
         this.image.attr({x: this.startPosition.x, y: this.startPosition.y});
         this.centerX = this.startPosition.x + this.width / 2;
         this.centerY = this.startPosition.y + this.height / 2;
@@ -218,13 +220,13 @@ class SensorItem {
     }
 
     rotate(angle: number): void {
-        this.currentRotation = "R" + angle;
+        this.currentRotation = "r" + angle;
         this.image.transform(this.getTransformation());
     }
 
     rotateByRobot(angle: number, centerX: number, centerY: number) {
-        var direction = this.startDirection + angle;
-        this.currentRotation = "R" + direction + "," + centerX + "," + centerY;
+        //var direction = this.startDirection + angle;
+        this.currentRobotRotation = "R" + angle + "," + centerX + "," + centerY;
         this.image.transform(this.getTransformation());
     }
 
@@ -243,6 +245,6 @@ class SensorItem {
     }
 
     private getTransformation(): string {
-        return this.currentRotation + this.currentTranslation;
+        return this.currentRobotRotation + this.currentTranslation + this.currentRotation;
     }
 }

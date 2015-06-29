@@ -33,14 +33,14 @@ class SonarSensorItem extends SensorItem {
         "Z");
         this.scanningRegion.attr({fill: "#c5d0de", stroke: "#b1bbc7", opacity: 0.5});
 
-        this.regionTranslation = "T0,0";
+        this.regionTranslation = "t0,0";
         this.regionRotation = "R0";
     }
 
     setStartPosition() {
         super.setStartPosition();
-        this.regionTranslation = "T0,0";
-        this.regionRotation = "R0";
+        this.regionTranslation = "t0,0";
+        this.regionRotation = "r0";
         var regAngle = 20;
         var halfRegAngleInRad = regAngle / 2 * (Math.PI / 180)
 
@@ -87,14 +87,12 @@ class SonarSensorItem extends SensorItem {
 
     rotate(angle: number): void {
         super.rotate(angle);
-        this.regionRotation = "R" + angle + "," + this.regionStartX + "," + this.regionStartY;
+        this.regionRotation = "r" + angle + "," + this.regionStartX + "," + this.regionStartY;
         this.scanningRegion.transform(this.getRegionTransformation());
     }
 
     rotateByRobot(angle: number, centerX: number, centerY: number) {
         super.rotateByRobot(angle, centerX, centerY);
-        var direction = this.startDirection + angle;
-        this.regionRotation = "R" + direction + "," + centerX + "," + centerY;
         this.scanningRegion.transform(this.getRegionTransformation());
     }
 
@@ -104,6 +102,6 @@ class SonarSensorItem extends SensorItem {
     }
 
     private getRegionTransformation(): string {
-        return this.regionRotation + this.regionTranslation;
+        return this.currentRobotRotation + this.regionTranslation + this.regionRotation;
     }
 }
