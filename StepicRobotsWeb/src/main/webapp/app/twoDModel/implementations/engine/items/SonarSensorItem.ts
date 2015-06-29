@@ -1,8 +1,8 @@
 class SonarSensorItem extends SensorItem {
     private scanningRegion: RaphaelPath;
     private sonarRange = 255;
-    private regionStartX:number;
-    private regionStartY:number;
+    private regionStartX: number;
+    private regionStartY: number;
     private regionTransformationString = "";
     protected regionTranslation: string;
     protected regionRotation: string;
@@ -68,10 +68,15 @@ class SonarSensorItem extends SensorItem {
         this.scanningRegion.transform(this.regionTransformationString + transformationString);
     }
 
-    animate(positionOffsetX: number, positionOffsetY: number): void {
-        super.animate(positionOffsetX, positionOffsetY);
+    animate(positionX: number, positionY: number): void {
+        super.animate(positionX, positionY);
 
-        this.regionTranslation = "T" + positionOffsetX + "," + positionOffsetY;
+        var newX = positionX + this.offsetPosition.x + this.width / 2;
+        var newY = positionY + this.offsetPosition.y + this.height / 2;
+        var positionOffsetX = newX - this.regionStartX;
+        var positionOffsetY = newY - this.regionStartY;
+
+        this.regionTranslation = "t" + positionOffsetX + "," + positionOffsetY;
         this.scanningRegion.transform(this.getRegionTransformation());
     }
 
@@ -89,7 +94,7 @@ class SonarSensorItem extends SensorItem {
     rotateByRobot(angle: number, centerX: number, centerY: number) {
         super.rotateByRobot(angle, centerX, centerY);
         var direction = this.startDirection + angle;
-        this.regionRotation = "R" + direction + "," + this.regionStartX + "," + this.regionStartY;
+        this.regionRotation = "R" + direction + "," + centerX + "," + centerY;
         this.scanningRegion.transform(this.getRegionTransformation());
     }
 

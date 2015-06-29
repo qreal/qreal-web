@@ -207,10 +207,10 @@ class RobotItemImpl implements RobotItem {
         }
     }
 
-    private animateSensors(positionOffsetX: number, positionOffsetY: number): void {
+    private animateSensors(positionX: number, positionY: number): void {
         for (var portName in this.sensors) {
             var sensor = this.sensors[portName];
-            sensor.animate(positionOffsetX, positionOffsetY);
+            sensor.animate(positionX, positionY);
         }
     }
 
@@ -249,7 +249,7 @@ class RobotItemImpl implements RobotItem {
                 var currentPoint = points[seqNumber];
                 var newX = currentPoint.x + robotItem.offsetX;
                 var newY = currentPoint.y + robotItem.offsetY;
-                robotItem.center.x = newX + robotItem.width / 2
+                robotItem.center.x = newX + robotItem.width / 2;
                 robotItem.center.y = newY + robotItem.height / 2;
 
                 robotItem.image.transform("R" + currentPoint.direction);
@@ -257,10 +257,7 @@ class RobotItemImpl implements RobotItem {
 
                 seqNumber++;
 
-                var matrixCx = robotItem.image.matrix.x(robotItem.center.x, robotItem.center.y);
-                var matrixCy = robotItem.image.matrix.y(robotItem.center.x, robotItem.center.y);
-
-                robotItem.animateSensors(matrixCx - robotItem.startCenter.x, matrixCy - robotItem.startCenter.y);
+                robotItem.animateSensors(newX, newY);
 
                 robotItem.image.attr({x: newX, y: newY});
             }, delay);

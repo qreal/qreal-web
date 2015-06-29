@@ -15,6 +15,7 @@ class SensorItem {
     protected sensorType: DeviceInfo;
     protected currentTranslation: string;
     protected currentRotation: string;
+    protected offsetPosition: TwoDPosition;
 
     constructor(robotItem: RobotItem, worldModel: WorldModel, sensorType: DeviceInfo,
                 pathToImage: string, position?: TwoDPosition) {
@@ -54,7 +55,7 @@ class SensorItem {
     }
 
     setStartPosition() {
-        this.currentTranslation = "T0,0";
+        this.currentTranslation = "t0,0";
         this.currentRotation = "R0";
         this.image.attr({x: this.startPosition.x, y: this.startPosition.y});
         this.centerX = this.startPosition.x + this.width / 2;
@@ -145,9 +146,12 @@ class SensorItem {
         if (position) {
             startX += position.x - this.width / 2;
             startY += position.y - this.height / 2;
+            this.offsetPosition = new TwoDPosition(position.x - this.width / 2, position.y - this.height / 2);
         } else {
             startX = startX + this.robotItem.getWidth() + 15;
             startY = startY + this.robotItem.getHeight() / 2 - this.height / 2;
+            this.offsetPosition = new TwoDPosition(this.robotItem.getWidth() + 15,
+                this.robotItem.getHeight() / 2 - this.height / 2);
         }
         return new TwoDPosition(startX, startY);
     }
@@ -200,8 +204,12 @@ class SensorItem {
         this.rotateHandle.attr({cx: newCx, cy: newCy});
     }
 
-    animate(positionOffsetX: number, positionOffsetY: number): void {
-        this.currentTranslation = "T" + positionOffsetX + "," + positionOffsetY;
+    animate(positionX: number, positionY: number): void {
+        var newX = positionX + this.offsetPosition.x;
+        var newY = positionY + this.offsetPosition.y;
+        var positionOffsetX = newX - this.startPosition.x;
+        var positionOffsetY = newY - this.startPosition.y;
+        this.currentTranslation = "t" + positionOffsetX + "," + positionOffsetY;
         this.image.transform(this.getTransformation());
     }
 
@@ -216,7 +224,7 @@ class SensorItem {
 
     rotateByRobot(angle: number, centerX: number, centerY: number) {
         var direction = this.startDirection + angle;
-        this.currentRotation = "R" + direction;
+        this.currentRotation = "R" + direction + "," + centerX + "," + centerY;
         this.image.transform(this.getTransformation());
     }
 
