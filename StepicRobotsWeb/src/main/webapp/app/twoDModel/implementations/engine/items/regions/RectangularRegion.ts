@@ -5,5 +5,6 @@ class RectangularRegion extends RegionItem {
         this.setColor(this.defaultColor);
         this.setWidht(this.defaultWidth);
         this.setHeight(this.defaultHeight);
+        this.shape.toBack();
     }
 }
