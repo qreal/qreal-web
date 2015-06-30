@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Elements>
+	<Category name="Algorithms">
+
+		<Element name="Initial Node" type="InitialNode">
+			<Image src="images/initialBlock.svg"/>
+		</Element>
+
+		<Element name="Final Node" type="FinalNode">
+			<Image src="images/finalBlock.svg"/>
+		</Element>
+	</Category>
+	<Category name="Actions">
+
+		<Element name="Motors Forward" type="TrikV6EnginesForward">
+			<Property key="Ports" name="Ports" type="string">
+                <value>M3, M4</value>
+			</Property>
+			<Property key="Power" name="Power (%)" type="string">
+                <value>100</value>
+			</Property>
+			<Image src="images/enginesForwardBlock.svg"/>
+		</Element>
+
+		<Element name="Motors Backward" type="TrikV6EnginesBackward">
+			<Property key="Ports" name="Ports" type="string">
+                <value>M3, M4</value>
+			</Property>
+			<Property key="Power" name="Power (%)" type="string">
+                <value>100</value>
+			</Property>
+			<Image src="images/enginesBackwardBlock.svg"/>
+		</Element>
+
+	</Category>
+	<Category name="Wait">
+
+		<Element name="Timer" type="Timer">
+			<Property key="Delay" name="Delay (ms)" type="string">
+                <value>1000</value>
+			</Property>
+			<Image src="images/timerBlock.svg"/>
+		</Element>
+		
+	</Category>
+</Elements>

@@ -20,7 +20,7 @@
 			<Image src="images/functionBlock.svg"/>
 		</Element>
 
-		<Element name="Condition" type="Condition">
+		<Element name="Condition" type="IfBlock">
 			<Property key="Condition" name="Condition" type="string">
                 <value>0</value>
 			</Property>
