@@ -67,7 +67,6 @@ function ContextMenu() {
         this.DOMObj.style.left = event.clientX+"px";
         var self = this;
         var hideMenu = function() {
-            afsdfsdfsd;
             if (self.DOMObj) {
                 self.DOMObj.parentNode.removeChild(self.DOMObj);
             }
