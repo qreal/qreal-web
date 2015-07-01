@@ -7,6 +7,7 @@ class DiagramController {
     private linksMap = {};
     private currentElement: DiagramElement;
     private isPaletteLoaded = false;
+    private mouseupEvent;
 
     example : HTMLDivElement;
     static flagDraw : boolean = false;
@@ -55,21 +56,15 @@ class DiagramController {
 
         this.paper.on('blank:pointerdown',
             function (evt, x, y) {
-
                 console.log('alt was clicked');
                 var n = DiagramController.d.getTime();
                 DiagramController.currentTime = n;
                 DiagramController.flagAdd = false;
                 clearTimeout(DiagramController.timer);
                 DiagramController.flagDraw = true;
-           //     DiagramController.list.push(new utils.Pair(x, y));
                 console.log(DiagramController.flagDraw.toString());
-
                 $(".property").remove();
                 controller.currentElement = undefined;
-
-                // new
-//                $('#diagram_paper').line(0, 0, 100, 100);
             }
         );
 
@@ -113,19 +108,16 @@ class DiagramController {
         }
         DiagramController.flagAdd = true;
         DiagramController.list.push(p);
-        console.log("move");
-        console.log(DiagramController.list[DiagramController.list.length - 1].first.toString());
     }
 
-    onMouseUp()
+    onMouseUp(e)
     {
         if (DiagramController.flagDraw === false)
             return;
         var controller: DiagramController = this;
+        this.mouseupEvent = e;
         DiagramController.flagDraw = false;
         DiagramController.timer = setTimeout(() => this.finishDraw(), 1000);
-        console.log("mouseup");
-        console.log(DiagramController.list[0].first.toString());
     }
 
     finishDraw()
@@ -136,9 +128,8 @@ class DiagramController {
         for (var i = o.length; i > 0; i--) {
             o[i - 1].parentNode.removeChild(o[i - 1]);
         }
-        var keyG = new KeyGiver(DiagramController.list, DiagramController.data);
+        var keyG = new KeyGiver(DiagramController.list, DiagramController.data, this.mouseupEvent);
         var newKey = keyG.getKey();
-   //     keyG.isGesture(newKey);
         DiagramController.list = [];
     }
 

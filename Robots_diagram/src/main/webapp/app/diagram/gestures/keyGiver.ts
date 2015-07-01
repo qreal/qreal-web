@@ -22,16 +22,18 @@ class KeyGiver {
 	list: utils.PairArray = [];
 	listS: utils.PairArrayS = [];
 	private timer;
+	private contextMenuX: number;
+    private contextMenuY: number;
 	public prevKey: number;
 
-	minX:number;
-	minY:number;
-	maxX:number;
-	maxY:number;
+	minX: number;
+	minY: number;
+	maxX: number;
+	maxY: number;
 
-	gestures:Gesture[];
+	gestures: Gesture[];
 
-	constructor(public newList:utils.PairArray, public oldGesture:Gesture[]) {
+	constructor(public newList:utils.PairArray, public oldGesture:Gesture[], mouseupEvent) {
 		this.gestures = oldGesture;
 		this.list = newList;
 		this.minX = newList[0].first;
@@ -64,6 +66,8 @@ class KeyGiver {
 			if (this.list[i].first < this.minX) this.minX = this.list[i].first;
 			if (this.list[i].second < this.minY) this.minY = this.list[i].second;
 		}
+        this.contextMenuX = mouseupEvent.x;
+        this.contextMenuY = mouseupEvent.y;
 	}
 
 	getSymbol(pair:utils.Pair) {
@@ -154,8 +158,8 @@ class KeyGiver {
         function temp(keyGiver, e) {
             e.preventDefault();
             var menuDiv = document.createElement("div");
-            menuDiv.style.top = "200px";
-            menuDiv.style.left = "200px";
+            menuDiv.style.left = keyGiver.contextMenuX + "px";
+            menuDiv.style.top = keyGiver.contextMenuY + "px";
             menuDiv.style.width = "320px";
             menuDiv.style.height = "240px";
             menuDiv.style.position = "absolute";

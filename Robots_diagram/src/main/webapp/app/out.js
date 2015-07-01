@@ -386,18 +386,15 @@ var DiagramController = (function () {
         }
         DiagramController.flagAdd = true;
         DiagramController.list.push(p);
-        console.log("move");
-        console.log(DiagramController.list[DiagramController.list.length - 1].first.toString());
     };
-    DiagramController.prototype.onMouseUp = function () {
+    DiagramController.prototype.onMouseUp = function (e) {
         var _this = this;
         if (DiagramController.flagDraw === false)
             return;
         var controller = this;
+        this.mouseupEvent = e;
         DiagramController.flagDraw = false;
         DiagramController.timer = setTimeout(function () { return _this.finishDraw(); }, 1000);
-        console.log("mouseup");
-        console.log(DiagramController.list[0].first.toString());
     };
     DiagramController.prototype.finishDraw = function () {
         if (DiagramController.flagDraw === true)
@@ -406,7 +403,7 @@ var DiagramController = (function () {
         for (var i = o.length; i > 0; i--) {
             o[i - 1].parentNode.removeChild(o[i - 1]);
         }
-        var keyG = new KeyGiver(DiagramController.list, DiagramController.data);
+        var keyG = new KeyGiver(DiagramController.list, DiagramController.data, this.mouseupEvent);
         var newKey = keyG.getKey();
         DiagramController.list = [];
     };
@@ -660,7 +657,7 @@ var StandardsCustomEvent = (function () {
     return StandardsCustomEvent;
 })();
 var KeyGiver = (function () {
-    function KeyGiver(newList, oldGesture) {
+    function KeyGiver(newList, oldGesture, mouseupEvent) {
         this.newList = newList;
         this.oldGesture = oldGesture;
         this.list = [];
@@ -703,6 +700,8 @@ var KeyGiver = (function () {
             if (this.list[i].second < this.minY)
                 this.minY = this.list[i].second;
         }
+        this.contextMenuX = mouseupEvent.x;
+        this.contextMenuY = mouseupEvent.y;
     }
     KeyGiver.prototype.getSymbol = function (pair) {
         var curAr1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
@@ -781,8 +780,8 @@ var KeyGiver = (function () {
         function temp(keyGiver, e) {
             e.preventDefault();
             var menuDiv = document.createElement("div");
-            menuDiv.style.top = "200px";
-            menuDiv.style.left = "200px";
+            menuDiv.style.left = keyGiver.contextMenuX + "px";
+            menuDiv.style.top = keyGiver.contextMenuY + "px";
             menuDiv.style.width = "320px";
             menuDiv.style.height = "240px";
             menuDiv.style.position = "absolute";
