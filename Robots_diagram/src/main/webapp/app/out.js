@@ -326,9 +326,7 @@ var DiagramController = (function () {
         DiagramController.flagDraw = false;
         DiagramController.flagDraw = false;
         DiagramController.list = [];
-        console.log(window.location.href.toString());
         this.paper.on('cell:pointerdown', function (cellView, evt, x, y) {
-            console.log('cell view ' + cellView.model.id + ' was clicked 123');
             var node = controller.nodesMap[cellView.model.id];
             if (node) {
                 controller.currentElement = node;
@@ -346,13 +344,11 @@ var DiagramController = (function () {
             }
         });
         this.paper.on('blank:pointerdown', function (evt, x, y) {
-            console.log('alt was clicked');
             var n = DiagramController.d.getTime();
             DiagramController.currentTime = n;
             DiagramController.flagAdd = false;
             clearTimeout(DiagramController.timer);
             DiagramController.flagDraw = true;
-            console.log(DiagramController.flagDraw.toString());
             $(".property").remove();
             controller.currentElement = undefined;
         });
@@ -620,7 +616,7 @@ var DiagramController = (function () {
         xhr.send();
     };
     DiagramController.loadGestures = function () {
-        var url = "app/gestures.json";
+        var url = "resources/gestures.json";
         DiagramController.downloadData(url, DiagramController.processGestures.bind(this));
     };
     DiagramController.processGestures = function (xhr) {

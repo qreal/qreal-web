@@ -33,11 +33,8 @@ class DiagramController {
         DiagramController.flagDraw = false;
         DiagramController.list = [];
 
-        console.log(window.location.href.toString());
         this.paper.on('cell:pointerdown',
             function (cellView, evt, x, y) {
-                console.log('cell view ' + cellView.model.id + ' was clicked 123');
-
                 var node: DiagramNode = controller.nodesMap[cellView.model.id];
                 if (node) {
                     controller.currentElement = node;
@@ -56,13 +53,11 @@ class DiagramController {
 
         this.paper.on('blank:pointerdown',
             function (evt, x, y) {
-                console.log('alt was clicked');
                 var n = DiagramController.d.getTime();
                 DiagramController.currentTime = n;
                 DiagramController.flagAdd = false;
                 clearTimeout(DiagramController.timer);
                 DiagramController.flagDraw = true;
-                console.log(DiagramController.flagDraw.toString());
                 $(".property").remove();
                 controller.currentElement = undefined;
             }
@@ -369,7 +364,7 @@ class DiagramController {
     }
 
     static loadGestures() {
-        var url = "app/gestures.json";
+        var url = "resources/gestures.json";
         DiagramController.downloadData(url, DiagramController.processGestures.bind(this));
     }
 
