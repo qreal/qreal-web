@@ -7,8 +7,6 @@ declare var CustomEvent: {
     new(): CustomEvent;
 }
 
-var context_menu = new ContextMenu();
-
 class StandardsCustomEvent {
     static get(eventType: string, data: {}) {
         var customEvent = <any>CustomEvent;
@@ -21,7 +19,7 @@ class KeyGiver {
 
     list: utils.PairArray = [];
     listS: utils.PairArrayS = [];
-    private timer;
+    private contextMenu;
     private contextMenuX: number;
     private contextMenuY: number;
     public prevKey: number;
@@ -34,6 +32,7 @@ class KeyGiver {
     gestures: Gesture[];
 
     constructor(public newList:utils.PairArray, public oldGesture:Gesture[], mouseupEvent) {
+        this.contextMenu = new ContextMenu();
         this.gestures = oldGesture;
         this.list = newList;
         this.minX = newList[0].first;
@@ -103,17 +102,16 @@ class KeyGiver {
         return key;
     }
 
-
     public isGesture(key) {
         var result = 1000; //Pseudo-infinite value
         var num = -1;
         for (var i = 0; i < this.gestures.length; i++) {
             var curr = this.gestures[i];
             this.prevKey = i - 1;
-            var curRes = this.levenshtein(this.gestures[i].key, key) / Math.max(this.gestures[i].key.length, key.length);
+            var curRes = this.gestureDistance(this.gestures[i].key, key) / Math.max(this.gestures[i].key.length, key.length);
 
             while (this.prevKey >= 0
-            && this.levenshtein(this.gestures[this.prevKey].key, key) / Math.max(this.gestures[this.prevKey].key.length, key.length) > curRes) {
+            && this.gestureDistance(this.gestures[this.prevKey].key, key) / Math.max(this.gestures[this.prevKey].key.length, key.length) > curRes) {
                 this.gestures[this.prevKey + 1] = this.gestures[this.prevKey];
                 this.gestures[this.prevKey] = curr;
                 this.prevKey--;
@@ -125,7 +123,7 @@ class KeyGiver {
         {
             var t = 0;
             var q = Math.max(this.gestures[this.prevKey].key.length, key.length);
-            t = this.levenshtein(this.gestures[this.prevKey].key, key) / q;
+            t = this.gestureDistance(this.gestures[this.prevKey].key, key) / q;
             if (t > this.gestures[this.prevKey].factor)
                 break;
             this.prevKey++;
@@ -165,7 +163,7 @@ class KeyGiver {
             menuDiv.style.position = "absolute";
             menuDiv.style["z-index"] = 100;
             document.body.appendChild(menuDiv);
-            context_menu.showMenu("myevent", menuDiv, getItems.bind(keyGiver)());
+            keyGiver.contextMenu.showMenu("myevent", menuDiv, getItems.bind(keyGiver)());
         }
         var diagramPaper = document.getElementById('diagram_paper');
         var bindTemp = temp.bind(null, this);
@@ -175,8 +173,8 @@ class KeyGiver {
         diagramPaper.removeEventListener("myevent", bindTemp, false);
     }
 
-    // Calculate levenshtain's distance between s1 and s2
-    public levenshtein(s1, s2) {
+    // Calculate  distance between gestures s1 and s2
+     gestureDistance(s1, s2) {
         var ans = 0;
 
         for (var i = 0; i < s1.length; i++) {
