@@ -317,15 +317,18 @@ var DiagramController = (function () {
         this.nodesMap = {};
         this.linksMap = {};
         this.isPaletteLoaded = false;
+        this.flagDraw = false;
+        this.list = [];
+        this.d = new Date();
         var controller = this;
         DiagramController.instance = this;
         $scope.vm = controller;
         PaletteLoader.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
         DropdownListManager.addDropdownList("Link", "Guard", ["", "false", "iteration", "true"]);
-        DiagramController.loadGestures();
-        DiagramController.flagDraw = false;
-        DiagramController.flagDraw = false;
-        DiagramController.list = [];
+        this.loadGestures();
+        this.flagDraw = false;
+        this.flagDraw = false;
+        this.list = [];
         this.paper.on('cell:pointerdown', function (cellView, evt, x, y) {
             var node = controller.nodesMap[cellView.model.id];
             if (node) {
@@ -344,64 +347,62 @@ var DiagramController = (function () {
             }
         });
         this.paper.on('blank:pointerdown', function (evt, x, y) {
-            var n = DiagramController.d.getTime();
-            DiagramController.currentTime = n;
-            DiagramController.flagAdd = false;
-            clearTimeout(DiagramController.timer);
-            DiagramController.flagDraw = true;
+            var n = controller.d.getTime();
+            controller.currentTime = n;
+            controller.flagAdd = false;
+            clearTimeout(this.timer);
+            controller.flagDraw = true;
             $(".property").remove();
             controller.currentElement = undefined;
         });
         this.example = document.getElementById('diagram_paper');
         this.onMouseUp = controller.onMouseUp.bind(this);
-        document.addEventListener('mouseup', this.onMouseUp);
+        document.addEventListener('mouseup', this.onMouseUp.bind(this));
         this.onMouseUp = controller.onMouseMove.bind(this);
-        this.example.addEventListener('mousemove', this.onMouseMove);
+        this.example.addEventListener('mousemove', this.onMouseMove.bind(this));
     }
     DiagramController.getInstance = function () {
         return DiagramController.instance;
     };
-    DiagramController.smoothing = function (pair1, pair2, diff) {
+    DiagramController.prototype.smoothing = function (pair1, pair2, diff) {
         var a = 1;
         var c = 0.0275;
         var b = Math.exp(-c * diff);
         return new utils.Pair(pair2.first * b + (1 - b) * pair1.first, pair2.second + (1 - b) * pair1.second);
     };
     DiagramController.prototype.onMouseMove = function (e) {
-        var controller = this;
-        if (DiagramController.flagDraw === false)
+        if (this.flagDraw === false)
             return;
         var p = new utils.Pair(e.pageX, e.pageY);
-        if (DiagramController.flagAdd) {
-            var currentPair = DiagramController.list[DiagramController.list.length - 1];
-            var n = DiagramController.d.getTime();
-            var diff = n - DiagramController.currentTime;
-            DiagramController.currentTime = n;
-            p = DiagramController.smoothing(currentPair, new utils.Pair(e.pageX, e.pageY), diff);
+        if (this.flagAdd) {
+            var currentPair = this.list[this.list.length - 1];
+            var n = this.d.getTime();
+            var diff = n - this.currentTime;
+            this.currentTime = n;
+            p = this.smoothing(currentPair, new utils.Pair(e.pageX, e.pageY), diff);
             $('#diagram_paper').line(currentPair.first, currentPair.second, p.first, p.second);
         }
-        DiagramController.flagAdd = true;
-        DiagramController.list.push(p);
+        this.flagAdd = true;
+        this.list.push(p);
     };
     DiagramController.prototype.onMouseUp = function (e) {
         var _this = this;
-        if (DiagramController.flagDraw === false)
+        if (this.flagDraw === false)
             return;
-        var controller = this;
         this.mouseupEvent = e;
-        DiagramController.flagDraw = false;
-        DiagramController.timer = setTimeout(function () { return _this.finishDraw(); }, 1000);
+        this.flagDraw = false;
+        this.timer = setTimeout(function () { return _this.finishDraw(); }, 1000);
     };
     DiagramController.prototype.finishDraw = function () {
-        if (DiagramController.flagDraw === true)
+        if (this.flagDraw === true)
             return;
         var o = document.getElementsByClassName('pencil');
         for (var i = o.length; i > 0; i--) {
             o[i - 1].parentNode.removeChild(o[i - 1]);
         }
-        var keyG = new KeyGiver(DiagramController.list, DiagramController.data, this.mouseupEvent);
+        var keyG = new KeyGiver(this.list, this.data, this.mouseupEvent);
         var newKey = keyG.getKey();
-        DiagramController.list = [];
+        this.list = [];
     };
     DiagramController.prototype.setNodeTypesMap = function (nodeTypesMap) {
         this.nodeTypesMap = nodeTypesMap;
@@ -603,7 +604,7 @@ var DiagramController = (function () {
         $("#diagramContent").hide();
         $("#twoDModelContent").show();
     };
-    DiagramController.downloadData = function (url, success) {
+    DiagramController.prototype.downloadData = function (url, success) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
         xhr.onreadystatechange = function (e) {
@@ -615,19 +616,16 @@ var DiagramController = (function () {
         };
         xhr.send();
     };
-    DiagramController.loadGestures = function () {
+    DiagramController.prototype.loadGestures = function () {
         var url = "resources/gestures.json";
-        DiagramController.downloadData(url, DiagramController.processGestures.bind(this));
+        this.downloadData(url, this.processGestures.bind(this));
     };
-    DiagramController.processGestures = function (xhr) {
+    DiagramController.prototype.processGestures = function (xhr) {
         var fileData = JSON.parse(xhr.responseText);
-        DiagramController.data = [];
+        this.data = [];
         for (var i = 0; i < fileData.length; i++)
-            DiagramController.data[i] = new Gesture(fileData[i].name, fileData[i].key, fileData[i].factor);
+            this.data[i] = new Gesture(fileData[i].name, fileData[i].key, fileData[i].factor);
     };
-    DiagramController.flagDraw = false;
-    DiagramController.list = [];
-    DiagramController.d = new Date();
     return DiagramController;
 })();
 var Gesture = (function () {

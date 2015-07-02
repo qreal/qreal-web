@@ -9,14 +9,14 @@ class DiagramController {
     private isPaletteLoaded = false;
     private mouseupEvent;
 
-    example : HTMLDivElement;
-    static flagDraw : boolean = false;
-    static list : utils.PairArray = [];
-    static timer;
-    static currentTime;
-    static d : Date = new Date();
-    static data : Gesture[];
-    static flagAdd : boolean;
+    private example : HTMLDivElement;
+    private flagDraw : boolean = false;
+    private list : utils.PairArray = [];
+    private timer;
+    private currentTime;
+    private d : Date = new Date();
+    private data : Gesture[];
+    private flagAdd : boolean;
     private static instance: DiagramController;
 
     constructor($scope, $compile) {
@@ -28,10 +28,10 @@ class DiagramController {
 
         DropdownListManager.addDropdownList("Link", "Guard", ["", "false", "iteration", "true"]);
 
-        DiagramController.loadGestures();
-        DiagramController.flagDraw = false;
-        DiagramController.flagDraw = false;
-        DiagramController.list = [];
+        this.loadGestures();
+        this.flagDraw = false;
+        this.flagDraw = false;
+        this.list = [];
 
         this.paper.on('cell:pointerdown',
             function (cellView, evt, x, y) {
@@ -53,11 +53,11 @@ class DiagramController {
 
         this.paper.on('blank:pointerdown',
             function (evt, x, y) {
-                var n = DiagramController.d.getTime();
-                DiagramController.currentTime = n;
-                DiagramController.flagAdd = false;
-                clearTimeout(DiagramController.timer);
-                DiagramController.flagDraw = true;
+                var n = controller.d.getTime();
+                controller.currentTime = n;
+                controller.flagAdd = false;
+                clearTimeout(this.timer);
+                controller.flagDraw = true;
                 $(".property").remove();
                 controller.currentElement = undefined;
             }
@@ -65,10 +65,10 @@ class DiagramController {
 
         this.example = <HTMLDivElement> document.getElementById('diagram_paper');
         this.onMouseUp = <any>controller.onMouseUp.bind(this);
-        document.addEventListener('mouseup', this.onMouseUp);
+        document.addEventListener('mouseup', this.onMouseUp.bind(this));
 
         this.onMouseUp = <any>controller.onMouseMove.bind(this);
-        this.example.addEventListener('mousemove', this.onMouseMove);
+        this.example.addEventListener('mousemove', this.onMouseMove.bind(this));
 
     }
 
@@ -76,7 +76,7 @@ class DiagramController {
         return DiagramController.instance;
     }
 
-    static smoothing(pair1 : utils.Pair, pair2 : utils.Pair, diff : number) {
+    smoothing(pair1 : utils.Pair, pair2 : utils.Pair, diff : number) {
         var a = 1;
         var c = 0.0275;
         var b = Math.exp(-c * diff);
@@ -86,46 +86,44 @@ class DiagramController {
 
     onMouseMove(e)
     {
-        var controller: DiagramController = this;
-        if (DiagramController.flagDraw === false)
+        if (this.flagDraw === false)
             return;
 
         var p = new utils.Pair(e.pageX, e.pageY);
-        if (DiagramController.flagAdd) {
+        if (this.flagAdd) {
 
-            var currentPair = DiagramController.list[DiagramController.list.length - 1];
-            var n = DiagramController.d.getTime();
-            var diff = n - DiagramController.currentTime;
-            DiagramController.currentTime = n;
-            p = DiagramController.smoothing(currentPair, new utils.Pair(e.pageX, e.pageY), diff);
+            var currentPair = this.list[this.list.length - 1];
+            var n = this.d.getTime();
+            var diff = n - this.currentTime;
+            this.currentTime = n;
+            p = this.smoothing(currentPair, new utils.Pair(e.pageX, e.pageY), diff);
 
             $('#diagram_paper').line(currentPair.first, currentPair.second, p.first, p.second);
         }
-        DiagramController.flagAdd = true;
-        DiagramController.list.push(p);
+        this.flagAdd = true;
+        this.list.push(p);
     }
 
     onMouseUp(e)
     {
-        if (DiagramController.flagDraw === false)
+        if (this.flagDraw === false)
             return;
-        var controller: DiagramController = this;
         this.mouseupEvent = e;
-        DiagramController.flagDraw = false;
-        DiagramController.timer = setTimeout(() => this.finishDraw(), 1000);
+        this.flagDraw = false;
+        this.timer = setTimeout(() => this.finishDraw(), 1000);
     }
 
     finishDraw()
     {
-        if (DiagramController.flagDraw === true)
+        if (this.flagDraw === true)
             return;
         var o = document.getElementsByClassName('pencil');
         for (var i = o.length; i > 0; i--) {
             o[i - 1].parentNode.removeChild(o[i - 1]);
         }
-        var keyG = new KeyGiver(DiagramController.list, DiagramController.data, this.mouseupEvent);
+        var keyG = new KeyGiver(this.list, this.data, this.mouseupEvent);
         var newKey = keyG.getKey();
-        DiagramController.list = [];
+        this.list = [];
     }
 
     setNodeTypesMap(nodeTypesMap: NodeTypesMap): void {
@@ -350,7 +348,7 @@ class DiagramController {
     }
 
     // download file with gestures
-    static downloadData(url, success) {
+    downloadData(url, success) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
         xhr.onreadystatechange = function(e) {
@@ -363,15 +361,15 @@ class DiagramController {
         xhr.send();
     }
 
-    static loadGestures() {
+    loadGestures() {
         var url = "resources/gestures.json";
-        DiagramController.downloadData(url, DiagramController.processGestures.bind(this));
+        this.downloadData(url, this.processGestures.bind(this));
     }
 
-    static processGestures(xhr) {
+    processGestures(xhr) {
         var fileData = JSON.parse(xhr.responseText);
-        DiagramController.data = [];
+        this.data = [];
         for (var i = 0; i < fileData.length; i++)
-            DiagramController.data[i] = new Gesture(<string> fileData[i].name, <string[]> fileData[i].key, <number> fileData[i].factor);
+            this.data[i] = new Gesture(<string> fileData[i].name, <string[]> fileData[i].key, <number> fileData[i].factor);
     }
 }
