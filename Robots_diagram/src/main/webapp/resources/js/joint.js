@@ -8854,6 +8854,16 @@
 
 })(window);
 
+/**
+ * @license
+ * Lo-Dash 2.2.1 (Custom Build) <http://lodash.com/>
+ * Build: `lodash modern -o ./dist/lodash.js`
+ * Copyright 2012-2013 The Dojo Foundation <http://dojofoundation.org/>
+ * Based on Underscore.js 1.5.2 <http://underscorejs.org/LICENSE>
+ * Copyright 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ * Available under MIT license <http://lodash.com/license>
+ */
+;
 (function () {
 
     /** Used as a safe reference for `undefined` in pre ES5 environments */
@@ -14163,7 +14173,7 @@
                 return hasOwnProperty.call(cache, key)
                     ? cache[key]
                     : (cache[key] = func.apply(this, arguments));
-            };
+            }
             memoized.cache = {};
             return memoized;
         }
@@ -17933,7 +17943,7 @@ if (typeof exports === 'object') {
 
                     // Register the animation. (See `https://answers.launchpad.net/smil/+question/203333`)
                     var animation = animateMotion.node;
-                    animation.animators = [];
+                    animation.animators = new Array();
 
                     var animationID = animation.getAttribute('id');
                     if (animationID) id2anim[animationID] = animation;
@@ -20351,7 +20361,7 @@ joint.dia.LinkView = joint.dia.CellView.extend({
         if (!_.isArray(children)) children = [children];
 
         // Cache all children elements for quicker access.
-        this._V = {}; // vectorized markup;
+        this._V = {} // vectorized markup;
         _.each(children, function (child) {
             var c = child.attr('class');
             c && (this._V[$.camelCase(c)] = child);
@@ -20642,7 +20652,7 @@ joint.dia.LinkView = joint.dia.CellView.extend({
         // getting bbox of an element with `display="none"` in IE9 ends up with access violation
         if ($.css(this._V.markerArrowheads.node, 'display') === 'none') return this;
 
-        var sx = this.getConnectionLength() < this.options.shortLinkLength ? .5 : 1;
+        var sx = this.getConnectionLength() < this.options.shortLinkLength ? .5 : 1
         this._sourceArrowhead.scale(sx);
         this._targetArrowhead.scale(sx);
 
@@ -21207,7 +21217,7 @@ joint.dia.LinkView = joint.dia.CellView.extend({
         var end = this.model.get(oppositeArrowhead);
 
         if (end.id) {
-            args[i] = this.paper.findViewByModel(end.id);
+            args[i] = this.paper.findViewByModel(end.id)
             args[i + 1] = end.selector && args[i].el.querySelector(end.selector);
         }
 
@@ -21368,7 +21378,7 @@ joint.dia.LinkView = joint.dia.CellView.extend({
                     // It holds the element when a touchstart triggered.
                     var target = (evt.type === 'mousemove')
                         ? evt.target
-                        : document.elementFromPoint(evt.clientX, evt.clientY);
+                        : document.elementFromPoint(evt.clientX, evt.clientY)
 
                     if (this._targetEvent !== target) {
                         // Unhighlight the previous view under pointer if there was one.
