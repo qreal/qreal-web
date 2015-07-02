@@ -17,6 +17,9 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan("com.qreal.stepic.robots")
 public class WebConfig extends WebMvcConfigurerAdapter {
 
+    /* Time, in seconds, to have the browser cache static resources (one day). */
+    private static final int BROWSER_CACHE_CONTROL = 86400;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/WEB-INF/pages/**").addResourceLocations("/pages/");
@@ -24,7 +27,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/app/**").addResourceLocations("/app/");
         registry.addResourceHandler("/configs/**").addResourceLocations("/configs/");
         registry.addResourceHandler("/tasks/**").addResourceLocations("/tasks/");
-        registry.addResourceHandler("/images/**").addResourceLocations("/images/");
+        registry.addResourceHandler("/images/**").addResourceLocations("/images/").setCachePeriod(BROWSER_CACHE_CONTROL);
 
     }
 
