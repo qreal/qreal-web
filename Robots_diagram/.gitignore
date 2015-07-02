@@ -3,4 +3,5 @@ src/main/webapp/node_modules/
 target/
 *.map
 *.iml
+**/out.js
 src/main/webapp/.tscache
