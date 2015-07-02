@@ -17,12 +17,10 @@ class DiagramController {
     private d : Date = new Date();
     private data : Gesture[];
     private flagAdd : boolean;
-    private static instance: DiagramController;
 
     constructor($scope, $compile) {
 
         var controller: DiagramController = this;
-        DiagramController.instance = this;
         $scope.vm = controller;
         PaletteLoader.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
 
@@ -72,11 +70,7 @@ class DiagramController {
 
     }
 
-    public static getInstance(): DiagramController {
-        return DiagramController.instance;
-    }
-
-    smoothing(pair1 : utils.Pair, pair2 : utils.Pair, diff : number) {
+    private smoothing(pair1 : utils.Pair, pair2 : utils.Pair, diff : number) {
         var a = 1;
         var c = 0.0275;
         var b = Math.exp(-c * diff);
@@ -84,7 +78,7 @@ class DiagramController {
             , pair2.second + (1 - b) * pair1.second);
     }
 
-    onMouseMove(e)
+    private onMouseMove(e)
     {
         if (this.flagDraw === false)
             return;
@@ -104,7 +98,7 @@ class DiagramController {
         this.list.push(p);
     }
 
-    onMouseUp(e)
+    private onMouseUp(e)
     {
         if (this.flagDraw === false)
             return;
@@ -113,7 +107,7 @@ class DiagramController {
         this.timer = setTimeout(() => this.finishDraw(), 1000);
     }
 
-    finishDraw()
+    private finishDraw()
     {
         if (this.flagDraw === true)
             return;
@@ -121,7 +115,7 @@ class DiagramController {
         for (var i = o.length; i > 0; i--) {
             o[i - 1].parentNode.removeChild(o[i - 1]);
         }
-        var keyG = new KeyGiver(this.list, this.data, this.mouseupEvent);
+        var keyG = new KeyGiver(this);
         var newKey = keyG.getKey();
         this.list = [];
     }
@@ -348,7 +342,7 @@ class DiagramController {
     }
 
     // download file with gestures
-    downloadData(url, success) {
+    private downloadData(url, success) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
         xhr.onreadystatechange = function(e) {
@@ -361,15 +355,27 @@ class DiagramController {
         xhr.send();
     }
 
-    loadGestures() {
+    private loadGestures() {
         var url = "resources/gestures.json";
         this.downloadData(url, this.processGestures.bind(this));
     }
 
-    processGestures(xhr) {
+    private processGestures(xhr) {
         var fileData = JSON.parse(xhr.responseText);
         this.data = [];
         for (var i = 0; i < fileData.length; i++)
             this.data[i] = new Gesture(<string> fileData[i].name, <string[]> fileData[i].key, <number> fileData[i].factor);
+    }
+
+    public getGestureList(): utils.PairArray {
+        return this.list;
+    }
+
+    public getGestureData(): Gesture[] {
+        return this.data;
+    }
+
+    public getMouseupEvent() {
+        return this.mouseupEvent;
     }
 }

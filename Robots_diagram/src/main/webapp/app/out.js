@@ -321,7 +321,6 @@ var DiagramController = (function () {
         this.list = [];
         this.d = new Date();
         var controller = this;
-        DiagramController.instance = this;
         $scope.vm = controller;
         PaletteLoader.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
         DropdownListManager.addDropdownList("Link", "Guard", ["", "false", "iteration", "true"]);
@@ -361,9 +360,6 @@ var DiagramController = (function () {
         this.onMouseUp = controller.onMouseMove.bind(this);
         this.example.addEventListener('mousemove', this.onMouseMove.bind(this));
     }
-    DiagramController.getInstance = function () {
-        return DiagramController.instance;
-    };
     DiagramController.prototype.smoothing = function (pair1, pair2, diff) {
         var a = 1;
         var c = 0.0275;
@@ -400,7 +396,7 @@ var DiagramController = (function () {
         for (var i = o.length; i > 0; i--) {
             o[i - 1].parentNode.removeChild(o[i - 1]);
         }
-        var keyG = new KeyGiver(this.list, this.data, this.mouseupEvent);
+        var keyG = new KeyGiver(this);
         var newKey = keyG.getKey();
         this.list = [];
     };
@@ -626,6 +622,15 @@ var DiagramController = (function () {
         for (var i = 0; i < fileData.length; i++)
             this.data[i] = new Gesture(fileData[i].name, fileData[i].key, fileData[i].factor);
     };
+    DiagramController.prototype.getGestureList = function () {
+        return this.list;
+    };
+    DiagramController.prototype.getGestureData = function () {
+        return this.data;
+    };
+    DiagramController.prototype.getMouseupEvent = function () {
+        return this.mouseupEvent;
+    };
     return DiagramController;
 })();
 var Gesture = (function () {
@@ -650,18 +655,16 @@ var StandardsCustomEvent = (function () {
     return StandardsCustomEvent;
 })();
 var KeyGiver = (function () {
-    function KeyGiver(newList, oldGesture, mouseupEvent) {
-        this.newList = newList;
-        this.oldGesture = oldGesture;
+    function KeyGiver(newController) {
         this.list = [];
-        this.listS = [];
+        this.controller = newController;
         this.contextMenu = new ContextMenu();
-        this.gestures = oldGesture;
-        this.list = newList;
-        this.minX = newList[0].first;
-        this.minY = newList[0].second;
-        this.maxX = newList[0].first;
-        this.maxY = newList[0].second;
+        this.gestures = this.controller.getGestureData();
+        this.list = this.controller.getGestureList();
+        this.minX = this.list[0].first;
+        this.minY = this.list[0].second;
+        this.maxX = this.list[0].first;
+        this.maxY = this.list[0].second;
         for (var i = 1; i < this.list.length; i++) {
             if (this.list[i].first < this.minX)
                 this.minX = this.list[i].first;
@@ -686,16 +689,16 @@ var KeyGiver = (function () {
                 this.list[i].first = midValue - (midValue - this.list[i].first) * ratio;
             }
         }
-        this.minX = newList[0].first;
-        this.minY = newList[0].second;
+        this.minX = this.list[0].first;
+        this.minY = this.list[0].second;
         for (var i = 1; i < this.list.length; i++) {
             if (this.list[i].first < this.minX)
                 this.minX = this.list[i].first;
             if (this.list[i].second < this.minY)
                 this.minY = this.list[i].second;
         }
-        this.contextMenuX = mouseupEvent.x;
-        this.contextMenuY = mouseupEvent.y;
+        this.contextMenuX = this.controller.getMouseupEvent().x;
+        this.contextMenuY = this.controller.getMouseupEvent().y;
     }
     KeyGiver.prototype.getSymbol = function (pair) {
         var curAr1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
@@ -758,7 +761,7 @@ var KeyGiver = (function () {
             var items = new Array();
             for (var i = 0; i < this.prevKey; ++i) {
                 items.push({ "name": names[i], "action": function (text) {
-                    DiagramController.getInstance().createNode(text);
+                    this.controller.createNode(text);
                 }.bind(null, names[i]) });
             }
             return items;

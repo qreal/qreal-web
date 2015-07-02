@@ -1,11 +1,6 @@
 // algoritm to get a key
 
 declare function ContextMenu() : void;
-declare function showMenu(event, parent, items) : void;
-declare var CustomEvent: {
-    prototype: CustomEvent;
-    new(): CustomEvent;
-}
 
 class StandardsCustomEvent {
     static get(eventType: string, data: {}) {
@@ -17,28 +12,29 @@ class StandardsCustomEvent {
         
 class KeyGiver {
 
-    list: utils.PairArray = [];
-    listS: utils.PairArrayS = [];
+    private list: utils.PairArray = [];
     private contextMenu;
     private contextMenuX: number;
     private contextMenuY: number;
-    public prevKey: number;
+    private prevKey: number;
+    private controller: DiagramController;
 
-    minX: number;
-    minY: number;
-    maxX: number;
-    maxY: number;
+    private minX: number;
+    private minY: number;
+    private maxX: number;
+    private maxY: number;
 
-    gestures: Gesture[];
+    private gestures: Gesture[];
 
-    constructor(public newList:utils.PairArray, public oldGesture:Gesture[], mouseupEvent) {
+    constructor(newController: DiagramController) {
+        this.controller = newController;
         this.contextMenu = new ContextMenu();
-        this.gestures = oldGesture;
-        this.list = newList;
-        this.minX = newList[0].first;
-        this.minY = newList[0].second;
-        this.maxX = newList[0].first;
-        this.maxY = newList[0].second;
+        this.gestures = this.controller.getGestureData();
+        this.list = this.controller.getGestureList();
+        this.minX = this.list[0].first;
+        this.minY = this.list[0].second;
+        this.maxX = this.list[0].first;
+        this.maxY = this.list[0].second;
         for (var i = 1; i < this.list.length; i++) {
             if (this.list[i].first < this.minX) this.minX = this.list[i].first;
             if (this.list[i].first > this.maxX) this.maxX = this.list[i].first;
@@ -59,17 +55,17 @@ class KeyGiver {
                 this.list[i].first = midValue - (midValue - this.list[i].first) * ratio;
             }
         }
-        this.minX = newList[0].first;
-        this.minY = newList[0].second;
+        this.minX = this.list[0].first;
+        this.minY = this.list[0].second;
         for (var i = 1; i < this.list.length; i++) {
             if (this.list[i].first < this.minX) this.minX = this.list[i].first;
             if (this.list[i].second < this.minY) this.minY = this.list[i].second;
         }
-        this.contextMenuX = mouseupEvent.x;
-        this.contextMenuY = mouseupEvent.y;
+        this.contextMenuX = this.controller.getMouseupEvent().x;
+        this.contextMenuY = this.controller.getMouseupEvent().y;
     }
 
-    getSymbol(pair:utils.Pair) {
+    private getSymbol(pair:utils.Pair) {
         var curAr1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
         var curNumX = pair.first - this.minX;
         var curNumY = pair.second - this.minY;
@@ -139,7 +135,7 @@ class KeyGiver {
         var getItems = function() {
             var items = new Array();
             for (var i = 0; i < this.prevKey; ++i) {
-                items.push({"name": names[i], "action": function(text) { DiagramController.getInstance().createNode(text); }.bind(null, names[i])});
+                items.push({"name": names[i], "action": function(text) { this.controller.createNode(text); }.bind(null, names[i])});
             }
             return items;
         }
@@ -174,7 +170,7 @@ class KeyGiver {
     }
 
     // Calculate  distance between gestures s1 and s2
-     gestureDistance(s1, s2) {
+    private gestureDistance(s1, s2) {
         var ans = 0;
 
         for (var i = 0; i < s1.length; i++) {
