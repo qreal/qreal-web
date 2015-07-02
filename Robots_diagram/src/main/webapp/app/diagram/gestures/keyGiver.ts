@@ -66,24 +66,24 @@ class KeyGiver {
     }
 
     private getSymbol(pair:utils.Pair) {
-        var curAr1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
-        var curNumX = pair.first - this.minX;
-        var curNumY = pair.second - this.minY;
+        var columnNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+        var curX = pair.first - this.minX;
+        var curY= pair.second - this.minY;
 
-        return curAr1[Math.floor(curNumX * 9 / (this.maxX + 1 - this.minX))] + +(Math.floor(curNumY * 9 / Math.floor(this.maxY + 1 - this.minY)));
+        return columnNames[Math.floor(curX * 9 / (this.maxX + 1 - this.minX))] + +(Math.floor(curY * 9 / Math.floor(this.maxY + 1 - this.minY)));
     }
 
     public getKey() {
         var key = [];
         var index = 0;
-        var str1 = this.getSymbol(this.list[0]);
-        key[index] = str1;
+        var firstCell = this.getSymbol(this.list[0]);
+        key[index] = firstCell;
         index++;
         for (var i = 1; i < this.list.length; i++) {
-            var str2 = this.getSymbol(this.list[i]);
-            if (str2 != str1) {
-                str1 = str2;
-                key[index] = str1;
+            var secondCell = this.getSymbol(this.list[i]);
+            if (secondCell != firstCell) {
+                firstCell = secondCell;
+                key[index] = firstCell;
                 index++;
             }
         }
@@ -92,15 +92,12 @@ class KeyGiver {
             if (key[i] === key[i + 1])
                 key.splice(i, 1);
         }
-        console.log(key.toString());
         this.isGesture(key);
 
         return key;
     }
 
     public isGesture(key) {
-        var result = 1000; //Pseudo-infinite value
-        var num = -1;
         for (var i = 0; i < this.gestures.length; i++) {
             var curr = this.gestures[i];
             this.prevKey = i - 1;
@@ -113,14 +110,11 @@ class KeyGiver {
                 this.prevKey--;
             }
         }
-        var str = "";
         this.prevKey = 0;
         while (this.prevKey < this.gestures.length)
         {
-            var t = 0;
-            var q = Math.max(this.gestures[this.prevKey].key.length, key.length);
-            t = this.gestureDistance(this.gestures[this.prevKey].key, key) / q;
-            if (t > this.gestures[this.prevKey].factor)
+            var factor = this.gestureDistance(this.gestures[this.prevKey].key, key) / Math.max(this.gestures[this.prevKey].key.length, key.length);
+            if (factor > this.gestures[this.prevKey].factor)
                 break;
             this.prevKey++;
         }
@@ -134,13 +128,14 @@ class KeyGiver {
 
         var getItems = function() {
             var items = new Array();
+            var tempController = this.controller;
             for (var i = 0; i < this.prevKey; ++i) {
-                items.push({"name": names[i], "action": function(text) { this.controller.createNode(text); }.bind(null, names[i])});
+                items.push({"name": names[i], "action": function(text) { tempController.createNode(text); }.bind(null, names[i])});
             }
             return items;
         }
 
-        var x = StandardsCustomEvent.get("myevent", {
+        var contextMenuEvent = StandardsCustomEvent.get("myevent", {
             detail: {
                 message: "Hello World!",
                 time: new Date(),
@@ -149,7 +144,7 @@ class KeyGiver {
             cancelable: true
         });
 
-        function temp(keyGiver, e) {
+        function showContextMenu(keyGiver, e) {
             e.preventDefault();
             var menuDiv = document.createElement("div");
             menuDiv.style.left = keyGiver.contextMenuX + "px";
@@ -162,11 +157,11 @@ class KeyGiver {
             keyGiver.contextMenu.showMenu("myevent", menuDiv, getItems.bind(keyGiver)());
         }
         var diagramPaper = document.getElementById('diagram_paper');
-        var bindTemp = temp.bind(null, this);
-        diagramPaper.addEventListener("myevent", bindTemp, false);
+        var bindContextMenu = showContextMenu.bind(null, this);
+        diagramPaper.addEventListener("myevent", bindContextMenu, false);
         diagramPaper.setAttribute("oncontextmenu", "javascript: context_menu.showMenu('myevent', this, getItems());");
-        diagramPaper.dispatchEvent(x);
-        diagramPaper.removeEventListener("myevent", bindTemp, false);
+        diagramPaper.dispatchEvent(contextMenuEvent);
+        diagramPaper.removeEventListener("myevent", bindContextMenu, false);
     }
 
     // Calculate  distance between gestures s1 and s2

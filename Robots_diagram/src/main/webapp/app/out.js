@@ -319,7 +319,7 @@ var DiagramController = (function () {
         this.isPaletteLoaded = false;
         this.flagDraw = false;
         this.list = [];
-        this.d = new Date();
+        this.date = new Date();
         var controller = this;
         $scope.vm = controller;
         PaletteLoader.loadElementsFromXml(this, "configs/elements.xml", $scope, $compile);
@@ -346,7 +346,7 @@ var DiagramController = (function () {
             }
         });
         this.paper.on('blank:pointerdown', function (evt, x, y) {
-            var n = controller.d.getTime();
+            var n = controller.date.getTime();
             controller.currentTime = n;
             controller.flagAdd = false;
             clearTimeout(this.timer);
@@ -354,11 +354,11 @@ var DiagramController = (function () {
             $(".property").remove();
             controller.currentElement = undefined;
         });
-        this.example = document.getElementById('diagram_paper');
+        this.diagramPaper = document.getElementById('diagram_paper');
         this.onMouseUp = controller.onMouseUp.bind(this);
         document.addEventListener('mouseup', this.onMouseUp.bind(this));
         this.onMouseUp = controller.onMouseMove.bind(this);
-        this.example.addEventListener('mousemove', this.onMouseMove.bind(this));
+        this.diagramPaper.addEventListener('mousemove', this.onMouseMove.bind(this));
     }
     DiagramController.prototype.smoothing = function (pair1, pair2, diff) {
         var a = 1;
@@ -372,7 +372,7 @@ var DiagramController = (function () {
         var p = new utils.Pair(e.pageX, e.pageY);
         if (this.flagAdd) {
             var currentPair = this.list[this.list.length - 1];
-            var n = this.d.getTime();
+            var n = this.date.getTime();
             var diff = n - this.currentTime;
             this.currentTime = n;
             p = this.smoothing(currentPair, new utils.Pair(e.pageX, e.pageY), diff);
@@ -435,7 +435,7 @@ var DiagramController = (function () {
     };
     DiagramController.prototype.setCheckboxListener = function () {
         var controller = this;
-        $(document).on('change', '.checkbox', function () {
+        $(document).on('change', '.cheeckbox', function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
             var label = tr.find('label');
@@ -601,7 +601,7 @@ var DiagramController = (function () {
         $("#twoDModelContent").show();
     };
     DiagramController.prototype.downloadData = function (url, success) {
-        var xhr = new XMLHttpRequest();
+        var xhr = XmlHttpFactory.createXMLHTTPObject();
         xhr.open('GET', url, true);
         xhr.onreadystatechange = function (e) {
             if (xhr.readyState == 4) {
@@ -701,22 +701,22 @@ var KeyGiver = (function () {
         this.contextMenuY = this.controller.getMouseupEvent().y;
     }
     KeyGiver.prototype.getSymbol = function (pair) {
-        var curAr1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
-        var curNumX = pair.first - this.minX;
-        var curNumY = pair.second - this.minY;
-        return curAr1[Math.floor(curNumX * 9 / (this.maxX + 1 - this.minX))] + +(Math.floor(curNumY * 9 / Math.floor(this.maxY + 1 - this.minY)));
+        var columnNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+        var curX = pair.first - this.minX;
+        var curY = pair.second - this.minY;
+        return columnNames[Math.floor(curX * 9 / (this.maxX + 1 - this.minX))] + +(Math.floor(curY * 9 / Math.floor(this.maxY + 1 - this.minY)));
     };
     KeyGiver.prototype.getKey = function () {
         var key = [];
         var index = 0;
-        var str1 = this.getSymbol(this.list[0]);
-        key[index] = str1;
+        var firstCell = this.getSymbol(this.list[0]);
+        key[index] = firstCell;
         index++;
         for (var i = 1; i < this.list.length; i++) {
-            var str2 = this.getSymbol(this.list[i]);
-            if (str2 != str1) {
-                str1 = str2;
-                key[index] = str1;
+            var secondCell = this.getSymbol(this.list[i]);
+            if (secondCell != firstCell) {
+                firstCell = secondCell;
+                key[index] = firstCell;
                 index++;
             }
         }
@@ -725,13 +725,10 @@ var KeyGiver = (function () {
             if (key[i] === key[i + 1])
                 key.splice(i, 1);
         }
-        console.log(key.toString());
         this.isGesture(key);
         return key;
     };
     KeyGiver.prototype.isGesture = function (key) {
-        var result = 1000;
-        var num = -1;
         for (var i = 0; i < this.gestures.length; i++) {
             var curr = this.gestures[i];
             this.prevKey = i - 1;
@@ -742,13 +739,10 @@ var KeyGiver = (function () {
                 this.prevKey--;
             }
         }
-        var str = "";
         this.prevKey = 0;
         while (this.prevKey < this.gestures.length) {
-            var t = 0;
-            var q = Math.max(this.gestures[this.prevKey].key.length, key.length);
-            t = this.gestureDistance(this.gestures[this.prevKey].key, key) / q;
-            if (t > this.gestures[this.prevKey].factor)
+            var factor = this.gestureDistance(this.gestures[this.prevKey].key, key) / Math.max(this.gestures[this.prevKey].key.length, key.length);
+            if (factor > this.gestures[this.prevKey].factor)
                 break;
             this.prevKey++;
         }
@@ -759,14 +753,15 @@ var KeyGiver = (function () {
             names[i] = this.gestures[i].name;
         var getItems = function () {
             var items = new Array();
+            var tempController = this.controller;
             for (var i = 0; i < this.prevKey; ++i) {
                 items.push({ "name": names[i], "action": function (text) {
-                    this.controller.createNode(text);
+                    tempController.createNode(text);
                 }.bind(null, names[i]) });
             }
             return items;
         };
-        var x = StandardsCustomEvent.get("myevent", {
+        var contextMenuEvent = StandardsCustomEvent.get("myevent", {
             detail: {
                 message: "Hello World!",
                 time: new Date(),
@@ -774,7 +769,7 @@ var KeyGiver = (function () {
             bubbles: true,
             cancelable: true
         });
-        function temp(keyGiver, e) {
+        function showContextMenu(keyGiver, e) {
             e.preventDefault();
             var menuDiv = document.createElement("div");
             menuDiv.style.left = keyGiver.contextMenuX + "px";
@@ -787,11 +782,11 @@ var KeyGiver = (function () {
             keyGiver.contextMenu.showMenu("myevent", menuDiv, getItems.bind(keyGiver)());
         }
         var diagramPaper = document.getElementById('diagram_paper');
-        var bindTemp = temp.bind(null, this);
-        diagramPaper.addEventListener("myevent", bindTemp, false);
+        var bindContextMenu = showContextMenu.bind(null, this);
+        diagramPaper.addEventListener("myevent", bindContextMenu, false);
         diagramPaper.setAttribute("oncontextmenu", "javascript: context_menu.showMenu('myevent', this, getItems());");
-        diagramPaper.dispatchEvent(x);
-        diagramPaper.removeEventListener("myevent", bindTemp, false);
+        diagramPaper.dispatchEvent(contextMenuEvent);
+        diagramPaper.removeEventListener("myevent", bindContextMenu, false);
     };
     KeyGiver.prototype.gestureDistance = function (s1, s2) {
         var ans = 0;

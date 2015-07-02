@@ -9,12 +9,12 @@ class DiagramController {
     private isPaletteLoaded = false;
     private mouseupEvent;
 
-    private example : HTMLDivElement;
+    private diagramPaper : HTMLDivElement;
     private flagDraw : boolean = false;
     private list : utils.PairArray = [];
     private timer;
     private currentTime;
-    private d : Date = new Date();
+    private date : Date = new Date();
     private data : Gesture[];
     private flagAdd : boolean;
 
@@ -51,7 +51,7 @@ class DiagramController {
 
         this.paper.on('blank:pointerdown',
             function (evt, x, y) {
-                var n = controller.d.getTime();
+                var n = controller.date.getTime();
                 controller.currentTime = n;
                 controller.flagAdd = false;
                 clearTimeout(this.timer);
@@ -61,12 +61,12 @@ class DiagramController {
             }
         );
 
-        this.example = <HTMLDivElement> document.getElementById('diagram_paper');
+        this.diagramPaper = <HTMLDivElement> document.getElementById('diagram_paper');
         this.onMouseUp = <any>controller.onMouseUp.bind(this);
         document.addEventListener('mouseup', this.onMouseUp.bind(this));
 
         this.onMouseUp = <any>controller.onMouseMove.bind(this);
-        this.example.addEventListener('mousemove', this.onMouseMove.bind(this));
+        this.diagramPaper.addEventListener('mousemove', this.onMouseMove.bind(this));
 
     }
 
@@ -87,7 +87,7 @@ class DiagramController {
         if (this.flagAdd) {
 
             var currentPair = this.list[this.list.length - 1];
-            var n = this.d.getTime();
+            var n = this.date.getTime();
             var diff = n - this.currentTime;
             this.currentTime = n;
             p = this.smoothing(currentPair, new utils.Pair(e.pageX, e.pageY), diff);
@@ -159,7 +159,7 @@ class DiagramController {
 
     setCheckboxListener(): void {
         var controller: DiagramController = this;
-        $(document).on('change', '.checkbox', function () {
+        $(document).on('change', '.cheeckbox', function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
             var label = tr.find('label');
@@ -343,7 +343,7 @@ class DiagramController {
 
     // download file with gestures
     private downloadData(url, success) {
-        var xhr = new XMLHttpRequest();
+        var xhr = XmlHttpFactory.createXMLHTTPObject();
         xhr.open('GET', url, true);
         xhr.onreadystatechange = function(e) {
             if (xhr.readyState == 4) {
