@@ -13,6 +13,11 @@ class TwoDRobotModel extends CommonRobotModelImpl {
         realModel.getAvailablePorts().forEach(function(port) {
             twoDRobotModel.addAllowedConnection(port, realModel.getAllowedDevices(port));
         });
+
+        ImagePreloader.preloadImages(["images/2dmodel/trikKit/twoDColorEmpty.svg",
+            "images/2dmodel/trikKit/twoDIrRangeSensor.svg",
+            "images/2dmodel/trikKit/twoDUsRangeSensor.svg",
+            "images/2dmodel/trikKit/twoDVideoModule.svg"]);
     }
 
     sensorImagePath(deviceType: DeviceInfo): string {
