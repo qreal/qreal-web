@@ -257,10 +257,15 @@ class DiagramController {
         return node;
     }
 
-    createNode(type): void {
+    createNode(type: string, x: number, y: number): void {
         var image: string = this.nodeTypesMap[type].image;
         var properties: PropertiesMap = this.nodeTypesMap[type].properties;
-        var node = this.createDefaultNode(type, 0, 0, properties, image);
+        var leftElementPos: number = x - $(this.diagramPaper).offset().left + $(this.diagramPaper).scrollLeft();
+        var topElementPos: number = y - $(this.diagramPaper).offset().top + $(this.diagramPaper).scrollTop();
+        var gridSize: number = this.paper.getGridSizeValue();
+        leftElementPos -= leftElementPos % gridSize;
+        topElementPos -= topElementPos % gridSize;
+        var node = this.createDefaultNode(type, leftElementPos, topElementPos, properties, image);
         this.currentElement = node;
         this.setNodeProperties(node);
     }

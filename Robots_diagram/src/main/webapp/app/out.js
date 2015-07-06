@@ -524,10 +524,15 @@ var DiagramController = (function () {
         this.graph.addCell(node.getJointObject());
         return node;
     };
-    DiagramController.prototype.createNode = function (type) {
+    DiagramController.prototype.createNode = function (type, x, y) {
         var image = this.nodeTypesMap[type].image;
         var properties = this.nodeTypesMap[type].properties;
-        var node = this.createDefaultNode(type, 0, 0, properties, image);
+        var leftElementPos = x - $(this.diagramPaper).offset().left + $(this.diagramPaper).scrollLeft();
+        var topElementPos = y - $(this.diagramPaper).offset().top + $(this.diagramPaper).scrollTop();
+        var gridSize = this.paper.getGridSizeValue();
+        leftElementPos -= leftElementPos % gridSize;
+        topElementPos -= topElementPos % gridSize;
+        var node = this.createDefaultNode(type, leftElementPos, topElementPos, properties, image);
         this.currentElement = node;
         this.setNodeProperties(node);
     };
@@ -756,7 +761,7 @@ var KeyGiver = (function () {
             var tempController = this.controller;
             for (var i = 0; i < this.prevKey; ++i) {
                 items.push({ "name": names[i], "action": function (text) {
-                    tempController.createNode(text);
+                    tempController.createNode(text, tempController.getMouseupEvent().x, tempController.getMouseupEvent().y);
                 }.bind(null, names[i]) });
             }
             return items;

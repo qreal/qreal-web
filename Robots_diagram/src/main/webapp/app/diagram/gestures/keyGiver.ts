@@ -130,7 +130,10 @@ class KeyGiver {
             var items = new Array();
             var tempController = this.controller;
             for (var i = 0; i < this.prevKey; ++i) {
-                items.push({"name": names[i], "action": function(text) { tempController.createNode(text); }.bind(null, names[i])});
+                items.push({"name": names[i],
+                            "action": function(text) {
+                                tempController.createNode(text, tempController.getMouseupEvent().x, tempController.getMouseupEvent().y); }.bind(null, names[i])
+                });
             }
             return items;
         }
