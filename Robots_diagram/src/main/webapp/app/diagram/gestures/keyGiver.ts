@@ -73,7 +73,7 @@ class KeyGiver {
         return columnNames[Math.floor(curX * 9 / (this.maxX + 1 - this.minX))] + +(Math.floor(curY * 9 / Math.floor(this.maxY + 1 - this.minY)));
     }
 
-    public getKey() {
+    public makeKey() {
         var key = [];
         var index = 0;
         var firstCell = this.getSymbol(this.list[0]);
@@ -92,12 +92,11 @@ class KeyGiver {
             if (key[i] === key[i + 1])
                 key.splice(i, 1);
         }
-        this.isGesture(key);
-
         return key;
     }
 
-    public isGesture(key) {
+    public isGesture() {
+        var key = this.makeKey();
         for (var i = 0; i < this.gestures.length; i++) {
             var curr = this.gestures[i];
             this.prevKey = i - 1;

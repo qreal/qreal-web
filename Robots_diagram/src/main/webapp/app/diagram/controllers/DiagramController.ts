@@ -28,7 +28,6 @@ class DiagramController {
 
         this.loadGestures();
         this.flagDraw = false;
-        this.flagDraw = false;
         this.list = [];
 
         this.paper.on('cell:pointerdown',
@@ -54,7 +53,7 @@ class DiagramController {
                 var n = controller.date.getTime();
                 controller.currentTime = n;
                 controller.flagAdd = false;
-                clearTimeout(this.timer);
+                clearTimeout(controller.timer);
                 controller.flagDraw = true;
                 $(".property").remove();
                 controller.currentElement = undefined;
@@ -111,12 +110,12 @@ class DiagramController {
     {
         if (this.flagDraw === true)
             return;
-        var o = document.getElementsByClassName('pencil');
-        for (var i = o.length; i > 0; i--) {
-            o[i - 1].parentNode.removeChild(o[i - 1]);
+        var pencil = document.getElementsByClassName('pencil');
+        for (var i = pencil.length; i > 0; i--) {
+            pencil[i - 1].parentNode.removeChild(pencil[i - 1]);
         }
         var keyG = new KeyGiver(this);
-        var newKey = keyG.getKey();
+        keyG.isGesture();
         this.list = [];
     }
 
