@@ -435,7 +435,7 @@ var DiagramController = (function () {
     };
     DiagramController.prototype.setCheckboxListener = function () {
         var controller = this;
-        $(document).on('change', '.cheeckbox', function () {
+        $(document).on('change', '.checkbox', function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
             var label = tr.find('label');
