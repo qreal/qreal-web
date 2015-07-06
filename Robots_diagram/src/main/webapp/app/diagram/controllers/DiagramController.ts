@@ -72,7 +72,7 @@ class DiagramController {
 
     private smoothing(pair1 : utils.Pair, pair2 : utils.Pair, diff : number) {
         var a = 1;
-        var c = 0.0275;
+        var c = 0.0275; // 'a' and 'c' are empirical constants
         var b = Math.exp(-c * diff);
         return new utils.Pair(pair2.first * b + (1 - b) * pair1.first
             , pair2.second + (1 - b) * pair1.second);
@@ -159,7 +159,7 @@ class DiagramController {
 
     setCheckboxListener(): void {
         var controller: DiagramController = this;
-        $(document).on('change', '.cheeckbox', function () {
+        $(document).on('change', '.checkbox', function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
             var label = tr.find('label');
