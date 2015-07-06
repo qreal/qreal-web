@@ -19,7 +19,7 @@ class DefaultDiagramNode implements DiagramNode {
                     'xlink:href': imagePath
                 }
             }
-        }
+        };
 
         if (id) {
             jQuery.extend(jointObjectAttributes, {id: id});

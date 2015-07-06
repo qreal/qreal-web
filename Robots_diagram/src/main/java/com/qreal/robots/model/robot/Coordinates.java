@@ -41,9 +41,8 @@ public class Coordinates {
         Coordinates that = (Coordinates) o;
 
         if (!latitude.equals(that.latitude)) return false;
-        if (!longitude.equals(that.longitude)) return false;
+        return longitude.equals(that.longitude);
 
-        return true;
     }
 
     @Override

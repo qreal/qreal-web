@@ -8,7 +8,7 @@ class TwoDRobotModel extends CommonRobotModelImpl {
         var twoDRobotModel = this;
         this.realModel = realModel;
         this.name = name;
-        this.image = "images/2dmodel/trikKit/trikTwoDRobot.svg"
+        this.image = "images/2dmodel/trikKit/trikTwoDRobot.svg";
 
         realModel.getAvailablePorts().forEach(function(port) {
             twoDRobotModel.addAllowedConnection(port, realModel.getAllowedDevices(port));

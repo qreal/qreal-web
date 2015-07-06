@@ -17,7 +17,7 @@ class EllipseItemImpl implements EllipseItem {
             cursor: "pointer",
             "stroke": color,
             "stroke-width": width
-        })
+        });
 
         var ellipseItem = this;
 

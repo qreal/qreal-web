@@ -14,7 +14,7 @@
     <script>
         $(document).ready(function () {
             $("#submit").click(function () {
-                var program = $('#paper').val()
+                var program = $('#paper').val();
                 var id = $("#robotss option:selected").text();
                 var data = "id=" + id + "&program=" + program;
                 $.ajax({

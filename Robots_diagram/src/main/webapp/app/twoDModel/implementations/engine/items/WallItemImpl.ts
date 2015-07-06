@@ -68,9 +68,9 @@ class WallItemImpl implements WallItem {
         var startPath = function () {
                 if (!worldModel.getDrawMode()) {
                     this.startX = wall.pathArray[0][1];
-                    this.startY = wall.pathArray[0][2]
+                    this.startY = wall.pathArray[0][2];
                     this.endX = wall.pathArray[1][1];
-                    this.endY = wall.pathArray[1][2]
+                    this.endY = wall.pathArray[1][2];
                     this.ox = this.attr("x");
                     this.oy = this.attr("y");
                     worldModel.setCurrentElement(wall);

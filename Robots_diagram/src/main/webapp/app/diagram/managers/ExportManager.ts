@@ -7,7 +7,7 @@ class ExportManager {
         };
 
         ExportManager.exportNodes(json, nodesMap);
-        ExportManager.exportLinks(json, linksMap)
+        ExportManager.exportLinks(json, linksMap);
 
         return JSON.stringify(json);
     }
@@ -43,7 +43,7 @@ class ExportManager {
                 'target': jointObject.get('target').id,
                 'vertices' : vertices,
                 'properties': []
-            }
+            };
 
             linkJSON.properties = ExportManager.exportProperties(link.getProperties());
 
@@ -77,7 +77,7 @@ class ExportManager {
                     y : vertex.y,
                     number : count
                 }
-            )
+            );
             count++;
         });
         return verticesJSON;

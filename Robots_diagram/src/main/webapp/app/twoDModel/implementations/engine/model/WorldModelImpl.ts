@@ -42,7 +42,7 @@ class WorldModelImpl implements WorldModel {
                         worldModel.colorFields.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
-                        break
+                        break;
                     case 2:
                         var position = worldModel.getMousePosition(e);
                         var x = position.x;
@@ -51,7 +51,7 @@ class WorldModelImpl implements WorldModel {
                         worldModel.wallItems.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
-                        break
+                        break;
                     case 3:
                         var position = worldModel.getMousePosition(e);
                         var x = position.x;
@@ -62,7 +62,7 @@ class WorldModelImpl implements WorldModel {
                         worldModel.colorFields.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
-                        break
+                        break;
                     case 4:
                         var position = worldModel.getMousePosition(e);
                         var x = position.x;
@@ -72,12 +72,12 @@ class WorldModelImpl implements WorldModel {
                         startDrawPoint = {
                             "x": x,
                             "y": y
-                        }
+                        };
                         shape = new EllipseItemImpl(worldModel, x, y, width, color);
                         worldModel.colorFields.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
-                        break
+                        break;
                     default:
                 }
             });
@@ -91,19 +91,19 @@ class WorldModelImpl implements WorldModel {
                             var x = position.x;
                             var y = position.y;
                             shape.updateEnd(x, y);
-                            break
+                            break;
                         case 3:
                             var position = worldModel.getMousePosition(e);
                             var x = position.x;
                             var y = position.y;
                             shape.updatePath(x, y);
-                            break
+                            break;
                         case 4:
                             var position = worldModel.getMousePosition(e);
                             var x = position.x;
                             var y = position.y;
                             shape.updateCorner(startDrawPoint.x, startDrawPoint.y, x, y);
-                            break
+                            break;
                         default:
                     }
                 }
@@ -122,7 +122,7 @@ class WorldModelImpl implements WorldModel {
         var position = {
             x : e.pageX - offset.left,
             y : e.pageY - offset.top
-        }
+        };
         return position;
     }
 
