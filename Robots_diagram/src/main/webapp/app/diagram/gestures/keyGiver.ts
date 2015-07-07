@@ -18,11 +18,10 @@ class KeyGiver {
     private contextMenuY: number;
     private prevKey: number;
     private controller: DiagramController;
+    private gestureMatrixSize = 9;
 
-    private minX: number;
-    private minY: number;
-    private maxX: number;
-    private maxY: number;
+    private width: number;
+    private height: number;
 
     private gestures: Gesture[];
 
@@ -31,46 +30,54 @@ class KeyGiver {
         this.contextMenu = new ContextMenu();
         this.gestures = this.controller.getGestureData();
         this.list = this.controller.getGestureList();
-        this.minX = this.list[0].first;
-        this.minY = this.list[0].second;
-        this.maxX = this.list[0].first;
-        this.maxY = this.list[0].second;
+        var minX = this.list[0].first;
+        var minY = this.list[0].second;
         for (var i = 1; i < this.list.length; i++) {
-            if (this.list[i].first < this.minX) this.minX = this.list[i].first;
-            if (this.list[i].first > this.maxX) this.maxX = this.list[i].first;
-            if (this.list[i].second < this.minY) this.minY = this.list[i].second;
-            if (this.list[i].second > this.maxY) this.maxY = this.list[i].second;
+            if (this.list[i].first < minX)
+                minX = this.list[i].first;
+            if (this.list[i].second < minY)
+                minY = this.list[i].second;
         }
-        if (this.maxX - this.minX > this.maxY - this.minY) {
-            var ratio = (this.maxY - this.minY) / (this.maxX - this.minX);
-            var midValue = (this.maxY + this.minY) / 2;
+        this.width = 0;
+        this.height = 0;
+        for (var i = 0; i < this.list.length; i++) {
+            this.list[i].first -= minX;
+            this.list[i].second -= minY;
+            if (this.list[i].first + 1 > this.width)
+                this.width = this.list[i].first + 1;
+            if (this.list[i].second + 1 > this.height)
+                this.height = this.list[i].second + 1;
+        }
+        var maxX = 0;
+        var maxY = 0;
+        if (this.width > this.height) {
+            maxY = this.gestureMatrixSize - 1;
+            var ratio = this.gestureMatrixSize / this.height;
             for (var i = 0; i < this.list.length; i++) {
-                this.list[i].second = midValue - (midValue - this.list[i].second) * ratio;
+                this.list[i].first *= ratio;
+                this.list[i].second *= ratio;
+                if (this.list[i].first > maxX)
+                    maxX = this.list[i].first;
+            }
+        } else {
+            maxX = this.gestureMatrixSize - 1;
+            var ratio = this.gestureMatrixSize / this.width;
+            for (var i = 0; i < this.list.length; i++) {
+                this.list[i].first *= ratio;
+                this.list[i].second *= ratio;
+                if (this.list[i].second > maxY)
+                    maxY = this.list[i].second;
             }
         }
-        if (this.maxX - this.minX < this.maxY - this.minY) {
-            var ratio = (this.maxX - this.minX) / (this.maxY - this.minY);
-            var midValue = (this.maxX + this.minX) / 2;
-            for (var i = 0; i < this.list.length; i++) {
-                this.list[i].first = midValue - (midValue - this.list[i].first) * ratio;
-            }
-        }
-        this.minX = this.list[0].first;
-        this.minY = this.list[0].second;
-        for (var i = 1; i < this.list.length; i++) {
-            if (this.list[i].first < this.minX) this.minX = this.list[i].first;
-            if (this.list[i].second < this.minY) this.minY = this.list[i].second;
-        }
+        this.width = maxX + 1;
+        this.height = maxY + 1;
         this.contextMenuX = this.controller.getMouseupEvent().x;
         this.contextMenuY = this.controller.getMouseupEvent().y;
     }
 
-    private getSymbol(pair:utils.Pair) {
+    private getSymbol(pair: utils.Pair) {
         var columnNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
-        var curX = pair.first - this.minX;
-        var curY= pair.second - this.minY;
-
-        return columnNames[Math.floor(curX * 9 / (this.maxX + 1 - this.minX))] + +(Math.floor(curY * 9 / Math.floor(this.maxY + 1 - this.minY)));
+        return columnNames[Math.floor(pair.first * this.gestureMatrixSize / this.width)] + (Math.floor(pair.second * this.gestureMatrixSize / this.height));
     }
 
     public makeKey() {
@@ -97,13 +104,14 @@ class KeyGiver {
 
     public isGesture() {
         var key = this.makeKey();
+        console.log(key);
         for (var i = 0; i < this.gestures.length; i++) {
             var curr = this.gestures[i];
             this.prevKey = i - 1;
-            var curRes = this.gestureDistance(this.gestures[i].key, key) / Math.max(this.gestures[i].key.length, key.length);
+            var curRes = this.gestureDistance(this.gestures[i].key, key) / Math.min(this.gestures[i].key.length, key.length);
 
             while (this.prevKey >= 0
-            && this.gestureDistance(this.gestures[this.prevKey].key, key) / Math.max(this.gestures[this.prevKey].key.length, key.length) > curRes) {
+            && this.gestureDistance(this.gestures[this.prevKey].key, key) / Math.min(this.gestures[this.prevKey].key.length, key.length) > curRes) {
                 this.gestures[this.prevKey + 1] = this.gestures[this.prevKey];
                 this.gestures[this.prevKey] = curr;
                 this.prevKey--;
@@ -112,7 +120,7 @@ class KeyGiver {
         this.prevKey = 0;
         while (this.prevKey < this.gestures.length)
         {
-            var factor = this.gestureDistance(this.gestures[this.prevKey].key, key) / Math.max(this.gestures[this.prevKey].key.length, key.length);
+            var factor = this.gestureDistance(this.gestures[this.prevKey].key, key) / Math.min(this.gestures[this.prevKey].key.length, key.length);
             if (factor > this.gestures[this.prevKey].factor)
                 break;
             this.prevKey++;
@@ -124,6 +132,11 @@ class KeyGiver {
         var names = new Array();
         for (var i = 0; i < this.prevKey; ++i)
             names[i] = this.gestures[i].name;
+
+        if (this.prevKey === 1) {
+            this.controller.createNode(names[0], this.controller.getMouseupEvent().x, this.controller.getMouseupEvent().y);
+            return;
+        }
 
         var getItems = function() {
             var items = new Array();
