@@ -104,7 +104,6 @@ class KeyGiver {
 
     public isGesture() {
         var key = this.makeKey();
-        console.log(key);
         for (var i = 0; i < this.gestures.length; i++) {
             var curr = this.gestures[i];
             this.prevKey = i - 1;
