@@ -39,7 +39,7 @@ class SensorItem implements AbstractItem {
         var sensorItem = this;
 
         this.rotateHandle = paper.circle(defaultPosition.x + this.width + 20,
-            defaultPosition.y + this.height / 2, handleRadius).attr(handleAttrs);
+                defaultPosition.y + this.height / 2, handleRadius).attr(handleAttrs);
 
         var startHandle = function () {
                 if (!worldModel.getDrawMode()) {
@@ -106,6 +106,10 @@ class SensorItem implements AbstractItem {
         this.hideHandles();
     }
 
+    show(): void {
+        console.log("sensorX: " + this.centerX + " sensorY: " + this.centerY);
+    }
+
     getDefaultPosition(): TwoDPosition {
         var startX = this.robotItem.getStartPosition().x + this.robotItem.getWidth() + 15;
         var startY = this.robotItem.getStartPosition().y + this.robotItem.getHeight() / 2 - this.height / 2;
@@ -139,19 +143,19 @@ class SensorItem implements AbstractItem {
     }
 
     protected defineImageSizes(sensorType): void {
-        if (sensorType.isA(TouchSensor)) {
-            this.width = 25;
-            this.height = 25;
-        } else if (sensorType.isA(ColorSensor) || sensorType.isA(LightSensor)) {
-            this.width = 15;
-            this.height = 15;
-        } else if (sensorType.isA(RangeSensor)) {
-            this.width = 35;
-            this.height = 35;
-        } else {
-            alert("Unknown sensor type");
-        }
+    if (sensorType.isA(TouchSensor)) {
+        this.width = 25;
+        this.height = 25;
+    } else if (sensorType.isA(ColorSensor) || sensorType.isA(LightSensor)) {
+        this.width = 15;
+        this.height = 15;
+    } else if (sensorType.isA(RangeSensor)) {
+        this.width = 35;
+        this.height = 35;
+    } else {
+        alert("Unknown sensor type");
     }
+}
 
     transform(transformationString): void {
         this.image.transform(this.transformationString + transformationString);
