@@ -148,8 +148,8 @@ class RobotItemImpl implements RobotItem {
     //}
 
     redraw(): void {
-        var newCx = (this.width / 2 + 20) * Math.cos(this.angle) + this.center.x;
-        var newCy = (this.width / 2 + 20) * Math.sin(this.angle) + this.center.y;
+        var newCx = (this.width / 2 + 20) * Math.cos(this.angle) + this.center.x + this.width / 2; //radius === 10???
+        var newCy = (this.width / 2 + 20) * Math.sin(this.angle) + this.center.y + this.width / 2;
         this.rotateHandle.attr({cx: newCx, cy: newCy});
 
         var x = this.center.x - this.startPosition.x;
