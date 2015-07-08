@@ -37,4 +37,10 @@ public class DiagramRepositoryController {
     @ResponseBody
     @RequestMapping(value = "/show", method = RequestMethod.POST)
     public List<String> showByUserName() { return diagramService.showDiagramsByUserName(); }
+
+    @ResponseBody
+    @RequestMapping(value = "/exists", method = RequestMethod.POST)
+    public boolean exists(@RequestBody OpenRequest request) {
+        return diagramService.exists(request.getName());
+    }
 }

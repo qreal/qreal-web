@@ -16,4 +16,6 @@ public interface DiagramDAO {
     public Diagram openByName(String name);
 
     public List<String> showDiagramsByUserName(String userName);
+
+    public boolean exists(String name);
 }

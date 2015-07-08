@@ -55,4 +55,10 @@ public class DiagramDAOImpl implements DiagramDAO {
         }
         return namesDiagrams;
     }
+
+    public boolean exists(String name) {
+        Session session = sessionFactory.getCurrentSession();
+        List<Diagram> diagrams = session.createQuery("from Diagram where name=?").setParameter(0, name).list();
+        return (!diagrams.isEmpty());
+    }
 }

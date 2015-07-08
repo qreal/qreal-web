@@ -47,4 +47,10 @@ public class DiagramServiceImpl implements DiagramService {
         String creatorName = SecurityContextHolder.getContext().getAuthentication().getName();
         return diagramDAO.showDiagramsByUserName(creatorName);
     }
+
+    @Transactional
+    @Override
+    public boolean exists(String name) {
+        return diagramDAO.exists(name);
+    }
 }

@@ -376,20 +376,45 @@ class DiagramController {
             alert("Palette is not loaded!");
             return;
         }
+
         var name: string = prompt("input name");
-        $.ajax({
-            type: 'POST',
-            url: 'save',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: (ExportManager.exportDiagramStateToJSON(name, this.nodesMap, this.linksMap)),
-            success: function (response) {
-                console.log(response.message);
-            },
-            error: function (response, status, error) {
-                console.log("error: " + status + " " + error);
-            }
-        });
+        var controller = this;
+
+        if (name === "")
+        {
+            alert("Empty name!");
+            this.saveDiagram();
+        }
+        else if (name !== null) {
+            $.ajax({
+                type: 'POST',
+                url: 'exists',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: (JSON.stringify({name: name})),
+                success: function (response) {
+                    if (response) {
+                        alert("This name already exists");
+                        controller.saveDiagram();
+                    }
+                    else {
+                        $.ajax({
+                            type: 'POST',
+                            url: 'save',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            data: (ExportManager.exportDiagramStateToJSON(name, this.nodesMap, this.linksMap)),
+                            success: function (response) {
+                                console.log(response.message);
+                            },
+                            error: function (response, status, error) {
+                                console.log("error: " + status + " " + error);
+                            }
+                        });
+                    }
+                },
+            });
+        }
     }
 
     private openDiagramWindow(): void {

@@ -16,4 +16,6 @@ public interface DiagramService {
     public Diagram openByName(String name);
 
     public List<String> showDiagramsByUserName();
+
+    public boolean exists(String name);
 }
