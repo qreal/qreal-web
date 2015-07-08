@@ -154,10 +154,6 @@ class DiagramController {
             function (cellView, event, x, y) {
                 controller.clickFlag = true;
                 controller.rightClickFlag = false;
-           /*     if (!($(event.target).parents(".custom-menu").length > 0)) {
-                    $(".custom-menu").hide(100);
-                }
-*/
                 var node: DiagramNode = controller.nodesMap[cellView.model.id];
                 if (node) {
                     controller.currentElement = node;
