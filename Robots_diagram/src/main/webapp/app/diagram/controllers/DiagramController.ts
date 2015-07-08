@@ -14,6 +14,7 @@ class DiagramController {
     private pointsList : utils.PairArray = [];
     private timer;
     private currentTime;
+    private clickFlag;
     private date : Date = new Date();
     private data : Gesture[];
     private flagAdd : boolean;
@@ -151,16 +152,17 @@ class DiagramController {
         var controller: DiagramController = this;
         this.paper.on('cell:pointerdown',
             function (cellView, event, x, y) {
+                controller.clickFlag = true;
                 controller.altFlag = false;
-                if (!($(event.target).parents(".custom-menu").length > 0)) {
+           /*     if (!($(event.target).parents(".custom-menu").length > 0)) {
                     $(".custom-menu").hide(100);
                 }
-
+*/
                 var node: DiagramNode = controller.nodesMap[cellView.model.id];
                 if (node) {
                     controller.currentElement = node;
                     controller.setNodeProperties(node);
-
+                    
                     if (event.altKey) {
                         controller.startDrawing();
                         controller.altFlag = true;
@@ -174,7 +176,7 @@ class DiagramController {
                         controller.currentElement = undefined;
                     }
                 }
-
+/*
                 if (event.button == 2) {
                     console.log("right-click");
                     $(".custom-menu").finish().toggle(100).
@@ -183,8 +185,38 @@ class DiagramController {
                             left: event.pageX + "px"
                         });
                 }
+                */
             }
         );
+
+        this.paper.on('cell:pointermove',  function (cellView, event, x, y) {
+                console.log("ololol");
+                controller.clickFlag = false;
+            }
+              /*  if (event.button == 2) {
+                    console.log("right-click");
+                    $(".custom-menu").finish().toggle(100).
+                        css({
+                            top: event.pageY + "px",
+                            left: event.pageX + "px"
+                        });
+                }
+            }*/
+        );
+
+        this.paper.on('cell:pointerup', function (cellView, event, x, y) {
+            if (!($(event.target).parents(".custom-menu").length > 0)) {
+                $(".custom-menu").hide(100);
+            }
+            if ((controller.clickFlag) && (event.button == 2)) {
+                console.log("right-click");
+                $(".custom-menu").finish().toggle(100).
+                    css({
+                        top: event.pageY + "px",
+                        left: event.pageX + "px"
+                    });
+            }
+        });
 
         this.paper.on('blank:pointerdown',
             function (evt, x, y) {
