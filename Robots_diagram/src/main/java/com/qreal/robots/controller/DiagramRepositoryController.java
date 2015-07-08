@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 /**
  * Created by vladzx on 22.06.15.
  */
@@ -30,5 +32,15 @@ public class DiagramRepositoryController {
     @RequestMapping(value = "/open", method = RequestMethod.POST)
     public Diagram open(@RequestBody OpenRequest request) {
         return diagramService.openByName(request.getName());
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/show", method = RequestMethod.POST)
+    public List<String> showByUserName() { return diagramService.showDiagramsByUserName(); }
+
+    @ResponseBody
+    @RequestMapping(value = "/exists", method = RequestMethod.POST)
+    public boolean exists(@RequestBody OpenRequest request) {
+        return diagramService.exists(request.getName());
     }
 }

@@ -433,34 +433,86 @@ class DiagramController {
         this.currentElement = undefined;
     }
 
+    private createNew(): void {
+        if (confirm('Do you want to save the current diagram?')) {
+            this.saveDiagram();
+        }
+        this.clear();
+    }
+
     private saveDiagram(): void {
         if (!this.isPaletteLoaded) {
             alert("Palette is not loaded!");
             return;
         }
+
         var name: string = prompt("input name");
-        $.ajax({
-            type: 'POST',
-            url: 'save',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: (ExportManager.exportDiagramStateToJSON(name, this.nodesMap, this.linksMap)),
-            success: function (response) {
-                console.log(response.message);
-            },
-            error: function (response, status, error) {
-                console.log("error: " + status + " " + error);
-            }
-        });
+        var controller = this;
+
+        if (name === "")
+        {
+            alert("Empty name!");
+            this.saveDiagram();
+        }
+        else if (name !== null) {
+            $.ajax({
+                type: 'POST',
+                url: 'exists',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: (JSON.stringify({name: name})),
+                success: function (response) {
+                    if (response) {
+                        alert("This name already exists");
+                        controller.saveDiagram();
+                    }
+                    else {
+                        $.ajax({
+                            type: 'POST',
+                            url: 'save',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            data: (ExportManager.exportDiagramStateToJSON(name, this.nodesMap, this.linksMap)),
+                            success: function (response) {
+                                console.log(response.message);
+                            },
+                            error: function (response, status, error) {
+                                console.log("error: " + status + " " + error);
+                            }
+                        });
+                    }
+                },
+            });
+        }
     }
 
-    private openDiagram(): void {
+    private openDiagramWindow(): void {
         if (!this.isPaletteLoaded) {
             alert("Palette is not loaded!");
             return;
         }
+
         var controller = this;
-        var name: string = prompt("input diagram name");
+        $.ajax({
+            type: 'POST',
+            url: 'show',
+            success: function (response) {
+                $('#diagramNames a').remove();
+                $.each(response, function (i) {
+                    console.log(response[i]);
+                    $('#diagramNames').append("<a class=\"list-group-item\">" + response[i] + "</a>");
+                });
+
+                $('#diagramNames a').click(function () {
+                    $('#diagrams').modal('hide');
+                    controller.openDiagram($(this).text());
+                });
+            }
+        });
+    }
+
+    private openDiagram(name: string): void {
+        var controller = this;
         $.ajax({
             type: 'POST',
             url: 'open',

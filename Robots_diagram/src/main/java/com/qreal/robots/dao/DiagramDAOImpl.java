@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by vladzx on 07.11.14.
@@ -42,5 +43,22 @@ public class DiagramDAOImpl implements DiagramDAO {
         Session session = sessionFactory.getCurrentSession();
         List<Diagram> diagrams = session.createQuery("from Diagram where name=?").setParameter(0, name).list();
         return (diagrams.isEmpty() ? null : diagrams.get(0));
+    }
+
+    public List<String> showDiagramsByUserName(String userName) {
+        Session session = sessionFactory.getCurrentSession();
+        List<Diagram> diagrams = session.createQuery("from Diagram where username=?").setParameter(0, userName).list();
+
+        List<String> namesDiagrams = new ArrayList<String>();
+        for (Diagram diagram : diagrams) {
+            namesDiagrams.add(diagram.getName());
+        }
+        return namesDiagrams;
+    }
+
+    public boolean exists(String name) {
+        Session session = sessionFactory.getCurrentSession();
+        List<Diagram> diagrams = session.createQuery("from Diagram where name=?").setParameter(0, name).list();
+        return (!diagrams.isEmpty());
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Created by vladzx on 22.06.15.
  */
@@ -37,5 +39,18 @@ public class DiagramServiceImpl implements DiagramService {
     @Override
     public Diagram openByName(String name) {
         return diagramDAO.openByName(name);
+    }
+
+    @Transactional
+    @Override
+    public List<String> showDiagramsByUserName() {
+        String creatorName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return diagramDAO.showDiagramsByUserName(creatorName);
+    }
+
+    @Transactional
+    @Override
+    public boolean exists(String name) {
+        return diagramDAO.exists(name);
     }
 }

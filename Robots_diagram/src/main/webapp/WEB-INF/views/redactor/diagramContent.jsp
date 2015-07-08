@@ -17,8 +17,9 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                            <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.createNew()">New</a></li>
                             <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.saveDiagram()">Save</a></li>
-                            <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.openDiagram()">Open</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams" ng-click="vm.openDiagramWindow()">Open</a></li>
                         </ul>
                     </li>
                     <li>
@@ -80,6 +81,24 @@
             <div id="elements_tree">
                 <ul id="navigation">
                 </ul>
+            </div>
+        </div>
+
+        <div class="modal fade" id="diagrams" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Diagrams</h4>
+                    </div>
+                    <div class="modal-body_nopadding">
+                        <div class="list-group" id="diagramNames">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
