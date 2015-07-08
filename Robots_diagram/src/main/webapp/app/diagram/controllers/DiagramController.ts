@@ -1,4 +1,3 @@
-///<reference path="../../../resources/types/jointjs/jointjs.d.ts"/>
 class DiagramController {
     private graph: joint.dia.Graph = new joint.dia.Graph;
     private paper: DiagramPaper = new DiagramPaper(this, this.graph);
@@ -18,7 +17,7 @@ class DiagramController {
     private date : Date = new Date();
     private data : Gesture[];
     private flagAdd : boolean;
-    private altFlag : boolean;
+    private rightClickFlag : boolean;
 
     constructor($scope, $compile) {
 
@@ -32,6 +31,7 @@ class DiagramController {
         this.flagDraw = false;
 
         this.initPointerdownListener();
+        this.initPointerMoveAndUpListener();
         this.initDeleteListener();
         this.initCustomContextMenu();
 
@@ -153,7 +153,7 @@ class DiagramController {
         this.paper.on('cell:pointerdown',
             function (cellView, event, x, y) {
                 controller.clickFlag = true;
-                controller.altFlag = false;
+                controller.rightClickFlag = false;
            /*     if (!($(event.target).parents(".custom-menu").length > 0)) {
                     $(".custom-menu").hide(100);
                 }
@@ -162,10 +162,9 @@ class DiagramController {
                 if (node) {
                     controller.currentElement = node;
                     controller.setNodeProperties(node);
-                    
-                    if (event.altKey) {
+                    if (event.button == 2) {
                         controller.startDrawing();
-                        controller.altFlag = true;
+                        controller.rightClickFlag = true;
                     }
                 } else {
                     var link: Link = controller.linksMap[cellView.model.id];
@@ -176,32 +175,42 @@ class DiagramController {
                         controller.currentElement = undefined;
                     }
                 }
-/*
-                if (event.button == 2) {
-                    console.log("right-click");
-                    $(".custom-menu").finish().toggle(100).
-                        css({
-                            top: event.pageY + "px",
-                            left: event.pageX + "px"
-                        });
-                }
-                */
             }
         );
 
+        this.paper.on('blank:pointerdown',
+            function (evt, x, y) {
+                if (!($(event.target).parents(".custom-menu").length > 0)) {
+                    $(".custom-menu").hide(100);
+                }
+
+                var n = controller.date.getTime();
+                controller.currentTime = n;
+                controller.flagAdd = false;
+                clearTimeout(controller.timer);
+                controller.flagDraw = true;
+                if (evt.button == 2)
+                    controller.startDrawing();
+
+                $(".property").remove();
+                controller.currentElement = undefined;
+            }
+        );
+
+        this.diagramPaper = <HTMLDivElement> document.getElementById('diagram_paper');
+        this.onMouseUp = <any>controller.onMouseUp.bind(this);
+        document.addEventListener('mouseup', this.onMouseUp.bind(this));
+
+        this.onMouseUp = <any>controller.onMouseMove.bind(this);
+        this.diagramPaper.addEventListener('mousemove', this.onMouseMove.bind(this));
+    }
+
+    private initPointerMoveAndUpListener(): void {
+
+        var controller: DiagramController = this;
         this.paper.on('cell:pointermove',  function (cellView, event, x, y) {
-                console.log("ololol");
                 controller.clickFlag = false;
             }
-              /*  if (event.button == 2) {
-                    console.log("right-click");
-                    $(".custom-menu").finish().toggle(100).
-                        css({
-                            top: event.pageY + "px",
-                            left: event.pageX + "px"
-                        });
-                }
-            }*/
         );
 
         this.paper.on('cell:pointerup', function (cellView, event, x, y) {
@@ -218,40 +227,15 @@ class DiagramController {
             }
         });
 
-        this.paper.on('blank:pointerdown',
-            function (evt, x, y) {
-                if (!($(event.target).parents(".custom-menu").length > 0)) {
-                    $(".custom-menu").hide(100);
-                }
-
-                var n = controller.date.getTime();
-                controller.currentTime = n;
-                controller.flagAdd = false;
-                clearTimeout(controller.timer);
-                controller.flagDraw = true;
-                if (evt.altKey)
-                    controller.startDrawing();
-
-                $(".property").remove();
-                controller.currentElement = undefined;
-            }
-        );
-
         this.graph.on('change:position', function(cell) {
-            if (!controller.altFlag)
+            if (!controller.rightClickFlag)
                 return;
             cell.set('position', cell.previous('position'));
         });
 
-        this.diagramPaper = <HTMLDivElement> document.getElementById('diagram_paper');
-        this.onMouseUp = <any>controller.onMouseUp.bind(this);
-        document.addEventListener('mouseup', this.onMouseUp.bind(this));
-
-        this.onMouseUp = <any>controller.onMouseMove.bind(this);
-        this.diagramPaper.addEventListener('mousemove', this.onMouseMove.bind(this));
     }
 
-    public startDrawing() {
+    private startDrawing() {
         var n = this.date.getTime();
         this.currentTime = n;
         this.flagAdd = false;
@@ -269,7 +253,7 @@ class DiagramController {
 
     private onMouseMove(e)
     {
-        if (!event.altKey)
+        if (!(event.button == 2))
             return;
 
         if (this.flagDraw === false)
@@ -321,7 +305,7 @@ class DiagramController {
                 var topElementPos:number = e.pageY - $(controller.diagramPaper).offset().top + $(controller.diagramPaper).scrollTop();
 
                 if ((mxb <= leftElementPos) && (mxe >= leftElementPos)
-                    && (myb <= topElementPos) && (mye >= topElementPos) && (controller.altFlag))
+                    && (myb <= topElementPos) && (mye >= topElementPos) && (controller.rightClickFlag))
                     return true;
                 return false;
             });
