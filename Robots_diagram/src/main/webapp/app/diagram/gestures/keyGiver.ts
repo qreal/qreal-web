@@ -31,6 +31,8 @@ class KeyGiver {
         this.contextMenu = new ContextMenu();
         this.gestures = this.controller.getGestureData();
         this.list = this.controller.getGestureList();
+        if (this.list.length === 0)
+            this.list[0] = new utils.Pair(0, 0);
         this.minX = this.list[0].first;
         this.minY = this.list[0].second;
         this.maxX = this.list[0].first;

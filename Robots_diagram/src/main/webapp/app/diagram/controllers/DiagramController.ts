@@ -11,9 +11,9 @@ class DiagramController {
     private diagramPaper : HTMLDivElement;
     private flagDraw : boolean = false;
     private pointsList : utils.PairArray = [];
-    private timer;
-    private currentTime;
-    private clickFlag;
+    private timer : number;
+    private currentTime : number;
+    private clickFlag : boolean;
     private date : Date = new Date();
     private data : Gesture[];
     private flagAdd : boolean;
@@ -176,10 +176,6 @@ class DiagramController {
 
         this.paper.on('blank:pointerdown',
             function (evt, x, y) {
-                if (!($(event.target).parents(".custom-menu").length > 0)) {
-                    $(".custom-menu").hide(100);
-                }
-
                 var n = controller.date.getTime();
                 controller.currentTime = n;
                 controller.flagAdd = false;
@@ -292,16 +288,16 @@ class DiagramController {
             var elementBelow = this.graph.get('cells').find(function (cell) {
                 if (cell instanceof joint.dia.Link) return false; // Not interested in links.
                 if (cell.id === controller.currentElement.getJointObject().id) return false; // The same element as the dropped one.
-                var mxb = cell.getBBox().origin().x;
-                var myb = cell.getBBox().origin().y;
-                var mxe = cell.getBBox().corner().x;
-                var mye = cell.getBBox().corner().y;
+                var mXBegin = cell.getBBox().origin().x;
+                var mYBegin = cell.getBBox().origin().y;
+                var mXEnd = cell.getBBox().corner().x;
+                var mYEnd = cell.getBBox().corner().y;
 
                 var leftElementPos:number = e.pageX - $(controller.diagramPaper).offset().left + $(controller.diagramPaper).scrollLeft();
                 var topElementPos:number = e.pageY - $(controller.diagramPaper).offset().top + $(controller.diagramPaper).scrollTop();
 
-                if ((mxb <= leftElementPos) && (mxe >= leftElementPos)
-                    && (myb <= topElementPos) && (mye >= topElementPos) && (controller.rightClickFlag))
+                if ((mXBegin <= leftElementPos) && (mXEnd >= leftElementPos)
+                    && (mYBegin <= topElementPos) && (mYEnd >= topElementPos) && (controller.rightClickFlag))
                     return true;
                 return false;
             });
