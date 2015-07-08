@@ -403,6 +403,7 @@ class DiagramController {
                 });
 
                 $('#diagramNames a').click(function () {
+                    $('#diagrams').modal('hide');
                     controller.openDiagram($(this).text());
                 });
             }
