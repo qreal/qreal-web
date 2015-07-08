@@ -1,3 +1,4 @@
+///<reference path="../../../resources/types/jointjs/jointjs.d.ts"/>
 class DiagramController {
     private graph: joint.dia.Graph = new joint.dia.Graph;
     private paper: DiagramPaper = new DiagramPaper(this, this.graph);
@@ -16,6 +17,7 @@ class DiagramController {
     private date : Date = new Date();
     private data : Gesture[];
     private flagAdd : boolean;
+    private altFlag : boolean;
 
     constructor($scope, $compile) {
 
@@ -149,6 +151,7 @@ class DiagramController {
         var controller: DiagramController = this;
         this.paper.on('cell:pointerdown',
             function (cellView, event, x, y) {
+                controller.altFlag = false;
                 if (!($(event.target).parents(".custom-menu").length > 0)) {
                     $(".custom-menu").hide(100);
                 }
@@ -157,6 +160,11 @@ class DiagramController {
                 if (node) {
                     controller.currentElement = node;
                     controller.setNodeProperties(node);
+
+                    if (event.altKey) {
+                        controller.startDrawing();
+                        controller.altFlag = true;
+                    }
                 } else {
                     var link: Link = controller.linksMap[cellView.model.id];
                     if (link) {
@@ -189,11 +197,19 @@ class DiagramController {
                 controller.flagAdd = false;
                 clearTimeout(controller.timer);
                 controller.flagDraw = true;
+                if (evt.altKey)
+                    controller.startDrawing();
 
                 $(".property").remove();
                 controller.currentElement = undefined;
             }
         );
+
+        this.graph.on('change:position', function(cell) {
+            if (!controller.altFlag)
+                return;
+            cell.set('position', cell.previous('position'));
+        });
 
         this.diagramPaper = <HTMLDivElement> document.getElementById('diagram_paper');
         this.onMouseUp = <any>controller.onMouseUp.bind(this);
@@ -201,7 +217,14 @@ class DiagramController {
 
         this.onMouseUp = <any>controller.onMouseMove.bind(this);
         this.diagramPaper.addEventListener('mousemove', this.onMouseMove.bind(this));
+    }
 
+    public startDrawing() {
+        var n = this.date.getTime();
+        this.currentTime = n;
+        this.flagAdd = false;
+        clearTimeout(this.timer);
+        this.flagDraw = true;
     }
 
     private smoothing(pair1 : utils.Pair, pair2 : utils.Pair, diff : number) {
@@ -214,6 +237,9 @@ class DiagramController {
 
     private onMouseMove(e)
     {
+        if (!event.altKey)
+            return;
+
         if (this.flagDraw === false)
             return;
 
@@ -238,10 +264,10 @@ class DiagramController {
             return;
         this.mouseupEvent = e;
         this.flagDraw = false;
-        this.timer = setTimeout(() => this.finishDraw(), 1000);
+        this.timer = setTimeout(() => this.finishDraw(e), 1000);
     }
 
-    private finishDraw()
+    private finishDraw(e)
     {
         if (this.flagDraw === true)
             return;
@@ -249,8 +275,41 @@ class DiagramController {
         for (var i = pencil.length; i > 0; i--) {
             pencil[i - 1].parentNode.removeChild(pencil[i - 1]);
         }
-        var keyG = new KeyGiver(this);
-        keyG.isGesture();
+        var controller: DiagramController = this;
+        if (this.currentElement != undefined) {
+            var elementBelow = this.graph.get('cells').find(function (cell) {
+                if (cell instanceof joint.dia.Link) return false; // Not interested in links.
+                if (cell.id === controller.currentElement.getJointObject().id) return false; // The same element as the dropped one.
+                var mxb = cell.getBBox().origin().x;
+                var myb = cell.getBBox().origin().y;
+                var mxe = cell.getBBox().corner().x;
+                var mye = cell.getBBox().corner().y;
+
+                var leftElementPos:number = e.pageX - $(controller.diagramPaper).offset().left + $(controller.diagramPaper).scrollLeft();
+                var topElementPos:number = e.pageY - $(controller.diagramPaper).offset().top + $(controller.diagramPaper).scrollTop();
+
+                if ((mxb <= leftElementPos) && (mxe >= leftElementPos)
+                    && (myb <= topElementPos) && (mye >= topElementPos) && (controller.altFlag))
+                    return true;
+                return false;
+            });
+
+            if (elementBelow) {
+                var link = new joint.dia.Link({
+                    source: { id: elementBelow.id }, target: { id: this.currentElement.getJointObject().id },
+                    attrs: { '.marker-source': { d: 'M 10 0 L 0 5 L 10 10 z' } }});
+
+                var linkObject: Link = new Link(link);
+
+                controller.addLink(link.id, linkObject);
+
+                this.graph.addCell(link);
+            }
+        }
+        else {
+            var keyG = new KeyGiver(this);
+            keyG.isGesture();
+        }
         this.pointsList = [];
     }
 
