@@ -385,13 +385,32 @@ class DiagramController {
         });
     }
 
-    private openDiagram(): void {
+    private openDiagramWindow(): void {
         if (!this.isPaletteLoaded) {
             alert("Palette is not loaded!");
             return;
         }
+
         var controller = this;
-        var name: string = prompt("input diagram name");
+        $.ajax({
+            type: 'POST',
+            url: 'show',
+            success: function (response) {
+                $('#diagramNames a').remove();
+                $.each(response, function (i) {
+                    console.log(response[i]);
+                    $('#diagramNames').append("<a class=\"list-group-item\">" + response[i] + "</a>");
+                });
+
+                $('#diagramNames a').click(function () {
+                    controller.openDiagram($(this).text());
+                });
+            }
+        });
+    }
+
+    private openDiagram(name: string): void {
+        var controller = this;
         $.ajax({
             type: 'POST',
             url: 'open',
