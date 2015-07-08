@@ -364,6 +364,13 @@ class DiagramController {
         this.currentElement = undefined;
     }
 
+    private createNew(): void {
+        if (confirm('Do you want to save the current diagram?')) {
+            this.saveDiagram();
+        }
+        this.clear();
+    }
+
     private saveDiagram(): void {
         if (!this.isPaletteLoaded) {
             alert("Palette is not loaded!");

@@ -17,6 +17,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                            <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.createNew()">New</a></li>
                             <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.saveDiagram()">Save</a></li>
                             <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams" ng-click="vm.openDiagramWindow()">Open</a></li>
                         </ul>
