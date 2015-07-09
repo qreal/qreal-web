@@ -94,6 +94,10 @@
                     <div class="modal-body_nopadding">
                         <div class="list-group" id="diagramNames">
                         </div>
+                        <div class="folders">
+                            </div>
+                        <div class="fields">
+                            </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
