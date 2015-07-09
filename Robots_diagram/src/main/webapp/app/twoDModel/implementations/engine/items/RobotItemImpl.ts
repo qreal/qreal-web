@@ -131,7 +131,7 @@ class RobotItemImpl implements RobotItem {
     }
 
     private getRightAngleValue(angle : number) : number {
-        return angle;
+        return angle * Math.PI / 180.0;
     }
 
     setStartPosition(position: TwoDPosition, direction: number): void {
@@ -198,7 +198,7 @@ class RobotItemImpl implements RobotItem {
         return this.height;
     }
 
-    getAngle() : number {
+    getAngleInRadian() : number {
         return this.angle;
     }
 

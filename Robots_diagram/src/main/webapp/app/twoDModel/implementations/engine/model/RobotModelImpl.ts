@@ -60,7 +60,7 @@ class RobotModelImpl implements RobotModel {
 
     recalculateParams(): void {
         var position = this.robotItem.getCurrentPosition();
-        var angle = this.robotItem.getAngle();
+        var angle = this.robotItem.getAngleInRadian();
         this.position = position;
         this.angle = angle;
         var robotHeight = 50; // TODO: getHeight!
