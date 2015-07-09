@@ -95,8 +95,4 @@ class RobotModelImpl implements RobotModel {
     nextFragment(): void {
         this.robotItem.redraw();
     }
-
-    //nextFragment(): void {
-    //    this.robotItem.ride();
-    //}
 }
