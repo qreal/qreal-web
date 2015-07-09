@@ -5,6 +5,7 @@ interface RobotItem extends AbstractItem {
     getHeight(): number;
     getStartPosition(): TwoDPosition;
     getCurrentPosition() : TwoDPosition;
+    getAngle() : number;
     removeSensorItem(portName: string): void;
     addSensorItem(portName: string, deviceType: DeviceInfo, pathToImage: string): void;
     setStartPosition(position: TwoDPosition, direction: number): void;

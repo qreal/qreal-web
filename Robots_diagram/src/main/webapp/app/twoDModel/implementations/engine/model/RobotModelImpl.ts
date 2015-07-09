@@ -59,7 +59,10 @@ class RobotModelImpl implements RobotModel {
     }
 
     recalculateParams(): void {
-        this.position = this.robotItem.getCurrentPosition();
+        var position = this.robotItem.getCurrentPosition();
+        var angle = this.robotItem.getAngle();
+        this.position = position;
+        this.angle = angle;
         var robotHeight = 50; // TODO: getHeight!
         var timeInterval = 1; // TODO: timeInterval!
         var averageSpeed = (this.speed1 + this.speed2) / 2;

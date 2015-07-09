@@ -4,7 +4,6 @@ class RobotItemImpl implements RobotItem {
     private startPosition: TwoDPosition;
     private startCenter: TwoDPosition = new TwoDPosition();
     private center: TwoDPosition = new TwoDPosition();
-    public previousPosition : TwoDPosition = new TwoDPosition();
     private image;
     private rotateHandle: RaphaelElement;
     private width: number = 50;
@@ -28,8 +27,6 @@ class RobotItemImpl implements RobotItem {
 
         this.startCenter.x = this.center.x;
         this.startCenter.y = this.center.y;
-
-        this.previousPosition = position;
 
         var handleRadius: number = 10;
 
@@ -81,10 +78,8 @@ class RobotItemImpl implements RobotItem {
                     var newCy = robotItem.image.matrix.y(robotItem.startCenter.x + robotItem.width / 2 + 20,
                         robotItem.startCenter.y);
                     this.attr({cx: newCx, cy: newCy});
-                    var newCenterX = robotItem.image.matrix.x(robotItem.startCenter.x, robotItem.startCenter.y);
-                    var newCenterY = robotItem.image.matrix.y(robotItem.startCenter.x, robotItem.startCenter.y);
-                    var angle = robotItem.getAngle();
-
+                    var angle : number = robotItem.image.matrix.split().rotate;
+                    robotItem.angle = robotItem.getRightAngleValue(angle);
                 }
                 return this;
             },
@@ -128,16 +123,17 @@ class RobotItemImpl implements RobotItem {
                     var sensor = robotItem.sensors[portName];
                     sensor.show();
                 }
-                console.log("x: " + robotItem.center.x + " y: " + robotItem.center.y);
+                console.log("x: " + robotItem.center.x + " y: " + robotItem.center.y, "angle : ", robotItem.angle);
                 return this;
             };
         this.image.drag(move, start, up);
         this.hideHandles();
     }
 
-    getAngle() : number {
-        return this.angle;
+    private getRightAngleValue(angle : number) : number {
+        return angle;
     }
+
     setStartPosition(position: TwoDPosition, direction: number): void {
         this.startPosition = position;
         this.image.attr({x: position.x, y: position.y});
@@ -200,6 +196,10 @@ class RobotItemImpl implements RobotItem {
 
     getHeight(): number {
         return this.height;
+    }
+
+    getAngle() : number {
+        return this.angle;
     }
 
     getCurrentPosition() : TwoDPosition {
