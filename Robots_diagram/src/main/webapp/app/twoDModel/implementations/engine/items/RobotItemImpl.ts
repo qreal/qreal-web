@@ -81,6 +81,10 @@ class RobotItemImpl implements RobotItem {
                     var newCy = robotItem.image.matrix.y(robotItem.startCenter.x + robotItem.width / 2 + 20,
                         robotItem.startCenter.y);
                     this.attr({cx: newCx, cy: newCy});
+                    var newCenterX = robotItem.image.matrix.x(robotItem.startCenter.x, robotItem.startCenter.y);
+                    var newCenterY = robotItem.image.matrix.y(robotItem.startCenter.x, robotItem.startCenter.y);
+                    var angle = robotItem.getAngle();
+
                 }
                 return this;
             },
@@ -131,6 +135,9 @@ class RobotItemImpl implements RobotItem {
         this.hideHandles();
     }
 
+    getAngle() : number {
+        return this.angle;
+    }
     setStartPosition(position: TwoDPosition, direction: number): void {
         this.startPosition = position;
         this.image.attr({x: position.x, y: position.y});
@@ -148,20 +155,27 @@ class RobotItemImpl implements RobotItem {
     //}
 
     redraw(): void {
-        var newCx = (this.width / 2 + 20) * Math.cos(this.angle) + this.center.x + this.width / 2; //radius === 10???
-        var newCy = (this.width / 2 + 20) * Math.sin(this.angle) + this.center.y + this.width / 2;
-        this.rotateHandle.attr({cx: newCx, cy: newCy});
 
-        var x = this.center.x - this.startPosition.x;
-        var y = this.center.y - this.startPosition.y;
+        var x = this.center.x - this.startPosition.x - this.width / 2;
+        var y = this.center.y - this.startPosition.y - this.width / 2;
         var angle = this.angle * 180 / Math.PI;
         console.log("x: " + this.center.x + " y: " + this.center.y);
         var px = this.image.matrix.x(this.startCenter.x, this.startCenter.y);
         var py = this.image.matrix.y(this.startCenter.x, this.startCenter.y);
+        //var x = this.center.x - px;
+        //var y = this.center.y - py;
         var q = this.image.transform("t" + x + "," + y + "r" + angle);
         console.log(q);
         var ax = this.image.matrix.x(this.startCenter.x, this.startCenter.y);
         var ay = this.image.matrix.y(this.startCenter.x, this.startCenter.y);
+
+        var robotItem = this;
+
+        var newCx = robotItem.image.matrix.x(robotItem.startCenter.x + robotItem.width / 2 + 20,
+            robotItem.startCenter.y);
+        var newCy = robotItem.image.matrix.y(robotItem.startCenter.x + robotItem.width / 2 + 20,
+            robotItem.startCenter.y);
+        this.rotateHandle.attr({cx: newCx, cy: newCy});
 
     }
 
@@ -186,6 +200,10 @@ class RobotItemImpl implements RobotItem {
 
     getHeight(): number {
         return this.height;
+    }
+
+    getCurrentPosition() : TwoDPosition {
+        return this.center;
     }
 
     getStartPosition(): TwoDPosition {

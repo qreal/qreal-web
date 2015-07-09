@@ -15,28 +15,40 @@ class TimelineImpl implements Timeline {
     private frameLength: number = this.defaultFrameLength;
 
     private intervalId: number;
+    private isActive : boolean;
 
     private robotModels: RobotModel[] = [];
 
     constructor() {
+        this.setActive(false);
     }
 
-    start(): void {
+    setActive(value : boolean) : void{
+        this.isActive = value;
+    }
+
+       start(): void {
+        if (this.isActive)
+            return;
+        this.setActive(true);
         var timeline = this;
         this.cyclesCount = 0;
         this.intervalId = setInterval(function() { timeline.onTimer(timeline); }, this.defaultFrameLength);
     }
 
     stop(): void {
+        this.setActive(false);
         clearInterval(this.intervalId);
     }
 
     onTimer(timeline: Timeline): void {
+        if (!this.isActive)
+            return;
         timeline.getRobotModels().forEach(function(model) {
             model.recalculateParams();
         });
         this.cyclesCount++;
-        if (this.cyclesCount > this.speedFactor) {
+        if (this.cyclesCount >= this.speedFactor) {
             timeline.getRobotModels().forEach(function(model) {
                 model.nextFragment();
             });
