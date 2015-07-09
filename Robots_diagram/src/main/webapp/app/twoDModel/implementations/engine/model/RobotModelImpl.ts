@@ -80,17 +80,6 @@ class RobotModelImpl implements RobotModel {
             }
             var gammaRadians = timeInterval * angularSpeed;
             var gammaDegrees = gammaRadians * 180 / Math.PI;
-
-            //QTransform map;
-            //map.rotate(robotAngle);
-            ///// @todo robotWidth / 2 shall actually be a distance between robot center and
-            ///// centers of the wheels by x axis.
-            //map.translate(-robotWidth / 2, actualRadius);
-            //map.rotate(gammaDegrees);
-            //map.translate(robotWidth / 2, -actualRadius);
-
-            //mPositionShift = QVector2D(map.map(QPointF(0, 0)));
-            //mRotation = gammaDegrees;
             this.angle += gammaRadians;
 
             this.position.x += averageSpeed * Math.cos(this.angle);
