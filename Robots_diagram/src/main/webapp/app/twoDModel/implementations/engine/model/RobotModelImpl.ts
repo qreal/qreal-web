@@ -18,7 +18,6 @@ class RobotModelImpl implements RobotModel {
         this.angle = 0;
         this.speed1 = 0;
         this.speed2 = 0;
-        this.robotItem.updateRobotLocation(position, this.angle);
     }
 
     info(): TwoDRobotModel {
