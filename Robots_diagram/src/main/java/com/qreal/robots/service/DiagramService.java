@@ -1,6 +1,7 @@
 package com.qreal.robots.service;
 
 import com.qreal.robots.model.diagram.Diagram;
+import com.qreal.robots.model.diagram.Folder;
 
 import java.util.List;
 
@@ -18,4 +19,8 @@ public interface DiagramService {
     public List<String> showDiagramsByUserName();
 
     public boolean exists(String name);
+
+    public void createFolder(String folderName);
+
+    public List<String> showFoldersByUserName();
 }

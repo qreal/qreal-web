@@ -40,7 +40,16 @@ public class DiagramRepositoryController {
 
     @ResponseBody
     @RequestMapping(value = "/exists", method = RequestMethod.POST)
-    public boolean exists(@RequestBody OpenRequest request) {
-        return diagramService.exists(request.getName());
+    public boolean exists(@RequestBody OpenRequest request) { return diagramService.exists(request.getName()); }
+
+    @ResponseBody
+    @RequestMapping(value = "/createFolder", method = RequestMethod.POST)
+    public String createFolder(@RequestBody OpenRequest request) {
+        diagramService.createFolder(request.getName());
+        return "{\"message\":\"OK\"}";
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/showFolders", method = RequestMethod.POST)
+    public List<String> showFolders() { return diagramService.showFoldersByUserName(); }
 }

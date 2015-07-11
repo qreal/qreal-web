@@ -2,6 +2,7 @@ package com.qreal.robots.service;
 
 import com.qreal.robots.dao.DiagramDAO;
 import com.qreal.robots.model.diagram.Diagram;
+import com.qreal.robots.model.diagram.Folder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,9 @@ public class DiagramServiceImpl implements DiagramService {
     @Transactional
     @Override
     public void save(Diagram diagram) {
-        String creatorName = SecurityContextHolder.getContext().getAuthentication().getName();
+        /*String creatorName = SecurityContextHolder.getContext().getAuthentication().getName();
         diagram.setCreator(userService.findByUserName(creatorName));
-        diagramDAO.save(diagram);
+        diagramDAO.save(diagram);*/
     }
 
     @Transactional
@@ -52,5 +53,20 @@ public class DiagramServiceImpl implements DiagramService {
     @Override
     public boolean exists(String name) {
         return diagramDAO.exists(name);
+    }
+
+    @Transactional
+    @Override
+    public void createFolder(String folderName) {
+        String creatorName = SecurityContextHolder.getContext().getAuthentication().getName();
+        Folder folder = new Folder(folderName, userService.findByUserName(creatorName));
+        diagramDAO.createFolder(folder);
+    }
+
+    @Transactional
+    @Override
+    public List<String> showFoldersByUserName() {
+        String creatorName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return diagramDAO.showFoldersByUserName(creatorName);
     }
 }

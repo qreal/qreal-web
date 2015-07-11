@@ -1,6 +1,7 @@
 package com.qreal.robots.dao;
 
 import com.qreal.robots.model.diagram.Diagram;
+import com.qreal.robots.model.diagram.Folder;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -60,5 +61,22 @@ public class DiagramDAOImpl implements DiagramDAO {
         Session session = sessionFactory.getCurrentSession();
         List<Diagram> diagrams = session.createQuery("from Diagram where name=?").setParameter(0, name).list();
         return (!diagrams.isEmpty());
+    }
+
+    public void createFolder(Folder folder) {
+        LOG.debug("creating folder");
+        Session session = sessionFactory.getCurrentSession();
+        session.save(folder);
+    }
+
+    public List<String> showFoldersByUserName(String userName) {
+        Session session = sessionFactory.getCurrentSession();
+        List<Folder> folders = session.createQuery("from Folder where username=?").setParameter(0, userName).list();
+
+        List<String> folderNames = new ArrayList<String>();
+        for (Folder folder : folders) {
+            folderNames.add(folder.getFolderName());
+        }
+        return folderNames;
     }
 }

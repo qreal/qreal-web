@@ -464,6 +464,36 @@ class DiagramController {
         });
     }
 
+    private createFolder() : void {
+        var name: string = prompt("input name of the folder");
+        $.ajax({
+            type: 'POST',
+            url: 'createFolder',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: (JSON.stringify({name: name})),
+            success: function (response) {
+                console.log(response.message);
+            },
+            error: function (response, status, error) {
+                console.log("error: " + status + " " + error);
+            }
+        });
+    }
+
+    private showFolders() : void {
+        $.ajax({
+            type: 'POST',
+            url: 'showFolders',
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (response, status, error) {
+                console.log("error: " + status + " " + error);
+            }
+        });
+    }
+
     private makeUnselectable(element) {
         if (element.nodeType == 1) {
             element.setAttribute("unselectable", "on");

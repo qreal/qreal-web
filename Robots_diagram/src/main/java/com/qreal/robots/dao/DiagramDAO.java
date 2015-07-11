@@ -1,6 +1,7 @@
 package com.qreal.robots.dao;
 
 import com.qreal.robots.model.diagram.Diagram;
+import com.qreal.robots.model.diagram.Folder;
 
 import java.util.List;
 
@@ -18,4 +19,8 @@ public interface DiagramDAO {
     public List<String> showDiagramsByUserName(String userName);
 
     public boolean exists(String name);
+
+    public void createFolder(Folder folder);
+
+    public List<String> showFoldersByUserName(String userName);
 }
