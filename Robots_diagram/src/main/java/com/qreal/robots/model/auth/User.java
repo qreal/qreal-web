@@ -2,6 +2,7 @@ package com.qreal.robots.model.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.qreal.robots.model.diagram.Diagram;
+import com.qreal.robots.model.diagram.Folder;
 import com.qreal.robots.model.robot.Robot;
 
 import javax.persistence.*;
@@ -23,7 +24,7 @@ public class User {
     private Set<Robot> robots = new HashSet<>(0);
 
     @JsonIgnore
-    private Set<Diagram> diagrams = new HashSet<>(0);
+    private Set<Folder> folders = new HashSet<>(0);
 
     public User() {
     }
@@ -93,13 +94,12 @@ public class User {
 
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "creator")
-    public Set<Diagram> getDiagrams() {
-        return this.diagrams;
+    public Set<Folder> getFolders() {
+        return this.folders;
     }
 
-    public void setDiagrams(Set<Diagram> diagrams) {
-        this.diagrams = diagrams;
+    public void setFolders(Set<Folder> folders) {
+        this.folders = folders;
     }
-
 
 }

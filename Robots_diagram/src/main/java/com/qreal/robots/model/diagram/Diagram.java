@@ -1,7 +1,5 @@
 package com.qreal.robots.model.diagram;
 
-import com.qreal.robots.model.auth.User;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -22,8 +20,8 @@ public class Diagram implements Serializable {
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "username", nullable = false)
-    private User creator;
+    @JoinColumn(name = "folder_id", nullable = false)
+    private Folder folder;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "diagram_id", referencedColumnName = "diagram_id")
@@ -34,12 +32,12 @@ public class Diagram implements Serializable {
     private Set<Link> links;
 
 
-    public User getCreator() {
-        return this.creator;
+    public Folder getFolder() {
+        return this.folder;
     }
 
-    public void setCreator(User creator) {
-        this.creator = creator;
+    public void setFolder(Folder folder) {
+        this.folder = folder;
     }
 
     public Long getDiagramId() {
