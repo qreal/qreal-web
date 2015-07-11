@@ -14,7 +14,6 @@ DROP TABLE IF EXISTS folders;
 DROP TABLE IF EXISTS users;
 
 
-
 CREATE TABLE users (
   username VARCHAR(45) NOT NULL,
   password VARCHAR(60) NOT NULL,
