@@ -20,7 +20,7 @@ public interface DiagramDAO {
 
     public boolean exists(String name);
 
-    public String createFolder(Folder folder);
+    public boolean createFolder(Folder folder);
 
     public List<String> showFoldersByUserName(String userName);
 }

@@ -297,7 +297,7 @@ class DiagramController {
         var controller: DiagramController = this;
         $(document).on('change', '.checkbox', function () {
             var tr = $(this).closest('tr');
-            var name = tr.find('td:first').html();
+                var name = tr.find('td:first').html();
             var label = tr.find('label');
             var value = label.contents().last()[0].textContent;
             if (value === "True") {
@@ -489,7 +489,7 @@ class DiagramController {
             contentType: 'application/json',
             data: (JSON.stringify({name: name})),
             success: function (response) {
-                console.log(response);
+                console.log(response.message);
             },
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);
