@@ -45,8 +45,7 @@ public class DiagramRepositoryController {
     @ResponseBody
     @RequestMapping(value = "/createFolder", method = RequestMethod.POST)
     public String createFolder(@RequestBody OpenRequest request) {
-        diagramService.createFolder(request.getName());
-        return "{\"message\":\"OK\"}";
+        return diagramService.createFolder(request.getName());
     }
 
     @ResponseBody
