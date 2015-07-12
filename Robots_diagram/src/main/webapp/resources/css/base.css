@@ -161,6 +161,7 @@ body{
     overflow-y: scroll;
 }
 
-.fields {
+#fields {
+    height: 50px;
     text-align: right;
 }

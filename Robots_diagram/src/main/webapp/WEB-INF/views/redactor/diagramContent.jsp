@@ -98,7 +98,7 @@
                             <div class="list-group" id="diagramNames">
                             </div>
                         </div>
-                        <div class="fields">
+                        <div id="fields">
                             <input type="text">
                             <button class="btn btn-success" ng-click="vm.createFolder()">Create a new folder</button>
                             </div>
