@@ -21,7 +21,7 @@
                             <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.saveDiagram()">Save</a></li>
                             <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.createFolder()">Create folder</a></li>
                             <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.showFolders()">Show folders</a></li>
-                            <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams" ng-click="vm.openDiagramWindow()">Open</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams" ng-click="vm.openFolderWindow()">Open</a></li>
                         </ul>
                     </li>
                     <li>
@@ -99,6 +99,8 @@
                         <div class="folders">
                             </div>
                         <div class="fields">
+                            <input type="text">
+                            <button class="btn btn-success" ng-click="vm.createFolder()">Create a new folder</button>
                             </div>
                     </div>
                     <div class="modal-footer">
