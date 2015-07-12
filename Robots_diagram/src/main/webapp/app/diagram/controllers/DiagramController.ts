@@ -297,7 +297,7 @@ class DiagramController {
         var controller: DiagramController = this;
         $(document).on('change', '.checkbox', function () {
             var tr = $(this).closest('tr');
-            var name = tr.find('td:first').html();
+                var name = tr.find('td:first').html();
             var label = tr.find('label');
             var value = label.contents().last()[0].textContent;
             if (value === "True") {
