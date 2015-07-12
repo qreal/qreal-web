@@ -304,8 +304,10 @@ class DiagramController {
 
             if (elementBelow) {
                 var link = new joint.dia.Link({
-                    source: { id: elementBelow.id }, target: { id: this.currentElement.getJointObject().id },
-                    attrs: { '.marker-source': { d: 'M 10 0 L 0 5 L 10 10 z' } }});
+                    source: { id: this.currentElement.getJointObject().id },
+                    target: { id: elementBelow.id },
+                    attrs: { '.marker-target': { d: 'M 10 0 L 0 5 L 10 10 z' } }
+                });
 
                 var linkObject: Link = new Link(link);
 
