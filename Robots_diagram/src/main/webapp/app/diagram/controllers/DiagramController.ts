@@ -32,7 +32,7 @@ class DiagramController {
         this.initPointerdownListener();
         this.initDeleteListener();
         this.initCustomContextMenu();
-        this.currentFolder = "NULL";
+        this.currentFolder = "root";
 
         $scope.$on("interpret", function(event, timeline) {
             console.log(InterpretManager.interpret(controller.graph, controller.nodesMap, controller.linksMap, timeline));
@@ -467,7 +467,6 @@ class DiagramController {
     }
 
     private openFolderWindow() : void {
-        var controller = this;
         var currentFolder: string = this.currentFolder;
         $.ajax({
             type: 'POST',
@@ -487,7 +486,8 @@ class DiagramController {
 
     private createFolder() : void {
         $('#fields p').remove();
-        var name:string = $('#diagrams input:text').val();
+        var name: string = $('#diagrams input:text').val();
+        var currentFolder: string = this.currentFolder;
         var controller = this;
         if (name === "") {
             this.exception("Empty name");
@@ -498,7 +498,7 @@ class DiagramController {
                 url: 'createFolder',
                 dataType: 'json',
                 contentType: 'application/json',
-                data: (JSON.stringify({name: name})),
+                data: (ExportManager.exportFolderToJSON(name, currentFolder)),
                 success: function (response) {
                     console.log(response.message);
                     if (response.message === "OK") {

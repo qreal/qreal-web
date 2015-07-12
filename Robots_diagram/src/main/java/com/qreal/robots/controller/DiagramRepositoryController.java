@@ -1,6 +1,7 @@
 package com.qreal.robots.controller;
 
 import com.qreal.robots.model.diagram.Diagram;
+import com.qreal.robots.model.diagram.Folder;
 import com.qreal.robots.model.diagram.OpenRequest;
 import com.qreal.robots.service.DiagramService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +45,8 @@ public class DiagramRepositoryController {
 
     @ResponseBody
     @RequestMapping(value = "/createFolder", method = RequestMethod.POST)
-    public String createFolder(@RequestBody OpenRequest request) {
-        boolean created = diagramService.createFolder(request.getName(), request.getSecondParameter());
+    public String createFolder(@RequestBody Folder folder) {
+        boolean created = diagramService.createFolder(folder);
         if (created) {
             return "{\"message\":\"OK\"}";
         }

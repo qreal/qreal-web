@@ -14,14 +14,6 @@ import java.util.Set;
 @Table(name = "folders")
 public class Folder implements Serializable{
 
-    public Folder() {}
-
-    public Folder(String folderName, User creator, String folderParent) {
-        this.folderName = folderName;
-        this.creator = creator;
-        this.folderParent = folderParent;
-    }
-
     @Id
     @Column(name = "folder_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
