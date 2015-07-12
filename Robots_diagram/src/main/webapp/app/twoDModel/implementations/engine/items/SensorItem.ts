@@ -113,6 +113,7 @@ class SensorItem implements AbstractItem {
     getDefaultPosition(): TwoDPosition {
         var startX = this.robotItem.getStartPosition().x + this.robotItem.getWidth() + 15;
         var startY = this.robotItem.getStartPosition().y + this.robotItem.getHeight() / 2 - this.height / 2;
+        console.log("Put in the " + startX + " " + startY);
         return new TwoDPosition(startX, startY);
     }
 
