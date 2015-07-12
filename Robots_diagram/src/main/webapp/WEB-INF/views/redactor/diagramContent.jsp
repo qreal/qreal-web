@@ -92,11 +92,13 @@
                         <h4 class="modal-title">Diagrams</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="list-group" id="diagramNames">
-                        </div>
                         <div class="folders">
+                            <div class="list-group" id="folderNames">
                             </div>
-                        <div class="fields">
+                            <div class="list-group" id="diagramNames">
+                            </div>
+                        </div>
+                        <div id="fields">
                             <input type="text">
                             <button class="btn btn-success" ng-click="vm.createFolder()">Create a new folder</button>
                             </div>

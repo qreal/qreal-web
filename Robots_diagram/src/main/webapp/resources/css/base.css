@@ -156,6 +156,12 @@ body{
     background-color: #DEF;
 }
 
-.fields {
+.folders {
+    height: 200px;
+    overflow-y: scroll;
+}
+
+#fields {
+    height: 50px;
     text-align: right;
 }
