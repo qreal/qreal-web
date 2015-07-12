@@ -45,7 +45,13 @@ public class DiagramRepositoryController {
     @ResponseBody
     @RequestMapping(value = "/createFolder", method = RequestMethod.POST)
     public String createFolder(@RequestBody OpenRequest request) {
-        return diagramService.createFolder(request.getName());
+        boolean exists = diagramService.createFolder(request.getName());
+        if (exists) {
+            return "{\"message\":\"This  already exists.\"}";
+        }
+        else {
+            return "{\"message\":\"OK\"}";
+        }
     }
 
     @ResponseBody

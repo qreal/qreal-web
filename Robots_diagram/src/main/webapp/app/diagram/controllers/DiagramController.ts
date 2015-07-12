@@ -489,7 +489,7 @@ class DiagramController {
             contentType: 'application/json',
             data: (JSON.stringify({name: name})),
             success: function (response) {
-                console.log(response);
+                console.log(response.message);
             },
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);
