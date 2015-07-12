@@ -470,10 +470,10 @@ class DiagramController {
             type: 'POST',
             url: 'showFolders',
             success: function (response) {
-                $('#diagramNames a').remove();
+                $('#folderNames a').remove();
                 $.each(response, function (i) {
                     console.log(response[i]);
-                    $('#diagramNames').append("<a class=\"list-group-item\">" + response[i] + "</a>");
+                    $('#folderNames').append("<a class=\"list-group-item\">" + response[i] + "</a>");
                 });
             }
         });
@@ -496,6 +496,8 @@ class DiagramController {
             }
         });
         this.openFolderWindow();
+        $('#diagrams input:text').val('');
+
     }
 
     private showFolders() : void {
