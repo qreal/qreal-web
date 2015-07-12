@@ -16,6 +16,7 @@ class DiagramController {
     private date : Date = new Date();
     private data : Gesture[];
     private flagAdd : boolean;
+    private currentFolder: string;
 
     constructor($scope, $compile) {
 
@@ -31,6 +32,7 @@ class DiagramController {
         this.initPointerdownListener();
         this.initDeleteListener();
         this.initCustomContextMenu();
+        this.currentFolder = "NULL";
 
         $scope.$on("interpret", function(event, timeline) {
             console.log(InterpretManager.interpret(controller.graph, controller.nodesMap, controller.linksMap, timeline));
@@ -466,9 +468,13 @@ class DiagramController {
 
     private openFolderWindow() : void {
         var controller = this;
+        var currentFolder: string = this.currentFolder;
         $.ajax({
             type: 'POST',
             url: 'showFolders',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: (JSON.stringify({name: currentFolder})),
             success: function (response) {
                 $('#diagramNames a').remove();
                 $.each(response, function (i) {
@@ -477,17 +483,17 @@ class DiagramController {
                 });
             }
         });
-
     }
 
     private createFolder() : void {
         var name: string = $('#diagrams input:text').val();
+        var currentFolder: string = this.currentFolder;
         $.ajax({
             type: 'POST',
             url: 'createFolder',
             dataType: 'json',
             contentType: 'application/json',
-            data: (JSON.stringify({name: name})),
+            data: (JSON.stringify({name: name, secondParameter: currentFolder})),
             success: function (response) {
                 console.log(response.message);
             },
@@ -499,10 +505,15 @@ class DiagramController {
     }
 
     private showFolders() : void {
+        var currentFolder: string = this.currentFolder;
         $.ajax({
             type: 'POST',
             url: 'showFolders',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: (JSON.stringify({name: currentFolder})),
             success: function (response) {
+                console.log(currentFolder);
                 console.log(response);
             },
             error: function (response, status, error) {

@@ -57,16 +57,16 @@ public class DiagramServiceImpl implements DiagramService {
 
     @Transactional
     @Override
-    public boolean createFolder(String folderName) {
+    public boolean createFolder(String folderName, String folderParent) {
         String creatorName = SecurityContextHolder.getContext().getAuthentication().getName();
-        Folder folder = new Folder(folderName, userService.findByUserName(creatorName));
+        Folder folder = new Folder(folderName, userService.findByUserName(creatorName), folderParent);
         return diagramDAO.createFolder(folder);
     }
 
     @Transactional
     @Override
-    public List<String> showFoldersByUserName() {
+    public List<String> showFoldersByUserName(String currentFolder) {
         String creatorName = SecurityContextHolder.getContext().getAuthentication().getName();
-        return diagramDAO.showFoldersByUserName(creatorName);
+        return diagramDAO.showFoldersByUserName(creatorName, currentFolder);
     }
 }
