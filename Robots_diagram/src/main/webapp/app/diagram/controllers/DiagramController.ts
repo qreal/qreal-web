@@ -495,6 +495,7 @@ class DiagramController {
                 console.log("error: " + status + " " + error);
             }
         });
+        this.openFolderWindow();
     }
 
     private showFolders() : void {
