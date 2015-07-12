@@ -155,3 +155,7 @@ body{
 .custom-menu li:hover {
     background-color: #DEF;
 }
+
+.fields {
+    text-align: right;
+}

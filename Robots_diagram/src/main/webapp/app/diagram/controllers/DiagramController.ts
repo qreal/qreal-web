@@ -464,8 +464,24 @@ class DiagramController {
         });
     }
 
+    private openFolderWindow() : void {
+        var controller = this;
+        $.ajax({
+            type: 'POST',
+            url: 'showFolders',
+            success: function (response) {
+                $('#diagramNames a').remove();
+                $.each(response, function (i) {
+                    console.log(response[i]);
+                    $('#diagramNames').append("<a class=\"list-group-item\">" + response[i] + "</a>");
+                });
+            }
+        });
+
+    }
+
     private createFolder() : void {
-        var name: string = prompt("input name of the folder");
+        var name: string = $('#diagrams input:text').val();
         $.ajax({
             type: 'POST',
             url: 'createFolder',
@@ -479,6 +495,7 @@ class DiagramController {
                 console.log("error: " + status + " " + error);
             }
         });
+        this.openFolderWindow();
     }
 
     private showFolders() : void {
