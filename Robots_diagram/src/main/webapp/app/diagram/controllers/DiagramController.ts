@@ -470,32 +470,48 @@ class DiagramController {
             type: 'POST',
             url: 'showFolders',
             success: function (response) {
-                $('#diagramNames a').remove();
+                $('#folderNames a').remove();
                 $.each(response, function (i) {
                     console.log(response[i]);
-                    $('#diagramNames').append("<a class=\"list-group-item\">" + response[i] + "</a>");
+                    $('#folderNames').append("<a class=\"list-group-item\">" + response[i] + "</a>");
                 });
             }
         });
-
     }
 
     private createFolder() : void {
-        var name: string = $('#diagrams input:text').val();
-        $.ajax({
-            type: 'POST',
-            url: 'createFolder',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: (JSON.stringify({name: name})),
-            success: function (response) {
-                console.log(response.message);
-            },
-            error: function (response, status, error) {
-                console.log("error: " + status + " " + error);
-            }
-        });
-        this.openFolderWindow();
+        $('#fields p').remove();
+        var name:string = $('#diagrams input:text').val();
+        var controller = this;
+        if (name === "") {
+            this.exception("Empty name");
+        }
+        else {
+            $.ajax({
+                type: 'POST',
+                url: 'createFolder',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: (JSON.stringify({name: name})),
+                success: function (response) {
+                    console.log(response.message);
+                    if (response.message === "OK") {
+                        controller.openFolderWindow();
+                    }
+                    else {
+                        controller.exception(response.message);
+                    }
+                },
+                error: function (response, status, error) {
+                    console.log("error: " + status + " " + error);
+                }
+            });
+            $('#diagrams input:text').val('');
+        }
+    }
+
+    private exception(message : string) : void {
+        $('#fields').append("<p>" + message + "</p>");
     }
 
     private showFolders() : void {
