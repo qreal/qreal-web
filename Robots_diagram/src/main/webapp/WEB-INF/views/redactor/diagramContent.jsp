@@ -94,7 +94,7 @@
                     <div class="modal-body">
                         <div id="fields">
                             <button ng-click="vm.reverseFolder()"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> </button>
-                            <button ng-click="vm.openWindowForCreating()"><span class="glyphicon glyphicon-plus"></span></button>
+                            <button id="openCreator"><span class="glyphicon glyphicon-plus"></span></button>
                         </div>
                         <div class="folders">
                             <div id="folderNames">

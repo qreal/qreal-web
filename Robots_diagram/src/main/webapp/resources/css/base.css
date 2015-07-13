@@ -168,9 +168,12 @@ body{
 
 .folderTable > td {
     width: 33%;
-    word-wrap: break-word;
 }
 #fields {
     height: 50px;
     text-align: left;
+}
+
+#create {
+    margin-left: 3px;
 }
