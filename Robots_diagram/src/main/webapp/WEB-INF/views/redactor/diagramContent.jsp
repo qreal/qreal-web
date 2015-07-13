@@ -93,7 +93,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="folders">
-                            <div class="list-group" id="folderNames">
+                            <div id="folderNames">
                             </div>
                             <div class="list-group" id="diagramNames">
                             </div>

@@ -467,24 +467,7 @@ class DiagramController {
     }
 
     private openFolderWindow() : void {
-        var currentFolder: string = this.currentFolder;
-        var controller = this;
-        $.ajax({
-            type: 'POST',
-            url: 'showFolders',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: (JSON.stringify({name: currentFolder})),
-            success: function (response) {
-                $('#folderNames a').remove();
-                $.each(response, function (i) {
-                    $('#folderNames').append("<a class=\"list-group-item\">" + response[i] + "</a>");
-                    $('#folderNames a').click(function () {
-                        controller.openClickedFolder($(this).text());
-                    });
-                });
-            }
-        });
+        this.openClickedFolder(this.currentFolder);
     }
 
     private openClickedFolder(openingFolder: string): void {
@@ -499,7 +482,7 @@ class DiagramController {
             success: function (response) {
                 $('#folderNames a').remove();
                 $.each(response, function (i) {
-                    $('#folderNames').append("<a class=\"list-group-item\" ng-click=\"vm.openClickedFolder()\">" + response[i] + "</a>");
+                    $('#folderNames').append("<a class=\"list-group-item\">" + response[i] + "</a>");
                     $('#folderNames a').click(function () {
                         controller.openClickedFolder($(this).text());
                     });
@@ -510,6 +493,7 @@ class DiagramController {
 
     private reverseFolder(): void {
         var currentFolder: string = this.currentFolder;
+        var controller = this;
         $.ajax({
             type: 'POST',
             url: 'getParentFolder',
@@ -518,6 +502,7 @@ class DiagramController {
             data: (JSON.stringify({name: this.currentFolder})),
             success: function (response) {
                 console.log(response);
+                controller.openClickedFolder(response[0]);
             },
             error: function() {
                 alert("")
