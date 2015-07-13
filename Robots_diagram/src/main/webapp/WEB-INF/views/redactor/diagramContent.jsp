@@ -91,12 +91,12 @@
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         <h4 class="modal-title">Diagrams</h4>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body_nopadding">
                         <div class="folderMenu">
                         </div>
                         <div class="folderView">
-                            <table class="folderTable">
-                            </table>
+                            <ul class="folderTable">
+                            </ul>
                         </div>
                     </div>
                     <div class="modal-footer">
