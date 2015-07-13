@@ -93,7 +93,8 @@
                     </div>
                     <div class="modal-body">
                         <div class="folders">
-                            <div class="list-group" id="folderNames">
+                            <div id="folderNames">
+                                <table class="folderTable"></table>
                             </div>
                             <div class="list-group" id="diagramNames">
                             </div>

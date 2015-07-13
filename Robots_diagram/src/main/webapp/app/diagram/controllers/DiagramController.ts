@@ -465,15 +465,19 @@ class DiagramController {
     }
 
     private openFolderWindow() : void {
-        var controller = this;
         $.ajax({
             type: 'POST',
             url: 'showFolders',
             success: function (response) {
-                $('#folderNames a').remove();
+                $('#folderNames tr').remove();
                 $.each(response, function (i) {
                     console.log(response[i]);
-                    $('#folderNames').append("<a class=\"list-group-item\">" + response[i] + "</a>");
+
+                    if (i % 3 === 0) {
+                        $('#folderNames table').append("<tr id=\"" + parseInt((i / 3).toString()) + "\"</tr>");
+                    }
+                    var newLine: string = "#" + parseInt((i / 3).toString());
+                    $(newLine).append("<td> <a class=\"folder\">" + response[i] + "</a></td>");
                 });
             }
         });
