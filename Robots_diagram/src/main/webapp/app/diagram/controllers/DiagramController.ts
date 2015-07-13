@@ -345,9 +345,12 @@ class DiagramController {
         var deleteKey: number = 46;
         $('html').keyup(function(e){
             if(e.keyCode == deleteKey) {
-                controller.removeCurrentElement();
+                if(!(document.activeElement.tagName === "INPUT")) {
+                    console.log(document.activeElement.tagName);
+                    controller.removeCurrentElement();
+                }
             }
-        })
+        });
     }
 
     private setInputStringListener(): void {
