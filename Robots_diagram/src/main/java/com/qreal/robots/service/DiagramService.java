@@ -20,7 +20,7 @@ public interface DiagramService {
 
     public boolean exists(String name);
 
-    public boolean createFolder(Folder folder);
+    public String createFolder(Folder folder);
 
     public List<String> showFoldersByUserName(String currentFolder);
 
