@@ -16,4 +16,10 @@ public class OpenRequest implements Serializable {
     }
 
     private String name;
+
+    public String getSecondParameter() { return this.secondParameter; }
+
+    public void setSecondParameter(String secondParameter) { this.secondParameter = secondParameter; }
+
+    public String secondParameter;
 }

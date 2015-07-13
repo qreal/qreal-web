@@ -94,7 +94,6 @@
                     <div class="modal-body">
                         <div class="folders">
                             <div id="folderNames">
-                                <table class="folderTable"></table>
                             </div>
                             <div class="list-group" id="diagramNames">
                             </div>
@@ -102,6 +101,7 @@
                         <div id="fields">
                             <input type="text">
                             <button class="btn btn-success" ng-click="vm.createFolder()">Create a new folder</button>
+                            <button ng-click="vm.reverseFolder()">Back</button>
                             </div>
                     </div>
                     <div class="modal-footer">

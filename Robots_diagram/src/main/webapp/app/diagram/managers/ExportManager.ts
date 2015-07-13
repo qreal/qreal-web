@@ -12,6 +12,15 @@ class ExportManager {
         return JSON.stringify(json);
     }
 
+    static exportFolderToJSON(name: string, currentFolder: string): string {
+        var json = {
+            'folderName': name,
+            'folderParent': currentFolder
+        }
+
+        return JSON.stringify(json);
+    }
+
     private static exportNodes(json, nodesMap) {
         for (var id in nodesMap) {
             var node: DiagramNode = nodesMap[id];

@@ -14,13 +14,6 @@ import java.util.Set;
 @Table(name = "folders")
 public class Folder implements Serializable{
 
-    public Folder() {}
-
-    public Folder(String folderName, User creator) {
-        this.folderName = folderName;
-        this.creator = creator;
-    }
-
     @Id
     @Column(name = "folder_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +21,9 @@ public class Folder implements Serializable{
 
     @Column(name = "folder_name")
     private String folderName;
+
+    @Column(name = "folder_parent")
+    private String folderParent;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username", nullable = false)
@@ -44,6 +40,10 @@ public class Folder implements Serializable{
     public void setFolderName(String name) { this.folderName = name; }
 
     public String getFolderName() { return this.folderName; }
+
+    public void setFolderParent(String folderParent) { this.folderParent = folderParent; }
+
+    public String getFolderParent() { return this.folderParent; }
 
     public void setCreator(User creator) { this.creator = creator; }
 

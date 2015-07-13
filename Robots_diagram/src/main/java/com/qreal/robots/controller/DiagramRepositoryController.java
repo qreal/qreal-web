@@ -1,6 +1,7 @@
 package com.qreal.robots.controller;
 
 import com.qreal.robots.model.diagram.Diagram;
+import com.qreal.robots.model.diagram.Folder;
 import com.qreal.robots.model.diagram.OpenRequest;
 import com.qreal.robots.service.DiagramService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,17 +46,27 @@ public class DiagramRepositoryController {
 
     @ResponseBody
     @RequestMapping(value = "/createFolder", method = RequestMethod.POST)
-    public String createFolder(@RequestBody OpenRequest request) {
-        boolean created = diagramService.createFolder(request.getName());
-        if (!created) {
-            return "{\"message\":\"This already exists.\"}";
+    public String createFolder(@RequestBody Folder folder) {
+        boolean created = diagramService.createFolder(folder);
+        if (created) {
+            return "{\"message\":\"OK\"}";
         }
         else {
-            return "{\"message\":\"OK\"}";
+            return "{\"message\":\"This  already exists.\"}";
         }
     }
 
     @ResponseBody
     @RequestMapping(value = "/showFolders", method = RequestMethod.POST)
-    public List<String> showFolders() { return diagramService.showFoldersByUserName(); }
+    public List<String> showFolders(@RequestBody OpenRequest request) {
+        return diagramService.showFoldersByUserName(request.getName());
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getParentFolder", method = RequestMethod.POST)
+    public List<String> getParentFolder(@RequestBody OpenRequest request) {
+        List<String> parentFolder = new ArrayList<String>();
+        parentFolder.add(diagramService.getParentFolder(request.getName()));
+        return parentFolder;
+    }
 }
