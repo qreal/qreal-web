@@ -528,15 +528,12 @@ class DiagramController {
             contentType: 'application/json',
             data: (JSON.stringify({name: openingFolder})),
             success: function (response) {
-                $('.folderTable tr').remove();
+                $('.folderTable li').remove();
                 $.each(response, function (i) {
-                    if (i % 3 === 0) {
-                        $('.folderTable').append("<tr id=\"" + parseInt((i / 3).toString()) + "\"></tr>");
-                    }
-                    var rowId: string = ".folderTable #" + parseInt((i / 3).toString());
-                    $(rowId).append("<td> <a>" + response[i] + "</a></td>");
+                    $('.folderView ul').append("<li><span class=\"glyphicon glyphicon-folder-open\" aria-hidden=\"true\"></span>" +
+                        "<span class=\"glyphicon-class\">" + response[i] + "</span></li>");
                 });
-                $('.folderTable a').click(function () {
+                $('.folderTable li').click(function () {
                     controller.showFolderTable($(this).text());
                 });
             }
@@ -595,7 +592,7 @@ class DiagramController {
     }
 
     private writeWarning(message : string) : void {
-        $('.folderMenu').append("<p>" + message + "</p>");
+        $('.folderMenu').append("<p class=\"warningMessage\">" + message + "</p>");
     }
 
     private makeUnselectable(element) {
