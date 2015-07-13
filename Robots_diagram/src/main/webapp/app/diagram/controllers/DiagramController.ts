@@ -497,12 +497,12 @@ class DiagramController {
         $.ajax({
             type: 'POST',
             url: 'getParentFolder',
-            dataType: 'json',
+            dataType: 'text',
             contentType: 'application/json',
             data: (JSON.stringify({name: this.currentFolder})),
             success: function (response) {
                 console.log(response);
-                controller.openClickedFolder(response[0]);
+                controller.openClickedFolder(response);
             },
             error: function() {
                 alert("")
@@ -523,12 +523,12 @@ class DiagramController {
             $.ajax({
                 type: 'POST',
                 url: 'createFolder',
-                dataType: 'json',
+                dataType: 'text',
                 contentType: 'application/json',
                 data: (ExportManager.exportFolderToJSON(name, currentFolder)),
                 success: function (response) {
-                    console.log(response.message);
-                    if (response.message === "OK") {
+                    console.log(response);
+                    if (response === "OK") {
                         controller.openFolderWindow();
                     }
                     else {

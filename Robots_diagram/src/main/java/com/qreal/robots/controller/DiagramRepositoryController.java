@@ -47,13 +47,7 @@ public class DiagramRepositoryController {
     @ResponseBody
     @RequestMapping(value = "/createFolder", method = RequestMethod.POST)
     public String createFolder(@RequestBody Folder folder) {
-        boolean created = diagramService.createFolder(folder);
-        if (created) {
-            return "{\"message\":\"OK\"}";
-        }
-        else {
-            return "{\"message\":\"This  already exists.\"}";
-        }
+        return diagramService.createFolder(folder);
     }
 
     @ResponseBody
@@ -64,9 +58,7 @@ public class DiagramRepositoryController {
 
     @ResponseBody
     @RequestMapping(value = "/getParentFolder", method = RequestMethod.POST)
-    public List<String> getParentFolder(@RequestBody OpenRequest request) {
-        List<String> parentFolder = new ArrayList<String>();
-        parentFolder.add(diagramService.getParentFolder(request.getName()));
-        return parentFolder;
+    public String getParentFolder(@RequestBody OpenRequest request) {
+        return diagramService.getParentFolder(request.getName());
     }
 }

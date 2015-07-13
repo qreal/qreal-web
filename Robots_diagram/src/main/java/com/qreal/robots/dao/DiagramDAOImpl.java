@@ -63,19 +63,28 @@ public class DiagramDAOImpl implements DiagramDAO {
         return (!diagrams.isEmpty());
     }
 
-    public boolean createFolder(Folder folder) {
+    public String createFolder(Folder folder) {
         LOG.debug("creating folder");
         Session session = sessionFactory.getCurrentSession();
-        List<Folder> folders = session.createQuery("from Folder where folderName=?").setParameter(0, folder.getFolderName()).list();
+        List<Folder> folders = session.createQuery("from Folder where folderName=? AND username=? AND folderParent=?")
+                .setParameter(0, folder.getFolderName())
+                .setParameter(1, folder.getCreator().getUsername())
+                .setParameter(2, folder.getFolderParent())
+                .list();
         if (folders.isEmpty()) {
             session.save(folder);
+            return "OK";
         }
-        return (folders.isEmpty());
+
+        return "This folders already exists.";
     }
 
     public List<String> showFoldersByUserName(String userName, String currentFolder) {
         Session session = sessionFactory.getCurrentSession();
-        List<Folder> folders = session.createQuery("from Folder where folderParent=?").setParameter(0, currentFolder).list();
+        List<Folder> folders = session.createQuery("from Folder where folderParent=? AND username=?")
+                .setParameter(0, currentFolder)
+                .setParameter(1, userName)
+                .list();
 
         List<String> folderNames = new ArrayList<String>();
         for (Folder folder : folders) {
