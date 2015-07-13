@@ -480,13 +480,18 @@ class DiagramController {
             contentType: 'application/json',
             data: (JSON.stringify({name: openingFolder})),
             success: function (response) {
-                $('#folderNames a').remove();
+                $('#folderNames tr').remove();
                 $.each(response, function (i) {
-                    $('#folderNames').append("<a class=\"list-group-item\">" + response[i] + "</a>");
+                    if (i % 3 === 0) {
+                    $('#folderNames table').append("<tr id=\"" + parseInt((i / 3).toString()) + "\"></tr>");
+                    }
+                    var newLine: string = "#folderNames #" + parseInt((i / 3).toString());
+                    $(newLine).append("<td> <a>" + response[i] + "</a></td>");
+                    });
+
                     $('#folderNames a').click(function () {
                         controller.openClickedFolder($(this).text());
                     });
-                });
             }
         });
     }
@@ -497,12 +502,11 @@ class DiagramController {
         $.ajax({
             type: 'POST',
             url: 'getParentFolder',
-            dataType: 'json',
+            dataType: 'text',
             contentType: 'application/json',
             data: (JSON.stringify({name: this.currentFolder})),
             success: function (response) {
-                console.log(response);
-                controller.openClickedFolder(response[0]);
+                controller.openClickedFolder(response);
             },
             error: function() {
                 alert("")
@@ -511,9 +515,18 @@ class DiagramController {
         this.currentFolder = currentFolder;
     }
 
+    private openWindowForCreating() : void {
+        $('#fields').append("<input type=\"text\"><button id=\"create\"><span class='glyphicon glyphicon-ok' </button>");
+        var controller = this;
+        $('#create').click(function () {
+            controller.createFolder();
+        });
+    }
+
     private createFolder() : void {
         $('#fields p').remove();
-        var name: string = $('#diagrams input:text').val();
+        var name: string = $('#fields input:text').val();
+        console.log("vv");
         var currentFolder: string = this.currentFolder;
         var controller = this;
         if (name === "") {
