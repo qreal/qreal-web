@@ -95,4 +95,9 @@ class RobotModelImpl implements RobotModel {
     nextFragment(): void {
         this.robotItem.redraw();
     }
+
+    informSensors() : void {
+        this.robotItem.informSensorsAboutStoppingRunning();
+    }
+
 }

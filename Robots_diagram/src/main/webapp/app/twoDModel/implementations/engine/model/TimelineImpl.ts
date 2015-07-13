@@ -37,6 +37,9 @@ class TimelineImpl implements Timeline {
     }
 
     stop(): void {
+        this.getRobotModels().forEach(function(model) {
+            model.nextFragment();
+        });
         this.setActive(false);
         clearInterval(this.intervalId);
     }
