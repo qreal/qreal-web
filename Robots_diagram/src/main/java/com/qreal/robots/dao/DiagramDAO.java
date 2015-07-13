@@ -24,4 +24,5 @@ public interface DiagramDAO {
 
     public List<String> showFoldersByUserName(String userName, String currentFolder);
 
+    public String getParentFolder(String userName, String currentFolder);
 }

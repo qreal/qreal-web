@@ -83,4 +83,11 @@ public class DiagramDAOImpl implements DiagramDAO {
         }
         return folderNames;
     }
+
+    public String getParentFolder(String userName, String currentFolder) {
+        Session session = sessionFactory.getCurrentSession();
+        List<Folder> folders = session.createQuery("from Folder where folderName=?").setParameter(0, currentFolder).list();
+
+        return folders.get(0).getFolderParent();
+    }
 }

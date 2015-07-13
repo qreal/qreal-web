@@ -101,7 +101,7 @@
                         <div id="fields">
                             <input type="text">
                             <button class="btn btn-success" ng-click="vm.createFolder()">Create a new folder</button>
-                            <button ng-click="vm.showFolders()">Show</button>
+                            <button ng-click="vm.reverseFolder()">Back</button>
                             </div>
                     </div>
                     <div class="modal-footer">

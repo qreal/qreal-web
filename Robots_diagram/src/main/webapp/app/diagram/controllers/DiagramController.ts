@@ -468,6 +468,7 @@ class DiagramController {
 
     private openFolderWindow() : void {
         var currentFolder: string = this.currentFolder;
+        var controller = this;
         $.ajax({
             type: 'POST',
             url: 'showFolders',
@@ -477,11 +478,52 @@ class DiagramController {
             success: function (response) {
                 $('#folderNames a').remove();
                 $.each(response, function (i) {
-                    console.log(response[i]);
                     $('#folderNames').append("<a class=\"list-group-item\">" + response[i] + "</a>");
+                    $('#folderNames a').click(function () {
+                        controller.openClickedFolder($(this).text());
+                    });
                 });
             }
         });
+    }
+
+    private openClickedFolder(openingFolder: string): void {
+        this.currentFolder = openingFolder;
+        var controller = this;
+        $.ajax({
+            type: 'POST',
+            url: 'showFolders',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: (JSON.stringify({name: openingFolder})),
+            success: function (response) {
+                $('#folderNames a').remove();
+                $.each(response, function (i) {
+                    $('#folderNames').append("<a class=\"list-group-item\" ng-click=\"vm.openClickedFolder()\">" + response[i] + "</a>");
+                    $('#folderNames a').click(function () {
+                        controller.openClickedFolder($(this).text());
+                    });
+                });
+            }
+        });
+    }
+
+    private reverseFolder(): void {
+        var currentFolder: string = this.currentFolder;
+        $.ajax({
+            type: 'POST',
+            url: 'getParentFolder',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: (JSON.stringify({name: this.currentFolder})),
+            success: function (response) {
+                console.log(response);
+            },
+            error: function() {
+                alert("")
+            }
+        });
+        this.currentFolder = currentFolder;
     }
 
     private createFolder() : void {
@@ -518,24 +560,6 @@ class DiagramController {
 
     private exception(message : string) : void {
         $('#fields').append("<p>" + message + "</p>");
-    }
-
-    private showFolders() : void {
-        var currentFolder: string = this.currentFolder;
-        $.ajax({
-            type: 'POST',
-            url: 'showFolders',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: (JSON.stringify({name: currentFolder})),
-            success: function (response) {
-                console.log(currentFolder);
-                console.log(response);
-            },
-            error: function (response, status, error) {
-                console.log("error: " + status + " " + error);
-            }
-        });
     }
 
     private makeUnselectable(element) {

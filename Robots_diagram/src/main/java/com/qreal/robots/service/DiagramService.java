@@ -23,4 +23,6 @@ public interface DiagramService {
     public boolean createFolder(Folder folder);
 
     public List<String> showFoldersByUserName(String currentFolder);
+
+    public String getParentFolder(String currentFolder);
 }

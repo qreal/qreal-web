@@ -69,4 +69,11 @@ public class DiagramServiceImpl implements DiagramService {
         String creatorName = SecurityContextHolder.getContext().getAuthentication().getName();
         return diagramDAO.showFoldersByUserName(creatorName, currentFolder);
     }
+
+    @Transactional
+    @Override
+    public String getParentFolder(String currentFolder) {
+        String creatorName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return diagramDAO.getParentFolder(creatorName, currentFolder);
+    }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,5 +60,13 @@ public class DiagramRepositoryController {
     @RequestMapping(value = "/showFolders", method = RequestMethod.POST)
     public List<String> showFolders(@RequestBody OpenRequest request) {
         return diagramService.showFoldersByUserName(request.getName());
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getParentFolder", method = RequestMethod.POST)
+    public List<String> getParentFolder(@RequestBody OpenRequest request) {
+        List<String> parentFolder = new ArrayList<String>();
+        parentFolder.add(diagramService.getParentFolder(request.getName()));
+        return parentFolder;
     }
 }
