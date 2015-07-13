@@ -92,17 +92,18 @@
                         <h4 class="modal-title">Diagrams</h4>
                     </div>
                     <div class="modal-body">
+                        <div id="fields">
+                            <button ng-click="vm.reverseFolder()"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> </button>
+                            <button id="openCreator"><span class="glyphicon glyphicon-plus"></span></button>
+                        </div>
                         <div class="folders">
                             <div id="folderNames">
+                                <table class="folderTable"></table>
                             </div>
                             <div class="list-group" id="diagramNames">
                             </div>
                         </div>
-                        <div id="fields">
-                            <input type="text">
-                            <button class="btn btn-success" ng-click="vm.createFolder()">Create a new folder</button>
-                            <button ng-click="vm.reverseFolder()">Back</button>
-                            </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

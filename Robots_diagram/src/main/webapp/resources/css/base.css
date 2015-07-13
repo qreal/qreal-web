@@ -163,25 +163,17 @@ body{
 
 .folderTable {
     width: 100%;
+    table-layout: fixed;
 }
 
-.folderTable > tr {
-    height: 30px;
+.folderTable > td {
+    width: 33%;
 }
-
-.folder {
-    width: 30px;
-    height: 30px;
-    margin: 0 auto;
-    margin-top: 1px;
-    background-color: #708090;
-    border-radius: 0 6px 6px 6px;
-    box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.59);
-}
-
-
-
 #fields {
     height: 50px;
-    text-align: right;
+    text-align: left;
+}
+
+#create {
+    margin-left: 3px;
 }

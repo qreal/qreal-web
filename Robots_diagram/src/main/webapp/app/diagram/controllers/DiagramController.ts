@@ -37,6 +37,18 @@ class DiagramController {
         $scope.$on("interpret", function(event, timeline) {
             console.log(InterpretManager.interpret(controller.graph, controller.nodesMap, controller.linksMap, timeline));
         });
+
+        $(document).ready(function() {
+            $('#openCreator').click(function () {
+                controller.openWindowForCreating();
+            });
+            $('#create').click(function () {
+                controller.createFolder();
+            });
+            $('#cancelCreating').click(function () {
+                controller.closeCreatingWindow();
+            });
+        })
     }
 
     initPalette() {
@@ -467,12 +479,18 @@ class DiagramController {
     }
 
     private openFolderWindow() : void {
-        this.openClickedFolder(this.currentFolder);
+        this.openFolder(this.currentFolder);
     }
 
-    private openClickedFolder(openingFolder: string): void {
+    private closeCreatingWindow() : void {
+        $('#fields input:text').remove();
+        $('#create').remove();
+    }
+
+    private openFolder(openingFolder: string): void {
         this.currentFolder = openingFolder;
         var controller = this;
+        this.closeCreatingWindow();
         $.ajax({
             type: 'POST',
             url: 'showFolders',
@@ -480,13 +498,18 @@ class DiagramController {
             contentType: 'application/json',
             data: (JSON.stringify({name: openingFolder})),
             success: function (response) {
-                $('#folderNames a').remove();
+                $('#folderNames tr').remove();
                 $.each(response, function (i) {
-                    $('#folderNames').append("<a class=\"list-group-item\">" + response[i] + "</a>");
-                    $('#folderNames a').click(function () {
-                        controller.openClickedFolder($(this).text());
+                    if (i % 3 === 0) {
+                    $('#folderNames table').append("<tr id=\"" + parseInt((i / 3).toString()) + "\"></tr>");
+                    }
+                    var newLine: string = "#folderNames #" + parseInt((i / 3).toString());
+                    $(newLine).append("<td> <a>" + response[i] + "</a></td>");
                     });
-                });
+
+                    $('#folderNames a').click(function () {
+                        controller.openFolder($(this).text());
+                    });
             }
         });
     }
@@ -501,8 +524,7 @@ class DiagramController {
             contentType: 'application/json',
             data: (JSON.stringify({name: this.currentFolder})),
             success: function (response) {
-                console.log(response);
-                controller.openClickedFolder(response);
+                controller.openFolder(response);
             },
             error: function() {
                 alert("")
@@ -511,9 +533,15 @@ class DiagramController {
         this.currentFolder = currentFolder;
     }
 
+    private openWindowForCreating() : void {
+        $('#fields').append("<input type=\"text\"><button id=\"create\"><span class='glyphicon glyphicon-ok' </button>" +
+            "<button id=\"cancelCreating\"><span class=\"glyphicon glyphicon-remove\"></button></button>");
+        var controller = this;
+    }
+
     private createFolder() : void {
         $('#fields p').remove();
-        var name: string = $('#diagrams input:text').val();
+        var name: string = $('#fields input:text').val();
         var currentFolder: string = this.currentFolder;
         var controller = this;
         if (name === "") {
@@ -532,14 +560,14 @@ class DiagramController {
                         controller.openFolderWindow();
                     }
                     else {
-                        controller.exception(response.message);
+                        controller.exception(response);
+                        $('#diagrams input:text').val('');
                     }
                 },
                 error: function (response, status, error) {
                     console.log("error: " + status + " " + error);
                 }
             });
-            $('#diagrams input:text').val('');
         }
     }
 
