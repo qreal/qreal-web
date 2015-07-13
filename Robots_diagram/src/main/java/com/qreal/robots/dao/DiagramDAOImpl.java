@@ -76,7 +76,7 @@ public class DiagramDAOImpl implements DiagramDAO {
             return "OK";
         }
 
-        return "This folders already exists.";
+        return "This folder already exists.";
     }
 
     public List<String> showFoldersByUserName(String userName, String currentFolder) {
