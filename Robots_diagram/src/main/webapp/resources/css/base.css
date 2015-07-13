@@ -156,7 +156,7 @@ body{
     background-color: #DEF;
 }
 
-.folders {
+.folderView {
     height: 200px;
     overflow-y: scroll;
 }
@@ -164,16 +164,21 @@ body{
 .folderTable {
     width: 100%;
     table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 3em;
 }
 
 .folderTable > td {
     width: 33%;
-}
-#fields {
-    height: 50px;
-    text-align: left;
+    border-bottom: 2px solid #ddd;
 }
 
-#create {
+.folderMenu {
+    height: 35px;
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+.folderMenu > button {
     margin-left: 3px;
 }
