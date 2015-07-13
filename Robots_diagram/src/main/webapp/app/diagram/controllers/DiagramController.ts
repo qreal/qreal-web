@@ -37,18 +37,6 @@ class DiagramController {
         $scope.$on("interpret", function(event, timeline) {
             console.log(InterpretManager.interpret(controller.graph, controller.nodesMap, controller.linksMap, timeline));
         });
-
-        $(document).ready(function() {
-            $('#openCreator').click(function () {
-                controller.openWindowForCreating();
-            });
-            $('#create').click(function () {
-                controller.createFolder();
-            });
-            $('#cancelCreating').click(function () {
-                controller.closeCreatingWindow();
-            });
-        })
     }
 
     initPalette() {
@@ -478,19 +466,61 @@ class DiagramController {
         });
     }
 
-    private openFolderWindow() : void {
-        this.openFolder(this.currentFolder);
+    private openFolderWindow(): void {
+        this.showFolderMenu();
+        this.showFolderTable(this.currentFolder);
     }
 
-    private closeCreatingWindow() : void {
-        $('#fields input:text').remove();
-        $('#create').remove();
+    private showFolderMenu(): void {
+        this.clearFolderMenu();
+        var controller = this;
+        $('.folderMenu').append("<button id=\"levelUp\"><span class='glyphicon glyphicon-arrow-left'></span></button>");
+        $('.folderMenu #levelUp').click(function() {
+            controller.levelUpFolder();
+        });
+
+        $('.folderMenu').append("<button id=\"creatingMenu\"><span class='glyphicon glyphicon-plus'></span></button>");
+        $('.folderMenu #creatingMenu').click(function() {
+            controller.showCreatingMenu();
+        });
     }
 
-    private openFolder(openingFolder: string): void {
+    private showCreatingMenu() {
+        var controller = this;
+        this.clearFolderMenu();
+        $('.folderMenu').append(
+            "<input type=\"text\">" +
+            "<button id=\"creating\"><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>" +
+            "<button id=\"cancelCreating\"><span class='glyphicon glyphicon-remove'></span></button>");
+
+        $('.folderMenu #creating').click(function() {
+            controller.clearWarning();
+            if (controller.createFolder()) {
+                controller.openFolderWindow();
+            }
+        });
+
+        $('.folderMenu #cancelCreating').click(function() {
+            controller.showFolderMenu();
+        });
+    }
+
+    private clearFolderMenu(): void {
+        $('.folderMenu').empty();
+    }
+
+    private clearFolderTable(): void {
+        $('.folderTable').empty();
+    }
+
+    private clearWarning(): void {
+        $('.folderMenu p').remove();
+    }
+
+    private showFolderTable(openingFolder: string): void {
+        this.clearFolderTable();
         this.currentFolder = openingFolder;
         var controller = this;
-        this.closeCreatingWindow();
         $.ajax({
             type: 'POST',
             url: 'showFolders',
@@ -498,24 +528,22 @@ class DiagramController {
             contentType: 'application/json',
             data: (JSON.stringify({name: openingFolder})),
             success: function (response) {
-                $('#folderNames tr').remove();
+                $('.folderTable tr').remove();
                 $.each(response, function (i) {
                     if (i % 3 === 0) {
-                    $('#folderNames table').append("<tr id=\"" + parseInt((i / 3).toString()) + "\"></tr>");
+                        $('.folderTable').append("<tr id=\"" + parseInt((i / 3).toString()) + "\"></tr>");
                     }
-                    var newLine: string = "#folderNames #" + parseInt((i / 3).toString());
-                    $(newLine).append("<td> <a>" + response[i] + "</a></td>");
-                    });
-
-                    $('#folderNames a').click(function () {
-                        controller.openFolder($(this).text());
-                    });
+                    var rowId: string = ".folderTable #" + parseInt((i / 3).toString());
+                    $(rowId).append("<td> <a>" + response[i] + "</a></td>");
+                });
+                $('.folderTable a').click(function () {
+                    controller.showFolderTable($(this).text());
+                });
             }
         });
     }
 
-    private reverseFolder(): void {
-        var currentFolder: string = this.currentFolder;
+    private levelUpFolder(): void {
         var controller = this;
         $.ajax({
             type: 'POST',
@@ -524,31 +552,25 @@ class DiagramController {
             contentType: 'application/json',
             data: (JSON.stringify({name: this.currentFolder})),
             success: function (response) {
-                controller.openFolder(response);
+                controller.showFolderTable(response);
             },
-            error: function() {
-                alert("")
+            error: function (response, status, error) {
+                console.log("error: " + status + " " + error);
             }
         });
-        this.currentFolder = currentFolder;
     }
 
-    private openWindowForCreating() : void {
-        $('#fields').append("<input type=\"text\"><button id=\"create\"><span class='glyphicon glyphicon-ok' </button>" +
-            "<button id=\"cancelCreating\"><span class=\"glyphicon glyphicon-remove\"></button></button>");
-        var controller = this;
-    }
-
-    private createFolder() : void {
-        $('#fields p').remove();
-        var name: string = $('#fields input:text').val();
+    private createFolder() : boolean {
+        var name: string = $('.folderMenu input:text').val();
         var currentFolder: string = this.currentFolder;
         var controller = this;
+        var created: boolean = false;
         if (name === "") {
-            this.exception("Empty name");
+            this.writeWarning("Empty name");
         }
         else {
             $.ajax({
+                async: false,
                 type: 'POST',
                 url: 'createFolder',
                 dataType: 'text',
@@ -557,11 +579,11 @@ class DiagramController {
                 success: function (response) {
                     console.log(response);
                     if (response === "OK") {
-                        controller.openFolderWindow();
+                        created = true;
                     }
                     else {
-                        controller.exception(response);
-                        $('#diagrams input:text').val('');
+                        controller.writeWarning(response);
+                        $('.folderMenu input:text').val('');
                     }
                 },
                 error: function (response, status, error) {
@@ -569,10 +591,11 @@ class DiagramController {
                 }
             });
         }
+        return created;
     }
 
-    private exception(message : string) : void {
-        $('#fields').append("<p>" + message + "</p>");
+    private writeWarning(message : string) : void {
+        $('.folderMenu').append("<p>" + message + "</p>");
     }
 
     private makeUnselectable(element) {
