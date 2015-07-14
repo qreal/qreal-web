@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface DiagramService {
 
-    public void save(Diagram diagram);
+    public String save(Diagram diagram);
 
     public Diagram openById(Long diagramId);
 
@@ -25,4 +25,8 @@ public interface DiagramService {
     public List<String> showFoldersByUserName(String currentFolder);
 
     public String getParentFolder(String currentFolder);
+
+    public String getUserName();
+
+    public List<String> showDiagramNames(String folderId);
 }

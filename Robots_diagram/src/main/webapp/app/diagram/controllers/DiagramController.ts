@@ -17,6 +17,7 @@ class DiagramController {
     private data : Gesture[];
     private flagAdd : boolean;
     private currentFolder: string;
+    private user: string;
 
     constructor($scope, $compile) {
 
@@ -33,6 +34,36 @@ class DiagramController {
         this.initDeleteListener();
         this.initCustomContextMenu();
         this.currentFolder = "root";
+
+        var user: string;
+        $.ajax({
+            async: false,
+            type: 'POST',
+            url: 'getUser',
+            dataType: 'text',
+            success: function (response) {
+                console.log(response);
+                user = response;
+            }
+        });
+        this.user = user;
+
+        var folderId: string = this.user + this.currentFolder;
+        var empty: string = "";
+        $.ajax({
+            type: 'POST',
+            url: 'createFolder',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: (ExportManager.exportFolderToJSON(folderId, this.currentFolder, empty)),
+            success: function (response) {
+                console.log(response);
+                console.log("root folder was created");
+            },
+            error: function (response, status, error) {
+                console.log("error: " + status + " " + error);
+            }
+        });
 
         $scope.$on("interpret", function(event, timeline) {
             console.log(InterpretManager.interpret(controller.graph, controller.nodesMap, controller.linksMap, timeline));
@@ -374,75 +405,40 @@ class DiagramController {
     }
 
     private saveDiagram(): void {
-        if (!this.isPaletteLoaded) {
-            alert("Palette is not loaded!");
-            return;
-        }
-
-        var name: string = prompt("input name");
-        var controller = this;
-
-        if (name === "")
-        {
-            alert("Empty name!");
-            this.saveDiagram();
-        }
-        else if (name !== null) {
-            $.ajax({
-                type: 'POST',
-                url: 'exists',
-                dataType: 'json',
-                contentType: 'application/json',
-                data: (JSON.stringify({name: name})),
-                success: function (response) {
-                    if (response) {
-                        alert("This name already exists");
-                        controller.saveDiagram();
-                    }
-                    else {
-                        $.ajax({
-                            type: 'POST',
-                            url: 'save',
-                            dataType: 'json',
-                            contentType: 'application/json',
-                            data: (ExportManager.exportDiagramStateToJSON(name, this.nodesMap, this.linksMap)),
-                            success: function (response) {
-                                console.log(response.message);
-                            },
-                            error: function (response, status, error) {
-                                console.log("error: " + status + " " + error);
-                            }
-                        });
-                    }
-                },
-            });
-        }
-    }
-
-    private openDiagramWindow(): void {
-        if (!this.isPaletteLoaded) {
-            alert("Palette is not loaded!");
-            return;
-        }
-
-        var controller = this;
+        var name: string = prompt("input diagram name");
+        console.log(this.user);
+        var folderId: string = this.user + this.currentFolder;
+        console.log(folderId);
         $.ajax({
             type: 'POST',
-            url: 'show',
+            url: 'save',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: (ExportManager.exportDiagramStateToJSON(name, folderId, this.nodesMap, this.linksMap)),
             success: function (response) {
-                $('#diagramNames a').remove();
-                $.each(response, function (i) {
-                    console.log(response[i]);
-                    $('#diagramNames').append("<a class='list-group-item'>" + response[i] + "</a>");
-                });
+                console.log(response);
+            },
+            error: function (response, status, error) {
+                console.log("error: " + status + " " + error);
+            }
+        });
+        this.showDiagram();
+    }
 
-                $('#diagramNames a').click(function () {
-                    $('#diagrams').modal('hide');
-                    controller.openDiagram($(this).text());
-                });
+    private showDiagram() : void {
+        var folderId: string = this.user + this.currentFolder;
+        $.ajax({
+            type: 'POST',
+            url: 'showDiagramNames',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: (JSON.stringify({name: folderId})),
+            success: function(response) {
+                console.log(response);
             }
         });
     }
+
 
     private openDiagram(name: string): void {
         var controller = this;
@@ -593,6 +589,7 @@ class DiagramController {
         var currentFolder: string = this.currentFolder;
         var controller = this;
         var created: boolean = false;
+        var folderId: string = this.user + name;
         if (name === "") {
             this.writeWarning("Empty name", '.folderMenu');
         }
@@ -603,7 +600,7 @@ class DiagramController {
                 url: 'createFolder',
                 dataType: 'text',
                 contentType: 'application/json',
-                data: (ExportManager.exportFolderToJSON(name, currentFolder)),
+                data: (ExportManager.exportFolderToJSON(folderId, name, currentFolder)),
                 success: function (response) {
                     console.log(response);
                     if (response === "OK") {

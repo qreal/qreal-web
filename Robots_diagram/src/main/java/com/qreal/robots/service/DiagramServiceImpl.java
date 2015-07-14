@@ -24,11 +24,7 @@ public class DiagramServiceImpl implements DiagramService {
 
     @Transactional
     @Override
-    public void save(Diagram diagram) {
-        /*String creatorName = SecurityContextHolder.getContext().getAuthentication().getName();
-        diagram.setCreator(userService.findByUserName(creatorName));
-        diagramDAO.save(diagram);*/
-    }
+    public String save(Diagram diagram) { return diagramDAO.save(diagram); }
 
     @Transactional
     @Override
@@ -76,4 +72,12 @@ public class DiagramServiceImpl implements DiagramService {
         String creatorName = SecurityContextHolder.getContext().getAuthentication().getName();
         return diagramDAO.getParentFolder(creatorName, currentFolder);
     }
+
+    @Transactional
+    @Override
+    public String getUserName() { return SecurityContextHolder.getContext().getAuthentication().getName(); }
+
+    @Transactional
+    @Override
+    public List<String> showDiagramNames(String folderId) { return diagramDAO.showDiagramNames(folderId); }
 }

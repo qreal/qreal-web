@@ -26,8 +26,7 @@ public class DiagramRepositoryController {
     @ResponseBody
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String save(@RequestBody Diagram diagram) {
-        diagramService.save(diagram);
-        return "{\"message\":\"OK\"}";
+        return diagramService.save(diagram);
     }
 
     @ResponseBody
@@ -60,5 +59,15 @@ public class DiagramRepositoryController {
     @RequestMapping(value = "/getParentFolder", method = RequestMethod.POST)
     public String getParentFolder(@RequestBody OpenRequest request) {
         return diagramService.getParentFolder(request.getName());
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getUser", method = RequestMethod.POST)
+    public String getUserName() { return diagramService.getUserName(); }
+
+    @ResponseBody
+    @RequestMapping(value = "/showDiagramNames", method = RequestMethod.POST)
+    public List<String> showDiagramNames(@RequestBody OpenRequest request) {
+        return diagramService.showDiagramNames(request.getName());
     }
 }

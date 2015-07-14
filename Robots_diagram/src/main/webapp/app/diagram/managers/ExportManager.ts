@@ -1,7 +1,8 @@
 class ExportManager {
-    static exportDiagramStateToJSON(name: string, nodesMap, linksMap): string {
+    static exportDiagramStateToJSON(name: string, folderId: string,  nodesMap, linksMap): string {
         var json = {
             'name': name,
+            'folderId': folderId,
             'nodes': [],
             'links': []
         };
@@ -12,8 +13,9 @@ class ExportManager {
         return JSON.stringify(json);
     }
 
-    static exportFolderToJSON(name: string, currentFolder: string): string {
+    static exportFolderToJSON(folderId: string, name: string, currentFolder: string): string {
         var json = {
+            'folderId': folderId,
             'folderName': name,
             'folderParent': currentFolder
         }
