@@ -469,6 +469,7 @@ class DiagramController {
     private openFolderWindow(): void {
         this.showFolderMenu();
         this.showFolderTable(this.currentFolder);
+        this.clearSavingMenu();
     }
 
     private saveDiagramAs(): void {
@@ -500,7 +501,7 @@ class DiagramController {
             "<i id='cancelCreating'><span class='glyphicon glyphicon-remove'></span></i>");
 
         $('.folderMenu #creating').click(function() {
-            controller.clearWarningFolder();
+            controller.clearWarning('.folderMenu p');
             if (controller.createFolder()) {
                 controller.openFolderWindow();
             }
@@ -512,7 +513,6 @@ class DiagramController {
     }
 
     private showSavingMenu(): void {
-        this.clearWarningDiagram();
         this.clearSavingMenu();
         var controller = this;
 
@@ -520,9 +520,10 @@ class DiagramController {
         $('.modal-footer').prepend("<button id='saving' type='button' class='btn btn-success'>Save</button>");
 
         $('#saving').click(function() {
+            controller.clearWarning('.savingMenu p');
             var name: string = $('.savingMenu input:text').val();
             if (name === "") {
-                controller.writeWarningDiagram("Empty name");
+                controller.writeWarning("Empty name", '.savingMenu');
             }
             else{
                 $('#diagrams').modal('hide');
@@ -543,12 +544,8 @@ class DiagramController {
         $('.folderTable').empty();
     }
 
-    private clearWarningFolder(): void {
-        $('.folderMenu p').remove();
-    }
-
-    private clearWarningDiagram(): void {
-        $('.savingMenu p').remove();
+    private clearWarning(place : string): void {
+        $(place).remove();
     }
 
     private showFolderTable(openingFolder: string): void {
@@ -597,7 +594,7 @@ class DiagramController {
         var controller = this;
         var created: boolean = false;
         if (name === "") {
-            this.writeWarningFolder("Empty name");
+            this.writeWarning("Empty name", '.folderMenu');
         }
         else {
             $.ajax({
@@ -613,7 +610,7 @@ class DiagramController {
                         created = true;
                     }
                     else {
-                        controller.writeWarningFolder(response);
+                        controller.writeWarning(response, '.folderMenu');
                         $('.folderMenu input:text').val('');
                     }
                 },
@@ -625,12 +622,8 @@ class DiagramController {
         return created;
     }
 
-    private writeWarningFolder(message : string) : void {
-        $('.folderMenu').append("<p class='warningMessage'>" + message + "</p>");
-    }
-
-    private writeWarningDiagram(message : string) : void {
-        $('.savingMenu').append("<p class='warningMessage'>" + message + "</p>");
+    private writeWarning(message : string, place : string) : void {
+        $(place).append("<p class='warningMessage'>" + message + "</p>");
     }
 
     private makeUnselectable(element) {
