@@ -433,7 +433,7 @@ class DiagramController {
                 $('#diagramNames a').remove();
                 $.each(response, function (i) {
                     console.log(response[i]);
-                    $('#diagramNames').append("<a class=\"list-group-item\">" + response[i] + "</a>");
+                    $('#diagramNames').append("<a class='list-group-item'>" + response[i] + "</a>");
                 });
 
                 $('#diagramNames a').click(function () {
@@ -471,15 +471,21 @@ class DiagramController {
         this.showFolderTable(this.currentFolder);
     }
 
+    private saveDiagramAs(): void {
+        this.showFolderMenu();
+        this.showFolderTable(this.currentFolder);
+        this.showSavingMenu();
+    }
+
     private showFolderMenu(): void {
         this.clearFolderMenu();
         var controller = this;
-        $('.folderMenu').append("<button id=\"levelUp\"><span class='glyphicon glyphicon-arrow-left'></span></button>");
+        $('.folderMenu').append("<i id='levelUp'><span class='glyphicon glyphicon-arrow-left'></span></i>");
         $('.folderMenu #levelUp').click(function() {
             controller.levelUpFolder();
         });
 
-        $('.folderMenu').append("<button id=\"creatingMenu\"><span class='glyphicon glyphicon-plus'></span></button>");
+        $('.folderMenu').append("<i id='creatingMenu'><span class='glyphicon glyphicon-plus'></span></i>");
         $('.folderMenu #creatingMenu').click(function() {
             controller.showCreatingMenu();
         });
@@ -489,12 +495,12 @@ class DiagramController {
         var controller = this;
         this.clearFolderMenu();
         $('.folderMenu').append(
-            "<input type=\"text\">" +
-            "<button id=\"creating\"><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>" +
-            "<button id=\"cancelCreating\"><span class='glyphicon glyphicon-remove'></span></button>");
+            "<input type='text'>" +
+            "<i id='creating'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></i>" +
+            "<i id='cancelCreating'><span class='glyphicon glyphicon-remove'></span></i>");
 
         $('.folderMenu #creating').click(function() {
-            controller.clearWarning();
+            controller.clearWarningFolder();
             if (controller.createFolder()) {
                 controller.openFolderWindow();
             }
@@ -505,6 +511,30 @@ class DiagramController {
         });
     }
 
+    private showSavingMenu(): void {
+        this.clearWarningDiagram();
+        this.clearSavingMenu();
+        var controller = this;
+
+        $('.savingMenu').append("<b>Input diagram name</b><input type:text>");
+        $('.modal-footer').prepend("<button id='saving' type='button' class='btn btn-success'>Save</button>");
+
+        $('#saving').click(function() {
+            var name: string = $('.savingMenu input:text').val();
+            if (name === "") {
+                controller.writeWarningDiagram("Empty name");
+            }
+            else{
+                $('#diagrams').modal('hide');
+            }
+        });
+    }
+
+    private clearSavingMenu(): void {
+        $('.savingMenu').empty();
+        $('.modal-footer #saving').remove();
+    }
+
     private clearFolderMenu(): void {
         $('.folderMenu').empty();
     }
@@ -513,8 +543,12 @@ class DiagramController {
         $('.folderTable').empty();
     }
 
-    private clearWarning(): void {
+    private clearWarningFolder(): void {
         $('.folderMenu p').remove();
+    }
+
+    private clearWarningDiagram(): void {
+        $('.savingMenu p').remove();
     }
 
     private showFolderTable(openingFolder: string): void {
@@ -530,8 +564,8 @@ class DiagramController {
             success: function (response) {
                 $('.folderTable li').remove();
                 $.each(response, function (i) {
-                    $('.folderView ul').append("<li><span class=\"glyphicon glyphicon-folder-open\" aria-hidden=\"true\"></span>" +
-                        "<span class=\"glyphicon-class\">" + response[i] + "</span></li>");
+                    $('.folderView ul').append("<li><span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>" +
+                        "<span class='glyphicon-class'>" + response[i] + "</span></li>");
                 });
                 $('.folderTable li').click(function () {
                     controller.showFolderTable($(this).text());
@@ -563,7 +597,7 @@ class DiagramController {
         var controller = this;
         var created: boolean = false;
         if (name === "") {
-            this.writeWarning("Empty name");
+            this.writeWarningFolder("Empty name");
         }
         else {
             $.ajax({
@@ -579,7 +613,7 @@ class DiagramController {
                         created = true;
                     }
                     else {
-                        controller.writeWarning(response);
+                        controller.writeWarningFolder(response);
                         $('.folderMenu input:text').val('');
                     }
                 },
@@ -591,8 +625,12 @@ class DiagramController {
         return created;
     }
 
-    private writeWarning(message : string) : void {
-        $('.folderMenu').append("<p class=\"warningMessage\">" + message + "</p>");
+    private writeWarningFolder(message : string) : void {
+        $('.folderMenu').append("<p class='warningMessage'>" + message + "</p>");
+    }
+
+    private writeWarningDiagram(message : string) : void {
+        $('.savingMenu').append("<p class='warningMessage'>" + message + "</p>");
     }
 
     private makeUnselectable(element) {
