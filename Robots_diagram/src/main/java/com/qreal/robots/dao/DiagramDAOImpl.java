@@ -28,10 +28,21 @@ public class DiagramDAOImpl implements DiagramDAO {
         this.sessionFactory = sessionFactory;
     }
 
-    public void save(Diagram diagram) {
+    public String save(Diagram diagram) {
         LOG.debug("saving diagram");
         Session session = sessionFactory.getCurrentSession();
-        session.save(diagram);
+        List<Diagram> diagrams = session.createQuery("from Diagram where folderId=? and name=?")
+                .setParameter(0, diagram.getFolderId())
+                .setParameter(1, diagram.getName())
+                .list();
+
+        if (!diagrams.isEmpty()) {
+            return "This diagram already exists.";
+        }
+        else {
+            session.save(diagram);
+            return "OK";
+        }
     }
 
     public Diagram openById(Long diagramId) {
@@ -66,11 +77,12 @@ public class DiagramDAOImpl implements DiagramDAO {
     public String createFolder(Folder folder) {
         LOG.debug("creating folder");
         Session session = sessionFactory.getCurrentSession();
-        List<Folder> folders = session.createQuery("from Folder where folderName=? AND username=? AND folderParent=?")
+        List<Folder> folders = session.createQuery("from Folder where folderName=? and username=? and folderParent=?")
                 .setParameter(0, folder.getFolderName())
                 .setParameter(1, folder.getCreator().getUsername())
                 .setParameter(2, folder.getFolderParent())
                 .list();
+
         if (folders.isEmpty()) {
             session.save(folder);
             return "OK";
@@ -101,5 +113,16 @@ public class DiagramDAOImpl implements DiagramDAO {
                 .list();
 
         return folders.get(0).getFolderParent();
+    }
+
+    public List<String> showDiagramNames(String folderId) {
+        Session session = sessionFactory.getCurrentSession();
+        List<Diagram> diagrams = session.createQuery("from Diagram where folderId=?").setParameter(0, folderId).list();
+
+        List<String> namesDiagrams = new ArrayList<String>();
+        for (Diagram diagram : diagrams) {
+            namesDiagrams.add(diagram.getName());
+        }
+        return namesDiagrams;
     }
 }
