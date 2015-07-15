@@ -47,7 +47,7 @@ class RobotItemImpl implements RobotItem {
                 this.cx = this.attr("cx");
                 this.cy = this.attr("cy");
                 this.lastDx = 0;
-                this.LastDy = 0;
+                this.lastDy = 0;
 
                 if (!worldModel.getDrawMode()) {
                     robotItem.updateSensorsTransformations();
@@ -59,6 +59,7 @@ class RobotItemImpl implements RobotItem {
 
                     var newDx = dx - this.lastDx;
                     var newDy = dy - this.lastDy;
+
                     this.lastDx = dx;
                     this.lastDy = dy;
 
@@ -82,16 +83,9 @@ class RobotItemImpl implements RobotItem {
                     robotItem.image.transform("R" + angle + "," + robotItem.center.x + "," + robotItem.center.y);
                     robotItem.transformSensorsItems("R" + angle + "," + robotItem.center.x + "," + robotItem.center.y);
 
-                    var newCx = robotItem.image.matrix.x(robotItem.startCenter.x + robotItem.width / 2 + 20,
-                        robotItem.startCenter.y);
-                    var newCy = robotItem.image.matrix.y(robotItem.startCenter.x + robotItem.width / 2 + 20,
-                        robotItem.startCenter.y);
-
-                    var newRx = robotItem.image.matrix.x(robotItem.startCenter.x, robotItem.startCenter.y);
-                    var newRy = robotItem.image.matrix.y(robotItem.startCenter.x, robotItem.startCenter.y);
-
-                    robotItem.center.x = newRx;
-                    robotItem.center.y = newRy;
+                    var angleInRad = angle * Math.PI / 180.0;
+                    var newCx = Math.cos(angleInRad) * (robotItem.width / 2 + 20) + robotItem.center.x;
+                    var newCy = Math.sin(angleInRad) * (robotItem.width / 2 + 20) + robotItem.center.y;
 
                     console.log(robotItem.center.x + " " + robotItem.center.y);
                     console.log(newCx + " rothandle " + newCy);
@@ -99,7 +93,7 @@ class RobotItemImpl implements RobotItem {
                     this.attr({cx: newCx, cy: newCy});
                     this.cx = newCx;
                     this.cy = newCy;
-                    robotItem.angle += angle;
+                    robotItem.angle = angle;
 
                 }
                 return this;
@@ -107,6 +101,9 @@ class RobotItemImpl implements RobotItem {
             upHandle = function () {
                 this.lastDx = 0;
                 this.lastDy = 0;
+                robotItem.image.transform("");
+                robotItem.image.attr({"x" : robotItem.center.x - robotItem.height / 2, "y" : robotItem.center.y - robotItem.width / 2});
+                robotItem.image.transform("R" + robotItem.angle);
                 if (!worldModel.getDrawMode()) {
 
                     robotItem.updateSensorsTransformations();
@@ -117,10 +114,11 @@ class RobotItemImpl implements RobotItem {
         robotItem.rotateHandle.drag(moveHandle, startHandle, upHandle);
 
         var start = function () {
+                robotItem.beforeRotateTransformationPositionCenter = robotItem.center;
+                this.tmpDx = 0;
+                this.tmpDy = 0;
                 if (!worldModel.getDrawMode()) {
-                    this.transformation = this.transform();
                     robotItem.updateSensorsTransformations();
-
                     this.handle_cx = robotItem.rotateHandle.attr("cx");
                     this.handle_cy = robotItem.rotateHandle.attr("cy");
                     worldModel.setCurrentElement(robotItem);
@@ -129,9 +127,10 @@ class RobotItemImpl implements RobotItem {
             }
             ,move = function (dx, dy) {
                 if (!worldModel.getDrawMode()) {
-                    this.transform(this.transformation + "T" + dx + "," + dy);
-
-                    robotItem.transformSensorsItems("T" + dx + "," + dy);
+                    robotItem.image.transform("R" + robotItem.angle + "," + robotItem.center.x + "," + robotItem.center.y + "T" + dx + "," + dy);
+                    robotItem.transformSensorsItems("t" + dx + "," + dy);
+                    this.tmpDx = dx;
+                    this.tmpDy = dy;
 
                     robotItem.rotateHandle.attr({"cx": this.handle_cx + dx, "cy": this.handle_cy + dy});
                 }
@@ -139,8 +138,12 @@ class RobotItemImpl implements RobotItem {
             }
             ,up = function () {
                 if (!worldModel.getDrawMode()) {
-                    robotItem.center.x = this.matrix.x(robotItem.startCenter.x, robotItem.startCenter.y);
-                    robotItem.center.y = this.matrix.y(robotItem.startCenter.x, robotItem.startCenter.y);
+                    robotItem.center.x += this.tmpDx;
+                    robotItem.center.y += this.tmpDy;
+                    robotItem.image.transform("");
+                    robotItem.image.attr({"x" : robotItem.center.x - robotItem.height / 2, "y" : robotItem.center.y - robotItem.width / 2});
+                    robotItem.image.transform("R" + robotItem.angle + "," + robotItem.image.x + "," + robotItem.image.y);
+
                     robotItem.updateSensorsTransformations();
                 }
 
