@@ -97,7 +97,8 @@ class RobotModelImpl implements RobotModel {
     }
 
     informSensors() : void {
-        this.robotItem.informSensorsAboutStoppingRunning();
+        //this.robotItem.iformSensorsAboutStoppingRunning();
+        this.robotItem.notifySensors();
     }
 
 }

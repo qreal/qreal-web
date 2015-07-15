@@ -32,13 +32,16 @@ class TimelineImpl implements Timeline {
             return;
         this.setActive(true);
         var timeline = this;
+        this.getRobotModels().forEach(function(model) {
+               model.informSensors();
+         });
         this.cyclesCount = 0;
         this.intervalId = setInterval(function() { timeline.onTimer(timeline); }, this.defaultFrameLength);
     }
 
     stop(): void {
         this.getRobotModels().forEach(function(model) {
-            model.nextFragment();
+            model.informSensors();
         });
         this.setActive(false);
         clearInterval(this.intervalId);

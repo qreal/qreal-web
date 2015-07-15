@@ -118,6 +118,13 @@ class SensorItem implements AbstractItem {
     }
 
     show(): void {
+        /*console.log("sensorX: " + this.centerX + " sensorY: " + this.centerY);
+        var sensorItem = this;
+        sensorItem.centerX = this.image.matrix.x(sensorItem.startCx, sensorItem.startCy);
+        sensorItem.centerY = this.image.matrix.y(sensorItem.startCx, sensorItem.startCy);
+        var newCx = sensorItem.image.matrix.x(sensorItem.startCx + sensorItem.width / 2 + 20, sensorItem.startCy);
+        var newCy = sensorItem.image.matrix.y(sensorItem.startCx + sensorItem.width / 2 + 20, sensorItem.startCy);
+        //this.attr({cx: newCx, cy: newCy});*/
         console.log("sensorX: " + this.centerX + " sensorY: " + this.centerY);
     }
 
