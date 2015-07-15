@@ -472,7 +472,8 @@ class DiagramController {
         $('.folderMenu #creating').click(function() {
             controller.clearWarning('.folderMenu p');
             if (controller.createFolder()) {
-                controller.openFolderWindow();
+                controller.showFolderMenu();
+                controller.showFolderTable(controller.currentFolder);
             }
         });
 
@@ -559,7 +560,7 @@ class DiagramController {
                 });
             },
             error: function() {
-                alert("err");
+                alert("");
             }
         });
     }
