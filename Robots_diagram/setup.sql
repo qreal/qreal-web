@@ -22,10 +22,10 @@ CREATE TABLE users (
 );
 
 CREATE TABLE folders (
-  folder_id     VARCHAR(50) NOT NULL,
-  folder_name   VARCHAR(50) NOT NULL,
-  username      VARCHAR(45) NOT NULL,
-  folder_parent VARCHAR(50) NOT NULL,
+  folder_id        VARCHAR(50) NOT NULL,
+  folder_name      VARCHAR(50) NOT NULL,
+  username         VARCHAR(45) NOT NULL,
+  folder_parent_id VARCHAR(50) NOT NULL,
   FOREIGN KEY (username) REFERENCES users (username)
 );
 

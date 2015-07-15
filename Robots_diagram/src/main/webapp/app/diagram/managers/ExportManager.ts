@@ -13,11 +13,11 @@ class ExportManager {
         return JSON.stringify(json);
     }
 
-    static exportFolderToJSON(folderId: string, name: string, currentFolder: string): string {
+    static exportFolderToJSON(folderId: string, name: string, folderParentId: string): string {
         var json = {
             'folderId': folderId,
             'folderName': name,
-            'folderParent': currentFolder
+            'folderParentId': folderParentId
         }
 
         return JSON.stringify(json);

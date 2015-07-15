@@ -59,9 +59,9 @@ public class DiagramDAOImpl implements DiagramDAO {
     public String createFolder(Folder folder) {
         LOG.debug("creating folder");
         Session session = sessionFactory.getCurrentSession();
-        List<Folder> folders = session.createQuery("from Folder where folderId=? and folderParent=? and folderName=?")
+        List<Folder> folders = session.createQuery("from Folder where folderId=? and folderParentId=? and folderName=?")
                 .setParameter(0, folder.getFolderId())
-                .setParameter(1, folder.getFolderParent())
+                .setParameter(1, folder.getFolderParentId())
                 .setParameter(2, folder.getFolderName())
                 .list();
 
@@ -74,11 +74,10 @@ public class DiagramDAOImpl implements DiagramDAO {
         }
     }
 
-    public List<String> showFoldersByUserName(String userName, String currentFolder) {
+    public List<String> showFoldersByUserName(String currentFolderId) {
         Session session = sessionFactory.getCurrentSession();
-        List<Folder> folders = session.createQuery("from Folder where folderParent=? and username=?")
-                .setParameter(0, currentFolder)
-                .setParameter(1, userName)
+        List<Folder> folders = session.createQuery("from Folder where folderParentId=?")
+                .setParameter(0, currentFolderId)
                 .list();
 
         List<String> folderNames = new ArrayList<String>();
@@ -88,14 +87,13 @@ public class DiagramDAOImpl implements DiagramDAO {
         return folderNames;
     }
 
-    public String getParentFolder(String userName, String currentFolder) {
+    public String getParentFolder(String currentFolderId) {
         Session session = sessionFactory.getCurrentSession();
-        List<Folder> folders = session.createQuery("from Folder where folderName=? and username=?")
-                .setParameter(0, currentFolder)
-                .setParameter(1, userName)
+        List<Folder> folders = session.createQuery("from Folder where folderId=?")
+                .setParameter(0, currentFolderId)
                 .list();
 
-        return folders.get(0).getFolderParent();
+        return folders.get(0).getFolderParentId();
     }
 
     public List<String> showDiagramNames(String folderId) {

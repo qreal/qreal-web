@@ -17,9 +17,9 @@ public interface DiagramService {
 
     public String createFolder(Folder folder);
 
-    public List<String> showFoldersByUserName(String currentFolder);
+    public List<String> showFoldersByUserName(String currentFolderId);
 
-    public String getParentFolder(String currentFolder);
+    public String getParentFolder(String currentFolderId);
 
     public String getUserName();
 
