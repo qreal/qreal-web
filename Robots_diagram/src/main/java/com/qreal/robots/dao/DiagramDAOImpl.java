@@ -1,6 +1,7 @@
 package com.qreal.robots.dao;
 
 import com.qreal.robots.model.diagram.Diagram;
+import com.qreal.robots.model.diagram.DiagramRequest;
 import com.qreal.robots.model.diagram.Folder;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -45,50 +46,32 @@ public class DiagramDAOImpl implements DiagramDAO {
         }
     }
 
-    public Diagram openById(Long diagramId) {
+    public Diagram openDiagram(DiagramRequest request) {
         Session session = sessionFactory.getCurrentSession();
-        return (Diagram) session.get(Diagram.class, diagramId);
-    }
+        List<Diagram> diagrams = session.createQuery("from Diagram where name=? and folderId=?")
+                .setParameter(0, request.getDiagramName())
+                .setParameter(1, request.getFolderId())
+                .list();
 
-    public Diagram openByName(String name) {
-        LOG.debug("open diagram");
-        Session session = sessionFactory.getCurrentSession();
-        List<Diagram> diagrams = session.createQuery("from Diagram where name=?").setParameter(0, name).list();
-        return (diagrams.isEmpty() ? null : diagrams.get(0));
-    }
-
-    public List<String> showDiagramsByUserName(String userName) {
-        Session session = sessionFactory.getCurrentSession();
-        List<Diagram> diagrams = session.createQuery("from Diagram where username=?").setParameter(0, userName).list();
-
-        List<String> namesDiagrams = new ArrayList<String>();
-        for (Diagram diagram : diagrams) {
-            namesDiagrams.add(diagram.getName());
-        }
-        return namesDiagrams;
-    }
-
-    public boolean exists(String name) {
-        Session session = sessionFactory.getCurrentSession();
-        List<Diagram> diagrams = session.createQuery("from Diagram where name=?").setParameter(0, name).list();
-        return (!diagrams.isEmpty());
+        return diagrams.get(0);
     }
 
     public String createFolder(Folder folder) {
         LOG.debug("creating folder");
         Session session = sessionFactory.getCurrentSession();
-        List<Folder> folders = session.createQuery("from Folder where folderName=? and username=? and folderParent=?")
-                .setParameter(0, folder.getFolderName())
-                .setParameter(1, folder.getCreator().getUsername())
-                .setParameter(2, folder.getFolderParent())
+        List<Folder> folders = session.createQuery("from Folder where folderId=? and folderParent=? and folderName=?")
+                .setParameter(0, folder.getFolderId())
+                .setParameter(1, folder.getFolderParent())
+                .setParameter(2, folder.getFolderName())
                 .list();
 
         if (folders.isEmpty()) {
             session.save(folder);
             return "OK";
         }
-
-        return "This folder already exists.";
+        else {
+            return "This folder already exists.";
+        }
     }
 
     public List<String> showFoldersByUserName(String userName, String currentFolder) {

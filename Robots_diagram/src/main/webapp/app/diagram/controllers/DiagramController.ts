@@ -42,23 +42,20 @@ class DiagramController {
             url: 'getUser',
             dataType: 'text',
             success: function (response) {
-                console.log(response);
                 user = response;
             }
         });
         this.user = user;
 
         var folderId: string = this.user + this.currentFolder;
-        var empty: string = "";
         $.ajax({
             type: 'POST',
             url: 'createFolder',
             dataType: 'text',
             contentType: 'application/json',
-            data: (ExportManager.exportFolderToJSON(folderId, this.currentFolder, empty)),
+            data: (ExportManager.exportFolderToJSON(folderId, this.currentFolder, "")),
             success: function (response) {
                 console.log(response);
-                console.log("root folder was created");
             },
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);
@@ -397,21 +394,12 @@ class DiagramController {
         this.currentElement = undefined;
     }
 
-    private createNew(): void {
-        if (confirm('Do you want to save the current diagram?')) {
-            this.saveDiagram();
-        }
-        this.clear();
-    }
-
-    private saveDiagram(): void {
-        var name: string = prompt("input diagram name");
-        console.log(this.user);
+    private saveDiagram(name: string): void {
         var folderId: string = this.user + this.currentFolder;
-        console.log(folderId);
         $.ajax({
+            async: false,
             type: 'POST',
-            url: 'save',
+            url: 'saveDiagram',
             dataType: 'text',
             contentType: 'application/json',
             data: (ExportManager.exportDiagramStateToJSON(name, folderId, this.nodesMap, this.linksMap)),
@@ -422,32 +410,17 @@ class DiagramController {
                 console.log("error: " + status + " " + error);
             }
         });
-        this.showDiagram();
     }
 
-    private showDiagram() : void {
-        var folderId: string = this.user + this.currentFolder;
-        $.ajax({
-            type: 'POST',
-            url: 'showDiagramNames',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: (JSON.stringify({name: folderId})),
-            success: function(response) {
-                console.log(response);
-            }
-        });
-    }
-
-
-    private openDiagram(name: string): void {
+    private openDiagram(diagramName: string): void {
+        var folderId = this.user + this.currentFolder;
         var controller = this;
         $.ajax({
             type: 'POST',
-            url: 'open',
+            url: 'openDiagram',
             dataType: 'json',
             contentType: 'application/json',
-            data: (JSON.stringify({name: name})),
+            data: (ExportManager.exportDiagramRequestToJSON(diagramName, folderId)),
             success: function (response) {
                 controller.clear();
                 ImportManager.import(response, controller.graph, controller.nodesMap,
@@ -465,17 +438,24 @@ class DiagramController {
     private openFolderWindow(): void {
         this.showFolderMenu();
         this.showFolderTable(this.currentFolder);
+        this.clearSavingMenu();
+    }
+
+    private saveDiagramAs(): void {
+        this.showFolderMenu();
+        this.showFolderTable(this.currentFolder);
+        this.showSavingMenu();
     }
 
     private showFolderMenu(): void {
         this.clearFolderMenu();
         var controller = this;
-        $('.folderMenu').append("<button id=\"levelUp\"><span class='glyphicon glyphicon-arrow-left'></span></button>");
+        $('.folderMenu').append("<i id='levelUp'><span class='glyphicon glyphicon-arrow-left'></span></i>");
         $('.folderMenu #levelUp').click(function() {
             controller.levelUpFolder();
         });
 
-        $('.folderMenu').append("<button id=\"creatingMenu\"><span class='glyphicon glyphicon-plus'></span></button>");
+        $('.folderMenu').append("<i id='creatingMenu'><span class='glyphicon glyphicon-plus'></span></i>");
         $('.folderMenu #creatingMenu').click(function() {
             controller.showCreatingMenu();
         });
@@ -485,12 +465,12 @@ class DiagramController {
         var controller = this;
         this.clearFolderMenu();
         $('.folderMenu').append(
-            "<input type=\"text\">" +
-            "<button id=\"creating\"><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>" +
-            "<button id=\"cancelCreating\"><span class='glyphicon glyphicon-remove'></span></button>");
+            "<input type='text'>" +
+            "<i id='creating'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></i>" +
+            "<i id='cancelCreating'><span class='glyphicon glyphicon-remove'></span></i>");
 
         $('.folderMenu #creating').click(function() {
-            controller.clearWarning();
+            controller.clearWarning('.folderMenu p');
             if (controller.createFolder()) {
                 controller.openFolderWindow();
             }
@@ -501,6 +481,31 @@ class DiagramController {
         });
     }
 
+    private showSavingMenu(): void {
+        this.clearSavingMenu();
+        var controller = this;
+
+        $('.savingMenu').append("<b>Input diagram name</b><input type:text>");
+        $('.modal-footer').prepend("<button id='saving' type='button' class='btn btn-success'>Save</button>");
+
+        $('#saving').click(function() {
+            controller.clearWarning('.savingMenu p');
+            var name: string = $('.savingMenu input:text').val();
+            if (name === "") {
+                controller.writeWarning("Empty name", '.savingMenu');
+            }
+            else{
+                controller.saveDiagram(name);
+                $('#diagrams').modal('hide');
+            }
+        });
+    }
+
+    private clearSavingMenu(): void {
+        $('.savingMenu').empty();
+        $('.modal-footer #saving').remove();
+    }
+
     private clearFolderMenu(): void {
         $('.folderMenu').empty();
     }
@@ -509,15 +514,17 @@ class DiagramController {
         $('.folderTable').empty();
     }
 
-    private clearWarning(): void {
-        $('.folderMenu p').remove();
+    private clearWarning(place : string): void {
+        $(place).remove();
     }
 
     private showFolderTable(openingFolder: string): void {
         this.clearFolderTable();
         this.currentFolder = openingFolder;
         var controller = this;
+        var folderId = this.user + this.currentFolder;
         $.ajax({
+            async: false,
             type: 'POST',
             url: 'showFolders',
             dataType: 'json',
@@ -526,12 +533,33 @@ class DiagramController {
             success: function (response) {
                 $('.folderTable li').remove();
                 $.each(response, function (i) {
-                    $('.folderView ul').append("<li><span class=\"glyphicon glyphicon-folder-open\" aria-hidden=\"true\"></span>" +
-                        "<span class=\"glyphicon-class\">" + response[i] + "</span></li>");
+                    $('.folderView ul').append("<li class='folders'><span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>" +
+                        "<span class='glyphicon-class'>" + response[i] + "</span></li>");
                 });
-                $('.folderTable li').click(function () {
+                $('.folderTable .folders').click(function () {
                     controller.showFolderTable($(this).text());
                 });
+            }
+        });
+        $.ajax({
+            async: false,
+            type: 'POST',
+            url: 'showDiagramNames',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: (JSON.stringify({name: folderId})),
+            success: function(response) {
+                $.each(response, function (i) {
+                    $('.folderView ul').append("<li class='diagrams'><span class='glyphicon glyphicon-file' aria-hidden='true'></span>" +
+                        "<span class='glyphicon-class'>" + response[i] + "</span></li>");
+                });
+                $('.folderTable .diagrams').click(function () {
+                    controller.openDiagram($(this).text());
+                    $('#diagrams').modal('hide');
+                });
+            },
+            error: function() {
+                alert("err");
             }
         });
     }
@@ -545,7 +573,10 @@ class DiagramController {
             contentType: 'application/json',
             data: (JSON.stringify({name: this.currentFolder})),
             success: function (response) {
-                controller.showFolderTable(response);
+                if(response !== null) {
+                    controller.currentFolder = response;
+                    controller.showFolderTable(controller.currentFolder);
+                }
             },
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);
@@ -560,7 +591,7 @@ class DiagramController {
         var created: boolean = false;
         var folderId: string = this.user + name;
         if (name === "") {
-            this.writeWarning("Empty name");
+            this.writeWarning("Empty name", '.folderMenu');
         }
         else {
             $.ajax({
@@ -571,12 +602,11 @@ class DiagramController {
                 contentType: 'application/json',
                 data: (ExportManager.exportFolderToJSON(folderId, name, currentFolder)),
                 success: function (response) {
-                    console.log(response);
                     if (response === "OK") {
                         created = true;
                     }
                     else {
-                        controller.writeWarning(response);
+                        controller.writeWarning(response, '.folderMenu');
                         $('.folderMenu input:text').val('');
                     }
                 },
@@ -588,8 +618,8 @@ class DiagramController {
         return created;
     }
 
-    private writeWarning(message : string) : void {
-        $('.folderMenu').append("<p class=\"warningMessage\">" + message + "</p>");
+    private writeWarning(message : string, place : string) : void {
+        $(place).append("<p class='warningMessage'>" + message + "</p>");
     }
 
     private makeUnselectable(element) {

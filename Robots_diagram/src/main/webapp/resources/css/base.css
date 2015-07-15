@@ -162,7 +162,7 @@ body{
 
 .folderView {
     width: 100%;
-    height: 250px;
+    height: 300px;
     overflow-y: scroll;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
@@ -179,6 +179,7 @@ body{
     text-align: center;
     word-wrap: break-word;
     font-size: large;
+    color: #101010;
 }
 
 .folderTable {
@@ -188,17 +189,19 @@ body{
 
 .folderTable li {
     float: left;
-    width: 25%;
+    width: 20%;
     height: 115px;
     padding: 10px;
     font-size: 10px;
     line-height: 1.4;
     text-align: center;
     border: 1px solid #fff;
+    color: grey;
 }
 
 .folderTable li:hover {
     background-color: lavender;
+    border-radius: 10px;
 }
 
 .folderMenu {
@@ -207,10 +210,30 @@ body{
     margin: 15px;
 }
 
-.folderMenu > button {
-    margin-left: 3px;
+.folderMenu > i, .folderMenu > input {
+    margin-left: 5px;
+    font-size: 25px;
 }
 
-.warningMessage {
+#creating {
+    color: forestgreen;
+}
+
+#cancelCreating, .warningMessage {
     color: #d43f3a;
+}
+
+#levelUp, #creatingMenu{
+    color: grey;
+}
+
+.savingMenu {
+    height: 30px;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.savingMenu > input {
+    width: 70%;
+    margin-left: 10px;
 }

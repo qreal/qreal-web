@@ -2,6 +2,7 @@ package com.qreal.robots.service;
 
 import com.qreal.robots.dao.DiagramDAO;
 import com.qreal.robots.model.diagram.Diagram;
+import com.qreal.robots.model.diagram.DiagramRequest;
 import com.qreal.robots.model.diagram.Folder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,31 +25,12 @@ public class DiagramServiceImpl implements DiagramService {
 
     @Transactional
     @Override
-    public String save(Diagram diagram) { return diagramDAO.save(diagram); }
+    public String saveDiagram(Diagram diagram) { return diagramDAO.save(diagram); }
 
     @Transactional
     @Override
-    public Diagram openById(Long diagramId) {
-        return diagramDAO.openById(diagramId);
-    }
-
-    @Transactional
-    @Override
-    public Diagram openByName(String name) {
-        return diagramDAO.openByName(name);
-    }
-
-    @Transactional
-    @Override
-    public List<String> showDiagramsByUserName() {
-        String creatorName = SecurityContextHolder.getContext().getAuthentication().getName();
-        return diagramDAO.showDiagramsByUserName(creatorName);
-    }
-
-    @Transactional
-    @Override
-    public boolean exists(String name) {
-        return diagramDAO.exists(name);
+    public Diagram openDiagram(DiagramRequest request) {
+        return diagramDAO.openDiagram(request);
     }
 
     @Transactional

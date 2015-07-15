@@ -23,6 +23,15 @@ class ExportManager {
         return JSON.stringify(json);
     }
 
+    static exportDiagramRequestToJSON(name: string, folderId: string): string {
+        var json = {
+            'diagramName': name,
+            'folderId': folderId
+        }
+
+        return JSON.stringify(json);
+    }
+
     private static exportNodes(json, nodesMap) {
         for (var id in nodesMap) {
             var node: DiagramNode = nodesMap[id];
