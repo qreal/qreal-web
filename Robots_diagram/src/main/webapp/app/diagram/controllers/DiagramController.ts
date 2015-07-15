@@ -19,6 +19,8 @@ class DiagramController {
     private currentFolderId: string;
     private user: string;
     private folderLevel: number;
+    private currentDiagramName: string;
+    private currentDiagramFolderId: string;
 
     constructor($scope, $compile) {
 
@@ -36,6 +38,8 @@ class DiagramController {
         this.initCustomContextMenu();
         this.currentFolderId = "userroot_0";
         this.folderLevel = 0;
+        this.currentDiagramFolderId = "";
+        this.currentDiagramName = "";
 
         var user: string;
         $.ajax({
@@ -403,7 +407,21 @@ class DiagramController {
         this.currentElement = undefined;
     }
 
-    private saveDiagram(name: string): void {
+    private createNewDiagram(): void {
+        if (confirm("Do you want to save current diagram?")) {
+            this.saveCurrentDiagram();
+        }
+
+        this.currentDiagramName = "";
+        this.currentDiagramFolderId = "";
+        this.clear();
+    }
+
+    private saveDiagram(name: string): boolean {
+        var saved: boolean = false;
+        this.currentDiagramName = name;
+        this.currentDiagramFolderId = this.currentFolderId;
+        var controller = this;
         $.ajax({
             async: false,
             type: 'POST',
@@ -413,15 +431,43 @@ class DiagramController {
             data: (ExportManager.exportDiagramStateToJSON(name, this.currentFolderId, this.nodesMap, this.linksMap)),
             success: function (response) {
                 console.log(response);
+                saved = (response === "OK");
             },
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);
             }
         });
+        return saved;
+    }
+
+    private saveCurrentDiagram(): void {
+        var controller = this;
+        if(this.currentDiagramName === "") {
+            this.saveDiagramAs();
+            $('#diagrams').modal('show');
+        }
+        else {
+            $.ajax({
+                async: false,
+                type: 'POST',
+                url: 'rewriteDiagram',
+                dataType: 'text',
+                contentType: 'application/json',
+                data: (ExportManager.exportDiagramStateToJSON(this.currentDiagramName, this.currentDiagramFolderId, this.nodesMap, this.linksMap)),
+                success: function (response) {
+                    console.log(response);
+                },
+                error: function (response, status, error) {
+                    console.log("error: " + status + " " + error);
+                }
+            });
+        }
     }
 
     private openDiagram(diagramName: string): void {
         var controller = this;
+        this.currentDiagramName = diagramName;
+        this.currentDiagramFolderId = this.currentFolderId;
         $.ajax({
             type: 'POST',
             url: 'openDiagram',
@@ -443,9 +489,14 @@ class DiagramController {
     }
 
     private openFolderWindow(): void {
+        var controller = this;
         this.showFolderMenu();
         this.showFolderTable(this.currentFolderId);
         this.clearSavingMenu();
+        $('.folderTable .diagrams').click(function () {
+            controller.openDiagram($(this).text());
+            $('#diagrams').modal('hide');
+        });
     }
 
     private saveDiagramAs(): void {
@@ -503,10 +554,14 @@ class DiagramController {
                 controller.writeWarning("Empty name", '.savingMenu');
             }
             else{
-                controller.saveDiagram(name);
-                controller.currentFolderId = "userroot_0";
-                controller.folderLevel = 0;
-                $('#diagrams').modal('hide');
+                if (controller.saveDiagram(name)) {
+                    controller.currentFolderId = "userroot_0";
+                    controller.folderLevel = 0;
+                    $('#diagrams').modal('hide');
+                }
+                else {
+                    controller.writeWarning("This diagram already exists.", '.savingMenu');
+                }
             }
         });
     }
@@ -563,10 +618,6 @@ class DiagramController {
                 $.each(response, function (i) {
                     $('.folderView ul').append("<li class='diagrams'><span class='glyphicon glyphicon-file' aria-hidden='true'></span>" +
                         "<span class='glyphicon-class'>" + response[i] + "</span></li>");
-                });
-                $('.folderTable .diagrams').click(function () {
-                    controller.openDiagram($(this).text());
-                    $('#diagrams').modal('hide');
                 });
             },
             error: function() {
