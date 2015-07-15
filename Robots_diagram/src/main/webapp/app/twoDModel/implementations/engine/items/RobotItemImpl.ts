@@ -128,7 +128,7 @@ class RobotItemImpl implements RobotItem {
             ,move = function (dx, dy) {
                 if (!worldModel.getDrawMode()) {
                     robotItem.image.transform("R" + robotItem.angle + "," + robotItem.center.x + "," + robotItem.center.y + "T" + dx + "," + dy);
-                    robotItem.transformSensorsItems("t" + dx + "," + dy);
+                    robotItem.transformSensorsItems("T" + dx + "," + dy);
                     this.tmpDx = dx;
                     this.tmpDy = dy;
 
@@ -217,6 +217,10 @@ class RobotItemImpl implements RobotItem {
         }*/
     }
 
+    public getAngle() : number {
+        return this.angle;
+    }
+
     notifySensors() : void {
         for (var portName in this.sensors){
             var sensor = this.sensors[portName];
@@ -244,6 +248,10 @@ class RobotItemImpl implements RobotItem {
         this.rotateHandle.show();
     }
 
+    getCenterPosition() : TwoDPosition {
+        return this.center;
+    }
+
     getWidth(): number {
         return this.width;
     }
@@ -253,7 +261,7 @@ class RobotItemImpl implements RobotItem {
     }
 
     getAngleInRadian() : number {
-        return this.angle;
+        return this.angle * Math.PI / 180.0;
     }
 
     getCurrentPosition() : TwoDPosition {
@@ -279,8 +287,6 @@ class RobotItemImpl implements RobotItem {
         } else {
             sensor = new SensorItem(this, this.worldModel, sensorType, pathToImage);
         }
-        sensor.transform(this.image.transform());
-        sensor.updateTransformationString();
         this.sensors[portName] = sensor;
     }
 
