@@ -408,13 +408,18 @@ class DiagramController {
     }
 
     private createNewDiagram(): void {
-        if (confirm("Do you want to save current diagram?")) {
-            this.saveCurrentDiagram();
-        }
+        var controller = this;
+        $('#confirmNew').modal('show');
+        $('#confirmNew button').click(function() {
+            $('#confirmNew').modal('hide');
+        });
+        $('#saveAfterCreate').click(function() {
+            controller.saveCurrentDiagram();
+            controller.currentDiagramName = "";
+            controller.currentDiagramFolderId = "";
+            controller.clear();
+        });
 
-        this.currentDiagramName = "";
-        this.currentDiagramFolderId = "";
-        this.clear();
     }
 
     private saveDiagram(name: string): boolean {
@@ -468,6 +473,7 @@ class DiagramController {
         var controller = this;
         this.currentDiagramName = diagramName;
         this.currentDiagramFolderId = this.currentFolderId;
+        this.currentFolderId = "userroot_0";
         $.ajax({
             type: 'POST',
             url: 'openDiagram',
@@ -489,14 +495,9 @@ class DiagramController {
     }
 
     private openFolderWindow(): void {
-        var controller = this;
         this.showFolderMenu();
         this.showFolderTable(this.currentFolderId);
         this.clearSavingMenu();
-        $('.folderTable .diagrams').click(function () {
-            controller.openDiagram($(this).text());
-            $('#diagrams').modal('hide');
-        });
     }
 
     private saveDiagramAs(): void {
@@ -545,7 +546,7 @@ class DiagramController {
         var controller = this;
 
         $('.savingMenu').append("<b>Input diagram name</b><input type:text>");
-        $('.modal-footer').prepend("<button id='saving' type='button' class='btn btn-success'>Save</button>");
+        $('#diagrams .modal-footer').prepend("<button id='saving' type='button' class='btn btn-success'>Save</button>");
 
         $('#saving').click(function() {
             controller.clearWarning('.savingMenu p');
@@ -618,6 +619,10 @@ class DiagramController {
                 $.each(response, function (i) {
                     $('.folderView ul').append("<li class='diagrams'><span class='glyphicon glyphicon-file' aria-hidden='true'></span>" +
                         "<span class='glyphicon-class'>" + response[i] + "</span></li>");
+                });
+                $('.folderTable .diagrams').click(function () {
+                    controller.openDiagram($(this).text());
+                    $('#diagrams').modal('hide');
                 });
             },
             error: function() {
