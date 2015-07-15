@@ -17,9 +17,9 @@ public interface DiagramDAO {
 
     public String createFolder(Folder folder);
 
-    public List<String> showFoldersByUserName(String userName, String currentFolder);
+    public List<String> showFoldersByUserName(String currentFolderId);
 
-    public String getParentFolder(String userName, String currentFolder);
+    public String getParentFolder(String currentFolderId);
 
     public List<String> showDiagramNames(String folderId);
 }

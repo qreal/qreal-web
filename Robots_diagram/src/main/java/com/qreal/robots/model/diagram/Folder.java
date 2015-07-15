@@ -21,8 +21,8 @@ public class Folder implements Serializable{
     @Column(name = "folder_name")
     private String folderName;
 
-    @Column(name = "folder_parent")
-    private String folderParent;
+    @Column(name = "folder_parent_id")
+    private String folderParentId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username", nullable = false)
@@ -36,9 +36,9 @@ public class Folder implements Serializable{
 
     public String getFolderName() { return this.folderName; }
 
-    public void setFolderParent(String folderParent) { this.folderParent = folderParent; }
+    public void setFolderParentId(String folderParentId) { this.folderParentId = folderParentId; }
 
-    public String getFolderParent() { return this.folderParent; }
+    public String getFolderParentId() { return this.folderParentId; }
 
     public void setCreator(User creator) { this.creator = creator; }
 
