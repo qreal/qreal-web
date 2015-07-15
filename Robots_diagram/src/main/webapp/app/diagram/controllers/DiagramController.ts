@@ -532,7 +532,6 @@ class DiagramController {
         this.clearFolderTable();
         this.currentFolderId = openingFolderId;
         var controller = this;
-        console.log(this.currentFolderId);
         $.ajax({
             async: false,
             type: 'POST',
@@ -548,7 +547,8 @@ class DiagramController {
                 });
                 $('.folderTable .folders').click(function () {
                     controller.folderLevel++;
-                    controller.showFolderTable($(this).text());
+                    var folderId: string = controller.user + $(this).text() + "_" + controller.folderLevel;
+                    controller.showFolderTable(folderId);
                 });
             }
         });
@@ -578,6 +578,7 @@ class DiagramController {
     private levelUpFolder(): void {
         var controller = this;
         if (this.currentFolderId !== "userroot_0") {
+            this.folderLevel--;
             $.ajax({
                 async: false,
                 type: 'POST',
@@ -587,7 +588,6 @@ class DiagramController {
                 data: (JSON.stringify({name: this.currentFolderId})),
                 success: function (response) {
                     controller.currentFolderId = response;
-                    controller.folderLevel--;
                     controller.showFolderTable(controller.currentFolderId);
                 },
                 error: function (response, status, error) {
@@ -601,8 +601,8 @@ class DiagramController {
         var name: string = $('.folderMenu input:text').val();
         var controller = this;
         var created: boolean = false;
-        var folderId: string = this.user + name + "_" + this.folderLevel;
-        console.log(folderId);
+        var newFolderLevel: number = this.folderLevel + 1;
+        var folderId: string = this.user + name + "_" + newFolderLevel;
         if (name === "") {
             this.writeWarning("Empty name", '.folderMenu');
         }
