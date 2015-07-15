@@ -15,6 +15,8 @@ public interface DiagramService {
 
     public Diagram openDiagram(DiagramRequest request);
 
+    public String rewriteDiagram(Diagram diagram);
+
     public String createFolder(Folder folder);
 
     public List<String> showFoldersByUserName(String currentFolderId);

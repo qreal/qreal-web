@@ -56,6 +56,18 @@ public class DiagramDAOImpl implements DiagramDAO {
         return diagrams.get(0);
     }
 
+    public String rewriteDiagram(Diagram diagram) {
+        Session session = sessionFactory.getCurrentSession();
+        List<Diagram> diagrams = session.createQuery("from Diagram where folderId=? and name=?")
+                .setParameter(0, diagram.getFolderId())
+                .setParameter(1, diagram.getName())
+                .list();
+
+        session.delete(diagrams.get(0));
+        session.save(diagram);
+        return("OK");
+    }
+
     public String createFolder(Folder folder) {
         LOG.debug("creating folder");
         Session session = sessionFactory.getCurrentSession();

@@ -35,6 +35,10 @@ public class DiagramServiceImpl implements DiagramService {
 
     @Transactional
     @Override
+    public String rewriteDiagram(Diagram diagram) { return diagramDAO.rewriteDiagram(diagram); }
+
+    @Transactional
+    @Override
     public String createFolder(Folder folder) {
         String creatorName = SecurityContextHolder.getContext().getAuthentication().getName();
         folder.setCreator(userService.findByUserName(creatorName));
