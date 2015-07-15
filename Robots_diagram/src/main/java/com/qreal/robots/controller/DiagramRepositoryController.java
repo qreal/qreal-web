@@ -1,6 +1,7 @@
 package com.qreal.robots.controller;
 
 import com.qreal.robots.model.diagram.Diagram;
+import com.qreal.robots.model.diagram.DiagramRequest;
 import com.qreal.robots.model.diagram.Folder;
 import com.qreal.robots.model.diagram.OpenRequest;
 import com.qreal.robots.service.DiagramService;
@@ -24,24 +25,22 @@ public class DiagramRepositoryController {
     private DiagramService diagramService;
 
     @ResponseBody
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(@RequestBody Diagram diagram) {
-        return diagramService.save(diagram);
+    @RequestMapping(value = "/saveDiagram", method = RequestMethod.POST)
+    public String saveDiagram(@RequestBody Diagram diagram) {
+        return diagramService.saveDiagram(diagram);
     }
 
     @ResponseBody
-    @RequestMapping(value = "/open", method = RequestMethod.POST)
-    public Diagram open(@RequestBody OpenRequest request) {
-        return diagramService.openByName(request.getName());
+    @RequestMapping(value = "/openDiagram", method = RequestMethod.POST)
+    public Diagram openDiagram(@RequestBody DiagramRequest request) {
+        return diagramService.openDiagram(request);
     }
 
     @ResponseBody
-    @RequestMapping(value = "/show", method = RequestMethod.POST)
-    public List<String> showByUserName() { return diagramService.showDiagramsByUserName(); }
-
-    @ResponseBody
-    @RequestMapping(value = "/exists", method = RequestMethod.POST)
-    public boolean exists(@RequestBody OpenRequest request) { return diagramService.exists(request.getName()); }
+    @RequestMapping(value = "/showDiagramNames", method = RequestMethod.POST)
+    public List<String> showDiagramNames(@RequestBody OpenRequest request) {
+        return diagramService.showDiagramNames(request.getName());
+    }
 
     @ResponseBody
     @RequestMapping(value = "/createFolder", method = RequestMethod.POST)
@@ -64,10 +63,4 @@ public class DiagramRepositoryController {
     @ResponseBody
     @RequestMapping(value = "/getUser", method = RequestMethod.POST)
     public String getUserName() { return diagramService.getUserName(); }
-
-    @ResponseBody
-    @RequestMapping(value = "/showDiagramNames", method = RequestMethod.POST)
-    public List<String> showDiagramNames(@RequestBody OpenRequest request) {
-        return diagramService.showDiagramNames(request.getName());
-    }
 }

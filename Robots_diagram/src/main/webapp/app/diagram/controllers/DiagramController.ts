@@ -42,23 +42,20 @@ class DiagramController {
             url: 'getUser',
             dataType: 'text',
             success: function (response) {
-                console.log(response);
                 user = response;
             }
         });
         this.user = user;
 
         var folderId: string = this.user + this.currentFolder;
-        var empty: string = "";
         $.ajax({
             type: 'POST',
             url: 'createFolder',
             dataType: 'text',
             contentType: 'application/json',
-            data: (ExportManager.exportFolderToJSON(folderId, this.currentFolder, empty)),
+            data: (ExportManager.exportFolderToJSON(folderId, this.currentFolder, "")),
             success: function (response) {
                 console.log(response);
-                console.log("root folder was created");
             },
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);
@@ -397,21 +394,12 @@ class DiagramController {
         this.currentElement = undefined;
     }
 
-    private createNew(): void {
-        if (confirm('Do you want to save the current diagram?')) {
-            this.saveDiagram();
-        }
-        this.clear();
-    }
-
-    private saveDiagram(): void {
-        var name: string = prompt("input diagram name");
-        console.log(this.user);
+    private saveDiagram(name: string): void {
         var folderId: string = this.user + this.currentFolder;
-        console.log(folderId);
         $.ajax({
+            async: false,
             type: 'POST',
-            url: 'save',
+            url: 'saveDiagram',
             dataType: 'text',
             contentType: 'application/json',
             data: (ExportManager.exportDiagramStateToJSON(name, folderId, this.nodesMap, this.linksMap)),
@@ -422,32 +410,17 @@ class DiagramController {
                 console.log("error: " + status + " " + error);
             }
         });
-        this.showDiagram();
     }
 
-    private showDiagram() : void {
-        var folderId: string = this.user + this.currentFolder;
-        $.ajax({
-            type: 'POST',
-            url: 'showDiagramNames',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: (JSON.stringify({name: folderId})),
-            success: function(response) {
-                console.log(response);
-            }
-        });
-    }
-
-
-    private openDiagram(name: string): void {
+    private openDiagram(diagramName: string): void {
+        var folderId = this.user + this.currentFolder;
         var controller = this;
         $.ajax({
             type: 'POST',
-            url: 'open',
+            url: 'openDiagram',
             dataType: 'json',
             contentType: 'application/json',
-            data: (JSON.stringify({name: name})),
+            data: (ExportManager.exportDiagramRequestToJSON(diagramName, folderId)),
             success: function (response) {
                 controller.clear();
                 ImportManager.import(response, controller.graph, controller.nodesMap,
@@ -522,6 +495,7 @@ class DiagramController {
                 controller.writeWarning("Empty name", '.savingMenu');
             }
             else{
+                controller.saveDiagram(name);
                 $('#diagrams').modal('hide');
             }
         });
@@ -548,7 +522,9 @@ class DiagramController {
         this.clearFolderTable();
         this.currentFolder = openingFolder;
         var controller = this;
+        var folderId = this.user + this.currentFolder;
         $.ajax({
+            async: false,
             type: 'POST',
             url: 'showFolders',
             dataType: 'json',
@@ -557,12 +533,33 @@ class DiagramController {
             success: function (response) {
                 $('.folderTable li').remove();
                 $.each(response, function (i) {
-                    $('.folderView ul').append("<li><span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>" +
+                    $('.folderView ul').append("<li class='folders'><span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>" +
                         "<span class='glyphicon-class'>" + response[i] + "</span></li>");
                 });
-                $('.folderTable li').click(function () {
+                $('.folderTable .folders').click(function () {
                     controller.showFolderTable($(this).text());
                 });
+            }
+        });
+        $.ajax({
+            async: false,
+            type: 'POST',
+            url: 'showDiagramNames',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: (JSON.stringify({name: folderId})),
+            success: function(response) {
+                $.each(response, function (i) {
+                    $('.folderView ul').append("<li class='diagrams'><span class='glyphicon glyphicon-file' aria-hidden='true'></span>" +
+                        "<span class='glyphicon-class'>" + response[i] + "</span></li>");
+                });
+                $('.folderTable .diagrams').click(function () {
+                    controller.openDiagram($(this).text());
+                    $('#diagrams').modal('hide');
+                });
+            },
+            error: function() {
+                alert("err");
             }
         });
     }
@@ -576,7 +573,10 @@ class DiagramController {
             contentType: 'application/json',
             data: (JSON.stringify({name: this.currentFolder})),
             success: function (response) {
-                controller.showFolderTable(response);
+                if(response !== null) {
+                    controller.currentFolder = response;
+                    controller.showFolderTable(controller.currentFolder);
+                }
             },
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);
@@ -602,7 +602,6 @@ class DiagramController {
                 contentType: 'application/json',
                 data: (ExportManager.exportFolderToJSON(folderId, name, currentFolder)),
                 success: function (response) {
-                    console.log(response);
                     if (response === "OK") {
                         created = true;
                     }

@@ -1,6 +1,7 @@
 package com.qreal.robots.dao;
 
 import com.qreal.robots.model.diagram.Diagram;
+import com.qreal.robots.model.diagram.DiagramRequest;
 import com.qreal.robots.model.diagram.Folder;
 
 import java.util.List;
@@ -12,13 +13,7 @@ public interface DiagramDAO {
 
     public String save(Diagram diagram);
 
-    public Diagram openById(Long diagramId);
-
-    public Diagram openByName(String name);
-
-    public List<String> showDiagramsByUserName(String userName);
-
-    public boolean exists(String name);
+    public Diagram openDiagram(DiagramRequest request);
 
     public String createFolder(Folder folder);
 
