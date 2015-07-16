@@ -119,8 +119,9 @@
                         <p>Do you want to save current diagram?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" id="saveAfterCreate">Yes</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-default" id="saveAfterCreate" data-dismiss="modal">Yes</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clearAll()">No</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
