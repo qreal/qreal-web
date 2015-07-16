@@ -62,9 +62,7 @@ class DiagramController {
             dataType: 'text',
             contentType: 'application/json',
             data: (ExportManager.exportFolderToJSON(this.currentFolderId, "root", "")),
-            success: function (response) {
-                console.log(response);
-            },
+            success: function () {},
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);
             }
@@ -493,7 +491,6 @@ class DiagramController {
                 console.log("error: " + status + " " + error);
             }
         });
-        console.log(this.currentDiagramName);
     }
 
     private createNewDiagram(): void {
