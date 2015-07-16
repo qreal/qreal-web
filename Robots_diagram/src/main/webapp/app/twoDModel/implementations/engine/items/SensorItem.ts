@@ -36,12 +36,14 @@ class SensorItem implements AbstractItem {
 
         this.image.transform("R" + this.angle + "," +  this.parentCenter.x + "," + this.parentCenter.y);
         var dx = this.center.x - this.parentCenter.x;
-        var dy = this.center.y - this.parentCenter.y
+        var dy = this.center.y - this.parentCenter.y;
 
         var angleInRad = this.toRadian(this.angle);
 
         var newDx = dx * Math.cos(angleInRad) - dy * Math.sin(angleInRad);
         var newDy = dx * Math.sin(angleInRad) + dy * Math.cos(angleInRad);
+
+        console.log(newDx + " " + newDy);
 
         this.center.x = this.parentCenter.x + newDx;
         this.center.y = this.parentCenter.y + newDy;
@@ -57,8 +59,8 @@ class SensorItem implements AbstractItem {
 
         var sensorItem = this;
 
-        this.rotateHandle = paper.circle(this.parentCenter.x + this.radiusFromParent * Math.cos(this.angle),
-               this.parentCenter.y + this.radiusFromParent * Math.sin(this.angle), this.handleRadius).attr(handleAttrs);
+        this.rotateHandle = paper.circle(this.parentCenter.x + this.radiusFromParent * Math.cos(angleInRad),
+               this.parentCenter.y + this.radiusFromParent * Math.sin(angleInRad), this.handleRadius).attr(handleAttrs);
 
         this.outterAngle = this.angle;
         this.innerAngle = this.angle;
