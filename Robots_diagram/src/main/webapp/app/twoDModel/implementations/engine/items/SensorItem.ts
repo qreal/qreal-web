@@ -267,7 +267,25 @@ class SensorItem implements AbstractItem {
     }
 
     private rotateSensor(angle : number, x : number, y: number) {
-
+        var wasCenter : TwoDPosition = this.center;
+        console.log(angle + ", " + x + ", " + y);
+        var dxCentr = this.center.x - x;
+        var dyCentr = this.center.y - y;
+        var dxHandle = this.rotateHandle.attr("cx") - x;
+        var dyHandle = this.rotateHandle.attr("cy") - y;
+        var angleInRadian = this.toRadian(angle);
+        var newXC = dxCentr * Math.cos(angleInRadian) - dyCentr * Math.sin(angleInRadian);
+        var newYC = dxCentr * Math.sin(angleInRadian) + dyCentr * Math.cos(angleInRadian);
+        this.center.x = newXC + x;
+        this.center.y = newYC + y;
+        newXC = dxHandle * Math.cos(angleInRadian) - dyHandle * Math.sin(angleInRadian);
+        newYC = dxHandle * Math.sin(angleInRadian) + dyHandle * Math.cos(angleInRadian);
+        this.rotateHandle.attr({"cx" : x + newXC, "cy" : y + newYC});
+        this.angle += angle;
+        this.image.transform("");
+        var CCX = this.center.x - wasCenter.x;
+        var CCY = this.center.y - wasCenter.y;
+        this.transform("T" + CCX + "," + CCY);
     }
 
     updateTransformationString(): void {

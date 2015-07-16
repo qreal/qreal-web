@@ -80,8 +80,10 @@ class RobotItemImpl implements RobotItem {
                     console.log(robotItem.center.x + " " + robotItem.center.y);
                     console.log(this.cx + " " + this.cy + " dif == " + dx + " " + dy);
 
+                    var diffAngle = angle - robotItem.angle;
+
                     robotItem.image.transform("R" + angle + "," + robotItem.center.x + "," + robotItem.center.y);
-                    robotItem.transformSensorsItems("R" + angle + "," + robotItem.center.x + "," + robotItem.center.y);
+                    robotItem.transformSensorsItems("R" + diffAngle + "," + robotItem.center.x + "," + robotItem.center.y);
 
                     var angleInRad = angle * Math.PI / 180.0;
                     var newCx = Math.cos(angleInRad) * (robotItem.width / 2 + 20) + robotItem.center.x;
