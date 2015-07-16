@@ -147,6 +147,10 @@ class RobotItemImpl implements RobotItem {
                     robotItem.updateSensorsTransformations();
                 }
 
+                console.log("Robot at the point : " + robotItem.center.x + " " + robotItem.center.y);
+                console.log("Robot rotate on :" + robotItem.getAngle());
+                console.log(robotItem.image.transform());
+
                 return this;
             };
         this.image.drag(move, start, up);
