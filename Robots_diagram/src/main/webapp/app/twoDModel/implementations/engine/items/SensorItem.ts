@@ -241,14 +241,12 @@ class SensorItem implements AbstractItem {
         var tmp : string = "";
         for (var i = 1; i < transformationString.length; i++)
             tmp = tmp + transformationString[i];
-        console.log(tmp);
         if (transformationString[0] === 'T') {
             var shifts : string[] = tmp.split(",");
-            for (var j = 0; j < shifts.length; j++)
-                console.log(shifts[j]);
             this.translateSensor(parseInt(shifts[0]), parseInt(shifts[1]));
         } else {
-
+            var params : string[] = tmp.split(",");
+            this.rotateSensor(parseFloat(params[0]), parseFloat(params[1]), parseFloat(params[2]));
         }
      //   this.image.transform(this.transformationString + transformationString);
        // var newCx = this.image.matrix.x(this.start.x + this.width / 2 + 20, this.start.y);
