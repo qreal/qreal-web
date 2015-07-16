@@ -1,6 +1,6 @@
 class SensorItem implements AbstractItem {
     protected robotItem: RobotItem;
-    protected image: RaphaelElement;
+    protected image;
     protected angle : number;
     protected width: number = 20;
     protected height: number = 20;
@@ -135,6 +135,9 @@ class SensorItem implements AbstractItem {
         sensorItem.rotateHandle.drag(moveHandle, startHandle, upHandle);
 
         var start = function () {
+
+                this.tmpDx = 0;
+                this.tmpDy = 0;
                 if (!worldModel.getDrawMode()) {
                     this.handle_cx = sensorItem.rotateHandle.attr("cx");
                     this.handle_cy = sensorItem.rotateHandle.attr("cy");
@@ -142,24 +145,32 @@ class SensorItem implements AbstractItem {
                 }
                 return this;
             }
-            ,move = function (dx, dy) {
-                if (!worldModel.getDrawMode()) {
-                    sensorItem.transform("T" + dx + "," + dy);
 
-                    sensorItem.rotateHandle.attr({"cx": this.handle_cx + dx, "cy": this.handle_cy + dy});
+            ,move = function (dx, dy) {
+
+                if (!worldModel.getDrawMode()) {
+                    sensor.image.transform("R" + sensor.angle + "," + sensor.center.x + "," + sensor.center.y + "T" + dx + "," + dy);
+                    this.tmpDx = dx;
+                    this.tmpDy = dy;
+                    sensor.rotateHandle.attr({"cx": this.handle_cx + dx, "cy": this.handle_cy + dy});
                 }
                 return this;
             }
             ,up = function () {
                 if (!worldModel.getDrawMode()) {
-                    sensorItem.center.x = this.matrix.x(sensorItem.start.x, sensorItem.start.y);
-                    sensorItem.center.y = this.matrix.y(sensorItem.start.x, sensorItem.start.y);
+
+                    sensor.center.x += this.tmpDx;
+                    sensor.center.y += this.tmpDy;
+                    sensor.image.transform("");
+                    sensor.image.attr({"x" : sensor.center.x - sensor.height / 2, "y" : sensor.center.y - sensor.width / 2});
+                    sensor.image.transform("R" + sensor.angle + "," + sensor.image.x + "," + sensor.image.y);
+
                 }
-                sensorItem.updateTransformationString();
                 return this;
-            }
-    //    this.image.drag(move, start, up);
-      //  this.hideHandles();
+            };
+
+        this.image.drag(move, start, up);
+        this.hideHandles();
     }
 
     show(): void {
@@ -173,11 +184,6 @@ class SensorItem implements AbstractItem {
         return;
     }
 
-    private getDelta() : TwoDPosition {
-        var x = 20 * Math.cos(this.angle);
-        var y = 20 * Math.sin(this.angle);
-        return new TwoDPosition(x, y);
-    }
 
     getDefaultPosition(): TwoDPosition {
         return new TwoDPosition(this.robotItem.getCenterPosition().x + this.robotItem.getWidth() + this.width / 2,
@@ -229,15 +235,45 @@ class SensorItem implements AbstractItem {
     }
 }
 
-    transform(transformationString): void {
-        this.image.transform(this.transformationString + transformationString);
-        var newCx = this.image.matrix.x(this.start.x + this.width / 2 + 20, this.start.y);
-        var newCy = this.image.matrix.y(this.start.x + this.width / 2 + 20, this.start.y);
-        this.rotateHandle.attr({cx: newCx, cy: newCy});
+    transform(transformationString : string): void {
+
+        var tmpPosition = this.robotItem.getCenterPosition();
+        var tmp : string = "";
+        for (var i = 1; i < transformationString.length; i++)
+            tmp = tmp + transformationString[i];
+        console.log(tmp);
+        if (transformationString[0] === 'T') {
+            var shifts : string[] = tmp.split(",");
+            for (var j = 0; j < shifts.length; j++)
+                console.log(shifts[j]);
+            this.translateSensor(parseInt(shifts[0]), parseInt(shifts[1]));
+        } else {
+
+        }
+     //   this.image.transform(this.transformationString + transformationString);
+       // var newCx = this.image.matrix.x(this.start.x + this.width / 2 + 20, this.start.y);
+       // var newCy = this.image.matrix.y(this.start.x + this.width / 2 + 20, this.start.y);
+       // this.rotateHandle.attr({cx: newCx, cy: newCy});
+    }
+
+    private translateSensor(dx : number, dy : number) {
+        var cx = this.rotateHandle.attr("cx");
+        var cy = this.rotateHandle.attr("cy");
+        this.rotateHandle.attr({"cx" : cx + dx, "cy" : cy + dy});
+        var sensor = this;
+        sensor.center.x += dx;
+        sensor.center.y += dy;
+        sensor.image.transform("");
+        sensor.image.attr({"x" : sensor.center.x - sensor.height / 2, "y" : sensor.center.y - sensor.width / 2});
+        sensor.image.transform("R" + sensor.angle + "," + sensor.image.x + "," + sensor.image.y);
+    }
+
+    private rotateSensor(angle : number, x : number, y: number) {
+
     }
 
     updateTransformationString(): void {
-        this.transformationString = this.image.transform();
+        //this.transformationString = this.image.transform();
     }
 
     rotate(angle: number) {

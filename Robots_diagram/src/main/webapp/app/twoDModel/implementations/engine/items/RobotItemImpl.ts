@@ -117,6 +117,8 @@ class RobotItemImpl implements RobotItem {
                 robotItem.beforeRotateTransformationPositionCenter = robotItem.center;
                 this.tmpDx = 0;
                 this.tmpDy = 0;
+                this.lastDx = 0;
+                this.lastDy = 0;
                 if (!worldModel.getDrawMode()) {
                     robotItem.updateSensorsTransformations();
                     this.handle_cx = robotItem.rotateHandle.attr("cx");
@@ -126,11 +128,15 @@ class RobotItemImpl implements RobotItem {
                 return this;
             }
             ,move = function (dx, dy) {
+                var newDx = dx - this.lastDx;
+                var newDy = dy - this.lastDy;
                 if (!worldModel.getDrawMode()) {
                     robotItem.image.transform("R" + robotItem.angle + "," + robotItem.center.x + "," + robotItem.center.y + "T" + dx + "," + dy);
-                    robotItem.transformSensorsItems("T" + dx + "," + dy);
+                    robotItem.transformSensorsItems("T" + newDx + "," + newDy);
                     this.tmpDx = dx;
                     this.tmpDy = dy;
+                    this.lastDx = dx;
+                    this.lastDy = dy;
 
                     robotItem.rotateHandle.attr({"cx": this.handle_cx + dx, "cy": this.handle_cy + dy});
                 }
@@ -153,6 +159,7 @@ class RobotItemImpl implements RobotItem {
 
                 return this;
             };
+
         this.image.drag(move, start, up);
         this.hideHandles();
     }
