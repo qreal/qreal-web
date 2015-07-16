@@ -73,6 +73,10 @@ class DiagramController {
                controller.currentFolderId = controller.user + "root_0";
                controller.folderLevel = 0;
            });
+            $('#saveAfterCreate').click(function () {
+                controller.canBeDeleted = true;
+                controller.saveCurrentDiagram();
+            });
         });
 
         $scope.$on("interpret", function(event, timeline) {
@@ -443,8 +447,8 @@ class DiagramController {
     private saveCurrentDiagram(): void {
         var controller = this;
         if (this.currentDiagramName === "") {
-            this.saveDiagramAs();
             $('#diagrams').modal('show');
+            this.saveDiagramAs();
         }
         else {
             $.ajax({
@@ -496,11 +500,6 @@ class DiagramController {
     private createNewDiagram(): void {
         var controller = this;
         $('#confirmNew').modal('show');
-
-        $('#saveAfterCreate').click(function () {
-            controller.canBeDeleted = true;
-            controller.saveCurrentDiagram();
-        });
     }
 
     private openFolderWindow(): void {
