@@ -74,7 +74,7 @@ class SensorItem implements AbstractItem {
 
         var startHandle = function () {
 
-                this.rotation = sensor.innerAngle;
+                this.rotation = sensor.angle;
                 this.cx = this.attr("cx");
                 this.cy = this.attr("cy");
                 this.lastX = 0;
@@ -243,7 +243,7 @@ class SensorItem implements AbstractItem {
             tmp = tmp + transformationString[i];
         if (transformationString[0] === 'T') {
             var shifts : string[] = tmp.split(",");
-            this.translateSensor(parseInt(shifts[0]), parseInt(shifts[1]));
+            this.translateSensor(parseFloat(shifts[0]), parseFloat(shifts[1]));
         } else {
             var params : string[] = tmp.split(",");
             this.rotateSensor(parseFloat(params[0]), parseFloat(params[1]), parseFloat(params[2]));

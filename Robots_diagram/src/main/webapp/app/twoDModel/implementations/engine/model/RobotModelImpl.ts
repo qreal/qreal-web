@@ -88,7 +88,8 @@ class RobotModelImpl implements RobotModel {
             this.position.x += averageSpeed * Math.cos(this.angle);
             this.position.y += averageSpeed * Math.sin(this.angle);
         }
-        this.robotItem.updateRobotLocation(this.position, this.angle);
+        var pos :TwoDPosition = new TwoDPosition(this.position.x, this.position.y);
+        this.robotItem.updateRobotLocation(pos, this.angle * 180 / Math.PI);
         console.log("Robot now at: " + this.position.x + ", " + this.position.y + '\n');
     }
 

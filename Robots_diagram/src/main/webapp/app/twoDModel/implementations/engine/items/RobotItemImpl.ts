@@ -13,6 +13,7 @@ class RobotItemImpl implements RobotItem {
     private angle: number;
     private lastDx: number;
     private lastDy: number;
+    private previousAngle : number;
 
     private sensors: {string?: SensorItem} = {};
 
@@ -192,22 +193,32 @@ class RobotItemImpl implements RobotItem {
 
     redraw(): void {
 
-        var x = this.center.x - this.startPosition.x - this.width / 2;
-        var y = this.center.y - this.startPosition.y - this.width / 2;
-        var angle = this.angle * 180 / Math.PI;
+        var x = this.center.x - this.startCenter.x;
+        var y = this.center.y - this.startCenter.y;
 
+        console.log(x + " + " + y);
 
-        console.log(angle);
+        var robotItem = this;
 
+        robotItem.image.transform("");
+        robotItem.image.attr({"x" : robotItem.center.x - robotItem.height / 2, "y" : robotItem.center.y - robotItem.width / 2});
+        var oldX = robotItem.rotateHandle.attr("cx");
+        var oldY = robotItem.rotateHandle.attr("cy");
+        robotItem.rotateHandle.attr({cx : oldX + x, cy : oldY + y});
+        var diffAngle : number = this.angle - this.previousAngle
+        this.rotateCircle(diffAngle);
+        robotItem.image.transform("R" + robotItem.angle);
+        robotItem.transformSensorsItems("T" + x + "," + y);
+        robotItem.transformSensorsItems("R" + diffAngle +"," + this.center.x + "," + this.center.y);
 
-        this.image.transform("t" + x + "," + y + "r" + angle);
+        //this.image.transform("t" + x + "," + y + "r" + angle);
         var cx = this.image.matrix.x(this.startCenter.x, this.startCenter.y);
         var cy = this.image.matrix.y(this.startCenter.x, this.startCenter.y);
 
         //x = this.center.x - cx;
         //y = this.center.y - cy;
 
-        this.transformSensorsItems("t" + x + "," + y + "r" + angle + "," + this.startCenter.x + "," + this.startCenter.y);
+        //this.transformSensorsItems("t" + x + "," + y + "r" + angle + "," + this.startCenter.x + "," + this.startCenter.y);
         //this.transformSensorsItems("t" + x + "," + y + "r" + angle);
         //this.updateSensorsTransformations();
         //
@@ -222,7 +233,7 @@ class RobotItemImpl implements RobotItem {
             robotItem.startCenter.y);
 
 
-        this.rotateHandle.attr({cx: newCx, cy: newCy});
+        //this.rotateHandle.attr({cx: newCx, cy: newCy});
 
         /*for (var sensor in this.sensors) {
             var s = this.sensors[sensor];
@@ -241,12 +252,25 @@ class RobotItemImpl implements RobotItem {
         }
     }
 
+    private rotateCircle(angle : number) : void {
+        var cX = this.rotateHandle.attr("cx");
+        var cY = this.rotateHandle.attr("cy");
+        var dX = cX - this.center.x;
+        var dY = cY - this.center.y;
+        var angleInRad = angle * Math.PI / 180;
+        var newDX = dX * Math.cos(angleInRad) - dY * Math.sin(angleInRad);
+        var newDY = dX * Math.sin(angleInRad) + dY * Math.cos(angleInRad);
+        this.rotateHandle.attr({cx : this.center.x + newDX, cy : this.center.y + newDY});
+    }
+
 
     informSensorsAboutStoppingRunning() : void {
         //this.updateSensorsTransformations();
     }
 
     updateRobotLocation(position: TwoDPosition, angle): void {
+        this.startCenter = new TwoDPosition(this.center.x, this.center.y);
+        this.previousAngle = this.angle;
         this.center.x = position.x;
         this.center.y = position.y;
         this.angle = angle;
