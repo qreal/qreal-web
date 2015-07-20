@@ -8,14 +8,14 @@ class SensorItem implements AbstractItem {
     protected rotateHandle: RaphaelElement;
     protected center : TwoDPosition;
     protected start : TwoDPosition;
-    private  parentCenter : TwoDPosition;
+    protected  parentCenter : TwoDPosition;
     protected sensorType: DeviceInfo;
-    private deltaPosition: TwoDPosition;
-    private handleRadius = 10;
-    private radiusFromParent : number;
-    private innerAngle : number;
-    private outterAngle : number;
-    private radiusFromSensor : number;
+    protected deltaPosition: TwoDPosition;
+    protected handleRadius = 10;
+    protected radiusFromParent : number;
+    protected innerAngle : number;
+    protected outterAngle : number;
+    protected radiusFromSensor : number;
 
 
     constructor(robotItem: RobotItem, worldModel: WorldModel, sensorType: DeviceInfo, pathToImage: string) {
@@ -220,7 +220,7 @@ class SensorItem implements AbstractItem {
         return "images/2dmodel/sensors/2d_" + this.name() + ".png";
     }
 
-    protected defineImageSizes(sensorType): void {
+    defineImageSizes(sensorType): void {
     if (sensorType.isA(TouchSensor)) {
         this.width = 25;
         this.height = 25;
@@ -254,7 +254,7 @@ class SensorItem implements AbstractItem {
        // this.rotateHandle.attr({cx: newCx, cy: newCy});
     }
 
-    private translateSensor(dx : number, dy : number) {
+    translateSensor(dx : number, dy : number) {
         var cx = this.rotateHandle.attr("cx");
         var cy = this.rotateHandle.attr("cy");
         this.rotateHandle.attr({"cx" : cx + dx, "cy" : cy + dy});
@@ -266,7 +266,7 @@ class SensorItem implements AbstractItem {
         sensor.image.transform("R" + sensor.angle + "," + sensor.image.x + "," + sensor.image.y);
     }
 
-    private rotateSensor(angle : number, x : number, y: number) {
+    rotateSensor(angle : number, x : number, y: number) {
         var wasCenter : TwoDPosition = this.center;
         console.log(angle + ", " + x + ", " + y);
         var dxCentr = this.center.x - x;
