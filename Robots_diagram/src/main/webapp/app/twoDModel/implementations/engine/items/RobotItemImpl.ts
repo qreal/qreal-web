@@ -1,5 +1,5 @@
 class RobotItemImpl implements RobotItem {
-    private worldModel: WorldModel;
+    public worldModel: WorldModel;
     private robot: RobotModel;
     private startPosition: TwoDPosition;
     private startCenter: TwoDPosition = new TwoDPosition();
@@ -307,6 +307,10 @@ class RobotItemImpl implements RobotItem {
 
     getStartPosition(): TwoDPosition {
         return this.startPosition;
+    }
+
+    getWorldModel() : WorldModel {
+       return this.worldModel;
     }
 
     removeSensorItem(portName: string): void {

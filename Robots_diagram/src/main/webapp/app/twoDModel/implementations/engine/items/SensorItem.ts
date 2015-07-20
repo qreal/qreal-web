@@ -81,6 +81,7 @@ class SensorItem implements AbstractItem {
                 this.lastY = 0;
 
                 console.log(sensor.center.x + " -- " + sensor.center.y);
+                sensor.updateTransformationString();
                 return this;
             },
             moveHandle = function (dx, dy) {
@@ -119,6 +120,7 @@ class SensorItem implements AbstractItem {
                     this.cx = newCx;
                     this.cy = newCy;
                     sensor.innerAngle = angle;
+                    sensor.updateTransformationString();
                 }
                 return this;
             },
@@ -129,6 +131,7 @@ class SensorItem implements AbstractItem {
                 sensor.image.transform("");
                 sensor.image.attr({"x" : sensor.center.x - sensor.height / 2, "y" : sensor.center.y - sensor.width / 2});
                 sensor.image.transform("R" + sensor.innerAngle);
+                sensor.updateTransformationString();
                 return this;
             };
 
@@ -143,6 +146,7 @@ class SensorItem implements AbstractItem {
                     this.handle_cy = sensorItem.rotateHandle.attr("cy");
                     worldModel.setCurrentElement(sensorItem);
                 }
+                sensor.updateTransformationString();
                 return this;
             }
 
@@ -154,6 +158,12 @@ class SensorItem implements AbstractItem {
                     this.tmpDy = dy;
                     sensor.rotateHandle.attr({"cx": this.handle_cx + dx, "cy": this.handle_cy + dy});
                 }
+                sensor.center.x += this.tmpDx;
+                sensor.center.y += this.tmpDy;
+                sensor.updateTransformationString();
+                sensor.center.x -= this.tmpDx;
+                sensor.center.y -= this.tmpDy;
+
                 return this;
             }
             ,up = function () {
@@ -166,6 +176,7 @@ class SensorItem implements AbstractItem {
                     sensor.image.transform("R" + sensor.angle + "," + sensor.image.x + "," + sensor.image.y);
 
                 }
+                sensor.updateTransformationString();
                 return this;
             };
 

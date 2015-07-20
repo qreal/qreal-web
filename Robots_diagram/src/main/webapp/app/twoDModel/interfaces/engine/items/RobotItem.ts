@@ -14,4 +14,5 @@ interface RobotItem extends AbstractItem {
     notifySensors() : void;
     getRotateHandle() : RaphaelElement;
     getCenterPosition() : TwoDPosition;
+    getWorldModel() : WorldModel;
 }
