@@ -62,8 +62,8 @@ class RobotModelImpl implements RobotModel {
         var angle = this.robotItem.getAngleInRadian();
         this.position = position;
         this.angle = angle;
-        var robotHeight = 50; // TODO: getHeight!
-        var timeInterval = 1; // TODO: timeInterval!
+        var robotHeight = 50;
+        var timeInterval = 1;
         var averageSpeed = (this.speed1 + this.speed2) / 2;
         if (this.speed1 != this.speed2) {
             var radius = this.speed1 * robotHeight / (this.speed1 - this.speed2);
@@ -90,16 +90,9 @@ class RobotModelImpl implements RobotModel {
         }
         var pos :TwoDPosition = new TwoDPosition(this.position.x, this.position.y);
         this.robotItem.updateRobotLocation(pos, this.angle * 180 / Math.PI);
-        console.log("Robot now at: " + this.position.x + ", " + this.position.y + '\n');
     }
 
     nextFragment(): void {
         this.robotItem.redraw();
     }
-
-    informSensors() : void {
-        //this.robotItem.iformSensorsAboutStoppingRunning();
-        this.robotItem.notifySensors();
-    }
-
 }

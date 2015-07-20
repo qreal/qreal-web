@@ -8,5 +8,4 @@ interface RobotModel {
     setAngle(angle: number): void;
     getAngle(): number;
     setPosition(position: TwoDPosition): void;
-    informSensors() : void;
 }

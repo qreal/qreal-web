@@ -23,26 +23,16 @@ class TimelineImpl implements Timeline {
         this.setActive(false);
     }
 
-    setActive(value : boolean) : void{
-        this.isActive = value;
-    }
-
-       start(): void {
+    start(): void {
         if (this.isActive)
             return;
         this.setActive(true);
         var timeline = this;
-        this.getRobotModels().forEach(function(model) {
-               model.informSensors();
-         });
         this.cyclesCount = 0;
         this.intervalId = setInterval(function() { timeline.onTimer(timeline); }, this.defaultFrameLength);
     }
 
     stop(): void {
-        this.getRobotModels().forEach(function(model) {
-            model.informSensors();
-        });
         this.setActive(false);
         clearInterval(this.intervalId);
     }
@@ -60,6 +50,10 @@ class TimelineImpl implements Timeline {
             });
             this.cyclesCount = 0;
         }
+    }
+
+    setActive(value : boolean) : void{
+        this.isActive = value;
     }
 
     setSpeedFactor(factor: number): void {

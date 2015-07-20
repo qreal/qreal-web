@@ -16,7 +16,6 @@ class SonarSensorItem extends SensorItem {
     transform(transformationString: string) {
         super.transform(transformationString);
         this.drawRegion();
-        //   this.scanningRegion.transform(this.regionTransformationString + transformationString);
     }
 
     private rotateVector(toRotate : TwoDPosition, center : TwoDPosition, angle : number) : TwoDPosition {
@@ -30,9 +29,7 @@ class SonarSensorItem extends SensorItem {
 
     updateTransformationString(): void {
         super.updateTransformationString();
-        console.log("AA");
         this.drawRegion();
-     //   this.regionTransformationString = this.scanningRegion.transform();
     }
 
     rotate(angle: number) {
@@ -50,6 +47,9 @@ class SonarSensorItem extends SensorItem {
         this.scanningRegion.remove();
     }
 
+    /**
+     * Redrawing sonar way on the current moment
+     */
     private drawRegion() : void {
         var worldModel : WorldModel = this.robotItem.getWorldModel();
         this.scanningRegion.remove();
@@ -85,7 +85,6 @@ class SonarSensorItem extends SensorItem {
             "L" + regionBottomX + "," + regionBottomY + "L" + this.regionStartX + "," + this.regionStartY +
             "Z");
         this.scanningRegion.attr({fill: "#c5d0de", stroke: "#b1bbc7", opacity: 0.5});
-
     }
 
 }
