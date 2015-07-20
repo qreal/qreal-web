@@ -1,6 +1,6 @@
 class SensorItem implements AbstractItem {
     protected robotItem: RobotItem;
-    protected image;
+    protected image : RaphaelElement;
     protected angle : number;
     protected width: number;
     protected height: number;
