@@ -4,13 +4,11 @@ interface RobotItem extends AbstractItem {
     getWidth(): number;
     getHeight(): number;
     getStartPosition(): TwoDPosition;
-    getCurrentPosition() : TwoDPosition;
-    getAngleInRadian() : number;
+    getCurrentCenter() : TwoDPosition;
     getAngle() : number;
     removeSensorItem(portName: string): void;
     addSensorItem(portName: string, deviceType: DeviceInfo, pathToImage: string): void;
     setStartPosition(position: TwoDPosition, direction: number): void;
-    informSensorsAboutStoppingRunning() : void;
     getRotateHandle() : RaphaelElement;
     getCenterPosition() : TwoDPosition;
     getWorldModel() : WorldModel;

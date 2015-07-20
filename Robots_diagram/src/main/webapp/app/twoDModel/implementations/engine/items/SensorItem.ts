@@ -2,8 +2,8 @@ class SensorItem implements AbstractItem {
     protected robotItem: RobotItem;
     protected image;
     protected angle : number;
-    protected width: number = 20;
-    protected height: number = 20;
+    protected width: number;
+    protected height: number;
     protected transformationString = "";
     protected rotateHandle: RaphaelElement;
     protected center : TwoDPosition;
@@ -12,7 +12,7 @@ class SensorItem implements AbstractItem {
     protected sensorType: DeviceInfo;
     protected deltaPosition: TwoDPosition;
     protected handleRadius = 10;
-    protected radiusFromParent : number;
+    protected radiusFromCar : number;
     protected radiusFromSensor : number;
 
 
@@ -29,25 +29,19 @@ class SensorItem implements AbstractItem {
         this.image = paper.image((pathToImage) ? pathToImage : this.pathToImage(), defaultPosition.x, defaultPosition.y, this.width, this.height);
         this.angle = this.robotItem.getAngle();
 
-        this.radiusFromParent = this.robotItem.getWidth() + this.width + this.width + this.handleRadius;
-        this.radiusFromSensor = this.radiusFromParent - (this.center.x - this.parentCenter.x);
+        this.radiusFromCar = this.robotItem.getWidth() + this.width + this.width + this.handleRadius;
+        this.radiusFromSensor = this.radiusFromCar - (this.center.x - this.parentCenter.x);
 
         this.image.transform("R" + this.angle + "," +  this.parentCenter.x + "," + this.parentCenter.y);
         var diffX = this.center.x - this.parentCenter.x;
         var diffY = this.center.y - this.parentCenter.y;
 
-        var angleInRad = this.toRadian(this.angle);
+        var newD : TwoDPosition = Utils.rotateVector(diffX, diffY, this.angle);
+        this.center.x = this.parentCenter.x + newD.x;
+        this.center.y = this.parentCenter.y + newD.y;
 
-        var newDx = diffX * Math.cos(angleInRad) - diffY * Math.sin(angleInRad);
-        var newDy = diffX * Math.sin(angleInRad) + diffY * Math.cos(angleInRad);
-
-        this.center.x = this.parentCenter.x + newDx;
-        this.center.y = this.parentCenter.y + newDy;
-
-        sensorItem = this;
-
-        sensorItem.image.attr({"x" : sensorItem.center.x - sensorItem.height / 2, "y" : sensorItem.center.y - sensorItem.width / 2});
-        sensorItem.image.transform("R" + this.angle);
+        this.image.attr({"x" : this.center.x - this.height / 2, "y" : this.center.y - this.width / 2});
+        this.image.transform("R" + this.angle);
 
 
         var handleAttrs = {
@@ -58,8 +52,10 @@ class SensorItem implements AbstractItem {
             stroke: "black"
         };
 
-        this.rotateHandle = paper.circle(this.parentCenter.x + this.radiusFromParent * Math.cos(angleInRad),
-               this.parentCenter.y + this.radiusFromParent * Math.sin(angleInRad), this.handleRadius).attr(handleAttrs);
+        var angleInRad : number = Utils.toRadian(this.angle);
+
+        this.rotateHandle = paper.circle(this.parentCenter.x + this.radiusFromCar * Math.cos(angleInRad),
+               this.parentCenter.y + this.radiusFromCar * Math.sin(angleInRad), this.handleRadius).attr(handleAttrs);
 
         var sensorItem = this;
 
@@ -70,7 +66,7 @@ class SensorItem implements AbstractItem {
                 this.cy = this.attr("cy");
                 this.lastX = 0;
                 this.lastY = 0;
-                sensorItem.updateTransformationString();
+                sensorItem.updatePosition();
                 return this;
             },
             moveHandle = function (dx, dy) {
@@ -99,14 +95,14 @@ class SensorItem implements AbstractItem {
 
                     sensorItem.image.transform("R" + angle);
 
-                    var angleInRad = sensorItem.toRadian(angle);
+                    var angleInRad = Utils.toRadian(angle);
                     var newCx = Math.cos(angleInRad) * (sensorItem.radiusFromSensor) + sensorItem.center.x;
                     var newCy = Math.sin(angleInRad) * (sensorItem.radiusFromSensor) + sensorItem.center.y;
 
                     this.attr({cx: newCx, cy: newCy});
                     this.cx = newCx;
                     this.cy = newCy;
-                    sensorItem.updateTransformationString();
+                    sensorItem.updatePosition();
                 }
                 return this;
             },
@@ -117,7 +113,7 @@ class SensorItem implements AbstractItem {
                 sensorItem.image.transform("");
                 sensorItem.image.attr({"x" : sensorItem.center.x - sensorItem.height / 2, "y" : sensorItem.center.y - sensorItem.width / 2});
                 sensorItem.image.transform("R" + sensorItem.angle);
-                sensorItem.updateTransformationString();
+                sensorItem.updatePosition();
                 return this;
             };
 
@@ -132,21 +128,23 @@ class SensorItem implements AbstractItem {
                     this.handleCy = sensorItem.rotateHandle.attr("cy");
                     worldModel.setCurrentElement(sensorItem);
                 }
-                sensorItem.updateTransformationString();
+                sensorItem.updatePosition();
                 return this;
             }
 
             ,move = function (dx, dy) {
 
                 if (!worldModel.getDrawMode()) {
-                    sensorItem.image.transform("R" + sensorItem.angle + "," + sensorItem.center.x + "," + sensorItem.center.y + "T" + dx + "," + dy);
+                    sensorItem.image.transform("R" + sensorItem.angle + "," + sensorItem.center.x + ","
+                                                            + sensorItem.center.y + "T" + dx + "," + dy);
+
                     this.lastDx = dx;
                     this.lastDy = dy;
                     sensorItem.rotateHandle.attr({"cx": this.handleCx + dx, "cy": this.handleCy + dy});
                 }
                 sensorItem.center.x += this.lastDx;
                 sensorItem.center.y += this.lastDy;
-                sensorItem.updateTransformationString();
+                sensorItem.updatePosition();
                 sensorItem.center.x -= this.lastDx;
                 sensorItem.center.y -= this.lastDy;
 
@@ -158,11 +156,13 @@ class SensorItem implements AbstractItem {
                     sensorItem.center.x += this.lastDx;
                     sensorItem.center.y += this.lastDy;
                     sensorItem.image.transform("");
-                    sensorItem.image.attr({"x" : sensorItem.center.x - sensorItem.height / 2, "y" : sensorItem.center.y - sensorItem.width / 2});
+                    sensorItem.image.attr({"x" : sensorItem.center.x - sensorItem.height / 2,
+                                            "y" : sensorItem.center.y - sensorItem.width / 2});
+
                     sensorItem.image.transform("R" + sensorItem.angle + "," + sensorItem.image.x + "," + sensorItem.image.y);
 
                 }
-                sensorItem.updateTransformationString();
+                sensorItem.updatePosition();
                 return this;
             };
 
@@ -194,10 +194,6 @@ class SensorItem implements AbstractItem {
             alert(!"Unknown sensor type");
             return "";
         }
-    }
-
-    private toRadian(angle : number) : number {
-        return angle * Math.PI / 180.0;
     }
 
     pathToImage(): string
@@ -254,16 +250,12 @@ class SensorItem implements AbstractItem {
         var handleDx = this.rotateHandle.attr("cx") - x;
         var handleDy = this.rotateHandle.attr("cy") - y;
 
-        var angleInRadian = this.toRadian(angle);
-        var newCx = centrDx * Math.cos(angleInRadian) - centrDy * Math.sin(angleInRadian);
-        var newCy = centrDx * Math.sin(angleInRadian) + centrDy * Math.cos(angleInRadian);
-        this.center.x = newCx + x;
-        this.center.y = newCy + y;
+        var newC : TwoDPosition = Utils.rotateVector(centrDx, centrDy, angle);
+        this.center.x = newC.x + x;
+        this.center.y = newC.y + y;
 
-        newCx = handleDx * Math.cos(angleInRadian) - handleDy * Math.sin(angleInRadian);
-        newCy = handleDx * Math.sin(angleInRadian) + handleDy * Math.cos(angleInRadian);
-
-        this.rotateHandle.attr({"cx" : x + newCx, "cy" : y + newCy});
+        newC = Utils.rotateVector(handleDx, handleDy, angle);
+        this.rotateHandle.attr({"cx" : x + newC.x, "cy" : y + newC.y});
         this.angle += angle;
         this.image.transform("");
 
@@ -273,7 +265,7 @@ class SensorItem implements AbstractItem {
         this.transform("T" + diffX + "," + diffY);
     }
 
-    updateTransformationString(): void {
+    updatePosition(): void {
     }
 
     rotate(angle: number) {

@@ -6,6 +6,4 @@ class TwoDPosition {
         this.x = x;
         this.y = y;
     }
-
-
 }

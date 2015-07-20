@@ -57,6 +57,7 @@
 /// <reference path="interpreter/Factory.ts" />
 /// <reference path="interpreter/InterpretManager.ts" />
 /// <reference path="interpreter/Parser/Parser.ts" />
+/// <reference path="twoDModel/implementations/Utils.ts" />
 /// <reference path="twoDModel/implementations/engine/TwoDModelEngineFacadeImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/items/EllipseItemImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/items/LineItemImpl.ts" />

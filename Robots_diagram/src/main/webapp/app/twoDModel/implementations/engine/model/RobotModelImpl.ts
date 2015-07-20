@@ -58,9 +58,9 @@ class RobotModelImpl implements RobotModel {
     }
 
     recalculateParams(): void {
-        var position = this.robotItem.getCurrentPosition();
-        var angle = this.robotItem.getAngleInRadian();
-        this.position = position;
+        var centerPosition = this.robotItem.getCurrentCenter();
+        var angle = Utils.toRadian(this.robotItem.getAngle());
+        this.position = centerPosition;
         this.angle = angle;
         var robotHeight = 50;
         var timeInterval = 1;
@@ -78,7 +78,7 @@ class RobotModelImpl implements RobotModel {
                 actualRadius = averageRadius;
             }
             var gammaRadians = timeInterval * angularSpeed;
-            var gammaDegrees = gammaRadians * 180 / Math.PI;
+            var gammaDegrees = Utils.toDegrees(gammaRadians);
             this.angle += gammaRadians;
 
             this.position.x += averageSpeed * Math.cos(this.angle);
@@ -89,7 +89,7 @@ class RobotModelImpl implements RobotModel {
             this.position.y += averageSpeed * Math.sin(this.angle);
         }
         var pos :TwoDPosition = new TwoDPosition(this.position.x, this.position.y);
-        this.robotItem.updateRobotLocation(pos, this.angle * 180 / Math.PI);
+        this.robotItem.updateRobotLocation(pos, Utils.toDegrees(this.angle));
     }
 
     nextFragment(): void {

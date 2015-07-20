@@ -40,7 +40,6 @@ class RobotItemImpl implements RobotItem {
                 position.y + this.height / 2, handleRadius).attr(handleAttrs);
 
         var robotItem = this;
-        robotItem.angle = 0;
 
         var startHandle = function () {
 
@@ -60,35 +59,33 @@ class RobotItemImpl implements RobotItem {
             moveHandle = function (dx, dy) {
                 if (!worldModel.getDrawMode()) {
 
-                    var newDx = dx - this.lastDx;
-                    var newDy = dy - this.lastDy;
+                    var newDx : number = dx - this.lastDx;
+                    var newDy : number = dy - this.lastDy;
 
                     this.lastDx = dx;
                     this.lastDy = dy;
 
-                    var newX = this.cx + newDx;
-                    var newY = this.cy + newDy;
+                    var newX : number = this.cx + newDx;
+                    var newY : number = this.cy + newDy;
 
-                    var offsetX = newX - robotItem.center.x;
-                    var offsetY = newY - robotItem.center.y;
-                    var tan = offsetY / offsetX;
-                    var angle = Math.atan(tan) / (Math.PI / 180);
+                    var offsetX : number = newX - robotItem.center.x;
+                    var offsetY : number = newY - robotItem.center.y;
+                    var tan : number = offsetY / offsetX;
+                    var angle : number = Math.atan(tan) / (Math.PI / 180);
                     if (offsetX < 0) {
                         angle += 180;
                     }
 
-                    var diffAngle = angle - robotItem.angle;
+                    var diffAngle : number = angle - robotItem.angle;
 
                     robotItem.image.transform("R" + angle + "," + robotItem.center.x + "," + robotItem.center.y);
                     robotItem.transformSensorsItems("R" + diffAngle + "," + robotItem.center.x + "," + robotItem.center.y);
 
-                    var angleInRad = angle * Math.PI / 180.0;
-                    var newCx = Math.cos(angleInRad) * (robotItem.width / 2 + 20) + robotItem.center.x;
-                    var newCy = Math.sin(angleInRad) * (robotItem.width / 2 + 20) + robotItem.center.y;
-                    this.attr({cx: newCx, cy: newCy});
-                    this.cx = newCx;
-                    this.cy = newCy;
+                    robotItem.rotateCircle(diffAngle);
+                    this.cx = this.attr("cx");
+                    this.cy = this.attr("cy");
                     robotItem.angle = angle;
+
                 }
                 return this;
             },
@@ -128,7 +125,9 @@ class RobotItemImpl implements RobotItem {
                 var newDx = dx - this.lastDx;
                 var newDy = dy - this.lastDy;
                 if (!worldModel.getDrawMode()) {
-                    robotItem.image.transform("R" + robotItem.angle + "," + robotItem.center.x + "," + robotItem.center.y + "T" + dx + "," + dy);
+                    robotItem.image.transform("R" + robotItem.angle + "," + robotItem.center.x + ","
+                                                + robotItem.center.y + "T" + dx + "," + dy);
+
                     robotItem.transformSensorsItems("T" + newDx + "," + newDy);
                     this.lastDx = dx;
                     this.lastDy = dy;
@@ -143,7 +142,9 @@ class RobotItemImpl implements RobotItem {
                     robotItem.center.y += this.lastDy;
 
                     robotItem.image.transform("");
-                    robotItem.image.attr({"x" : robotItem.center.x - robotItem.height / 2, "y" : robotItem.center.y - robotItem.width / 2});
+                    robotItem.image.attr({"x" : robotItem.center.x - robotItem.height / 2,
+                                            "y" : robotItem.center.y - robotItem.width / 2});
+
                     robotItem.image.transform("R" + robotItem.angle + "," + robotItem.image.x + "," + robotItem.image.y);
 
                     robotItem.updateSensorsTransformations();
@@ -153,10 +154,6 @@ class RobotItemImpl implements RobotItem {
 
         this.image.drag(move, start, up);
         this.hideHandles();
-    }
-
-    private getRightAngleValue(angle : number) : number {
-        return angle * Math.PI / 180.0;
     }
 
     getRotateHandle(): RaphaelElement {
@@ -179,12 +176,9 @@ class RobotItemImpl implements RobotItem {
 
         var diffX = this.center.x - this.startCenter.x;
         var diffY = this.center.y - this.startCenter.y;
-
         var robotItem = this;
-
         robotItem.image.transform("");
         robotItem.image.attr({"x" : robotItem.center.x - robotItem.height / 2, "y" : robotItem.center.y - robotItem.width / 2});
-
 
         // Change the rotateHandle's position to a new center!
 
@@ -213,15 +207,8 @@ class RobotItemImpl implements RobotItem {
         var cY = this.rotateHandle.attr("cy");
         var diffX = cX - this.center.x;
         var diffY = cY - this.center.y;
-        var angleInRad = angle * Math.PI / 180;
-        var newDX = diffX * Math.cos(angleInRad) - diffY * Math.sin(angleInRad);
-        var newDY = diffX * Math.sin(angleInRad) + diffY * Math.cos(angleInRad);
-        this.rotateHandle.attr({cx : this.center.x + newDX, cy : this.center.y + newDY});
-    }
-
-
-    informSensorsAboutStoppingRunning() : void {
-        //this.updateSensorsTransformations();
+        var newDiff : TwoDPosition = Utils.rotateVector(diffX, diffY, angle);
+        this.rotateHandle.attr({cx : this.center.x + newDiff.x, cy : this.center.y + newDiff.y});
     }
 
     /**
@@ -258,11 +245,7 @@ class RobotItemImpl implements RobotItem {
         return this.height;
     }
 
-    getAngleInRadian() : number {
-        return this.angle * Math.PI / 180.0;
-    }
-
-    getCurrentPosition() : TwoDPosition {
+    getCurrentCenter() : TwoDPosition {
         return new TwoDPosition(this.center.x, this.center.y);
     }
 
@@ -295,7 +278,7 @@ class RobotItemImpl implements RobotItem {
     private updateSensorsTransformations(): void {
         for(var portName in this.sensors) {
             var sensor = this.sensors[portName];
-            sensor.updateTransformationString();
+            sensor.updatePosition();
         }
     }
 

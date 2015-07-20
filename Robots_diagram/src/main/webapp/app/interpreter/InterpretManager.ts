@@ -43,7 +43,6 @@ class InterpretManager {
 
     static getOutboundLinks(graph, nodeId) {
         var e = graph.getCell(nodeId);
-        var all = graph.getElements();
         var outboundLinks = graph.getConnectedLinks(e, { outbound : true });
         return outboundLinks;
     }

@@ -8,8 +8,6 @@ class SonarSensorItem extends SensorItem {
 
     constructor(robotItem: RobotItem, worldModel: WorldModel, sensorType: DeviceInfo, pathToImage: string) {
         super(robotItem, worldModel, sensorType, pathToImage);
-        var paper : RaphaelPaper = worldModel.getPaper();
-        this.scanningRegion = paper.path();
         this.drawRegion();
     }
 
@@ -21,14 +19,12 @@ class SonarSensorItem extends SensorItem {
     private rotateVector(toRotate : TwoDPosition, center : TwoDPosition, angle : number) : TwoDPosition {
         var dx = toRotate.x - center.x;
         var dy = toRotate.y - center.y;
-        var angleInRad = angle * Math.PI / 180;
-        var newDx = dx * Math.cos(angleInRad) - dy * Math.sin(angleInRad);
-        var newDy = dx * Math.sin(angleInRad) + dy * Math.cos(angleInRad);
-        return new TwoDPosition(center.x + newDx, center.y + newDy);
+        var newD : TwoDPosition = Utils.rotateVector(dx, dy, angle);
+        return new TwoDPosition(center.x + newD.x, center.y + newD.y);
     }
 
-    updateTransformationString(): void {
-        super.updateTransformationString();
+    updatePosition(): void {
+        super.updatePosition();
         this.drawRegion();
     }
 
@@ -52,15 +48,17 @@ class SonarSensorItem extends SensorItem {
      */
     private drawRegion() : void {
         var worldModel : WorldModel = this.robotItem.getWorldModel();
-        this.scanningRegion.remove();
+        if (this.scanningRegion) {
+            this.scanningRegion.remove();
+        }
         var paper : RaphaelPaper = worldModel.getPaper();
 
-        var angleInRad = this.angle * Math.PI / 180;
+        var angleInRad = Utils.toRadian(this.angle);
         this.regionStartX = this.center.x + (this.width) * Math.cos(angleInRad);
         this.regionStartY = this.center.y + (this.width) * Math.sin(angleInRad);
 
         var regAngle = 20;
-        var halfRegAngleInRad = regAngle / 2 * (Math.PI / 180);
+        var halfRegAngleInRad = Utils.toRadian(regAngle / 2);
 
         var rangeInPixels = this.sonarRange * Constants.pixelsInCm;
 
@@ -71,12 +69,18 @@ class SonarSensorItem extends SensorItem {
         var regionBottomY = this.regionStartY + Math.sin(halfRegAngleInRad) * rangeInPixels;
 
 
-        var newRegionTop : TwoDPosition = this.rotateVector(new TwoDPosition(regionTopX, regionTopY), new TwoDPosition(this.regionStartX, this.regionStartY), this.angle - regAngle / 2);
+        var newRegionTop : TwoDPosition = this.rotateVector(new TwoDPosition(regionTopX, regionTopY),
+                                                new TwoDPosition(this.regionStartX, this.regionStartY),
+                                                this.angle - regAngle / 2);
+
         regionTopX = newRegionTop.x;
         regionTopY = newRegionTop.y;
 
 
-        var newRegionBottom : TwoDPosition = this.rotateVector(new TwoDPosition(regionBottomX, regionBottomY), new TwoDPosition(this.regionStartX, this.regionStartY), this.angle + regAngle / 2);
+        var newRegionBottom : TwoDPosition = this.rotateVector(new TwoDPosition(regionBottomX, regionBottomY),
+                                                new TwoDPosition(this.regionStartX, this.regionStartY),
+                                                this.angle + regAngle / 2);
+
         regionBottomX = newRegionBottom.x;
         regionBottomY = newRegionBottom.y
 
