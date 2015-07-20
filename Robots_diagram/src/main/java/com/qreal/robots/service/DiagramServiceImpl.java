@@ -47,8 +47,8 @@ public class DiagramServiceImpl implements DiagramService {
 
     @Transactional
     @Override
-    public List<String> showFoldersByUserName(String currentFolderId) {
-        return diagramDAO.showFoldersByUserName(currentFolderId);
+    public List<String> getFolderNames(String currentFolderId) {
+        return diagramDAO.getFolderNames(currentFolderId);
     }
 
     @Transactional
@@ -63,5 +63,5 @@ public class DiagramServiceImpl implements DiagramService {
 
     @Transactional
     @Override
-    public List<String> showDiagramNames(String folderId) { return diagramDAO.showDiagramNames(folderId); }
+    public List<String> getDiagramNames(String folderId) { return diagramDAO.getDiagramNames(folderId); }
 }

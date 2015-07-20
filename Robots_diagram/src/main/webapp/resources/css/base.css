@@ -197,6 +197,7 @@ body{
     text-align: center;
     border: 1px solid #fff;
     color: grey;
+    cursor: pointer;
 }
 
 .folderTable li:hover {
@@ -213,6 +214,10 @@ body{
 .folderMenu > i, .folderMenu > input {
     margin-left: 5px;
     font-size: 25px;
+}
+
+.folderMenu > i {
+    cursor: pointer;
 }
 
 #creating {

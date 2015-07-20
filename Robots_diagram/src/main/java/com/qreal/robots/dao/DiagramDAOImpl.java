@@ -86,7 +86,7 @@ public class DiagramDAOImpl implements DiagramDAO {
         }
     }
 
-    public List<String> showFoldersByUserName(String currentFolderId) {
+    public List<String> getFolderNames(String currentFolderId) {
         Session session = sessionFactory.getCurrentSession();
         List<Folder> folders = session.createQuery("from Folder where folderParentId=?")
                 .setParameter(0, currentFolderId)
@@ -108,7 +108,7 @@ public class DiagramDAOImpl implements DiagramDAO {
         return folders.get(0).getFolderParentId();
     }
 
-    public List<String> showDiagramNames(String folderId) {
+    public List<String> getDiagramNames(String folderId) {
         Session session = sessionFactory.getCurrentSession();
         List<Diagram> diagrams = session.createQuery("from Diagram where folderId=?").setParameter(0, folderId).list();
 

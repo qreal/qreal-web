@@ -37,9 +37,9 @@ public class DiagramRepositoryController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/showDiagramNames", method = RequestMethod.POST)
+    @RequestMapping(value = "/getDiagramNames", method = RequestMethod.POST)
     public List<String> showDiagramNames(@RequestBody OpenRequest request) {
-        return diagramService.showDiagramNames(request.getName());
+        return diagramService.getDiagramNames(request.getName());
     }
 
     @ResponseBody
@@ -55,9 +55,9 @@ public class DiagramRepositoryController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/showFolders", method = RequestMethod.POST)
+    @RequestMapping(value = "/getFolderNames", method = RequestMethod.POST)
     public List<String> showFolders(@RequestBody OpenRequest request) {
-        return diagramService.showFoldersByUserName(request.getName());
+        return diagramService.getFolderNames(request.getName());
     }
 
     @ResponseBody

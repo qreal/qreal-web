@@ -30,6 +30,7 @@
 /// <reference path="RootDiagramController.ts" />
 /// <reference path="XmlHttpFactory.ts" />
 /// <reference path="diagram/controllers/DiagramController.ts" />
+/// <reference path="diagram/controllers/DiagramMenuController.ts" />
 /// <reference path="diagram/gestures/gestures.ts" />
 /// <reference path="diagram/gestures/keyGiver.ts" />
 /// <reference path="diagram/gestures/utils.ts" />
