@@ -52,17 +52,9 @@ class DiagramMenuController {
         });
     }
 
-    private clearScene(): void {
-        this.diagramController.graph.clear();
-        this.diagramController.nodesMap = {};
-        this.diagramController.linksMap = {};
-        $(".property").remove();
-        this.diagramController.currentElement = undefined;
-        this.canBeDeleted = false;
-    }
-
     private clearAll(): void {
-        this.clearScene();
+        this.diagramController.clearScene();
+        this.canBeDeleted = false;
         this.currentDiagramName = "";
         this.currentDiagramFolderId = "";
     }
@@ -139,7 +131,7 @@ class DiagramMenuController {
             contentType: 'application/json',
             data: (ExportManager.exportDiagramRequestToJSON(diagramName, this.currentDiagramFolderId)),
             success: function (response) {
-                menuController.clearScene();
+                menuController.diagramController.clearScene();
                 ImportManager.import(response, menuController.diagramController.graph, menuController.diagramController.nodesMap,
                     menuController.diagramController.linksMap, menuController.diagramController.nodeTypesMap);
             },

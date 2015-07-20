@@ -102,6 +102,9 @@ CREATE TABLE robots (
   FOREIGN KEY (username) REFERENCES users (username)
 );
 
+
+ALTER TABLE diagrams ADD CONSTRAINT diagram_key UNIQUE (name, folder_id);
+
 INSERT INTO users (username, password, enabled)
 VALUES ('denis', '$2a$10$04TVADrR6/SPLBjsK0N30.Jf5fNjBugSACeGv1S69dZALR7lSov0y', TRUE);
 
