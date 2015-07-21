@@ -156,21 +156,18 @@ class RobotItemImpl implements RobotItem {
         this.hideHandles();
     }
 
+    /**
+     *
+     * @returns {RaphaelElement} - pointer to rotate Handle (circle)
+     */
+
     getRotateHandle(): RaphaelElement {
         return this.rotateHandle;
     }
 
-    setStartPosition(position: TwoDPosition, direction: number): void {
-        this.startPosition = position;
-        this.image.attr({x: position.x, y: position.y});
-        this.center.x = position.x + this.width / 2;
-        this.center.y = position.y + this.height / 2;
-        this.startCenter.x = this.center.x;
-        this.startCenter.y = this.center.y;
-        this.image.transform("R" + direction + "," + this.center.x + "," + this.center.y);
-        this.rotateHandle.attr({"cx": + position.x + this.width + 20, "cy": position.y + this.height / 2 });
-
-    }
+    /**
+     * Redraw robot Item and his sensors on the WoldModel's paper
+     */
 
     redraw(): void {
 
@@ -194,6 +191,11 @@ class RobotItemImpl implements RobotItem {
         robotItem.transformSensorsItems("R" + diffAngle +"," + this.center.x + "," + this.center.y);
     }
 
+    /**
+     * Returns the value of the rotation
+     * @returns {number} - current value in degrees
+     */
+
     public getAngle() : number {
         return this.angle;
     }
@@ -202,6 +204,7 @@ class RobotItemImpl implements RobotItem {
      * Rotate the rotateHandle by angle degrees relative to the center of the machine
      * @param angle
      */
+
     private rotateCircle(angle : number) : void {
         var cX = this.rotateHandle.attr("cx");
         var cY = this.rotateHandle.attr("cy");
@@ -216,6 +219,7 @@ class RobotItemImpl implements RobotItem {
      * @param position - new position for robot
      * @param angle - new angle for robot
      */
+
     updateRobotLocation(position: TwoDPosition, angle): void {
         this.startCenter = new TwoDPosition(this.center.x, this.center.y);
         this.previousAngle = this.angle;
@@ -223,6 +227,7 @@ class RobotItemImpl implements RobotItem {
         this.center.y = position.y;
         this.angle = angle;
     }
+
 
     hideHandles(): void {
         this.rotateHandle.hide();
@@ -257,6 +262,11 @@ class RobotItemImpl implements RobotItem {
        return this.worldModel;
     }
 
+    /**
+     * Remove sensor with name as portName from observed sensors
+     * @param portName
+     */
+
     removeSensorItem(portName: string): void {
         var sensor = this.sensors[portName];
         if (sensor) {
@@ -264,6 +274,13 @@ class RobotItemImpl implements RobotItem {
             delete this.sensors[portName];
         }
     }
+
+    /**
+     * Add new sensor with name as portName to observing sensors
+     * @param portName
+     * @param sensorType
+     * @param pathToImage
+     */
 
     addSensorItem(portName: string, sensorType: DeviceInfo, pathToImage: string): void {
         var sensor: SensorItem;
@@ -275,12 +292,22 @@ class RobotItemImpl implements RobotItem {
         this.sensors[portName] = sensor;
     }
 
+    /**
+     * Notify all sensors update their current positions
+     */
+
     private updateSensorsTransformations(): void {
         for(var portName in this.sensors) {
             var sensor = this.sensors[portName];
             sensor.updatePosition();
         }
     }
+
+    /**
+     * Applied transformation for all sensors
+     * @param transformationString
+     * IMPORTANT -- only either "T x,y" or "R angle,x,y"
+     */
 
     private transformSensorsItems(transformationString: string): void {
         for(var portName in this.sensors) {
