@@ -175,7 +175,6 @@ class SensorItem implements AbstractItem {
      * Returns upper left conner of the car's model
      * @returns {TwoDPosition}
      */
-
     getDefaultPosition(): TwoDPosition {
         return new TwoDPosition(this.robotItem.getCenterPosition().x + this.robotItem.getWidth() + this.width / 2,
                                       this.robotItem.getCenterPosition().y - this.height / 2);
@@ -185,7 +184,6 @@ class SensorItem implements AbstractItem {
      * Returns the type of the sensor
      * @returns {string}
      */
-
     name(): string {
         if (this.sensorType.isA(TouchSensor)) {
             return "touch";
@@ -216,7 +214,6 @@ class SensorItem implements AbstractItem {
      * Defines the image's size for current type of the sensor
      * @param sensorType
      */
-
     defineImageSizes(sensorType): void {
         if (sensorType.isA(TouchSensor)) {
             this.width = 25;
@@ -236,7 +233,6 @@ class SensorItem implements AbstractItem {
      * Transform sensor and his items by transformationString
      * @param transformationString
      */
-
     transform(transformationString : string): void {
         var tmpPosition = this.robotItem.getCenterPosition();
         var tmp : string = "";
@@ -256,7 +252,6 @@ class SensorItem implements AbstractItem {
      * @param dx
      * @param dy
      */
-
     translateSensor(dx : number, dy : number) {
         var cx = this.rotateHandle.attr("cx");
         var cy = this.rotateHandle.attr("cy");
@@ -275,7 +270,6 @@ class SensorItem implements AbstractItem {
      * @param x
      * @param y
      */
-
     rotateSensor(angle : number, x : number, y: number) {
         var previousCenter : TwoDPosition = this.center;
 

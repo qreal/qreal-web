@@ -15,7 +15,6 @@ class SonarSensorItem extends SensorItem {
      * Apply transformation to sensor
      * @param transformationString
      */
-
     transform(transformationString: string) {
         super.transform(transformationString);
         this.drawRegion();
@@ -28,7 +27,6 @@ class SonarSensorItem extends SensorItem {
      * @param angle
      * @returns {TwoDPosition} new vector after rotation
      */
-
     private rotateVector(toRotate : TwoDPosition, center : TwoDPosition, angle : number) : TwoDPosition {
         var dx = toRotate.x - center.x;
         var dy = toRotate.y - center.y;
@@ -45,7 +43,6 @@ class SonarSensorItem extends SensorItem {
      * Rotate sensor by angle degree
      * @param angle
      */
-
     rotate(angle: number) {
         super.rotate(angle);
 
@@ -59,7 +56,6 @@ class SonarSensorItem extends SensorItem {
     /**
      * Remove sensor and all his items from paper
      */
-
     remove(): void {
         super.remove();
         this.scanningRegion.remove();
@@ -68,7 +64,6 @@ class SonarSensorItem extends SensorItem {
     /**
      * Redrawing sonar way on the current moment
      */
-
     private drawRegion() : void {
         var worldModel : WorldModel = this.robotItem.getWorldModel();
         if (this.scanningRegion) {

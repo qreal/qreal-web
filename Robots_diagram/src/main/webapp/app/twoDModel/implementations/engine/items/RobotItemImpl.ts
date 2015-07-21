@@ -160,7 +160,6 @@ class RobotItemImpl implements RobotItem {
      *
      * @returns {RaphaelElement} - pointer to rotate Handle (circle)
      */
-
     getRotateHandle(): RaphaelElement {
         return this.rotateHandle;
     }
@@ -168,7 +167,6 @@ class RobotItemImpl implements RobotItem {
     /**
      * Redraw robot Item and his sensors on the WoldModel's paper
      */
-
     redraw(): void {
 
         var diffX = this.center.x - this.startCenter.x;
@@ -195,7 +193,6 @@ class RobotItemImpl implements RobotItem {
      * Returns the value of the rotation
      * @returns {number} - current value in degrees
      */
-
     public getAngle() : number {
         return this.angle;
     }
@@ -204,7 +201,6 @@ class RobotItemImpl implements RobotItem {
      * Rotate the rotateHandle by angle degrees relative to the center of the machine
      * @param angle
      */
-
     private rotateCircle(angle : number) : void {
         var cX = this.rotateHandle.attr("cx");
         var cY = this.rotateHandle.attr("cy");
@@ -219,7 +215,6 @@ class RobotItemImpl implements RobotItem {
      * @param position - new position for robot
      * @param angle - new angle for robot
      */
-
     updateRobotLocation(position: TwoDPosition, angle): void {
         this.startCenter = new TwoDPosition(this.center.x, this.center.y);
         this.previousAngle = this.angle;
@@ -266,7 +261,6 @@ class RobotItemImpl implements RobotItem {
      * Remove sensor with name as portName from observed sensors
      * @param portName
      */
-
     removeSensorItem(portName: string): void {
         var sensor = this.sensors[portName];
         if (sensor) {
@@ -281,7 +275,6 @@ class RobotItemImpl implements RobotItem {
      * @param sensorType
      * @param pathToImage
      */
-
     addSensorItem(portName: string, sensorType: DeviceInfo, pathToImage: string): void {
         var sensor: SensorItem;
         if (sensorType.isA(RangeSensor)) {
@@ -295,7 +288,6 @@ class RobotItemImpl implements RobotItem {
     /**
      * Notify all sensors update their current positions
      */
-
     private updateSensorsTransformations(): void {
         for(var portName in this.sensors) {
             var sensor = this.sensors[portName];
@@ -308,7 +300,6 @@ class RobotItemImpl implements RobotItem {
      * @param transformationString
      * IMPORTANT -- only either "T x,y" or "R angle,x,y"
      */
-
     private transformSensorsItems(transformationString: string): void {
         for(var portName in this.sensors) {
             var sensor = this.sensors[portName];
