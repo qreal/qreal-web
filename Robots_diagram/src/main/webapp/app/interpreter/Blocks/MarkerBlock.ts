@@ -13,6 +13,13 @@ class MarkerBlock extends Block {
             output += "Too much links";
         }
 
+        var models = timeline.getRobotModels();
+
+        for (var modelId = 0; modelId < models.length; modelId++) {
+            var model = models[modelId];
+            model.setDrawingState(isUp);
+        }
+
         if (links.length == 1) {
             var link = links[0];
             var nextNode = nodesMap[link.get('target').id];
@@ -21,6 +28,5 @@ class MarkerBlock extends Block {
 
         return output;
     }
-
 
 }

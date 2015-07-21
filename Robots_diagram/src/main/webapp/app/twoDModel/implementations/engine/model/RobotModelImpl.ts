@@ -60,6 +60,7 @@ class RobotModelImpl implements RobotModel {
 
     setDrawingState(newState : boolean) : void {
         this.drawingState = newState;
+        this.robotItem.setDrawingState(newState);
     }
 
     recalculateParams(): void {

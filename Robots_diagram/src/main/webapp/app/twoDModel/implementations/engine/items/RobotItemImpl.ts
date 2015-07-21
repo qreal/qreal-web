@@ -15,6 +15,7 @@ class RobotItemImpl implements RobotItem {
     private lastDy: number;
     private previousAngle : number;
     private sensors: {string?: SensorItem} = {};
+    private draftsman : DrawingItemImpl;
 
     constructor(worldModel: WorldModel, position: TwoDPosition, imageFileName: string, robot: RobotModel) {
         this.worldModel = worldModel;
@@ -26,6 +27,7 @@ class RobotItemImpl implements RobotItem {
         this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
         this.center = new TwoDPosition(position.x + this.width / 2, position.y + this.width / 2);
         this.startCenter = new TwoDPosition(this.center.x, this.center.y);
+        this.draftsman = new DrawingItemImpl(worldModel, this);
         var handleRadius: number = 10;
 
         var handleAttrs = {
@@ -189,6 +191,10 @@ class RobotItemImpl implements RobotItem {
         var diffAngle : number = this.angle - this.previousAngle
         this.rotateCircle(diffAngle);
 
+        var toDraftsPosition = Utils.rotateVector(-this.getWidth() / 2 - 3, 0, this.angle);
+        this.draftsman.setPosition(this.center.x + toDraftsPosition.x, this.center.y + toDraftsPosition.y);
+        this.draftsman.drawLine();
+
         robotItem.image.transform("R" + robotItem.angle);
         robotItem.transformSensorsItems("T" + diffX + "," + diffY);
         robotItem.transformSensorsItems("R" + diffAngle +"," + this.center.x + "," + this.center.y);
@@ -263,6 +269,10 @@ class RobotItemImpl implements RobotItem {
             sensor.remove();
             delete this.sensors[portName];
         }
+    }
+
+    setDrawingState(newState : boolean) : void {
+        this.draftsman.setDrawingState(newState);
     }
 
     addSensorItem(portName: string, sensorType: DeviceInfo, pathToImage: string): void {
