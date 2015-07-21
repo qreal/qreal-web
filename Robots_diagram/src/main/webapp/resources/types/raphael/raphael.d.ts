@@ -91,6 +91,8 @@ interface RaphaelElement {
     untouchend(handler: Function): RaphaelElement;
     untouchmove(handler: Function): RaphaelElement;
     untouchstart(handler: Function): RaphaelElement;
+    x : number;
+    y : number;
 }
 
 interface RaphaelPath extends RaphaelElement {
