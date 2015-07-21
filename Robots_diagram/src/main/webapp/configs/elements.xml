@@ -175,6 +175,14 @@
 			<Image src="images/smileBlock.svg"/>
 		</Element>
 
+        <Element name="Marker Down">
+            <Image src="images/markerDownBlock.svg"/>
+        </Element>
+
+        <Element name="Marker Up">
+            <Image src="images/markerUpBlock.svg"/>
+        </Element>
+
 		<Element name="Background Color">
 			<Property name="Color" type="dropdown">
                 <value>white</value>

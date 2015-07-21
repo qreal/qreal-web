@@ -8,12 +8,13 @@ class RobotModelImpl implements RobotModel {
     private speed2: number;
     private maxSpeed1 = 3;
     private maxSpeed2 = 3;
+    private drawingState : boolean;
 
     constructor(worldModel: WorldModel, twoDRobotModel: TwoDRobotModel, position: TwoDPosition) {
         this.twoDRobotModel = twoDRobotModel;
         this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), this);
         this.sensorsConfiguration = new SensorsConfiguration(this);
-
+        this.drawingState = false;
         this.position = new TwoDPosition(position.x, position.y);
         this.angle = 0;
         this.speed1 = 0;
@@ -55,6 +56,10 @@ class RobotModelImpl implements RobotModel {
     setPosition(position: TwoDPosition) {
         this.position.x = position.x;
         this.position.y = position.y;
+    }
+
+    setDrawingState(newState : boolean) : void {
+        this.drawingState = newState;
     }
 
     recalculateParams(): void {

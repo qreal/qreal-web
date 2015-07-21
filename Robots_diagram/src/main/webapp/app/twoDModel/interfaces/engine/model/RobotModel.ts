@@ -8,4 +8,5 @@ interface RobotModel {
     setAngle(angle: number): void;
     getAngle(): number;
     setPosition(position: TwoDPosition): void;
+    setDrawingState(newState : boolean): void;
 }
