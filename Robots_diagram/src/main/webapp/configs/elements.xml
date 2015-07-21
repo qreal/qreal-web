@@ -34,6 +34,13 @@
 			<Image src="images/loopBlock.svg"/>
 		</Element>
 
+        <Element name="Switch">
+            <Property name="Condition" type="string">
+                <value>0</value>
+            </Property>
+            <Image src="images/switchBlock.svg"/>
+        </Element>
+
 		<Element name="Fork">
 			<Image src="images/forkBlock.svg"/>
 		</Element>

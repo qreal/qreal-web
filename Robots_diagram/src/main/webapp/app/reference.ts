@@ -52,6 +52,7 @@
 /// <reference path="interpreter/Blocks/Motors.ts" />
 /// <reference path="interpreter/Blocks/MotorsStop.ts" />
 /// <reference path="interpreter/Blocks/SmileBlock.ts" />
+/// <reference path="interpreter/Blocks/SwitchBlock.ts" />
 /// <reference path="interpreter/Blocks/Timer.ts" />
 /// <reference path="interpreter/Blocks/initialBlock.ts" />
 /// <reference path="interpreter/Factory.ts" />

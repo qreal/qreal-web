@@ -34,6 +34,10 @@ class Factory {
                 output += Timer.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;
 
+            case "Switch":
+                output += SwitchBlock.run(node, graph, nodesMap, linksMap, env, timeline);
+                break;
+            
             default:
                 output += "Not yet";
         }
