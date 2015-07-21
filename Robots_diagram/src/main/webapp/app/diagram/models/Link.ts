@@ -10,7 +10,7 @@ class Link implements DiagramElement {
             this.properties = properties;
         }
         else {
-            this.properties["Guard"] = new Property("", "dropdown");
+            this.properties["Guard"] = new Property("", "combobox");
         }
     }
 
