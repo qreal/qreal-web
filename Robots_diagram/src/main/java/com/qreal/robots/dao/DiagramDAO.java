@@ -21,7 +21,5 @@ public interface DiagramDAO {
 
     public List<String> getFolderNames(String currentFolderId);
 
-    public String getParentFolder(String currentFolderId);
-
     public List<String> getDiagramNames(String folderId);
 }

@@ -47,15 +47,7 @@ public class DiagramServiceImpl implements DiagramService {
 
     @Transactional
     @Override
-    public List<String> getFolderNames(String currentFolderId) {
-        return diagramDAO.getFolderNames(currentFolderId);
-    }
-
-    @Transactional
-    @Override
-    public String getParentFolder(String currentFolderId) {
-        return diagramDAO.getParentFolder(currentFolderId);
-    }
+    public List<String> getFolderNames(String currentFolderId) { return diagramDAO.getFolderNames(currentFolderId); }
 
     @Transactional
     @Override

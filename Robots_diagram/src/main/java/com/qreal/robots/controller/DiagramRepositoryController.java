@@ -61,12 +61,6 @@ public class DiagramRepositoryController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/getParentFolderId", method = RequestMethod.POST)
-    public String getParentFolderId(@RequestBody OpenRequest request) {
-        return diagramService.getParentFolder(request.getName());
-    }
-
-    @ResponseBody
     @RequestMapping(value = "/getUser", method = RequestMethod.POST)
     public String getUserName() { return diagramService.getUserName(); }
 }

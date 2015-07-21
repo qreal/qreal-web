@@ -2,29 +2,31 @@ class DiagramMenuController {
     private diagramController;
     private currentFolderId: string;
     private user: string;
-    private folderLevel: number;
     private currentDiagramName: string;
     private currentDiagramFolderId: string;
     private canBeDeleted: boolean;
+    private pathToFolder;
 
     constructor($scope) {
         this.diagramController = $scope.vm;
-        this.folderLevel = 0;
         this.currentDiagramFolderId = "";
         this.currentDiagramName = "";
         this.canBeDeleted = false;
 
-        var user: string;
+        var menuController = this;
         $.ajax({
             type: 'POST',
             url: 'getUser',
             dataType: 'text',
             success: function (response) {
-                user = response;
+                menuController.user = response;
+                menuController.currentFolderId = menuController.user + "root_0";
+                menuController.pathToFolder = [];
+            },
+            error: function (response, status, error) {
+                console.log("error: " + status + " " + error);
             }
         });
-        this.user = user;
-        this.currentFolderId = this.user + "root_0";
 
         $.ajax({
             type: 'POST',
@@ -32,18 +34,17 @@ class DiagramMenuController {
             dataType: 'text',
             contentType: 'application/json',
             data: (ExportManager.exportFolderToJSON(this.currentFolderId, "root", "")),
-            success: function () {},
+            success: function () {
+                console.log("OK");
+            },
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);
             }
         });
 
-        var menuController = this;
-
         $(document).ready(function() {
             $('.modal-footer button').click(function() {
                 menuController.currentFolderId = menuController.user + "root_0";
-                menuController.folderLevel = 0;
             });
             $('#saveAfterCreate').click(function () {
                 menuController.canBeDeleted = true;
@@ -73,7 +74,8 @@ class DiagramMenuController {
             success: function (response) {
                 if (response === "OK") {
                     menuController.currentFolderId = menuController.user + "root_0";
-                    menuController.folderLevel = 0;
+                    menuController.pathToFolder = [];
+                    menuController.pathToFolder = [menuController.currentFolderId];
                     $('#diagrams').modal('hide');
 
                     if (menuController.canBeDeleted) {
@@ -123,7 +125,7 @@ class DiagramMenuController {
         this.currentDiagramName = diagramName;
         this.currentDiagramFolderId = this.currentFolderId;
         this.currentFolderId = this.user + "root_0";
-        this.folderLevel = 0;
+        this.pathToFolder = [];
         $.ajax({
             type: 'POST',
             url: 'openDiagram',
@@ -226,7 +228,7 @@ class DiagramMenuController {
     }
 
     private clearFolderTable(): void {
-        $('.folderTable').empty();
+        $('.folderTable li').remove();
     }
 
     private clearWarning(place : string): void {
@@ -234,8 +236,8 @@ class DiagramMenuController {
     }
 
     private showFolderTable(openingFolderId: string): void {
-        $('.folderTable li').remove();
         this.clearFolderTable();
+        console.log(openingFolderId);
         this.currentFolderId = openingFolderId;
         var menuController = this;
         $.ajax({
@@ -250,8 +252,10 @@ class DiagramMenuController {
                         "<span class='glyphicon-class'>" + response[i] + "</span></li>");
                 });
                 $('.folderTable .folders').click(function () {
-                    menuController.folderLevel++;
-                    var folderId: string = menuController.user + $(this).text() + "_" + menuController.folderLevel;
+                    console.log(menuController.pathToFolder.length);
+                    var folderId: string = menuController.user + $(this).text() + "_" + menuController.pathToFolder.length;
+                    menuController.pathToFolder.push(menuController.currentFolderId);
+                    console.log(menuController.pathToFolder);
                     menuController.showFolderTable(folderId);
                 });
             },
@@ -282,30 +286,17 @@ class DiagramMenuController {
     }
 
     private levelUpFolder(): void {
-        var menuController = this;
-        if (this.currentFolderId !== this.user + "root_0") {
-            this.folderLevel--;
-            $.ajax({
-                type: 'POST',
-                url: 'getParentFolderId',
-                dataType: 'text',
-                contentType: 'application/json',
-                data: (JSON.stringify({name: this.currentFolderId})),
-                success: function (response) {
-                    menuController.currentFolderId = response;
-                    menuController.showFolderTable(menuController.currentFolderId);
-                },
-                error: function (response, status, error) {
-                    console.log("error: " + status + " " + error);
-                }
-            });
+        if (this.pathToFolder.length > 0) {
+            var parentFolder: string = this.pathToFolder.pop();
+            console.log(this.pathToFolder);
+            this.showFolderTable(parentFolder);
         }
     }
 
     private createFolder() : void {
         var name: string = $('.folderMenu input:text').val();
         var menuController = this;
-        var newFolderLevel: number = this.folderLevel + 1;
+        var newFolderLevel: number = this.pathToFolder.length;
         var folderId: string = this.user + name + "_" + newFolderLevel;
         if (name === "") {
             this.writeWarning("Empty name", '.folderMenu');
