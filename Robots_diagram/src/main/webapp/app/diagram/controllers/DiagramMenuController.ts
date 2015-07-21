@@ -45,6 +45,7 @@ class DiagramMenuController {
         $(document).ready(function() {
             $('.modal-footer button').click(function() {
                 menuController.currentFolderId = menuController.user + "root_0";
+                menuController.pathToFolder = [];
             });
             $('#saveAfterCreate').click(function () {
                 menuController.canBeDeleted = true;
@@ -237,7 +238,6 @@ class DiagramMenuController {
 
     private showFolderTable(openingFolderId: string): void {
         this.clearFolderTable();
-        console.log(openingFolderId);
         this.currentFolderId = openingFolderId;
         var menuController = this;
         $.ajax({
@@ -252,10 +252,8 @@ class DiagramMenuController {
                         "<span class='glyphicon-class'>" + response[i] + "</span></li>");
                 });
                 $('.folderTable .folders').click(function () {
-                    console.log(menuController.pathToFolder.length);
                     var folderId: string = menuController.user + $(this).text() + "_" + menuController.pathToFolder.length;
                     menuController.pathToFolder.push(menuController.currentFolderId);
-                    console.log(menuController.pathToFolder);
                     menuController.showFolderTable(folderId);
                 });
             },
@@ -288,7 +286,6 @@ class DiagramMenuController {
     private levelUpFolder(): void {
         if (this.pathToFolder.length > 0) {
             var parentFolder: string = this.pathToFolder.pop();
-            console.log(this.pathToFolder);
             this.showFolderTable(parentFolder);
         }
     }
