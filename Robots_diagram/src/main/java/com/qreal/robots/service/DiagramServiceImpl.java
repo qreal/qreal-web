@@ -25,7 +25,10 @@ public class DiagramServiceImpl implements DiagramService {
 
     @Transactional
     @Override
-    public String saveDiagram(Diagram diagram) { return diagramDAO.save(diagram); }
+    public String saveDiagram(Diagram diagram) {
+        
+        return diagramDAO.save(diagram);
+    }
 
     @Transactional
     @Override
@@ -56,4 +59,9 @@ public class DiagramServiceImpl implements DiagramService {
     @Transactional
     @Override
     public List<String> getDiagramNames(String folderId) { return diagramDAO.getDiagramNames(folderId); }
+
+    private String addUserToId(String folderId) {
+        String creatorName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return creatorName + folderId;
+    }
 }
