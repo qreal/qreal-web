@@ -8,11 +8,11 @@ class DrawingItemImpl implements DrawingItem {
         var robotPosition : TwoDPosition = robotItem.getCenterPosition();
         this.currentPosition = new TwoDPosition(robotPosition.x - robotItem.getWidth() / 2, robotPosition.y);
         this.worldModel = worldModel;
-        this.drawingState = true;
+        this.drawingState = false;
     }
 
     /**
-     * Set a new drawing state : true if robot shouldn't draw own way and false otherwise.
+     * Set a new drawing state : true if robot should draw own way and false otherwise.
      * @param newState
      */
     setDrawingState(newState : boolean) : void {
@@ -34,7 +34,7 @@ class DrawingItemImpl implements DrawingItem {
      */
     drawLine() : void {
         var paper = this.worldModel.getPaper();;
-        if (!this.drawingState) {
+        if (this.drawingState) {
             var rect = paper.rect(this.currentPosition.x, this.currentPosition.y, 3, 3);
             rect.attr({stroke : "#bb0000", fill : "bb0000"});
         }

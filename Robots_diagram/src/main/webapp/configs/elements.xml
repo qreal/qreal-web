@@ -41,7 +41,7 @@
             <Image src="images/switchBlock.svg"/>
         </Element>
 
-		<Element name="Fork">
+        <Element name="Fork">
 			<Image src="images/forkBlock.svg"/>
 		</Element>
 

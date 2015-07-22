@@ -39,11 +39,11 @@ class Factory {
                 break;
 
             case "Marker Up":
-                output += MarkerBlock.run(node, graph, nodesMap, linksMap, env, timeline, true);
+                output += MarkerBlock.run(node, graph, nodesMap, linksMap, env, timeline, false);
                 break;
 
             case "Marker Down":
-                output += MarkerBlock.run(node, graph, nodesMap, linksMap, env, timeline, false);
+                output += MarkerBlock.run(node, graph, nodesMap, linksMap, env, timeline, true);
                 break;
             
             default:
