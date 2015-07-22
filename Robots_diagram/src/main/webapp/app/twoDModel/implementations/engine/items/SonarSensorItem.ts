@@ -11,11 +11,22 @@ class SonarSensorItem extends SensorItem {
         this.drawRegion();
     }
 
+    /**
+     * Apply transformation to sensor
+     * @param transformationString
+     */
     transform(transformationString: string) {
         super.transform(transformationString);
         this.drawRegion();
     }
 
+    /**
+     * Rotates vector toRotate around center to angle degrees
+     * @param toRotate
+     * @param center
+     * @param angle
+     * @returns {TwoDPosition} new vector after rotation
+     */
     private rotateVector(toRotate : TwoDPosition, center : TwoDPosition, angle : number) : TwoDPosition {
         var dx = toRotate.x - center.x;
         var dy = toRotate.y - center.y;
@@ -28,6 +39,10 @@ class SonarSensorItem extends SensorItem {
         this.drawRegion();
     }
 
+    /**
+     * Rotate sensor by angle degree
+     * @param angle
+     */
     rotate(angle: number) {
         super.rotate(angle);
 
@@ -38,6 +53,9 @@ class SonarSensorItem extends SensorItem {
             regionRotationX + "," + regionRotationY);
     }
 
+    /**
+     * Remove sensor and all his items from paper
+     */
     remove(): void {
         super.remove();
         this.scanningRegion.remove();

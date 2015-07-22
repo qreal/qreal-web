@@ -53,6 +53,11 @@ class RobotModelImpl implements RobotModel {
         return this.angle;
     }
 
+    /**
+     * Set new position for car's Model
+     * @param position
+     */
+
     setPosition(position: TwoDPosition) {
         this.position.x = position.x;
         this.position.y = position.y;
@@ -63,6 +68,9 @@ class RobotModelImpl implements RobotModel {
         this.robotItem.setDrawingState(newState);
     }
 
+    /**
+     * Update parameters for car's Model
+     */
     recalculateParams(): void {
         var centerPosition = this.robotItem.getCurrentCenter();
         var angle = Utils.toRadian(this.robotItem.getAngle());
@@ -97,6 +105,10 @@ class RobotModelImpl implements RobotModel {
         var pos :TwoDPosition = new TwoDPosition(this.position.x, this.position.y);
         this.robotItem.updateRobotLocation(pos, Utils.toDegrees(this.angle));
     }
+
+    /**
+     * Call methods for drawing new state at the paper
+     */
 
     nextFragment(): void {
         this.robotItem.redraw();

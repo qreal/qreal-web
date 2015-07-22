@@ -12,8 +12,8 @@ class SensorItem implements AbstractItem {
     protected sensorType: DeviceInfo;
     protected deltaPosition: TwoDPosition;
     protected handleRadius = 10;
-    protected radiusFromCar : number;
-    protected radiusFromSensor : number;
+    protected distanceFromCarToRotateHandle : number;
+    protected distanceFromSensorToRotateHandle : number;
 
 
     constructor(robotItem: RobotItem, worldModel: WorldModel, sensorType: DeviceInfo, pathToImage: string) {
@@ -29,8 +29,8 @@ class SensorItem implements AbstractItem {
         this.image = paper.image((pathToImage) ? pathToImage : this.pathToImage(), defaultPosition.x, defaultPosition.y, this.width, this.height);
         this.angle = this.robotItem.getAngle();
 
-        this.radiusFromCar = this.robotItem.getWidth() + this.width + this.width + this.handleRadius;
-        this.radiusFromSensor = this.radiusFromCar - (this.center.x - this.parentCenter.x);
+        this.distanceFromCarToRotateHandle = this.robotItem.getWidth() + this.width + this.width + this.handleRadius;
+        this.distanceFromSensorToRotateHandle = this.distanceFromCarToRotateHandle - (this.center.x - this.parentCenter.x);
 
         this.image.transform("R" + this.angle + "," +  this.parentCenter.x + "," + this.parentCenter.y);
         var diffX = this.center.x - this.parentCenter.x;
@@ -54,8 +54,8 @@ class SensorItem implements AbstractItem {
 
         var angleInRad : number = Utils.toRadian(this.angle);
 
-        this.rotateHandle = paper.circle(this.parentCenter.x + this.radiusFromCar * Math.cos(angleInRad),
-               this.parentCenter.y + this.radiusFromCar * Math.sin(angleInRad), this.handleRadius).attr(handleAttrs);
+        this.rotateHandle = paper.circle(this.parentCenter.x + this.distanceFromCarToRotateHandle * Math.cos(angleInRad),
+               this.parentCenter.y + this.distanceFromCarToRotateHandle * Math.sin(angleInRad), this.handleRadius).attr(handleAttrs);
 
         var sensorItem = this;
 
@@ -96,8 +96,8 @@ class SensorItem implements AbstractItem {
                     sensorItem.image.transform("R" + angle);
 
                     var angleInRad = Utils.toRadian(angle);
-                    var newCx = Math.cos(angleInRad) * (sensorItem.radiusFromSensor) + sensorItem.center.x;
-                    var newCy = Math.sin(angleInRad) * (sensorItem.radiusFromSensor) + sensorItem.center.y;
+                    var newCx = Math.cos(angleInRad) * (sensorItem.distanceFromSensorToRotateHandle) + sensorItem.center.x;
+                    var newCy = Math.sin(angleInRad) * (sensorItem.distanceFromSensorToRotateHandle) + sensorItem.center.y;
 
                     this.attr({cx: newCx, cy: newCy});
                     this.cx = newCx;
@@ -111,7 +111,8 @@ class SensorItem implements AbstractItem {
                 this.lastDx = 0;
                 this.lastDy = 0;
                 sensorItem.image.transform("");
-                sensorItem.image.attr({"x" : sensorItem.center.x - sensorItem.height / 2, "y" : sensorItem.center.y - sensorItem.width / 2});
+                sensorItem.image.attr({"x" : sensorItem.center.x - sensorItem.height / 2,
+                                            "y" : sensorItem.center.y - sensorItem.width / 2});
                 sensorItem.image.transform("R" + sensorItem.angle);
                 sensorItem.updatePosition();
                 return this;
@@ -170,11 +171,19 @@ class SensorItem implements AbstractItem {
         this.hideHandles();
     }
 
+    /**
+     * Returns upper left conner of the car's model
+     * @returns {TwoDPosition}
+     */
     getDefaultPosition(): TwoDPosition {
         return new TwoDPosition(this.robotItem.getCenterPosition().x + this.robotItem.getWidth() + this.width / 2,
                                       this.robotItem.getCenterPosition().y - this.height / 2);
     }
 
+    /**
+     * Returns the type of the sensor
+     * @returns {string}
+     */
     name(): string {
         if (this.sensorType.isA(TouchSensor)) {
             return "touch";
@@ -201,6 +210,10 @@ class SensorItem implements AbstractItem {
         return "images/2dmodel/sensors/2d_" + this.name() + ".png";
     }
 
+    /**
+     * Defines the image's size for current type of the sensor
+     * @param sensorType
+     */
     defineImageSizes(sensorType): void {
         if (sensorType.isA(TouchSensor)) {
             this.width = 25;
@@ -216,6 +229,10 @@ class SensorItem implements AbstractItem {
         }
     }
 
+    /**
+     * Transform sensor and his items by transformationString
+     * @param transformationString
+     */
     transform(transformationString : string): void {
         var tmpPosition = this.robotItem.getCenterPosition();
         var tmp : string = "";
@@ -230,6 +247,11 @@ class SensorItem implements AbstractItem {
         }
     }
 
+    /**
+     * Translate sensor and his items by dx,dy
+     * @param dx
+     * @param dy
+     */
     translateSensor(dx : number, dy : number) {
         var cx = this.rotateHandle.attr("cx");
         var cy = this.rotateHandle.attr("cy");
@@ -242,6 +264,12 @@ class SensorItem implements AbstractItem {
         sensor.image.transform("R" + sensor.angle + "," + sensor.image.x + "," + sensor.image.y);
     }
 
+    /**
+     * Rotates sensor and his items around (x,y) by andle degrees
+     * @param angle
+     * @param x
+     * @param y
+     */
     rotateSensor(angle : number, x : number, y: number) {
         var previousCenter : TwoDPosition = this.center;
 

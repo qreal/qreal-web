@@ -23,6 +23,9 @@ class TimelineImpl implements Timeline {
         this.setActive(false);
     }
 
+    /**
+     * Start timer and car's movement
+     */
     start(): void {
         if (this.isActive)
             return;
@@ -32,11 +35,18 @@ class TimelineImpl implements Timeline {
         this.intervalId = setInterval(function() { timeline.onTimer(timeline); }, this.defaultFrameLength);
     }
 
+    /**
+     * Stop timer and car's movement
+     */
     stop(): void {
         this.setActive(false);
         clearInterval(this.intervalId);
     }
 
+    /**
+     * Call method for robotModel to recalculate parameters and to draw new state on the paper by timer tick
+     * @param timeline
+     */
     onTimer(timeline: Timeline): void {
         if (!this.isActive)
             return;
