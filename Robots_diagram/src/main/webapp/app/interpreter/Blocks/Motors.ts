@@ -14,6 +14,10 @@ class Motors extends Block {
             if (p == "Power (%)") {
                 var parser = new Parser(properties[p].value, env);
                 parser.parseExpression();
+                var models = timeline.getRobotModels();
+                var model = models[0];
+                model.setMotor1(0);
+                model.setMotor2(0);
                 if (parser.error == null) {
                     power = parser.result;
                     if (power < 0 || power > 100) {
@@ -23,16 +27,12 @@ class Motors extends Block {
                         output += "Ports: " + ports + "\n" + "Power: " + power + "\n";
 
                         power = (forward) ? power : -power;
-                        var models = timeline.getRobotModels();
-                        var model = models[0];
                         if (ports.length == 1) {
                             if (ports[0] == "M3") {
                                 model.setMotor1(power);
-                                model.setMotor2(0);
                             }
                             else if (ports[0] == "M4") {
                                 model.setMotor2(power);
-                                model.setMotor1(0);
                             }
                             else {
                                 output += "Error: Incorrect port name";
