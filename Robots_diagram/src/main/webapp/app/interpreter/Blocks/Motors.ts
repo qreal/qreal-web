@@ -16,8 +16,6 @@ class Motors extends Block {
                 parser.parseExpression();
                 var models = timeline.getRobotModels();
                 var model = models[0];
-                model.setMotor1(0);
-                model.setMotor2(0);
                 if (parser.error == null) {
                     power = parser.result;
                     if (power < 0 || power > 100) {
