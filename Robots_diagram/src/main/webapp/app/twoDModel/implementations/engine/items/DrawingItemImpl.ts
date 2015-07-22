@@ -30,7 +30,7 @@ class DrawingItemImpl implements DrawingItem {
     }
 
     /**
-     * Draw point at the current position, if drawState is false
+     * Draw point at the current position, if drawState is true
      */
     drawLine() : void {
         var paper = this.worldModel.getPaper();;
