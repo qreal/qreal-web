@@ -275,7 +275,10 @@ class RobotItemImpl implements RobotItem {
         }
     }
 
-
+    /**
+     * Change drawingState to new value
+     * @param newState
+     */
     setDrawingState(newState : boolean) : void {
         this.draftsman.setDrawingState(newState);
     }

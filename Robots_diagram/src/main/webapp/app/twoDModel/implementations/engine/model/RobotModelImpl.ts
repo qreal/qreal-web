@@ -57,12 +57,15 @@ class RobotModelImpl implements RobotModel {
      * Set new position for car's Model
      * @param position
      */
-
     setPosition(position: TwoDPosition) {
         this.position.x = position.x;
         this.position.y = position.y;
     }
 
+    /**
+     * Change the value of drawing stage
+     * @param newState
+     */
     setDrawingState(newState : boolean) : void {
         this.drawingState = newState;
         this.robotItem.setDrawingState(newState);
