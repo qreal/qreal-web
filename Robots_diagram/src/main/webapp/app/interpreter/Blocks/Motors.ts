@@ -28,9 +28,11 @@ class Motors extends Block {
                         if (ports.length == 1) {
                             if (ports[0] == "M3") {
                                 model.setMotor1(power);
+                                model.setMotor2(0);
                             }
                             else if (ports[0] == "M4") {
                                 model.setMotor2(power);
+                                model.setMotor1(0);
                             }
                             else {
                                 output += "Error: Incorrect port name";

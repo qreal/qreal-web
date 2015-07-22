@@ -8,7 +8,7 @@ class DrawingItemImpl implements DrawingItem {
         var robotPosition : TwoDPosition = robotItem.getCenterPosition();
         this.currentPosition = new TwoDPosition(robotPosition.x - robotItem.getWidth() / 2, robotPosition.y);
         this.worldModel = worldModel;
-        this.drawingState = false;
+        this.drawingState = true;
     }
 
     setDrawingState(newState : boolean) : void {
