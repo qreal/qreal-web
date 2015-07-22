@@ -34,6 +34,18 @@ class Factory {
                 output += Timer.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;
 
+            case "Switch":
+                output += SwitchBlock.run(node, graph, nodesMap, linksMap, env, timeline);
+                break;
+
+            case "Marker Up":
+                output += MarkerBlock.run(node, graph, nodesMap, linksMap, env, timeline, false);
+                break;
+
+            case "Marker Down":
+                output += MarkerBlock.run(node, graph, nodesMap, linksMap, env, timeline, true);
+                break;
+            
             default:
                 output += "Not yet";
         }

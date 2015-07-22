@@ -11,4 +11,5 @@ interface RobotItem extends AbstractItem {
     getRotateHandle() : RaphaelElement;
     getCenterPosition() : TwoDPosition;
     getWorldModel() : WorldModel;
+    setDrawingState(newState : boolean) : void;
 }

@@ -14,6 +14,8 @@ class Motors extends Block {
             if (p == "Power (%)") {
                 var parser = new Parser(properties[p].value, env);
                 parser.parseExpression();
+                var models = timeline.getRobotModels();
+                var model = models[0];
                 if (parser.error == null) {
                     power = parser.result;
                     if (power < 0 || power > 100) {
@@ -23,8 +25,6 @@ class Motors extends Block {
                         output += "Ports: " + ports + "\n" + "Power: " + power + "\n";
 
                         power = (forward) ? power : -power;
-                        var models = timeline.getRobotModels();
-                        var model = models[0];
                         if (ports.length == 1) {
                             if (ports[0] == "M3") {
                                 model.setMotor1(power);
