@@ -1,6 +1,7 @@
 package com.qreal.robots.service;
 
 import com.qreal.robots.dao.DiagramDAO;
+import com.qreal.robots.model.auth.User;
 import com.qreal.robots.model.diagram.Diagram;
 import com.qreal.robots.model.diagram.DiagramRequest;
 import com.qreal.robots.model.diagram.Folder;
@@ -53,6 +54,13 @@ public class DiagramServiceImpl implements DiagramService {
         folder.setFolderParentId(addUserToId(folder.getFolderParentId()));
 
         return diagramDAO.createFolder(folder);
+    }
+
+    @Transactional
+    @Override
+    public boolean createRootFolder(User user) {
+        Folder rootFolder = new Folder(user.getUsername() + "root_0", "root", "", user);
+        return diagramDAO.createFolder(rootFolder);
     }
 
     @Transactional

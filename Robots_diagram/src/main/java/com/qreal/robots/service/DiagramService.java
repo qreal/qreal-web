@@ -1,5 +1,6 @@
 package com.qreal.robots.service;
 
+import com.qreal.robots.model.auth.User;
 import com.qreal.robots.model.diagram.Diagram;
 import com.qreal.robots.model.diagram.DiagramRequest;
 import com.qreal.robots.model.diagram.Folder;
@@ -18,6 +19,8 @@ public interface DiagramService {
     public String rewriteDiagram(Diagram diagram);
 
     public boolean createFolder(Folder folder);
+
+    public boolean createRootFolder(User user);
 
     public List<String> getFolderNames(String currentFolderId);
 
