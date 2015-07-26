@@ -95,6 +95,8 @@
                     <div class="modal-body_nopadding">
                         <div class="folderMenu">
                         </div>
+                        <div class="folderPath">
+                        </div>
                         <div class="folderView">
                             <ul class="folderTable">
                             </ul>
@@ -108,6 +110,7 @@
                 </div>
             </div>
         </div>
+
         <div class="modal fade" id="confirmNew" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">

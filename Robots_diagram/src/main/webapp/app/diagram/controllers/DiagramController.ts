@@ -1,9 +1,9 @@
 class DiagramController {
-    private graph: joint.dia.Graph = new joint.dia.Graph;
+    public graph: joint.dia.Graph = new joint.dia.Graph;
     private paper: DiagramPaper = new DiagramPaper(this, this.graph);
-    private nodeTypesMap: NodeTypesMap = {};
-    private nodesMap = {};
-    private linksMap = {};
+    public nodeTypesMap: NodeTypesMap = {};
+    public nodesMap = {};
+    public linksMap = {};
     private currentElement: DiagramElement;
     private isPaletteLoaded = false;
     private mouseupEvent;

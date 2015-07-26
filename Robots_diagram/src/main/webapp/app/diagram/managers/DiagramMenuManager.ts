@@ -1,5 +1,5 @@
 class DiagramMenuManager {
-    private diagramController;
+    private diagramController: DiagramController;
     private currentFolder: string;
     private currentDiagramName: string;
     private currentDiagramFolderId: string;
@@ -222,9 +222,31 @@ class DiagramMenuManager {
         $(place).remove();
     }
 
+    private showPathToFolder(): void {
+        $('.folderPath p').remove();
+        var path: string = "";
+        var i: number = 0;
+        if (this.pathToFolder.length > 3) {
+            i = this.pathToFolder.length - 2;
+            path = "...";
+        }
+        else {
+            i = 1;
+        }
+        for (i; i < this.pathToFolder.length; i++) {
+            path = path + this.pathToFolder[i] + "/";
+        }
+        if(this.currentFolder !== "root") {
+            path = path + this.currentFolder;
+        }
+
+        $('.folderPath').prepend("<p>" + path + "</p>");
+    }
+
     private showFolderTable(openingFolder: string): void {
         this.clearFolderTable();
         this.currentFolder = openingFolder;
+        this.showPathToFolder();
         var currentFolderId = this.currentFolder + "_" + this.pathToFolder.length;
         var menuManager = this;
         console.log(currentFolderId);
