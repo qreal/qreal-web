@@ -11,13 +11,13 @@ import java.util.List;
  */
 public interface DiagramDAO {
 
-    public String save(Diagram diagram);
+    public boolean save(Diagram diagram);
 
     public Diagram openDiagram(DiagramRequest request);
 
     public String rewriteDiagram(Diagram diagram);
 
-    public String createFolder(Folder folder);
+    public boolean createFolder(Folder folder);
 
     public List<String> getFolderNames(String currentFolderId);
 

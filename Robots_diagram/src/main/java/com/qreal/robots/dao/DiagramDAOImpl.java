@@ -29,7 +29,7 @@ public class DiagramDAOImpl implements DiagramDAO {
         this.sessionFactory = sessionFactory;
     }
 
-    public String save(Diagram diagram) {
+    public boolean save(Diagram diagram) {
         LOG.debug("saving diagram");
         Session session = sessionFactory.getCurrentSession();
         List<Diagram> diagrams = session.createQuery("from Diagram where folderId=:folderId and name=:name")
@@ -38,11 +38,11 @@ public class DiagramDAOImpl implements DiagramDAO {
                 .list();
 
         if (!diagrams.isEmpty()) {
-            return "This diagram already exists.";
+            return false;
         }
         else {
             session.save(diagram);
-            return "OK";
+            return true;
         }
     }
 
@@ -67,7 +67,7 @@ public class DiagramDAOImpl implements DiagramDAO {
         return("OK");
     }
 
-    public String createFolder(Folder folder) {
+    public boolean createFolder(Folder folder) {
         LOG.debug("creating folder");
         Session session = sessionFactory.getCurrentSession();
         List<Folder> folders = session.createQuery("from Folder where folderId=:folderId")
@@ -76,10 +76,10 @@ public class DiagramDAOImpl implements DiagramDAO {
 
         if (folders.isEmpty()) {
             session.save(folder);
-            return "OK";
+            return true;
         }
         else {
-            return "This folder already exists.";
+            return false;
         }
     }
 

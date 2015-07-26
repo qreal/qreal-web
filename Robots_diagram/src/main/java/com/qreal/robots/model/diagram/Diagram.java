@@ -32,6 +32,8 @@ public class Diagram implements Serializable {
 
     public String getFolderId() { return this.folderId; }
 
+    public void setFolderId(String folderId) { this.folderId = folderId; }
+
     public void setFolder(String folderId) { this.folderId = folderId; }
 
     public Long getDiagramId() {

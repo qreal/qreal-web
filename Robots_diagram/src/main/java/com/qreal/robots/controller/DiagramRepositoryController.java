@@ -6,11 +6,9 @@ import com.qreal.robots.model.diagram.Folder;
 import com.qreal.robots.model.diagram.OpenRequest;
 import com.qreal.robots.service.DiagramService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +22,36 @@ public class DiagramRepositoryController {
     @Autowired
     private DiagramService diagramService;
 
+    public class MenuException extends RuntimeException {
+        private String exceptionMessage;
+
+        public MenuException(String message) {
+            this.exceptionMessage = message;
+        }
+
+        public String getExceptionMessage() {
+            return this.exceptionMessage;
+        }
+
+        public void setExceptionMessage(String message) {
+            this.exceptionMessage = message;
+        }
+    }
+
+    @ExceptionHandler(MenuException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public String handleMenuException(MenuException exception) {
+        return exception.getExceptionMessage();
+    }
+
     @ResponseBody
     @RequestMapping(value = "/saveDiagram", method = RequestMethod.POST)
-    public String saveDiagram(@RequestBody Diagram diagram) {
-        return diagramService.saveDiagram(diagram);
+    public String saveDiagram(@RequestBody Diagram diagram) throws MenuException {
+        if (!diagramService.saveDiagram(diagram)) {
+            throw new MenuException("This diagram already exists");
+        }
+        return "OK";
     }
 
     @ResponseBody
@@ -51,7 +75,10 @@ public class DiagramRepositoryController {
     @ResponseBody
     @RequestMapping(value = "/createFolder", method = RequestMethod.POST)
     public String createFolder(@RequestBody Folder folder) {
-        return diagramService.createFolder(folder);
+        if (!diagramService.createFolder(folder)) {
+            throw new MenuException("This folder already exists");
+        }
+        return "OK";
     }
 
     @ResponseBody
@@ -59,8 +86,4 @@ public class DiagramRepositoryController {
     public List<String> getFolderNames(@RequestBody OpenRequest request) {
         return diagramService.getFolderNames(request.getName());
     }
-
-    @ResponseBody
-    @RequestMapping(value = "/getUser", method = RequestMethod.POST)
-    public String getUserName() { return diagramService.getUserName(); }
 }

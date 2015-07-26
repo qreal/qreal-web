@@ -11,17 +11,15 @@ import java.util.List;
  */
 public interface DiagramService {
 
-    public String saveDiagram(Diagram diagram);
+    public boolean saveDiagram(Diagram diagram);
 
     public Diagram openDiagram(DiagramRequest request);
 
     public String rewriteDiagram(Diagram diagram);
 
-    public String createFolder(Folder folder);
+    public boolean createFolder(Folder folder);
 
     public List<String> getFolderNames(String currentFolderId);
-
-    public String getUserName();
 
     public List<String> getDiagramNames(String folderId);
 }
