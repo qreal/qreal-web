@@ -14,6 +14,9 @@ import java.util.Set;
 @Table(name = "folders")
 public class Folder implements Serializable{
 
+    public Folder() {
+    }
+
     public Folder(String folderId, String folderName, String folderParentId, User user) {
         this.folderId = folderId;
         this.folderName = folderName;
