@@ -52,9 +52,7 @@ public class Diagram implements Serializable {
         return links;
     }
 
-    public void setNodes(Set<DefaultDiagramNode> nodes) {
-        this.nodes = nodes;
-    }
+    public void setNodes(Set<DefaultDiagramNode> nodes) { this.nodes = nodes; }
 
     public void setLinks(Set<Link> links) {
         this.links = links;

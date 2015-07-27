@@ -8,27 +8,13 @@ class DiagramMenuManager {
 
     constructor($scope) {
         this.diagramController = $scope.vm;
-        this.currentDiagramFolderId = "";
+        this.currentFolder = "root";
         this.currentDiagramName = "";
+        this.currentDiagramFolderId = "";
         this.canBeDeleted = false;
         this.pathToFolder = [];
-        this.currentFolder = "root";
 
         var menuManager = this;
-
-        $.ajax({
-            type: 'POST',
-            url: 'createFolder',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: (ExportManager.exportFolderToJSON("root_0", "root", "")),
-            success: function () {
-                console.log("OK");
-            },
-            error: function (response, status, error) {
-                console.log("error: " + status + " " + error);
-            }
-        });
 
         $(document).ready(function() {
             $('.modal-footer button').click(function() {
@@ -65,7 +51,6 @@ class DiagramMenuManager {
                 console.log(response);
                 menuManager.currentFolder = "root";
                 menuManager.pathToFolder = [];
-                console.log(menuManager.pathToFolder.length);
                 $('#diagrams').modal('hide');
 
                 if (menuManager.canBeDeleted) {
@@ -126,9 +111,6 @@ class DiagramMenuManager {
                     menuManager.diagramController.linksMap, menuManager.diagramController.nodeTypesMap);
             },
             error: function (response, status, error) {
-                if (status === "parsererror") {
-                    alert("Diagram with this name does not exist");
-                }
                 console.log("error: " + status + " " + error);
             }
         });
@@ -249,7 +231,6 @@ class DiagramMenuManager {
         this.showPathToFolder();
         var currentFolderId = this.currentFolder + "_" + this.pathToFolder.length;
         var menuManager = this;
-        console.log(currentFolderId);
         $.ajax({
             type: 'POST',
             url: 'getFolderNames',
@@ -278,7 +259,6 @@ class DiagramMenuManager {
             contentType: 'application/json',
             data: (JSON.stringify({name: currentFolderId})),
             success: function(response) {
-                //console.log(response);
                 $.each(response, function (i) {
                     $('.folderView ul').append("<li class='diagrams'><span class='glyphicon glyphicon-file' aria-hidden='true'></span>" +
                         "<span class='glyphicon-class'>" + response[i] + "</span></li>");

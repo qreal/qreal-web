@@ -37,13 +37,11 @@ public class DiagramDAOImpl implements DiagramDAO {
                 .setParameter("name", diagram.getName())
                 .list();
 
-        if (!diagrams.isEmpty()) {
-            return false;
-        }
-        else {
+        if (diagrams.isEmpty()) {
             session.save(diagram);
             return true;
         }
+        return false;
     }
 
     public Diagram openDiagram(DiagramRequest request) {
@@ -58,11 +56,12 @@ public class DiagramDAOImpl implements DiagramDAO {
 
     public String rewriteDiagram(Diagram diagram) {
         Session session = sessionFactory.getCurrentSession();
-        session.createQuery("delete from Diagram where folderId=:folderId and name=:name")
+        List<Diagram> diagrams = session.createQuery("from Diagram where folderId=:folderId and name=:name")
                 .setParameter("folderId", diagram.getFolderId())
                 .setParameter("name", diagram.getName())
                 .list();
 
+        session.delete(diagrams.get(0));
         session.save(diagram);
         return("OK");
     }
@@ -78,9 +77,7 @@ public class DiagramDAOImpl implements DiagramDAO {
             session.save(folder);
             return true;
         }
-        else {
-            return false;
-        }
+        return false;
     }
 
     public List<String> getFolderNames(String currentFolderId) {
@@ -101,10 +98,10 @@ public class DiagramDAOImpl implements DiagramDAO {
         List<Diagram> diagrams = session.createQuery("from Diagram where folderId=:folderId")
                 .setParameter("folderId", folderId).list();
 
-        List<String> namesDiagrams = new ArrayList<String>();
+        List<String> diagramNames = new ArrayList<String>();
         for (Diagram diagram : diagrams) {
-            namesDiagrams.add(diagram.getName());
+            diagramNames.add(diagram.getName());
         }
-        return namesDiagrams;
+        return diagramNames;
     }
 }
