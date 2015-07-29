@@ -79,28 +79,13 @@ public class DiagramDAOImpl implements DiagramDAO {
         return false;
     }
 
-    public List<String> getFolderNames(String folderId) {
+    public Folder getFolderTree(String userName) {
         Session session = sessionFactory.getCurrentSession();
-        List<Folder> folders = session.createQuery("from Folder where folderParentId=:folderParentId")
-                .setParameter("folderParentId", folderId)
+        List<Folder> rootFolders = session.createQuery("from Folder where folderName=:folderName and userName=:userName")
+                .setParameter("folderName", "root")
+                .setParameter("userName", userName)
                 .list();
 
-        List<String> folderNames = new ArrayList<String>();
-        for (Folder folder : folders) {
-            folderNames.add(folder.getFolderName());
-        }
-        return folderNames;
-    }
-
-    public List<String> getDiagramNames(String folderId) {
-        Session session = sessionFactory.getCurrentSession();
-        List<Diagram> diagrams = session.createQuery("from Diagram where folderId=:folderId")
-                .setParameter("folderId", folderId).list();
-
-        List<String> diagramNames = new ArrayList<String>();
-        for (Diagram diagram : diagrams) {
-            diagramNames.add(diagram.getName());
-        }
-        return diagramNames;
+        return rootFolders.get(0);
     }
 }

@@ -16,6 +16,17 @@ class DiagramMenuManager {
 
         var menuManager = this;
 
+        $.ajax({
+            type: 'POST',
+            url: 'getFolderTree',
+            success: function () {
+                console.log("OK");
+            },
+            error: function (response, status, error) {
+                console.log("error: " + status + " " + error);
+            }
+        });
+
         $(document).ready(function() {
             $('.modal-footer button').click(function() {
                 menuManager.currentFolder = "root";

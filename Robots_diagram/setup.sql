@@ -22,18 +22,20 @@ CREATE TABLE users (
 );
 
 CREATE TABLE folders (
-  folder_id        VARCHAR(50) NOT NULL,
+  folder_id        BIGINT      NOT NULL AUTO_INCREMENT,
   folder_name      VARCHAR(50) NOT NULL,
   username         VARCHAR(45) NOT NULL,
-  folder_parent_id VARCHAR(50) NOT NULL,
-  FOREIGN KEY (username) REFERENCES users (username)
+  folder_parent_id BIGINT      NOT NULL,
+  PRIMARY KEY (folder_id),
+  FOREIGN KEY (folder_parent_id) REFERENCES folders (folder_id)
 );
 
 CREATE TABLE diagrams (
   diagram_id BIGINT      NOT NULL AUTO_INCREMENT,
   name       VARCHAR(50) NOT NULL,
-  folder_id  VARCHAR(50) NOT NULL,
-  PRIMARY KEY (diagram_id)
+  folder_id  BIGINT      NOT NULL,
+  PRIMARY KEY (diagram_id),
+  FOREIGN KEY (folder_id) REFERENCES folders (folder_id)
 );
 
 CREATE TABLE nodes (

@@ -19,8 +19,8 @@ public class Diagram implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "folder_id")
-    private String folderId;
+    @JoinColumn(name = "folder_id", nullable = false)
+    private Long folderId;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "diagram_id", referencedColumnName = "diagram_id")
@@ -30,18 +30,6 @@ public class Diagram implements Serializable {
     @JoinColumn(name = "diagram_id", referencedColumnName = "diagram_id")
     private Set<Link> links;
 
-    public String getFolderId() {
-        return this.folderId;
-    }
-
-    public void setFolderId(String folderId) {
-        this.folderId = folderId;
-    }
-
-    public void setFolder(String folderId) {
-        this.folderId = folderId;
-    }
-
     public Long getDiagramId() {
         return diagramId;
     }
@@ -50,27 +38,36 @@ public class Diagram implements Serializable {
         this.diagramId = diagramId;
     }
 
-    public Set<DefaultDiagramNode> getNodes() {
-        return nodes;
-    }
-
-    public Set<Link> getLinks() {
-        return links;
-    }
-
-    public void setNodes(Set<DefaultDiagramNode> nodes) {
-        this.nodes = nodes;
-    }
-
-    public void setLinks(Set<Link> links) {
-        this.links = links;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    public Long getFolderId() {
+        return this.folderId;
+    }
+
+    public void setFolderId(Long folderId) {
+        this.folderId = folderId;
+    }
+
+    public void setNodes(Set<DefaultDiagramNode> nodes) {
+        this.nodes = nodes;
+    }
+
+    public Set<DefaultDiagramNode> getNodes() {
+        return nodes;
+    }
+
+    public void setLinks(Set<Link> links) {
+        this.links = links;
+    }
+
+    public Set<Link> getLinks() {
+        return links;
     }
 }

@@ -45,12 +45,6 @@ public class DiagramRepositoryController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/getDiagramNames", method = RequestMethod.POST)
-    public List<String> getDiagramNames(@RequestBody OpenRequest request) {
-        return diagramService.getDiagramNames(request.getName());
-    }
-
-    @ResponseBody
     @RequestMapping(value = "/rewriteDiagram", method = RequestMethod.POST)
     public String rewriteDiagram(@RequestBody Diagram diagram) {
         diagramService.rewriteDiagram(diagram);
@@ -67,8 +61,8 @@ public class DiagramRepositoryController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/getFolderNames", method = RequestMethod.POST)
-    public List<String> getFolderNames(@RequestBody OpenRequest request) {
-        return diagramService.getFolderNames(request.getName());
+    @RequestMapping(value = "/getFolderTree", method = RequestMethod.POST)
+    public Folder getFolderTree() {
+        return diagramService.getFolderTree();
     }
 }

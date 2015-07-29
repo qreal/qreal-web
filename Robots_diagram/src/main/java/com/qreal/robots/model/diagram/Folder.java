@@ -1,10 +1,8 @@
 package com.qreal.robots.model.diagram;
 
-import com.qreal.robots.model.auth.User;
-
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by korniluk13 on 09.07.2015.
@@ -17,32 +15,30 @@ public class Folder implements Serializable {
     public Folder() {
     }
 
-    public Folder(String folderId, String folderName, String folderParentId, User user) {
-        this.folderId = folderId;
-        this.folderName = folderName;
-        this.folderParentId = folderParentId;
-        this.creator = user;
-    }
-
     @Id
     @Column(name = "folder_id")
-    private String folderId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long folderId;
 
     @Column(name = "folder_name")
     private String folderName;
 
-    @Column(name = "folder_parent_id")
-    private String folderParentId;
+    @Column(name = "username")
+    private String userName;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "username", nullable = false)
-    private User creator;
+    @OneToMany
+    @JoinColumn(name = "folder_parent_id")
+    private List<Folder> childrenFolders;
 
-    public void setFolderId(String folderId) {
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "folder_id", referencedColumnName = "folder_id")
+    private List<Diagram> diagrams;
+
+    public void setFolderId(Long folderId) {
         this.folderId = folderId;
     }
 
-    public String getFolderId() {
+    public Long getFolderId() {
         return this.folderId;
     }
 
@@ -54,19 +50,27 @@ public class Folder implements Serializable {
         return this.folderName;
     }
 
-    public void setFolderParentId(String folderParentId) {
-        this.folderParentId = folderParentId;
+    public void setChildrenFolders(List<Folder> folderParentId) {
+        this.childrenFolders = folderParentId;
     }
 
-    public String getFolderParentId() {
-        return this.folderParentId;
+    public List<Folder> getChildrenFolders() {
+        return this.childrenFolders;
     }
 
-    public void setCreator(User creator) {
-        this.creator = creator;
+    public void setDiagrams(List<Diagram> diagrams) {
+        this.diagrams = diagrams;
     }
 
-    public User getCreator() {
-        return this.creator;
+    public List<Diagram> getDiagrams() {
+        return this.diagrams;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+        return this.userName;
     }
 }

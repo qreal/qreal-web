@@ -20,9 +20,5 @@ public interface DiagramService {
 
     public boolean createFolder(Folder folder);
 
-    public boolean createRootFolder(User user);
-
-    public List<String> getFolderNames(String folderId);
-
-    public List<String> getDiagramNames(String folderId);
+    public Folder getFolderTree();
 }

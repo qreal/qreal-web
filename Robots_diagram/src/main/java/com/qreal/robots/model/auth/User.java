@@ -91,15 +91,4 @@ public class User {
     public void setRobots(Set<Robot> robots) {
         this.robots = robots;
     }
-
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "creator")
-    public Set<Folder> getFolders() {
-        return this.folders;
-    }
-
-    public void setFolders(Set<Folder> folders) {
-        this.folders = folders;
-    }
-
 }

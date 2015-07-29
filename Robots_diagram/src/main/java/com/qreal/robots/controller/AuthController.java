@@ -26,9 +26,6 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private DiagramService diagramService;
-
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login(@RequestParam(value = "error", required = false) String error) {
 
@@ -65,7 +62,6 @@ public class AuthController {
 
         User user = new User(username, passwordEncoder.encode(password), true);
         userService.save(user);
-        diagramService.createRootFolder(user);
 
         redirectAttributes.addFlashAttribute("msg", "Registered successfully. Log in to continue working");
         model.setViewName("redirect:/login");
