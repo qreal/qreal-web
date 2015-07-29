@@ -1,9 +1,9 @@
 class DiagramController {
-    public graph: joint.dia.Graph = new joint.dia.Graph;
+    private graph: joint.dia.Graph = new joint.dia.Graph;
     private paper: DiagramPaper = new DiagramPaper(this, this.graph);
-    public nodeTypesMap: NodeTypesMap = {};
-    public nodesMap = {};
-    public linksMap = {};
+    private nodeTypesMap: NodeTypesMap = {};
+    private nodesMap = {};
+    private linksMap = {};
     private currentElement: DiagramElement;
     private isPaletteLoaded = false;
     private mouseupEvent;
@@ -37,6 +37,22 @@ class DiagramController {
         $scope.$on("interpret", function(event, timeline) {
             console.log(InterpretManager.interpret(controller.graph, controller.nodesMap, controller.linksMap, timeline));
         });
+    }
+
+    public getGraph(): joint.dia.Graph {
+        return this.graph;
+    }
+
+    public getNodeTypesMap(): NodeTypesMap {
+        return this.nodeTypesMap
+    }
+
+    public getNodesMap() {
+        return this.nodesMap;
+    }
+
+    public getLinksMap() {
+        return this.linksMap;
     }
 
     initPalette() {

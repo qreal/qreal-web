@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "folders")
-public class Folder implements Serializable{
+public class Folder implements Serializable {
 
     public Folder() {
     }
@@ -38,19 +38,35 @@ public class Folder implements Serializable{
     @JoinColumn(name = "username", nullable = false)
     private User creator;
 
-    public void setFolderId(String folderId) { this.folderId = folderId; }
+    public void setFolderId(String folderId) {
+        this.folderId = folderId;
+    }
 
-    public String getFolderId() { return this.folderId; }
+    public String getFolderId() {
+        return this.folderId;
+    }
 
-    public void setFolderName(String name) { this.folderName = name; }
+    public void setFolderName(String name) {
+        this.folderName = name;
+    }
 
-    public String getFolderName() { return this.folderName; }
+    public String getFolderName() {
+        return this.folderName;
+    }
 
-    public void setFolderParentId(String folderParentId) { this.folderParentId = folderParentId; }
+    public void setFolderParentId(String folderParentId) {
+        this.folderParentId = folderParentId;
+    }
 
-    public String getFolderParentId() { return this.folderParentId; }
+    public String getFolderParentId() {
+        return this.folderParentId;
+    }
 
-    public void setCreator(User creator) { this.creator = creator; }
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
 
-    public User getCreator() { return this.creator; }
+    public User getCreator() {
+        return this.creator;
+    }
 }

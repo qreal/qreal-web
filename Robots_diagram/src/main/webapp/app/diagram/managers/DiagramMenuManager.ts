@@ -46,7 +46,7 @@ class DiagramMenuManager {
             dataType: 'text',
             contentType: 'application/json',
             data: (ExportManager.exportDiagramStateToJSON(diagramName, currentFolderId,
-                this.diagramController.nodesMap, this.diagramController.linksMap)),
+                this.diagramController.getNodesMap(), this.diagramController.getLinksMap())),
             success: function (response) {
                 console.log(response);
                 menuManager.currentFolder = "root";
@@ -78,7 +78,7 @@ class DiagramMenuManager {
                 dataType: 'text',
                 contentType: 'application/json',
                 data: (ExportManager.exportDiagramStateToJSON(this.currentDiagramName, this.currentDiagramFolderId,
-                    this.diagramController.nodesMap, this.diagramController.linksMap)),
+                    this.diagramController.getNodesMap(), this.diagramController.getLinksMap())),
                 success: function (response) {
                     console.log(response);
                     if (menuManager.canBeDeleted) {
@@ -107,8 +107,8 @@ class DiagramMenuManager {
             data: (ExportManager.exportDiagramRequestToJSON(diagramName, this.currentDiagramFolderId)),
             success: function (response) {
                 menuManager.diagramController.clearScene();
-                ImportManager.import(response, menuManager.diagramController.graph, menuManager.diagramController.nodesMap,
-                    menuManager.diagramController.linksMap, menuManager.diagramController.nodeTypesMap);
+                ImportManager.import(response, menuManager.diagramController.getGraph(), menuManager.diagramController.getNodesMap(),
+                    menuManager.diagramController.getLinksMap(), menuManager.diagramController.getNodeTypesMap());
             },
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);

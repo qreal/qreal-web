@@ -1,9 +1,9 @@
 package com.qreal.robots.controller;
 
 /**
- * Created by Анастасия on 26.07.2015.
+ * Created by korniluk13 on 26.07.2015.
  */
-public class DiagramMenuException extends RuntimeException{
+public class DiagramMenuException extends RuntimeException {
     private String exceptionMessage;
 
     public DiagramMenuException(String message) {

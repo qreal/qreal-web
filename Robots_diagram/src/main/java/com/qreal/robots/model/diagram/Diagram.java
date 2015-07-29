@@ -30,11 +30,17 @@ public class Diagram implements Serializable {
     @JoinColumn(name = "diagram_id", referencedColumnName = "diagram_id")
     private Set<Link> links;
 
-    public String getFolderId() { return this.folderId; }
+    public String getFolderId() {
+        return this.folderId;
+    }
 
-    public void setFolderId(String folderId) { this.folderId = folderId; }
+    public void setFolderId(String folderId) {
+        this.folderId = folderId;
+    }
 
-    public void setFolder(String folderId) { this.folderId = folderId; }
+    public void setFolder(String folderId) {
+        this.folderId = folderId;
+    }
 
     public Long getDiagramId() {
         return diagramId;
@@ -52,7 +58,9 @@ public class Diagram implements Serializable {
         return links;
     }
 
-    public void setNodes(Set<DefaultDiagramNode> nodes) { this.nodes = nodes; }
+    public void setNodes(Set<DefaultDiagramNode> nodes) {
+        this.nodes = nodes;
+    }
 
     public void setLinks(Set<Link> links) {
         this.links = links;

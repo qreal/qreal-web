@@ -94,7 +94,9 @@ public class User {
 
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "creator")
-    public Set<Folder> getFolders() { return this.folders; }
+    public Set<Folder> getFolders() {
+        return this.folders;
+    }
 
     public void setFolders(Set<Folder> folders) {
         this.folders = folders;
