@@ -1,4 +1,7 @@
 class InterpretManager {
+
+    static error = false;
+
     static interpret(graph: joint.dia.Graph, nodesMap, linksMap, timeline): string {
         var elements = graph.getElements();
         var links = graph.getLinks();
@@ -8,6 +11,7 @@ class InterpretManager {
         if (elements.length > 0) {
             if (links.length > 0) {
                 var firstNodeId = InterpretManager.findInitialNode(nodesMap);
+                InterpretManager.error = false; // Interpretation starts without errors
                 if (firstNodeId != "") {
                     timeline.start();
                     output += Factory.run(nodesMap[firstNodeId], graph, nodesMap, linksMap, env, timeline);
