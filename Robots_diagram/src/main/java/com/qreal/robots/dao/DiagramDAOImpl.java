@@ -79,10 +79,10 @@ public class DiagramDAOImpl implements DiagramDAO {
         return false;
     }
 
-    public List<String> getFolderNames(String currentFolderId) {
+    public List<String> getFolderNames(String folderId) {
         Session session = sessionFactory.getCurrentSession();
         List<Folder> folders = session.createQuery("from Folder where folderParentId=:folderParentId")
-                .setParameter("folderParentId", currentFolderId)
+                .setParameter("folderParentId", folderId)
                 .list();
 
         List<String> folderNames = new ArrayList<String>();

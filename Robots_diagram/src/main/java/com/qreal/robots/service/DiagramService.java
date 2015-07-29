@@ -22,7 +22,7 @@ public interface DiagramService {
 
     public boolean createRootFolder(User user);
 
-    public List<String> getFolderNames(String currentFolderId);
+    public List<String> getFolderNames(String folderId);
 
     public List<String> getDiagramNames(String folderId);
 }

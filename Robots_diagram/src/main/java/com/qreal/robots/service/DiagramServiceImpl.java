@@ -65,9 +65,9 @@ public class DiagramServiceImpl implements DiagramService {
 
     @Transactional
     @Override
-    public List<String> getFolderNames(String currentFolderId) {
-        currentFolderId = addUserToId(currentFolderId);
-        return diagramDAO.getFolderNames(currentFolderId);
+    public List<String> getFolderNames(String folderId) {
+        folderId = addUserToId(folderId);
+        return diagramDAO.getFolderNames(folderId);
     }
 
     @Transactional

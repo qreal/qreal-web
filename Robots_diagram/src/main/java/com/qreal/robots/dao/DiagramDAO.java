@@ -19,7 +19,7 @@ public interface DiagramDAO {
 
     public boolean createFolder(Folder folder);
 
-    public List<String> getFolderNames(String currentFolderId);
+    public List<String> getFolderNames(String folderId);
 
     public List<String> getDiagramNames(String folderId);
 }
