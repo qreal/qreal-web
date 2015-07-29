@@ -53,7 +53,8 @@ public class DiagramRepositoryController {
     @ResponseBody
     @RequestMapping(value = "/rewriteDiagram", method = RequestMethod.POST)
     public String rewriteDiagram(@RequestBody Diagram diagram) {
-        return diagramService.rewriteDiagram(diagram);
+        diagramService.rewriteDiagram(diagram);
+        return "{\"responseText\":\"OK\"}";
     }
 
     @ResponseBody

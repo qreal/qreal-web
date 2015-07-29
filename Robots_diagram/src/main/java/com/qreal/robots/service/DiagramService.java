@@ -16,7 +16,7 @@ public interface DiagramService {
 
     public Diagram openDiagram(DiagramRequest request);
 
-    public String rewriteDiagram(Diagram diagram);
+    public void rewriteDiagram(Diagram diagram);
 
     public boolean createFolder(Folder folder);
 

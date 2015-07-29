@@ -40,9 +40,9 @@ public class DiagramServiceImpl implements DiagramService {
 
     @Transactional
     @Override
-    public String rewriteDiagram(Diagram diagram) {
+    public void rewriteDiagram(Diagram diagram) {
         diagram.setFolderId(addUserToId(diagram.getFolderId()));
-        return diagramDAO.rewriteDiagram(diagram);
+        diagramDAO.rewriteDiagram(diagram);
     }
 
     @Transactional

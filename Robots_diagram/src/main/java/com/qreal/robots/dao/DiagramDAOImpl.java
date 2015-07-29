@@ -54,7 +54,7 @@ public class DiagramDAOImpl implements DiagramDAO {
         return diagrams.get(0);
     }
 
-    public String rewriteDiagram(Diagram diagram) {
+    public void rewriteDiagram(Diagram diagram) {
         Session session = sessionFactory.getCurrentSession();
         List<Diagram> diagrams = session.createQuery("from Diagram where folderId=:folderId and name=:name")
                 .setParameter("folderId", diagram.getFolderId())
@@ -63,7 +63,6 @@ public class DiagramDAOImpl implements DiagramDAO {
 
         session.delete(diagrams.get(0));
         session.save(diagram);
-        return("OK");
     }
 
     public boolean createFolder(Folder folder) {

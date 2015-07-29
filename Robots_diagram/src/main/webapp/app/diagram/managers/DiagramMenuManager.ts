@@ -80,7 +80,7 @@ class DiagramMenuManager {
                 data: (ExportManager.exportDiagramStateToJSON(this.currentDiagramName, this.currentDiagramFolderId,
                     this.diagramController.getNodesMap(), this.diagramController.getLinksMap())),
                 success: function (response) {
-                    console.log(response);
+                    console.log(response.message);
                     if (menuManager.canBeDeleted) {
                         menuManager.clearAll();
                     }
