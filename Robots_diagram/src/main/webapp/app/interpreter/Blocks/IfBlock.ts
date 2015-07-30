@@ -1,11 +1,10 @@
 class IfBlock extends Block {
     static run(node, graph, nodesMap, linksMap, env, timeline): string {
-        var output = "If" + "\n";
 
+        var output = "If" + "\n";
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
-
-        var condition = IfBlock.getCondition(node);
+        var condition = Block.getCondition(node);
         var parser = new Parser(condition, env);
         parser.parseExpression();
         if (parser.error == null) {
@@ -18,8 +17,8 @@ class IfBlock extends Block {
         if (links.length == 2) {
             var link0 = links[0];
             var link1 = links[1];
-            var link0Guard = IfBlock.getGuard(linksMap[link0.id]);
-            var link1Guard = IfBlock.getGuard(linksMap[link1.id]);
+            var link0Guard = Block.getGuard(linksMap[link0.id]);
+            var link1Guard = Block.getGuard(linksMap[link1.id]);
             var nextNode;
             if (link0Guard == "true" && link1Guard == "false") {
                 if (parser.result) {
@@ -48,27 +47,5 @@ class IfBlock extends Block {
         }
 
         return output;
-    }
-
-    private static getCondition(node) {
-        var condition = "";
-        var properties = node.getProperties();
-        for (var p in properties) {
-            if (p == "Condition") {
-                condition = properties[p].value;
-            }
-        }
-        return condition;
-    }
-
-    private static getGuard(link : Link) {
-        var guard = "";
-        var properties = link.getProperties();
-        for (var p in properties) {
-            if (p == "Guard") {
-                guard = properties[p].value;
-            }
-        }
-        return guard;
     }
 }
