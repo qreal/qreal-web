@@ -1,5 +1,7 @@
 class Timer extends Block {
-    static run(node, graph, nodesMap, linksMap, env, timeline):string {
+
+    static run(node, graph, nodesMap, linksMap, env, timeline): string {
+
         var output = "Timer" + "\n";
         var delay = 0;
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
@@ -13,23 +15,26 @@ class Timer extends Block {
                 if (parser.error == null) {
                     delay = parser.result;
                     if (delay < 0) {
-                        output += "Error: incorrect delay value";
+                        Block.error(timeline, "Error: incorrect delay value in Timer block");
                     }
                     else {
                         output += "Delay: " + delay + "\n";
-
-                        if (links.length == 1) {
-                            var nextNode = nodesMap[links[0].get('target').id];
-                            setTimeout(function () { output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline); }, delay);
-                        }
-                        else if (links.length > 1) {
-                            output += "Error: too many links\n";
-                        }
                     }
                 }
                 else {
-                    output += "Error: " + parser.error + "\n";
+                    Block.error(timeline, "Parser error in Timer block: " + parser.error + "\n");
                 }
+            }
+        }
+
+        // Figuring out next block
+        if (!InterpretManager.error) {
+            if (links.length == 1) {
+                var nextNode = nodesMap[links[0].get('target').id];
+                setTimeout(function () { output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline); }, delay);
+            }
+            else {
+                Block.error(timeline, "Error: too many links from Timer block");
             }
         }
 

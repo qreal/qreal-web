@@ -1,5 +1,7 @@
 class MotorsStop extends Block {
+
     static run(node, graph, nodesMap, linksMap, env, timeline): string {
+
         var output = "Motors stop" + "\n";
         var ports = [];
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);

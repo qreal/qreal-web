@@ -6,21 +6,18 @@ class MarkerBlock extends Block {
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
 
-        if (links.length == 0) {
-            output += "Too small links";
-        } else
-        if (links.length > 1) {
-            output += "Too much links";
+        if (links.length != 1) {
+            Block.error(timeline, "Error: there must be 1 link from Marker up (down) block");
         }
 
-        var models = timeline.getRobotModels();
+        if (!InterpretManager.error) {
+            var models = timeline.getRobotModels();
 
-        for (var modelId = 0; modelId < models.length; modelId++) {
-            var model = models[modelId];
-            model.setDrawingState(isUp);
-        }
+            for (var modelId = 0; modelId < models.length; modelId++) {
+                var model = models[modelId];
+                model.setDrawingState(isUp);
+            }
 
-        if (links.length == 1) {
             var link = links[0];
             var nextNode = nodesMap[link.get('target').id];
             output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline);

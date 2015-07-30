@@ -1,5 +1,7 @@
 class InitialBlock extends Block {
+
     static run(node, graph, nodesMap, linksMap, env, timeline): string {
+
         var output = "Initial" + "\n";
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
@@ -9,7 +11,7 @@ class InitialBlock extends Block {
             output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
         }
         else if (links.length > 1) {
-            output += "Error: too many links\n"
+            Block.error(timeline, "Error: too many links from Initial block");
         }
 
         return output;
