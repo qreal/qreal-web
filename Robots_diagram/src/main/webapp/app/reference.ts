@@ -49,6 +49,7 @@
 /// <reference path="interpreter/Blocks/FinalBlock.ts" />
 /// <reference path="interpreter/Blocks/FunctionBlock.ts" />
 /// <reference path="interpreter/Blocks/IfBlock.ts" />
+/// <reference path="interpreter/Blocks/LoopBlock.ts" />
 /// <reference path="interpreter/Blocks/MarkerBlock.ts" />
 /// <reference path="interpreter/Blocks/Motors.ts" />
 /// <reference path="interpreter/Blocks/MotorsStop.ts" />

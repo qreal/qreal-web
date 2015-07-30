@@ -45,6 +45,10 @@ class Factory {
             case "Marker Down":
                 output += MarkerBlock.run(node, graph, nodesMap, linksMap, env, timeline, true);
                 break;
+
+            case "Loop":
+                output += LoopBlock.run(node, graph, nodesMap, linksMap, env, timeline);
+                break;
             
             default:
                 output += "Not yet";
