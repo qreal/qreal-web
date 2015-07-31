@@ -17,10 +17,11 @@ class DiagramMenuManager {
         var menuManager = this;
 
         $.ajax({
-            type: 'POST',
+            type: 'GET',
             url: 'getFolderTree',
-            success: function () {
-                console.log("OK");
+            dataType: 'json',
+            success: function (response) {
+                console.log(response);
             },
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);

@@ -61,7 +61,7 @@ public class DiagramRepositoryController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/getFolderTree", method = RequestMethod.POST)
+    @RequestMapping(value = "/getFolderTree", method = RequestMethod.GET)
     public Folder getFolderTree() {
         return diagramService.getFolderTree();
     }
