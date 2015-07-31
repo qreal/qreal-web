@@ -52,6 +52,20 @@ public class DiagramServiceImpl implements DiagramService {
     @Override
     public Folder getFolderTree() {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        return diagramDAO.getFolderTree(userName);
+        Folder root = diagramDAO.getFolderTree(userName);
+        printTree(root);
+        return root;
+    }
+
+    private void printTree(Folder folder) {
+        System.out.print(folder.getFolderName());
+        if (folder.getChildrenFolders().size() == 0) {
+            return;
+        }
+        System.out.print("(");
+        printTree(folder.getChildrenFolders().get(0));
+        System.out.print(" ");
+        printTree(folder.getChildrenFolders().get(1));
+        System.out.print(")");
     }
 }

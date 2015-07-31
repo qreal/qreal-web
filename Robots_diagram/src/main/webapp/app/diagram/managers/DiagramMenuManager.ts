@@ -1,17 +1,18 @@
 class DiagramMenuManager {
     private diagramController: DiagramController;
-    private currentFolder: string;
-    private currentDiagramName: string;
-    private currentDiagramFolderId: string;
-    private canBeDeleted: boolean;
+    //private currentDiagramName: string;
+    //private currentDiagramFolderId: string;
+    //private canBeDeleted: boolean;
     private pathToFolder;
+    private folderTree;
+    private currentFolder;
 
     constructor($scope) {
         this.diagramController = $scope.vm;
         this.currentFolder = "root";
-        this.currentDiagramName = "";
+        /*this.currentDiagramName = "";
         this.currentDiagramFolderId = "";
-        this.canBeDeleted = false;
+        this.canBeDeleted = false;*/
         this.pathToFolder = [];
 
         var menuManager = this;
@@ -21,7 +22,8 @@ class DiagramMenuManager {
             url: 'getFolderTree',
             dataType: 'json',
             success: function (response) {
-                console.log(response);
+                menuManager.folderTree = response;
+                menuManager.currentFolder = response;
             },
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);
@@ -30,24 +32,24 @@ class DiagramMenuManager {
 
         $(document).ready(function() {
             $('.modal-footer button').click(function() {
-                menuManager.currentFolder = "root";
+                menuManager.currentFolder = menuManager.folderTree;
                 menuManager.pathToFolder = [];
             });
             $('#saveAfterCreate').click(function () {
-                menuManager.canBeDeleted = true;
-                menuManager.saveCurrentDiagram();
+                //menuManager.canBeDeleted = true;
+                //menuManager.saveCurrentDiagram();
             });
         });
     }
 
     private clearAll(): void {
         this.diagramController.clearScene();
-        this.canBeDeleted = false;
+        /*this.canBeDeleted = false;
         this.currentDiagramName = "";
-        this.currentDiagramFolderId = "";
+        this.currentDiagramFolderId = "";*/
     }
 
-    private saveDiagram(diagramName: string): void {
+    /*private saveDiagram(diagramName: string): void {
         var menuManager = this;
         this.currentDiagramName = diagramName;
         var currentFolderId = this.currentFolder + "_" + this.pathToFolder.length;
@@ -130,21 +132,21 @@ class DiagramMenuManager {
 
     private createNewDiagram(): void {
         $('#confirmNew').modal('show');
-    }
+    }*/
 
     private openFolderWindow(): void {
-        this.showFolderMenu();
+        //this.showFolderMenu();
         this.showFolderTable(this.currentFolder);
-        this.clearSavingMenu();
+        //this.clearSavingMenu();
     }
 
-    private saveDiagramAs(): void {
+    /*private saveDiagramAs(): void {
         this.showFolderMenu();
         this.showFolderTable(this.currentFolder);
         this.showSavingMenu();
-    }
+    }*/
 
-    private showFolderMenu(): void {
+    /*private showFolderMenu(): void {
         this.clearFolderMenu();
         var menuManager = this;
         $('.folderMenu').append("<i id='levelUp'><span class='glyphicon glyphicon-arrow-left'></span></i>");
@@ -156,9 +158,9 @@ class DiagramMenuManager {
         $('.folderMenu #creatingMenu').click(function() {
             menuManager.showCreatingMenu();
         });
-    }
+    }*/
 
-    private showCreatingMenu() {
+    /*private showCreatingMenu() {
         var menuManager = this;
         this.clearFolderMenu();
         $('.folderMenu').append(
@@ -206,15 +208,15 @@ class DiagramMenuManager {
 
     private clearFolderMenu(): void {
         $('.folderMenu').empty();
-    }
+    }*/
 
     private clearFolderTable(): void {
         $('.folderTable li').remove();
-    }
+    }/*
 
     private clearWarning(place : string): void {
         $(place).remove();
-    }
+    }*/
 
     private showPathToFolder(): void {
         $('.folderPath p').remove();
@@ -231,62 +233,35 @@ class DiagramMenuManager {
             path = path + this.pathToFolder[i] + "/";
         }
         if(this.currentFolder !== "root") {
-            path = path + this.currentFolder;
+            path = path + this.currentFolder.folderName;
         }
 
         $('.folderPath').prepend("<p>" + path + "</p>");
     }
 
-    private showFolderTable(openingFolder: string): void {
+    private showFolderTable(openingFolder): void {
         this.clearFolderTable();
         this.currentFolder = openingFolder;
         this.showPathToFolder();
-        var currentFolderId = this.currentFolder + "_" + this.pathToFolder.length;
+        //var currentFolderId = this.currentFolder + "_" + this.pathToFolder.length;
         var menuManager = this;
-        $.ajax({
-            type: 'POST',
-            url: 'getFolderNames',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: (JSON.stringify({name: currentFolderId})),
-            success: function (response) {
-                console.log(response);
-                $.each(response, function (i) {
-                    $('.folderView ul').prepend("<li class='folders'><span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>" +
-                        "<span class='glyphicon-class'>" + response[i] + "</span></li>");
-                });
-                $('.folderTable .folders').click(function () {
-                    menuManager.pathToFolder.push(menuManager.currentFolder);
-                    menuManager.showFolderTable($(this).text());
-                });
-            },
-            error: function (response, status, error) {
-                console.log("error: " + status + " " + error);
-            }
+        var folders = FolderTreeManager.getFolderNames(this.currentFolder);
+        var diagrams = FolderTreeManager.getDiagramNames(this.currentFolder);
+        $.each(folders, function (i) {
+            $('.folderView ul').prepend("<li class='folders'><span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>" +
+                "<span class='glyphicon-class'>" + folders[i] + "</span></li>");
         });
-        $.ajax({
-            type: 'POST',
-            url: 'getDiagramNames',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: (JSON.stringify({name: currentFolderId})),
-            success: function(response) {
-                $.each(response, function (i) {
-                    $('.folderView ul').append("<li class='diagrams'><span class='glyphicon glyphicon-file' aria-hidden='true'></span>" +
-                        "<span class='glyphicon-class'>" + response[i] + "</span></li>");
-                });
-                $('.folderTable .diagrams').click(function () {
-                    menuManager.openDiagram($(this).text());
-                    $('#diagrams').modal('hide');
-                });
-            },
-            error: function (response, status, error) {
-                console.log("error: " + status + " " + error);
-            }
+        $.each(diagrams, function (i) {
+            $('.folderView ul').prepend("<li class='folders'><span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>" +
+                "<span class='glyphicon-class'>" + diagrams[i] + "</span></li>");
+        });
+        $('.folderTable .folders').click(function () {
+            menuManager.pathToFolder.push(menuManager.currentFolder.folderName);
+            menuManager.showFolderTable(FolderTreeManager.findFolderByName(menuManager.currentFolder, $(this).text()));
         });
     }
 
-    private levelUpFolder(): void {
+    /*private levelUpFolder(): void {
         if (this.pathToFolder.length > 0) {
             var parentFolder: string = this.pathToFolder.pop();
             this.showFolderTable(parentFolder);
@@ -320,5 +295,5 @@ class DiagramMenuManager {
                 }
             });
         }
-    }
+    }*/
 }
