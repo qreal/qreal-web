@@ -135,9 +135,9 @@ class DiagramMenuManager {
     }*/
 
     private openFolderWindow(): void {
-        //this.showFolderMenu();
+        this.showFolderMenu();
         this.showFolderTable(this.currentFolder);
-        //this.clearSavingMenu();
+        this.clearSavingMenu();
     }
 
     /*private saveDiagramAs(): void {
@@ -146,7 +146,7 @@ class DiagramMenuManager {
         this.showSavingMenu();
     }*/
 
-    /*private showFolderMenu(): void {
+    private showFolderMenu(): void {
         this.clearFolderMenu();
         var menuManager = this;
         $('.folderMenu').append("<i id='levelUp'><span class='glyphicon glyphicon-arrow-left'></span></i>");
@@ -156,9 +156,9 @@ class DiagramMenuManager {
 
         $('.folderMenu').append("<i id='creatingMenu'><span class='glyphicon glyphicon-plus'></span></i>");
         $('.folderMenu #creatingMenu').click(function() {
-            menuManager.showCreatingMenu();
+            //menuManager.showCreatingMenu();
         });
-    }*/
+    }
 
     /*private showCreatingMenu() {
         var menuManager = this;
@@ -199,7 +199,7 @@ class DiagramMenuManager {
 
     private writeWarning(message : string, place : string) : void {
         $(place).append("<p class='warningMessage'>" + message + "</p>");
-    }
+    }*/
 
     private clearSavingMenu(): void {
         $('.savingMenu').empty();
@@ -208,7 +208,7 @@ class DiagramMenuManager {
 
     private clearFolderMenu(): void {
         $('.folderMenu').empty();
-    }*/
+    }
 
     private clearFolderTable(): void {
         $('.folderTable li').remove();
@@ -230,7 +230,7 @@ class DiagramMenuManager {
             i = 1;
         }
         for (i; i < this.pathToFolder.length; i++) {
-            path = path + this.pathToFolder[i] + "/";
+            path = path + this.pathToFolder[i].folderName + "/";
         }
         if(this.currentFolder.folderName !== "root") {
             path = path + this.currentFolder.folderName;
@@ -256,18 +256,17 @@ class DiagramMenuManager {
                 "<span class='glyphicon-class'>" + diagrams[i] + "</span></li>");
         });
         $('.folderTable .folders').click(function () {
-            menuManager.pathToFolder.push(menuManager.currentFolder.folderName);
+            menuManager.pathToFolder.push(menuManager.currentFolder);
             menuManager.showFolderTable(FolderTreeManager.findFolderByName(menuManager.currentFolder, $(this).text()));
         });
     }
 
-    /*private levelUpFolder(): void {
+    private levelUpFolder(): void {
         if (this.pathToFolder.length > 0) {
-            var parentFolder: string = this.pathToFolder.pop();
-            this.showFolderTable(parentFolder);
+            this.showFolderTable(this.pathToFolder.pop());
         }
     }
-
+/*
     private createFolder() : void {
         var name: string = $('.folderMenu input:text').val();
         var menuManager = this;
