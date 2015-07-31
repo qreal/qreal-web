@@ -232,7 +232,7 @@ class DiagramMenuManager {
         for (i; i < this.pathToFolder.length; i++) {
             path = path + this.pathToFolder[i] + "/";
         }
-        if(this.currentFolder !== "root") {
+        if(this.currentFolder.folderName !== "root") {
             path = path + this.currentFolder.folderName;
         }
 
