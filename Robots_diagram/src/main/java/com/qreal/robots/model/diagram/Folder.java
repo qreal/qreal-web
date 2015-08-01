@@ -26,8 +26,11 @@ public class Folder implements Serializable {
     @Column(name = "username")
     private String userName;
 
+    @Column(name = "folder_parent_id")
+    private Long folderParentId;
+
     @OneToMany
-    @JoinColumn(name = "folder_parent_id")
+    @JoinColumn(name = "folder_parent_id", insertable = false, updatable = false)
     private List<Folder> childrenFolders;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -48,6 +51,10 @@ public class Folder implements Serializable {
 
     public String getFolderName() {
         return this.folderName;
+    }
+
+    public Long getFolderParentId() {
+        return this.folderParentId;
     }
 
     public void setChildrenFolders(List<Folder> folderParentId) {

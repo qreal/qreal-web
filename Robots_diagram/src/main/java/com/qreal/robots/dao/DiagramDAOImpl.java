@@ -6,6 +6,7 @@ import com.qreal.robots.model.diagram.Folder;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -65,18 +66,12 @@ public class DiagramDAOImpl implements DiagramDAO {
         session.save(diagram);
     }
 
-    public boolean createFolder(Folder folder) {
+    public Long createFolder(Folder folder) {
         LOG.debug("creating folder");
         Session session = sessionFactory.getCurrentSession();
-        List<Folder> folders = session.createQuery("from Folder where folderId=:folderId")
-                .setParameter("folderId", folder.getFolderId())
-                .list();
-
-        if (folders.isEmpty()) {
-            session.save(folder);
-            return true;
-        }
-        return false;
+        session.save(folder);
+        session.flush();
+        return folder.getFolderId();
     }
 
     public Folder getFolderTree(String userName) {

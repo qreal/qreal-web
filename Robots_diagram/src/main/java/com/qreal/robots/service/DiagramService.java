@@ -18,7 +18,7 @@ public interface DiagramService {
 
     public void rewriteDiagram(Diagram diagram);
 
-    public boolean createFolder(Folder folder);
+    public Long createFolder(Folder folder);
 
     public Folder getFolderTree();
 }

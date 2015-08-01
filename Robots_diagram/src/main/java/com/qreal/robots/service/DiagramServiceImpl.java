@@ -41,7 +41,7 @@ public class DiagramServiceImpl implements DiagramService {
 
     @Transactional
     @Override
-    public boolean createFolder(Folder folder) {
+    public Long createFolder(Folder folder) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         folder.setUserName(userName);
 
@@ -59,13 +59,15 @@ public class DiagramServiceImpl implements DiagramService {
 
     private void printTree(Folder folder) {
         System.out.print(folder.getFolderName());
-        if (folder.getChildrenFolders().size() == 0) {
+        System.out.print(" ");
+        int size = folder.getChildrenFolders().size();
+        if (size == 0) {
             return;
         }
         System.out.print("(");
-        printTree(folder.getChildrenFolders().get(0));
-        System.out.print(" ");
-        printTree(folder.getChildrenFolders().get(1));
+        for (int i = 0; i < size; i++) {
+            printTree(folder.getChildrenFolders().get(i));
+        }
         System.out.print(")");
     }
 }

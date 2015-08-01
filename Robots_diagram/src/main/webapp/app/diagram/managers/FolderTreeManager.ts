@@ -27,4 +27,15 @@ class FolderTreeManager {
 
         return folder;
     }
+
+    static addFolder(folderId: number, folderName: string, parentFolder) {
+        var folder = {
+            folderId: folderId,
+            folderName: folderName,
+            folderParentId: parentFolder.folderId,
+            childrenFolders: [],
+            diagrams: []
+        }
+        parentFolder.childrenFolders.push(folder);
+    }
 }

@@ -53,11 +53,8 @@ public class DiagramRepositoryController {
 
     @ResponseBody
     @RequestMapping(value = "/createFolder", method = RequestMethod.POST)
-    public String createFolder(@RequestBody Folder folder) {
-        if (!diagramService.createFolder(folder)) {
-            throw new DiagramMenuException("This folder already exists");
-        }
-        return "OK";
+    public Long createFolder(@RequestBody Folder folder) {
+        return diagramService.createFolder(folder);
     }
 
     @ResponseBody

@@ -156,11 +156,11 @@ class DiagramMenuManager {
 
         $('.folderMenu').append("<i id='creatingMenu'><span class='glyphicon glyphicon-plus'></span></i>");
         $('.folderMenu #creatingMenu').click(function() {
-            //menuManager.showCreatingMenu();
+            menuManager.showCreatingMenu();
         });
     }
 
-    /*private showCreatingMenu() {
+    private showCreatingMenu() {
         var menuManager = this;
         this.clearFolderMenu();
         $('.folderMenu').append(
@@ -178,7 +178,7 @@ class DiagramMenuManager {
         });
     }
 
-    private showSavingMenu(): void {
+    /*private showSavingMenu(): void {
         this.clearSavingMenu();
         var menuManager = this;
 
@@ -195,11 +195,11 @@ class DiagramMenuManager {
                 menuManager.saveDiagram(name);
             }
         });
-    }
+    }*/
 
     private writeWarning(message : string, place : string) : void {
         $(place).append("<p class='warningMessage'>" + message + "</p>");
-    }*/
+    }
 
     private clearSavingMenu(): void {
         $('.savingMenu').empty();
@@ -212,11 +212,11 @@ class DiagramMenuManager {
 
     private clearFolderTable(): void {
         $('.folderTable li').remove();
-    }/*
+    }
 
     private clearWarning(place : string): void {
         $(place).remove();
-    }*/
+    }
 
     private showPathToFolder(): void {
         $('.folderPath p').remove();
@@ -243,7 +243,6 @@ class DiagramMenuManager {
         this.clearFolderTable();
         this.currentFolder = openingFolder;
         this.showPathToFolder();
-        //var currentFolderId = this.currentFolder + "_" + this.pathToFolder.length;
         var menuManager = this;
         var folders = FolderTreeManager.getFolderNames(this.currentFolder);
         var diagrams = FolderTreeManager.getDiagramNames(this.currentFolder);
@@ -266,13 +265,10 @@ class DiagramMenuManager {
             this.showFolderTable(this.pathToFolder.pop());
         }
     }
-/*
+
     private createFolder() : void {
         var name: string = $('.folderMenu input:text').val();
         var menuManager = this;
-        var newFolderLevel: number = this.pathToFolder.length + 1;
-        var newfolderId: string = name + "_" + newFolderLevel;
-        var currentFolderId: string = this.currentFolder + "_" + this.pathToFolder.length;
         if (name === "") {
             this.writeWarning("Empty name", '.folderMenu');
         }
@@ -282,8 +278,9 @@ class DiagramMenuManager {
                 url: 'createFolder',
                 dataType: 'text',
                 contentType: 'application/json',
-                data: (ExportManager.exportFolderToJSON(newfolderId, name, currentFolderId)),
-                success: function () {
+                data: (ExportManager.exportFolderToJSON(name, this.currentFolder.folderId)),
+                success: function (createdFolderId) {
+                    FolderTreeManager.addFolder(createdFolderId, name, menuManager.currentFolder);
                     menuManager.showFolderMenu();
                     menuManager.showFolderTable(menuManager.currentFolder);
                 },
@@ -294,5 +291,5 @@ class DiagramMenuManager {
                 }
             });
         }
-    }*/
+    }
 }
