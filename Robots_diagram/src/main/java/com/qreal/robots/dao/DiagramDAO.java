@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface DiagramDAO {
 
-    public boolean save(Diagram diagram);
+    public Long saveDiagram(Diagram diagram);
 
     public Diagram openDiagram(DiagramRequest request);
 

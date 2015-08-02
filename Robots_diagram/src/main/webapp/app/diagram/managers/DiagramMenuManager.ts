@@ -1,8 +1,8 @@
 class DiagramMenuManager {
     private diagramController: DiagramController;
-    //private currentDiagramName: string;
-    //private currentDiagramFolderId: string;
-    //private canBeDeleted: boolean;
+    private currentDiagramName: string;
+    private currentDiagramFolder;
+    private canBeDeleted: boolean;
     private pathToFolder;
     private folderTree;
     private currentFolder;
@@ -10,9 +10,9 @@ class DiagramMenuManager {
     constructor($scope) {
         this.diagramController = $scope.vm;
         this.currentFolder = "root";
-        /*this.currentDiagramName = "";
-        this.currentDiagramFolderId = "";
-        this.canBeDeleted = false;*/
+        this.currentDiagramName = "";
+        this.currentDiagramFolder = null;
+        this.canBeDeleted = false;
         this.pathToFolder = [];
 
         var menuManager = this;
@@ -36,7 +36,7 @@ class DiagramMenuManager {
                 menuManager.pathToFolder = [];
             });
             $('#saveAfterCreate').click(function () {
-                //menuManager.canBeDeleted = true;
+                menuManager.canBeDeleted = true;
                 //menuManager.saveCurrentDiagram();
             });
         });
@@ -49,21 +49,21 @@ class DiagramMenuManager {
         this.currentDiagramFolderId = "";*/
     }
 
-    /*private saveDiagram(diagramName: string): void {
+    private saveDiagram(diagramName: string): void {
         var menuManager = this;
         this.currentDiagramName = diagramName;
-        var currentFolderId = this.currentFolder + "_" + this.pathToFolder.length;
-        this.currentDiagramFolderId = currentFolderId;
+        this.currentDiagramFolder = this.currentFolder;
         $.ajax({
             type: 'POST',
             url: 'saveDiagram',
             dataType: 'text',
             contentType: 'application/json',
-            data: (ExportManager.exportDiagramStateToJSON(diagramName, currentFolderId,
+            data: (ExportManager.exportDiagramStateToJSON(diagramName, this.currentFolder.folderId,
                 this.diagramController.getNodesMap(), this.diagramController.getLinksMap())),
-            success: function (response) {
-                console.log(response);
-                menuManager.currentFolder = "root";
+            success: function (diagramId) {
+                console.log(diagramId);
+                FolderTreeManager.addDiagramToFolder(diagramName, diagramId, menuManager.currentFolder);
+                menuManager.currentFolder = menuManager.folderTree;
                 menuManager.pathToFolder = [];
                 $('#diagrams').modal('hide');
 
@@ -79,7 +79,7 @@ class DiagramMenuManager {
         });
     }
 
-    private saveCurrentDiagram(): void {
+    /*private saveCurrentDiagram(): void {
         var menuManager = this;
         if (this.currentDiagramName === "") {
             $('#diagrams').modal('show');
@@ -104,21 +104,20 @@ class DiagramMenuManager {
                 }
             });
         }
-    }
+    }*/
 
     private openDiagram(diagramName: string): void {
         var menuManager = this;
         this.currentDiagramName = diagramName;
-        var currentFolderId = this.currentFolder + "_" + this.pathToFolder.length;
-        this.currentDiagramFolderId = currentFolderId;
-        this.currentFolder = "root";
+        this.currentDiagramFolder = this.currentFolder;
+        this.currentFolder = this.folderTree;
         this.pathToFolder = [];
         $.ajax({
             type: 'POST',
             url: 'openDiagram',
             dataType: 'json',
             contentType: 'application/json',
-            data: (ExportManager.exportDiagramRequestToJSON(diagramName, this.currentDiagramFolderId)),
+            data: (ExportManager.exportDiagramRequestToJSON(diagramName, this.currentDiagramFolder.folderId)),
             success: function (response) {
                 menuManager.diagramController.clearScene();
                 ImportManager.import(response, menuManager.diagramController.getGraph(), menuManager.diagramController.getNodesMap(),
@@ -130,6 +129,7 @@ class DiagramMenuManager {
         });
     }
 
+    /*
     private createNewDiagram(): void {
         $('#confirmNew').modal('show');
     }*/
@@ -140,11 +140,11 @@ class DiagramMenuManager {
         this.clearSavingMenu();
     }
 
-    /*private saveDiagramAs(): void {
+    private saveDiagramAs(): void {
         this.showFolderMenu();
         this.showFolderTable(this.currentFolder);
         this.showSavingMenu();
-    }*/
+    }
 
     private showFolderMenu(): void {
         this.clearFolderMenu();
@@ -178,7 +178,7 @@ class DiagramMenuManager {
         });
     }
 
-    /*private showSavingMenu(): void {
+    private showSavingMenu(): void {
         this.clearSavingMenu();
         var menuManager = this;
 
@@ -195,7 +195,7 @@ class DiagramMenuManager {
                 menuManager.saveDiagram(name);
             }
         });
-    }*/
+    }
 
     private writeWarning(message : string, place : string) : void {
         $(place).append("<p class='warningMessage'>" + message + "</p>");
@@ -251,12 +251,17 @@ class DiagramMenuManager {
                 "<span class='glyphicon-class'>" + folders[i] + "</span></li>");
         });
         $.each(diagrams, function (i) {
-            $('.folderView ul').prepend("<li class='folders'><span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>" +
+            $('.folderView ul').append("<li class='diagrams'><span class='glyphicon glyphicon-file' aria-hidden='true'></span>" +
                 "<span class='glyphicon-class'>" + diagrams[i] + "</span></li>");
         });
+
         $('.folderTable .folders').click(function () {
             menuManager.pathToFolder.push(menuManager.currentFolder);
             menuManager.showFolderTable(FolderTreeManager.findFolderByName(menuManager.currentFolder, $(this).text()));
+        });
+        $('.folderTable .diagrams').click(function () {
+            menuManager.openDiagram($(this).text());
+            $('#diagrams').modal('hide');
         });
     }
 
@@ -280,7 +285,7 @@ class DiagramMenuManager {
                 contentType: 'application/json',
                 data: (ExportManager.exportFolderToJSON(name, this.currentFolder.folderId)),
                 success: function (createdFolderId) {
-                    FolderTreeManager.addFolder(createdFolderId, name, menuManager.currentFolder);
+                    FolderTreeManager.addChildFolder(createdFolderId, name, menuManager.currentFolder);
                     menuManager.showFolderMenu();
                     menuManager.showFolderTable(menuManager.currentFolder);
                 },

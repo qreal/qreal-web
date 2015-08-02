@@ -23,8 +23,8 @@ public class DiagramServiceImpl implements DiagramService {
 
     @Transactional
     @Override
-    public boolean saveDiagram(Diagram diagram) {
-        return diagramDAO.save(diagram);
+    public Long saveDiagram(Diagram diagram) {
+        return diagramDAO.saveDiagram(diagram);
     }
 
     @Transactional

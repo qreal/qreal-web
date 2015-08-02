@@ -31,11 +31,8 @@ public class DiagramRepositoryController {
 
     @ResponseBody
     @RequestMapping(value = "/saveDiagram", method = RequestMethod.POST)
-    public String saveDiagram(@RequestBody Diagram diagram) throws DiagramMenuException {
-        if (!diagramService.saveDiagram(diagram)) {
-            throw new DiagramMenuException("This diagram already exists");
-        }
-        return "OK";
+    public Long saveDiagram(@RequestBody Diagram diagram) throws DiagramMenuException {
+        return diagramService.saveDiagram(diagram);
     }
 
     @ResponseBody

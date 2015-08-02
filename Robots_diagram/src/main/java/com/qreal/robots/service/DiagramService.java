@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface DiagramService {
 
-    public boolean saveDiagram(Diagram diagram);
+    public Long saveDiagram(Diagram diagram);
 
     public Diagram openDiagram(DiagramRequest request);
 

@@ -30,19 +30,12 @@ public class DiagramDAOImpl implements DiagramDAO {
         this.sessionFactory = sessionFactory;
     }
 
-    public boolean save(Diagram diagram) {
+    public Long saveDiagram(Diagram diagram) {
         LOG.debug("saving diagram");
         Session session = sessionFactory.getCurrentSession();
-        List<Diagram> diagrams = session.createQuery("from Diagram where folderId=:folderId and name=:name")
-                .setParameter("folderId", diagram.getFolderId())
-                .setParameter("name", diagram.getName())
-                .list();
+        session.save(diagram);
 
-        if (diagrams.isEmpty()) {
-            session.save(diagram);
-            return true;
-        }
-        return false;
+        return diagram.getFolderId();
     }
 
     public Diagram openDiagram(DiagramRequest request) {
