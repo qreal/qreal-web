@@ -32,30 +32,26 @@
 			<Image src="images/enginesBackwardBlock.svg"/>
 		</Element>
 
+		<Element name="Stop Motors" type="TrikV6EnginesStop">
+			<Property key="Ports" name="Ports" type="string">
+                <value>M1, M2, M3, M4</value>
+			</Property>
+			<Image src="images/enginesStopBlock.svg"/>
+		</Element>
+
+		<Element name="Clear Encoder" type="TrikV6ClearEncoder">
+			<Property key="Ports" name="Ports" type="string">
+                <value>B1, B2, B3, B4</value>
+			</Property>
+			<Image src="images/nullificationEncoderBlock.svg"/>
+		</Element>
+
 	</Category>
 	<Category name="Wait">
 
-		<Element name="Timer" type="Timer">
-			<Property key="Delay" name="Delay (ms)" type="string">
-                <value>1000</value>
-			</Property>
-			<Image src="images/timerBlock.svg"/>
-		</Element>
-
-		<Element name="Wait for Infrared Distance" type="TrikWaitForIRDistance">
-			<Property key="Distance" name="Distance" type="string">
-                <value>0</value>
-			</Property>
-			<Property key="Port" name="Port" type="dropdown">
-                <value>A1</value>
-                <Variants>
-                    <variant>A1</variant>
-                    <variant>A2</variant>
-                    <variant>A3</variant>
-                    <variant>A4</variant>
-                    <variant>A5</variant>
-                    <variant>A6</variant>
-                </Variants>
+		<Element name="Wait for Encoder" type="TrikWaitForEncoder">
+			<Property key="Port" name="Port" type="string">
+                <value>B1</value>
 			</Property>
 			<Property key="Sign" name="Sign" type="dropdown">
                 <value>greater</value>
@@ -66,7 +62,10 @@
                     <variant>not less</variant>
                 </Variants>
 			</Property>
-			<Image src="images/waitForSonarDistanceBlock.svg"/>
+			<Property key="TachoLimit" name="Tacho Limit" type="string">
+                <value>""</value>
+			</Property>
+			<Image src="images/waitForEncoderBlock.svg"/>
 		</Element>
 	</Category>
 </Elements>
