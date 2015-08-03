@@ -87,19 +87,18 @@ public class DiagramController {
             compressorProcBuilder.directory(folder);
             compressorProcBuilder.start().waitFor();
 
-            ProcessBuilder interpreterProcBuilder = new ProcessBuilder("2D-model",
-                    "-b", "--platform", "minimal", "--report", "report.json", "--trajectory", "trajectory.fifo", "diagram.qrs");
+            ProcessBuilder interpreterProcBuilder = new ProcessBuilder(checkerPath, "diagram.qrs");
             interpreterProcBuilder.directory(folder);
             interpreterProcBuilder.start().waitFor();
 
             Path trajectoryPath = resourceLoader.getResource("tasks/" + request.getId() +
-                    "/solutions/" + uuidStr + "/trajectory.fifo").getFile().toPath();
+                    "/solutions/" + uuidStr + "/trajectories/diagram/_diagram").getFile().toPath();
 
             Report report = parseReportFile(resourceLoader.getResource("tasks/" + request.getId() +
-                    "/solutions/" + uuidStr + "/report.json").getFile());
+                    "/solutions/" + uuidStr + "/reports/diagram/_diagram").getFile());
 
             Trace trace = parseTrajectoryFile(trajectoryPath);
-            FileUtils.deleteDirectory(folder);
+            //FileUtils.deleteDirectory(folder);
             return new SubmitResponse(report, trace);
         } catch (IOException e) {
             e.printStackTrace();
@@ -141,4 +140,6 @@ public class DiagramController {
         String parts[] = line.split(" ");
         return new Point(Double.valueOf(parts[2]), Double.valueOf(parts[3]), Double.valueOf(parts[4]), Double.valueOf(parts[1]));
     }
+
+    private static final String checkerPath = System.getProperty("user.home") + "/qreal/bin/debug/check-solution.sh";
 }
