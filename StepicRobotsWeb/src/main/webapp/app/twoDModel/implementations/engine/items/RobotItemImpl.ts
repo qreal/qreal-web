@@ -5,7 +5,7 @@ class RobotItemImpl implements RobotItem {
     private startDirection: number;
     private startCenter: TwoDPosition = new TwoDPosition();
     private center: TwoDPosition = new TwoDPosition();
-    private image;
+    private image: RaphaelElement;
     private rotateHandle: RaphaelElement;
     private width: number = 50;
     private height: number = 50;
@@ -14,11 +14,13 @@ class RobotItemImpl implements RobotItem {
     private timeoutId: number;
     private sensors: {string?: SensorItem} = {};
     private startPositionCross: StartPositionItem;
+    private direction: number;
 
     constructor(worldModel: WorldModel, position: TwoDPosition, imageFileName: string, robot: RobotModel) {
         this.worldModel = worldModel;
         this.robot = robot;
         this.startPosition = position;
+        this.direction = 0;
         this.startDirection = 0;
         var paper = worldModel.getPaper();
         this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
@@ -43,90 +45,9 @@ class RobotItemImpl implements RobotItem {
         this.hideHandles();
     }
 
-    setDraggable(): void {
-        var robotItem = this;
-        robotItem.image.attr({cursor: "pointer"});
-
-        var startHandle = function () {
-                if (!robotItem.worldModel.getDrawMode()) {
-                    this.transformation = robotItem.image.transform();
-                    robotItem.updateSensorsTransformations();
-
-                    this.rotation = robotItem.image.matrix.split().rotate;
-                    this.cx = this.attr("cx");
-                    this.cy = this.attr("cy");
-                }
-                return this;
-            },
-            moveHandle = function (dx, dy) {
-                if (!robotItem.worldModel.getDrawMode()) {
-                    var newX = this.cx + dx;
-                    var newY = this.cy + dy;
-                    var offsetX = newX - robotItem.center.x;
-                    var offsetY = newY - robotItem.center.y;
-                    var tan = offsetY / offsetX;
-                    var angle = Math.atan(tan) / (Math.PI / 180);
-                    if (offsetX < 0) {
-                        angle += 180;
-                    }
-
-                    angle -= this.rotation;
-                    robotItem.image.transform(this.transformation + "R" + angle + "," +
-                        robotItem.center.x + "," + robotItem.center.y);
-
-                    robotItem.transformSensorsItems("R" + angle + "," + robotItem.center.x + "," + robotItem.center.y);
-
-                    var newCx = robotItem.image.matrix.x(robotItem.startCenter.x + robotItem.width / 2 + 20,
-                        robotItem.startCenter.y);
-                    var newCy = robotItem.image.matrix.y(robotItem.startCenter.x + robotItem.width / 2 + 20,
-                        robotItem.startCenter.y);
-                    this.attr({cx: newCx, cy: newCy});
-                }
-                return this;
-            },
-            upHandle = function () {
-                if (!robotItem.worldModel.getDrawMode()) {
-                    robotItem.updateSensorsTransformations();
-                }
-                return this;
-            };
-
-        robotItem.rotateHandle.drag(moveHandle, startHandle, upHandle);
-
-        var start = function () {
-                if (!robotItem.worldModel.getDrawMode()) {
-                    this.transformation = this.transform();
-                    robotItem.updateSensorsTransformations();
-
-                    this.handle_cx = robotItem.rotateHandle.attr("cx");
-                    this.handle_cy = robotItem.rotateHandle.attr("cy");
-                    robotItem.worldModel.setCurrentElement(robotItem);
-                }
-                return this;
-            }
-            ,move = function (dx, dy) {
-                if (!robotItem.worldModel.getDrawMode()) {
-                    this.transform(this.transformation + "T" + dx + "," + dy);
-
-                    robotItem.transformSensorsItems("T" + dx + "," + dy);
-
-                    robotItem.rotateHandle.attr({"cx": this.handle_cx + dx, "cy": this.handle_cy + dy});
-                }
-                return this;
-            }
-            ,up = function () {
-                if (!robotItem.worldModel.getDrawMode()) {
-                    robotItem.center.x = this.matrix.x(robotItem.startCenter.x, robotItem.startCenter.y);
-                    robotItem.center.y = this.matrix.y(robotItem.startCenter.x, robotItem.startCenter.y);
-                    robotItem.updateSensorsTransformations();
-                }
-                return this;
-            }
-        this.image.drag(move, start, up);
-    }
-
     setStartPosition(position: TwoDPosition, direction: number): void {
         this.startPosition = position;
+        this.direction = direction;
         this.startDirection = direction;
         this.image.attr({x: position.x, y: position.y});
         this.center.x = position.x + this.width / 2
@@ -135,10 +56,6 @@ class RobotItemImpl implements RobotItem {
         this.startCenter.y = this.center.y;
         this.image.transform("R" + direction + "," + this.center.x + "," + this.center.y);
         this.rotateHandle.attr({"cx": + position.x + this.width + 20, "cy": position.y + this.height / 2 });
-    }
-
-    ride(): void {
-        console.log("robot ride");
     }
 
     hideHandles(): void {
@@ -178,8 +95,7 @@ class RobotItemImpl implements RobotItem {
         } else {
             sensor = new SensorItem(this, this.worldModel, sensorType, pathToImage, position);
         }
-        sensor.transform(this.image.transform());
-        sensor.updateTransformationString();
+        sensor.rotateByRobot(this.direction, this.center.x, this.center.y);
         if (direction) {
             sensor.setStartDirection(direction);
         }
@@ -190,13 +106,6 @@ class RobotItemImpl implements RobotItem {
         for(var portName in this.sensors) {
             var sensor = this.sensors[portName];
             sensor.updateTransformationString();
-        }
-    }
-
-    private transformSensorsItems(transformationString: string): void {
-        for (var portName in this.sensors) {
-            var sensor = this.sensors[portName];
-            sensor.transform(transformationString);
         }
     }
 
@@ -218,8 +127,7 @@ class RobotItemImpl implements RobotItem {
         for (var portName in this.sensors) {
             var sensor = this.sensors[portName];
             sensor.setStartPosition();
-            sensor.transform(this.image.transform());
-            sensor.updateTransformationString();
+            sensor.rotateByRobot(this.direction, this.center.x, this.center.y);
             sensor.restoreStartDirection();
         }
     }
@@ -253,7 +161,8 @@ class RobotItemImpl implements RobotItem {
                 robotItem.center.y = newY + robotItem.height / 2;
 
                 robotItem.image.transform("R" + currentPoint.direction);
-                robotItem.rotateSensors(currentPoint.direction, robotItem.center.x,  robotItem.center.y);
+                robotItem.direction = currentPoint.direction;
+                robotItem.rotateSensors(currentPoint.direction, robotItem.center.x, robotItem.center.y);
 
                 seqNumber++;
 

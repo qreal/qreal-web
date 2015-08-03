@@ -1,18 +1,17 @@
 class WallItemImpl implements WallItem {
+    private static width: number = 15;
     private path: RaphaelPath;
     private worldModel: WorldModel;
     private handleStart: RaphaelElement;
     private handleEnd: RaphaelElement;
     private pathArray;
-    private width;
 
     constructor(worldModel: WorldModel, xStart: number, yStart: number, xEnd: number, yEnd: number) {
         var paper = worldModel.getPaper();
         this.worldModel = worldModel;
-        this.width = 15;
         this.path = paper.path("M" + xStart + " " + yStart + " L" + xEnd + " " + yEnd);
         this.path.attr({
-            "stroke-width": this.width
+            "stroke-width": WallItemImpl.width
         });
         $(this.path.node).attr("class", "path");
         $(".path").attr("stroke", "url(#wall_pattern)");
@@ -35,6 +34,10 @@ class WallItemImpl implements WallItem {
         });
         $(this.handleEnd.node).attr("class", "handleEnd");
         $(".handleEnd").attr("fill", "url(#wall_pattern)");
+    }
+
+    static getWidth(): number {
+        return WallItemImpl.width;
     }
 
     setDraggable() {

@@ -14,7 +14,6 @@ class EllipseItemImpl implements EllipseItem {
         this.ellipse.attr({
             fill: "transparent",
             "stroke": color,
-            "stroke-width": width
         })
 
         var handleAttrs = {

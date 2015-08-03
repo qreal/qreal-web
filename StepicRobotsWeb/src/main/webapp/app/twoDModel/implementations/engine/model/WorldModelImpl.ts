@@ -125,9 +125,58 @@ class WorldModelImpl implements WorldModel {
     }
 
     addWall(xStart: number, yStart: number, xEnd: number, yEnd: number): void {
-        var wall = new WallItemImpl(this, xStart, yStart, xEnd, yEnd);
+        var exPositions = this.getExtendedPositions(xStart, yStart, xEnd, yEnd, WallItemImpl.getWidth());
+        var wall = new WallItemImpl(this, exPositions.start.x, exPositions.start.y,
+            exPositions.end.x, exPositions.end.y);
         wall.hideHandles();
         this.wallItems.push(wall);
+    }
+
+    addLine(xStart: number, yStart: number, xEnd: number, yEnd: number, width: number, color: string) {
+        var exPositions = this.getExtendedPositions(xStart, yStart, xEnd, yEnd, width);
+        var line = new LineItemImpl(this, exPositions.start.x, exPositions.start.y,
+            exPositions.end.x, exPositions.end.y, width, color);
+        line.hideHandles();
+        this.colorFields.push(line);
+    }
+
+    private getExtendedPositions(xStart: number, yStart: number, xEnd: number,
+                         yEnd: number, width: number): {start: TwoDPosition, end: TwoDPosition} {
+        var extension = width / 2;
+        var cos = Math.abs(xEnd - xStart) / this.getLenght(xStart, yStart, xEnd, yEnd);
+        var extensionX = extension * cos;
+        var sin = Math.abs(yEnd - yStart) / this.getLenght(xStart, yStart, xEnd, yEnd);
+        var extensionY = extension * sin;
+
+        var exStartX: number;
+        var exStartY: number;
+        var exEndX: number;
+        var exEndY: number;
+
+        if (xStart < xEnd) {
+            exStartX = xStart - extensionX;
+            exEndX = xEnd + extensionX;
+        } else {
+            exStartX = xStart + extensionX;
+            exEndX = xEnd - extensionX;
+        }
+
+        if (yStart < yEnd) {
+            exStartY = yStart - extensionY;
+            exEndY = yEnd + extensionY;
+        } else {
+            exStartY = yStart + extensionY;
+            exEndY = yEnd - extensionY;
+        }
+        return { start: new TwoDPosition(exStartX, exStartY), end: new TwoDPosition(exEndX, exEndY) };
+    }
+
+    private getLenght(xStart: number, yStart: number, xEnd: number, yEnd: number): number {
+        return Math.sqrt(this.sqr(xEnd - xStart) + this.sqr((yEnd - yStart)));
+    }
+
+    private sqr(x: number): number {
+        return x * x;
     }
 
     getMousePosition(e) {
@@ -214,7 +263,6 @@ class WorldModelImpl implements WorldModel {
             }
         }
 
-
         var walls = xml.getElementsByTagName("wall");
 
         if (walls) {
@@ -225,6 +273,22 @@ class WorldModelImpl implements WorldModel {
                 var endPos = this.parsePositionString(endPosStr);
 
                 this.addWall(beginPos.x + offsetX, beginPos.y + offsetY, endPos.x + offsetX, endPos.y + offsetY);
+            }
+        }
+
+        var lines = xml.getElementsByTagName("colorFields")[0].getElementsByTagName("line");
+
+        if (lines) {
+            for (var i = 0; i < lines.length; i++) {
+                var beginPosStr:string = lines[i].getAttribute('begin');
+                var beginPos = this.parsePositionString(beginPosStr);
+                var endPosStr:string = lines[i].getAttribute('end');
+                var endPos = this.parsePositionString(endPosStr);
+                var width:number = parseInt(lines[i].getAttribute('stroke-width'));
+                var color:string = lines[i].getAttribute('stroke');
+
+                this.addLine(beginPos.x + offsetX, beginPos.y + offsetY,
+                    endPos.x + offsetX, endPos.y + offsetY, width, color);
             }
         }
     }

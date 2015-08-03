@@ -29,10 +29,6 @@ class RobotModelImpl implements RobotModel {
             position, direction);
     }
 
-    nextFragment(): void {
-        this.robotItem.ride();
-    }
-
     private parsePositionString(positionStr: string): TwoDPosition {
         var splittedStr = positionStr.split(":");
         var x = parseFloat(splittedStr[0]);

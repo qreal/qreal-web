@@ -9,6 +9,7 @@ class LineItemImpl implements LineItem {
         var paper = worldModel.getPaper();
         this.worldModel = worldModel;
         this.path = paper.path("M" + xStart + " " + yStart + " L" + xEnd + " " + yEnd);
+        this.path.toBack();
         this.path.attr({
             "stroke": color,
             "stroke-width": width

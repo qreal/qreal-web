@@ -1,5 +1,4 @@
 interface RobotItem extends AbstractItem {
-    ride(): void;
     getWidth(): number;
     getHeight(): number;
     getStartPosition(): TwoDPosition;

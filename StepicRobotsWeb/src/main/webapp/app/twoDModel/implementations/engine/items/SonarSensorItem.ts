@@ -3,7 +3,6 @@ class SonarSensorItem extends SensorItem {
     private sonarRange = 255;
     private regionStartX: number;
     private regionStartY: number;
-    private regionTransformationString = "";
     protected regionTranslation: string;
     protected regionRotation: string;
 
@@ -60,12 +59,6 @@ class SonarSensorItem extends SensorItem {
         });
 
         this.scanningRegion.transform("");
-        this.regionTransformationString = "";
-    }
-
-    transform(transformationString: string) {
-        super.transform(transformationString);
-        this.scanningRegion.transform(this.regionTransformationString + transformationString);
     }
 
     animate(positionX: number, positionY: number): void {
@@ -78,11 +71,6 @@ class SonarSensorItem extends SensorItem {
 
         this.regionTranslation = "t" + positionOffsetX + "," + positionOffsetY;
         this.scanningRegion.transform(this.getRegionTransformation());
-    }
-
-    updateTransformationString(): void {
-        super.updateTransformationString();
-        this.regionTransformationString = this.scanningRegion.transform();
     }
 
     rotate(angle: number): void {
