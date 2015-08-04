@@ -9,6 +9,17 @@
 		<Element name="Final Node" type="FinalNode">
 			<Image src="images/finalBlock.svg"/>
 		</Element>
+
+		<Element name="Function" type="Function">
+			<Property key="Body" name="Body" type="string">
+				<value></value>
+			</Property>
+			<Property key="Init" name="Initialization" type="checkbox">
+				<value>True</value>
+			</Property>
+			<Image src="images/functionBlock.svg"/>
+		</Element>
+
 	</Category>
 	<Category name="Actions">
 
@@ -32,15 +43,47 @@
 			<Image src="images/enginesBackwardBlock.svg"/>
 		</Element>
 
+		<Element name="Stop Motors" type="TrikV6EnginesStop">
+			<Property key="Ports" name="Ports" type="string">
+                <value>M1, M2, M3, M4</value>
+			</Property>
+			<Image src="images/enginesStopBlock.svg"/>
+		</Element>
+
+		<Element name="Clear Encoder" type="TrikV6ClearEncoder">
+			<Property key="Ports" name="Ports" type="string">
+                <value>B1, B2, B3, B4</value>
+			</Property>
+			<Image src="images/nullificationEncoderBlock.svg"/>
+		</Element>
+
 	</Category>
 	<Category name="Wait">
 
 		<Element name="Timer" type="Timer">
 			<Property key="Delay" name="Delay (ms)" type="string">
-                <value>1000</value>
+				<value>1000</value>
 			</Property>
 			<Image src="images/timerBlock.svg"/>
 		</Element>
-		
+
+		<Element name="Wait for Encoder" type="TrikWaitForEncoder">
+			<Property key="Port" name="Port" type="string">
+                <value>B1</value>
+			</Property>
+			<Property key="Sign" name="Sign" type="dropdown">
+                <value>greater</value>
+                <Variants>
+                    <variant>greater</variant>
+                    <variant>less</variant>
+                    <variant>not greater</variant>
+                    <variant>not less</variant>
+                </Variants>
+			</Property>
+			<Property key="TachoLimit" name="Tacho Limit" type="string">
+                <value>""</value>
+			</Property>
+			<Image src="images/waitForEncoderBlock.svg"/>
+		</Element>
 	</Category>
 </Elements>

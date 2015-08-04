@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -81,24 +82,47 @@ public class DiagramController {
         String uuidStr = String.valueOf(javaModelConverter.convertToXmlSave(request.getDiagram(), resourceLoader, taskId));
 
         try {
-            Resource resource = resourceLoader.getResource("tasks/" + request.getId() + "/solutions/" + uuidStr);
-            File folder = resource.getFile();
+            File taskFields = resourceLoader.getResource("tasks/" + request.getId() + "/fields").getFile();
+            File solutionFolder = resourceLoader.getResource("tasks/" + request.getId() + "/solutions/" + uuidStr).getFile();
+
+            if (taskFields.exists()) {
+                File solutionFields = new File(solutionFolder.getPath() + "/fields");
+                FileUtils.copyDirectory(taskFields, solutionFields);
+            }
+
             ProcessBuilder compressorProcBuilder = new ProcessBuilder("compressor", "diagram");
-            compressorProcBuilder.directory(folder);
+            compressorProcBuilder.directory(solutionFolder);
             compressorProcBuilder.start().waitFor();
 
             ProcessBuilder interpreterProcBuilder = new ProcessBuilder(checkerPath, "diagram.qrs");
-            interpreterProcBuilder.directory(folder);
+            interpreterProcBuilder.directory(solutionFolder);
             interpreterProcBuilder.start().waitFor();
 
-            Path trajectoryPath = resourceLoader.getResource("tasks/" + request.getId() +
-                    "/solutions/" + uuidStr + "/trajectories/diagram/_diagram").getFile().toPath();
+            Path trajectoryPath;
+            Report report;
 
-            Report report = parseReportFile(resourceLoader.getResource("tasks/" + request.getId() +
-                    "/solutions/" + uuidStr + "/reports/diagram/_diagram").getFile());
+            File failedField = resourceLoader.getResource("tasks/" + request.getId() +
+                    "/solutions/" + uuidStr + "/failed-field").getFile();
+            if (failedField.exists()) {
+                BufferedReader br = new BufferedReader(new FileReader(failedField));
+                String[] pathParts = br.readLine().split("/");
+                String failedFilename = pathParts[pathParts.length - 1];
+                String failedName = failedFilename.substring(0, failedFilename.length() - 4);
+                trajectoryPath = resourceLoader.getResource("tasks/" + request.getId() +
+                        "/solutions/" + uuidStr + "/trajectories/diagram/" + failedName).getFile().toPath();
+
+                report = parseReportFile(resourceLoader.getResource("tasks/" + request.getId() +
+                        "/solutions/" + uuidStr + "/reports/diagram/" + failedName).getFile());
+            } else {
+                trajectoryPath = resourceLoader.getResource("tasks/" + request.getId() +
+                        "/solutions/" + uuidStr + "/trajectories/diagram/_diagram").getFile().toPath();
+
+                report = parseReportFile(resourceLoader.getResource("tasks/" + request.getId() +
+                        "/solutions/" + uuidStr + "/reports/diagram/_diagram").getFile());
+            }
 
             Trace trace = parseTrajectoryFile(trajectoryPath);
-            //FileUtils.deleteDirectory(folder);
+            //FileUtils.deleteDirectory(solutionFolder);
             return new SubmitResponse(report, trace);
         } catch (IOException e) {
             e.printStackTrace();

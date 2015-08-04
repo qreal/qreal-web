@@ -80,7 +80,7 @@ class RegionItem {
         if (text) {
             var textPos = this.getPosition();
             this.worldModel.getPaper().text(textPos.x + 5, textPos.y + 10, text).
-                attr({"text-anchor":"start", fill: color, "font-size": 14});
+                attr({"text-anchor":"start", fill: color, "font-size": 14}).toBack();
         }
 
         var visible = element.getAttribute("visible");
