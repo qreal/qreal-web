@@ -12,6 +12,8 @@
 
     <link rel="stylesheet" href="<c:url value='/resources/treeview/jquery.treeview.css' />"/>
     <script type="text/javascript" src="<c:url value='/resources/treeview/jquery.treeview.js' />"></script>
+
+    <link rel="stylesheet" href="<c:url value='/resources/css/jquery-ui.css' />"/>
 </head>
 <body>
 <div ng-app ng-controller="RootDiagramController">

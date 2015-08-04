@@ -96,7 +96,7 @@ class DiagramLoader {
         for (var j = 0; j < logicalPropertiesObject.length; j++) {
             switch (logicalPropertiesObject[j].name) {
                 case "Guard":
-                    var property: Property = new Property("Guard", logicalPropertiesObject[j].value, "dropdown");
+                    var property: Property = new Property("Guard", logicalPropertiesObject[j].value, "combobox");
                     properties["Guard"] = property;
             }
         }

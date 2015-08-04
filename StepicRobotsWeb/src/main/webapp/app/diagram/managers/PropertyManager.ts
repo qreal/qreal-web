@@ -2,6 +2,7 @@ class PropertyManager {
     static getPropertyHtml(typeName: string, property: Property): string {
         switch (property.type) {
             case "string":
+            case "combobox":
                 return this.getHtmlForString(property);
             case "checkbox":
                 return this.getHtmlForCheckBox(property);

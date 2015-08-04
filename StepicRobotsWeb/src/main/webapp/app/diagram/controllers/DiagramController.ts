@@ -50,7 +50,6 @@ class DiagramController {
                 }
 
                 if (event.button == 2) {
-                    console.log("right-click");
                     $(".custom-menu").finish().toggle(100).
                         css({
                             top: event.offsetY + "px",
@@ -233,13 +232,38 @@ class DiagramController {
         });
     }
 
-    setNodeProperties(element: DiagramElement): void {
+    private setNodeProperties(element): void {
+        $('#property_table tbody').empty();
         var properties: PropertiesMap = element.getProperties();
-        var content: string = '';
         for (var property in properties) {
-            content += this.getPropertyHtml(element.getType(), properties[property]);
+            var newItem = $(this.getPropertyHtml(element.getType(), properties[property]));
+            $('#property_table tbody').append(newItem);
+
+            if (properties[property].type === "combobox") {
+                this.initCombobox(element.getType(), property, newItem);
+            }
         }
-        $('#property_table tbody').html(content);
+    }
+
+    private initCombobox(typeName: string, propertyName: string, element) {
+        var dropdownList = DropdownListManager.getDropdownList(typeName, propertyName);
+
+        var controller: DiagramController = this;
+
+        element.find('input').autocomplete({
+            source: dropdownList,
+            minLength: 0,
+            select: function (event, ui) {
+                var tr = $(this).closest('tr');
+                var name = tr.find('td:first').html();
+                var value = ui.item.value;;
+                var property: Property = controller.currentElement.getProperties()[name];
+                property.value = value;
+                controller.currentElement.setProperty(name, property);
+            }
+        }).focus(function() {
+            $(this).autocomplete("search", $(this).val());
+        });
     }
 
     getPropertyHtml(typeName, property: Property): string {
