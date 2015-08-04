@@ -117,7 +117,7 @@ class DiagramMenuManager {
             url: 'openDiagram',
             dataType: 'json',
             contentType: 'application/json',
-            data: (ExportManager.exportDiagramRequestToJSON(diagramName, this.currentDiagramFolder.folderId)),
+            data: (JSON.stringify({id: FolderTreeManager.getDiagramIdByName(diagramName, this.currentFolder)})),
             success: function (response) {
                 menuManager.diagramController.clearScene();
                 ImportManager.import(response, menuManager.diagramController.getGraph(), menuManager.diagramController.getNodesMap(),

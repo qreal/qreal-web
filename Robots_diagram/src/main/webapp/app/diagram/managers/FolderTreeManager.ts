@@ -47,4 +47,15 @@ class FolderTreeManager {
 
         parentFolder.diagrams.push(diagram);
     }
+
+    static getDiagramIdByName(diagramName: string, parentFolder) {
+        var diagramId: number;
+        for (var i = 0; i < parentFolder.diagrams.length; i++) {
+            if (parentFolder.diagrams[i].name === diagramName) {
+                diagramId = parentFolder.diagrams[i].diagramId;
+            }
+        }
+
+        return diagramId;
+    }
 }

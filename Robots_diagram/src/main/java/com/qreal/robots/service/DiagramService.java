@@ -12,9 +12,9 @@ import java.util.List;
  */
 public interface DiagramService {
 
-    public Long saveDiagram(Diagram diagram);
+    public Long saveDiagram(DiagramRequest diagramRequest);
 
-    public Diagram openDiagram(DiagramRequest request);
+    public Diagram openDiagram(Long diagramId);
 
     public void rewriteDiagram(Diagram diagram);
 

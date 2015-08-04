@@ -19,9 +19,6 @@ public class Diagram implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @JoinColumn(name = "folder_id", nullable = false)
-    private Long folderId;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "diagram_id", referencedColumnName = "diagram_id")
     private Set<DefaultDiagramNode> nodes;
@@ -44,15 +41,6 @@ public class Diagram implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-
-    public Long getFolderId() {
-        return this.folderId;
-    }
-
-    public void setFolderId(Long folderId) {
-        this.folderId = folderId;
     }
 
     public void setNodes(Set<DefaultDiagramNode> nodes) {

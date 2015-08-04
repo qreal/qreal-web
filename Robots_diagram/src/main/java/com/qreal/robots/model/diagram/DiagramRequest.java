@@ -7,23 +7,23 @@ import java.io.Serializable;
  */
 public class DiagramRequest implements Serializable {
 
-    private String diagramName;
+    private Diagram diagram;
 
-    private String folderId;
+    private Long folderId;
 
-    public String getDiagramName() {
-        return this.diagramName;
+    public Diagram getDiagram() {
+        return this.diagram;
     }
 
-    public void setDiagramName(String name) {
-        this.diagramName = name;
+    public void setDiagram(Diagram diagram) {
+        this.diagram = diagram;
     }
 
-    public String getFolderId() {
+    public Long getFolderId() {
         return this.folderId;
     }
 
-    public void setFolderId(String folderId) {
+    public void setFolderId(Long folderId) {
         this.folderId = folderId;
     }
 }

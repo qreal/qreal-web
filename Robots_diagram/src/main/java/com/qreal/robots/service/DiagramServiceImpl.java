@@ -23,14 +23,14 @@ public class DiagramServiceImpl implements DiagramService {
 
     @Transactional
     @Override
-    public Long saveDiagram(Diagram diagram) {
-        return diagramDAO.saveDiagram(diagram);
+    public Long saveDiagram(DiagramRequest diagramRequest) {
+        return diagramDAO.saveDiagram(diagramRequest);
     }
 
     @Transactional
     @Override
-    public Diagram openDiagram(DiagramRequest request) {
-        return diagramDAO.openDiagram(request);
+    public Diagram openDiagram(Long diagramId) {
+        return diagramDAO.openDiagram(diagramId);
     }
 
     @Transactional
@@ -58,6 +58,11 @@ public class DiagramServiceImpl implements DiagramService {
     }
 
     private void printTree(Folder folder) {
+        System.out.print("(");
+        for (int i = 0; i < folder.getDiagrams().size(); i++) {
+            System.out.print(folder.getDiagrams().get(i).getName());
+        }
+        System.out.print(")");
         System.out.print(folder.getFolderName());
         System.out.print(" ");
         int size = folder.getChildrenFolders().size();

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Created by vladzx on 07.11.14.
@@ -30,33 +29,37 @@ public class DiagramDAOImpl implements DiagramDAO {
         this.sessionFactory = sessionFactory;
     }
 
-    public Long saveDiagram(Diagram diagram) {
+    public Long saveDiagram(DiagramRequest diagramRequest) {
         LOG.debug("saving diagram");
         Session session = sessionFactory.getCurrentSession();
-        session.save(diagram);
+        List<Folder> folders = session.createQuery("from Folder where folderId=:folderId")
+                .setParameter("folderId", diagramRequest.getFolderId())
+                .list();
 
-        return diagram.getFolderId();
+        folders.get(0).getDiagrams().add(diagramRequest.getDiagram());
+        session.update(folders.get(0));
+        session.flush();
+        return diagramRequest.getDiagram().getDiagramId();
     }
 
-    public Diagram openDiagram(DiagramRequest request) {
+    public Diagram openDiagram(Long diagramId) {
         Session session = sessionFactory.getCurrentSession();
-        List<Diagram> diagrams = session.createQuery("from Diagram where name=:name and folderId=:folderId")
-                .setParameter("name", request.getDiagramName())
-                .setParameter("folderId", request.getFolderId())
+        List<Diagram> diagrams = session.createQuery("from Diagram where diagramId=:diagramId")
+                .setParameter("diagramId", diagramId)
                 .list();
 
         return diagrams.get(0);
     }
 
     public void rewriteDiagram(Diagram diagram) {
-        Session session = sessionFactory.getCurrentSession();
+       /* Session session = sessionFactory.getCurrentSession();
         List<Diagram> diagrams = session.createQuery("from Diagram where folderId=:folderId and name=:name")
                 .setParameter("folderId", diagram.getFolderId())
                 .setParameter("name", diagram.getName())
                 .list();
 
         session.delete(diagrams.get(0));
-        session.save(diagram);
+        session.save(diagram);*/
     }
 
     public Long createFolder(Folder folder) {

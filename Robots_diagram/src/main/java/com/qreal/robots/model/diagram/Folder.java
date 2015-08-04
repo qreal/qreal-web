@@ -15,6 +15,10 @@ public class Folder implements Serializable {
     public Folder() {
     }
 
+    public Folder(Long folderId) {
+        this.folderId = folderId;
+    }
+
     @Id
     @Column(name = "folder_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +33,7 @@ public class Folder implements Serializable {
     @Column(name = "folder_parent_id")
     private Long folderParentId;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "folder_parent_id", insertable = false, updatable = false)
     private List<Folder> childrenFolders;
 
