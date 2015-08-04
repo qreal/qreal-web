@@ -1,5 +1,5 @@
 class ExportManager {
-    static exportDiagramStateToJSON(name: string, folderId: string,  nodesMap, linksMap): string {
+    static exportSavingDiagramStateToJSON(name: string, folderId: string,  nodesMap, linksMap): string {
         var json = {
             'diagram': {
                 'name': name,
@@ -9,6 +9,19 @@ class ExportManager {
             'folderId': folderId
         };
 
+        ExportManager.exportNodes(json.diagram, nodesMap);
+        ExportManager.exportLinks(json.diagram, linksMap);
+
+        return JSON.stringify(json);
+    }
+
+    static exportUpdatingDiagramStateToJSON(name: string, parentFolder,  nodesMap, linksMap): string {
+        var json = {
+            'diagramId': FolderTreeManager.getDiagramIdByName(name, parentFolder),
+            'name': name,
+            'nodes': [],
+            'links': []
+        }
         ExportManager.exportNodes(json, nodesMap);
         ExportManager.exportLinks(json, linksMap);
 
@@ -37,7 +50,7 @@ class ExportManager {
             };
 
             nodeJSON.properties = ExportManager.exportProperties(node.getProperties());
-            json.diagram.nodes.push(nodeJSON);
+            json.nodes.push(nodeJSON);
         }
     }
 
@@ -59,7 +72,7 @@ class ExportManager {
 
             linkJSON.properties = ExportManager.exportProperties(link.getProperties());
 
-            json.diagram.links.push(linkJSON);
+            json.links.push(linkJSON);
         }
     }
 

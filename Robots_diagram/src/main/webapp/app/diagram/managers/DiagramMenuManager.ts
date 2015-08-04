@@ -44,9 +44,9 @@ class DiagramMenuManager {
 
     private clearAll(): void {
         this.diagramController.clearScene();
-        /*this.canBeDeleted = false;
+        this.canBeDeleted = false;
         this.currentDiagramName = "";
-        this.currentDiagramFolderId = "";*/
+        this.currentDiagramFolder = null;
     }
 
     private saveDiagram(diagramName: string): void {
@@ -58,7 +58,7 @@ class DiagramMenuManager {
             url: 'saveDiagram',
             dataType: 'text',
             contentType: 'application/json',
-            data: (ExportManager.exportDiagramStateToJSON(diagramName, this.currentFolder.folderId,
+            data: (ExportManager.exportSavingDiagramStateToJSON(diagramName, this.currentFolder.folderId,
                 this.diagramController.getNodesMap(), this.diagramController.getLinksMap())),
             success: function (diagramId) {
                 console.log(diagramId);
@@ -79,7 +79,7 @@ class DiagramMenuManager {
         });
     }
 
-    /*private saveCurrentDiagram(): void {
+    private saveCurrentDiagram(): void {
         var menuManager = this;
         if (this.currentDiagramName === "") {
             $('#diagrams').modal('show');
@@ -88,10 +88,10 @@ class DiagramMenuManager {
         else {
             $.ajax({
                 type: 'POST',
-                url: 'rewriteDiagram',
+                url: 'updateDiagram',
                 dataType: 'text',
                 contentType: 'application/json',
-                data: (ExportManager.exportDiagramStateToJSON(this.currentDiagramName, this.currentDiagramFolderId,
+                data: (ExportManager.exportUpdatingDiagramStateToJSON(this.currentDiagramName, this.currentDiagramFolder,
                     this.diagramController.getNodesMap(), this.diagramController.getLinksMap())),
                 success: function (response) {
                     console.log(response.message);
@@ -104,7 +104,7 @@ class DiagramMenuManager {
                 }
             });
         }
-    }*/
+    }
 
     private openDiagram(diagramName: string): void {
         var menuManager = this;

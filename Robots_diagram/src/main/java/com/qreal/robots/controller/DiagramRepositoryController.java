@@ -31,10 +31,9 @@ public class DiagramRepositoryController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/rewriteDiagram", method = RequestMethod.POST)
-    public String rewriteDiagram(@RequestBody Diagram diagram) {
+    @RequestMapping(value = "/updateDiagram", method = RequestMethod.POST)
+    public void rewriteDiagram(@RequestBody Diagram diagram) {
         diagramService.rewriteDiagram(diagram);
-        return "{\"responseText\":\"OK\"}";
     }
 
     @ResponseBody

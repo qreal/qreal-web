@@ -52,14 +52,8 @@ public class DiagramDAOImpl implements DiagramDAO {
     }
 
     public void rewriteDiagram(Diagram diagram) {
-       /* Session session = sessionFactory.getCurrentSession();
-        List<Diagram> diagrams = session.createQuery("from Diagram where folderId=:folderId and name=:name")
-                .setParameter("folderId", diagram.getFolderId())
-                .setParameter("name", diagram.getName())
-                .list();
-
-        session.delete(diagrams.get(0));
-        session.save(diagram);*/
+        Session session = sessionFactory.getCurrentSession();
+        session.update(diagram);
     }
 
     public Long createFolder(Folder folder) {
