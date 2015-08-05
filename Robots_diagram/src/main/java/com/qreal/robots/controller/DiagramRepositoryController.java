@@ -21,14 +21,12 @@ public class DiagramRepositoryController {
     @ResponseBody
     @RequestMapping(value = "/saveDiagram", method = RequestMethod.POST)
     public Long saveDiagram(@RequestBody DiagramRequest diagramRequest) {
-        System.out.print(diagramRequest.getFolderId());
         return diagramService.saveDiagram(diagramRequest);
     }
 
     @ResponseBody
     @RequestMapping(value = "/openDiagram", method = RequestMethod.POST)
     public Diagram openDiagram(@RequestBody OpenRequest request) {
-        System.out.print(request.getId());
         return diagramService.openDiagram(request.getId());
     }
 

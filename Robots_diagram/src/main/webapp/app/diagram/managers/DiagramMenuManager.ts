@@ -21,7 +21,6 @@ class DiagramMenuManager {
             url: 'getFolderTree',
             dataType: 'json',
             success: function (response) {
-                console.log(response);
                 menuManager.folderTree = response;
                 menuManager.currentFolder = response;
             },
@@ -61,7 +60,6 @@ class DiagramMenuManager {
             data: (ExportManager.exportSavingDiagramStateToJSON(diagramName, this.currentFolder.folderId,
                 this.diagramController.getNodesMap(), this.diagramController.getLinksMap())),
             success: function (diagramId) {
-                console.log(diagramId);
                 FolderTreeManager.addDiagramToFolder(diagramName, diagramId, menuManager.currentFolder);
                 menuManager.currentFolder = menuManager.folderTree;
                 menuManager.pathToFolder = [];
@@ -93,8 +91,7 @@ class DiagramMenuManager {
                 contentType: 'application/json',
                 data: (ExportManager.exportUpdatingDiagramStateToJSON(this.currentDiagramName, this.currentDiagramFolder,
                     this.diagramController.getNodesMap(), this.diagramController.getLinksMap())),
-                success: function (response) {
-                    console.log(response.message);
+                success: function () {
                     if (menuManager.canBeDeleted) {
                         menuManager.clearAll();
                     }
@@ -252,7 +249,6 @@ class DiagramMenuManager {
     }
 
     private showFolderTable(openingFolder): void {
-        console.log(openingFolder);
         this.clearFolderTable();
         this.currentFolder = openingFolder;
         this.showPathToFolder();
