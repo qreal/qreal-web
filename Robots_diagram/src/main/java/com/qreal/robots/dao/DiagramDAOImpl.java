@@ -31,12 +31,10 @@ public class DiagramDAOImpl implements DiagramDAO {
     public Long saveDiagram(DiagramRequest diagramRequest) {
         LOG.debug("saving diagram");
         Session session = sessionFactory.getCurrentSession();
-        List<Folder> folders = session.createQuery("from Folder where folderId=:folderId")
-                .setParameter("folderId", diagramRequest.getFolderId())
-                .list();
+        Folder folder = (Folder) session.get(Folder.class, diagramRequest.getFolderId());
 
-        folders.get(0).getDiagrams().add(diagramRequest.getDiagram());
-        session.update(folders.get(0));
+        folder.getDiagrams().add(diagramRequest.getDiagram());
+        session.update(folder);
         session.flush();
         return diagramRequest.getDiagram().getDiagramId();
     }

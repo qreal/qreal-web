@@ -1,7 +1,6 @@
 package com.qreal.robots.service;
 
 import com.qreal.robots.dao.DiagramDAO;
-import com.qreal.robots.model.auth.User;
 import com.qreal.robots.model.diagram.Diagram;
 import com.qreal.robots.model.diagram.DiagramRequest;
 import com.qreal.robots.model.diagram.Folder;
@@ -9,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Created by vladzx on 22.06.15.

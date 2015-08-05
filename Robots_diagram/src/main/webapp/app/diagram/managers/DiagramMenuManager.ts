@@ -36,7 +36,7 @@ class DiagramMenuManager {
             });
             $('#saveAfterCreate').click(function () {
                 menuManager.canBeDeleted = true;
-                menuManager.saveCurrentDiagram();
+                menuManager.updateCurrentDiagramInDatabase();
             });
         });
     }
@@ -48,7 +48,28 @@ class DiagramMenuManager {
         this.currentDiagramFolder = null;
     }
 
-    private saveDiagram(diagramName: string): void {
+    private createFolderInDatabase(folderName: string) : void {
+        var menuManager = this;
+        $.ajax({
+            type: 'POST',
+            url: 'createFolder',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: (ExportManager.exportFolderToJSON(folderName, this.currentFolder.folderId)),
+            success: function (createdFolderId) {
+                FolderTreeManager.addChildFolder(createdFolderId, folderName, menuManager.currentFolder);
+                menuManager.showFolderMenu();
+                menuManager.showFolderTable(menuManager.currentFolder);
+            },
+            error: function (response, status, error) {
+                menuManager.writeWarning(response.responseText, '.folderMenu');
+                $('.folderMenu input:text').val('');
+                console.log("error: " + status + " " + error);
+            }
+        });
+    }
+
+    private saveDiagramInDatabase(diagramName: string): void {
         var menuManager = this;
         this.currentDiagramName = diagramName;
         this.currentDiagramFolder = this.currentFolder;
@@ -70,14 +91,12 @@ class DiagramMenuManager {
                 }
             },
             error: function (response, status, error) {
-                menuManager.writeWarning(response.responseText, '.savingMenu');
-                $('.savingMenu input:text').val('');
                 console.log("error: " + status + " " + error);
             }
         });
     }
 
-    private saveCurrentDiagram(): void {
+    private updateCurrentDiagramInDatabase(): void {
         var menuManager = this;
         if (this.currentDiagramName === "") {
             $('#diagrams').modal('show');
@@ -103,7 +122,7 @@ class DiagramMenuManager {
         }
     }
 
-    private openDiagram(diagramName: string): void {
+    private openDiagramFromDatabase(diagramName: string): void {
         var menuManager = this;
         this.currentDiagramName = diagramName;
         this.currentDiagramFolder = this.currentFolder;
@@ -175,7 +194,7 @@ class DiagramMenuManager {
                 menuManager.writeWarning("The folder with this name already exists", '.folderMenu');
             }
             else {
-                menuManager.createFolder(folderName);
+                menuManager.createFolderInDatabase(folderName);
             }
         });
 
@@ -201,7 +220,7 @@ class DiagramMenuManager {
                 menuManager.writeWarning("The diagram with this name already exists", '.savingMenu');
             }
             else {
-                menuManager.saveDiagram(diagramName);
+                menuManager.saveDiagramInDatabase(diagramName);
             }
         });
     }
@@ -241,7 +260,7 @@ class DiagramMenuManager {
         for (i; i < this.pathToFolder.length; i++) {
             path = path + this.pathToFolder[i].folderName + "/";
         }
-        if(this.currentFolder.folderName !== "root") {
+        if (this.currentFolder.folderName !== "root") {
             path = path + this.currentFolder.folderName;
         }
 
@@ -269,7 +288,7 @@ class DiagramMenuManager {
             menuManager.showFolderTable(FolderTreeManager.findFolderByName(menuManager.currentFolder, $(this).text()));
         });
         $('.folderTable .diagrams').click(function () {
-            menuManager.openDiagram($(this).text());
+            menuManager.openDiagramFromDatabase($(this).text());
             $('#diagrams').modal('hide');
         });
     }
@@ -278,26 +297,5 @@ class DiagramMenuManager {
         if (this.pathToFolder.length > 0) {
             this.showFolderTable(this.pathToFolder.pop());
         }
-    }
-
-    private createFolder(folderName: string) : void {
-        var menuManager = this;
-        $.ajax({
-            type: 'POST',
-            url: 'createFolder',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: (ExportManager.exportFolderToJSON(folderName, this.currentFolder.folderId)),
-            success: function (createdFolderId) {
-                FolderTreeManager.addChildFolder(createdFolderId, folderName, menuManager.currentFolder);
-                menuManager.showFolderMenu();
-                menuManager.showFolderTable(menuManager.currentFolder);
-            },
-            error: function (response, status, error) {
-                menuManager.writeWarning(response.responseText, '.folderMenu');
-                $('.folderMenu input:text').val('');
-                console.log("error: " + status + " " + error);
-            }
-        });
     }
 }
