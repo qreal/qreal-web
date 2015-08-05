@@ -18,6 +18,8 @@ public interface DiagramService {
 
     public void rewriteDiagram(Diagram diagram);
 
+    public void createRootFolder(String userName);
+
     public Long createFolder(Folder folder);
 
     public Folder getFolderTree();

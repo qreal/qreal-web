@@ -200,7 +200,7 @@ class DiagramMenuManager {
             if (diagramName === "") {
                 menuManager.writeWarning("Empty name", '.savingMenu');
             }
-            else if (FolderTreeManager.diagramExists(diagramName, menuManager.currentDiagramFolder)) {
+            else if (FolderTreeManager.diagramExists(diagramName, menuManager.currentFolder)) {
                 menuManager.writeWarning("The diagram with this name already exists", '.savingMenu');
             }
             else {

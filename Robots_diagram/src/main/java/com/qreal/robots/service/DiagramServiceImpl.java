@@ -41,6 +41,13 @@ public class DiagramServiceImpl implements DiagramService {
 
     @Transactional
     @Override
+    public void createRootFolder(String userName) {
+        Folder rootFolder = new Folder("root", userName);
+        diagramDAO.createFolder(rootFolder);
+    }
+
+    @Transactional
+    @Override
     public Long createFolder(Folder folder) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         folder.setUserName(userName);

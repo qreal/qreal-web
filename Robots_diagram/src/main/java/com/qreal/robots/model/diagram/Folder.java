@@ -15,8 +15,9 @@ public class Folder implements Serializable {
     public Folder() {
     }
 
-    public Folder(Long folderId) {
-        this.folderId = folderId;
+    public Folder(String folderName, String userName) {
+        this.folderName = folderName;
+        this.userName = userName;
     }
 
     @Id
