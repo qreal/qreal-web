@@ -6,7 +6,6 @@ import com.qreal.robots.model.diagram.Folder;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -60,7 +59,6 @@ public class DiagramDAOImpl implements DiagramDAO {
         LOG.debug("creating folder");
         Session session = sessionFactory.getCurrentSession();
         session.save(folder);
-        session.flush();
         return folder.getFolderId();
     }
 

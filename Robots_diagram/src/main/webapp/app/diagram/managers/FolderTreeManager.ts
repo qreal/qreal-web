@@ -58,4 +58,26 @@ class FolderTreeManager {
 
         return diagramId;
     }
+
+    static diagramExists(diagramName: string, parentFolder): boolean {
+        var exists: boolean = false;
+        for (var i = 0; i < parentFolder.diagrams.length; i++) {
+            if (parentFolder.diagrams[i].name === diagramName) {
+                exists = true;
+            }
+        }
+
+        return exists;
+    }
+
+    static folderExists(folderName: string, parentFolder): boolean {
+        var exists: boolean = false;
+        for (var i = 0; i < parentFolder.diagrams.length; i++) {
+            if (parentFolder.childrenFolders[i].folderName === folderName) {
+                exists = true;
+            }
+        }
+
+        return exists;
+    }
 }

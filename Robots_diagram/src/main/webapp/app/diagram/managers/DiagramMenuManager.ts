@@ -9,7 +9,6 @@ class DiagramMenuManager {
 
     constructor($scope) {
         this.diagramController = $scope.vm;
-        this.currentFolder = "root";
         this.currentDiagramName = "";
         this.currentDiagramFolder = null;
         this.canBeDeleted = false;
@@ -37,7 +36,7 @@ class DiagramMenuManager {
             });
             $('#saveAfterCreate').click(function () {
                 menuManager.canBeDeleted = true;
-                //menuManager.saveCurrentDiagram();
+                menuManager.saveCurrentDiagram();
             });
         });
     }
@@ -53,30 +52,38 @@ class DiagramMenuManager {
         var menuManager = this;
         this.currentDiagramName = diagramName;
         this.currentDiagramFolder = this.currentFolder;
-        $.ajax({
-            type: 'POST',
-            url: 'saveDiagram',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: (ExportManager.exportSavingDiagramStateToJSON(diagramName, this.currentFolder.folderId,
-                this.diagramController.getNodesMap(), this.diagramController.getLinksMap())),
-            success: function (diagramId) {
-                console.log(diagramId);
-                FolderTreeManager.addDiagramToFolder(diagramName, diagramId, menuManager.currentFolder);
-                menuManager.currentFolder = menuManager.folderTree;
-                menuManager.pathToFolder = [];
-                $('#diagrams').modal('hide');
+        if (diagramName === "") {
+            this.writeWarning("Empty name", '.savingMenu');
+        }
+        else if (FolderTreeManager.diagramExists(diagramName, this.currentDiagramFolder)) {
+            this.writeWarning("The diagram with this name already exists", '.savingMenu');
+        }
+        else {
+            $.ajax({
+                type: 'POST',
+                url: 'saveDiagram',
+                dataType: 'text',
+                contentType: 'application/json',
+                data: (ExportManager.exportSavingDiagramStateToJSON(diagramName, this.currentFolder.folderId,
+                    this.diagramController.getNodesMap(), this.diagramController.getLinksMap())),
+                success: function (diagramId) {
+                    console.log(diagramId);
+                    FolderTreeManager.addDiagramToFolder(diagramName, diagramId, menuManager.currentFolder);
+                    menuManager.currentFolder = menuManager.folderTree;
+                    menuManager.pathToFolder = [];
+                    $('#diagrams').modal('hide');
 
-                if (menuManager.canBeDeleted) {
-                    menuManager.clearAll();
+                    if (menuManager.canBeDeleted) {
+                        menuManager.clearAll();
+                    }
+                },
+                error: function (response, status, error) {
+                    menuManager.writeWarning(response.responseText, '.savingMenu');
+                    $('.savingMenu input:text').val('');
+                    console.log("error: " + status + " " + error);
                 }
-            },
-            error: function (response, status, error) {
-                menuManager.writeWarning(response.responseText, '.savingMenu');
-                $('.savingMenu input:text').val('');
-                console.log("error: " + status + " " + error);
-            }
-        });
+            });
+        }
     }
 
     private saveCurrentDiagram(): void {
@@ -117,7 +124,7 @@ class DiagramMenuManager {
             url: 'openDiagram',
             dataType: 'json',
             contentType: 'application/json',
-            data: (JSON.stringify({id: FolderTreeManager.getDiagramIdByName(diagramName, this.currentFolder)})),
+            data: (JSON.stringify({id: FolderTreeManager.getDiagramIdByName(diagramName, this.currentDiagramFolder)})),
             success: function (response) {
                 menuManager.diagramController.clearScene();
                 ImportManager.import(response, menuManager.diagramController.getGraph(), menuManager.diagramController.getNodesMap(),
@@ -129,10 +136,10 @@ class DiagramMenuManager {
         });
     }
 
-    /*
+
     private createNewDiagram(): void {
         $('#confirmNew').modal('show');
-    }*/
+    }
 
     private openFolderWindow(): void {
         this.showFolderMenu();
@@ -188,12 +195,7 @@ class DiagramMenuManager {
         $('#saving').click(function() {
             menuManager.clearWarning('.savingMenu p');
             var name: string = $('.savingMenu input:text').val();
-            if (name === "") {
-                menuManager.writeWarning("Empty name", '.savingMenu');
-            }
-            else{
-                menuManager.saveDiagram(name);
-            }
+            menuManager.saveDiagram(name);
         });
     }
 
