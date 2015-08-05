@@ -61,6 +61,7 @@ class FolderTreeManager {
 
     static diagramExists(diagramName: string, parentFolder): boolean {
         var exists: boolean = false;
+        console.log(parentFolder.folderName);
         for (var i = 0; i < parentFolder.diagrams.length; i++) {
             if (parentFolder.diagrams[i].name === diagramName) {
                 exists = true;
@@ -72,7 +73,8 @@ class FolderTreeManager {
 
     static folderExists(folderName: string, parentFolder): boolean {
         var exists: boolean = false;
-        for (var i = 0; i < parentFolder.diagrams.length; i++) {
+        console.log(parentFolder);
+        for (var i = 0; i < parentFolder.childrenFolders.length; i++) {
             if (parentFolder.childrenFolders[i].folderName === folderName) {
                 exists = true;
             }

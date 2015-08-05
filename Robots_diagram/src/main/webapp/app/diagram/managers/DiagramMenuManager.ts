@@ -21,6 +21,7 @@ class DiagramMenuManager {
             url: 'getFolderTree',
             dataType: 'json',
             success: function (response) {
+                console.log(response);
                 menuManager.folderTree = response;
                 menuManager.currentFolder = response;
             },
@@ -52,38 +53,30 @@ class DiagramMenuManager {
         var menuManager = this;
         this.currentDiagramName = diagramName;
         this.currentDiagramFolder = this.currentFolder;
-        if (diagramName === "") {
-            this.writeWarning("Empty name", '.savingMenu');
-        }
-        else if (FolderTreeManager.diagramExists(diagramName, this.currentDiagramFolder)) {
-            this.writeWarning("The diagram with this name already exists", '.savingMenu');
-        }
-        else {
-            $.ajax({
-                type: 'POST',
-                url: 'saveDiagram',
-                dataType: 'text',
-                contentType: 'application/json',
-                data: (ExportManager.exportSavingDiagramStateToJSON(diagramName, this.currentFolder.folderId,
-                    this.diagramController.getNodesMap(), this.diagramController.getLinksMap())),
-                success: function (diagramId) {
-                    console.log(diagramId);
-                    FolderTreeManager.addDiagramToFolder(diagramName, diagramId, menuManager.currentFolder);
-                    menuManager.currentFolder = menuManager.folderTree;
-                    menuManager.pathToFolder = [];
-                    $('#diagrams').modal('hide');
+        $.ajax({
+            type: 'POST',
+            url: 'saveDiagram',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: (ExportManager.exportSavingDiagramStateToJSON(diagramName, this.currentFolder.folderId,
+                this.diagramController.getNodesMap(), this.diagramController.getLinksMap())),
+            success: function (diagramId) {
+                console.log(diagramId);
+                FolderTreeManager.addDiagramToFolder(diagramName, diagramId, menuManager.currentFolder);
+                menuManager.currentFolder = menuManager.folderTree;
+                menuManager.pathToFolder = [];
+                $('#diagrams').modal('hide');
 
-                    if (menuManager.canBeDeleted) {
-                        menuManager.clearAll();
-                    }
-                },
-                error: function (response, status, error) {
-                    menuManager.writeWarning(response.responseText, '.savingMenu');
-                    $('.savingMenu input:text').val('');
-                    console.log("error: " + status + " " + error);
+                if (menuManager.canBeDeleted) {
+                    menuManager.clearAll();
                 }
-            });
-        }
+            },
+            error: function (response, status, error) {
+                menuManager.writeWarning(response.responseText, '.savingMenu');
+                $('.savingMenu input:text').val('');
+                console.log("error: " + status + " " + error);
+            }
+        });
     }
 
     private saveCurrentDiagram(): void {
@@ -177,7 +170,16 @@ class DiagramMenuManager {
 
         $('.folderMenu #creating').click(function() {
             menuManager.clearWarning('.folderMenu p');
-            menuManager.createFolder();
+            var folderName: string = $('.folderMenu input:text').val();
+            if (folderName === "") {
+                menuManager.writeWarning("Empty name", '.folderMenu');
+            }
+            else if (FolderTreeManager.folderExists(folderName, menuManager.currentFolder)) {
+                menuManager.writeWarning("The folder with this name already exists", '.folderMenu');
+            }
+            else {
+                menuManager.createFolder(folderName);
+            }
         });
 
         $('.folderMenu #cancelCreating').click(function() {
@@ -194,8 +196,16 @@ class DiagramMenuManager {
 
         $('#saving').click(function() {
             menuManager.clearWarning('.savingMenu p');
-            var name: string = $('.savingMenu input:text').val();
-            menuManager.saveDiagram(name);
+            var diagramName: string = $('.savingMenu input:text').val();
+            if (diagramName === "") {
+                menuManager.writeWarning("Empty name", '.savingMenu');
+            }
+            else if (FolderTreeManager.diagramExists(diagramName, menuManager.currentDiagramFolder)) {
+                menuManager.writeWarning("The diagram with this name already exists", '.savingMenu');
+            }
+            else {
+                menuManager.saveDiagram(diagramName);
+            }
         });
     }
 
@@ -242,6 +252,7 @@ class DiagramMenuManager {
     }
 
     private showFolderTable(openingFolder): void {
+        console.log(openingFolder);
         this.clearFolderTable();
         this.currentFolder = openingFolder;
         this.showPathToFolder();
@@ -273,30 +284,24 @@ class DiagramMenuManager {
         }
     }
 
-    private createFolder() : void {
-        var name: string = $('.folderMenu input:text').val();
+    private createFolder(folderName: string) : void {
         var menuManager = this;
-        if (name === "") {
-            this.writeWarning("Empty name", '.folderMenu');
-        }
-        else {
-            $.ajax({
-                type: 'POST',
-                url: 'createFolder',
-                dataType: 'text',
-                contentType: 'application/json',
-                data: (ExportManager.exportFolderToJSON(name, this.currentFolder.folderId)),
-                success: function (createdFolderId) {
-                    FolderTreeManager.addChildFolder(createdFolderId, name, menuManager.currentFolder);
-                    menuManager.showFolderMenu();
-                    menuManager.showFolderTable(menuManager.currentFolder);
-                },
-                error: function (response, status, error) {
-                    menuManager.writeWarning(response.responseText, '.folderMenu');
-                    $('.folderMenu input:text').val('');
-                    console.log("error: " + status + " " + error);
-                }
-            });
-        }
+        $.ajax({
+            type: 'POST',
+            url: 'createFolder',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: (ExportManager.exportFolderToJSON(folderName, this.currentFolder.folderId)),
+            success: function (createdFolderId) {
+                FolderTreeManager.addChildFolder(createdFolderId, folderName, menuManager.currentFolder);
+                menuManager.showFolderMenu();
+                menuManager.showFolderTable(menuManager.currentFolder);
+            },
+            error: function (response, status, error) {
+                menuManager.writeWarning(response.responseText, '.folderMenu');
+                $('.folderMenu input:text').val('');
+                console.log("error: " + status + " " + error);
+            }
+        });
     }
 }
