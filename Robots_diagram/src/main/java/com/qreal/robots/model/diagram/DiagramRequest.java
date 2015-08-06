@@ -5,6 +5,7 @@ import java.io.Serializable;
 /**
  * Created by korniluk13 on 14.07.2015.
  */
+
 public class DiagramRequest implements Serializable {
 
     private Diagram diagram;

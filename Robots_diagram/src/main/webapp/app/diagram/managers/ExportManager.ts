@@ -50,6 +50,7 @@ class ExportManager {
             };
 
             nodeJSON.properties = ExportManager.exportProperties(node.getProperties());
+
             json.nodes.push(nodeJSON);
         }
     }
