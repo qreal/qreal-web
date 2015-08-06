@@ -26,6 +26,7 @@
 //grunt-start
 /// <reference path="RootDiagramController.ts" />
 /// <reference path="XmlHttpFactory.ts" />
+/// <reference path="checker/CheckerController.ts" />
 /// <reference path="diagram/UIDGenerator.ts" />
 /// <reference path="diagram/controllers/DiagramController.ts" />
 /// <reference path="diagram/loaders/DiagramLoader.ts" />

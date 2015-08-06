@@ -1,7 +1,7 @@
 .idea/
 src/main/webapp/node_modules/
-src/main/webapp/tasks/*/diagram
-src/main/webapp/tasks/*/solutions
+src/main/webapp/tasks/*/*/
+!src/main/webapp/tasks/*/fields
 target/
 *.map
 *.iml

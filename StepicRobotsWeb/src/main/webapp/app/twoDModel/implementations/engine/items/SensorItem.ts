@@ -115,7 +115,7 @@ class SensorItem {
 
     pathToImage(): string
     {
-        return "images/2dmodel/sensors/2d_" + this.name() + ".png";
+        return "/StepicRobotsWeb/images/2dmodel/sensors/2d_" + this.name() + ".png";
     }
 
     protected defineImageSizes(sensorType): void {

@@ -34,13 +34,13 @@ public class JavaModelConverter {
 
             this.uuid = UUID.randomUUID();
 
-            String targetPath = directoryPath + "/solutions/" + String.valueOf(this.uuid) + "/diagram";
+            String targetPath = directoryPath + "/solutions/" + String.valueOf(this.uuid) + "/" + taskId;
             File targetDirectory = new File(targetPath);
-            targetDirectory.mkdir();
+            targetDirectory.mkdirs();
             File patternsDirectory = resourceLoader.getResource("resources/xml_patterns/diagram").getFile();
             FileUtils.copyDirectory(patternsDirectory, targetDirectory);
 
-            File taskMetaInfo = new File(directoryPath + "/diagram/metaInfo.xml");
+            File taskMetaInfo = new File(directoryPath + "/" + taskId + "/metaInfo.xml");
             File targetMetaInfo = new File(targetPath + "/metaInfo.xml");
             targetMetaInfo.createNewFile();
             FileUtils.copyFile(taskMetaInfo, targetMetaInfo);

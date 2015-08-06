@@ -25,12 +25,23 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
             facade.makeUnselectable(document.getElementById("twoDModelContent"));
         });
 
-        $scope.$on("DisplayResult", function(event, result) {
-            facade.showCheckResult(result);
+        $scope.$on("displayResult", (event, result) => {
+            this.showCheckResult(result);
         });
 
-        $scope.$on("2dModelLoad", function(event) {
-            facade.load("tasks/" + taskId + "/diagram/metaInfo.xml");
+        $scope.$on("displayCheckingResult", (event, result) => {
+            if (result.failedFieldName) {
+                this.load("/StepicRobotsWeb/tasks/" + taskId + "/fields/" + result.failedFieldName,
+                    this.displayFailedTest, result);
+            } else {
+                this.load("/StepicRobotsWeb/tasks/" + taskId + "/" + taskId + "/metaInfo.xml",
+                    this.displayDefaultTest, result);
+            }
+
+        });
+
+        $scope.$on("2dModelLoad", (event) => {
+            this.load("/StepicRobotsWeb/tasks/" + taskId + "/" + taskId + "/metaInfo.xml", this.xmlLoadReady);
         });
 
         $compile($("#stop_button"))($scope);
@@ -52,17 +63,20 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         }
     }
 
-    load(pathToXML: string): void {
-        var facade = this;
+    load(pathToXML: string, callback, opt?): void {
         var req: any = XmlHttpFactory.createXMLHTTPObject();
         if (!req) {
             alert("Can't load xml document!");
-            return null;
+            return;
         }
 
         req.open("GET", pathToXML, true);
-        req.onreadystatechange = function() {
-            facade.xmlLoadReady(req);
+        req.onreadystatechange = () => {
+            if (opt) {
+                callback.call(this, req, opt);
+            } else {
+                callback.call(this, req);
+            }
         };
         req.send(null);
     }
@@ -88,6 +102,29 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         } catch(e) {
             alert("Error: " + e.message);
         }
+    }
+
+    private displayFailedTest(request, result): void {
+        try {
+            if (request.readyState == 4) {
+                if (request.status == 200) {
+                    this.model.deserialize(request.responseXML);
+                } else {
+                    alert("Can't load 2d model:\n" + request.statusText);
+                }
+            }
+        } catch(e) {
+            alert("Error: " + e.message);
+            console.log(e.stack);
+        }
+        $("#twoDModelContent").show();
+        this.showCheckResult(result);
+    }
+
+    private displayDefaultTest(request, result): void {
+        this.xmlLoadReady(request);
+        $("#twoDModelContent").show();
+        this.showCheckResult(result);
     }
 
     setDrawLineMode(): void {
@@ -164,6 +201,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
 
     stopPlay(): void {
         var robotModel = this.model.getRobotModels()[0];
+        $("#infoAlert").hide();
         robotModel.stopPlay();
     }
 }

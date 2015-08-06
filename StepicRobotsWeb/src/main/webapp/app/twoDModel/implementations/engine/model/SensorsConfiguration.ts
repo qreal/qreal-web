@@ -46,6 +46,9 @@ class SensorsConfiguration extends DevicesConfigurationProvider {
     deserialize(xml): void {
         var sensors = xml.getElementsByTagName("sensor");
         for (var i = 0; i < sensors.length; i++) {
+            if (!sensors[i].getAttribute('type')) {
+                continue;
+            }
             var portName: string = sensors[i].getAttribute('port').split("###")[0];
             var typeSplittedStr = sensors[i].getAttribute('type').split("::");
             var device: DeviceInfo = DeviceInfoImpl.fromString(typeSplittedStr[typeSplittedStr.length - 1]);

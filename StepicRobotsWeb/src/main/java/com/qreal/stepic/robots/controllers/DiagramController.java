@@ -40,27 +40,29 @@ public class DiagramController {
     private ResourceLoader resourceLoader;
 
     @RequestMapping(value = "{taskId}", method = RequestMethod.GET)
-    public ModelAndView showTask(@PathVariable String taskId, Model model) {
-        model.addAttribute("taskId", taskId);
-        return new ModelAndView("index");
+    public ModelAndView showTask(@PathVariable String taskId) {
+        ModelAndView modelAndView = new ModelAndView("index");
+        modelAndView.addObject("taskId", taskId);
+        return modelAndView;
     }
 
     @ResponseBody
     @RequestMapping(value = "/open", method = RequestMethod.POST)
     public Diagram open(@RequestBody OpenRequest request) {
-        Resource resource = resourceLoader.getResource("tasks/" + request.getId());
+        String taskId = request.getId();
+        Resource resource = resourceLoader.getResource("tasks/" + taskId);
         XmlSaveConverter converter= new XmlSaveConverter();
 
         try {
             File folder = resource.getFile();
             String folderPath = folder.getPath();
-            File diagramDirectory = new File(folderPath + "/diagram");
+            File diagramDirectory = new File(folderPath + "/" + taskId);
 
             if (!diagramDirectory.exists()) {
-                ProcessBuilder processBuilder = new ProcessBuilder("compressor", "diagram.qrs");
+                ProcessBuilder processBuilder = new ProcessBuilder("compressor", taskId + ".qrs");
                 processBuilder.directory(folder);
                 processBuilder.start().waitFor();
-                diagramDirectory = new File(folderPath + "/diagram");
+                diagramDirectory = new File(folderPath + "/" + taskId);
             }
 
             File treeDirectory = new File(diagramDirectory.getPath() + "/tree");
@@ -82,48 +84,49 @@ public class DiagramController {
         String uuidStr = String.valueOf(javaModelConverter.convertToXmlSave(request.getDiagram(), resourceLoader, taskId));
 
         try {
-            File taskFields = resourceLoader.getResource("tasks/" + request.getId() + "/fields").getFile();
-            File solutionFolder = resourceLoader.getResource("tasks/" + request.getId() + "/solutions/" + uuidStr).getFile();
+            File taskFields = resourceLoader.getResource("tasks/" + taskId + "/fields").getFile();
+            File solutionFolder = resourceLoader.getResource("tasks/" + taskId + "/solutions/" + uuidStr).getFile();
 
             if (taskFields.exists()) {
-                File solutionFields = new File(solutionFolder.getPath() + "/fields");
+                File solutionFields = new File(solutionFolder.getPath() + "/fields/" + taskId);
                 FileUtils.copyDirectory(taskFields, solutionFields);
             }
 
-            ProcessBuilder compressorProcBuilder = new ProcessBuilder("compressor", "diagram");
+            ProcessBuilder compressorProcBuilder = new ProcessBuilder("compressor", taskId);
             compressorProcBuilder.directory(solutionFolder);
             compressorProcBuilder.start().waitFor();
 
-            ProcessBuilder interpreterProcBuilder = new ProcessBuilder(checkerPath, "diagram.qrs");
+            ProcessBuilder interpreterProcBuilder = new ProcessBuilder(checkerPath, taskId + ".qrs");
             interpreterProcBuilder.directory(solutionFolder);
             interpreterProcBuilder.start().waitFor();
 
             Path trajectoryPath;
             Report report;
 
-            File failedField = resourceLoader.getResource("tasks/" + request.getId() +
+            File failedField = resourceLoader.getResource("tasks/" + taskId +
                     "/solutions/" + uuidStr + "/failed-field").getFile();
+            String failedFilename = null;
             if (failedField.exists()) {
                 BufferedReader br = new BufferedReader(new FileReader(failedField));
                 String[] pathParts = br.readLine().split("/");
-                String failedFilename = pathParts[pathParts.length - 1];
+                failedFilename = pathParts[pathParts.length - 1];
                 String failedName = failedFilename.substring(0, failedFilename.length() - 4);
-                trajectoryPath = resourceLoader.getResource("tasks/" + request.getId() +
-                        "/solutions/" + uuidStr + "/trajectories/diagram/" + failedName).getFile().toPath();
+                trajectoryPath = resourceLoader.getResource("tasks/" + taskId +
+                        "/solutions/" + uuidStr + "/trajectories/" + taskId + "/" + failedName).getFile().toPath();
 
-                report = parseReportFile(resourceLoader.getResource("tasks/" + request.getId() +
-                        "/solutions/" + uuidStr + "/reports/diagram/" + failedName).getFile());
+                report = parseReportFile(resourceLoader.getResource("tasks/" + taskId +
+                        "/solutions/" + uuidStr + "/reports/" + taskId + "/" + failedName).getFile());
             } else {
-                trajectoryPath = resourceLoader.getResource("tasks/" + request.getId() +
-                        "/solutions/" + uuidStr + "/trajectories/diagram/_diagram").getFile().toPath();
+                trajectoryPath = resourceLoader.getResource("tasks/" + taskId +
+                        "/solutions/" + uuidStr + "/trajectories/" + taskId + "/_" + taskId).getFile().toPath();
 
-                report = parseReportFile(resourceLoader.getResource("tasks/" + request.getId() +
-                        "/solutions/" + uuidStr + "/reports/diagram/_diagram").getFile());
+                report = parseReportFile(resourceLoader.getResource("tasks/" + taskId +
+                        "/solutions/" + uuidStr + "/reports/" + taskId + "/_" + taskId).getFile());
             }
 
             Trace trace = parseTrajectoryFile(trajectoryPath);
             //FileUtils.deleteDirectory(solutionFolder);
-            return new SubmitResponse(report, trace);
+            return new SubmitResponse(report, trace, failedFilename);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
