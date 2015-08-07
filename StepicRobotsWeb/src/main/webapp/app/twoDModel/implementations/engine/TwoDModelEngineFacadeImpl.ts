@@ -30,18 +30,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         });
 
         $scope.$on("displayCheckingResult", (event, result) => {
-            if (result.failedFieldName) {
-                this.load("/StepicRobotsWeb/tasks/" + taskId + "/fields/" + result.failedFieldName,
-                    this.displayFailedTest, result);
-            } else {
-                this.load("/StepicRobotsWeb/tasks/" + taskId + "/" + taskId + "/metaInfo.xml",
-                    this.displayDefaultTest, result);
-            }
-
-        });
-
-        $scope.$on("2dModelLoad", (event) => {
-            this.load("/StepicRobotsWeb/tasks/" + taskId + "/" + taskId + "/metaInfo.xml", this.xmlLoadReady);
+            this.displayResult(result);
         });
 
         $compile($("#stop_button"))($scope);
@@ -63,66 +52,8 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         }
     }
 
-    load(pathToXML: string, callback, opt?): void {
-        var req: any = XmlHttpFactory.createXMLHTTPObject();
-        if (!req) {
-            alert("Can't load xml document!");
-            return;
-        }
-
-        req.open("GET", pathToXML, true);
-        req.onreadystatechange = () => {
-            if (opt) {
-                callback.call(this, req, opt);
-            } else {
-                callback.call(this, req);
-            }
-        };
-        req.send(null);
-    }
-
-    private xmlLoadReady(request): void {
-        try {
-            if (request.readyState == 4) {
-                if (request.status == 200) {
-                    var responseXml = request.responseXML;
-                    var worldModelXml;
-                    var infos = responseXml.getElementsByTagName("info");
-                    for (var i = 0; i < infos.length; i++) {
-                        if (infos[i].getAttribute("key") === "worldModel") {
-                            worldModelXml = infos[i].getAttribute("value");
-                            break;
-                        }
-                    }
-                    this.model.deserialize($.parseXML(worldModelXml));
-                } else {
-                    alert("Can't load 2d model:\n" + request.statusText);
-                }
-            }
-        } catch(e) {
-            alert("Error: " + e.message);
-        }
-    }
-
-    private displayFailedTest(request, result): void {
-        try {
-            if (request.readyState == 4) {
-                if (request.status == 200) {
-                    this.model.deserialize(request.responseXML);
-                } else {
-                    alert("Can't load 2d model:\n" + request.statusText);
-                }
-            }
-        } catch(e) {
-            alert("Error: " + e.message);
-            console.log(e.stack);
-        }
-        $("#twoDModelContent").show();
-        this.showCheckResult(result);
-    }
-
-    private displayDefaultTest(request, result): void {
-        this.xmlLoadReady(request);
+    private displayResult(result): void {
+        this.model.deserialize($.parseXML(result.failedFieldXML));
         $("#twoDModelContent").show();
         this.showCheckResult(result);
     }

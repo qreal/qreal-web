@@ -31,6 +31,8 @@ import java.util.List;
 @Controller
 public class DiagramController {
 
+    private static final String compressorPath = System.getProperty("user.home") + "/compressor";
+
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ModelAndView index() {
         return new ModelAndView("index");
@@ -59,7 +61,7 @@ public class DiagramController {
             File diagramDirectory = new File(folderPath + "/" + taskId);
 
             if (!diagramDirectory.exists()) {
-                ProcessBuilder processBuilder = new ProcessBuilder("compressor", taskId + ".qrs");
+                ProcessBuilder processBuilder = new ProcessBuilder(compressorPath, taskId + ".qrs");
                 processBuilder.directory(folder);
                 processBuilder.start().waitFor();
                 diagramDirectory = new File(folderPath + "/" + taskId);

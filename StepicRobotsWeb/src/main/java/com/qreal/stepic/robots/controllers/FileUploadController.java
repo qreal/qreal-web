@@ -1,6 +1,7 @@
 package com.qreal.stepic.robots.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.qreal.stepic.robots.constants.PathConstants;
 import com.qreal.stepic.robots.exceptions.UploadException;
 import com.qreal.stepic.robots.model.diagram.Report;
 import com.qreal.stepic.robots.model.diagram.ReportMessage;
@@ -8,20 +9,27 @@ import com.qreal.stepic.robots.model.diagram.SubmitResponse;
 import com.qreal.stepic.robots.model.two_d.Point;
 import com.qreal.stepic.robots.model.two_d.Trace;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -31,15 +39,10 @@ import java.util.*;
 @RequestMapping("/checker/task")
 public class FileUploadController {
 
-    @Autowired
-    private ResourceLoader resourceLoader;
-
-    private static final String checkerPath = System.getProperty("user.home") + "/qreal/bin/debug/check-solution.sh";
-
     private static final Logger LOG = Logger.getLogger(FileUploadController.class);
 
     @ExceptionHandler(UploadException.class)
-    @ResponseStatus(value= HttpStatus.BAD_REQUEST)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ResponseBody
     public String handleUploadException(UploadException e) {
         return e.getMessage();
@@ -61,7 +64,7 @@ public class FileUploadController {
 
         if (!file.isEmpty()) {
             try {
-                String directoryPath = resourceLoader.getResource("tasks/" + taskId).getFile().getPath();
+                String directoryPath = PathConstants.tasksPath + "/" + taskId;
 
                 UUID uuid = UUID.randomUUID();
 
@@ -77,7 +80,8 @@ public class FileUploadController {
                 stream.close();
                 LOG.info("Server File Location = " + serverFile.getAbsolutePath());
                 return submit(taskId, name, String.valueOf(uuid));
-            } catch (Exception e) {
+            } catch (IOException e) {
+                e.printStackTrace();
                 throw new UploadException("Sorry, try to upload file again");
             }
         } else {
@@ -85,18 +89,18 @@ public class FileUploadController {
         }
     }
 
-    public SubmitResponse submit(String taskId, String filename, String uuidStr) {
+    public SubmitResponse submit(String taskId, String filename, String uuidStr) throws UploadException {
         String nameWithoutExt = filename.substring(0, filename.length() - 4);
         try {
-            File taskFields = resourceLoader.getResource("tasks/" + taskId + "/fields").getFile();
-            File solutionFolder = resourceLoader.getResource("tasks/" + taskId + "/solutions/" + uuidStr).getFile();
+            File taskFields = new File(PathConstants.tasksPath + "/" + taskId + "/fields");
+            File solutionFolder = new File(PathConstants.tasksPath + "/" + taskId + "/solutions/" + uuidStr);
 
             if (taskFields.exists()) {
                 File solutionFields = new File(solutionFolder.getPath() + "/fields/" + nameWithoutExt);
                 FileUtils.copyDirectory(taskFields, solutionFields);
             }
 
-            ProcessBuilder interpreterProcBuilder = new ProcessBuilder(checkerPath, filename);
+            ProcessBuilder interpreterProcBuilder = new ProcessBuilder(PathConstants.checkerPath, filename);
             interpreterProcBuilder.directory(solutionFolder);
 
             final Process process = interpreterProcBuilder.start();
@@ -109,64 +113,90 @@ public class FileUploadController {
             }
             process.waitFor();
 
-            Path trajectoryPath;
+            String trajectoryPath;
             Report report;
 
-            File failedField = resourceLoader.getResource("tasks/" + taskId +
-                    "/solutions/" + uuidStr + "/failed-field").getFile();
-            String failedFilename = null;
+            File failedField = new File(PathConstants.tasksPath + "/" + taskId +
+                    "/solutions/" + uuidStr + "/failed-field");
+            String failedFieldXML = null;
             if (failedField.exists()) {
                 BufferedReader br = new BufferedReader(new FileReader(failedField));
-                String[] pathParts = br.readLine().split("/");
-                failedFilename = pathParts[pathParts.length - 1];
+                String pathToFailedField = br.readLine();
+                failedFieldXML = new String(Files.readAllBytes(Paths.get(pathToFailedField)), StandardCharsets.UTF_8);
+                String[] pathParts = pathToFailedField.split("/");
+                String failedFilename = pathParts[pathParts.length - 1];
                 String failedName = failedFilename.substring(0, failedFilename.length() - 4);
-                trajectoryPath = resourceLoader.getResource("tasks/" + taskId +
-                        "/solutions/" + uuidStr + "/trajectories/" + nameWithoutExt + "/" + failedName).getFile().toPath();
+                trajectoryPath = PathConstants.tasksPath + "/" + taskId +
+                        "/solutions/" + uuidStr + "/trajectories/" + nameWithoutExt + "/" + failedName;
 
-                report = parseReportFile(resourceLoader.getResource("tasks/" + taskId +
-                        "/solutions/" + uuidStr + "/reports/" + nameWithoutExt + "/" + failedName).getFile());
+                report = parseReportFile(new File(PathConstants.tasksPath + "/" + taskId +
+                        "/solutions/" + uuidStr + "/reports/" + nameWithoutExt + "/" + failedName));
             } else {
-                trajectoryPath = resourceLoader.getResource("tasks/" + taskId +
-                        "/solutions/" + uuidStr + "/trajectories/" + nameWithoutExt + "/_" + nameWithoutExt).getFile().toPath();
+                String pathToMetainfo = PathConstants.tasksPath + "/" + taskId +"/" + taskId + "/metaInfo.xml";
+                failedFieldXML = getWorldModelFromMetainfo(pathToMetainfo);
+                trajectoryPath = PathConstants.tasksPath + "/" + taskId +
+                        "/solutions/" + uuidStr + "/trajectories/" + nameWithoutExt + "/_" + nameWithoutExt;
 
-                report = parseReportFile(resourceLoader.getResource("tasks/" + taskId +
-                        "/solutions/" + uuidStr + "/reports/" + nameWithoutExt + "/_" + nameWithoutExt).getFile());
+                report = parseReportFile(new File(PathConstants.tasksPath + "/" + taskId +
+                        "/solutions/" + uuidStr + "/reports/" + nameWithoutExt + "/_" + nameWithoutExt));
             }
 
             Trace trace = parseTrajectoryFile(trajectoryPath);
             //FileUtils.deleteDirectory(solutionFolder);
-            return new SubmitResponse(report, trace, failedFilename);
+            return new SubmitResponse(report, trace, failedFieldXML);
         } catch (IOException e) {
             e.printStackTrace();
+            throw new UploadException("Error while checking, please contact the developers");
         } catch (InterruptedException e) {
             e.printStackTrace();
+            throw new UploadException("Error while checking, please contact the developers");
         }
-
-        return null;
     }
 
-    private Report parseReportFile(File file) {
+    private String getWorldModelFromMetainfo(String pathToMetaInfo) throws UploadException {
+        try {
+            File metainfo = new File(pathToMetaInfo);
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document metainfoXML = dBuilder.parse(metainfo);
+
+            NodeList infos = metainfoXML.getElementsByTagName("info");
+            for (int i = 0; i < infos.getLength(); i++) {
+                Element info = (Element) infos.item(i);
+                if (info.getAttribute("key").equals("worldModel")) {
+                    return StringEscapeUtils.unescapeXml(info.getAttribute("value"));
+                }
+            }
+            throw new UploadException("Can't load 2d world model! Please contact the developers");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UploadException("Can't load 2d world model! Please contact the developers");
+        }
+    }
+
+    private Report parseReportFile(File file) throws UploadException {
         ObjectMapper mapper = new ObjectMapper();
         try {
             List<ReportMessage> messages = mapper.readValue(file, List.class);
             return new Report(messages);
         } catch (IOException e) {
             e.printStackTrace();
+            throw new UploadException("Can't return report! Please contact the developers");
         }
-        return null;
     }
 
-    private Trace parseTrajectoryFile(Path file) {
+    private Trace parseTrajectoryFile(String filePath) throws UploadException {
         Trace trace = new Trace();
         List<Point> points = new LinkedList<Point>();
         Charset charset = Charset.forName("UTF-8");
-        try (BufferedReader reader = Files.newBufferedReader(file, charset)) {
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), charset)) {
             String line = null;
             while ((line = reader.readLine()) != null) {
                 points.add(parseTrajectoryLine(line));
             }
         } catch (IOException e) {
             e.printStackTrace();
+            throw new UploadException("Can't return trajectory! Please contact the developers");
         }
         trace.setPoints(points);
         return trace;

@@ -9,10 +9,10 @@ import java.io.Serializable;
  */
 public class SubmitResponse implements Serializable {
 
-    public SubmitResponse(Report report, Trace trace, String failedFieldName) {
+    public SubmitResponse(Report report, Trace trace, String failedFieldXML) {
         this.report = report;
         this.trace = trace;
-        this.failedFieldName = failedFieldName;
+        this.failedFieldXML = failedFieldXML;
     }
 
     public Report getReport() {
@@ -31,15 +31,15 @@ public class SubmitResponse implements Serializable {
         this.trace = trace;
     }
 
-    public String getFailedFieldName() {
-        return failedFieldName;
+    public String getFailedFieldXML() {
+        return failedFieldXML;
     }
 
-    public void setFailedFieldName(String failedFieldName) {
-        this.failedFieldName = failedFieldName;
+    public void setFailedFieldXML(String failedFieldXML) {
+        this.failedFieldXML = failedFieldXML;
     }
 
     private Report report;
     private Trace trace;
-    private String failedFieldName;
+    private String failedFieldXML;
 }

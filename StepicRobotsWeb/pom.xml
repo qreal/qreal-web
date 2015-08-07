@@ -17,7 +17,8 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <port>8080</port>
+                    <url>http://localhost:8080/manager/text</url>
+                    <server>TomcatServer</server>
                     <path>/${project.build.finalName}</path>
                     <additionalConfigFilesDir>${basedir}/src/main/tomcat/conf</additionalConfigFilesDir>
                     <systemProperties>
@@ -61,6 +62,14 @@
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
         </dependency>
+
+        <!-- Apache Commons Lang -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+
 
         <!-- Spring -->
         <dependency>
