@@ -20,6 +20,8 @@
                 <h2>Task: ${taskId}</h2>
                 <br>
 
+                <h4>Description: ${description}</h4>
+
                 <a href="downloadTask/${taskId}"><h4>Download task</h4></a>
                 <br>
 

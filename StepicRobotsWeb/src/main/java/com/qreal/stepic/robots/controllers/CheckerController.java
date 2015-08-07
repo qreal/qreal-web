@@ -12,6 +12,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +44,15 @@ public class CheckerController {
         decompressTask(taskId);
         ModelAndView modelAndView = new ModelAndView("checker/task");
         modelAndView.addObject("taskId", taskId);
+
+        String descriptionPath = PathConstants.tasksPath + "/" + taskId + "/" + taskId + ".txt";
+        try {
+            String description = new String(Files.readAllBytes(Paths.get(descriptionPath)), StandardCharsets.UTF_8);
+            modelAndView.addObject("description", description);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return modelAndView;
     }
 
