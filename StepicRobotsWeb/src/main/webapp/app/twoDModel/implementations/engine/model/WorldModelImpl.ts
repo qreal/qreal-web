@@ -280,12 +280,12 @@ class WorldModelImpl implements WorldModel {
 
         if (lines) {
             for (var i = 0; i < lines.length; i++) {
-                var beginPosStr:string = lines[i].getAttribute('begin');
-                var beginPos = this.parsePositionString(beginPosStr);
-                var endPosStr:string = lines[i].getAttribute('end');
-                var endPos = this.parsePositionString(endPosStr);
-                var width:number = parseInt(lines[i].getAttribute('stroke-width'));
-                var color:string = lines[i].getAttribute('stroke');
+                var beginPosStr: string = lines[i].getAttribute('begin');
+                var beginPos: TwoDPosition = this.parsePositionString(beginPosStr);
+                var endPosStr: string = lines[i].getAttribute('end');
+                var endPos: TwoDPosition = this.parsePositionString(endPosStr);
+                var width: number = parseInt(lines[i].getAttribute('stroke-width'));
+                var color: string = lines[i].getAttribute('stroke');
 
                 this.addLine(beginPos.x + offsetX, beginPos.y + offsetY,
                     endPos.x + offsetX, endPos.y + offsetY, width, color);

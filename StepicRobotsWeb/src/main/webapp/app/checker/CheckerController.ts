@@ -35,7 +35,7 @@ class CheckerController {
                 spinner.hide();
                 controller.lastResponse = JSON.parse(response);
                 $("#showResult").prop('disabled', false);
-                $('#result').html("Your file successfully uploaded and checked");
+                $('#result').html("Your file has been uploaded and checked successfully");
             },
             error: function (response, status, error) {
                 spinner.hide();

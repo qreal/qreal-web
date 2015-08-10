@@ -59,6 +59,23 @@ class ModelImpl implements Model {
             }
         }
 
+        var lines = xml.getElementsByTagName("colorFields")[0].getElementsByTagName("line");
+
+        if (lines) {
+            for (var i = 0; i < lines.length; i++) {
+                var beginPosStr: string = lines[i].getAttribute('begin');
+                var beginPos: TwoDPosition = this.parsePositionString(beginPosStr);
+                var endPosStr: string = lines[i].getAttribute('end');
+                var endPos: TwoDPosition = this.parsePositionString(endPosStr);
+                var width: number = parseInt(lines[i].getAttribute('stroke-width'));
+
+                minX = this.min(beginPos.x - width, minX);
+                minY = this.min(beginPos.y - width, minY);
+                minX = this.min(endPos.x - width, minX);
+                minY = this.min(endPos.y - width, minY);
+            }
+        }
+
         var regions = xml.getElementsByTagName("region");
 
         if (regions) {
