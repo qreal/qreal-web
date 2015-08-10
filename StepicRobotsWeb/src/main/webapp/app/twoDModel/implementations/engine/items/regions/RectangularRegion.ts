@@ -1,4 +1,5 @@
 class RectangularRegion extends RegionItem {
+
     constructor(worldModel: WorldModel) {
         super(worldModel);
         this.shape = worldModel.getPaper().rect(0, 0, 0, 0);

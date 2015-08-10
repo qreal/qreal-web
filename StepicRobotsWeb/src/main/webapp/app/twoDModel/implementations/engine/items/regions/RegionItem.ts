@@ -63,26 +63,6 @@ class RegionItem {
             this.setColor(color);
         }
 
-        var xAttr = element.getAttribute("x");
-        var yAttr = element.getAttribute("y");
-        if (xAttr !== undefined && yAttr !== undefined) {
-            this.setPosition(this.deserializePoint(element, xAttr, yAttr, offsetX, offsetY));
-        }
-
-
-        var textX = element.getAttribute("textX");
-        var textY = element.getAttribute("textY");
-        if (textX  !== undefined && textY !== undefined) {
-            //TODO: set text pos
-        }
-
-        var text = element.getAttribute("text");
-        if (text) {
-            var textPos = this.getPosition();
-            /*this.worldModel.getPaper().text(textPos.x + 5, textPos.y - 40, text).
-                attr({"text-anchor":"start", fill: color, "font-size": 14}).toBack();*/
-        }
-
         var visible = element.getAttribute("visible");
         if (visible) {
             this.setVisible(visible === "true");
@@ -98,6 +78,25 @@ class RegionItem {
                 this.setWidht(width);
                 this.setHeight(height);
             }
+        }
+
+        var xAttr = element.getAttribute("x");
+        var yAttr = element.getAttribute("y");
+        if (xAttr !== undefined && yAttr !== undefined) {
+            this.setPosition(this.deserializePoint(element, xAttr, yAttr, offsetX, offsetY));
+        }
+
+        var textX = element.getAttribute("textX");
+        var textY = element.getAttribute("textY");
+        if (textX  !== undefined && textY !== undefined) {
+            //TODO: set text pos
+        }
+
+        var text = element.getAttribute("text");
+        if (text) {
+            var textPos = this.getPosition();
+            /*this.worldModel.getPaper().text(textPos.x + 5, textPos.y - 40, text).
+             attr({"text-anchor":"start", fill: color, "font-size": 14}).toBack();*/
         }
     }
 }

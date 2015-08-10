@@ -258,6 +258,13 @@ class WorldModelImpl implements WorldModel {
                             this.regions.push(region);
                             break;
                         }
+                    case "ellipse":
+                        if (regions[i].getAttribute("visible") == "true") {
+                            var region = new EllipseRegion(this);
+                            region.deserialize(regions[i], offsetX, offsetY);
+                            this.regions.push(region);
+                            break;
+                        }
                     default:
                 }
             }
