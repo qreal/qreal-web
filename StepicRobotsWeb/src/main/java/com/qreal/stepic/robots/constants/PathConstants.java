@@ -5,8 +5,9 @@ package com.qreal.stepic.robots.constants;
  */
 public class PathConstants {
 
-    public static final String compressorPath = System.getenv("STEPIC") + "/compressor";
-    public static final String tasksPath = System.getenv("STEPIC") + "/tasks";
-    public static final String checkerPath = System.getenv("STEPIC") + "/trikStudio-checker/bin/check-solution.sh";
+    public static final String stepicPath = System.getenv("STEPIC");
+    public static final String compressorPath = stepicPath + "/compressor";
+    public static final String tasksPath = stepicPath + "/tasks";
+    public static final String checkerPath = stepicPath + "/trikStudio-checker/bin/check-solution.sh";
 
 }

@@ -20,7 +20,7 @@
             <c:if test="${not empty tasks}">
                 <div id="taskList" class="list-group">
                     <c:forEach var="task" items="${tasks}">
-                        <a href="task/${task}" class="list-group-item">${task}</a>
+                        <a href="task/${task.getName()}" class="list-group-item">${task.getTitle()}. ${task.getName()}</a>
                     </c:forEach>
                 </div>
             </c:if>

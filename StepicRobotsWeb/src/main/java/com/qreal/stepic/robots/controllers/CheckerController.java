@@ -1,6 +1,9 @@
 package com.qreal.stepic.robots.controllers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qreal.stepic.robots.constants.PathConstants;
+import com.qreal.stepic.robots.model.checker.TaskItem;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +19,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by vladzx on 04.08.15.
@@ -29,13 +34,25 @@ public class CheckerController {
     public ModelAndView tasksHandler() {
         ModelAndView modelAndView = new ModelAndView("checker/tasks");
 
+        List<TaskItem> taskItems = this.parseTaskList(new File(PathConstants.stepicPath + "/list.json"));
+        System.out.println(taskItems);
+
+
         File tasksDir = new File(PathConstants.tasksPath);
-        List<String> taskNames = new ArrayList<String>();
+        Set<String> taskNames = new HashSet<>();
         for (File task : tasksDir.listFiles()) {
             taskNames.add(task.getName());
         }
 
-        modelAndView.addObject("tasks", taskNames);
+        List<TaskItem> tasks = new ArrayList();
+        for (TaskItem item : taskItems) {
+            if (taskNames.contains(item.getName())) {
+                tasks.add(item);
+            }
+        }
+
+        modelAndView.addObject("tasks", tasks);
+        modelAndView.addObject("tasksWithTitles");
         return modelAndView;
     }
 
@@ -125,5 +142,15 @@ public class CheckerController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private List<TaskItem> parseTaskList(File file) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.readValue(file, new TypeReference<List<TaskItem>>() {});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
