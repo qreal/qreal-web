@@ -1,0 +1,226 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+    <world>
+        <walls/>
+        <colorFields>
+            <line id="green_line0" begin="48:-70" stroke="#008000" fill-style="none" stroke-width="26" end="415:-70" stroke-style="solid" fill="#000000"/>
+            <line id="green_line1" begin="431:-67" stroke="#008000" fill-style="none" stroke-width="26" end="523:-30" stroke-style="solid" fill="#000000"/>
+            <line id="green_line2" begin="529:-21" stroke="#008000" fill-style="none" stroke-width="26" end="543:73" stroke-style="solid" fill="#000000"/>
+            <line id="green_line3" begin="541:86" stroke="#008000" fill-style="none" stroke-width="26" end="482:157" stroke-style="solid" fill="#000000"/>
+            <line id="green_line4" begin="468:166" stroke="#008000" fill-style="none" stroke-width="26" end="359:184" stroke-style="solid" fill="#000000"/>
+            <line id="green_line5" begin="341:186" stroke="#008000" fill-style="none" stroke-width="26" end="48:186" stroke-style="solid" fill="#000000"/>
+            <line id="red_line0" begin="48:-45" stroke="#ff0000" fill-style="none" stroke-width="26" end="415:-45" stroke-style="solid" fill="#000000"/>
+            <line id="red_line1" begin="430:-42" stroke="#ff0000" fill-style="none" stroke-width="26" end="503:-11" stroke-style="solid" fill="#000000"/>
+            <line id="red_line2" begin="509:-3" stroke="#ff0000" fill-style="none" stroke-width="26" end="520:69" stroke-style="solid" fill="#000000"/>
+            <line id="red_line3" begin="516:78" stroke="#ff0000" fill-style="none" stroke-width="26" end="467:140" stroke-style="solid" fill="#000000"/>
+            <line id="red_line4" begin="455:147" stroke="#ff0000" fill-style="none" stroke-width="26" end="371:162" stroke-style="solid" fill="#000000"/>
+            <line id="red_line5" begin="349:164" stroke="#ff0000" fill-style="none" stroke-width="26" end="48:164" stroke-style="solid" fill="#000000"/>
+        </colorFields>
+        <regions>
+            <region type="bound" id="green_line0_region" width="473" color="#87cefa" stroke="35" y="0" height="106" visible="false" filled="true" x="0" boundItem="green_line0"/>
+            <region type="bound" id="green_line1_region" width="198" color="#87cefa" stroke="35" y="0" height="143" visible="false" filled="true" x="0" boundItem="green_line1"/>
+            <region type="bound" id="green_line2_region" width="120" color="#87cefa" stroke="35" y="0" height="200" visible="false" filled="true" x="0" boundItem="green_line2"/>
+            <region type="bound" id="green_line3_region" width="165" color="#87cefa" stroke="35" y="0" height="177" visible="false" filled="true" x="0" boundItem="green_line3"/>
+            <region type="bound" id="green_line4_region" width="215" color="#87cefa" stroke="35" y="0" height="124" visible="false" filled="true" x="0" boundItem="green_line4"/>
+            <region type="bound" id="green_line5_region" width="399" color="#87cefa" stroke="35" y="0" height="106" visible="false" filled="true" x="0" boundItem="green_line5"/>
+            <region type="bound" id="red_line0_region" width="473" color="#00cefa" stroke="35" y="0" height="106" visible="false" filled="true" x="0" boundItem="red_line0"/>
+            <region type="bound" id="red_line1_region" width="179" color="#00cefa" stroke="35" y="0" height="137" visible="false" filled="true" x="0" boundItem="red_line1"/>
+            <region type="bound" id="red_line2_region" width="117" color="#00cefa" stroke="35" y="0" height="178" visible="false" filled="true" x="0" boundItem="red_line2"/>
+            <region type="bound" id="red_line3_region" width="155" color="#00cefa" stroke="35" y="0" height="168" visible="false" filled="true" x="0" boundItem="red_line3"/>
+            <region type="bound" id="red_line4_region" width="190" color="#00cefa" stroke="35" y="0" height="121" visible="false" filled="true" x="0" boundItem="red_line4"/>
+            <region type="bound" id="red_line5_region" width="407" color="#00cefa" stroke="35" y="0" height="106" visible="false" filled="true" x="0" boundItem="red_line5"/>
+            <region type="rectangle" id="start_zone" width="50" color="#87cefa" y="-84" height="51" textX="0" visible="true" text="Старт" textY="0" filled="true" x="48"/>
+            <region type="rectangle" id="finish_zone" width="50" color="#ff0000" y="151" height="50" textX="0" visible="false" text="Финиш" textY="0" filled="true" x="48"/>
+        </regions>
+    </world>
+    <robots>
+        <robot id="trikV62KitRobot" position="49:-83" direction="0">
+            <sensors>
+                <sensor type="kitBase::robotModel::robotParts::Motor" position="75:25" direction="0" port="M4###output######"/>
+                <sensor type="kitBase::robotModel::robotParts::LightSensor" position="75:25" direction="0" port="A1###input######sensorA1"/>
+                <sensor type="kitBase::robotModel::robotParts::Motor" position="75:25" direction="0" port="M3###output######"/>
+            </sensors>
+            <startPosition y="-53" direction="0" x="-50"/>
+            <wheels left="M3###output######" right="M4###output######"/>
+        </robot>
+    </robots>
+    <constraints>
+        <timelimit value="30000"/>
+        <!-- событие, которое инициализирует сенсор значением красного цвета и эмулирует нажатие кнопки "вверх" для калибровки -->
+        <event id="Calibrate red" settedUpInitially="true">
+            <condition>
+                <timer timeout="100"/>
+            </condition>
+            <triggers>
+                <setState property="locked" object="robot1.A1">
+                    <bool value="true"/>
+                </setState>
+                <setState property="locked" object="robot1.Up">
+                    <bool value="true"/>
+                </setState>
+                <setState property="value" object="robot1.A1">
+                    <int value="21"/>
+                </setState>
+                <setState property="value" object="robot1.Up">
+                    <int value="1"/>
+                </setState>
+            </triggers>
+        </event>
+        <!-- событие, которое проверяет нажатие на кнопку "вверх" и возводит событие, ожидающее кнопку "вниз" -->
+        <event settedUpInitially="true">
+            <condition>
+                <equals>
+                    <objectState object="robot1.Up.value"/>
+                    <int value="1"/>
+                </equals>
+            </condition>
+            <triggers>
+                <setState property="locked" object="robot1.Up">
+                    <bool value="false"/>
+                </setState>
+                <setUp id="Calibrate green"/>
+                <setUp id="Wait for down button"/>
+            </triggers>
+        </event>
+        <!-- событие, которое инициализирует сенсор значением зеленого цвета и эмулирует нажатие кнопки "вниз" для калибровки -->
+        <event id="Calibrate green">
+            <condition>
+                <timer timeout="100"/>
+            </condition>
+            <triggers>
+                <setState property="locked" object="robot1.Down">
+                    <bool value="true"/>
+                </setState>
+                <setState property="value" object="robot1.A1">
+                    <int value="35"/>
+                </setState>
+                <setState property="value" object="robot1.Down">
+                    <int value="1"/>
+                </setState>
+            </triggers>
+        </event>
+        <!-- событие, которое проверяет нажатие на кнопку "вниз", эмулирет нажатие кнопки вверх и возводит событие, ожидающее кнопку "вверх" -->
+        <event id="Wait for down button">
+            <condition>
+                <equals>
+                    <objectState object="robot1.Down.value"/>
+                    <int value="1"/>
+                </equals>
+            </condition>
+            <triggers>
+                <setState property="locked" object="robot1.Down">
+                    <bool value="false"/>
+                </setState>
+                <setUp id="Wait for up button"/>
+                <setUp id="Click up"/>
+            </triggers>
+        </event>
+        <!-- событие, которое эмулирует нажатие кнопки "вверх" через 100 мс -->
+        <event id="Click up">
+            <condition>
+                <timer timeout="100"/>
+            </condition>
+            <triggers>
+                <setState property="locked" object="robot1.Up">
+                    <bool value="true"/>
+                </setState>
+                <setState property="value" object="robot1.Up">
+                    <int value="1"/>
+                </setState>
+            </triggers>
+        </event>
+        <!-- событие, которое проверяет нажатие на кнопку "вверх" и возводит событие, проверяющее начальную позицию робота -->
+        <event id="Wait for up button">
+            <condition>
+                <equals>
+                    <objectState object="robot1.Up.value"/>
+                    <int value="1"/>
+                </equals>
+            </condition>
+            <triggers>
+                <setState property="locked" object="robot1.Up">
+                    <bool value="false"/>
+                </setState>
+                <setState property="locked" object="robot1.A1">
+                    <bool value="false"/>
+                </setState>
+                <setUp id="Check start position"/>
+                <setUp id="Check start position failed"/>
+            </triggers>
+        </event>
+        <!-- событие, котрое проверяет начальную позицию робота, в случае успеха возводится событие, проверяющее, что робот едет по трассе -->
+        <event id="Check start position">
+            <condition>
+                <inside objectId="robot1" regionId="start_zone"/>
+            </condition>
+            <triggers>
+                <setUp id="Check trace"/>
+                <setUp id="Finish"/>
+            </triggers>
+        </event>
+        <!-- событие, сообщающее об ошибке, если после нажатия на кнопку робот находится не в стартовой позиции -->
+        <event id="Check start position failed">
+            <conditions glue="and">
+                <timer timeout="100"/>
+                <settedUp id="Check start position"/>
+            </conditions>
+            <trigger>
+                <fail message="Робот должен находиться в стартовой позиции после калибровки"/>
+            </trigger>
+        </event>
+        <!-- Событие, которое проверяет, что робот едет по трассе-->
+        <event id="Check trace">
+            <conditions glue="and">
+                <not>
+                    <conditions glue="and">
+                        <inside objectId="robot1.A1" regionId="green_line0_region"/>
+                        <inside objectId="robot1.A1" regionId="red_line0_region"/>
+                    </conditions>
+                </not>
+                <not>
+                    <conditions glue="and">
+                        <inside objectId="robot1.A1" regionId="green_line1_region"/>
+                        <inside objectId="robot1.A1" regionId="red_line1_region"/>
+                    </conditions>
+                </not>
+                <not>
+                    <conditions glue="and">
+                        <inside objectId="robot1.A1" regionId="green_line2_region"/>
+                        <inside objectId="robot1.A1" regionId="red_line2_region"/>
+                    </conditions>
+                </not>
+                <not>
+                    <conditions glue="and">
+                        <inside objectId="robot1.A1" regionId="green_line3_region"/>
+                        <inside objectId="robot1.A1" regionId="red_line3_region"/>
+                    </conditions>
+                </not>
+                <not>
+                    <conditions glue="and">
+                        <inside objectId="robot1.A1" regionId="green_line4_region"/>
+                        <inside objectId="robot1.A1" regionId="red_line4_region"/>
+                    </conditions>
+                </not>
+                <not>
+                    <conditions glue="and">
+                        <inside objectId="robot1.A1" regionId="green_line5_region"/>
+                        <inside objectId="robot1.A1" regionId="red_line5_region"/>
+                    </conditions>
+                </not>
+            </conditions>
+            <trigger>
+                <fail message="Робот выехал с границы красного и зеленого"/>
+            </trigger>
+        </event>
+        <!-- Событие, которое говорит, что задание выполнено, когда робот приезжает на линию финиша-->
+        <event id="Finish">
+            <conditions glue="and">
+                <timer forceDropOnTimeout="false" timeout="50"/>
+                <inside objectId="robot1" regionId="finish_zone"/>
+            </conditions>
+            <trigger>
+                <success/>
+            </trigger>
+        </event>
+    </constraints>
+</root>

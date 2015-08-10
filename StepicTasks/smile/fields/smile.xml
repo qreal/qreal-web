@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+    <world>
+        <walls/>
+        <colorFields/>
+        <regions/>
+    </world>
+    <robots>
+        <robot direction="0" position="-206:26" id="trikV62KitRobot">
+            <sensors>
+                <sensor direction="0" port="E3###input###M3###encoder3" position="0:0" type=""/>
+                <sensor direction="0" port="M4###output######" position="0:0" type=""/>
+                <sensor direction="0" port="E2###input###M2###encoder2" position="0:0" type=""/>
+                <sensor direction="0" port="E4###input###M4###encoder4" position="0:0" type=""/>
+                <sensor direction="0" port="E1###input###M1###encoder1" position="0:0" type=""/>
+                <sensor direction="0" port="M3###output######" position="0:0" type=""/>
+            </sensors>
+            <startPosition y="51" direction="0" x="-181"/>
+            <wheels left="M3###output######" right="M4###output######"/>
+        </robot>
+    </robots>
+    <constraints>
+        <timelimit value="2000"/>
+        <!-- Событие, которое проверяет, что через 1 секунду после начала на экране нарисовано 2 эллипса и 1 дуга -->
+        <event settedUpInitially="true">
+            <conditions glue="and">
+                <timer forceDropOnTimeout="false" timeout="1000"/>
+                <equals>
+                    <objectState object="robot1.display.ellipses.size"/>
+                    <int value="2"/>
+                </equals>
+                <equals>
+                    <objectState object="robot1.display.arcs.size"/>
+                    <int value="1"/>
+                </equals>
+            </conditions>
+            <trigger>
+                <success/>
+            </trigger>
+        </event>
+        <!-- Событие, которое выводит ошибку, если нарисовано больше 2 эллипсов -->
+        <event settedUpInitially="true">
+            <conditions glue="and">
+                <timer forceDropOnTimeout="true" timeout="500"/>
+                <not>
+                    <equals>
+                        <objectState object="robot1.display.ellipses.size"/>
+                        <int value="2"/>
+                    </equals>
+                </not>
+            </conditions>
+            <trigger>
+                <fail message="На экране должно быть ровно два эллипса"/>
+            </trigger>
+        </event>
+        <!-- Событие, которое выводит ошибку, если нарисовано не 1 дуга -->
+        <event settedUpInitially="true">
+            <conditions glue="and">
+                <timer forceDropOnTimeout="true" timeout="600"/>
+                <not>
+                    <equals>
+                        <objectState object="robot1.display.arcs.size"/>
+                        <int value="1"/>
+                    </equals>
+                </not>
+            </conditions>
+            <trigger>
+                <fail message="На экране должна быть ровно одна дуга"/>
+            </trigger>
+        </event>
+        <!-- Событие, которое выводит ошибку, если нарисовано не ровно три объекта -->
+        <event settedUpInitially="true">
+            <conditions glue="and">
+                <timer forceDropOnTimeout="true" timeout="700"/>
+                <not>
+                    <equals>
+                        <objectState object="robot1.display.objects.size"/>
+                        <int value="3"/>
+                    </equals>
+                </not>
+            </conditions>
+            <trigger>
+                <fail message="На экране должно быть ровно три объекта"/>
+            </trigger>
+        </event> -->
+
+	</constraints>
+</root>

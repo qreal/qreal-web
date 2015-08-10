@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+    <world>
+        <walls/>
+        <colorFields>
+            <line end="91:87" stroke-style="solid" id="" begin="91:-27" fill="#000000" fill-style="none" stroke-width="30" stroke="#ff0000"/>
+            <line end="121:87" stroke-style="solid" id="" begin="121:-27" fill="#000000" fill-style="none" stroke-width="30" stroke="#ff0000"/>
+            <line end="151:87" stroke-style="solid" id="" begin="151:-27" fill="#000000" fill-style="none" stroke-width="30" stroke="#ff0000"/>
+            <line end="181:87" stroke-style="solid" id="" begin="181:-27" fill="#000000" fill-style="none" stroke-width="30" stroke="#ff0000"/>
+            <line end="211:87" stroke-style="solid" id="" begin="211:-27" fill="#000000" fill-style="none" stroke-width="30" stroke="#ff0000"/>
+            <line end="350:87" stroke-style="solid" id="" begin="350:-27" fill="#000000" fill-style="none" stroke-width="30" stroke="#ff0000"/>
+            <line end="380:87" stroke-style="solid" id="" begin="380:-27" fill="#000000" fill-style="none" stroke-width="30" stroke="#ff0000"/>
+            <line end="410:87" stroke-style="solid" id="" begin="410:-27" fill="#000000" fill-style="none" stroke-width="30" stroke="#ff0000"/>
+            <line end="440:87" stroke-style="solid" id="" begin="440:-27" fill="#000000" fill-style="none" stroke-width="30" stroke="#ff0000"/>
+            <line end="470:87" stroke-style="solid" id="" begin="470:-27" fill="#000000" fill-style="none" stroke-width="30" stroke="#ff0000"/>
+            <line end="609:87" stroke-style="solid" id="" begin="609:-27" fill="#000000" fill-style="none" stroke-width="30" stroke="#008000"/>
+            <line end="639:87" stroke-style="solid" id="" begin="639:-27" fill="#000000" fill-style="none" stroke-width="30" stroke="#008000"/>
+            <line end="669:87" stroke-style="solid" id="" begin="669:-27" fill="#000000" fill-style="none" stroke-width="30" stroke="#008000"/>
+            <line end="699:87" stroke-style="solid" id="" begin="699:-27" fill="#000000" fill-style="none" stroke-width="30" stroke="#008000"/>
+            <line end="729:87" stroke-style="solid" id="" begin="729:-27" fill="#000000" fill-style="none" stroke-width="30" stroke="#008000"/>
+        </colorFields>
+        <regions/>
+    </world>
+    <robots>
+        <robot direction="0" position="-116:1" id="trikV62KitRobot">
+            <sensors>
+                <sensor direction="0" position="75:25" type="kitBase::robotModel::robotParts::LightSensor" port="A1###input######sensorA1"/>
+                <sensor direction="0" position="51:25" type="kitBase::robotModel::robotParts::LightSensor" port="A2###input######sensorA2"/>
+            </sensors>
+            <startPosition direction="0" y="26" x="-91"/>
+            <wheels right="M4###output######" left="M3###output######"/>
+        </robot>
+    </robots>
+    <constraints>
+        <!-- Лимит времени в 34 секунды - 30 секунд доехать до зелёного пятна, 3 секунды грустить и секунда на всякий случай -->
+        <timelimit value="34000"/>
+        <!-- Событие, которое говорит о том, что робот вообще поехал и стартует цепочку проверки -->
+        <event id="We are alive, first move" settedUpInitially="true">
+            <condition>
+                <greater>
+                    <objectState object="robot1.M3.power"/>
+                    <int value="0"/>
+                </greater>
+            </condition>
+            <triggers>
+                <setUp id="Red area"/>
+                <setUp id="Green area"/>
+            </triggers>
+        </event>
+        <!-- Событие, которое выдаёт ошибку, если робот не тронулся с места в первую секунду -->
+        <event id="Waiting for going forward too long" settedUpInitially="true">
+            <conditions glue="and">
+                <timer forceDropOnTimeout="true" timeout="1000"/>
+                <settedUp id="We are alive, first move"/>
+            </conditions>
+            <trigger>
+                <fail message="Робот так и не поехал в первую секунду"/>
+            </trigger>
+        </event>
+        <!-- Событие, которое взводит ожидание показа смайлика на экране -->
+        <event id="Red area">
+            <conditions glue="and">
+                <less>
+                    <objectState object="robot1.A1.value"/>
+                    <int value="30"/>
+                </less>
+                <less>
+                    <objectState object="robot1.A2.value"/>
+                    <int value="30"/>
+                </less>
+            </conditions>
+            <trigger>
+                <setUp id="Wait for smile"/>
+            </trigger>
+        </event>
+        <!-- Событие, которое даёт роботу потупить, но если смайлик за 100 мс так и не появился, то делает тест непройденным -->
+        <event id="Wait for smile">
+            <conditions glue="and">
+                <timer forceDropOnTimeout="true" timeout="100"/>
+                <equals>
+                    <objectState object="robot1.display.smiles"/>
+                    <bool value="false"/>
+                </equals>
+            </conditions>
+            <trigger>
+                <fail message="Робот видит красное пятно, но не показал смайлик"/>
+            </trigger>
+        </event>
+        <!-- Событие, которое взводит ожидание окончания программы -->
+        <event id="Green area">
+            <conditions glue="and">
+                <less>
+                    <objectState object="robot1.A1.value"/>
+                    <int value="50"/>
+                </less>
+                <greater>
+                    <objectState object="robot1.A1.value"/>
+                    <int value="30"/>
+                </greater>
+                <less>
+                    <objectState object="robot1.A2.value"/>
+                    <int value="50"/>
+                </less>
+                <greater>
+                    <objectState object="robot1.A2.value"/>
+                    <int value="30"/>
+                </greater>
+            </conditions>
+            <triggers>
+                <setUp id="Wait for shutdown sequence"/>
+                <setUp id="Wait for end"/>
+                <success deferred="true"/>
+            </triggers>
+        </event>
+        <!-- Событие, которое даёт роботу 100 мс на выключение моторов и показ грустного смайлика -->
+        <event id="Wait for shutdown sequence">
+            <conditions glue="and">
+                <timer forceDropOnTimeout="true" timeout="100"/>
+                <conditions glue="or">
+                    <greater>
+                        <objectState object="robot1.M3.power"/>
+                        <int value="0"/>
+                    </greater>
+                    <greater>
+                        <objectState object="robot1.M4.power"/>
+                        <int value="0"/>
+                    </greater>
+                    <equals>
+                        <objectState object="robot1.display.sadSmiles"/>
+                        <bool value="false"/>
+                    </equals>
+                </conditions>
+            </conditions>
+            <trigger>
+                <fail message="Робот видит зелёное пятно, но не показал грустный смайлик или не выключил моторы"/>
+            </trigger>
+        </event>
+        <!-- Событие, которое ожидает, что программа окончится через 3 секунды -->
+        <event id="Wait for end">
+            <condition>
+                <timer forceDropOnTimeout="true" timeout="3100"/>
+            </condition>
+            <trigger>
+                <fail message="Робот не выключился через 3 секунды после того, как увидел зелёное пятно"/>
+            </trigger>
+        </event>
+    </constraints>
+</root>
