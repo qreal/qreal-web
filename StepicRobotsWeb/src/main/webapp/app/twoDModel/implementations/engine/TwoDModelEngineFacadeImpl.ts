@@ -53,6 +53,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
     }
 
     private displayResult(result): void {
+        this.model.getWorldModel().clearPaper();
         this.model.deserialize($.parseXML(result.failedFieldXML));
         $("#twoDModelContent").show();
         this.showCheckResult(result);

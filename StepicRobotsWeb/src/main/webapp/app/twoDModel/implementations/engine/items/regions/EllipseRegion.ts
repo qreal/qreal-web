@@ -10,7 +10,6 @@ class EllipseRegion extends RegionItem {
     }
 
     setPosition(position: TwoDPosition): void {
-        console.log(this.getWith());
         this.shape.attr({cx: position.x + this.getWith(), cy: position.y + this.getHeight()});
     }
 

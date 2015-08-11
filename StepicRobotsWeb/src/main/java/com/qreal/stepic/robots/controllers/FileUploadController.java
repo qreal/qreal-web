@@ -134,11 +134,10 @@ public class FileUploadController {
             } else {
                 String pathToMetainfo = PathConstants.tasksPath + "/" + taskId +"/" + taskId + "/metaInfo.xml";
                 failedFieldXML = getWorldModelFromMetainfo(pathToMetainfo);
-                trajectoryPath = PathConstants.tasksPath + "/" + taskId +
-                        "/solutions/" + uuidStr + "/trajectories/" + nameWithoutExt + "/_" + nameWithoutExt;
+                trajectoryPath = PathConstants.tasksPath + "/" + taskId + "/solutions/" + uuidStr + "/trajectory";
 
                 report = parseReportFile(new File(PathConstants.tasksPath + "/" + taskId +
-                        "/solutions/" + uuidStr + "/reports/" + nameWithoutExt + "/_" + nameWithoutExt));
+                        "/solutions/" + uuidStr + "/report"));
             }
 
             Trace trace = parseTrajectoryFile(trajectoryPath);

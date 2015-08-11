@@ -5,6 +5,7 @@ class WorldModelImpl implements WorldModel {
     private colorFields: ColorFieldItem[] = [];
     private wallItems: WallItem[] = [];
     private regions: RegionItem[] = [];
+    private startPositionCross: StartPositionItem;
 
     constructor() {
         this.paper = Raphael("twoDModel_stage", 3000, 3000);
@@ -224,15 +225,25 @@ class WorldModelImpl implements WorldModel {
         element.showHandles();
     }
 
+    setStartPositionCross(x: number, y: number, direction: number, offsetX: number, offsetY: number) {
+        this.startPositionCross = new StartPositionItem(this, x + offsetX, y + offsetY, direction);
+    }
+
     clearPaper(): void {
         while (this.wallItems.length) {
-            var wallItem = this.wallItems.pop();
-            wallItem.remove();
+            this.wallItems.pop().remove();
         }
 
         while (this.colorFields.length) {
-            var item = this.colorFields.pop();
-            item.remove();
+            this.colorFields.pop().remove();
+        }
+
+        while (this.regions.length) {
+            this.regions.pop().remove();
+        }
+
+        if (this.startPositionCross) {
+            this.startPositionCross.remove();
         }
     }
 
@@ -297,6 +308,14 @@ class WorldModelImpl implements WorldModel {
                 this.addLine(beginPos.x + offsetX, beginPos.y + offsetY,
                     endPos.x + offsetX, endPos.y + offsetY, width, color);
             }
+        }
+
+        var startPosition = xml.getElementsByTagName("startPosition")[0];
+        if (startPosition) {
+            var x = parseFloat(startPosition.getAttribute('x'));
+            var y = parseFloat(startPosition.getAttribute('y'));
+            var direction = parseFloat(startPosition.getAttribute('direction'));
+            this.setStartPositionCross(x, y, direction, offsetX, offsetY);
         }
     }
 }

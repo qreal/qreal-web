@@ -124,9 +124,6 @@ public class CheckerController {
                 ProcessBuilder processBuilder = new ProcessBuilder(PathConstants.compressorPath, taskId + ".qrs");
                 processBuilder.directory(folder);
 
-                System.out.println(pathToFile);
-                System.out.println(processBuilder.command());
-
                 final Process process = processBuilder.start();
                 InputStream is = process.getInputStream();
                 InputStreamReader isr = new InputStreamReader(is);

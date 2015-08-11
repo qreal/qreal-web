@@ -9,4 +9,8 @@ class StartPositionItem {
         this.image.transform("R" + direction);
         this.image.toBack();
     }
+
+    remove(): void {
+        this.image.remove();
+    }
 }

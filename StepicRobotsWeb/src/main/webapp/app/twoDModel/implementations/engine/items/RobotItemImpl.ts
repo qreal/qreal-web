@@ -13,7 +13,6 @@ class RobotItemImpl implements RobotItem {
     private offsetY: number = 0;
     private timeoutId: number;
     private sensors: {string?: SensorItem} = {};
-    private startPositionCross: StartPositionItem;
     private direction: number;
 
     constructor(worldModel: WorldModel, position: TwoDPosition, imageFileName: string, robot: RobotModel) {
@@ -207,10 +206,6 @@ class RobotItemImpl implements RobotItem {
 
     setOffsetY(offsetY: number): void {
         this.offsetY = offsetY;
-    }
-
-    setStartPositionCross(x: number, y: number, direction: number) {
-        this.startPositionCross = new StartPositionItem(this.worldModel, x + this.offsetX, y + this.offsetY, direction);
     }
 
     hide(): void {
