@@ -156,7 +156,17 @@ class DiagramMenuManager {
         this.clearSavingMenu();
     }
 
+    private saveCurrentDiagram(): void {
+        if (this.currentDiagramName === "") {
+            this.saveDiagramAs();
+        }
+        else {
+            this.updateCurrentDiagramInDatabase();
+        }
+    }
+
     private saveDiagramAs(): void {
+        $('#diagrams').modal('show');
         this.showFolderMenu();
         this.showFolderTable(this.currentFolder);
         this.showSavingMenu();
