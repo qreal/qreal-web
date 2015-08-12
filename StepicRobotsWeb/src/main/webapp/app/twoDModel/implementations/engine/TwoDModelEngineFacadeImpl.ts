@@ -33,6 +33,10 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
             this.displayResult(result);
         });
 
+        $scope.$on("2dModelLoad", (event, fieldXML) => {
+            this.model.deserialize($.parseXML(fieldXML));
+        });
+
         $compile($("#stop_button"))($scope);
 
         $("#infoAlert").hide();

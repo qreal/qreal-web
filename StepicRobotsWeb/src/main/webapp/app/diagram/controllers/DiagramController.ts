@@ -21,7 +21,7 @@ class DiagramController {
         this.rootController = $scope.root;
 
         controller.taskId = $attrs.task;
-        PaletteLoader.loadElementsFromXml(controller, "tasks/" + controller.taskId + "/elements.xml", $scope, $compile);
+        PaletteLoader.loadElementsFromXml(controller, $scope, $compile, $attrs);
 
         DropdownListManager.addDropdownList("ControlFlow", "Guard", ["", "false", "iteration", "true"]);
 
@@ -336,12 +336,11 @@ class DiagramController {
         var controller = this;
         $.ajax({
             type: 'POST',
-            url: 'submit',
+            url: 'submit/' + controller.taskId,
             dataType: 'json',
             contentType: 'application/json',
-            data: (JSON.stringify({id: controller.taskId,
-                diagram: ExportManager.exportDiagramStateToJSON(controller.graph,
-                    controller.nodesMap, controller.linksMap)})),
+            data: (JSON.stringify({diagram: ExportManager.exportDiagramStateToJSON(controller.graph,
+                controller.nodesMap, controller.linksMap)})),
             success: function (response) {
                 twoDModelSpinner.hide();
                 $scope.$emit("emitDisplayResult", response);
@@ -365,16 +364,13 @@ class DiagramController {
         var controller = this;
         $.ajax({
             type: 'POST',
-            url: 'open',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: (JSON.stringify({id: taskId})),
+            url: 'open/' + taskId,
             success: function (response) {
                 controller.clear();
                 diagramSpinner.hide();
                 twoDModelSpinner.hide();
-                $scope.$emit("emit2dModelLoad");
-                DiagramLoader.load(response, controller.graph,
+                $scope.$emit("emit2dModelLoad", response.fieldXML);
+                DiagramLoader.load(response.diagram, controller.graph,
                     controller.nodesMap, controller.linksMap, controller.nodeTypesMap);
             },
             error: function (response, status, error) {

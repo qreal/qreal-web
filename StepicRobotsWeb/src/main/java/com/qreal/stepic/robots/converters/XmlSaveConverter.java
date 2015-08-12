@@ -32,7 +32,7 @@ public class XmlSaveConverter {
                 convertModel(fileEntry, builder, nodesMap, linksMap);
             }
             return new Diagram(new HashSet<DiagramNode>(nodesMap.values()), new HashSet<DiagramNode>(linksMap.values()));
-        } catch (ParserConfigurationException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

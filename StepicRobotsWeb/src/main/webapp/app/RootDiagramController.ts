@@ -16,8 +16,8 @@ class RootDiagramController {
             $scope.$broadcast("displayCheckingResult", result);
         });
 
-        $scope.$on("emit2dModelLoad", (event) => {
-            $scope.$broadcast("2dModelLoad");
+        $scope.$on("emit2dModelLoad", (event, fieldXML) => {
+            $scope.$broadcast("2dModelLoad", fieldXML);
         });
     }
 
