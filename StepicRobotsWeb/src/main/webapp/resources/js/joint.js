@@ -21279,14 +21279,13 @@ joint.dia.LinkView = joint.dia.CellView.extend({
                         this.paper.trigger(targetParentEvent, evt, this, x, y);
                     }
 
-                }
-        }
-    },
+                } else {
 
-    pointerdblclick: function (evt, x, y) {
-        var className = evt.target.getAttribute('class');
-        if (className === "connection-wrap") {
-            this.addVertex({ x: x, y: y });
+                    // Store the index at which the new vertex has just been placed.
+                    // We'll be update the very same vertex position in `pointermove()`.
+                    this._vertexIdx = this.addVertex({ x: x, y: y });
+                    this._action = 'vertex-move';
+                }
         }
     },
 
