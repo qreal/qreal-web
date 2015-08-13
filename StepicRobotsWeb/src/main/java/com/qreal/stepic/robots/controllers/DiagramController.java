@@ -10,10 +10,15 @@ import com.qreal.stepic.robots.model.diagram.OpenResponse;
 import com.qreal.stepic.robots.model.diagram.SubmitRequest;
 import com.qreal.stepic.robots.model.diagram.SubmitResponse;
 import com.qreal.stepic.robots.utils.CheckerUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,7 +36,11 @@ public class DiagramController {
     }
 
     @RequestMapping(value = "{taskId}", method = RequestMethod.GET)
-    public ModelAndView showTask(@PathVariable String taskId) {
+    public ModelAndView showTask(HttpServletRequest request, @PathVariable String taskId)
+            throws NoSuchRequestHandlingMethodException {
+        if (getPalette(taskId) == null) {
+            throw new NoSuchRequestHandlingMethodException(request);
+        }
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("taskId", taskId);
         return modelAndView;
