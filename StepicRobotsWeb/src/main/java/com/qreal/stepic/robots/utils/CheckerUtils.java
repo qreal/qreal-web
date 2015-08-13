@@ -61,11 +61,11 @@ public class CheckerUtils {
 
             File failedField = new File(PathConstants.tasksPath + "/" + taskId +
                     "/solutions/" + uuidStr + "/failed-field");
-            String failedFieldXML = null;
+            String fieldXML = null;
             if (failedField.exists()) {
                 BufferedReader br = new BufferedReader(new FileReader(failedField));
                 String pathToFailedField = br.readLine();
-                failedFieldXML = new String(Files.readAllBytes(Paths.get(pathToFailedField)), StandardCharsets.UTF_8);
+                fieldXML = new String(Files.readAllBytes(Paths.get(pathToFailedField)), StandardCharsets.UTF_8);
                 String[] pathParts = pathToFailedField.split("/");
                 String failedFilename = pathParts[pathParts.length - 1];
                 String failedName = failedFilename.substring(0, failedFilename.length() - 4);
@@ -78,7 +78,7 @@ public class CheckerUtils {
                 String pathToMetainfo = PathConstants.tasksPath + "/" + taskId + "/" + taskId + "/metaInfo.xml";
 
                 try {
-                    failedFieldXML = getWorldModelFromMetainfo(pathToMetainfo);
+                    fieldXML = getWorldModelFromMetainfo(pathToMetainfo);
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw new SubmitException("Can't load 2d world model! Please contact the developers");
@@ -91,7 +91,7 @@ public class CheckerUtils {
 
             Trace trace = parseTrajectoryFile(trajectoryPath);
             //FileUtils.deleteDirectory(solutionFolder);
-            return new SubmitResponse(report, trace, failedFieldXML);
+            return new SubmitResponse(report, trace, fieldXML);
         } catch (IOException e) {
             e.printStackTrace();
             throw new SubmitException("Error while checking, please contact the developers");

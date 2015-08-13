@@ -343,7 +343,7 @@ class DiagramController {
                 controller.nodesMap, controller.linksMap)})),
             success: function (response) {
                 twoDModelSpinner.hide();
-                $scope.$emit("emitDisplayResult", response);
+                $scope.$emit("emitCheckingResult", response);
             },
             error: function (response, status, error) {
                 twoDModelSpinner.hide();

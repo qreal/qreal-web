@@ -11,10 +11,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by vladzx on 25.04.15.
@@ -28,8 +25,16 @@ public class XmlSaveConverter {
 
             Map<String, DiagramNode> nodesMap = new HashMap<String, DiagramNode>();
             Map<String, DiagramNode> linksMap = new HashMap<String, DiagramNode>();
+
+            File robotDiagramNodeFolder = new File(folder.getPath() + "/graphical/RobotsMetamodel/RobotsDiagram/RobotsDiagramNode");
+            File robotDiagramNode = robotDiagramNodeFolder.listFiles()[0];
+            Set<String> robotDiagramNodeChilds = getNodeChilds(robotDiagramNode, builder);
+
+            File rootIdNode = new File(folder.getPath() + "/logical/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
+            Set<String> rootIdChilds = getNodeChilds(rootIdNode, builder);
+
             for (final File fileEntry : folder.listFiles()) {
-                convertModel(fileEntry, builder, nodesMap, linksMap);
+                convertModel(fileEntry, builder, robotDiagramNodeChilds, rootIdChilds, nodesMap, linksMap);
             }
             return new Diagram(new HashSet<DiagramNode>(nodesMap.values()), new HashSet<DiagramNode>(linksMap.values()));
         } catch (Exception e) {
@@ -39,19 +44,26 @@ public class XmlSaveConverter {
     }
 
     private void convertModel(final File folder, final DocumentBuilder builder,
+                              final Set<String> robotDiagramNodeChilds, final Set<String> rootIdChilds,
                               Map<String, DiagramNode> nodesMap, Map<String, DiagramNode> linksMap) {
+
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
-                convertModel(fileEntry, builder, nodesMap, linksMap);
+                convertModel(fileEntry, builder, robotDiagramNodeChilds, rootIdChilds, nodesMap, linksMap);
             } else {
                 try {
                     Document doc = builder.parse(fileEntry);
                     Element element = doc.getDocumentElement();
 
                     if (element.hasAttribute("logicalId") && element.getAttribute("logicalId") != "qrm:/") {
-                        convertGraphicalPart(element, nodesMap, linksMap);
+                        String id = element.getAttribute("id");
+                        if (robotDiagramNodeChilds.contains(id) || robotDiagramNodeChilds.contains(id)) {
+                            convertGraphicalPart(element, nodesMap, linksMap);
+                        }
                     } else {
-                        convertLogicalPart(element, nodesMap, linksMap);
+                        if (rootIdChilds.contains(element.getAttribute("id"))) {
+                            convertLogicalPart(element, nodesMap, linksMap);
+                        }
                     }
                 } catch (SAXException e) {
                     e.printStackTrace();
@@ -60,6 +72,25 @@ public class XmlSaveConverter {
                 }
             }
         }
+    }
+
+    private Set<String> getNodeChilds(final File node, final DocumentBuilder builder) {
+        Set<String> childs = new HashSet<>();
+        try {
+            Document doc = builder.parse(node);
+            Element children = (Element) doc.getElementsByTagName("children").item(0);
+            NodeList childList = children.getElementsByTagName("object");
+
+            for (int i = 0; i < childList.getLength(); i++) {
+                Element child = (Element) childList.item(i);
+                childs.add(child.getAttribute("id"));
+            }
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return childs;
     }
 
     private void convertLogicalPart(Element element, Map<String, DiagramNode> nodesMap,
