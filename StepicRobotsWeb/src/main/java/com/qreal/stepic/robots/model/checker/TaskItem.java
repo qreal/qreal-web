@@ -23,6 +23,15 @@ public class TaskItem implements Serializable {
         this.name = name;
     }
 
+    public Boolean isOnline() {
+        return online;
+    }
+
+    public void setOnline(Boolean online) {
+        this.online = online;
+    }
+
     private String title;
     private String name;
+    private Boolean online;
 }

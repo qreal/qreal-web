@@ -25,7 +25,7 @@ import java.util.UUID;
  * Created by vladzx on 04.08.15.
  */
 @Controller
-@RequestMapping("/checker/task")
+@RequestMapping("/offline")
 public class FileUploadController {
 
     private static final Logger LOG = Logger.getLogger(FileUploadController.class);

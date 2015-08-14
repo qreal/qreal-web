@@ -52,8 +52,8 @@ class DiagramController {
                 if (event.button == 2) {
                     $(".custom-menu").finish().toggle(100).
                         css({
-                            top: event.offsetY + "px",
-                            left: event.offsetX + "px"
+                            left: event.clientX + "px",
+                            top: event.clientY + "px"
                         });
                 }
             }
@@ -331,6 +331,7 @@ class DiagramController {
             alert("Palette is not loaded!");
             return;
         }
+        $("#infoAlert").hide();
         var twoDModelSpinner = $('#twoDModelSpinner');
         twoDModelSpinner.show();
         var controller = this;

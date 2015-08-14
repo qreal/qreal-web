@@ -6,6 +6,10 @@
     user-select: none;
 }
 
+#titleContent {
+    text-align: center;
+}
+
 #infoAlert {
     position: absolute;
     top: 1px;
@@ -143,7 +147,7 @@
 .custom-menu {
     display: none;
     z-index: 1000;
-    position: absolute;
+    position: fixed;
     overflow: hidden;
     border: 1px solid #CCC;
     white-space: nowrap;

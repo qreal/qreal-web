@@ -1,0 +1,14 @@
+body {
+    padding: 10px;
+}
+
+.col-centered {
+    float: none;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.listButton {
+    padding: 0px;
+    margin-right: 10px;
+}

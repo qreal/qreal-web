@@ -5,11 +5,19 @@
     <title>Tasks</title>
 
     <script src="<c:url value='/resources/js/jquery-1.11.0.min.js' />"></script>
-    <script src="<c:url value='/resources/js/joint.js' />"></script>
-    <script src="<c:url value='/app/out.js' />"></script>
+    <script src="<c:url value='/resources/bootstrap/js/bootstrap.min.js' />"></script>
+
+    <script type="text/javascript">
+        $('body').on('click', 'a.disabled', function(event) {
+            event.preventDefault();
+        });
+        $('body').on('click', 'li.disabled', function(event) {
+            event.preventDefault();
+        });
+    </script>
 
     <link rel="stylesheet" href="<c:url value='/resources/bootstrap/css/bootstrap.min.css' />"/>
-    <link rel="stylesheet" href="<c:url value='/resources/css/checker.css' />"/>
+    <link rel="stylesheet" href="<c:url value='/resources/css/tasks.css' />"/>
 </head>
 <body>
     <div class="container">
@@ -20,7 +28,17 @@
             <c:if test="${not empty tasks}">
                 <div id="taskList" class="list-group">
                     <c:forEach var="task" items="${tasks}">
-                        <a href="task/${task.getName()}" class="list-group-item">${task.getTitle()}. ${task.getName()}</a>
+                        <div class="list-group-item clearfix">
+                            <span class="pull-left">
+                                ${task.getTitle()}. ${task.getName()}
+                            </span>
+                            <span class="pull-right">
+                                <c:if test="${task.isOnline()}">
+                                    <a class="btn listButton" href="online/${task.getName()}">Online</a>
+                                </c:if>
+                                <a class="btn listButton" href="offline/${task.getName()}">Offline</a>
+                            </span>
+                        </div>
                     </c:forEach>
                 </div>
             </c:if>

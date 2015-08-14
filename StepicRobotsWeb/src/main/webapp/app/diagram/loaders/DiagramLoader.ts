@@ -2,8 +2,8 @@ class DiagramLoader {
     static load(response, graph: joint.dia.Graph,
                 nodesMap, linksMap, nodeTypesMap: NodeTypesMap): void {
         var minPos: {x: number; y: number} = this.findMinPosition(response, nodeTypesMap);
-        var offsetX = (minPos.x < 0) ? (-minPos.x + 100) : 0;
-        var offsetY = (minPos.y < 0) ? (-minPos.y + 100) : 0;
+        var offsetX = (minPos.x < 0) ? (-minPos.x + 100) : 10;
+        var offsetY = (minPos.y < 0) ? (-minPos.y + 100) : 10;
 
         for (var i = 0; i < response.nodes.length; i++) {
             var nodeObject = response.nodes[i];

@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -28,12 +29,8 @@ import java.nio.file.Paths;
  * Created by vladzx on 25.10.14.
  */
 @Controller
-public class DiagramController {
-
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public ModelAndView index() {
-        return new ModelAndView("index");
-    }
+@RequestMapping("/online")
+public class OnlineSolutionController {
 
     @RequestMapping(value = "{taskId}", method = RequestMethod.GET)
     public ModelAndView showTask(HttpServletRequest request, @PathVariable String taskId)
@@ -41,13 +38,22 @@ public class DiagramController {
         if (getPalette(taskId) == null) {
             throw new NoSuchRequestHandlingMethodException(request);
         }
-        ModelAndView modelAndView = new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView("checker/onlineSolution");
         modelAndView.addObject("taskId", taskId);
+
+        String descriptionPath = PathConstants.tasksPath + "/" + taskId + "/" + taskId + ".txt";
+        try {
+            String description = new String(Files.readAllBytes(Paths.get(descriptionPath)), StandardCharsets.UTF_8);
+            modelAndView.addObject("description", description);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return modelAndView;
     }
 
     @ResponseBody
-    @RequestMapping(value = "/getPalette/{taskId}", method = RequestMethod.POST)
+    @RequestMapping(value = "getPalette/{taskId}", method = RequestMethod.POST)
     public String getPalette(@PathVariable String taskId) {
         try {
             return new String(Files.readAllBytes(Paths.get(PathConstants.tasksPath + "/" + taskId + "/elements.xml")));
@@ -58,7 +64,7 @@ public class DiagramController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/open/{taskId}", method = RequestMethod.POST)
+    @RequestMapping(value = "open/{taskId}", method = RequestMethod.POST)
     public OpenResponse open(@PathVariable String taskId) {
         XmlSaveConverter converter= new XmlSaveConverter();
 
@@ -76,7 +82,7 @@ public class DiagramController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/submit/{taskId}", method = RequestMethod.POST)
+    @RequestMapping(value = "submit/{taskId}", method = RequestMethod.POST)
     public SubmitResponse submit(@RequestBody SubmitRequest request, @PathVariable String taskId) throws SubmitException {
         JavaModelConverter javaModelConverter = new JavaModelConverter();
         String uuidStr = String.valueOf(javaModelConverter.convertToXmlSave(request.getDiagram(), taskId));

@@ -62,7 +62,8 @@ class PaletteLoader {
                     properties[propertyKey] = property;
                 }
 
-                var image: string = elements[i].getElementsByTagName("Image")[0].getAttribute('src');
+                var image: string = "/StepicRobotsWeb/" +
+                    elements[i].getElementsByTagName("Image")[0].getAttribute('src');
                 nodeTypesMap[typeName].image = image;
                 nodeTypesMap[typeName].properties = properties;
 

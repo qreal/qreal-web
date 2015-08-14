@@ -10,6 +10,13 @@
 			<Image src="images/finalBlock.svg"/>
 		</Element>
 
+		<Element name="Function" type="Function">
+			<Property key="Body" name="Body" type="string">
+				<value></value>
+			</Property>
+			<Image src="images/functionBlock.svg"/>
+		</Element>
+
 	</Category>
 	<Category name="Actions">
 
@@ -49,6 +56,13 @@
 
 	</Category>
 	<Category name="Wait">
+
+		<Element name="Timer" type="Timer">
+			<Property key="Delay" name="Delay (ms)" type="string">
+				<value>1000</value>
+			</Property>
+			<Image src="images/timerBlock.svg"/>
+		</Element>
 
 		<Element name="Wait for Encoder" type="TrikWaitForEncoder">
 			<Property key="Port" name="Port" type="string">

@@ -30,12 +30,22 @@ public class XmlSaveConverter {
             File robotDiagramNode = robotDiagramNodeFolder.listFiles()[0];
             Set<String> robotDiagramNodeChilds = getNodeChilds(robotDiagramNode, builder);
 
-            File rootIdNode = new File(folder.getPath() + "/logical/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
-            Set<String> rootIdChilds = getNodeChilds(rootIdNode, builder);
+            Document doc = builder.parse(robotDiagramNode);
+            Element element = doc.getDocumentElement();
+            convertGraphicalPart(element, nodesMap, linksMap);
 
-            for (final File fileEntry : folder.listFiles()) {
-                convertModel(fileEntry, builder, robotDiagramNodeChilds, rootIdChilds, nodesMap, linksMap);
+            File graphicalFolder = new File(folder.getPath() + "/graphical");
+
+            for (final File fileEntry : graphicalFolder.listFiles()) {
+                convertGraphicalModel(fileEntry, builder, robotDiagramNodeChilds, nodesMap, linksMap);
             }
+
+            File logicalFolder = new File(folder.getPath() + "/logical");
+
+            for (final File fileEntry : logicalFolder.listFiles()) {
+                convertLogicalModel(fileEntry, builder, nodesMap, linksMap);
+            }
+
             return new Diagram(new HashSet<DiagramNode>(nodesMap.values()), new HashSet<DiagramNode>(linksMap.values()));
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,13 +53,13 @@ public class XmlSaveConverter {
         return null;
     }
 
-    private void convertModel(final File folder, final DocumentBuilder builder,
-                              final Set<String> robotDiagramNodeChilds, final Set<String> rootIdChilds,
-                              Map<String, DiagramNode> nodesMap, Map<String, DiagramNode> linksMap) {
+    private void convertGraphicalModel(final File folder, final DocumentBuilder builder,
+                                       final Set<String> robotDiagramNodeChilds,
+                                       Map<String, DiagramNode> nodesMap, Map<String, DiagramNode> linksMap) {
 
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
-                convertModel(fileEntry, builder, robotDiagramNodeChilds, rootIdChilds, nodesMap, linksMap);
+                convertGraphicalModel(fileEntry, builder, robotDiagramNodeChilds, nodesMap, linksMap);
             } else {
                 try {
                     Document doc = builder.parse(fileEntry);
@@ -57,13 +67,36 @@ public class XmlSaveConverter {
 
                     if (element.hasAttribute("logicalId") && element.getAttribute("logicalId") != "qrm:/") {
                         String id = element.getAttribute("id");
-                        if (robotDiagramNodeChilds.contains(id) || robotDiagramNodeChilds.contains(id)) {
+                        if (robotDiagramNodeChilds.contains(id)) {
                             convertGraphicalPart(element, nodesMap, linksMap);
                         }
-                    } else {
-                        if (rootIdChilds.contains(element.getAttribute("id"))) {
-                            convertLogicalPart(element, nodesMap, linksMap);
-                        }
+                    }
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void convertLogicalModel(final File folder, final DocumentBuilder builder,
+                                       Map<String, DiagramNode> nodesMap, Map<String, DiagramNode> linksMap) {
+
+        for (final File fileEntry : folder.listFiles()) {
+            if (fileEntry.isDirectory()) {
+                convertLogicalModel(fileEntry, builder, nodesMap, linksMap);
+            } else {
+                try {
+                    Document doc = builder.parse(fileEntry);
+                    Element element = doc.getDocumentElement();
+
+                    String idAttr = element.getAttribute("id");
+                    String parts[] = idAttr.split("/");
+                    String id = getId(parts[parts.length - 1]);
+
+                    if (nodesMap.containsKey(id) || linksMap.containsKey(id)) {
+                        convertLogicalPart(element, nodesMap, linksMap);
                     }
                 } catch (SAXException e) {
                     e.printStackTrace();

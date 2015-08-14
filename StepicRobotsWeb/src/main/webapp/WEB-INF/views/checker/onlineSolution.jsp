@@ -1,14 +1,14 @@
-<%@ include file="include/include.jsp" %>
+<%@ include file="../include/include.jsp" %>
 
 <html>
 <head>
     <title>Stepic Robots</title>
 
-    <jsp:include page="include/scripts.jsp" flush="true"/>
+    <jsp:include page="../include/scripts.jsp" flush="true"/>
 
     <link rel="stylesheet" href="<c:url value='/resources/bootstrap/css/bootstrap.min.css' />"/>
     <link rel="stylesheet" href="<c:url value='/resources/css/joint.css' />"/>
-    <link rel="stylesheet" href="<c:url value='/resources/css/index.css' />"/>
+    <link rel="stylesheet" href="<c:url value='/resources/css/onlineSolution.css' />"/>
 
     <link rel="stylesheet" href="<c:url value='/resources/treeview/jquery.treeview.css' />"/>
     <script type="text/javascript" src="<c:url value='/resources/treeview/jquery.treeview.js' />"></script>
@@ -18,6 +18,13 @@
 <body>
 <div ng-app ng-controller="RootDiagramController">
     <div class="container">
+        <div id="titleContent" class="col-md-12">
+            <h2>Task: ${taskId}</h2>
+            <br>
+
+            <h4>Description: ${description}</h4>
+            <br>
+        </div>
         <div class="col-md-9">
             <div id="diagramContent" class="row unselectable" ng-controller="DiagramController" task="${taskId}">
                 <ul class='custom-menu'>

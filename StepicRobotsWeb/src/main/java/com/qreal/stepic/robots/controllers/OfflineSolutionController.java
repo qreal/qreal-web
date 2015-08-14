@@ -1,9 +1,6 @@
 package com.qreal.stepic.robots.controllers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qreal.stepic.robots.constants.PathConstants;
-import com.qreal.stepic.robots.model.checker.TaskItem;
 import com.qreal.stepic.robots.utils.CheckerUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
@@ -22,46 +19,18 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by vladzx on 04.08.15.
  */
 @Controller
-@RequestMapping("/checker")
-public class CheckerController {
+@RequestMapping("/offline")
+public class OfflineSolutionController {
 
-    @RequestMapping(value = "tasks", method = RequestMethod.GET)
-    public ModelAndView tasksHandler() {
-        ModelAndView modelAndView = new ModelAndView("checker/tasks");
-
-        List<TaskItem> taskItems = this.parseTaskList(new File(PathConstants.stepicPath + "/list.json"));
-
-        File tasksDir = new File(PathConstants.tasksPath);
-        Set<String> taskNames = new HashSet<>();
-        for (File task : tasksDir.listFiles()) {
-            taskNames.add(task.getName());
-        }
-
-        List<TaskItem> tasks = new ArrayList();
-        for (TaskItem item : taskItems) {
-            if (taskNames.contains(item.getName())) {
-                tasks.add(item);
-            }
-        }
-
-        modelAndView.addObject("tasks", tasks);
-        modelAndView.addObject("tasksWithTitles");
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "task/{taskId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{taskId}", method = RequestMethod.GET)
     public ModelAndView taskHandler(@PathVariable String taskId) {
         decompressTask(taskId);
-        ModelAndView modelAndView = new ModelAndView("checker/task");
+        ModelAndView modelAndView = new ModelAndView("checker/offlineSolution");
         modelAndView.addObject("taskId", taskId);
 
         String descriptionPath = PathConstants.tasksPath + "/" + taskId + "/" + taskId + ".txt";
@@ -75,7 +44,7 @@ public class CheckerController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "task/downloadTask/{taskId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/downloadTask/{taskId}", method = RequestMethod.GET)
     public
     @ResponseBody
     void downloadFiles(HttpServletRequest request, HttpServletResponse response, @PathVariable String taskId) {
@@ -96,7 +65,7 @@ public class CheckerController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "task/decompressTask/{taskId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/decompressTask/{taskId}", method = RequestMethod.POST)
     public void decompressTask(@PathVariable String taskId) {
         try {
             CheckerUtils.decompressTask(taskId);
@@ -105,16 +74,5 @@ public class CheckerController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    private List<TaskItem> parseTaskList(File file) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.readValue(file, new TypeReference<List<TaskItem>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

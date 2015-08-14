@@ -9,8 +9,8 @@
     <script src="<c:url value='/resources/js/bootstrap-filestyle.min.js' />"></script>
 
     <link rel="stylesheet" href="<c:url value='/resources/bootstrap/css/bootstrap.min.css' />"/>
-    <link rel="stylesheet" href="<c:url value='/resources/css/checker.css' />"/>
-    <link rel="stylesheet" href="<c:url value='/resources/css/checker.css' />"/>
+    <link rel="stylesheet" href="<c:url value='/resources/css/offlineSolution.css' />"/>
+    <link rel="stylesheet" href="<c:url value='/resources/css/offlineSolution.css' />"/>
 
 </head>
 <body>
