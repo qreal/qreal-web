@@ -21,51 +21,24 @@
         </robot>
     </robots>
     <constraints>
+
         <timelimit value="5000"/>
-        <!-- событие, которое проверяет, улыбается ли робот -->
-        <event id="Check_smile" settedUpInitially="true">
-            <condition>
+
+		<!-- событие, которое проверяет, что все условия выполнены, и выводит сообщение об успехе -->
+		<event id="Check_conditions" settedUpInitially="true">
+            <conditions glue="and">
                 <equals>
                     <objectState object="robot1.display.smiles"/>
                     <bool value="true"/>
                 </equals>
-            </condition>
-            <triggers>
-                <setUp id="Check_say"/>
-                <setUp id="Check_say_fails"/>
-            </triggers>
-        </event>
-        <!-- событие, которое сообщает об ошибке, если через 100 мс после начала робот не улыбается -->
-        <event id="Check_smile_fails" settedUpInitially="true">
-            <conditions glue="and">
-                <timer timeout="100"/>
-                <settedUp id="Check_smile"/>
-            </conditions>
-            <trigger>
-                <fail message="Робот должен улыбаться!"/>
-            </trigger>
-        </event>
-        <!-- событие, которое проверяет, сказал ли робот "Привет, мир" -->
-        <event id="Check_say">
-            <condition>
-                <equals>
+				<equals>
                     <objectState object="robot1.shell.lastPhrase"/>
                     <string value="Привет, мир"/>
                 </equals>
-            </condition>
-            <trigger>
-                <success/>
-            </trigger>
-        </event>
-        <!-- событие, которое сообщает об ошибке, если робот не сказал "Привет, мир" через 100 мс после того, как начал улыбаться -->
-        <event id="Check_say_fails">
-            <conditions glue="and">
-                <timer timeout="100"/>
-                <settedUp id="Check_say"/>
             </conditions>
-            <trigger>
-                <fail message="Робот должен сказать фразу 'Привет, мир'"/>
-            </trigger>
+            <triggers>
+                <success/>
+            </triggers>
         </event>
     </constraints>
 </root>
