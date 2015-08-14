@@ -40,9 +40,9 @@
 			<Image src="images/enginesStopBlock.svg"/>
 		</Element>
 
-		<Element name="Clear Encoder" type="TrikV6ClearEncoder">
+		<Element name="Clear Encoder" type="TrikV62ClearEncoder">
 			<Property key="Ports" name="Ports" type="string">
-                <value>B1, B2, B3, B4</value>
+                <value>E1, E2, E3, E4</value>
 			</Property>
 			<Image src="images/nullificationEncoderBlock.svg"/>
 		</Element>
@@ -50,9 +50,9 @@
 	</Category>
 	<Category name="Wait">
 
-		<Element name="Wait for Encoder" type="TrikWaitForEncoder">
+		<Element name="Wait for Encoder" type="TrikV62WaitForEncoder">
 			<Property key="Port" name="Port" type="string">
-                <value>B1</value>
+                <value>E1</value>
 			</Property>
 			<Property key="Sign" name="Sign" type="dropdown">
                 <value>greater</value>
