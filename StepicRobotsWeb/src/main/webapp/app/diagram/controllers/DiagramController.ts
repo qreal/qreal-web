@@ -137,7 +137,7 @@ class DiagramController {
 
     setInputStringListener(): void {
         var controller: DiagramController = this;
-        $(document).on('change', '.form-control', function () {
+        $(document).on('input', '.form-control', function () {
             var tr = $(this).closest('tr');
             var name = tr.find('td:first').html();
             var key = controller.propertyNameMap[name];
