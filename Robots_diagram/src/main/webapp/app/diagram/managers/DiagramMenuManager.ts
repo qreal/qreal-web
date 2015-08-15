@@ -62,8 +62,6 @@ class DiagramMenuManager {
                 menuManager.showFolderTable(menuManager.currentFolder);
             },
             error: function (response, status, error) {
-                menuManager.writeWarning(response.responseText, '.folderMenu');
-                $('.folderMenu input:text').val('');
                 console.log("error: " + status + " " + error);
             }
         });
