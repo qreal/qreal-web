@@ -1,6 +1,7 @@
 class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
     private robotModelName: string;
     private model: Model;
+    private displayWidget: DisplayWidget;
 
     constructor($scope, $compile, $attrs) {
         $scope.vm = this;
@@ -15,14 +16,16 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
 
         var taskId = $attrs.task;
 
-        $(document).ready(function() {
+        $(document).ready(() => {
+            this.displayWidget = new DisplayWidget();
+
             $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
                 facade.model.getWorldModel().clearPaper();
                 $('#confirmDelete').modal('hide');
             });
 
-            facade.initPortsConfigation($scope, $compile, robotModel);
-            facade.makeUnselectable(document.getElementById("twoDModelContent"));
+            this.initPortsConfigation($scope, $compile, robotModel);
+            this.makeUnselectable(document.getElementById("twoDModelContent"));
         });
 
         $scope.$on("displayResult", (event, result) => {
@@ -140,16 +143,10 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
     }
 
     closeDisplay(): void {
-        $("#close_display").hide();
-        $("#display").hide();
-        $("#controller").hide();
-        $("#menu_button").show();
+        this.displayWidget.hide();
     }
 
     showDisplay(): void {
-        $("#menu_button").hide();
-        $("#close_display").show();
-        $("#controller").show();
-        $("#display").show();
+        this.displayWidget.show();
     }
 }

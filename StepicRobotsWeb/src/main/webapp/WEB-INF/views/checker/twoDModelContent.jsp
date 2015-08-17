@@ -14,7 +14,7 @@
 
     <img id="controller" src="/StepicRobotsWeb/images/2dmodel/trikKit/controller.png"/>
     <span id="close_display" class="glyphicon glyphicon-remove-circle" aria-hidden="true" ng-click="vm.closeDisplay()"></span>
-    <canvas id="display"/>
+    <canvas id="display" width="218" height="274"></canvas>
 
     <button id="stop_button" class="btn btn-danger btn-lg" type="button" ng-click="vm.stopPlay()">Stop
     </button>
