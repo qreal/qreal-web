@@ -8,12 +8,14 @@
 
     <link rel="stylesheet" href="<c:url value='/resources/bootstrap/css/bootstrap.min.css' />"/>
     <link rel="stylesheet" href="<c:url value='/resources/css/joint.css' />"/>
-    <link rel="stylesheet" href="<c:url value='/resources/css/onlineSolution.css' />"/>
 
     <link rel="stylesheet" href="<c:url value='/resources/treeview/jquery.treeview.css' />"/>
     <script type="text/javascript" src="<c:url value='/resources/treeview/jquery.treeview.js' />"></script>
 
     <link rel="stylesheet" href="<c:url value='/resources/css/jquery-ui.css' />"/>
+
+    <link rel="stylesheet" href="<c:url value='/resources/css/onlineSolution.css' />"/>
+    <link rel="stylesheet" href="<c:url value='/resources/css/twoDModel.css' />"/>
 </head>
 <body>
 <div ng-app ng-controller="RootDiagramController">
@@ -37,18 +39,7 @@
                 <button id="submit_button" class="btn btn-success btn-lg" type="button" ng-click="submit()">Submit
                 </button>
             </div>
-            <div  id="twoDModelContent" class="row unselectable">
-                <div id="twoDModel_stage" ng-controller="TwoDModelEngineFacadeImpl" task="${taskId}">
-
-                    <div id="twoDModelSpinner" class="centerSpinner">
-                    </div>
-                </div>
-                <div id="infoAlert" class="alert fade in">
-                    <a href="" class="close" aria-label="close">&times;</a>
-                </div>
-                <button id="stop_button" class="btn btn-danger btn-lg" type="button" ng-click="vm.stopPlay()">Stop
-                </button>
-            </div>
+            <%@ include file="twoDModelContent.jsp" %>
         </div>
         <div id="paletteContent" class="row unselectable">
             <div class="col-md-3">
