@@ -142,12 +142,14 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
     closeDisplay(): void {
         $("#close_display").hide();
         $("#display").hide();
+        $("#controller").hide();
         $("#menu_button").show();
     }
 
     showDisplay(): void {
         $("#menu_button").hide();
         $("#close_display").show();
+        $("#controller").show();
         $("#display").show();
     }
 }
