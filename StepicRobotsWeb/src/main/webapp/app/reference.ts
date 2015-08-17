@@ -57,6 +57,7 @@
 /// <reference path="twoDModel/implementations/engine/items/regions/RectangularRegion.ts" />
 /// <reference path="twoDModel/implementations/engine/model/Constants.ts" />
 /// <reference path="twoDModel/implementations/engine/model/DisplayWidget.ts" />
+/// <reference path="twoDModel/implementations/engine/model/LedWidget.ts" />
 /// <reference path="twoDModel/implementations/engine/model/ModelImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/model/RobotModelImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/model/SensorsConfiguration.ts" />

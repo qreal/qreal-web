@@ -5,6 +5,7 @@ class DisplayWidget {
     private smileImg: HTMLImageElement;
     private sadSmileImg: HTMLImageElement;
     private context: any;
+    private ledWidget: LedWidget;
 
     constructor() {
         var canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById("display");
@@ -13,6 +14,7 @@ class DisplayWidget {
         this.smileImg.src = "/StepicRobotsWeb/images/2dmodel/trikKit/smile.png";
         this.sadSmileImg = new Image();
         this.sadSmileImg.src = "/StepicRobotsWeb/images/2dmodel/trikKit/sadSmile.png";
+        this.ledWidget = new LedWidget();
     }
 
     drawSmile(): void {
@@ -28,6 +30,7 @@ class DisplayWidget {
         $("#close_display").show();
         $("#controller").show();
         $("#display").show();
+        this.ledWidget.show();
     }
 
     hide(): void {
@@ -35,5 +38,6 @@ class DisplayWidget {
         $("#display").hide();
         $("#controller").hide();
         $("#menu_button").show();
+        this.ledWidget.hide();
     }
 }

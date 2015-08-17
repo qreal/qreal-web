@@ -49,6 +49,16 @@
     height: 85px;
 }
 
+#led {
+    display: none;
+    position: absolute;
+    background: red;
+    top: 35px;
+    right: 80px;
+    width: 8px;
+    height: 4px;
+}
+
 #close_display {
     display: none;
     position: absolute;
