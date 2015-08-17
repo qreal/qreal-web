@@ -37,8 +37,6 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
             this.model.deserialize($.parseXML(fieldXML));
         });
 
-        $compile($("#stop_button"))($scope);
-
         $("#infoAlert").hide();
         $(".close").click(function () {
             $(this).parent().hide();
@@ -139,5 +137,17 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         var robotModel = this.model.getRobotModels()[0];
         $("#infoAlert").hide();
         robotModel.stopPlay();
+    }
+
+    closeDisplay(): void {
+        $("#close_display").hide();
+        $("#display").hide();
+        $("#menu_button").show();
+    }
+
+    showDisplay(): void {
+        $("#menu_button").hide();
+        $("#close_display").show();
+        $("#display").show();
     }
 }
