@@ -73,11 +73,15 @@ class Runner {
             case "smiles":
                 if (point.value) {
                     displayWidget.drawSmile();
+                } else {
+                    displayWidget.clearSmile();
                 }
                 break;
             case "sadSmiles":
                 if (point.value) {
                     displayWidget.drawSadSmile();
+                } else {
+                    displayWidget.clearSadSmile();
                 }
                 break;
         }
