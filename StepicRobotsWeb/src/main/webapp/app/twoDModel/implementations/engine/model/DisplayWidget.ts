@@ -46,6 +46,8 @@ class DisplayWidget {
     }
 
     reset(): void {
+        this.isSmiles = false;
+        this.isSadSmiles = false;
         this.clearScreen();
         this.ledWidget.reset()
     }
