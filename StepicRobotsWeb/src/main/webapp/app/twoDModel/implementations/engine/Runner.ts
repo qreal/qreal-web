@@ -53,6 +53,9 @@ class Runner {
                 case "display":
                     this.doDisplayActions(displayWidget, point);
                     break;
+                case "led":
+                    this.doLedActions(displayWidget, point);
+                    break;
                 default:
             }
         } else {
@@ -72,6 +75,12 @@ class Runner {
                     displayWidget.drawSadSmile();
                 }
                 break;
+        }
+    }
+
+    private doLedActions(displayWidget: DisplayWidget, point): void {
+        if (point.property === "color") {
+            displayWidget.setLedColor(point.value);
         }
     }
 }

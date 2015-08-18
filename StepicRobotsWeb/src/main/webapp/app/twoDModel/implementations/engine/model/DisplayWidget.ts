@@ -25,6 +25,10 @@ class DisplayWidget {
         this.context.drawImage(this.sadSmileImg, 0, 0, this.width, this.height);
     }
 
+    setLedColor(color: string): void {
+        this.ledWidget.setColor(color);
+    }
+
     reset(): void {
         this.clearScreen();
         this.ledWidget.reset()
