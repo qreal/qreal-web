@@ -7,12 +7,17 @@ class Runner {
         var trajectory = JSON.parse(result.trace);
         var runner: Runner = this;
         var counter: number = 0;
-        runner.timeoutId = setTimeout(function run() {
+        runner.timeoutId = setTimeout(function nextPoint() {
             var point: any = trajectory[counter];
             runner.doPointActions(robotItem, displayWidget, point);
             if (counter < trajectory.length - 1) {
                 counter++;
-                runner.timeoutId = setTimeout(run, (trajectory[counter].timestamp - point.timestamp) / runner.boost);
+                var delay: number = (trajectory[counter].timestamp - point.timestamp) / runner.boost;
+                if (!delay) {
+                    nextPoint();
+                } else {
+                    runner.timeoutId = setTimeout(nextPoint, delay);
+                }
             } else {
                 runner.parseReport(result.report);
             }
