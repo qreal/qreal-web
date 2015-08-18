@@ -15,6 +15,11 @@ class LedWidget {
         return this.color;
     }
 
+    reset(): void {
+        this.color = "red";
+        $("#led").css("background", "red");
+    }
+
     show(): void {
         $("#led").show();
     }

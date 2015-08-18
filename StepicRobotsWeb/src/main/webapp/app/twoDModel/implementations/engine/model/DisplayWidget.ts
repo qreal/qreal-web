@@ -25,6 +25,15 @@ class DisplayWidget {
         this.context.drawImage(this.sadSmileImg, 0, 0, this.width, this.height);
     }
 
+    reset(): void {
+        this.clearScreen();
+        this.ledWidget.reset()
+    }
+
+    clearScreen(): void {
+        this.context.clearRect(0, 0, this.width, this.height);
+    }
+
     show(): void {
         $("#menu_button").hide();
         $("#close_display").show();

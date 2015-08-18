@@ -6,4 +6,6 @@ interface RobotModel {
     deserialize(xml, offsetX: number, offsetY: number): void;
     showCheckResult(result);
     stopPlay(): void;
+    closeDisplay(): void;
+    showDisplay(): void;
 }

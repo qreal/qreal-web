@@ -1,7 +1,5 @@
 package com.qreal.stepic.robots.model.diagram;
 
-import com.qreal.stepic.robots.model.two_d.Trace;
-
 import java.io.Serializable;
 
 /**
@@ -9,7 +7,7 @@ import java.io.Serializable;
  */
 public class SubmitResponse implements Serializable {
 
-    public SubmitResponse(Report report, Trace trace, String fieldXML) {
+    public SubmitResponse(Report report, String trace, String fieldXML) {
         this.report = report;
         this.trace = trace;
         this.fieldXML = fieldXML;
@@ -23,11 +21,11 @@ public class SubmitResponse implements Serializable {
         this.report = report;
     }
 
-    public Trace getTrace() {
+    public String getTrace() {
         return trace;
     }
 
-    public void setTrace(Trace trace) {
+    public void setTrace(String trace) {
         this.trace = trace;
     }
 
@@ -40,6 +38,6 @@ public class SubmitResponse implements Serializable {
     }
 
     private Report report;
-    private Trace trace;
+    private String trace;
     private String fieldXML;
 }

@@ -101,21 +101,14 @@ class RobotItemImpl implements RobotItem {
         this.sensors[portName] = sensor;
     }
 
-    private updateSensorsTransformations(): void {
-        for(var portName in this.sensors) {
-            var sensor = this.sensors[portName];
-            sensor.updateTransformationString();
-        }
-    }
-
-    private rotateSensors(angle: number, centerX: number, centerY: number) {
+    rotateSensors(angle: number, centerX: number, centerY: number): void {
         for (var portName in this.sensors) {
             var sensor = this.sensors[portName];
             sensor.rotateByRobot(angle, centerX, centerY);
         }
     }
 
-    private animateSensors(positionX: number, positionY: number): void {
+    moveSensors(positionX: number, positionY: number): void {
         for (var portName in this.sensors) {
             var sensor = this.sensors[portName];
             sensor.animate(positionX, positionY);
@@ -140,72 +133,27 @@ class RobotItemImpl implements RobotItem {
         this.clearSensorsPosition();
     }
 
-    showCheckResult(result) {
-        var robotItem  = this;
-        var traceJson = result.trace;
-        this.clearCurrentPosition();
-
-        var animationQueue: AnimationQueue = new AnimationQueue();
-
-        var points = traceJson.points;
-        var seqNumber = 1;
-
-        for (var i = 1; i < points.length - 1; i++) {
-            var delay = points[i].timestamp - points[i - 1].timestamp;
-            animationQueue.push(function() {
-                var currentPoint = points[seqNumber];
-                var newX = currentPoint.x + robotItem.offsetX;
-                var newY = currentPoint.y + robotItem.offsetY;
-                robotItem.center.x = newX + robotItem.width / 2;
-                robotItem.center.y = newY + robotItem.height / 2;
-
-                robotItem.image.transform("R" + currentPoint.direction);
-                robotItem.direction = currentPoint.direction;
-                robotItem.rotateSensors(currentPoint.direction, robotItem.center.x, robotItem.center.y);
-
-                seqNumber++;
-
-                robotItem.animateSensors(newX, newY);
-
-                robotItem.image.attr({x: newX, y: newY});
-            }, delay);
-        }
-        animationQueue.push(function() {
-            robotItem.parseReport(result.report);
-        }, 0);
-        robotItem.timeoutId = setTimeout(function run() {
-            if (animationQueue.hasNext()) {
-                animationQueue.next().call(this);
-                robotItem.timeoutId = setTimeout(run, animationQueue.getNextDelay());
-            }
-        }, 0);
-    }
-
-    parseReport(report) {
-        var messageText = "";
-        var level = report.messages[0].level;
-        report.messages.forEach( function(message) {
-            messageText += message.message + " ";
-        });
-        if (level === "info") {
-            $("#infoAlert").removeClass("alert-danger");
-            $("#infoAlert").addClass("alert-success");
-        } else {
-            if (level === "error") {
-                $("#infoAlert").removeClass("alert-success");
-                $("#infoAlert").addClass("alert-danger");
-            }
-        }
-        $("#infoAlert").contents().last()[0].textContent = messageText;
-        $("#infoAlert").show();
-    }
-
     setOffsetX(offsetX: number): void {
         this.offsetX = offsetX;
     }
 
     setOffsetY(offsetY: number): void {
         this.offsetY = offsetY;
+    }
+
+    moveToPoint(x: number, y: number, rotation: number): void {
+        var newX = x + this.offsetX;
+        var newY = y + this.offsetY;
+        this.center.x = newX + this.width / 2;
+        this.center.y = newY + this.height / 2;
+
+        this.image.transform("R" + rotation);
+        this.direction = rotation;
+        this.rotateSensors(rotation, this.center.x, this.center.y);
+
+        this.moveSensors(newX, newY);
+
+        this.image.attr({x: newX, y: newY});
     }
 
     hide(): void {

@@ -1,7 +1,6 @@
 class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
     private robotModelName: string;
     private model: Model;
-    private displayWidget: DisplayWidget;
 
     constructor($scope, $compile, $attrs) {
         $scope.vm = this;
@@ -11,14 +10,9 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         this.robotModelName = robotModel.getName();
 
         this.model = new ModelImpl();
-
         this.model.addRobotModel(robotModel);
 
-        var taskId = $attrs.task;
-
         $(document).ready(() => {
-            this.displayWidget = new DisplayWidget();
-
             $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
                 facade.model.getWorldModel().clearPaper();
                 $('#confirmDelete').modal('hide');
@@ -143,10 +137,10 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
     }
 
     closeDisplay(): void {
-        this.displayWidget.hide();
+        this.model.getRobotModels()[0].closeDisplay();
     }
 
     showDisplay(): void {
-        this.displayWidget.show();
+        this.model.getRobotModels()[0].showDisplay();
     }
 }

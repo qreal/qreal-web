@@ -7,8 +7,6 @@ import com.qreal.stepic.robots.exceptions.SubmitException;
 import com.qreal.stepic.robots.model.diagram.Report;
 import com.qreal.stepic.robots.model.diagram.ReportMessage;
 import com.qreal.stepic.robots.model.diagram.SubmitResponse;
-import com.qreal.stepic.robots.model.two_d.Point;
-import com.qreal.stepic.robots.model.two_d.Trace;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Document;
@@ -20,11 +18,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -89,8 +85,11 @@ public class CheckerUtils {
                         "/solutions/" + uuidStr + "/report"));
             }
 
-            Trace trace = parseTrajectoryFile(trajectoryPath);
+            String trace = new String(Files.readAllBytes(Paths.get(trajectoryPath)));
+            // TODO: fix this temporary hack for current trajectory;
+            trace = trace.substring(0, trace.length() - 2) + "]";
             //FileUtils.deleteDirectory(solutionFolder);
+
             return new SubmitResponse(report, trace, fieldXML);
         } catch (IOException e) {
             e.printStackTrace();
@@ -110,24 +109,6 @@ public class CheckerUtils {
             e.printStackTrace();
             throw new SubmitException("Can't return report! Please contact the developers");
         }
-    }
-
-
-    public static Trace parseTrajectoryFile(String filePath) throws SubmitException {
-        Trace trace = new Trace();
-        List<Point> points = new LinkedList<Point>();
-        Charset charset = Charset.forName("UTF-8");
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), charset)) {
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                points.add(parseTrajectoryLine(line));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new SubmitException("Can't return trajectory! Please contact the developers");
-        }
-        trace.setPoints(points);
-        return trace;
     }
 
     public static String getWorldModelFromMetainfo(String pathToMetaInfo) throws NotExistsException,
@@ -174,11 +155,5 @@ public class CheckerUtils {
             }
             process.waitFor();
         }
-    }
-
-    private static Point parseTrajectoryLine(String line) {
-        String parts[] = line.split(" ");
-        return new Point(Double.valueOf(parts[2]), Double.valueOf(parts[3]), Double.valueOf(parts[4]),
-                Double.valueOf(parts[1]));
     }
 }

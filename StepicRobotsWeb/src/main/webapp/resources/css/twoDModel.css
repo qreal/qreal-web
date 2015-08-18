@@ -31,7 +31,6 @@
 }
 
 #controller {
-    display: none;
     position: absolute;
     top: 5px;
     right: 20px;
@@ -40,7 +39,6 @@
 }
 
 #display {
-    display: none;
     position: absolute;
     background: lightgrey;
     top: 45px;
@@ -50,7 +48,6 @@
 }
 
 #led {
-    display: none;
     position: absolute;
     background: red;
     top: 35px;
@@ -60,7 +57,6 @@
 }
 
 #close_display {
-    display: none;
     position: absolute;
     color: lightgrey;
     cursor: pointer;

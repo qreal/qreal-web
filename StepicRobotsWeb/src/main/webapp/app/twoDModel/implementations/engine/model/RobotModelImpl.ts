@@ -3,6 +3,8 @@ class RobotModelImpl implements RobotModel {
     private twoDRobotModel: TwoDRobotModel;
     private sensorsConfiguration: SensorsConfiguration;
     private worldModel: WorldModel;
+    private displayWidget: DisplayWidget;
+    private runner: Runner;
 
     constructor(worldModel: WorldModel, twoDRobotModel: TwoDRobotModel, position: TwoDPosition) {
         this.worldModel = worldModel;
@@ -10,6 +12,8 @@ class RobotModelImpl implements RobotModel {
         this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), this);
         this.robotItem.hide();
         this.sensorsConfiguration = new SensorsConfiguration(this);
+        this.displayWidget = new DisplayWidget();
+        this.runner = new Runner();
     }
 
     info(): TwoDRobotModel {
@@ -52,10 +56,20 @@ class RobotModelImpl implements RobotModel {
     }
 
     showCheckResult(result) {
-        this.robotItem.showCheckResult(result);
+        this.displayWidget.reset();
+        this.runner.run(this.robotItem, this.displayWidget, result);
     }
 
     stopPlay(): void {
+        this.runner.stop(this.robotItem, this.displayWidget);
         this.robotItem.clearCurrentPosition();
+    }
+
+    closeDisplay(): void {
+        this.displayWidget.hide();
+    }
+
+    showDisplay(): void {
+        this.displayWidget.show();
     }
 }
