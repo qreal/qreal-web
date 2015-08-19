@@ -2,7 +2,7 @@
 
 <html>
 <head>
-    <title>Check solution</title>
+    <title>${taskId}</title>
 
     <jsp:include page="../include/scripts.jsp" flush="true"/>
     <script src="<c:url value='/resources/js/jquery.form.min.js' />"></script>

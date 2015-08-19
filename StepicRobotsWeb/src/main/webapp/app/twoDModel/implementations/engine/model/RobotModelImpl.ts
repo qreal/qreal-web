@@ -56,6 +56,7 @@ class RobotModelImpl implements RobotModel {
     }
 
     showCheckResult(result) {
+        this.stopPlay();
         this.runner.run(this.robotItem, this.displayWidget, result);
     }
 

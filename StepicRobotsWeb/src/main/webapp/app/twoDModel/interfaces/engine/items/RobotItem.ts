@@ -14,4 +14,6 @@ interface RobotItem extends AbstractItem {
     setOffsetX(offsetX: number): void;
     setOffsetY(offsetY: number): void;
     moveToPoint(x: number, y: number, rotation: number): void;
+    setMarkerDown(down: boolean): void;
+    setMarkerColor(color: string): void;
 }

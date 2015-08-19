@@ -65,6 +65,9 @@ class Runner {
                 case "led":
                     this.doLedActions(displayWidget, point);
                     break;
+                case "marker":
+                    this.doMarkerActions(robotItem, point);
+                    break;
                 default:
             }
         } else {
@@ -94,6 +97,18 @@ class Runner {
     private doLedActions(displayWidget: DisplayWidget, point): void {
         if (point.property === "color") {
             displayWidget.setLedColor(point.value);
+        }
+    }
+
+    private doMarkerActions(robotItem: RobotItem, point): void {
+        switch (point.property) {
+            case "isDown":
+                robotItem.setMarkerDown(point.value);
+                break;
+            case "color":
+                robotItem.setMarkerColor(point.value);
+                break;
+            default:
         }
     }
 }

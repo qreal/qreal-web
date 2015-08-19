@@ -2,7 +2,7 @@
 
 <html>
 <head>
-    <title>Stepic Robots</title>
+    <title>${taskId}</title>
 
     <jsp:include page="../include/scripts.jsp" flush="true"/>
 

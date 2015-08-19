@@ -1,6 +1,7 @@
 class RobotItemImpl implements RobotItem {
     private worldModel: WorldModel;
     private robot: RobotModel;
+    private marker: Marker;
     private startPosition: TwoDPosition;
     private startDirection: number;
     private startCenter: TwoDPosition = new TwoDPosition();
@@ -22,6 +23,7 @@ class RobotItemImpl implements RobotItem {
         this.direction = 0;
         this.startDirection = 0;
         var paper = worldModel.getPaper();
+
         this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
 
         this.center.x = position.x + this.width / 2
@@ -29,6 +31,8 @@ class RobotItemImpl implements RobotItem {
 
         this.startCenter.x = this.center.x
         this.startCenter.y = this.center.y;
+
+        this.marker = new Marker(paper, new TwoDPosition(this.startPosition.x, this.center.y), this.center);
 
         var handleRadius: number = 10;
 
@@ -55,6 +59,9 @@ class RobotItemImpl implements RobotItem {
         this.startCenter.y = this.center.y;
         this.image.transform("R" + direction + "," + this.center.x + "," + this.center.y);
         this.rotateHandle.attr({"cx": + position.x + this.width + 20, "cy": position.y + this.height / 2 });
+
+        this.marker.setPosition(new TwoDPosition(this.center.x, this.center.y), this.center);
+        this.marker.setDirection(direction);
     }
 
     hideHandles(): void {
@@ -129,6 +136,9 @@ class RobotItemImpl implements RobotItem {
             clearTimeout(this.timeoutId);
             this.timeoutId = undefined;
         }
+        this.marker.setDown(false);
+        this.marker.setColor("#000000");
+        this.marker.clear();
         this.setStartPosition(this.startPosition, this.startDirection);
         this.clearSensorsPosition();
     }
@@ -154,6 +164,20 @@ class RobotItemImpl implements RobotItem {
         this.moveSensors(newX, newY);
 
         this.image.attr({x: newX, y: newY});
+
+        this.marker.setPosition(new TwoDPosition(newX, this.center.y), this.center);
+        this.marker.setDirection(rotation);
+        if (this.marker.isDown()) {
+            this.marker.drawPoint();
+        }
+    }
+
+    setMarkerDown(down: boolean): void {
+        this.marker.setDown(down);
+    }
+
+    setMarkerColor(color: string): void {
+        this.marker.setColor(color);
     }
 
     hide(): void {
