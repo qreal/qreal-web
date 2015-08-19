@@ -86,8 +86,6 @@ public class CheckerUtils {
             }
 
             String trace = new String(Files.readAllBytes(Paths.get(trajectoryPath)));
-            // TODO: fix this temporary hack for current trajectory;
-            trace = trace.substring(0, trace.length() - 2) + "]";
             //FileUtils.deleteDirectory(solutionFolder);
 
             return new SubmitResponse(report, trace, fieldXML);

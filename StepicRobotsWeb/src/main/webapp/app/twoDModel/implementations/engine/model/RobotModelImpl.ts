@@ -56,7 +56,6 @@ class RobotModelImpl implements RobotModel {
     }
 
     showCheckResult(result) {
-        this.displayWidget.reset();
         this.runner.run(this.robotItem, this.displayWidget, result);
     }
 

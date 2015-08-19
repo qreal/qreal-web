@@ -4,6 +4,7 @@ class Runner {
     private boost: number = 2;
 
     run(robotItem: RobotItem, displayWidget: DisplayWidget, result: any): void {
+        $("#display").css("z-index", 100);
         var trajectory = JSON.parse(result.trace);
         var runner: Runner = this;
         var counter: number = 0;
@@ -20,11 +21,14 @@ class Runner {
                 }
             } else {
                 runner.parseReport(result.report);
+                $("#display").css("z-index", -1);
+                displayWidget.reset();
             }
         }, 0);
     }
 
     stop(robotItem: RobotItem, displayWidget: DisplayWidget) {
+        $("#display").css("z-index", -1);
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
             this.timeoutId = undefined;
