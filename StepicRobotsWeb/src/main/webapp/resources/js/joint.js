@@ -18397,7 +18397,7 @@ if (typeof exports === 'object') {
             p = point(p);
             var center = point(this.x + this.width / 2, this.y + this.height / 2);
             var result;
-            if (angle) p.setDirection(center, angle);
+            if (angle) p.rotate(center, angle);
 
             // (clockwise, starting from the top side)
             var sides = [
@@ -18415,7 +18415,7 @@ if (typeof exports === 'object') {
                     break;
                 }
             }
-            if (result && angle) result.setDirection(center, -angle);
+            if (result && angle) result.rotate(center, -angle);
             return result;
         },
         // Move and expand me.
@@ -18460,13 +18460,13 @@ if (typeof exports === 'object') {
         // @param {number} angle If angle is specified, intersection with rotated ellipse is computed.
         intersectionWithLineFromCenterToPoint: function (p, angle) {
             p = point(p);
-            if (angle) p.setDirection(point(this.x, this.y), angle);
+            if (angle) p.rotate(point(this.x, this.y), angle);
             var dx = p.x - this.x;
             var dy = p.y - this.y;
             var result;
             if (dx === 0) {
                 result = this.bbox().pointNearestToPoint(p);
-                if (angle) return result.setDirection(point(this.x, this.y), -angle);
+                if (angle) return result.rotate(point(this.x, this.y), -angle);
                 return result;
             }
             var m = dy / dx;
@@ -18478,7 +18478,7 @@ if (typeof exports === 'object') {
             x = dx < 0 ? -x : x;
             var y = m * x;
             result = point(this.x + x, this.y + y);
-            if (angle) return result.setDirection(point(this.x, this.y), -angle);
+            if (angle) return result.rotate(point(this.x, this.y), -angle);
             return result;
         }
     };
@@ -21703,7 +21703,7 @@ joint.dia.Paper = Backbone.View.extend({
             oy = bbox.height / 2;
         }
 
-        V(this.viewport).setDirection(deg, ox, oy);
+        V(this.viewport).rotate(deg, ox, oy);
     },
 
     // Find the first view climbing up the DOM tree starting at element `el`. Note that `el` can also
