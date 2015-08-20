@@ -37,15 +37,15 @@ class DiagramController {
 
                 var node: DiagramNode = controller.nodesMap[cellView.model.id];
                 if (node) {
-                    controller.currentElement = node;
+                    controller.setCurrentElement(node);
                     controller.setNodeProperties(node);
                 } else {
                     var link: Link = controller.linksMap[cellView.model.id];
                     if (link) {
-                        controller.currentElement = link;
+                        controller.setCurrentElement(link);
                         controller.setNodeProperties(link);
                     } else {
-                        controller.currentElement = undefined;
+                        controller.clearCurrentElement();
                     }
                 }
 
@@ -59,12 +59,14 @@ class DiagramController {
             }
         );
         this.paper.on('blank:pointerdown',
-            function (evt, x, y) {
+            (event, x, y) => {
                 if (!($(event.target).parents(".custom-menu").length > 0)) {
                     $(".custom-menu").hide(100);
                 }
                 $(".property").remove();
-                controller.currentElement = undefined;
+                if (controller.currentElement) {
+                    this.clearCurrentElement();
+                }
             }
         );
 
@@ -73,6 +75,21 @@ class DiagramController {
         $('#twoDModelSpinner').hide();
 
         this.initCustomContextMenu();
+    }
+
+    setCurrentElement(element) {
+        if (this.currentElement) {
+            this.paper.findViewByModel(this.currentElement.getJointObject()).unhighlight();
+        }
+        this.currentElement = element;
+        this.paper.findViewByModel(element.getJointObject()).highlight();
+    }
+
+    clearCurrentElement() {
+        if (this.currentElement) {
+            this.paper.findViewByModel(this.currentElement.getJointObject()).unhighlight();
+            this.currentElement = undefined;
+        }
     }
 
     initCustomContextMenu(): void {
@@ -229,7 +246,7 @@ class DiagramController {
                 }
 
                 var node = controller.createNode(name, type, leftElementPos, topElementPos, nodeProperties, image);
-                controller.currentElement = node;
+                controller.setCurrentElement(node);
                 controller.setNodeProperties(node);
             }
         });
@@ -299,7 +316,7 @@ class DiagramController {
         this.nodesMap = {};
         this.linksMap = {};
         $(".property").remove();
-        this.currentElement = undefined;
+        this.clearCurrentElement();
     }
 
     removeCurrentElement(): void {
