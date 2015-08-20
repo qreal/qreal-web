@@ -12,6 +12,12 @@
     </button>
 
     <img id="controller" src="/StepicRobotsWeb/images/2dmodel/trikKit/controller.png"/>
+
+    <span id="port_M1" class="port_name">M1</span>
+    <span id="port_M2" class="port_name">M2</span>
+    <span id="port_M3" class="port_name">M3</span>
+    <span id="port_M4" class="port_name">M4</span>
+
     <span id="close_display" class="glyphicon glyphicon-remove-circle" aria-hidden="true" ng-click="vm.closeDisplay()"></span>
     <canvas id="display" width="218" height="274"></canvas>
     <div id="led"></div>

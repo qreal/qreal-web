@@ -126,6 +126,7 @@ class DisplayWidget {
         $("#close_display").show();
         $("#controller").show();
         $("#display").show();
+        $(".port_name").show();
         this.ledWidget.show();
     }
 
@@ -133,7 +134,8 @@ class DisplayWidget {
         $("#close_display").hide();
         $("#display").hide();
         $("#controller").hide();
-        $("#menu_button").show();
+        $(".port_name").hide();
         this.ledWidget.hide();
+        $("#menu_button").show();
     }
 }
