@@ -31,6 +31,61 @@ class DisplayWidget {
         this.context.drawImage(this.sadSmileImg, 0, 0, this.width, this.height);
     }
 
+    drawEllipse(x: number, y: number, a: number, b: number, color: string, thickness: number): void {
+        this.context.save();
+        this.context.beginPath();
+        this.context.translate(x, y);
+        this.context.scale(a / b, 1);
+        this.context.arc(0, 0, b, 0, 2 * Math.PI);
+        this.context.restore();
+        this.context.lineWidth = thickness;
+        this.context.strokeStyle = color;
+        this.context.stroke();
+    }
+
+    drawArc(x: number, y: number, a: number, b: number, startAngle: number, sweepLength: number,
+            color: string, thickness: number): void {
+        var startAngleInRad: number = MathUtils.toRad(startAngle);
+        var counterStartAngleInRad: number = 2 * Math.PI - startAngleInRad;
+        var counterEndAngleInRad: number = 2 * Math.PI - MathUtils.toRad(startAngle + sweepLength);
+        this.context.save();
+        this.context.beginPath();
+        this.context.translate(x, y);
+        this.context.scale(a / b, 1);
+        this.context.arc(0, 0, b, counterStartAngleInRad, counterEndAngleInRad, true);
+        this.context.restore();
+        this.context.lineWidth = thickness;
+        this.context.strokeStyle = color;
+        this.context.stroke();
+    }
+
+    drawRectangle(x: number, y: number, a: number, b: number, color: string, thickness: number): void {
+        this.context.rect(x, y, a, b);
+        this.context.lineWidth = thickness;
+        this.context.strokeStyle = color;
+        this.context.stroke();
+    }
+
+    drawLine(x1: number, y1: number, x2: number, y2: number, color: string, thickness: number) {
+        this.context.beginPath();
+        this.context.moveTo(x1, y1);
+        this.context.lineTo(x2, y2);
+        this.context.lineWidth = thickness;
+        this.context.strokeStyle = color;
+        this.context.stroke();
+    }
+
+    drawPoint(x: number, y: number, color: string, thickness: number) {
+        this.context.fillStyle = color;
+        this.context.fillRect(x - thickness / 2, y - thickness / 2, thickness, thickness);
+    }
+
+    drawText(x: number, y: number, text: string, color: string) {
+        this.context.fillStyle = color;
+        this.context.font = "12px Arial";
+        this.context.fillText(text, x, y);
+    }
+
     clearSmile(): void {
         this.isSmiles = false;
         this.redraw();

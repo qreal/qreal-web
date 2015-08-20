@@ -91,6 +91,9 @@ class Runner {
                     displayWidget.clearSadSmile();
                 }
                 break;
+            case "objects":
+                this.drawObjects(displayWidget, point.value);
+                break;
         }
     }
 
@@ -109,6 +112,36 @@ class Runner {
                 robotItem.setMarkerColor(point.value);
                 break;
             default:
+        }
+    }
+
+    private drawObjects(displayWidget: DisplayWidget, objects) {
+        displayWidget.redraw();
+        for (var i = 0; i < objects.length; i++) {
+            var object = objects[i];
+
+            switch (object.type) {
+                case "ellipse":
+                    displayWidget.drawEllipse(object.x, object.y, object.a, object.b, object.color, object.thickness);
+                    break;
+                case "arc":
+                    displayWidget.drawArc(object.x, object.y, object.a, object.b, object.startAngle, object.spanAngle,
+                        object.color, object.thickness);
+                    break;
+                case "rectangle":
+                    displayWidget.drawRectangle(object.x, object.y, object.width, object.height,
+                        object.color, object.thickness);
+                    break;
+                case "line":
+                    displayWidget.drawLine(object.x1, object.y1, object.x2, object.y2, object.color, object.thickness);
+                    break;
+                case "point":
+                    displayWidget.drawPoint(object.x, object.y, object.color, object.thickness);
+                    break;
+                case "text":
+                    displayWidget.drawText(object.x, object.y, object.text, object.color);
+                    break;
+            }
         }
     }
 }
