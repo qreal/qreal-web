@@ -79,17 +79,29 @@ class DiagramController {
 
     setCurrentElement(element) {
         if (this.currentElement) {
-            this.paper.findViewByModel(this.currentElement.getJointObject()).unhighlight();
+            this.unselectElement(this.currentElement.getJointObject());
         }
         this.currentElement = element;
-        this.paper.findViewByModel(element.getJointObject()).highlight();
+        this.selectElement(this.currentElement.getJointObject());
     }
 
     clearCurrentElement() {
         if (this.currentElement) {
-            this.paper.findViewByModel(this.currentElement.getJointObject()).unhighlight();
+            this.unselectElement(this.currentElement.getJointObject());
             this.currentElement = undefined;
         }
+    }
+
+    selectElement(jointObject): void {
+        var jQueryEl = this.paper.findViewByModel(jointObject).$el;
+        var oldClasses = jQueryEl.attr('class');
+        jQueryEl.attr('class', oldClasses + ' selected');
+    }
+
+    unselectElement(jointObject): void {
+        var jQueryEl = this.paper.findViewByModel(jointObject).$el;
+        var removedClass = jQueryEl.attr('class').replace(new RegExp('(\\s|^)selected(\\s|$)', 'g'), '$2');
+        jQueryEl.attr('class', removedClass);
     }
 
     initCustomContextMenu(): void {

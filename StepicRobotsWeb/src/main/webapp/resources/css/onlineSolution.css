@@ -6,11 +6,15 @@
     user-select: none;
 }
 
-.highlighted {
-    outline: 0px;
+.selected rect {
+    opacity: 0.9;
+    fill: #00ff00;
+    stroke: #00ff00;
+    stroke-width: 2px;
+}
+
+.selected {
     opacity: 1;
-    fill: green;
-    stroke: green !important;
     stroke-width: 2px;
 }
 
