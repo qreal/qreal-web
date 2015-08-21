@@ -102,7 +102,7 @@
                 <inside regionId="factical finish" objectId="robot1"/>
             </conditions>
             <triggers>
-                <success deferred="true"/>
+                <success/>
             </triggers>
         </event>
     </constraints>

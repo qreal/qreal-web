@@ -25,10 +25,13 @@
         </robot>
     </robots>
     <constraints>
+        
         <timelimit value="10000"/>
+        
         <constraint checkOnce="true" failMessage="Робот должен находиться в зоне старта перед запуском!">
             <inside regionId="start zone" objectId="robot1"/>
         </constraint>
+        
         <constraint checkOnce="true" failMessage="У робота не должно быть датчиков">
             <conditions glue="and">
                 <equals>
@@ -69,9 +72,11 @@
                 </equals>
             </conditions>
         </constraint>
+        
         <constraint failMessage="Робот выехал за пределы допустимой зоны">
             <inside regionId="warzone" objectId="robot1"/>
         </constraint>
+        
         <!-- Событие, которое говорит о том, что робот вообще поехал и стартует цепочку проверки -->
         <event id="We are alive, first move" settedUpInitially="true">
             <condition>
@@ -84,6 +89,7 @@
                 <setUp id="Finish"/>
             </triggers>
         </event>
+        
         <!-- Событие, которое выдает ошибку, если робот не тронулся с места в первую секунду -->
         <event id="Waiting for going forward too long" settedUpInitially="true">
             <conditions glue="and">
@@ -94,6 +100,7 @@
                 <fail message="Робот так и не поехал в первую секунду"/>
             </trigger>
         </event>
+        
         <!-- Событие, которое говорит, что задание выполнено, когда робот приезжает на финиш, и программа завершает работу -->
         <event id="Finish">
             <conditions glue="and">
@@ -101,7 +108,7 @@
                 <inside regionId="factical finish" objectId="robot1"/>
             </conditions>
             <trigger>
-                <success deferred="true"/>
+                <success/>
             </trigger>
         </event>
     </constraints>
