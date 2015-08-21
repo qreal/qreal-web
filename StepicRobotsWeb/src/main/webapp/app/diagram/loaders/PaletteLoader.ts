@@ -23,7 +23,6 @@ class PaletteLoader {
     static parseElementsXml(xmlDoc, controller: DiagramController, $scope, $compile): void {
         var nodeTypesMap: NodeTypesMap = {};
         var nameTypeMap: {string?: string} = {};
-        var propertyNameMap: {string?: string} = {};
         var content: string = '';
         var categories = xmlDoc.getElementsByTagName("Category");
         for (var k = 0; k < categories.length; k++) {
@@ -43,8 +42,6 @@ class PaletteLoader {
                     var propertyKey: string = elementProperties[j].getAttribute('key');
                     var propertyName: string = elementProperties[j].getAttribute('name');
                     var propertyType: string = elementProperties[j].getAttribute('type');
-
-                    propertyNameMap[propertyName] = propertyKey;
 
                     if (propertyType === "dropdown") {
                         this.addDropdownList(typeName, propertyName, elementProperties[j].
@@ -83,7 +80,6 @@ class PaletteLoader {
 
         controller.setNodeTypesMap(nodeTypesMap);
         controller.setNameTypeMap(nameTypeMap);
-        controller.setPropertyNameMap(propertyNameMap);
         controller.initPalette($scope);
     }
 }

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Elements>
+    <Category name="Algorithms">
+
+        <Element name="Initial Node" type="InitialNode">
+            <Image src="images/initialBlock.svg"/>
+        </Element>
+
+        <Element name="Final Node" type="FinalNode">
+            <Image src="images/finalBlock.svg"/>
+        </Element>
+
+    </Category>
+
+    <Category name="Wait">
+
+        <Element name="Timer" type="Timer">
+            <Property key="Delay" name="Delay (ms)" type="string">
+                <value>1000</value>
+            </Property>
+            <Image src="images/timerBlock.svg"/>
+        </Element>
+
+    </Category>
+
+    <Category name="Drawing">
+
+        <Element name="Painter Color" type="TrikSetPainterColor">
+            <Property key="Color" name="Color" type="dropdown">
+                <value>black</value>
+                <Variants>
+                    <variant>black</variant>
+                    <variant>blue</variant>
+                    <variant>cyan</variant>
+                    <variant>dark blue</variant>
+                    <variant>dark cyan</variant>
+                    <variant>dark gray</variant>
+                    <variant>dark green</variant>
+                    <variant>dark magenta</variant>
+                    <variant>dark red</variant>
+                    <variant>dark yellow</variant>
+                    <variant>gray</variant>
+                    <variant>green</variant>
+                    <variant>light gray</variant>
+                    <variant>magenta</variant>
+                    <variant>red</variant>
+                    <variant>white</variant>
+                    <variant>yellow</variant>
+                </Variants>
+            </Property>
+            <Image src="images/brushColorBlock.svg"/>
+        </Element>
+
+        <Element name="Painter Width" type="TrikSetPainterWidth">
+            <Property key="Width" name="Width" type="string">
+                <value>1</value>
+            </Property>
+            <Image src="images/brushWidthBlock.svg"/>
+        </Element>
+
+        <Element name="Draw Ellipse" type="TrikDrawEllipse">
+            <Property key="HeightEllipse" name="Height" type="string">
+                <value>5</value>
+            </Property>
+
+            <Property key="Redraw" name="Redraw" type="checkbox">
+                <value>true</value>
+            </Property>
+            
+            <Property key="WidthEllipse" name="Width" type="string">
+                <value>5</value>
+            </Property>
+
+            <Property key="XCoordinateEllipse" name="X" type="string">
+                <value>0</value>
+            </Property>
+            
+            <Property key="YCoordinateEllipse" name="Y" type="string">
+                <value>0</value>
+            </Property>
+            <Image src="images/drawCircleBlock.svg"/>
+        </Element>
+       
+        <Element name="Draw Arc" type="TrikDrawArc">
+            <Property key="HeightArc" name="Height" type="string">
+                <value>5</value>
+            </Property>
+            
+            <Property key="Redraw" name="Redraw" type="checkbox">
+                <value>true</value>
+            </Property>
+            
+            <Property key="SpanAngle" name="SpanAngle" type="string">
+                <value>20</value>
+            </Property>
+    
+            <Property key="StartAngle" name="StartAngle" type="string">
+                <value>20</value>
+            </Property>
+
+            <Property key="WidthArc" name="Width" type="string">
+                <value>5</value>
+            </Property>
+            
+            <Property key="XCoordinateArc" name="X" type="string">
+                <value>0</value>
+            </Property>
+
+            <Property key="YCoordinateArc" name="Y" type="string">
+                <value>0</value>
+            </Property>
+
+            <Image src="images/drawArcBlock.svg"/>
+        </Element>
+
+    </Category>
+
+</Elements>
+

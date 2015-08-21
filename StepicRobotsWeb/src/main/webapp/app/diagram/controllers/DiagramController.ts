@@ -6,7 +6,6 @@ class DiagramController {
     private nodeTypesMap: NodeTypesMap = {};
     private nameTypeMap: {string?: string} = {};
     private nodesMap = {};
-    private propertyNameMap: {string?: string};
     private linksMap = {};
     private currentElement: DiagramElement
     private isPaletteLoaded = false;
@@ -142,11 +141,6 @@ class DiagramController {
         this.nameTypeMap = nameTypeMap;
     }
 
-    setPropertyNameMap(propertyNameMap: {string?: string}) {
-        this.propertyNameMap = propertyNameMap;
-        this.propertyNameMap["Guard"] = "Guard"
-    }
-
     private makeUnselectable(element) {
         if (element.nodeType == 1) {
             element.setAttribute("unselectable", "on");
@@ -167,9 +161,7 @@ class DiagramController {
     setInputStringListener(): void {
         var controller: DiagramController = this;
         $(document).on('input', '.form-control', function () {
-            var tr = $(this).closest('tr');
-            var name = tr.find('td:first').html();
-            var key = controller.propertyNameMap[name];
+            var key = $(this).data('type');
             var value = $(this).val();
             var property: Property = controller.currentElement.getProperties()[key];
             property.value = value;
@@ -181,8 +173,7 @@ class DiagramController {
         var controller: DiagramController = this;
         $(document).on('change', '.checkbox', function () {
             var tr = $(this).closest('tr');
-            var name = tr.find('td:first').html();
-            var key = controller.propertyNameMap[name];
+            var key = $(this).data('type');
             var label = tr.find('label');
             var value = label.contents().last()[0].textContent;
             if (value === "true") {
@@ -201,9 +192,7 @@ class DiagramController {
     setDropdownListener(): void {
         var controller: DiagramController = this;
         $(document).on('change', '.mydropdown', function () {
-            var tr = $(this).closest('tr');
-            var name = tr.find('td:first').html();
-            var key = controller.propertyNameMap[name];
+            var key = $(this).data('type');
             var value = $(this).val();
             var property: Property = controller.currentElement.getProperties()[key];
             property.value = value;
@@ -214,9 +203,7 @@ class DiagramController {
     setSpinnerListener(): void {
         var controller: DiagramController = this;
         $(document).on('change', '.spinner', function () {
-            var tr = $(this).closest('tr');
-            var name = tr.find('td:first').html();
-            var key = controller.propertyNameMap[name];
+            var key = $(this).data('type');
             var value = $(this).val();
             if (value !== "" && !isNaN(value)) {
                 var property: Property = controller.currentElement.getProperties()[key];
@@ -268,7 +255,7 @@ class DiagramController {
         $('#property_table tbody').empty();
         var properties: PropertiesMap = element.getProperties();
         for (var property in properties) {
-            var newItem = $(this.getPropertyHtml(element.getType(), properties[property]));
+            var newItem = $(this.getPropertyHtml(element.getType(), property, properties[property]));
             $('#property_table tbody').append(newItem);
 
             if (properties[property].type === "combobox") {
@@ -298,8 +285,8 @@ class DiagramController {
         });
     }
 
-    getPropertyHtml(typeName, property: Property): string {
-        return PropertyManager.getPropertyHtml(typeName, property);
+    getPropertyHtml(typeName, propertyName: string, property: Property): string {
+        return PropertyManager.getPropertyHtml(typeName, propertyName, property);
     }
 
     afterPaletteLoaded($scope) {
