@@ -60,6 +60,7 @@ class DisplayWidget {
     }
 
     drawRectangle(x: number, y: number, a: number, b: number, color: string, thickness: number): void {
+        this.context.beginPath();
         this.context.rect(x, y, a, b);
         this.context.lineWidth = thickness;
         this.context.strokeStyle = color;
