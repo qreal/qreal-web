@@ -72,17 +72,39 @@
 }
 
 #property_table {
+    display: block;
     text-align: center;
     width: 100%;
 }
 
-.table th {
+.table thead {
+    display: block;
     text-align: center;
-    width: 45%;
+    width: 100%;
+}
+
+.table thead > tr {
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
+.table thead > tr > th {
+    text-align: center;
+    width: 40%;
     font-size: 1.2em;
 }
 
+.table tbody {
+    display: block;
+    text-align: center;
+    width: 100%;
+    height: 140px;
+    overflow: auto;
+}
+
 .table tbody > tr > td.vert-align {
+    width: 45%;
     vertical-align: middle;
 }
 

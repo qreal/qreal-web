@@ -29,7 +29,7 @@ class PropertyManager {
         content += '<td class="vert-align">' + property.name + '</td>';
         content += '<td class="vert-align"><div class="checkbox">';
         var state: string = "";
-        if (property.value === "True") {
+        if (property.value === "true") {
             state = "checked";
         }
         content += '<label class="active"><input type="checkbox" ' + state + ' >' + property.value + '</label>'

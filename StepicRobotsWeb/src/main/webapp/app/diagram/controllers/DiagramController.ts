@@ -185,11 +185,11 @@ class DiagramController {
             var key = controller.propertyNameMap[name];
             var label = tr.find('label');
             var value = label.contents().last()[0].textContent;
-            if (value === "True") {
-                value = "False"
+            if (value === "true") {
+                value = "false"
                 label.contents().last()[0].textContent = value;
             } else {
-                value = "True"
+                value = "true"
                 label.contents().last()[0].textContent = value;
             }
             var property: Property = controller.currentElement.getProperties()[key];
