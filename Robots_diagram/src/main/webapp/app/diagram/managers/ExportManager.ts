@@ -22,6 +22,7 @@ class ExportManager {
             'nodes': [],
             'links': []
         }
+
         ExportManager.exportNodes(json, nodesMap);
         ExportManager.exportLinks(json, linksMap);
 
