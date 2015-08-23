@@ -1,4 +1,5 @@
 class DropdownListManager {
+
     private static nodeDropdowns = {};
 
     static addDropdownList(typeName: string, propertyName: string, list) {

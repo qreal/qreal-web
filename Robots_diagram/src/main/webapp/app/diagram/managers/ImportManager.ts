@@ -1,4 +1,5 @@
 class ImportManager {
+
     static import(response, graph: joint.dia.Graph, nodesMap, linksMap, nodeTypesMap: NodeTypesMap): number {
         for (var i = 0; i < response.nodes.length; i++) {
             var nodeObject = response.nodes[i];

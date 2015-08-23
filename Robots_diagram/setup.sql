@@ -25,7 +25,7 @@ CREATE TABLE folders (
   folder_id        BIGINT      NOT NULL AUTO_INCREMENT,
   folder_name      VARCHAR(50) NOT NULL,
   username         VARCHAR(45) NOT NULL,
-  folder_parent_id BIGINT      NOT NULL,
+  folder_parent_id BIGINT,
   PRIMARY KEY (folder_id),
   FOREIGN KEY (folder_parent_id) REFERENCES folders (folder_id)
 );
@@ -33,7 +33,7 @@ CREATE TABLE folders (
 CREATE TABLE diagrams (
   diagram_id BIGINT      NOT NULL AUTO_INCREMENT,
   name       VARCHAR(50) NOT NULL,
-  folder_id  BIGINT      NOT NULL,
+  folder_id  BIGINT      DEFAULT NULL,
   PRIMARY KEY (diagram_id),
   FOREIGN KEY (folder_id) REFERENCES folders (folder_id)
 );

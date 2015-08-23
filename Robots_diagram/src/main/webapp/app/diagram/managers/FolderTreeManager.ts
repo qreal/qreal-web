@@ -1,4 +1,5 @@
 class FolderTreeManager {
+
     static getFolderNames(parentFolder) {
         var folderNames = [];
         for (var i = 0; i < parentFolder.childrenFolders.length; i++) {

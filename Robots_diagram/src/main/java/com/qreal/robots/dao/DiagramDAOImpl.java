@@ -62,6 +62,7 @@ public class DiagramDAOImpl implements DiagramDAO {
 
     public Folder getFolderTree(String userName) {
         Session session = sessionFactory.getCurrentSession();
+
         List<Folder> rootFolders = session.createQuery("from Folder where folderName=:folderName and userName=:userName")
                 .setParameter("folderName", "root")
                 .setParameter("userName", userName)

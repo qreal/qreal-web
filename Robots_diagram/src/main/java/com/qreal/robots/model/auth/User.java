@@ -23,9 +23,6 @@ public class User {
     @JsonIgnore
     private Set<Robot> robots = new HashSet<>(0);
 
-    @JsonIgnore
-    private Set<Folder> folders = new HashSet<>(0);
-
     public User() {
     }
 

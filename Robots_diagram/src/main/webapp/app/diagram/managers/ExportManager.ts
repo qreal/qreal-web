@@ -1,4 +1,5 @@
 class ExportManager {
+
     static exportSavingDiagramStateToJSON(name: string, folderId: number,  nodesMap, linksMap): string {
         var json = {
             'diagram': {

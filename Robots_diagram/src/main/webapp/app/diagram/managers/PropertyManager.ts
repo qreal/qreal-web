@@ -1,4 +1,5 @@
 class PropertyManager {
+
     static getPropertyHtml(typeName: string, propertyName: string, property: Property): string {
         switch (property.type) {
             case "string":

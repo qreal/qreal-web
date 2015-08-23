@@ -38,7 +38,8 @@ public class UserDAOImpl implements UserDAO {
     public User findByUserName(String username) {
         Session session = sessionFactory.getCurrentSession();
 
-        List<User> users = session.createQuery("from User where username=?").setParameter(0, username).list();
+        List<User> users = session.createQuery("from User where username=:username").
+                setParameter("username", username).list();
         if (users.size() > 0) {
             return users.get(0);
         } else {
@@ -49,7 +50,8 @@ public class UserDAOImpl implements UserDAO {
     public boolean isUserExist(String username) {
         Session session = sessionFactory.getCurrentSession();
 
-        List<User> users = session.createQuery("from User where username=?").setParameter(0, username).list();
+        List<User> users = session.createQuery("from User where username=:username").
+                setParameter("username", username).list();
         return users.size() > 0;
 
     }

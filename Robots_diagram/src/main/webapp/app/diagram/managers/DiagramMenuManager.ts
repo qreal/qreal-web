@@ -1,4 +1,5 @@
 class DiagramMenuManager {
+
     private diagramController: DiagramController;
     private currentDiagramName: string;
     private currentDiagramFolder;
