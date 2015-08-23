@@ -1,7 +1,5 @@
 package com.qreal.robots.model.diagram;
 
-import com.qreal.robots.model.auth.User;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -21,10 +19,6 @@ public class Diagram implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "username", nullable = false)
-    private User creator;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "diagram_id", referencedColumnName = "diagram_id")
     private Set<DefaultDiagramNode> nodes;
@@ -32,15 +26,6 @@ public class Diagram implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "diagram_id", referencedColumnName = "diagram_id")
     private Set<Link> links;
-
-
-    public User getCreator() {
-        return this.creator;
-    }
-
-    public void setCreator(User creator) {
-        this.creator = creator;
-    }
 
     public Long getDiagramId() {
         return diagramId;
@@ -50,27 +35,27 @@ public class Diagram implements Serializable {
         this.diagramId = diagramId;
     }
 
-    public Set<DefaultDiagramNode> getNodes() {
-        return nodes;
-    }
-
-    public Set<Link> getLinks() {
-        return links;
-    }
-
-    public void setNodes(Set<DefaultDiagramNode> nodes) {
-        this.nodes = nodes;
-    }
-
-    public void setLinks(Set<Link> links) {
-        this.links = links;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setNodes(Set<DefaultDiagramNode> nodes) {
+        this.nodes = nodes;
+    }
+
+    public Set<DefaultDiagramNode> getNodes() {
+        return nodes;
+    }
+
+    public void setLinks(Set<Link> links) {
+        this.links = links;
+    }
+
+    public Set<Link> getLinks() {
+        return links;
     }
 }

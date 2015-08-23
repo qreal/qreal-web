@@ -1,13 +1,40 @@
 class ExportManager {
-    static exportDiagramStateToJSON(name: string, nodesMap, linksMap): string {
+    static exportSavingDiagramStateToJSON(name: string, folderId: number,  nodesMap, linksMap): string {
         var json = {
+            'diagram': {
+                'name': name,
+                'nodes': [],
+                'links': []
+            },
+            'folderId': folderId
+        };
+
+        ExportManager.exportNodes(json.diagram, nodesMap);
+        ExportManager.exportLinks(json.diagram, linksMap);
+
+        return JSON.stringify(json);
+    }
+
+    static exportUpdatingDiagramStateToJSON(name: string, parentFolder,  nodesMap, linksMap): string {
+        var json = {
+            'diagramId': FolderTreeManager.getDiagramIdByName(name, parentFolder),
             'name': name,
             'nodes': [],
             'links': []
-        };
+        }
 
         ExportManager.exportNodes(json, nodesMap);
         ExportManager.exportLinks(json, linksMap);
+
+        return JSON.stringify(json);
+    }
+
+
+    static exportFolderToJSON(name: string, folderParentId: number): string {
+        var json = {
+            'folderName': name,
+            'folderParentId': folderParentId,
+        }
 
         return JSON.stringify(json);
     }

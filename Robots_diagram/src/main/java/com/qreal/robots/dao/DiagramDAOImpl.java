@@ -1,6 +1,8 @@
 package com.qreal.robots.dao;
 
 import com.qreal.robots.model.diagram.Diagram;
+import com.qreal.robots.model.diagram.DiagramRequest;
+import com.qreal.robots.model.diagram.Folder;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -26,21 +28,45 @@ public class DiagramDAOImpl implements DiagramDAO {
         this.sessionFactory = sessionFactory;
     }
 
-    public void save(Diagram diagram) {
+    public Long saveDiagram(DiagramRequest diagramRequest) {
         LOG.debug("saving diagram");
         Session session = sessionFactory.getCurrentSession();
-        session.save(diagram);
+        Folder folder = (Folder) session.get(Folder.class, diagramRequest.getFolderId());
+
+        folder.getDiagrams().add(diagramRequest.getDiagram());
+        session.update(folder);
+        session.flush();
+        return diagramRequest.getDiagram().getDiagramId();
     }
 
-    public Diagram openById(Long diagramId) {
+    public Diagram openDiagram(Long diagramId) {
         Session session = sessionFactory.getCurrentSession();
-        return (Diagram) session.get(Diagram.class, diagramId);
+        List<Diagram> diagrams = session.createQuery("from Diagram where diagramId=:diagramId")
+                .setParameter("diagramId", diagramId)
+                .list();
+
+        return diagrams.get(0);
     }
 
-    public Diagram openByName(String name) {
-        LOG.debug("open diagram");
+    public void rewriteDiagram(Diagram diagram) {
         Session session = sessionFactory.getCurrentSession();
-        List<Diagram> diagrams = session.createQuery("from Diagram where name=?").setParameter(0, name).list();
-        return (diagrams.isEmpty() ? null : diagrams.get(0));
+        session.update(diagram);
+    }
+
+    public Long createFolder(Folder folder) {
+        LOG.debug("creating folder");
+        Session session = sessionFactory.getCurrentSession();
+        session.save(folder);
+        return folder.getFolderId();
+    }
+
+    public Folder getFolderTree(String userName) {
+        Session session = sessionFactory.getCurrentSession();
+        List<Folder> rootFolders = session.createQuery("from Folder where folderName=:folderName and userName=:userName")
+                .setParameter("folderName", "root")
+                .setParameter("userName", userName)
+                .list();
+
+        return rootFolders.get(0);
     }
 }

@@ -17,8 +17,10 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.saveDiagram()">Save</a></li>
-                            <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.openDiagram()">Open</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.menuController.createNewDiagram()">New</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams" ng-click="vm.menuController.openFolderWindow()">Open</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.menuController.saveCurrentDiagram()">Save</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" ng-click="vm.menuController.saveDiagramAs()">SaveAs</a></li>
                         </ul>
                     </li>
                     <li>
@@ -80,6 +82,51 @@
             <div id="elements_tree">
                 <ul id="navigation">
                 </ul>
+            </div>
+        </div>
+
+        <div class="modal fade" id="diagrams" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Diagrams</h4>
+                    </div>
+                    <div class="modal-body_nopadding">
+                        <div class="folderMenu">
+                        </div>
+                        <div class="folderPath">
+                        </div>
+                        <div class="folderView">
+                            <ul class="folderTable">
+                            </ul>
+                        </div>
+                        <div class="savingMenu">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="confirmNew" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Create</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Do you want to save current diagram?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" id="saveAfterCreate" data-dismiss="modal">Yes</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.menuController.clearAll()">No</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

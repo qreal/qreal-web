@@ -1,14 +1,13 @@
 package com.qreal.robots.controller;
 
 import com.qreal.robots.model.diagram.Diagram;
+import com.qreal.robots.model.diagram.DiagramRequest;
+import com.qreal.robots.model.diagram.Folder;
 import com.qreal.robots.model.diagram.OpenRequest;
 import com.qreal.robots.service.DiagramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by vladzx on 22.06.15.
@@ -20,15 +19,32 @@ public class DiagramRepositoryController {
     private DiagramService diagramService;
 
     @ResponseBody
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(@RequestBody Diagram diagram) {
-        diagramService.save(diagram);
-        return "{\"message\":\"OK\"}";
+    @RequestMapping(value = "/saveDiagram", method = RequestMethod.POST)
+    public Long saveDiagram(@RequestBody DiagramRequest diagramRequest) {
+        return diagramService.saveDiagram(diagramRequest);
     }
 
     @ResponseBody
-    @RequestMapping(value = "/open", method = RequestMethod.POST)
-    public Diagram open(@RequestBody OpenRequest request) {
-        return diagramService.openByName(request.getName());
+    @RequestMapping(value = "/openDiagram", method = RequestMethod.POST)
+    public Diagram openDiagram(@RequestBody OpenRequest request) {
+        return diagramService.openDiagram(request.getId());
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateDiagram", method = RequestMethod.POST)
+    public void rewriteDiagram(@RequestBody Diagram diagram) {
+        diagramService.rewriteDiagram(diagram);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/createFolder", method = RequestMethod.POST)
+    public Long createFolder(@RequestBody Folder folder) {
+        return diagramService.createFolder(folder);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getFolderTree", method = RequestMethod.GET)
+    public Folder getFolderTree() {
+        return diagramService.getFolderTree();
     }
 }

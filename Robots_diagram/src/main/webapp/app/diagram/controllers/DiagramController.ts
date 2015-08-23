@@ -18,6 +18,7 @@ class DiagramController {
     private data : Gesture[];
     private flagAdd : boolean;
     private rightClickFlag : boolean;
+    private menuController: DiagramMenuManager;
 
     constructor($scope, $compile) {
 
@@ -34,10 +35,27 @@ class DiagramController {
         this.initPointerMoveAndUpListener();
         this.initDeleteListener();
         this.initCustomContextMenu();
+        this.menuController = new DiagramMenuManager($scope);
 
         $scope.$on("interpret", function(event, timeline) {
             console.log(InterpretManager.interpret(controller.graph, controller.nodesMap, controller.linksMap, timeline));
         });
+    }
+
+    public getGraph(): joint.dia.Graph {
+        return this.graph;
+    }
+
+    public getNodeTypesMap(): NodeTypesMap {
+        return this.nodeTypesMap
+    }
+
+    public getNodesMap() {
+        return this.nodesMap;
+    }
+
+    public getLinksMap() {
+        return this.linksMap;
     }
 
     initPalette() {
@@ -454,60 +472,12 @@ class DiagramController {
         this.linksMap[linkId] = linkObject;
     }
 
-    private clear(): void {
+    public clearScene(): void {
         this.graph.clear();
         this.nodesMap = {};
         this.linksMap = {};
         $(".property").remove();
         this.currentElement = undefined;
-    }
-
-    private saveDiagram(): void {
-        if (!this.isPaletteLoaded) {
-            alert("Palette is not loaded!");
-            return;
-        }
-        var name: string = prompt("input name");
-        $.ajax({
-            type: 'POST',
-            url: 'save',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: (ExportManager.exportDiagramStateToJSON(name, this.nodesMap, this.linksMap)),
-            success: function (response) {
-                console.log(response.message);
-            },
-            error: function (response, status, error) {
-                console.log("error: " + status + " " + error);
-            }
-        });
-    }
-
-    private openDiagram(): void {
-        if (!this.isPaletteLoaded) {
-            alert("Palette is not loaded!");
-            return;
-        }
-        var controller = this;
-        var name: string = prompt("input diagram name");
-        $.ajax({
-            type: 'POST',
-            url: 'open',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: (JSON.stringify({name: name})),
-            success: function (response) {
-                controller.clear();
-                ImportManager.import(response, controller.graph, controller.nodesMap,
-                    controller.linksMap, controller.nodeTypesMap);
-            },
-            error: function (response, status, error) {
-                if (status === "parsererror") {
-                    alert("Diagram with this name does not exist");
-                }
-                console.log("error: " + status + " " + error);
-            }
-        });
     }
 
     private makeUnselectable(element) {
