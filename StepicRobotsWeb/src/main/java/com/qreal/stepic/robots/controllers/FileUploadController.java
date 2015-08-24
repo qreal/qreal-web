@@ -38,9 +38,9 @@ public class FileUploadController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "upload/{taskId}", method = RequestMethod.POST)
+    @RequestMapping(value = "upload/{name}", method = RequestMethod.POST)
     public SubmitResponse handleFileUpload(MultipartHttpServletRequest request, HttpServletResponse response,
-                                           @PathVariable String taskId) throws UploadException, SubmitException {
+                                           @PathVariable String name) throws UploadException, SubmitException {
         Iterator<String> iterator = request.getFileNames();
         MultipartFile file;
         try {
@@ -49,11 +49,11 @@ public class FileUploadController {
             throw new UploadException("No files");
         }
 
-        String name = file.getOriginalFilename();
+        String filename = file.getOriginalFilename();
 
         if (!file.isEmpty()) {
             try {
-                String directoryPath = PathConstants.tasksPath + "/" + taskId;
+                String directoryPath = PathConstants.tasksPath + "/" + name;
 
                 UUID uuid = UUID.randomUUID();
 
@@ -61,14 +61,14 @@ public class FileUploadController {
                 File targetDirectory = new File(targetPath);
                 targetDirectory.mkdirs();
 
-                File serverFile = new File(targetDirectory.getAbsolutePath() + '/' + name);
+                File serverFile = new File(targetDirectory.getAbsolutePath() + '/' + filename);
 
                 byte[] bytes = file.getBytes();
                 BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
                 stream.write(bytes);
                 stream.close();
                 LOG.info("Server File Location = " + serverFile.getAbsolutePath());
-                return CheckerUtils.submit(taskId, name, String.valueOf(uuid));
+                return CheckerUtils.submit(name, filename, String.valueOf(uuid));
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new UploadException("Sorry, try to upload the file again");

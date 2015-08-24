@@ -4,10 +4,7 @@ import com.qreal.stepic.robots.constants.PathConstants;
 import com.qreal.stepic.robots.utils.CheckerUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,13 +24,14 @@ import java.nio.file.Paths;
 @RequestMapping("/offline")
 public class OfflineSolutionController {
 
-    @RequestMapping(value = "/{taskId}", method = RequestMethod.GET)
-    public ModelAndView taskHandler(@PathVariable String taskId) {
-        decompressTask(taskId);
+    @RequestMapping(value = "{title}", params = { "name" }, method = RequestMethod.GET)
+    public ModelAndView taskHandler(@PathVariable String title, @RequestParam(value = "name") String name) {
+        decompressTask(name);
         ModelAndView modelAndView = new ModelAndView("checker/offlineSolution");
-        modelAndView.addObject("taskId", taskId);
+        modelAndView.addObject("title", title);
+        modelAndView.addObject("name", name);
 
-        String descriptionPath = PathConstants.tasksPath + "/" + taskId + "/" + taskId + ".txt";
+        String descriptionPath = PathConstants.tasksPath + "/" + name + "/" + name + ".txt";
         try {
             String description = new String(Files.readAllBytes(Paths.get(descriptionPath)), StandardCharsets.UTF_8);
             modelAndView.addObject("description", description);
@@ -44,18 +42,19 @@ public class OfflineSolutionController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/downloadTask/{taskId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/downloadTask/{title}", params = { "name" }, method = RequestMethod.GET)
     public
     @ResponseBody
-    void downloadFiles(HttpServletRequest request, HttpServletResponse response, @PathVariable String taskId) {
-        File downloadFile = new File(PathConstants.tasksPath + "/" + taskId + "/" + taskId + ".qrs");
+    void downloadFiles(HttpServletRequest request, HttpServletResponse response, @PathVariable String title,
+                       @RequestParam(value = "name") String name) {
+        File downloadFile = new File(PathConstants.tasksPath + "/" + name + "/" + name + ".qrs");
         try (FileInputStream inputStream = new FileInputStream(downloadFile);
              OutputStream outStream = response.getOutputStream()) {
             response.setContentLength((int) downloadFile.length());
             response.setContentType("application/octet-stream");
 
             String headerKey = "Content-Disposition";
-            String headerValue = String.format("attachment; filename=\"%s\"", downloadFile.getName());
+            String headerValue = String.format("attachment; filename=\"%s-%s\"", title, downloadFile.getName());
             response.setHeader(headerKey, headerValue);
 
             IOUtils.copy(inputStream, outStream);
@@ -65,10 +64,10 @@ public class OfflineSolutionController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/decompressTask/{taskId}", method = RequestMethod.POST)
-    public void decompressTask(@PathVariable String taskId) {
+    @RequestMapping(value = "/decompressTask/{name}", method = RequestMethod.POST)
+    public void decompressTask(@PathVariable String name) {
         try {
-            CheckerUtils.decompressTask(taskId);
+            CheckerUtils.decompressTask(name);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

@@ -2,7 +2,7 @@
 
 <html>
 <head>
-    <title>${taskId}</title>
+    <title>${name}</title>
 
     <jsp:include page="../include/scripts.jsp" flush="true"/>
     <script src="<c:url value='/resources/js/jquery.form.min.js' />"></script>
@@ -16,18 +16,18 @@
 <body>
     <div class="container" ng-app ng-controller="RootDiagramController">
         <div class="col-md-9 col-centered">
-            <div id="taskContent" ng-controller="CheckerController" task="${taskId}">
-                <h2>Task: ${taskId}</h2>
+            <div id="taskContent" ng-controller="CheckerController" task="${name}">
+                <h2>Task: ${title}. ${name}</h2>
                 <br>
 
                 <h4>Description: ${description}</h4>
 
-                <a href="downloadTask/${taskId}"><h4>Download task</h4></a>
+                <a href="downloadTask/${title}?name=${name}"><h4>Download task</h4></a>
                 <br>
 
                 <h4>Check your solution</h4>
 
-                <form id="uploadForm" method="POST" action="upload/${taskId}" enctype="multipart/form-data">
+                <form id="uploadForm" method="POST" action="upload/${name}" enctype="multipart/form-data">
                     <input type="file" name="fileName" id="fileName" class="filestyle" data-buttonText="Browse" data-buttonName="btn-primary"/>
                 </form>
                 <br>

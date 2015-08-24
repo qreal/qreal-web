@@ -34,9 +34,9 @@
                             </span>
                             <span class="pull-right">
                                 <c:if test="${task.isOnline()}">
-                                    <a class="btn listButton" href="online/${task.getName()}">Online</a>
+                                    <a class="btn listButton" href="online/${task.getTitle()}?name=${task.getName()}">Online</a>
                                 </c:if>
-                                <a class="btn listButton" href="offline/${task.getName()}">Offline</a>
+                                <a class="btn listButton" href="offline/${task.getTitle()}?name=${task.getName()}">Offline</a>
                             </span>
                         </div>
                     </c:forEach>

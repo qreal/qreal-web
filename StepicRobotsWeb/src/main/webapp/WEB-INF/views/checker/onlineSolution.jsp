@@ -2,7 +2,7 @@
 
 <html>
 <head>
-    <title>${taskId}</title>
+    <title>${name}</title>
 
     <jsp:include page="../include/scripts.jsp" flush="true"/>
 
@@ -21,14 +21,14 @@
 <div ng-app ng-controller="RootDiagramController">
     <div class="container">
         <div id="titleContent" class="col-md-12">
-            <h2>Task: ${taskId}</h2>
+            <h2>Task: ${title}. ${name}</h2>
             <br>
 
             <h4>Description: ${description}</h4>
             <br>
         </div>
         <div class="col-md-9">
-            <div id="diagramContent" class="row unselectable" ng-controller="DiagramController" task="${taskId}">
+            <div id="diagramContent" class="row unselectable" ng-controller="DiagramController" task="${name}">
                 <ul class='custom-menu'>
                     <li data-action="delete">Delete</li>
                 </ul>
