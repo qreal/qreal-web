@@ -51,7 +51,7 @@
 
 		<Element name="Wait for Encoder" type="TrikV62WaitForEncoder">
 			<Property key="Port" name="Port" type="string">
-                <value>E1</value>
+                <value>E3</value>
 			</Property>
 			<Property key="Sign" name="Sign" type="dropdown">
                 <value>greater</value>
