@@ -68,6 +68,8 @@ class Runner {
                 case "marker":
                     this.doMarkerActions(robotItem, point);
                     break;
+                case "shell":
+                    this.doShellActions(point);
                 default:
             }
         } else {
@@ -113,6 +115,27 @@ class Runner {
                 break;
             default:
         }
+    }
+
+    private doShellActions(point): void {
+        switch (point.property) {
+            case "lastPhrase":
+                this.say(point.value);
+                break;
+        }
+    }
+
+    private say(value: string) {
+        var delay: number = 1000;
+        var maxLegnth: number = 90;
+        if (value.length > maxLegnth) {
+            value = value.substr(0, maxLegnth) + "...";
+        }
+        $("#sayAlert").contents().last()[0].textContent = value;
+        $("#sayAlert").show();
+        $("#sayAlert").delay(delay).fadeOut(delay, function() {
+            $("#sayAlert").hide();
+        });
     }
 
     private drawObjects(displayWidget: DisplayWidget, objects) {

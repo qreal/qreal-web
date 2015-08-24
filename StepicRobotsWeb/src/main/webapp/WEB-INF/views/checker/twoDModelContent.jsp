@@ -6,6 +6,8 @@
     <div id="infoAlert" class="alert fade in">
         <a href="" class="close" aria-label="close">&times;</a>
     </div>
+    <div id="sayAlert" class="alert alert-info fade in">
+    </div>
 
     <button id="menu_button" type="button" class="btn btn-default" ng-click="vm.showDisplay()">
         <span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span>
