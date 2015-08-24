@@ -93,6 +93,9 @@ class Runner {
                     displayWidget.clearSadSmile();
                 }
                 break;
+            case "background":
+                displayWidget.setBackground(point.value);
+                break;
             case "objects":
                 this.drawObjects(displayWidget, point.value);
                 break;

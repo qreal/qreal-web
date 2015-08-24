@@ -41,7 +41,7 @@
 #display {
     z-index: -1;
     position: absolute;
-    background: lightgrey;
+    background: #a0a0a4;
     top: 45px;
     right: 59px;
     width: 60px;

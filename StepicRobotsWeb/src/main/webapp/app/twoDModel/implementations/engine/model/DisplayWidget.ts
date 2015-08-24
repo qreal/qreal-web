@@ -8,6 +8,7 @@ class DisplayWidget {
     private ledWidget: LedWidget;
     private isSmiles: boolean;
     private isSadSmiles: boolean;
+    private background: string;
 
     constructor() {
         var canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById("display");
@@ -19,6 +20,12 @@ class DisplayWidget {
         this.ledWidget = new LedWidget();
         this.isSmiles = false;
         this.isSadSmiles = false;
+        this.background = "#a0a0a4";
+    }
+
+    setBackground(color: string): void {
+        this.background = color;
+        $("#display").css('background', color);
     }
 
     drawSmile(): void {
@@ -102,6 +109,7 @@ class DisplayWidget {
     }
 
     reset(): void {
+        this.background = "#a0a0a4"
         this.isSmiles = false;
         this.isSadSmiles = false;
         this.clearScreen();
