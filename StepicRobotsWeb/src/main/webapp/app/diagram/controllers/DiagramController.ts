@@ -365,6 +365,11 @@ class DiagramController {
             },
             error: function (response, status, error) {
                 twoDModelSpinner.hide();
+                if (status == "timeout") {
+                    alert("Timed out – please try again");
+                } else {
+                    alert(response.responseText);
+                }
                 console.log("error: " + status + " " + error);
             }
         });
@@ -395,6 +400,7 @@ class DiagramController {
             error: function (response, status, error) {
                 diagramSpinner.hide();
                 twoDModelSpinner.hide();
+                alert("error: " + status + " " + error);
                 console.log("error: " + status + " " + error);
             }
         });
