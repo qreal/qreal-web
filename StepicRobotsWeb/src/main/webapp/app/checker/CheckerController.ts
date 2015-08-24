@@ -31,6 +31,7 @@ class CheckerController {
 
         $("#uploadForm").ajaxForm({
             dataType: "text",
+            timeout: 60000,
             success: function (response) {
                 spinner.hide();
                 controller.lastResponse = JSON.parse(response);
@@ -39,7 +40,11 @@ class CheckerController {
             },
             error: function (response, status, error) {
                 spinner.hide();
-                $('#result').html(response.responseText);
+                if (status == "timeout") {
+                    $('#result').html("Timed out – please try again");
+                } else {
+                    $('#result').html(response.responseText);
+                }
             }
         }).submit();
     }

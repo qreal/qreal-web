@@ -356,6 +356,7 @@ class DiagramController {
             url: 'submit/' + controller.taskId,
             dataType: 'json',
             contentType: 'application/json',
+            timeout: 60000,
             data: (JSON.stringify({diagram: ExportManager.exportDiagramStateToJSON(controller.graph,
                 controller.nodesMap, controller.linksMap)})),
             success: function (response) {
@@ -382,6 +383,7 @@ class DiagramController {
         $.ajax({
             type: 'POST',
             url: 'open/' + taskId,
+            timeout: 60000,
             success: function (response) {
                 controller.clear();
                 diagramSpinner.hide();
