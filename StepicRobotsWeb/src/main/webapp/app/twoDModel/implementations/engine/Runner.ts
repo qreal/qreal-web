@@ -4,6 +4,7 @@ class Runner {
     private boost: number = 2;
 
     run(robotItem: RobotItem, displayWidget: DisplayWidget, result: any): void {
+        this.parseReport(result.report);
         $("#display").css("z-index", 100);
         var trajectory = JSON.parse(result.trace);
         var runner: Runner = this;
@@ -20,7 +21,6 @@ class Runner {
                     runner.timeoutId = setTimeout(nextPoint, delay);
                 }
             } else {
-                runner.parseReport(result.report);
                 $("#display").css("z-index", -1);
                 displayWidget.reset();
             }
