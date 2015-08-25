@@ -6,7 +6,8 @@ class Marker {
     private position: TwoDPosition;
     private robotCenter: TwoDPosition
     private direction: number;
-    private width: number = 6;
+    private width: number = 5;
+    private height: number = 6;
     private pointSet: RaphaelSet;
 
     constructor(paper: RaphaelPaper, position: TwoDPosition, robotCenter: TwoDPosition) {
@@ -47,7 +48,7 @@ class Marker {
     }
 
     drawPoint(): void {
-        var point = this.paper.rect(this.position.x - 0.5, this.position.y - this.width / 2, 1, this.width);
+        var point = this.paper.rect(this.position.x - 0.5, this.position.y - this.height / 2, this.width, this.height);
         point.attr({ "stroke-width": 0, "fill": this.color });
         point.transform("R" + this.direction + "," + this.robotCenter.x + "," + this.robotCenter.y);
         point.toBack();

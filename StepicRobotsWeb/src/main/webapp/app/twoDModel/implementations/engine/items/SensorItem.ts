@@ -133,12 +133,13 @@ class SensorItem {
         }
     }
 
-    animate(positionX: number, positionY: number): void {
+    moveToPoint(positionX: number, positionY: number, direction: number, rotationCX: number, rotationCY: number): void {
         var newX = positionX + this.offsetPosition.x;
         var newY = positionY + this.offsetPosition.y;
         var positionOffsetX = newX - this.startPosition.x;
         var positionOffsetY = newY - this.startPosition.y;
         this.currentTranslation = "t" + positionOffsetX + "," + positionOffsetY;
+        this.currentRobotRotation = "R" + direction + "," + rotationCX + "," + rotationCY;
         this.image.transform(this.getTransformation());
     }
 

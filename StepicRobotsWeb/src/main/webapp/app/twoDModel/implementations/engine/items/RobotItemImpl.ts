@@ -15,6 +15,7 @@ class RobotItemImpl implements RobotItem {
     private timeoutId: number;
     private sensors: {string?: SensorItem} = {};
     private direction: number;
+    private cycles: number;
 
     constructor(worldModel: WorldModel, position: TwoDPosition, imageFileName: string, robot: RobotModel) {
         this.worldModel = worldModel;
@@ -22,6 +23,7 @@ class RobotItemImpl implements RobotItem {
         this.startPosition = position;
         this.direction = 0;
         this.startDirection = 0;
+        this.cycles = 0;
         var paper = worldModel.getPaper();
 
         this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
@@ -108,17 +110,10 @@ class RobotItemImpl implements RobotItem {
         this.sensors[portName] = sensor;
     }
 
-    rotateSensors(angle: number, centerX: number, centerY: number): void {
+    moveSensors(positionX: number, positionY: number, direction: number, centerX: number, centerY: number): void {
         for (var portName in this.sensors) {
             var sensor = this.sensors[portName];
-            sensor.rotateByRobot(angle, centerX, centerY);
-        }
-    }
-
-    moveSensors(positionX: number, positionY: number): void {
-        for (var portName in this.sensors) {
-            var sensor = this.sensors[portName];
-            sensor.animate(positionX, positionY);
+            sensor.moveToPoint(positionX, positionY, direction, centerX, centerY);
         }
     }
 
@@ -141,6 +136,7 @@ class RobotItemImpl implements RobotItem {
         this.marker.clear();
         this.setStartPosition(this.startPosition, this.startDirection);
         this.clearSensorsPosition();
+        this.cycles = 0;
     }
 
     setOffsetX(offsetX: number): void {
@@ -159,16 +155,19 @@ class RobotItemImpl implements RobotItem {
 
         this.image.transform("R" + rotation);
         this.direction = rotation;
-        this.rotateSensors(rotation, this.center.x, this.center.y);
 
-        this.moveSensors(newX, newY);
+        this.moveSensors(newX, newY, rotation, this.center.x, this.center.y);
 
         this.image.attr({x: newX, y: newY});
 
         this.marker.setPosition(new TwoDPosition(newX, this.center.y), this.center);
         this.marker.setDirection(rotation);
-        if (this.marker.isDown()) {
+        if (this.marker.isDown() && !this.cycles) {
             this.marker.drawPoint();
+        }
+        this.cycles++;
+        if (this.cycles++ > 5) {
+            this.cycles = 0;
         }
     }
 

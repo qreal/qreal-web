@@ -61,8 +61,8 @@ class SonarSensorItem extends SensorItem {
         this.scanningRegion.transform("");
     }
 
-    animate(positionX: number, positionY: number): void {
-        super.animate(positionX, positionY);
+    moveToPoint(positionX: number, positionY: number, direction: number, rotationCX: number, rotationCY: number): void {
+        super.moveToPoint(positionX, positionY, direction, rotationCX, rotationCY);
 
         var newX = positionX + this.offsetPosition.x + this.width / 2;
         var newY = positionY + this.offsetPosition.y + this.height / 2;
