@@ -60,6 +60,17 @@ class FolderTreeManager {
         return diagramId;
     }
 
+    static getFolderIdByName(folderName: string, parentFolder) {
+        var folderId: number;
+        for (var i = 0; i < parentFolder.childrenFolders.length; i++) {
+            if (parentFolder.childrenFolders[i].folderName === folderName) {
+                folderId = parentFolder.childrenFolders[i].folderId;
+            }
+        }
+
+        return folderId;
+    }
+
     static diagramExists(diagramName: string, parentFolder): boolean {
         var exists: boolean = false;
         for (var i = 0; i < parentFolder.diagrams.length; i++) {
@@ -89,8 +100,22 @@ class FolderTreeManager {
             }
         }
 
-        parentFolder.diagrams = parentFolder.diagrams.filter(function (element) {
+        parentFolder.diagrams = FolderTreeManager.cleanArray(parentFolder.diagrams);
+    }
+
+    static deleteFolderFromTree(folderName: string, parentFolder): void {
+        for (var i = 0; i < parentFolder.childrenFolders.length; i++) {
+            if (parentFolder.childrenFolders[i].folderName === folderName) {
+                delete parentFolder.childrenFolders[i];
+            }
+        }
+
+        parentFolder.childrenFolders = FolderTreeManager.cleanArray(parentFolder.childrenFolders);
+    }
+
+    private static cleanArray(array): any {
+        return array.filter(function (element) {
             return element !== undefined && element !== null;
-        })
+        });
     }
 }

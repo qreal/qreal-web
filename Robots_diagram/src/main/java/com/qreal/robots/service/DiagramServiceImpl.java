@@ -60,6 +60,12 @@ public class DiagramServiceImpl implements DiagramService {
 
     @Transactional
     @Override
+    public void deleteFolder(Long folderId) {
+        diagramDAO.deleteFolder(folderId);
+    }
+
+    @Transactional
+    @Override
     public Folder getFolderTree() {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         return diagramDAO.getFolderTree(userName);

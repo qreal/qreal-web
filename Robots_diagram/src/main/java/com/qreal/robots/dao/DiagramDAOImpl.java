@@ -56,8 +56,7 @@ public class DiagramDAOImpl implements DiagramDAO {
     public void deleteDiagram(Long diagramId) {
         Session session = sessionFactory.getCurrentSession();
 
-        Diagram diagram = new Diagram();
-        diagram.setDiagramId(diagramId);
+        Diagram diagram = (Diagram) session.get(Diagram.class, diagramId);
         session.delete(diagram);
     }
 
@@ -66,6 +65,13 @@ public class DiagramDAOImpl implements DiagramDAO {
         Session session = sessionFactory.getCurrentSession();
         session.save(folder);
         return folder.getFolderId();
+    }
+
+    public void deleteFolder(Long folderId) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Folder folder = (Folder) session.get(Folder.class, folderId);
+        session.delete(folder);
     }
 
     public Folder getFolderTree(String userName) {

@@ -68,6 +68,23 @@ class DiagramMenuManager {
         });
     }
 
+    private  deleteFolderFromDatabase(folderName: string) {
+        var menuManager = this;
+        $.ajax({
+            type: 'POST',
+            url: 'deleteFolder',
+            contentType: 'application/json',
+            data: (JSON.stringify({id: FolderTreeManager.getFolderIdByName(folderName, this.currentFolder)})),
+            success: function () {
+                FolderTreeManager.deleteFolderFromTree(folderName, menuManager.currentFolder);
+                menuManager.showFolderTable(menuManager.currentFolder);
+            },
+            error: function (response, status, error) {
+                console.log("error: " + status + " " + error);
+            }
+        });
+    }
+
     private saveDiagramInDatabase(diagramName: string): void {
         var menuManager = this;
         this.currentDiagramName = diagramName;
@@ -151,8 +168,13 @@ class DiagramMenuManager {
             contentType: 'application/json',
             data: (JSON.stringify({id: FolderTreeManager.getDiagramIdByName(diagramName, this.currentFolder)})),
             success: function () {
-                FolderTreeManager.deleteDiagramFromTree(diagramName, menuManager.currentFolder)
+                FolderTreeManager.deleteDiagramFromTree(diagramName, menuManager.currentFolder);
                 menuManager.showFolderTable(menuManager.currentFolder);
+
+                if (diagramName === menuManager.currentDiagramName
+                    && menuManager.currentFolder === menuManager.currentDiagramFolder) {
+                    menuManager.clearAll();
+                }
             },
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);
@@ -341,6 +363,8 @@ class DiagramMenuManager {
                 case "delete":
                     if (tableElementClass === 'diagrams') {
                         menuManager.deleteDiagramFromDatabase(name);
+                    } else if (tableElementClass === 'folders') {
+                        menuManager.deleteFolderFromDatabase(name);
                     }
                     break;
                 case "rename":

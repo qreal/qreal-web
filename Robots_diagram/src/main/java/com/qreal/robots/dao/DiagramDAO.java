@@ -19,5 +19,7 @@ public interface DiagramDAO {
 
     public Long createFolder(Folder folder);
 
+    public void deleteFolder(Long folderId);
+
     public Folder getFolderTree(String userName);
 }
