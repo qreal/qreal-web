@@ -88,7 +88,6 @@
         <div class="modal fade" id="diagrams" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <ul class='custom-menu'>
                 <li data-action="delete">Delete</li>
-                <li data-action="rename">Rename</li>
             </ul>
             <div class="modal-dialog">
                 <div class="modal-content">

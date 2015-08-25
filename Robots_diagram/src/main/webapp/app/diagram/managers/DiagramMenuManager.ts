@@ -367,7 +367,6 @@ class DiagramMenuManager {
                         menuManager.deleteFolderFromDatabase(name);
                     }
                     break;
-                case "rename":
             }
 
             $(".custom-menu").hide(100);
