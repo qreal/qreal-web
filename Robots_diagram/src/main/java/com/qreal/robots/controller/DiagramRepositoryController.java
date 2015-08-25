@@ -37,6 +37,12 @@ public class DiagramRepositoryController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/deleteDiagram", method = RequestMethod.POST)
+    public void deleteDiagram(@RequestBody OpenRequest request) {
+        diagramService.deleteDiagram(request.getId());
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/createFolder", method = RequestMethod.POST)
     public Long createFolder(@RequestBody Folder folder) {
         return diagramService.createFolder(folder);

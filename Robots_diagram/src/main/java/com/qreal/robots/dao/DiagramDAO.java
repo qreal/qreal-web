@@ -15,6 +15,8 @@ public interface DiagramDAO {
 
     public void rewriteDiagram(Diagram diagram);
 
+    public void deleteDiagram(Long diagramId);
+
     public Long createFolder(Folder folder);
 
     public Folder getFolderTree(String userName);

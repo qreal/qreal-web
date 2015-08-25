@@ -81,4 +81,16 @@ class FolderTreeManager {
 
         return exists;
     }
+
+    static deleteDiagramFromTree(diagramName: string, parentFolder): void {
+        for (var i = 0; i < parentFolder.diagrams.length; i++) {
+            if (parentFolder.diagrams[i].name === diagramName) {
+                delete parentFolder.diagrams[i];
+            }
+        }
+
+        parentFolder.diagrams = parentFolder.diagrams.filter(function (element) {
+            return element !== undefined && element !== null;
+        })
+    }
 }

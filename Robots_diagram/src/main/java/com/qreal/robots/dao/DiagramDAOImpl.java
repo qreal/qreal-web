@@ -53,6 +53,14 @@ public class DiagramDAOImpl implements DiagramDAO {
         session.update(diagram);
     }
 
+    public void deleteDiagram(Long diagramId) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Diagram diagram = new Diagram();
+        diagram.setDiagramId(diagramId);
+        session.delete(diagram);
+    }
+
     public Long createFolder(Folder folder) {
         LOG.debug("creating folder");
         Session session = sessionFactory.getCurrentSession();

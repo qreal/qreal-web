@@ -143,6 +143,22 @@ class DiagramMenuManager {
         });
     }
 
+    private deleteDiagramFromDatabase(diagramName: string): void {
+        var menuManager = this;
+        $.ajax({
+            type: 'POST',
+            url: 'deleteDiagram',
+            contentType: 'application/json',
+            data: (JSON.stringify({id: FolderTreeManager.getDiagramIdByName(diagramName, this.currentFolder)})),
+            success: function () {
+                FolderTreeManager.deleteDiagramFromTree(diagramName, menuManager.currentFolder)
+                menuManager.showFolderTable(menuManager.currentFolder);
+            },
+            error: function (response, status, error) {
+                console.log("error: " + status + " " + error);
+            }
+        });
+    }
 
     private createNewDiagram(): void {
         $('#confirmNew').modal('show');
@@ -163,7 +179,6 @@ class DiagramMenuManager {
     }
 
     private saveDiagramAs(): void {
-        $('#diagrams').modal('show');
         this.showFolderMenu();
         this.showFolderTable(this.currentFolder);
         this.showSavingMenu();
@@ -299,6 +314,39 @@ class DiagramMenuManager {
         $('.folderTable .diagrams').click(function () {
             menuManager.openDiagramFromDatabase($(this).text());
             $('#diagrams').modal('hide');
+        });
+
+        this.initCustomMenu();
+    }
+
+    private initCustomMenu(): void {
+        var menuManager = this;
+        var name: string;
+        var tableElementClass: string;
+
+        $('#diagrams li').mousedown(function (event) {
+            if (event.which == 3) {
+                $("#diagrams .custom-menu").finish().toggle(100).
+                    css({
+                        top: event.pageY + "px",
+                        left: event.pageX + "px"
+                    });
+                name = $(this).text();
+                tableElementClass = $(this).attr("class");
+            }
+        });
+
+        $("#diagrams .custom-menu li").click(function () {
+            switch($(this).attr("data-action")) {
+                case "delete":
+                    if (tableElementClass === 'diagrams') {
+                        menuManager.deleteDiagramFromDatabase(name);
+                    }
+                    break;
+                case "rename":
+            }
+
+            $(".custom-menu").hide(100);
         });
     }
 

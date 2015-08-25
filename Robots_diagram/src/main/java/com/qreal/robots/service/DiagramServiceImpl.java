@@ -38,6 +38,12 @@ public class DiagramServiceImpl implements DiagramService {
 
     @Transactional
     @Override
+    public void deleteDiagram(Long diagramId) {
+        diagramDAO.deleteDiagram(diagramId);
+    }
+
+    @Transactional
+    @Override
     public void createRootFolder(String userName) {
         Folder rootFolder = new Folder("root", userName);
         diagramDAO.createFolder(rootFolder);

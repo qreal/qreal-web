@@ -20,7 +20,7 @@
                             <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.menuController.createNewDiagram()">New</a></li>
                             <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams" ng-click="vm.menuController.openFolderWindow()">Open</a></li>
                             <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.menuController.saveCurrentDiagram()">Save</a></li>
-                            <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" ng-click="vm.menuController.saveDiagramAs()">SaveAs</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams" ng-click="vm.menuController.saveDiagramAs()">SaveAs</a></li>
                         </ul>
                     </li>
                     <li>
@@ -86,6 +86,10 @@
         </div>
 
         <div class="modal fade" id="diagrams" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <ul class='custom-menu'>
+                <li data-action="delete">Delete</li>
+                <li data-action="rename">Rename</li>
+            </ul>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
