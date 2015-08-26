@@ -13,6 +13,19 @@ class WorldModelImpl implements WorldModel {
         $(this.paper.canvas).attr("id", "twoDModel_paper");
         $(this.paper.canvas).css('overflow', 'auto');
 
+        var foreignObject = document.createElementNS('http://www.w3.org/2000/svg', "foreignObject");
+        foreignObject.setAttribute("width", "3000");
+        foreignObject.setAttribute("height", "3000");
+        var canvas = document.createElementNS('http://www.w3.org/1999/xhtml', "canvas");
+        canvas.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
+        canvas.setAttribute("id", "twoDModelCanvas");
+        canvas.setAttribute("width", "3000");
+        canvas.setAttribute("height", "3000");
+
+        foreignObject.appendChild(canvas);
+
+        this.paper.canvas.appendChild(foreignObject);
+
         this.paper.setViewBox(0, 0, 3000, 3000, true);
         this.paper.canvas.setAttribute('preserveAspectRatio', 'none');
         $('#twoDModel_paper').attr('width', 2000).attr('height', 2000);

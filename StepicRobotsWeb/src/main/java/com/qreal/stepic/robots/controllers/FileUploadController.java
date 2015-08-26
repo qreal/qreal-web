@@ -1,11 +1,14 @@
 package com.qreal.stepic.robots.controllers;
 
+import com.qreal.stepic.robots.checker.Checker;
 import com.qreal.stepic.robots.constants.PathConstants;
 import com.qreal.stepic.robots.exceptions.SubmitException;
 import com.qreal.stepic.robots.exceptions.UploadException;
 import com.qreal.stepic.robots.model.diagram.SubmitResponse;
-import com.qreal.stepic.robots.utils.CheckerUtils;
+import com.qreal.stepic.robots.checker.CheckerUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -30,6 +34,9 @@ public class FileUploadController {
 
     private static final Logger LOG = Logger.getLogger(FileUploadController.class);
 
+    @Autowired
+    MessageSource messageSource;
+
     @ExceptionHandler(UploadException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ResponseBody
@@ -40,13 +47,14 @@ public class FileUploadController {
     @ResponseBody
     @RequestMapping(value = "upload/{name}", method = RequestMethod.POST)
     public SubmitResponse handleFileUpload(MultipartHttpServletRequest request, HttpServletResponse response,
-                                           @PathVariable String name) throws UploadException, SubmitException {
+                                           @PathVariable String name,
+                                           Locale locale) throws UploadException, SubmitException {
         Iterator<String> iterator = request.getFileNames();
         MultipartFile file;
         try {
             file = request.getFile(iterator.next());
         } catch (NoSuchElementException e) {
-            throw new UploadException("No files");
+            throw new UploadException(messageSource.getMessage("label.noFiles", null, locale));
         }
 
         String filename = file.getOriginalFilename();
@@ -68,13 +76,14 @@ public class FileUploadController {
                 stream.write(bytes);
                 stream.close();
                 LOG.info("Server File Location = " + serverFile.getAbsolutePath());
-                return CheckerUtils.submit(name, filename, String.valueOf(uuid));
+                Checker checker = new Checker(messageSource);
+                return checker.submit(name, filename, String.valueOf(uuid), locale);
             } catch (IOException e) {
                 e.printStackTrace();
-                throw new UploadException("Sorry, try to upload the file again");
+                throw new UploadException(messageSource.getMessage("label.uploadError", null, locale));
             }
         } else {
-            throw new UploadException("The uploaded file is empty!");
+            throw new UploadException(messageSource.getMessage("label.emptyFile", null, locale));
         }
     }
 }

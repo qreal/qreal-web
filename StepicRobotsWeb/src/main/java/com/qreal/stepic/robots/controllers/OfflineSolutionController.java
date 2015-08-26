@@ -1,7 +1,7 @@
 package com.qreal.stepic.robots.controllers;
 
 import com.qreal.stepic.robots.constants.PathConstants;
-import com.qreal.stepic.robots.utils.CheckerUtils;
+import com.qreal.stepic.robots.checker.CheckerUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

@@ -21,10 +21,10 @@
 <div ng-app ng-controller="RootDiagramController">
     <div class="container">
         <div id="titleContent" class="col-md-12">
-            <h2>Task: ${title}. ${name}</h2>
+            <h2><spring:message code="label.task"/>: ${title}. ${name}</h2>
             <br>
 
-            <h4>Description: ${description}</h4>
+            <h4><spring:message code="label.description"/>: ${description}</h4>
             <br>
         </div>
         <div class="col-md-9">
@@ -36,7 +36,8 @@
                     <div id="diagramSpinner" class="centerSpinner">
                     </div>
                 </div>
-                <button id="submit_button" class="btn btn-success btn-lg" type="button" ng-click="submit()">Submit
+                <button id="submit_button" class="btn btn-success btn-lg" type="button" ng-click="submit()">
+                    <spring:message code="label.submit"/>
                 </button>
             </div>
             <%@ include file="twoDModelContent.jsp" %>
@@ -45,12 +46,12 @@
             <div class="col-md-3">
                 <div id="palette">
                     <div id="properties">
-                        <legend style="padding: 10px">Property Editor</legend>
+                        <legend style="padding: 10px"><spring:message code="label.propertyEditor"/></legend>
                         <table class="table table-condensed" id="property_table">
                             <thead>
                             <tr>
-                                <th>Property</th>
-                                <th>Value</th>
+                                <th><spring:message code="label.property"/></th>
+                                <th><spring:message code="label.value"/></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -58,7 +59,7 @@
                         </table>
                     </div>
                     <div id="elements">
-                        <legend style="margin-bottom: 5px">Palette</legend>
+                        <legend style="margin-bottom: 5px"><spring:message code="label.palette"/></legend>
                         <div id="elements_tree">
                             <ul id="navigation">
                             </ul>

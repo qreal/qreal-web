@@ -7,10 +7,19 @@ import java.io.Serializable;
  */
 public class SubmitResponse implements Serializable {
 
-    public SubmitResponse(Report report, String trace, String fieldXML) {
+    public SubmitResponse(String message, Report report, String trace, String fieldXML) {
+        this.message = message;
         this.report = report;
         this.trace = trace;
         this.fieldXML = fieldXML;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public Report getReport() {
@@ -37,6 +46,7 @@ public class SubmitResponse implements Serializable {
         this.fieldXML = fieldXML;
     }
 
+    private String message;
     private Report report;
     private String trace;
     private String fieldXML;

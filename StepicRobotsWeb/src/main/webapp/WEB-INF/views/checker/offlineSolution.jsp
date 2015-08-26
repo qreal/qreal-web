@@ -17,22 +17,22 @@
     <div class="container" ng-app ng-controller="RootDiagramController">
         <div class="col-md-9 col-centered">
             <div id="taskContent" ng-controller="CheckerController" task="${name}">
-                <h2>Task: ${title}. ${name}</h2>
+                <h2><spring:message code="label.task"/>: ${title}. ${name}</h2>
                 <br>
 
-                <h4>Description: ${description}</h4>
+                <h4><spring:message code="label.description"/>: ${description}</h4>
 
-                <a href="downloadTask/${title}?name=${name}"><h4>Download task</h4></a>
+                <a href="downloadTask/${title}?name=${name}"><h4><spring:message code="label.download"/></h4></a>
                 <br>
 
-                <h4>Check your solution</h4>
+                <h4><spring:message code="label.checkSolution"/></h4>
 
                 <form id="uploadForm" method="POST" action="upload/${name}" enctype="multipart/form-data">
-                    <input type="file" name="fileName" id="fileName" class="filestyle" data-buttonText="Browse" data-buttonName="btn-primary"/>
+                    <input type="file" name="fileName" id="fileName" class="filestyle" data-buttonText="<spring:message code="label.browse"/>" data-buttonName="btn-primary"/>
                 </form>
                 <br>
 
-                <button id="upload" class="btn btn-success" ng-click="uploadFile()">Upload</button>
+                <button id="upload" class="btn btn-success" ng-click="uploadFile()"><spring:message code="label.upload"/></button>
                 <br>
                 <br>
 
@@ -42,7 +42,7 @@
                 <div id="result"></div>
                 <br>
 
-                <button id="showResult" class="btn btn-primary" ng-click="showResult()">Show result</button>
+                <button id="showResult" class="btn btn-primary" ng-click="showResult()"><spring:message code="label.showResult"/></button>
                 <br>
                 <br>
             </div>

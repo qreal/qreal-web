@@ -24,6 +24,7 @@
     <canvas id="display" width="218" height="274"></canvas>
     <div id="led"></div>
 
-    <button id="stop_button" class="btn btn-danger btn-lg" type="button" ng-click="vm.stopPlay()">Stop
+    <button id="stop_button" class="btn btn-danger btn-lg" type="button" ng-click="vm.stopPlay()">
+        <spring:message code="label.stop"/>
     </button>
 </div>

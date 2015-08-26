@@ -1,5 +1,6 @@
 package com.qreal.stepic.robots.controllers;
 
+import com.qreal.stepic.robots.checker.Checker;
 import com.qreal.stepic.robots.constants.PathConstants;
 import com.qreal.stepic.robots.converters.JavaModelConverter;
 import com.qreal.stepic.robots.converters.XmlSaveConverter;
@@ -8,7 +9,9 @@ import com.qreal.stepic.robots.model.diagram.Diagram;
 import com.qreal.stepic.robots.model.diagram.OpenResponse;
 import com.qreal.stepic.robots.model.diagram.SubmitRequest;
 import com.qreal.stepic.robots.model.diagram.SubmitResponse;
-import com.qreal.stepic.robots.utils.CheckerUtils;
+import com.qreal.stepic.robots.checker.CheckerUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,6 +23,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Locale;
 
 /**
  * Created by vladzx on 25.10.14.
@@ -28,11 +32,14 @@ import java.nio.file.Paths;
 @RequestMapping("/online")
 public class OnlineSolutionController {
 
+    @Autowired
+    MessageSource messageSource;
+
     @RequestMapping(value = "{title}", params = { "name" }, method = RequestMethod.GET)
     public ModelAndView showTask(HttpServletRequest request, @PathVariable String title,
-                                 @RequestParam(value = "name") String name)
+                                 @RequestParam(value = "name") String name, Locale locale)
             throws NoSuchRequestHandlingMethodException {
-        if (getPalette(name) == null) {
+        if (getPalette(name, locale) == null) {
             throw new NoSuchRequestHandlingMethodException(request);
         }
         ModelAndView modelAndView = new ModelAndView("checker/onlineSolution");
@@ -51,10 +58,18 @@ public class OnlineSolutionController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "getPalette/{name}", method = RequestMethod.POST)
-    public String getPalette(@PathVariable String name) {
+    @RequestMapping(value = "getPalette/{name}", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    public String getPalette(@PathVariable String name, Locale locale) {
         try {
-            return new String(Files.readAllBytes(Paths.get(PathConstants.tasksPath + "/" + name + "/elements.xml")));
+            if (locale.equals(new Locale("en", ""))) {
+                return new String(Files.readAllBytes(Paths.get(PathConstants.tasksPath + "/" + name + "/elements_en.xml")),
+                        StandardCharsets.UTF_8);
+            }
+
+            System.out.println(new String(Files.readAllBytes(Paths.get(PathConstants.tasksPath + "/" + name + "/elements_ru.xml")),
+                    StandardCharsets.UTF_8));
+            return new String(Files.readAllBytes(Paths.get(PathConstants.tasksPath + "/" + name + "/elements_ru.xml")),
+                    StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -81,16 +96,18 @@ public class OnlineSolutionController {
 
     @ResponseBody
     @RequestMapping(value = "submit/{name}", method = RequestMethod.POST)
-    public SubmitResponse submit(@RequestBody SubmitRequest request, @PathVariable String name) throws SubmitException {
+    public SubmitResponse submit(@RequestBody SubmitRequest request, @PathVariable String name,
+                                 Locale locale) throws SubmitException {
         JavaModelConverter javaModelConverter = new JavaModelConverter();
         String uuidStr = String.valueOf(javaModelConverter.convertToXmlSave(request.getDiagram(), name));
 
         try {
             CheckerUtils.compress(name, PathConstants.tasksPath + "/" + name + "/solutions/" + uuidStr);
         } catch (Exception e) {
-            throw new SubmitException("An error occurred. Please contact the developers");
+            throw new SubmitException(messageSource.getMessage("label.commonError", null, locale));
         }
 
-        return CheckerUtils.submit(name, name + ".qrs", uuidStr);
+        Checker checker = new Checker(messageSource);
+        return checker.submit(name, name + ".qrs", uuidStr, locale);
     }
 }

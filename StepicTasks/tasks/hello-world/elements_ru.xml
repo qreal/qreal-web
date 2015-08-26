@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Elements>
+	<Category name="Алгоритмы">
+
+		<Element name="Начало" type="InitialNode">
+			<Image src="images/initialBlock.svg"/>
+		</Element>
+
+		<Element name="Конец" type="FinalNode">
+			<Image src="images/finalBlock.svg"/>
+		</Element>
+
+	</Category>
+
+	<Category name="Действия">
+
+		<Element name="Сказать" type="TrikSay">
+			<Property key="Evaluate" name="Вычислять" type="checkbox">
+				<value>false</value>
+			</Property>
+			<Property key="Text" name="Текст" type="string">
+				<value>Привет!</value>
+			</Property>
+            <Image src="images/sayBlock.svg"/>
+        </Element>
+
+	</Category>
+
+	<Category name="Ожидание">
+
+		<Element name="Таймер" type="Timer">
+			<Property key="Delay" name="Задержка (мс)" type="string">
+				<value>1000</value>
+			</Property>
+			<Image src="images/timerBlock.svg"/>
+		</Element>
+
+	</Category>
+
+    <Category name="Рисование">
+
+        <Element name="Смайлик" type="TrikSmile">
+            <Image src="images/smileBlock.svg"/>
+        </Element>
+
+        <Element name="Грустный смайлик" type="TrikSadSmile">
+            <Image src="images/sadSmileBlock.svg"/>
+        </Element>
+
+    </Category>
+
+</Elements>

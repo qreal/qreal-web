@@ -1,34 +1,36 @@
-package com.qreal.stepic.robots.utils;
+package com.qreal.stepic.robots.checker;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qreal.stepic.robots.constants.PathConstants;
-import com.qreal.stepic.robots.exceptions.NotExistsException;
 import com.qreal.stepic.robots.exceptions.SubmitException;
 import com.qreal.stepic.robots.model.diagram.Report;
 import com.qreal.stepic.robots.model.diagram.ReportMessage;
 import com.qreal.stepic.robots.model.diagram.SubmitResponse;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.apache.commons.lang.LocaleUtils;
+import org.springframework.context.MessageSource;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
- * Created by vladzx on 12.08.15.
+ * Created by vladzx on 24.08.15.
  */
-public class CheckerUtils {
+public class Checker {
 
-    public static SubmitResponse submit(String taskId, String filename, String uuidStr) throws SubmitException {
+    private MessageSource messageSource;
+
+    public Checker(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
+    public SubmitResponse submit(String taskId, String filename, String uuidStr,
+                                        Locale locale) throws SubmitException {
         String nameWithoutExt = filename.substring(0, filename.length() - 4);
         try {
             File taskFields = new File(PathConstants.tasksPath + "/" + taskId + "/fields");
@@ -40,6 +42,13 @@ public class CheckerUtils {
             }
 
             ProcessBuilder interpreterProcBuilder = new ProcessBuilder(PathConstants.checkerPath, filename);
+            Map<String, String> environment = interpreterProcBuilder.environment();
+
+            if (locale.equals(new Locale("en", ""))) {
+                environment.put("LANG", "en_US.utf8");
+            } else {
+                environment.put("LANG", "ru_RU.utf8");
+            }
             interpreterProcBuilder.directory(solutionFolder);
 
             final Process process = interpreterProcBuilder.start();
@@ -69,89 +78,45 @@ public class CheckerUtils {
                         "/solutions/" + uuidStr + "/trajectories/" + nameWithoutExt + "/" + failedName;
 
                 report = parseReportFile(new File(PathConstants.tasksPath + "/" + taskId +
-                        "/solutions/" + uuidStr + "/reports/" + nameWithoutExt + "/" + failedName));
+                        "/solutions/" + uuidStr + "/reports/" + nameWithoutExt + "/" + failedName), locale);
             } else {
                 String pathToMetainfo = PathConstants.tasksPath + "/" + taskId + "/" + taskId + "/metaInfo.xml";
 
                 try {
-                    fieldXML = getWorldModelFromMetainfo(pathToMetainfo);
+                    fieldXML = CheckerUtils.getWorldModelFromMetainfo(pathToMetainfo);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    throw new SubmitException("Can't load 2d world model! Please contact the developers");
+                    throw new SubmitException(messageSource.getMessage("label.twoDModelError", null, locale));
                 }
                 trajectoryPath = PathConstants.tasksPath + "/" + taskId + "/solutions/" + uuidStr + "/trajectory";
 
                 report = parseReportFile(new File(PathConstants.tasksPath + "/" + taskId +
-                        "/solutions/" + uuidStr + "/report"));
+                        "/solutions/" + uuidStr + "/report"), locale);
             }
 
             String trace = new String(Files.readAllBytes(Paths.get(trajectoryPath)));
             //FileUtils.deleteDirectory(solutionFolder);
 
-            return new SubmitResponse(report, trace, fieldXML);
+            return new SubmitResponse(messageSource.getMessage("label.successUpload", null, locale),
+                    report, trace, fieldXML);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new SubmitException("Error while checking, please contact the developers");
+            throw new SubmitException(messageSource.getMessage("label.checkingError", null, locale));
         } catch (InterruptedException e) {
             e.printStackTrace();
-            throw new SubmitException("Error while checking, please contact the developers");
+            throw new SubmitException(messageSource.getMessage("label.checkingError", null, locale));
         }
     }
 
-    public static Report parseReportFile(File file) throws SubmitException {
+    private Report parseReportFile(File file, Locale locale) throws SubmitException {
         ObjectMapper mapper = new ObjectMapper();
         try {
             List<ReportMessage> messages = mapper.readValue(file, List.class);
             return new Report(messages);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new SubmitException("Can't return report! Please contact the developers");
+            throw new SubmitException(messageSource.getMessage("label.reportError", null, locale));
         }
     }
 
-    public static String getWorldModelFromMetainfo(String pathToMetaInfo) throws NotExistsException,
-            IOException, ParserConfigurationException, SAXException {
-
-            File metainfo = new File(pathToMetaInfo);
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document metainfoXML = dBuilder.parse(metainfo);
-
-            NodeList infos = metainfoXML.getElementsByTagName("info");
-            for (int i = 0; i < infos.getLength(); i++) {
-                Element info = (Element) infos.item(i);
-                if (info.getAttribute("key").equals("worldModel")) {
-                    return StringEscapeUtils.unescapeXml(info.getAttribute("value"));
-                }
-            }
-            throw new NotExistsException("There is no attribute key with value worldModel in the metainfo");
-    }
-
-    public static void compress(String taskId, String pathToFolder) throws IOException, InterruptedException {
-        File folder = new File(pathToFolder);
-        ProcessBuilder compressorProcBuilder = new ProcessBuilder("sudo", "compressor", taskId);
-        compressorProcBuilder.directory(folder);
-        compressorProcBuilder.start().waitFor();
-    }
-
-    public static void decompressTask(String taskId) throws IOException, InterruptedException {
-        String pathToFile = PathConstants.tasksPath + "/" + taskId;
-        File folder = new File(pathToFile);
-        File diagramDirectory = new File(pathToFile + "/" + taskId);
-
-        if (!diagramDirectory.exists()) {
-            ProcessBuilder processBuilder = new ProcessBuilder(PathConstants.compressorPath, taskId + ".qrs");
-            processBuilder.directory(folder);
-
-            final Process process = processBuilder.start();
-            InputStream is = process.getInputStream();
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader bufferedReader = new BufferedReader(isr);
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                System.out.println(line);
-            }
-            process.waitFor();
-        }
-    }
 }
