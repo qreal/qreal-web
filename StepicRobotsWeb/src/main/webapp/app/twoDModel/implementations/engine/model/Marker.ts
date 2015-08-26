@@ -1,22 +1,23 @@
 class Marker {
 
-    private context: any;
+    private paper: RaphaelPaper;
     private down: boolean;
+    private color: string;
     private position: TwoDPosition;
     private robotCenter: TwoDPosition
     private direction: number;
+    private width: number = 5;
     private height: number = 6;
+    private pointSet: RaphaelSet;
 
-    constructor(position: TwoDPosition, robotCenter: TwoDPosition) {
-        var canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById("twoDModelCanvas");
-        this.context = canvas.getContext("2d");
-        this.context.scale(2/3, 2/3);
-
+    constructor(paper: RaphaelPaper, position: TwoDPosition, robotCenter: TwoDPosition) {
+        this.paper = paper;
         this.down = false;
-        this.context.fillStyle = "#000000";
+        this.color = "#000000";
         this.position = position;
         this.robotCenter = robotCenter;
         this.direction = 0;
+        this.pointSet = paper.set();
     }
 
     setPosition(position: TwoDPosition, robotCenter: TwoDPosition) {
@@ -29,7 +30,7 @@ class Marker {
     }
 
     setColor(color: string) {
-        this.context.fillStyle = color;
+        this.color = color;
     }
 
     isDown(): boolean {
@@ -41,16 +42,17 @@ class Marker {
     }
 
     clear(): void {
-        this.context.clearRect(0, 0, 2000, 2000);
+        while(this.pointSet.length) {
+            this.pointSet.pop().remove();
+        }
     }
 
     drawPoint(): void {
-        this.context.save();
-        this.context.translate(this.robotCenter.x, this.robotCenter.y);
-        this.context.rotate(this.direction * Math.PI / 180);
-        this.context.translate(-this.robotCenter.x, -this.robotCenter.y);
-        this.context.fillRect(this.position.x - 0.5, this.position.y - this.height / 2, 5, this.height);
-        this.context.restore();
+        var point = this.paper.rect(this.position.x - 0.5, this.position.y - this.height / 2, this.width, this.height);
+        point.attr({ "stroke-width": 0, "fill": this.color });
+        point.transform("R" + this.direction + "," + this.robotCenter.x + "," + this.robotCenter.y);
+        point.toBack();
+        this.pointSet.push(point);
     }
 
 }

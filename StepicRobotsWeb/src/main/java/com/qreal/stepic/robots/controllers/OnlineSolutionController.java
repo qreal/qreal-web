@@ -65,7 +65,7 @@ public class OnlineSolutionController {
                 return new String(Files.readAllBytes(Paths.get(PathConstants.tasksPath + "/" + name + "/elements_en.xml")),
                         StandardCharsets.UTF_8);
             }
-            
+
             return new String(Files.readAllBytes(Paths.get(PathConstants.tasksPath + "/" + name + "/elements_ru.xml")),
                     StandardCharsets.UTF_8);
         } catch (IOException e) {

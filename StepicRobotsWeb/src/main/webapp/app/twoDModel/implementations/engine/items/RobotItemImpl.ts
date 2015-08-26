@@ -34,7 +34,7 @@ class RobotItemImpl implements RobotItem {
         this.startCenter.x = this.center.x
         this.startCenter.y = this.center.y;
 
-        this.marker = new Marker(new TwoDPosition(this.startPosition.x, this.center.y), this.center);
+        this.marker = new Marker(paper, new TwoDPosition(this.startPosition.x, this.center.y), this.center);
 
         var handleRadius: number = 10;
 
