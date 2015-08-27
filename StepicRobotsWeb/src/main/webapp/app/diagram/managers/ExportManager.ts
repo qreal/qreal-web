@@ -130,30 +130,42 @@ class ExportManager {
             var sourceObject = nodesMap[jointObject.get('source').id];
             var targetObject = nodesMap[jointObject.get('target').id];
 
+            var logicalSourceValue: string =  (sourceObject) ? sourceObject.getType() + "/{" + sourceObject.getLogicalId() + "}" :
+                "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID";
+
             var logicalSource = {
                 'name': "from",
-                'value': sourceObject.getType() + "/{" + sourceObject.getLogicalId() + "}",
+                'value': logicalSourceValue,
                 'type': "qReal::Id"
             }
 
+            var logicalTargetValue: string =  (targetObject) ? targetObject.getType() + "/{" + targetObject.getLogicalId() + "}" :
+                "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID";
+
             var logicalTarget = {
                 'name': "to",
-                'value': targetObject.getType() + "/{" + targetObject.getLogicalId() + "}",
+                'value': logicalTargetValue,
                 'type': "qReal::Id"
             }
 
             linkJSON.logicalProperties.push(logicalSource);
             linkJSON.logicalProperties.push(logicalTarget);
 
+            var graphicalSourceValue: string = (sourceObject) ? sourceObject.getType() + "/{" + jointObject.get('source').id + "}" :
+                "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID";
+
             var graphicalSource = {
                 'name': "from",
-                'value': sourceObject.getType() + "/{" + jointObject.get('source').id + "}",
+                'value': graphicalSourceValue,
                 'type': "qReal::Id"
             }
 
+            var graphicalTargetValue: string = (targetObject) ? targetObject.getType() + "/{" + jointObject.get('target').id + "}" :
+                "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID";
+
             var graphicalTarget = {
                 'name': "to",
-                'value': targetObject.getType() + "/{" + jointObject.get('target').id + "}",
+                'value': graphicalTargetValue,
                 'type': "qReal::Id"
             }
 
