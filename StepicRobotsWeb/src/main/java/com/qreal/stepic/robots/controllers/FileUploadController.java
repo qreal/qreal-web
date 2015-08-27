@@ -16,14 +16,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import static java.nio.charset.StandardCharsets.*;
 
 /**
  * Created by vladzx on 04.08.15.
@@ -40,8 +39,8 @@ public class FileUploadController {
     @ExceptionHandler(UploadException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public String handleUploadException(UploadException e) {
-        return e.getMessage();
+    public byte[] handleUploadException(UploadException e) {
+        return e.getMessage().getBytes(UTF_8);
     }
 
     @ResponseBody

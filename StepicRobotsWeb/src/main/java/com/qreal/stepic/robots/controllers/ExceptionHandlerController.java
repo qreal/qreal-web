@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * Created by vladzx on 12.08.15.
  */
@@ -16,7 +18,7 @@ public class ExceptionHandlerController {
     @ExceptionHandler(SubmitException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public String handleUploadException(SubmitException e) {
-        return e.getMessage();
+    public byte[] handleUploadException(SubmitException e) {
+        return e.getMessage().getBytes(UTF_8);
     }
 }
