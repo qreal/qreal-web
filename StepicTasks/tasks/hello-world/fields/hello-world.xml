@@ -31,10 +31,16 @@
                     <objectState object="robot1.display.smiles"/>
                     <bool value="true"/>
                 </equals>
-				<equals>
-                    <objectState object="robot1.shell.lastPhrase"/>
-                    <string value="Привет, мир"/>
-                </equals>
+				<conditions glue="or">
+                    <equals>
+                        <objectState object="robot1.shell.lastPhrase"/>
+                        <string value="Привет, мир!"/>
+                    </equals>
+                    <equals>
+                        <objectState object="robot1.shell.lastPhrase"/>
+                        <string value="Привет, мир"/>
+                    </equals>
+                </conditions>
             </conditions>
             <triggers>
                 <success deferred="true"/>
