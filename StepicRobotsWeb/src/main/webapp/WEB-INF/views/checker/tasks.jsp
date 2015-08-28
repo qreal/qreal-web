@@ -34,7 +34,7 @@
                     <c:forEach var="task" items="${tasks}">
                         <div class="list-group-item clearfix">
                             <span class="pull-left">
-                                ${task.getTitle()}. ${task.getName()}
+                                ${task.getTitle()}. <spring:message code="task.${task.getName()}"/>
                             </span>
                             <span class="pull-right">
                                 <c:if test="${task.isOnline()}">
