@@ -37,7 +37,7 @@
                 </equals>
             </conditions>
             <triggers>
-                <success/>
+                <success deferred="true"/>
             </triggers>
         </event>
     </constraints>
