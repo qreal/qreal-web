@@ -15,7 +15,8 @@ class RobotItemImpl implements RobotItem {
     private timeoutId: number;
     private sensors: {string?: SensorItem} = {};
     private direction: number;
-    private cycles: number;
+    private roughening: number = 50;
+    private counter: number = 0;
 
     constructor(worldModel: WorldModel, position: TwoDPosition, imageFileName: string, robot: RobotModel) {
         this.worldModel = worldModel;
@@ -23,7 +24,6 @@ class RobotItemImpl implements RobotItem {
         this.startPosition = position;
         this.direction = 0;
         this.startDirection = 0;
-        this.cycles = 0;
         var paper = worldModel.getPaper();
 
         this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
@@ -34,7 +34,7 @@ class RobotItemImpl implements RobotItem {
         this.startCenter.x = this.center.x
         this.startCenter.y = this.center.y;
 
-        this.marker = new Marker(paper, new TwoDPosition(this.startPosition.x, this.center.y), this.center);
+        this.marker = new Marker(paper, new TwoDPosition(this.center.x, this.center.y));
 
         var handleRadius: number = 10;
 
@@ -62,8 +62,7 @@ class RobotItemImpl implements RobotItem {
         this.image.transform("R" + direction + "," + this.center.x + "," + this.center.y);
         this.rotateHandle.attr({"cx": + position.x + this.width + 20, "cy": position.y + this.height / 2 });
 
-        this.marker.setPosition(new TwoDPosition(this.center.x, this.center.y), this.center);
-        this.marker.setDirection(direction);
+        this.marker.setCenter(new TwoDPosition(this.center.x, this.center.y));
     }
 
     hideHandles(): void {
@@ -117,15 +116,6 @@ class RobotItemImpl implements RobotItem {
         }
     }
 
-    private clearSensorsPosition() {
-        for (var portName in this.sensors) {
-            var sensor = this.sensors[portName];
-            sensor.setStartPosition();
-            sensor.rotateByRobot(this.direction, this.center.x, this.center.y);
-            sensor.restoreStartDirection();
-        }
-    }
-
     clearCurrentPosition(): void {
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
@@ -133,10 +123,11 @@ class RobotItemImpl implements RobotItem {
         }
         this.marker.setDown(false);
         this.marker.setColor("#000000");
+        this.marker.setCenter(new TwoDPosition(this.center.x, this.center.y));
         this.marker.clear();
         this.setStartPosition(this.startPosition, this.startDirection);
         this.clearSensorsPosition();
-        this.cycles = 0;
+        this.counter = 0;
     }
 
     setOffsetX(offsetX: number): void {
@@ -150,24 +141,31 @@ class RobotItemImpl implements RobotItem {
     moveToPoint(x: number, y: number, rotation: number): void {
         var newX = x + this.offsetX;
         var newY = y + this.offsetY;
-        this.center.x = newX + this.width / 2;
-        this.center.y = newY + this.height / 2;
+
+        var newCenterX = newX + this.width / 2;
+        var newCenterY = newY + this.height / 2;
+
+        this.center.x = newCenterX;
+        this.center.y = newCenterY;
 
         this.image.transform("R" + rotation);
+
         this.direction = rotation;
 
         this.moveSensors(newX, newY, rotation, this.center.x, this.center.y);
 
         this.image.attr({x: newX, y: newY});
 
-        this.marker.setPosition(new TwoDPosition(newX, this.center.y), this.center);
-        this.marker.setDirection(rotation);
-        if (this.marker.isDown() && !this.cycles) {
-            this.marker.drawPoint();
-        }
-        this.cycles++;
-        if (this.cycles++ > 5) {
-            this.cycles = 0;
+        if (this.marker.isDown()) {
+            if (this.counter > this.roughening) {
+                this.marker.setCenter(new TwoDPosition(this.center.x, this.center.y));
+                this.marker.drawPoint();
+                this.counter = 0;
+            } else {
+                this.counter++;
+            }
+        } else {
+            this.marker.setCenter(new TwoDPosition(this.center.x, this.center.y));
         }
     }
 
@@ -185,5 +183,14 @@ class RobotItemImpl implements RobotItem {
 
     show(): void {
         this.image.show();
+    }
+
+    private clearSensorsPosition() {
+        for (var portName in this.sensors) {
+            var sensor = this.sensors[portName];
+            sensor.setStartPosition();
+            sensor.rotateByRobot(this.direction, this.center.x, this.center.y);
+            sensor.restoreStartDirection();
+        }
     }
 }

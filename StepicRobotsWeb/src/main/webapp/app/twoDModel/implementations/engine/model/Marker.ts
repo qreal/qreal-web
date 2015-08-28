@@ -3,33 +3,26 @@ class Marker {
     private paper: RaphaelPaper;
     private down: boolean;
     private color: string;
-    private position: TwoDPosition;
-    private robotCenter: TwoDPosition
-    private direction: number;
-    private width: number = 5;
+    private robotCenter: TwoDPosition;
+    private prevCenter: TwoDPosition;
     private height: number = 6;
     private pointSet: RaphaelSet;
 
-    constructor(paper: RaphaelPaper, position: TwoDPosition, robotCenter: TwoDPosition) {
+    constructor(paper: RaphaelPaper, robotCenter: TwoDPosition) {
         this.paper = paper;
         this.down = false;
         this.color = "#000000";
-        this.position = position;
         this.robotCenter = robotCenter;
-        this.direction = 0;
+        this.prevCenter = new TwoDPosition(robotCenter.x, robotCenter.y);
         this.pointSet = paper.set();
     }
 
-    setPosition(position: TwoDPosition, robotCenter: TwoDPosition) {
-        this.position = position;
+    setCenter(robotCenter: TwoDPosition): void {
+        this.prevCenter = new TwoDPosition(this.robotCenter.x, this.robotCenter.y);
         this.robotCenter = robotCenter;
     }
 
-    setDirection(angle: number) {
-        this.direction = angle;
-    }
-
-    setColor(color: string) {
+    setColor(color: string): void {
         this.color = color;
     }
 
@@ -45,14 +38,40 @@ class Marker {
         while(this.pointSet.length) {
             this.pointSet.pop().remove();
         }
+        this.prevCenter = new TwoDPosition(this.robotCenter.x, this.robotCenter.y);
     }
 
     drawPoint(): void {
-        var point = this.paper.rect(this.position.x - 0.5, this.position.y - this.height / 2, this.width, this.height);
-        point.attr({ "stroke-width": 0, "fill": this.color });
-        point.transform("R" + this.direction + "," + this.robotCenter.x + "," + this.robotCenter.y);
-        point.toBack();
-        this.pointSet.push(point);
+        var length = MathUtils.twoPointLenght(this.robotCenter.x, this.robotCenter.y,
+                this.prevCenter.x, this.prevCenter.y);
+
+        var diffX = this.robotCenter.x - this.prevCenter.x;
+        var diffY = this.robotCenter.y - this.prevCenter.y;
+        var angle;
+        if (length) {
+            var sin = Math.abs(diffY) / length;
+            angle = MathUtils.toDeg(Math.asin(sin));
+
+            if (diffX > 0 && diffY < 0) {
+                angle = -angle;
+            }
+            if (diffX < 0 && diffY > 0) {
+                angle = 180 - angle;
+            }
+            if (diffX < 0 && diffY < 0) {
+                angle = -180 + angle;
+            }
+
+        } else {
+            angle = 0;
+        }
+
+        var rect: RaphaelElement = this.paper.rect(this.prevCenter.x - 1,
+            this.prevCenter.y - this.height / 2, length + 2, this.height);
+        rect.attr({ "stroke-width": 0, "fill": this.color });
+        rect.transform("R" + angle + "," + this.prevCenter.x + "," + this.prevCenter.y);
+        rect.toBack();
+        this.pointSet.push(rect);
     }
 
 }
