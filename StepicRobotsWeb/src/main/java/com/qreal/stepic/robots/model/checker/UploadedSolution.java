@@ -22,4 +22,5 @@ public class UploadedSolution {
 
     private UUID uuid;
     private String filename;
+
 }

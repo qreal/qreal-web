@@ -46,13 +46,9 @@ public class OnlineSolutionController extends SolutionController {
         modelAndView.addObject("title", title);
         modelAndView.addObject("name", name);
 
-        String descriptionPath = PathConstants.TASKS_PATH + "/" + name + "/description_ru.json";
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            Description description = objectMapper.readValue(new File(descriptionPath), Description.class);
+        Description description = getDescription(name);
+        if (description != null) {
             modelAndView.addObject("description", description.getMain());
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         return modelAndView;

@@ -4,6 +4,7 @@ import com.qreal.stepic.robots.checker.OfflineSolutionUploader;
 import com.qreal.stepic.robots.constants.PathConstants;
 import com.qreal.stepic.robots.exceptions.SubmitException;
 import com.qreal.stepic.robots.exceptions.UploadException;
+import com.qreal.stepic.robots.model.checker.Description;
 import com.qreal.stepic.robots.model.checker.UploadedSolution;
 import com.qreal.stepic.robots.model.diagram.SubmitResponse;
 import org.apache.commons.io.IOUtils;
@@ -60,12 +61,9 @@ public class OfflineSolutionController extends SolutionController {
         modelAndView.addObject("title", title);
         modelAndView.addObject("name", name);
 
-        String descriptionPath = PathConstants.TASKS_PATH + "/" + name + "/" + name + ".txt";
-        try {
-            String description = new String(Files.readAllBytes(Paths.get(descriptionPath)), StandardCharsets.UTF_8);
-            modelAndView.addObject("description", description);
-        } catch (IOException e) {
-            e.printStackTrace();
+        Description description = getDescription(name);
+        if (description != null) {
+            modelAndView.addObject("description", description.getMain());
         }
 
         return modelAndView;
