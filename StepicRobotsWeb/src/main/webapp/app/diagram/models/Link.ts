@@ -9,20 +9,13 @@ class Link implements DiagramElement {
         this.logicalId = UIDGenerator.generate();
         this.jointObject = jointObject;
 
+        jointObject.on('change:source', () => {
+                this.updateHighlight();
+            }
+        );
+
         jointObject.on('change:target', () => {
-                if (!jointObject.get('target').id || !jointObject.get('source').id) {
-                    jointObject.attr({
-                            '.connection': {stroke: 'red'},
-                            '.marker-target': {fill: 'red', d: 'M 10 0 L 0 5 L 10 10 z'}
-                        }
-                    );
-                } else {
-                    jointObject.attr({
-                            '.connection': {stroke: 'black'},
-                            '.marker-target': {fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z'}
-                        }
-                    );
-                }
+                this.updateHighlight();
             }
         );
 
@@ -56,5 +49,21 @@ class Link implements DiagramElement {
 
     setProperty(key: string, property: Property): void {
         this.properties[key] = property;
+    }
+
+    private updateHighlight(): void {
+        if (!this.jointObject.get('target').id || !this.jointObject.get('source').id) {
+            this.jointObject.attr({
+                    '.connection': {stroke: 'red'},
+                    '.marker-target': {fill: 'red', d: 'M 10 0 L 0 5 L 10 10 z'}
+                }
+            );
+        } else {
+            this.jointObject.attr({
+                    '.connection': {stroke: 'black'},
+                    '.marker-target': {fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z'}
+                }
+            );
+        }
     }
 }
