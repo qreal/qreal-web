@@ -5,7 +5,6 @@ import com.qreal.stepic.robots.constants.PathConstants;
 import com.qreal.stepic.robots.exceptions.SubmitException;
 import com.qreal.stepic.robots.exceptions.UploadException;
 import com.qreal.stepic.robots.model.diagram.SubmitResponse;
-import com.qreal.stepic.robots.checker.CheckerUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -17,7 +16,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.nio.charset.UnsupportedCharsetException;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.NoSuchElementException;
@@ -60,7 +58,7 @@ public class FileUploadController {
 
         if (!file.isEmpty()) {
             try {
-                String directoryPath = PathConstants.tasksPath + "/" + name;
+                String directoryPath = PathConstants.TASKS_PATH + "/" + name;
 
                 UUID uuid = UUID.randomUUID();
 

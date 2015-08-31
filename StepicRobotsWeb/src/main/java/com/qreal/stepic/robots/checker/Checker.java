@@ -7,7 +7,6 @@ import com.qreal.stepic.robots.model.diagram.Report;
 import com.qreal.stepic.robots.model.diagram.ReportMessage;
 import com.qreal.stepic.robots.model.diagram.SubmitResponse;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.LocaleUtils;
 import org.springframework.context.MessageSource;
 
 import java.io.*;
@@ -33,15 +32,15 @@ public class Checker {
                                         Locale locale) throws SubmitException {
         String nameWithoutExt = filename.substring(0, filename.length() - 4);
         try {
-            File taskFields = new File(PathConstants.tasksPath + "/" + taskId + "/fields");
-            File solutionFolder = new File(PathConstants.tasksPath + "/" + taskId + "/solutions/" + uuidStr);
+            File taskFields = new File(PathConstants.TASKS_PATH + "/" + taskId + "/fields");
+            File solutionFolder = new File(PathConstants.TASKS_PATH + "/" + taskId + "/solutions/" + uuidStr);
 
             if (taskFields.exists()) {
                 File solutionFields = new File(solutionFolder.getPath() + "/fields/" + nameWithoutExt);
                 FileUtils.copyDirectory(taskFields, solutionFields);
             }
 
-            ProcessBuilder interpreterProcBuilder = new ProcessBuilder(PathConstants.checkerPath, filename);
+            ProcessBuilder interpreterProcBuilder = new ProcessBuilder(PathConstants.CHECKER_PATH, filename);
             Map<String, String> environment = interpreterProcBuilder.environment();
 
             if (locale.equals(new Locale("en", ""))) {
@@ -64,7 +63,7 @@ public class Checker {
             String trajectoryPath;
             Report report;
 
-            File failedField = new File(PathConstants.tasksPath + "/" + taskId +
+            File failedField = new File(PathConstants.TASKS_PATH + "/" + taskId +
                     "/solutions/" + uuidStr + "/failed-field");
             String fieldXML = null;
             if (failedField.exists()) {
@@ -74,13 +73,13 @@ public class Checker {
                 String[] pathParts = pathToFailedField.split("/");
                 String failedFilename = pathParts[pathParts.length - 1];
                 String failedName = failedFilename.substring(0, failedFilename.length() - 4);
-                trajectoryPath = PathConstants.tasksPath + "/" + taskId +
+                trajectoryPath = PathConstants.TASKS_PATH + "/" + taskId +
                         "/solutions/" + uuidStr + "/trajectories/" + nameWithoutExt + "/" + failedName;
 
-                report = parseReportFile(new File(PathConstants.tasksPath + "/" + taskId +
+                report = parseReportFile(new File(PathConstants.TASKS_PATH + "/" + taskId +
                         "/solutions/" + uuidStr + "/reports/" + nameWithoutExt + "/" + failedName), locale);
             } else {
-                String pathToMetainfo = PathConstants.tasksPath + "/" + taskId + "/" + taskId + "/metaInfo.xml";
+                String pathToMetainfo = PathConstants.TASKS_PATH + "/" + taskId + "/" + taskId + "/metaInfo.xml";
 
                 try {
                     fieldXML = CheckerUtils.getWorldModelFromMetainfo(pathToMetainfo);
@@ -88,9 +87,9 @@ public class Checker {
                     e.printStackTrace();
                     throw new SubmitException(messageSource.getMessage("label.twoDModelError", null, locale));
                 }
-                trajectoryPath = PathConstants.tasksPath + "/" + taskId + "/solutions/" + uuidStr + "/trajectory";
+                trajectoryPath = PathConstants.TASKS_PATH + "/" + taskId + "/solutions/" + uuidStr + "/trajectory";
 
-                report = parseReportFile(new File(PathConstants.tasksPath + "/" + taskId +
+                report = parseReportFile(new File(PathConstants.TASKS_PATH + "/" + taskId +
                         "/solutions/" + uuidStr + "/report"), locale);
             }
 

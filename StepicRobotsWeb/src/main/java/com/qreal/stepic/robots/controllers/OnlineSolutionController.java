@@ -46,7 +46,7 @@ public class OnlineSolutionController {
         modelAndView.addObject("title", title);
         modelAndView.addObject("name", name);
 
-        String descriptionPath = PathConstants.tasksPath + "/" + name + "/" + name + ".txt";
+        String descriptionPath = PathConstants.TASKS_PATH + "/" + name + "/" + name + ".txt";
         try {
             String description = new String(Files.readAllBytes(Paths.get(descriptionPath)), StandardCharsets.UTF_8);
             modelAndView.addObject("description", description);
@@ -62,11 +62,11 @@ public class OnlineSolutionController {
     public String getPalette(@PathVariable String name, Locale locale) {
         try {
             if (locale.equals(new Locale("en", ""))) {
-                return new String(Files.readAllBytes(Paths.get(PathConstants.tasksPath + "/" + name + "/elements_en.xml")),
+                return new String(Files.readAllBytes(Paths.get(PathConstants.TASKS_PATH + "/" + name + "/elements_en.xml")),
                         StandardCharsets.UTF_8);
             }
 
-            return new String(Files.readAllBytes(Paths.get(PathConstants.tasksPath + "/" + name + "/elements_ru.xml")),
+            return new String(Files.readAllBytes(Paths.get(PathConstants.TASKS_PATH + "/" + name + "/elements_ru.xml")),
                     StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
@@ -81,9 +81,9 @@ public class OnlineSolutionController {
 
         try {
             CheckerUtils.decompressTask(name);
-            String fieldXML = CheckerUtils.getWorldModelFromMetainfo(PathConstants.tasksPath + "/" + name + "/"
+            String fieldXML = CheckerUtils.getWorldModelFromMetainfo(PathConstants.TASKS_PATH + "/" + name + "/"
                     + name + "/metaInfo.xml");
-            File treeDirectory = new File(PathConstants.tasksPath + "/" + name + "/" + name + "/tree");
+            File treeDirectory = new File(PathConstants.TASKS_PATH + "/" + name + "/" + name + "/tree");
             Diagram diagram = converter.convertToJavaModel(treeDirectory);
             return new OpenResponse(diagram, fieldXML);
         } catch (Exception e) {
@@ -100,7 +100,7 @@ public class OnlineSolutionController {
         String uuidStr = String.valueOf(javaModelConverter.convertToXmlSave(request.getDiagram(), name));
 
         try {
-            CheckerUtils.compress(name, PathConstants.tasksPath + "/" + name + "/solutions/" + uuidStr);
+            CheckerUtils.compress(name, PathConstants.TASKS_PATH + "/" + name + "/solutions/" + uuidStr);
         } catch (Exception e) {
             throw new SubmitException(messageSource.getMessage("label.commonError", null, locale));
         }

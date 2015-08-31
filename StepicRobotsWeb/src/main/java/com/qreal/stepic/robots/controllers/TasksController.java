@@ -36,9 +36,9 @@ public class TasksController {
     public ModelAndView tasksHandler() {
         ModelAndView modelAndView = new ModelAndView("checker/tasks");
 
-        List<TaskItem> taskItems = this.parseTaskList(new File(PathConstants.stepicPath + "/list.json"));
+        List<TaskItem> taskItems = this.parseTaskList(new File(PathConstants.STEPIC_PATH + "/list.json"));
 
-        File tasksDir = new File(PathConstants.tasksPath);
+        File tasksDir = new File(PathConstants.TASKS_PATH);
         Set<String> taskNames = new HashSet<>();
         for (File task : tasksDir.listFiles()) {
             taskNames.add(task.getName());

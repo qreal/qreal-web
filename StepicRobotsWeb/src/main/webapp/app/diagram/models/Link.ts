@@ -9,6 +9,23 @@ class Link implements DiagramElement {
         this.logicalId = UIDGenerator.generate();
         this.jointObject = jointObject;
 
+        jointObject.on('change:target', () => {
+                if (!jointObject.get('target').id || !jointObject.get('source').id) {
+                    jointObject.attr({
+                            '.connection': {stroke: 'red'},
+                            '.marker-target': {fill: 'red', d: 'M 10 0 L 0 5 L 10 10 z'}
+                        }
+                    );
+                } else {
+                    jointObject.attr({
+                            '.connection': {stroke: 'black'},
+                            '.marker-target': {fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z'}
+                        }
+                    );
+                }
+            }
+        );
+
         if (properties) {
             this.properties = properties;
         }

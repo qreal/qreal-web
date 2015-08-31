@@ -6,14 +6,11 @@ import com.qreal.stepic.robots.model.diagram.DiagramNode;
 import com.qreal.stepic.robots.model.diagram.IdObject;
 import com.qreal.stepic.robots.model.diagram.Property;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ResourceLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -33,7 +30,7 @@ public class JavaModelConverter {
 
     public UUID convertToXmlSave(Diagram diagram, String taskId) {
         try {
-            String directoryPath = PathConstants.tasksPath + "/" + taskId;
+            String directoryPath = PathConstants.TASKS_PATH + "/" + taskId;
 
             this.uuid = UUID.randomUUID();
 
@@ -41,9 +38,9 @@ public class JavaModelConverter {
             File targetDirectory = new File(targetPath);
             targetDirectory.mkdirs();
 
-            new File(targetPath + PathConstants.pathToGraphicalPart).mkdirs();
-            new File(targetPath + PathConstants.pathToLogicalPart).mkdirs();
-            new File(targetPath + PathConstants.pathToRootId).mkdirs();
+            new File(targetPath + PathConstants.PATH_TO_GRAPHICAL_PART).mkdirs();
+            new File(targetPath + PathConstants.PATH_TO_LOGICAL_PART).mkdirs();
+            new File(targetPath + PathConstants.PATH_TO_ROOT_ID).mkdirs();
 
             File taskMetaInfo = new File(directoryPath + "/" + taskId + "/metaInfo.xml");
             File targetMetaInfo = new File(targetPath + "/metaInfo.xml");
@@ -73,7 +70,7 @@ public class JavaModelConverter {
 
     private void createRootIdFile(String targetPath, DocumentBuilder documentBuilder, Transformer transformer) {
         try {
-            File rootIdFile = new File(targetPath + PathConstants.pathToRootId + "/ROOT_ID");
+            File rootIdFile = new File(targetPath + PathConstants.PATH_TO_ROOT_ID + "/ROOT_ID");
             rootIdFile.createNewFile();
 
             Document xml = documentBuilder.newDocument();
@@ -112,7 +109,7 @@ public class JavaModelConverter {
     private void convertElement(DiagramNode element, String targetPath,
                                        DocumentBuilder documentBuilder, Transformer transformer) {
         try {
-            String logicalXmlTargetPath = targetPath + PathConstants.pathToLogicalPart + "/" + element.getType();
+            String logicalXmlTargetPath = targetPath + PathConstants.PATH_TO_LOGICAL_PART + "/" + element.getType();
             File logicalXmlTargetDirectory = new File(logicalXmlTargetPath);
             logicalXmlTargetDirectory.mkdir();
 
@@ -128,7 +125,7 @@ public class JavaModelConverter {
             StreamResult logicalResult = new StreamResult(logicalTargetFile);
             transformer.transform(logicalSource, logicalResult);
 
-            String graphicalXmlTargetPath = targetPath + PathConstants.pathToGraphicalPart + "/" + element.getType();
+            String graphicalXmlTargetPath = targetPath + PathConstants.PATH_TO_GRAPHICAL_PART + "/" + element.getType();
             File graphicalXmlTargetDirectory = new File(graphicalXmlTargetPath);
             graphicalXmlTargetDirectory.mkdir();
 

@@ -26,12 +26,12 @@ public class CheckerUtils {
     }
 
     public static void decompressTask(String taskId) throws IOException, InterruptedException {
-        String pathToFile = PathConstants.tasksPath + "/" + taskId;
+        String pathToFile = PathConstants.TASKS_PATH + "/" + taskId;
         File folder = new File(pathToFile);
         File diagramDirectory = new File(pathToFile + "/" + taskId);
 
         if (!diagramDirectory.exists()) {
-            ProcessBuilder processBuilder = new ProcessBuilder(PathConstants.compressorPath, taskId + ".qrs");
+            ProcessBuilder processBuilder = new ProcessBuilder(PathConstants.COMPRESSOR_PATH, taskId + ".qrs");
             processBuilder.directory(folder);
 
             final Process process = processBuilder.start();

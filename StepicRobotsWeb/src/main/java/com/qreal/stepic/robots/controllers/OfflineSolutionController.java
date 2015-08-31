@@ -31,7 +31,7 @@ public class OfflineSolutionController {
         modelAndView.addObject("title", title);
         modelAndView.addObject("name", name);
 
-        String descriptionPath = PathConstants.tasksPath + "/" + name + "/" + name + ".txt";
+        String descriptionPath = PathConstants.TASKS_PATH + "/" + name + "/" + name + ".txt";
         try {
             String description = new String(Files.readAllBytes(Paths.get(descriptionPath)), StandardCharsets.UTF_8);
             modelAndView.addObject("description", description);
@@ -47,7 +47,7 @@ public class OfflineSolutionController {
     @ResponseBody
     void downloadFiles(HttpServletRequest request, HttpServletResponse response, @PathVariable String title,
                        @RequestParam(value = "name") String name) {
-        File downloadFile = new File(PathConstants.tasksPath + "/" + name + "/" + name + ".qrs");
+        File downloadFile = new File(PathConstants.TASKS_PATH + "/" + name + "/" + name + ".qrs");
         try (FileInputStream inputStream = new FileInputStream(downloadFile);
              OutputStream outStream = response.getOutputStream()) {
             response.setContentLength((int) downloadFile.length());
