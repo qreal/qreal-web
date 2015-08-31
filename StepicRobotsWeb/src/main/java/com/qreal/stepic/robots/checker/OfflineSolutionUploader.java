@@ -1,51 +1,34 @@
-package com.qreal.stepic.robots.controllers;
+package com.qreal.stepic.robots.checker;
 
-import com.qreal.stepic.robots.checker.Checker;
 import com.qreal.stepic.robots.constants.PathConstants;
 import com.qreal.stepic.robots.exceptions.SubmitException;
 import com.qreal.stepic.robots.exceptions.UploadException;
-import com.qreal.stepic.robots.model.diagram.SubmitResponse;
+import com.qreal.stepic.robots.model.checker.UploadedSolution;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import static java.nio.charset.StandardCharsets.*;
 
 /**
- * Created by vladzx on 04.08.15.
+ * Created by vladimir-zakharov on 31.08.15.
  */
-@Controller
-@RequestMapping("/offline")
-public class FileUploadController {
+public class OfflineSolutionUploader {
 
-    private static final Logger LOG = Logger.getLogger(FileUploadController.class);
+    private static final Logger LOG = Logger.getLogger(OfflineSolutionUploader.class);
 
-    @Autowired
-    MessageSource messageSource;
-
-    @ExceptionHandler(UploadException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public byte[] handleUploadException(UploadException e) {
-        return e.getMessage().getBytes(UTF_8);
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "upload/{name}", method = RequestMethod.POST)
-    public SubmitResponse handleFileUpload(MultipartHttpServletRequest request, HttpServletResponse response,
-                                           @PathVariable String name,
-                                           Locale locale) throws UploadException, SubmitException {
+    public UploadedSolution upload(MultipartHttpServletRequest request,
+                                 @PathVariable String name,
+                                 MessageSource messageSource, Locale locale) throws UploadException, SubmitException {
         Iterator<String> iterator = request.getFileNames();
         MultipartFile file;
         try {
@@ -73,8 +56,7 @@ public class FileUploadController {
                 stream.write(bytes);
                 stream.close();
                 LOG.info("Server File Location = " + serverFile.getAbsolutePath());
-                Checker checker = new Checker(messageSource);
-                return checker.submit(name, filename, String.valueOf(uuid), locale);
+                return new UploadedSolution(uuid, filename);
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new UploadException(messageSource.getMessage("label.uploadError", null, locale));
@@ -83,4 +65,5 @@ public class FileUploadController {
             throw new UploadException(messageSource.getMessage("label.emptyFile", null, locale));
         }
     }
+
 }

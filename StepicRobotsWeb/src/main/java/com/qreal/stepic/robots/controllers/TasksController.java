@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by vladzx on 13.08.15.
+ * Created by vladimir-zakharov on 13.08.15.
  */
 @Controller
 public class TasksController {
@@ -55,7 +55,6 @@ public class TasksController {
         modelAndView.addObject("tasksWithTitles");
         return modelAndView;
     }
-
 
     private List<TaskItem> parseTaskList(File file) {
         ObjectMapper objectMapper = new ObjectMapper();

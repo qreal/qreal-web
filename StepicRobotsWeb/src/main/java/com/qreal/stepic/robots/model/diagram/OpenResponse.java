@@ -3,7 +3,7 @@ package com.qreal.stepic.robots.model.diagram;
 import java.io.Serializable;
 
 /**
- * Created by vladzx on 12.08.15.
+ * Created by vladimir-zakharov on 12.08.15.
  */
 public class OpenResponse implements Serializable {
 

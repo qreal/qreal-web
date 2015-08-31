@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 
 /**
- * Created by vladzx on 05.11.14.
+ * Created by vladimir-zakharov on 05.11.14.
  */
 public class Property implements Serializable {
 

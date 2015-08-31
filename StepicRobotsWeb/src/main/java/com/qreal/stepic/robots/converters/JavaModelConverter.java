@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Created by vladzx on 25.05.15.
+ * Created by vladimir-zakharov on 25.05.15.
  */
 public class JavaModelConverter {
 

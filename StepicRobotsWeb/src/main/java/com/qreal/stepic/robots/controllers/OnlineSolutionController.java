@@ -1,15 +1,15 @@
 package com.qreal.stepic.robots.controllers;
 
-import com.qreal.stepic.robots.checker.Checker;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qreal.stepic.robots.constants.PathConstants;
 import com.qreal.stepic.robots.converters.JavaModelConverter;
 import com.qreal.stepic.robots.converters.XmlSaveConverter;
 import com.qreal.stepic.robots.exceptions.SubmitException;
+import com.qreal.stepic.robots.model.checker.Description;
 import com.qreal.stepic.robots.model.diagram.Diagram;
 import com.qreal.stepic.robots.model.diagram.OpenResponse;
 import com.qreal.stepic.robots.model.diagram.SubmitRequest;
 import com.qreal.stepic.robots.model.diagram.SubmitResponse;
-import com.qreal.stepic.robots.checker.CheckerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -26,11 +26,11 @@ import java.nio.file.Paths;
 import java.util.Locale;
 
 /**
- * Created by vladzx on 25.10.14.
+ * Created by vladimir-zakharov on 25.10.14.
  */
 @Controller
 @RequestMapping("/online")
-public class OnlineSolutionController {
+public class OnlineSolutionController extends SolutionController {
 
     @Autowired
     MessageSource messageSource;
@@ -46,10 +46,11 @@ public class OnlineSolutionController {
         modelAndView.addObject("title", title);
         modelAndView.addObject("name", name);
 
-        String descriptionPath = PathConstants.TASKS_PATH + "/" + name + "/" + name + ".txt";
+        String descriptionPath = PathConstants.TASKS_PATH + "/" + name + "/description_ru.json";
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            String description = new String(Files.readAllBytes(Paths.get(descriptionPath)), StandardCharsets.UTF_8);
-            modelAndView.addObject("description", description);
+            Description description = objectMapper.readValue(new File(descriptionPath), Description.class);
+            modelAndView.addObject("description", description.getMain());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,8 +81,8 @@ public class OnlineSolutionController {
         XmlSaveConverter converter= new XmlSaveConverter();
 
         try {
-            CheckerUtils.decompressTask(name);
-            String fieldXML = CheckerUtils.getWorldModelFromMetainfo(PathConstants.TASKS_PATH + "/" + name + "/"
+            compressor.decompress(name);
+            String fieldXML = checker.getWorldModelFromMetainfo(PathConstants.TASKS_PATH + "/" + name + "/"
                     + name + "/metaInfo.xml");
             File treeDirectory = new File(PathConstants.TASKS_PATH + "/" + name + "/" + name + "/tree");
             Diagram diagram = converter.convertToJavaModel(treeDirectory);
@@ -100,12 +101,12 @@ public class OnlineSolutionController {
         String uuidStr = String.valueOf(javaModelConverter.convertToXmlSave(request.getDiagram(), name));
 
         try {
-            CheckerUtils.compress(name, PathConstants.TASKS_PATH + "/" + name + "/solutions/" + uuidStr);
+            compressor.compress(name, PathConstants.TASKS_PATH + "/" + name + "/solutions/" + uuidStr);
         } catch (Exception e) {
             throw new SubmitException(messageSource.getMessage("label.commonError", null, locale));
         }
 
-        Checker checker = new Checker(messageSource);
-        return checker.submit(name, name + ".qrs", uuidStr, locale);
+        return checker.submit(name, name + ".qrs", uuidStr, messageSource, locale);
     }
+
 }

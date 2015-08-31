@@ -1,7 +1,7 @@
 package com.qreal.stepic.robots.constants;
 
 /**
- * Created by vladzx on 07.08.15.
+ * Created by vladimir-zakharov on 07.08.15.
  */
 public class PathConstants {
 

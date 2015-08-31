@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
- * Created by vladzx on 31.10.14.
+ * Created by vladimir-zakharov on 31.10.14.
  */
 public class DiagramNode implements Serializable {
 

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
- * Created by vladzx on 12.08.15.
+ * Created by vladimir-zakharov on 12.08.15.
  */
 @ControllerAdvice
 public class ExceptionHandlerController {

@@ -3,7 +3,7 @@ package com.qreal.stepic.robots.model.checker;
 import java.io.Serializable;
 
 /**
- * Created by vladzx on 10.08.15.
+ * Created by vladimir-zakharov on 10.08.15.
  */
 public class TaskItem implements Serializable {
 

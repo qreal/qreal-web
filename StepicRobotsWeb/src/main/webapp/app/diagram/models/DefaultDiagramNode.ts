@@ -1,5 +1,5 @@
 /**
- * Created by vladzx on 10.10.14.
+ * Created by vladimir-zakharov on 10.10.14.
  */
 class DefaultDiagramNode implements DiagramNode {
     private logicalId: string;

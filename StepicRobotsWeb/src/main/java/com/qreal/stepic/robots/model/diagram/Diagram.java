@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
- * Created by vladzx on 05.11.14.
+ * Created by vladimir-zakharov on 05.11.14.
  */
 public class Diagram implements Serializable {
 

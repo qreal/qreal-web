@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * Created by vladzx on 25.04.15.
+ * Created by vladimir-zakharov on 25.04.15.
  */
 public class XmlSaveConverter {
     public Diagram convertToJavaModel(File folder) {

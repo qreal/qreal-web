@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by vladzx on 09.06.15.
+ * Created by vladimir-zakharov on 09.06.15.
  */
 public class Report implements Serializable {
 

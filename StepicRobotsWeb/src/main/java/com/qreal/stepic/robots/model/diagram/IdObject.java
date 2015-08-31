@@ -3,7 +3,7 @@ package com.qreal.stepic.robots.model.diagram;
 import java.io.Serializable;
 
 /**
- * Created by vladzx on 01.06.15.
+ * Created by vladimir-zakharov on 01.06.15.
  */
 public class IdObject implements Serializable{
 
