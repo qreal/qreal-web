@@ -63,7 +63,7 @@ public class OfflineSolutionController extends SolutionController {
 
         Description description = getDescription(name);
         if (description != null) {
-            modelAndView.addObject("description", description.getMain());
+            modelAndView.addObject("description", description);
         }
 
         return modelAndView;

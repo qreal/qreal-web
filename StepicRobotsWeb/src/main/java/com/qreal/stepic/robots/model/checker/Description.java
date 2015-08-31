@@ -1,5 +1,7 @@
 package com.qreal.stepic.robots.model.checker;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 /**
@@ -23,12 +25,12 @@ public class Description implements Serializable {
         this.note = note;
     }
 
-    public String getMotors_hint() {
-        return motors_hint;
+    public String getMotorsHint() {
+        return motorsHint;
     }
 
-    public void setMotors_hint(String motors_hint) {
-        this.motors_hint = motors_hint;
+    public void setMotorsHint(String motorsHint) {
+        this.motorsHint = motorsHint;
     }
 
     public String getHint() {
@@ -40,7 +42,11 @@ public class Description implements Serializable {
     }
 
     private String main;
+
     private String note;
-    private String motors_hint;
+
+    @JsonProperty("motors_hint")
+    private String motorsHint;
+
     private String hint;
 }

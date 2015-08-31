@@ -12,15 +12,13 @@
 
     <link rel="stylesheet" href="<c:url value='/resources/css/offlineSolution.css' />"/>
     <link rel="stylesheet" href="<c:url value='/resources/css/twoDModel.css' />"/>
+    <link rel="stylesheet" href="<c:url value='/resources/css/description.css' />"/>
 </head>
 <body>
     <div class="container" ng-app ng-controller="RootDiagramController">
         <div class="col-md-9 col-centered">
             <div id="taskContent" ng-controller="CheckerController" task="${name}">
-                <h2><spring:message code="label.task"/>: ${title}. <spring:message code="task.${name}"/></h2>
-                <br>
-
-                <h4><spring:message code="label.description"/>: ${description}</h4>
+                <%@ include file="description.jsp" %>
 
                 <a href="downloadTask/${title}?name=${name}"><h4><spring:message code="label.download"/></h4></a>
                 <br>

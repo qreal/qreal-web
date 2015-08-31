@@ -17,21 +17,13 @@
 
     <link rel="stylesheet" href="<c:url value='/resources/css/onlineSolution.css' />"/>
     <link rel="stylesheet" href="<c:url value='/resources/css/twoDModel.css' />"/>
-    <link rel="stylesheet" href="<c:url value='/resources/css/tooltip.css' />"/>
+    <link rel="stylesheet" href="<c:url value='/resources/css/description.css' />"/>
 </head>
 <body>
 <div ng-app ng-controller="RootDiagramController">
     <div class="container">
         <div id="titleContent" class="col-md-12">
-            <h2><spring:message code="label.task"/>: ${title}. <spring:message code="task.${name}"/></h2>
-            <br>
-
-            <h4><spring:message code="label.description"/>: ${description}
-                <span class="myTooltip" data-tooltip="Left motor - M3 &#xa; Right motor - M4">
-                    <img class="questionSign" src="<c:url value='/resources/css/images/question.png' />"/>
-                </span>
-            </h4>
-
+            <%@ include file="description.jsp" %>
             <br>
         </div>
         <div class="col-md-9">
