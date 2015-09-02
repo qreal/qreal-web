@@ -62,8 +62,15 @@ class DiagramPaper extends joint.dia.Paper {
                             });
                         }
 
-                        var linkObject: Link = new Link(link);
+                        var typeProperties = controller.getNodeTypesMap()["ControlFlow"].getPropertiesMap();
 
+                        var nodeProperties: PropertiesMap = {};
+                        for (var property in typeProperties) {
+                            nodeProperties[property] = new Property(typeProperties[property].name,
+                                typeProperties[property].value, typeProperties[property].type);
+                        }
+
+                        var linkObject: Link = new Link(link, nodeProperties);
                         controller.addLink(link.id, linkObject);
 
                         this.paper.model.addCell(link);

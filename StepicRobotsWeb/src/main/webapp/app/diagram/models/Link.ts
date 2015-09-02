@@ -5,9 +5,10 @@ class Link implements DiagramElement {
     private name = "Link"
     private type = "ControlFlow";
 
-    constructor(jointObject: joint.dia.Link, properties?: PropertiesMap) {
+    constructor(jointObject: joint.dia.Link, properties: PropertiesMap) {
         this.logicalId = UIDGenerator.generate();
         this.jointObject = jointObject;
+        this.properties = properties;
 
         jointObject.on('change:source', () => {
                 this.updateHighlight();
@@ -18,13 +19,6 @@ class Link implements DiagramElement {
                 this.updateHighlight();
             }
         );
-
-        if (properties) {
-            this.properties = properties;
-        }
-        else {
-            this.properties["Guard"] = new Property("Guard", "", "combobox");
-        }
     }
 
     getLogicalId(): string {

@@ -17,7 +17,7 @@ class DiagramLoader {
                     var logicalProperties: PropertiesMap = {};
                     var logicalPropertiesObject = nodeObject.logicalProperties;
 
-                    var typeProperties = nodeTypesMap[nodeObject.type].properties;
+                    var typeProperties = nodeTypesMap[nodeObject.type].getPropertiesMap();
 
                     logicalPropertiesObject.sort(function (a:any, b:any) {
                         if (a.name < b.name) return -1;
@@ -53,7 +53,7 @@ class DiagramLoader {
                     }
 
                     this.loadNode(graph, nodesMap, nodeObject.graphicalId, name, type,
-                        x + offsetX, y + offsetY, logicalProperties, nodeTypesMap[nodeObject.type].image);
+                        x + offsetX, y + offsetY, logicalProperties, nodeTypesMap[nodeObject.type].getImage());
                 }
             }
         }

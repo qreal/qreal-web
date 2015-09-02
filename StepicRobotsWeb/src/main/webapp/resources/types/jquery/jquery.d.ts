@@ -621,6 +621,7 @@ interface JQueryAnimationOptions {
  */
 interface JQueryStatic {
 
+    ajax(object: any);
     /**
      * Perform an asynchronous HTTP (Ajax) request.
      *

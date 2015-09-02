@@ -1,3 +1,3 @@
 interface NodeTypesMap {
-    [name: string]: NodeType;
+    [typeName: string]: NodeType;
 }

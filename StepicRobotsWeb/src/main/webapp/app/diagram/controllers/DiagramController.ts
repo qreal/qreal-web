@@ -4,7 +4,6 @@ class DiagramController {
     private paper: DiagramPaper = new DiagramPaper(this, this.graph);
 
     private nodeTypesMap: NodeTypesMap = {};
-    private nameTypeMap: {string?: string} = {};
     private nodesMap = {};
     private linksMap = {};
     private currentElement: DiagramElement
@@ -20,9 +19,7 @@ class DiagramController {
         this.rootController = $scope.root;
 
         controller.taskId = $attrs.task;
-        PaletteLoader.loadElementsFromXml(controller, $scope, $compile, $attrs);
-
-        DropdownListManager.addDropdownList("ControlFlow", "Guard", ["", "false", "iteration", "true"]);
+        new ElementsTypeLoader(controller, controller.taskId).loadFromXml($scope, $compile);
 
         this.initDeleteListener();
 
@@ -137,10 +134,6 @@ class DiagramController {
         this.nodeTypesMap = nodeTypesMap;
     }
 
-    setNameTypeMap(nameTypeMap: {string?: string}): void {
-        this.nameTypeMap = nameTypeMap;
-    }
-
     private makeUnselectable(element) {
         if (element.nodeType == 1) {
             element.setAttribute("unselectable", "on");
@@ -213,6 +206,26 @@ class DiagramController {
         });
     }
 
+    private initCombobox(typeName: string, propertyKey: string, element) {
+        var dropdownList = DropdownListManager.getDropdownList(typeName, propertyKey);
+
+        var controller: DiagramController = this;
+
+        element.find('input').autocomplete({
+            source: dropdownList,
+            minLength: 0,
+            select: function (event, ui) {
+                var key = $(this).data('type');
+                var value = ui.item.value;
+                var property: Property = controller.currentElement.getProperties()[key];
+                property.value = value;
+                controller.currentElement.setProperty(key, property);
+            }
+        }).focus(function() {
+            $(this).autocomplete("search", $(this).val());
+        });
+    }
+
     initDragAndDrop(): void {
         var controller: DiagramController = this;
         $(".tree_element").draggable({
@@ -232,11 +245,11 @@ class DiagramController {
                 var gridSize: number = controller.paper.getGridSizeValue();
                 topElementPos -= topElementPos % gridSize;
                 leftElementPos -= leftElementPos % gridSize;
-                var name: string = $(ui.draggable.context).text();
-                var type = controller.nameTypeMap[name];
-                var image: string = controller.nodeTypesMap[type].image;
 
-                var typeProperties: PropertiesMap = controller.nodeTypesMap[type].properties;
+                var type = $(ui.draggable.context).data("type");
+                var image: string = controller.nodeTypesMap[type].getImage();
+
+                var typeProperties: PropertiesMap = controller.nodeTypesMap[type].getPropertiesMap();
 
                 var nodeProperties: PropertiesMap = {};
                 for (var property in typeProperties) {
@@ -264,25 +277,8 @@ class DiagramController {
         }
     }
 
-    private initCombobox(typeName: string, propertyName: string, element) {
-        var dropdownList = DropdownListManager.getDropdownList(typeName, propertyName);
-
-        var controller: DiagramController = this;
-
-        element.find('input').autocomplete({
-            source: dropdownList,
-            minLength: 0,
-            select: function (event, ui) {
-                var tr = $(this).closest('tr');
-                var name = tr.find('td:first').html();
-                var value = ui.item.value;;
-                var property: Property = controller.currentElement.getProperties()[name];
-                property.value = value;
-                controller.currentElement.setProperty(name, property);
-            }
-        }).focus(function() {
-            $(this).autocomplete("search", $(this).val());
-        });
+    getNodeTypesMap(): NodeTypesMap {
+        return this.nodeTypesMap;
     }
 
     getPropertyHtml(typeName, propertyName: string, property: Property): string {
