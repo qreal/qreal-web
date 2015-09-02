@@ -1,119 +1,143 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Elements>
-	<Category name="Алгоритмы">
 
-		<Element name="Начало" type="InitialNode">
-			<Image src="images/initialBlock.svg"/>
-		</Element>
+	<NotVisible>
 
-		<Element name="Конец" type="FinalNode">
-			<Image src="images/finalBlock.svg"/>
-		</Element>
-
-    </Category>
-
-	<Category name="Ожидание">
-
-		<Element name="Таймер" type="Timer">
-			<Property key="Delay" name="Задержка (мс)" type="string">
-				<value>1000</value>
-			</Property>
-			<Image src="images/timerBlock.svg"/>
-		</Element>
-
-    </Category>
-
-    <Category name="Рисование">
-
-        <Element name="Цвет кисти" type="TrikSetPainterColor">
-            <Property key="Color" name="Цвет" type="dropdown">
-                <value>black</value>
+        <Element name="Линия соединения" type="ControlFlow">
+            <Property key="Guard" name="Условие" type="combobox">
+                <value></value>
                 <Variants>
-                    <variant>black</variant>
-                    <variant>blue</variant>
-                    <variant>cyan</variant>
-                    <variant>dark blue</variant>
-                    <variant>dark cyan</variant>
-                    <variant>dark gray</variant>
-                    <variant>dark green</variant>
-                    <variant>dark magenta</variant>
-                    <variant>dark red</variant>
-                    <variant>dark yellow</variant>
-                    <variant>gray</variant>
-                    <variant>green</variant>
-                    <variant>light gray</variant>
-                    <variant>magenta</variant>
-                    <variant>red</variant>
-                    <variant>white</variant>
-                    <variant>yellow</variant>
+                    <variant>false</variant>
+                    <variant>iteration</variant>
+                    <variant>true</variant>
                 </Variants>
-            </Property>
-            <Image src="images/brushColorBlock.svg"/>
+             </Property>
         </Element>
 
-        <Element name="Толщина кисти" type="TrikSetPainterWidth">
-            <Property key="Width" name="Ширина" type="string">
-                <value>1</value>
-            </Property>
-            <Image src="images/brushWidthBlock.svg"/>
-        </Element>
+	</NotVisible>
 
-        <Element name="Нарисовать эллипс" type="TrikDrawEllipse">
-            <Property key="HeightEllipse" name="Высота" type="string">
-                <value>5</value>
-            </Property>
-
-            <Property key="Redraw" name="Обновить картинку" type="checkbox">
-                <value>true</value>
-            </Property>
-            
-            <Property key="WidthEllipse" name="Ширина" type="string">
-                <value>5</value>
-            </Property>
-
-            <Property key="XCoordinateEllipse" name="X" type="string">
-                <value>0</value>
-            </Property>
-            
-            <Property key="YCoordinateEllipse" name="Y" type="string">
-                <value>0</value>
-            </Property>
-            <Image src="images/drawCircleBlock.svg"/>
-        </Element>
-       
-        <Element name="Нарисовать дугу" type="TrikDrawArc">
-            <Property key="HeightArc" name="Высота" type="string">
-                <value>5</value>
-            </Property>
-            
-            <Property key="Redraw" name="Обновить картинку" type="checkbox">
-                <value>true</value>
-            </Property>
-            
-            <Property key="SpanAngle" name="Размах" type="string">
-                <value>20</value>
-            </Property>
+	<Visible>
     
-            <Property key="StartAngle" name="Начальный угол" type="string">
-                <value>20</value>
-            </Property>
+		<Palette>
 
-            <Property key="WidthArc" name="Ширина" type="string">
-                <value>5</value>
-            </Property>
-            
-            <Property key="XCoordinateArc" name="X" type="string">
-                <value>0</value>
-            </Property>
+			<Category name="Алгоритмы">
 
-            <Property key="YCoordinateArc" name="Y" type="string">
-                <value>0</value>
-            </Property>
+				<Element name="Начало" type="InitialNode">
+					<Image src="images/initialBlock.svg"/>
+				</Element>
 
-            <Image src="images/drawArcBlock.svg"/>
-        </Element>
+				<Element name="Конец" type="FinalNode">
+					<Image src="images/finalBlock.svg"/>
+				</Element>
 
-    </Category>
+			</Category>
+
+			<Category name="Ожидание">
+
+				<Element name="Таймер" type="Timer">
+					<Property key="Delay" name="Задержка (мс)" type="string">
+						<value>1000</value>
+					</Property>
+					<Image src="images/timerBlock.svg"/>
+				</Element>
+
+			</Category>
+
+			<Category name="Рисование">
+
+				<Element name="Цвет кисти" type="TrikSetPainterColor">
+				    <Property key="Color" name="Цвет" type="dropdown">
+				        <value>black</value>
+				        <Variants>
+				            <variant>black</variant>
+				            <variant>blue</variant>
+				            <variant>cyan</variant>
+				            <variant>dark blue</variant>
+				            <variant>dark cyan</variant>
+				            <variant>dark gray</variant>
+				            <variant>dark green</variant>
+				            <variant>dark magenta</variant>
+				            <variant>dark red</variant>
+				            <variant>dark yellow</variant>
+				            <variant>gray</variant>
+				            <variant>green</variant>
+				            <variant>light gray</variant>
+				            <variant>magenta</variant>
+				            <variant>red</variant>
+				            <variant>white</variant>
+				            <variant>yellow</variant>
+				        </Variants>
+				    </Property>
+				    <Image src="images/brushColorBlock.svg"/>
+				</Element>
+
+				<Element name="Толщина кисти" type="TrikSetPainterWidth">
+				    <Property key="Width" name="Ширина" type="string">
+				        <value>1</value>
+				    </Property>
+				    <Image src="images/brushWidthBlock.svg"/>
+				</Element>
+
+				<Element name="Нарисовать эллипс" type="TrikDrawEllipse">
+				    <Property key="HeightEllipse" name="Высота" type="string">
+				        <value>5</value>
+				    </Property>
+
+				    <Property key="Redraw" name="Обновить картинку" type="checkbox">
+				        <value>true</value>
+				    </Property>
+				    
+				    <Property key="WidthEllipse" name="Ширина" type="string">
+				        <value>5</value>
+				    </Property>
+
+				    <Property key="XCoordinateEllipse" name="X" type="string">
+				        <value>0</value>
+				    </Property>
+				    
+				    <Property key="YCoordinateEllipse" name="Y" type="string">
+				        <value>0</value>
+				    </Property>
+				    <Image src="images/drawCircleBlock.svg"/>
+				</Element>
+			   
+				<Element name="Нарисовать дугу" type="TrikDrawArc">
+				    <Property key="HeightArc" name="Высота" type="string">
+				        <value>5</value>
+				    </Property>
+				    
+				    <Property key="Redraw" name="Обновить картинку" type="checkbox">
+				        <value>true</value>
+				    </Property>
+				    
+				    <Property key="SpanAngle" name="Размах" type="string">
+				        <value>20</value>
+				    </Property>
+		
+				    <Property key="StartAngle" name="Начальный угол" type="string">
+				        <value>20</value>
+				    </Property>
+
+				    <Property key="WidthArc" name="Ширина" type="string">
+				        <value>5</value>
+				    </Property>
+				    
+				    <Property key="XCoordinateArc" name="X" type="string">
+				        <value>0</value>
+				    </Property>
+
+				    <Property key="YCoordinateArc" name="Y" type="string">
+				        <value>0</value>
+				    </Property>
+
+				    <Image src="images/drawArcBlock.svg"/>
+				</Element>
+
+			</Category>
+
+		</Palette>
+
+	</Visible>
 
 </Elements>
 

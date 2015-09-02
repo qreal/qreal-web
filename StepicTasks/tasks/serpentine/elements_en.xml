@@ -1,86 +1,111 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Elements>
-	<Category name="Algorithms">
 
-		<Element name="Initial Node" type="InitialNode">
-			<Image src="images/initialBlock.svg"/>
-		</Element>
+	<NotVisible>
 
-		<Element name="Final Node" type="FinalNode">
-			<Image src="images/finalBlock.svg"/>
-		</Element>
-
-		<Element name="Function" type="Function">
-			<Property key="Body" name="Body" type="string">
-				<value></value>
-			</Property>
-			<Image src="images/functionBlock.svg"/>
-		</Element>
-
-	</Category>
-	<Category name="Actions">
-
-		<Element name="Motors Forward" type="TrikV6EnginesForward">
-			<Property key="Ports" name="Ports" type="string">
-                <value>M3, M4</value>
-			</Property>
-			<Property key="Power" name="Power (%)" type="string">
-                <value>100</value>
-			</Property>
-			<Image src="images/enginesForwardBlock.svg"/>
-		</Element>
-
-		<Element name="Motors Backward" type="TrikV6EnginesBackward">
-			<Property key="Ports" name="Ports" type="string">
-                <value>M3, M4</value>
-			</Property>
-			<Property key="Power" name="Power (%)" type="string">
-                <value>100</value>
-			</Property>
-			<Image src="images/enginesBackwardBlock.svg"/>
-		</Element>
-
-		<Element name="Stop Motors" type="TrikV6EnginesStop">
-			<Property key="Ports" name="Ports" type="string">
-                <value>M1, M2, M3, M4</value>
-			</Property>
-			<Image src="images/enginesStopBlock.svg"/>
-		</Element>
-
-		<Element name="Clear Encoder" type="TrikV62ClearEncoder">
-			<Property key="Ports" name="Ports" type="string">
-                <value>E1, E2, E3, E4</value>
-			</Property>
-			<Image src="images/nullificationEncoderBlock.svg"/>
-		</Element>
-
-	</Category>
-	<Category name="Wait">
-
-		<Element name="Timer" type="Timer">
-			<Property key="Delay" name="Delay (ms)" type="string">
-				<value>1000</value>
-			</Property>
-			<Image src="images/timerBlock.svg"/>
-		</Element>
-
-		<Element name="Wait for Encoder" type="TrikV62WaitForEncoder">
-			<Property key="Port" name="Port" type="string">
-                <value>E3</value>
-			</Property>
-			<Property key="Sign" name="Sign" type="dropdown">
-                <value>greater</value>
+		<Element name="Link" type="ControlFlow">
+            <Property key="Guard" name="Guard" type="combobox">
+                <value></value>
                 <Variants>
-                    <variant>greater</variant>
-                    <variant>less</variant>
-                    <variant>not greater</variant>
-                    <variant>not less</variant>
+                    <variant>false</variant>
+                    <variant>iteration</variant>
+                    <variant>true</variant>
                 </Variants>
-			</Property>
-			<Property key="TachoLimit" name="Tacho Limit" type="string">
-                <value>""</value>
-			</Property>
-			<Image src="images/waitForEncoderBlock.svg"/>
-		</Element>
-	</Category>
+             </Property>
+        </Element>
+
+	</NotVisible>
+
+	<Visible>
+    
+		<Palette>
+
+			<Category name="Algorithms">
+
+				<Element name="Initial Node" type="InitialNode">
+					<Image src="images/initialBlock.svg"/>
+				</Element>
+
+				<Element name="Final Node" type="FinalNode">
+					<Image src="images/finalBlock.svg"/>
+				</Element>
+
+				<Element name="Function" type="Function">
+					<Property key="Body" name="Body" type="string">
+						<value></value>
+					</Property>
+					<Image src="images/functionBlock.svg"/>
+				</Element>
+
+			</Category>
+			<Category name="Actions">
+
+				<Element name="Motors Forward" type="TrikV6EnginesForward">
+					<Property key="Ports" name="Ports" type="string">
+				        <value>M3, M4</value>
+					</Property>
+					<Property key="Power" name="Power (%)" type="string">
+				        <value>100</value>
+					</Property>
+					<Image src="images/enginesForwardBlock.svg"/>
+				</Element>
+
+				<Element name="Motors Backward" type="TrikV6EnginesBackward">
+					<Property key="Ports" name="Ports" type="string">
+				        <value>M3, M4</value>
+					</Property>
+					<Property key="Power" name="Power (%)" type="string">
+				        <value>100</value>
+					</Property>
+					<Image src="images/enginesBackwardBlock.svg"/>
+				</Element>
+
+				<Element name="Stop Motors" type="TrikV6EnginesStop">
+					<Property key="Ports" name="Ports" type="string">
+				        <value>M1, M2, M3, M4</value>
+					</Property>
+					<Image src="images/enginesStopBlock.svg"/>
+				</Element>
+
+				<Element name="Clear Encoder" type="TrikV62ClearEncoder">
+					<Property key="Ports" name="Ports" type="string">
+				        <value>E1, E2, E3, E4</value>
+					</Property>
+					<Image src="images/nullificationEncoderBlock.svg"/>
+				</Element>
+
+			</Category>
+			<Category name="Wait">
+
+				<Element name="Timer" type="Timer">
+					<Property key="Delay" name="Delay (ms)" type="string">
+						<value>1000</value>
+					</Property>
+					<Image src="images/timerBlock.svg"/>
+				</Element>
+
+				<Element name="Wait for Encoder" type="TrikV62WaitForEncoder">
+					<Property key="Port" name="Port" type="string">
+				        <value>E3</value>
+					</Property>
+					<Property key="Sign" name="Sign" type="dropdown">
+				        <value>greater</value>
+				        <Variants>
+				            <variant>greater</variant>
+				            <variant>less</variant>
+				            <variant>not greater</variant>
+				            <variant>not less</variant>
+				        </Variants>
+					</Property>
+					<Property key="TachoLimit" name="Tacho Limit" type="string">
+				        <value>""</value>
+					</Property>
+					<Image src="images/waitForEncoderBlock.svg"/>
+				</Element>
+			</Category>
+
+		</Palette>
+
+	</Visible>
+
 </Elements>

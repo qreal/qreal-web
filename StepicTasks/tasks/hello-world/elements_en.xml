@@ -1,52 +1,76 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Elements>
-	<Category name="Algorithms">
 
-		<Element name="Initial Node" type="InitialNode">
-			<Image src="images/initialBlock.svg"/>
-		</Element>
+	<NotVisible>
 
-		<Element name="Final Node" type="FinalNode">
-			<Image src="images/finalBlock.svg"/>
-		</Element>
-
-	</Category>
-
-	<Category name="Actions">
-
-		<Element name="Say" type="TrikSay">
-			<Property key="Evaluate" name="Evaluate" type="checkbox">
-				<value>false</value>
-			</Property>
-			<Property key="Text" name="Text" type="string">
-				<value>Hi!</value>
-			</Property>
-            <Image src="images/sayBlock.svg"/>
+		<Element name="Link" type="ControlFlow">
+            <Property key="Guard" name="Guard" type="combobox">
+                <value></value>
+                <Variants>
+                    <variant>false</variant>
+                    <variant>iteration</variant>
+                    <variant>true</variant>
+                </Variants>
+             </Property>
         </Element>
 
-	</Category>
+	</NotVisible>
 
-	<Category name="Wait">
+	<Visible>
+    
+		<Palette>
+		    
+		    <Category name="Algorithms">
 
-		<Element name="Timer" type="Timer">
-			<Property key="Delay" name="Delay (ms)" type="string">
-				<value>1000</value>
-			</Property>
-			<Image src="images/timerBlock.svg"/>
-		</Element>
+		        <Element name="Initial Node" type="InitialNode">
+		            <Image src="images/initialBlock.svg"/>
+		        </Element>
 
-	</Category>
+		        <Element name="Final Node" type="FinalNode">
+		            <Image src="images/finalBlock.svg"/>
+		        </Element>
 
-    <Category name="Drawing">
+		    </Category>
 
-        <Element name="Smile" type="TrikSmile">
-            <Image src="images/smileBlock.svg"/>
-        </Element>
+		    <Category name="Actions">
 
-        <Element name="Sad Smile" type="TrikSadSmile">
-            <Image src="images/sadSmileBlock.svg"/>
-        </Element>
+		        <Element name="Say" type="TrikSay">
+		            <Property key="Evaluate" name="Evaluate" type="checkbox">
+		                <value>false</value>
+		            </Property>
+		            <Property key="Text" name="Text" type="string">
+		                <value>Hi!</value>
+		            </Property>
+		            <Image src="images/sayBlock.svg"/>
+		        </Element>
 
-    </Category>
+		    </Category>
+
+		    <Category name="Wait">
+
+		        <Element name="Timer" type="Timer">
+		            <Property key="Delay" name="Delay (ms)" type="string">
+		                <value>1000</value>
+		            </Property>
+		            <Image src="images/timerBlock.svg"/>
+		        </Element>
+
+		    </Category>
+
+		    <Category name="Drawing">
+
+		        <Element name="Smile" type="TrikSmile">
+		            <Image src="images/smileBlock.svg"/>
+		        </Element>
+
+		        <Element name="Sad Smile" type="TrikSadSmile">
+		            <Image src="images/sadSmileBlock.svg"/>
+		        </Element>
+
+		    </Category>
+		
+		</Palette>
+
+	</Visible>
 
 </Elements>
