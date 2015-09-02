@@ -6,7 +6,7 @@ class DiagramController {
     private nodeTypesMap: NodeTypesMap = {};
     private nodesMap = {};
     private linksMap = {};
-    private currentElement: DiagramElement
+    private currentElement: DiagramElement;
     private isPaletteLoaded = false;
     private taskId: string;
     private rootController: RootDiagramController;

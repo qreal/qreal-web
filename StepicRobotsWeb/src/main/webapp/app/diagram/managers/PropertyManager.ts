@@ -43,7 +43,7 @@ class PropertyManager {
         var content: string = '<tr class="property">';
         content += '<td class="vert-align">' + property.name + '</td>';
         content += '<td class="vert-align"><select class="mydropdown" data-type="' + propertyKey + '">';
-        var dropdownList = DropdownListManager.getDropdownList(typeName, property.name);
+        var dropdownList = DropdownListManager.getDropdownList(typeName, propertyKey);
         for (var i in dropdownList) {
             var variant = dropdownList[i];
             var selected = "";

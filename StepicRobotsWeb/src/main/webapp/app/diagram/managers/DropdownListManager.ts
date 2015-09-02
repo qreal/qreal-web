@@ -1,14 +1,14 @@
 class DropdownListManager {
     private static nodeDropdowns = {};
 
-    static addDropdownList(typeKey: string, propertyName: string, list) {
-        if (!this.nodeDropdowns[typeKey]) {
-            this.nodeDropdowns[typeKey] = {};
+    static addDropdownList(typeName: string, propertyKey: string, list) {
+        if (!this.nodeDropdowns[typeName]) {
+            this.nodeDropdowns[typeName] = {};
         }
-        this.nodeDropdowns[typeKey][propertyName] = list;
+        this.nodeDropdowns[typeName][propertyKey] = list;
     }
 
-    static getDropdownList(typeKey: string, propertyName: string) {
-        return this.nodeDropdowns[typeKey][propertyName];
+    static getDropdownList(typeName: string, propertyKey: string) {
+        return this.nodeDropdowns[typeName][propertyKey];
     }
 }
