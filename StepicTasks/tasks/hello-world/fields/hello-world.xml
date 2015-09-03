@@ -43,8 +43,48 @@
                 </conditions>
             </conditions>
             <triggers>
-                <success deferred="true"/>
+				<setUp id="Smile 3 seconds"/>
+				<setUp id="Wait for end"/>
             </triggers>
         </event>
+
+		<!-- событие, которое выводит ошибку, если робот не показывает смайлик через секунду после начала -->
+		<event id="No smile" settedUpInitially="true">
+			<conditions glue="and">
+				<timer timeout="1000"/>
+				<equals>
+                    <objectState object="robot1.display.smiles"/>
+                    <bool value="false"/>
+                </equals>
+			</conditions>
+			<trigger>
+				<fail message="Робот не показал смайлик через секунду после начала прогаммы"/>
+			</trigger>
+		</event>
+
+		<!-- событие, которое сообщает об успехе, если прошло 3 секунды (+-100 мс) с того момента, как робот улыбнулся и сказал привет мир -->
+		<event id="Smile 3 seconds">
+			<conditions glue="and">
+				<timer timeout="2900"/>
+				<equals>
+                    <objectState object="robot1.display.smiles"/>
+                    <bool value="true"/>
+                </equals>
+			</conditions>
+			<trigger>
+				<success deferred="true"/>
+			</trigger>
+		</event>
+
+        <!-- событие, которое ожидает, что программа окончится через 3 секунды -->
+        <event id="Wait for end">
+            <condition>
+                <timer forceDropOnTimeout="true" timeout="3100"/>
+            </condition>
+            <trigger>
+                <fail message="Робот показывал смайлик больше трех секунд"/>
+            </trigger>
+        </event>
+
     </constraints>
 </root>
