@@ -7,9 +7,9 @@
             <Property key="Guard" name="Условие" type="combobox">
                 <value></value>
                 <Variants>
-                    <variant>false</variant>
-                    <variant>iteration</variant>
-                    <variant>true</variant>
+                    <variant key="false">false</variant>
+                    <variant key="iteration">iteration</variant>
+                    <variant key="true">true</variant>
                 </Variants>
              </Property>
         </Element>
@@ -75,12 +75,12 @@
 				        <value>E3</value>
 					</Property>
 					<Property key="Sign" name="Считанное значение" type="dropdown">
-				        <value>greater</value>
+				        <value key="greater">больше</value>
 				        <Variants>
-				            <variant>greater</variant>
-				            <variant>less</variant>
-				            <variant>not greater</variant>
-				            <variant>not less</variant>
+				            <variant key="greater">больше</variant>
+				            <variant key="less">меньше</variant>
+				            <variant key="not greater">не больше</variant>
+				            <variant key="not less">не меньше</variant>
 				        </Variants>
 					</Property>
 					<Property key="TachoLimit" name="Предел оборотов" type="string">

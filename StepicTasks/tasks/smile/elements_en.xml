@@ -5,11 +5,11 @@
 
 		<Element name="Link" type="ControlFlow">
             <Property key="Guard" name="Guard" type="combobox">
-                <value></value>
+                <value key=""></value>
                 <Variants>
-                    <variant>false</variant>
-                    <variant>iteration</variant>
-                    <variant>true</variant>
+                    <variant key="false">false</variant>
+                    <variant key="iteration">iteration</variant>
+                    <variant key="true">true</variant>
                 </Variants>
              </Property>
         </Element>
@@ -47,25 +47,25 @@
 
 				<Element name="Painter Color" type="TrikSetPainterColor">
 				    <Property key="Color" name="Color" type="dropdown">
-				        <value>black</value>
+				        <value key="black">black</value>
 				        <Variants>
-				            <variant>black</variant>
-				            <variant>blue</variant>
-				            <variant>cyan</variant>
-				            <variant>dark blue</variant>
-				            <variant>dark cyan</variant>
-				            <variant>dark gray</variant>
-				            <variant>dark green</variant>
-				            <variant>dark magenta</variant>
-				            <variant>dark red</variant>
-				            <variant>dark yellow</variant>
-				            <variant>gray</variant>
-				            <variant>green</variant>
-				            <variant>light gray</variant>
-				            <variant>magenta</variant>
-				            <variant>red</variant>
-				            <variant>white</variant>
-				            <variant>yellow</variant>
+				            <variant key="black">black</variant>
+				            <variant key="blue">blue</variant>
+				            <variant key="cyan">cyan</variant>
+				            <variant key="dark blue">dark blue</variant>
+				            <variant key="dark cyan">dark cyan</variant>
+				            <variant key="dark gray">dark gray</variant>
+				            <variant key="dark green">dark green</variant>
+				            <variant key="dark magenta">dark magenta</variant>
+				            <variant key="dark red">dark red</variant>
+				            <variant key="dark yellow">dark yellow</variant>
+				            <variant key="gray">gray</variant>
+				            <variant key="green">green</variant>
+				            <variant key="light gray">light gray</variant>
+				            <variant key="magenta">magenta</variant>
+				            <variant key="red">red</variant>
+				            <variant key="white">white</variant>
+				            <variant key="yellow">yellow</variant>
 				        </Variants>
 				    </Property>
 				    <Image src="images/brushColorBlock.svg"/>

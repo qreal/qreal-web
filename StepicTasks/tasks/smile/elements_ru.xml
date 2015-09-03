@@ -5,11 +5,11 @@
 
         <Element name="Линия соединения" type="ControlFlow">
             <Property key="Guard" name="Условие" type="combobox">
-                <value></value>
+                <value key=""></value>
                 <Variants>
-                    <variant>false</variant>
-                    <variant>iteration</variant>
-                    <variant>true</variant>
+                    <variant key="false">false</variant>
+                    <variant key="iteration">iteration</variant>
+                    <variant key="true">true</variant>
                 </Variants>
              </Property>
         </Element>
@@ -47,25 +47,25 @@
 
 				<Element name="Цвет кисти" type="TrikSetPainterColor">
 				    <Property key="Color" name="Цвет" type="dropdown">
-				        <value>black</value>
+				        <value key="black">черный</value>
 				        <Variants>
-				            <variant>black</variant>
-				            <variant>blue</variant>
-				            <variant>cyan</variant>
-				            <variant>dark blue</variant>
-				            <variant>dark cyan</variant>
-				            <variant>dark gray</variant>
-				            <variant>dark green</variant>
-				            <variant>dark magenta</variant>
-				            <variant>dark red</variant>
-				            <variant>dark yellow</variant>
-				            <variant>gray</variant>
-				            <variant>green</variant>
-				            <variant>light gray</variant>
-				            <variant>magenta</variant>
-				            <variant>red</variant>
-				            <variant>white</variant>
-				            <variant>yellow</variant>
+				            <variant key="black">черный</variant>
+				            <variant key="blue">синий</variant>
+				            <variant key="cyan">сине-зелёный</variant>
+				            <variant key="dark blue">тёмно-синий</variant>
+				            <variant key="dark cyan">тёмно-сине-зелёный</variant>
+				            <variant key="dark gray">тёмно-серый</variant>
+				            <variant key="dark green">тёмно-зелёный</variant>
+				            <variant key="dark magenta">тёмно-пурпурный</variant>
+				            <variant key="dark red">тёмно-красный</variant>
+				            <variant key="dark yellow">тёмно-жёлтый</variant>
+				            <variant key="gray">серый</variant>
+				            <variant key="green">зелёный</variant>
+				            <variant key="light gray">светло-серый</variant>
+				            <variant key="magenta">пурпурный</variant>
+				            <variant key="red">красный</variant>
+				            <variant key="white">белый</variant>
+				            <variant key="yellow">жёлтый</variant>
 				        </Variants>
 				    </Property>
 				    <Image src="images/brushColorBlock.svg"/>

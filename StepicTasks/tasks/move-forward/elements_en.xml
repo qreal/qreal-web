@@ -5,11 +5,11 @@
 
 		<Element name="Link" type="ControlFlow">
             <Property key="Guard" name="Guard" type="combobox">
-                <value></value>
+                <value key=""></value>
                 <Variants>
-                    <variant>false</variant>
-                    <variant>iteration</variant>
-                    <variant>true</variant>
+                    <variant key="false">false</variant>
+                    <variant key="iteration">iteration</variant>
+                    <variant key="true">true</variant>
                 </Variants>
              </Property>
         </Element>

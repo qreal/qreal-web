@@ -5,11 +5,11 @@
 
 		<Element name="Link" type="ControlFlow">
             <Property key="Guard" name="Guard" type="combobox">
-                <value></value>
+                <value key=""></value>
                 <Variants>
-                    <variant>false</variant>
-                    <variant>iteration</variant>
-                    <variant>true</variant>
+                    <variant key="false">false</variant>
+                    <variant key="iteration">iteration</variant>
+                    <variant key="true">true</variant>
                 </Variants>
              </Property>
         </Element>
@@ -75,12 +75,12 @@
 				        <value>E3</value>
 					</Property>
 					<Property key="Sign" name="Sign" type="dropdown">
-				        <value>greater</value>
+				        <value key="greater">greater</value>
 				        <Variants>
-				            <variant>greater</variant>
-				            <variant>less</variant>
-				            <variant>not greater</variant>
-				            <variant>not less</variant>
+				            <variant key="greater">greater</variant>
+				            <variant key="less">less</variant>
+				            <variant key="not greater">not greater</variant>
+				            <variant key="not less">not less</variant>
 				        </Variants>
 					</Property>
 					<Property key="TachoLimit" name="Tacho Limit" type="string">

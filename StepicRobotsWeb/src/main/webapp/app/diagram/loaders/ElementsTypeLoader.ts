@@ -64,13 +64,18 @@ class ElementsTypeLoader {
                 this.addDropdownList(typeName, propertyKey, variants.getElementsByTagName("variant"));
             }
 
-            var propertyValue:string;
-            var valueElement = propertyElement.getElementsByTagName("value")[0];
-            if (valueElement.childNodes[0]) {
-                propertyValue = valueElement.childNodes[0].nodeValue;
+            var propertyValue: string;
+            var valueElement: Element = <Element> propertyElement.getElementsByTagName("value")[0];
+            if (valueElement.hasAttribute("key")) {
+                propertyValue = valueElement.getAttribute("key");
             } else {
-                propertyValue = '';
+                if (valueElement.childNodes[0]) {
+                    propertyValue = valueElement.childNodes[0].nodeValue;
+                } else {
+                    propertyValue = '';
+                }
             }
+
             var property:Property = new Property(propertyName, propertyValue, propertyType);
             properties[propertyKey] = property;
         }
@@ -135,12 +140,13 @@ class ElementsTypeLoader {
         });
     }
 
-    private addDropdownList(typeName: string, propertyKey: string, variants): void {
-        var list = [];
-        for (var i = 0; i < variants.length; i++) {
-            list.push(variants[i].childNodes[0].nodeValue);
+    private addDropdownList(typeName: string, propertyKey: string, variantElements: NodeList): void {
+        var variants: Variant[] = [];
+        for (var i = 0; i < variantElements.length; i++) {
+            var variant: Element = <Element> variantElements[i];
+            variants.push(new Variant(variant.getAttribute("key"), variant.childNodes[0].nodeValue));
         }
-        DropdownListManager.addDropdownList(typeName, propertyKey, list);
+        DropdownListManager.addDropdownList(typeName, propertyKey, variants);
     }
 
 }
