@@ -7,7 +7,7 @@
             <region filled="true" visible="false" height="25" width="25" y="38" color="#0000ff" id="start_zone" x="-194" type="rectangle"/>
             <region filled="false" visible="true" height="600" width="600" y="-249" color="#008000" id="outside_circle_zone" x="-481" type="ellipse"/>
             <region filled="false" visible="true" height="500" width="500" y="-199" color="#008000" id="inside_circle_zone" x="-431" type="ellipse"/>
-            <region filled="true" visible="true" height="50" width="40" y="26" color="#0000ff" textX="0" textY="0" id="begin" x="74" type="rectangle" text="Начало"/>
+            <region filled="true" visible="true" height="100" width="80" y="10" color="#0000ff" textX="0" textY="0" id="begin" x="54" type="rectangle" text="Начало"/>
             <region filled="true" visible="false" height="50" width="40" y="38" color="#00ff00" id="checkpoint" x="-476" type="rectangle"/>
         </regions>
     </world>
@@ -27,10 +27,13 @@
         </robot>
     </robots>
     <constraints>
+
         <timelimit value="50000"/>
+        
         <constraint checkOnce="true" failMessage="Робот должен находиться в начальной точке перед запуском программы!">
             <inside regionId="start_zone" objectId="robot1"/>
         </constraint>
+        
         <!-- событие, которое говорит о том, что робот вообще поехал и стартует цепочку проверки -->
         <event id="We are alive, first move" settedUpInitially="true">
             <condition>
@@ -43,6 +46,7 @@
                 <setUp id="Start"/>
             </trigger>
         </event>
+        
         <!-- событие, которое выдает ошибку, если робот не тронулся с места в первую секунду -->
         <event id="Waiting for going forward too long" settedUpInitially="true">
             <conditions glue="and">
@@ -53,10 +57,24 @@
                 <fail message="Робот так и не поехал в первую секунду"/>
             </trigger>
         </event>
-        <!-- событие, которое говорит, что задание выполнено, когда робот приезжает на финиш-->
+        
+        <!-- событие, возникающее, когда робот первый раз приезжает в зону старта -->
         <event id="Start">
             <condition>
                 <inside regionId="begin" objectId="robot1"/>
+            </condition>
+            <triggers>
+                <setUp id="Start draw"/>
+                <drop id="Marker is up"/>
+            </triggers>
+        </event>
+
+        <!-- событие, возникающее, когда робот выехал с зоны старта для рисования круга -->
+        <event id="Start draw">
+            <condition>
+                <not>
+                    <inside regionId="begin" objectId="robot1"/>
+                </not>
             </condition>
             <triggers>
                 <setUp id="In circle"/>
@@ -64,12 +82,10 @@
                 <setUp id="Checkpoint"/>
             </triggers>
         </event>
-        <!-- событие, которое сообщает об ошибке, если маркер опустили раньше времени -->
+        
+        <!-- событие, которое сообщает об ошибке, если маркер опущен -->
         <event id="Marker is up" settedUpInitially="true">
             <conditions glue="and">
-                <not>
-                    <settedUp id="Marker is down"/>
-                </not>
                 <equals>
                     <objectState object="robot1.marker.isDown"/>
                     <bool value="true"/>
@@ -79,19 +95,20 @@
                 <fail message="Маркер робота опущен до того, как начали рисовать круг"/>
             </trigger>
         </event>
+        
         <!-- событие, которое сообщает об ошибке, если маркер робота поднят" -->
         <event id="Marker is down">
-            <conditions glue="and">
-                <timer forceDropOnTimeout="false" timeout="3000"/>
+            <condition>
                 <equals>
                     <objectState object="robot1.marker.isDown"/>
                     <bool value="false"/>
                 </equals>
-            </conditions>
+            </condition>
             <trigger>
                 <fail message="Маркер робота должен быть опущен, чтобы рисовать круг"/>
             </trigger>
         </event>
+        
         <!-- событие, которое сообщает об ошибке, если робот едет не по кругу заданного радиуса -->
         <event id="In circle">
             <conditions glue="or">
@@ -104,6 +121,7 @@
                 <fail message="робот едет не по кругу заданного радиуса"/>
             </trigger>
         </event>
+        
         <!-- событие, которое проверяет, что робот проехал чекпоинт -->
         <event id="Checkpoint">
             <condition>
@@ -113,6 +131,7 @@
                 <setUp id="Finish"/>
             </trigger>
         </event>
+        
         <!-- событие, которое сообщает об успехе, когда робот приезжает на начало круга -->
         <event id="Finish">
             <condition>
@@ -122,5 +141,6 @@
                 <success/>
             </trigger>
         </event>
+
     </constraints>
 </root>
