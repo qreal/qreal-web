@@ -3,11 +3,11 @@
     "notVisible": {
         
          "ControlFlow": {
-            "name": "Link",
+            "name": "Линия соединения",
             "properties": [
                 {
                     "key": "Guard",
-                    "name": "Guard",
+                    "name": "Условие",
                     "type": "combobox",
                     "value": "",
                     "variants": [
@@ -32,24 +32,24 @@
 
     "visible": {
         
-        "Algorithms": {
+        "Алгоритмы": {
 
             "InitialNode": {
-                "name": "Initial Node",
+                "name": "Начало",
                 "image": {
                     "src": "images/initialBlock.svg"
                 }
             },
 
             "FinalNode": {
-                "name": "Final Node",
+                "name": "Конец",
                 "image": {
                     "src": "images/finalBlock.svg"
                 }
             },
 
             "Function": {
-                "name": "Function",
+                "name": "Функция",
                 "image": {
                     "src": "images/functionBlock.svg"
                 },
@@ -57,7 +57,7 @@
                     
                     {
                         "key": "Body",
-                        "name": "Body",
+                        "name": "Тело функции",
                         "type": "string",
                         "value": ""
                     }
@@ -66,7 +66,7 @@
             },
 
             "IfBlock": {
-                "name": "Condition",
+                "name": "Условие",
                 "image": {
                     "src": "images/.ifBlocksvg"
                 },
@@ -74,7 +74,7 @@
                     
                     {
                         "key": "Condition",
-                        "name": "Condition",
+                        "name": "Условие",
                         "type": "string",
                         "value": "x > 0"
                     }
@@ -83,7 +83,7 @@
             },
 
             "FiBlock": {
-                "name": "End If",
+                "name": "Конец условия",
                 "image": {
                     "src": "images/endIfBlock.svg"
                 }
@@ -91,10 +91,10 @@
 
         },
         
-        "Actions": {
+        "Действия": {
 
             "TrikV6EnginesForward": {
-                "name": "Motors Forward",
+                "name": "Моторы вперёд",
                 "image": {
                     "src": "images/enginesForwardBlock.svg"
                 },
@@ -102,14 +102,14 @@
                     
                     {
                         "key": "Ports",
-                        "name": "Ports",
+                        "name": "Порты",
                         "type": "string",
                         "value": "M3, M4"
                     },
 
                     {
                         "key": "Power",
-                        "name": "Power (%)",
+                        "name": "Мощность (%)"
                         "type": "string",
                         "value": "100"
                     }
@@ -118,7 +118,7 @@
             },
 
             "TrikV6EnginesBackward": {
-                "name": "Motors Backward",
+                "name": "Моторы назад",
                 "image": {
                     "src": "images/enginesBackwardBlock.svg"
                 },
@@ -126,14 +126,14 @@
                     
                     {
                         "key": "Ports",
-                        "name": "Ports",
+                        "name": "Порты",
                         "type": "string",
                         "value": "M3, M4"
                     },
 
                     {
                         "key": "Power",
-                        "name": "Power (%)",
+                        "name": "Мощность (%)"
                         "type": "string",
                         "value": "100"
                     }
@@ -142,7 +142,7 @@
             },
 
             "TrikV6EnginesStop": {
-                "name": "Stop Motors",
+                "name": "Моторы стоп",
                 "image": {
                     "src": "images/enginesStopBlock.svg"
                 },
@@ -151,7 +151,7 @@
                     
                     {
                         "key": "Ports",
-                        "name": "Ports",
+                        "name": "Порты",
                         "type": "string",
                         "value": "M1, M2, M3, M4"
                     }
@@ -160,7 +160,7 @@
             },
             
             "TrikV62ClearEncoder": {
-                "name": "Clear Encoder",
+                "name": "Сбросить показания энкодера",
                 "image": {
                     "src": "images/nullificationEncoderBlock.svg"
                 },
@@ -169,7 +169,7 @@
                     
                     {
                         "key": "Ports",
-                        "name": "Ports",
+                        "name": "Порты",
                         "type": "string",
                         "value": "E1, E2, E3, E4"
                     }
@@ -179,10 +179,10 @@
 
         },
 
-        "Wait": {
+        "Ожидание": {
 
             "Timer": {
-                "name": "Timer",
+                "name": "Таймер",
                 "image": {
                     "src": "images/timerBlock.svg"
                 },
@@ -191,7 +191,7 @@
                     
                     {
                         "key": "Delay",
-                        "name": "Delay (ms)",
+                        "name": "Задержка (мс)",
                         "type": "string",
                         "value": "1000"
                     }
@@ -200,7 +200,7 @@
             },
 
             "TrikV62WaitForEncoder": {
-                "name": "Wait for Encoder",
+                "name": "Ждать энкодер",
                 "image": {
                     "src": "images/waitForEncoderBlock.svg"
                 },
@@ -209,39 +209,39 @@
                     
                     {
                         "key": "Port",
-                        "name": "Port",
+                        "name": "Порт",
                         "type": "string",
                         "value": "E3"
                     },
 
                     {
                         "key": "Sign",
-                        "name": "Sign",
+                        "name": "Считанное значение",
                         "type": "dropdown",
                         "selected": {
                             "key": "greater",
-                            "value": "greater"
+                            "value": "больше"
                         },
                         "variants": [
                             
                             {
                                 "key": "greater",
-                                "value": "greater"
+                                "value": "больше"
                             },
 
                             {
                                 "key": "less",
-                                "value": "less"
+                                "value": "меньше"
                             },
 
                             {
                                 "key": "not greater",
-                                "value": "not greater"
+                                "value": "не больше"
                             },
 
                             {
                                 "key": "not less",
-                                "value": "not less"
+                                "value": "не меньше"
                             }
 
                         ]
@@ -249,7 +249,7 @@
 
                     {
                         "key": "TachoLimit",
-                        "name": "Tacho Limit",
+                        "name": "Предел оборотов",
                         "type": "string",
                         "value": ""
                     }
@@ -258,10 +258,10 @@
 
         },
 
-        "Drawing": {
+        "Рисование": {
                 
             "TrikSetPainterColor": {
-                "name": "Painter Color",
+                "name": "Цвет кисти",
                 "image": {
                     "src": "images/brushColorBlock.svg"
                 },
@@ -269,97 +269,97 @@
 
                     {
                         "key": "Color",
-                        "name": "Color",
+                        "name": "Цвет",
                         "type": "dropdown",
                         "selected": {
                             "key": "black",
-                            "value": "black"
+                            "value": "черный"
                         },
                         "variants": [
                             
                             {
                                 "key": "black",
-                                "value": "black"
+                                "value": "черный"
                             },
 
                             {
                                 "key": "blue",
-                                "value": "blue"
+                                "value": "синий"
                             },
 
                             {
                                 "key": "cyan",
-                                "value": "cyan"
+                                "value": "сине-зелёный"
                             },
 
                             {
                                 "key": "dark blue",
-                                "value": "dark blue"
+                                "value": "тёмно-синий"
                             },
 
                             {
                                 "key": "dark cyan",
-                                "value": "dark cyan"
+                                "value": "тёмно-сине-зелёный"
                             },
 
                             {
                                 "key": "dark gray",
-                                "value": "dark gray"
+                                "value": "тёмно-серый"
                             },
 
                             {
                                 "key": "dark green",
-                                "value": "dark green"
+                                "value": "тёмно-зелёный"
                             },
 
                             {
                                 "key": "dark magenta",
-                                "value": "dark magenta"
+                                "value": "тёмно-пурпурный"
                             },
 
                             {
                                 "key": "dark red",
-                                "value": "dark red"
+                                "value": "тёмно-красный"
                             },
 
                             {
                                 "key": "dark yellow",
-                                "value": "dark yellow"
+                                "value": "тёмно-жёлтый"
                             },
 
                             {
                                 "key": "gray",
-                                "value": "gray"
+                                "value": "серый"
                             },
                             
                             {
                                 "key": "green",
-                                "value": "green"
+                                "value": "зелёный"
                             },
 
                             {
                                 "key": "light gray",
-                                "value": "light gray"
+                                "value": "светло-серый"
                             },
 
                             {
                                 "key": "magenta",
-                                "value": "magenta"
+                                "value": "пурпурный"
                             },
 
                             {
                                 "key": "red",
-                                "value": "red"
+                                "value": "красный"
                             },
                             
                             {
                                 "key": "white",
-                                "value": "white"
+                                "value": "белый"
                             },
 
                             {
                                 "key": "yellow",
-                                "value": "yellow"
+                                "value": "жёлтый"
                             }
 
                         ]
@@ -370,7 +370,7 @@
             },
 
             "TrikSetPainterWidth": {
-                "name": "Painter Width",
+                "name": "Толщина кисти",
                 "image": {
                     "src": "images/brushWidthBlock.svg"
                 },
@@ -378,7 +378,7 @@
     
                     {
                         "key": "Width",
-                        "name": "Width",
+                        "name": "Ширина",
                         "type": "string",
                         "value": "1"
                     }
@@ -387,7 +387,7 @@
             },
 
             "TrikDrawEllipse": {
-                "name": "Draw Ellipse",
+                "name": "Нарисовать эллипс",
                 "images": {
                     "src": "images/drawCircleBlock.svg"
                 },
@@ -395,21 +395,21 @@
             
                     {
                         "key": "HeightEllipse",
-                        "name": "Height",
+                        "name": "Высота",
                         "type": "string",
                         "value": "5"
                     },
 
                     {
                         "key": "Redraw",
-                        "name": "Redraw",
+                        "name": "Обновить картинку",
                         "type": "checkbox",
                         "value": "true"
                     },
 
                     {
                         "key": "WidthEllipse",
-                        "name": "Width",
+                        "name": "Ширина",
                         "type": "string",
                         "value": "5"
                     },
@@ -432,7 +432,7 @@
             },
 
             "TrikDrawArc": {
-                "name": "Draw Arc",
+                "name": "Нарисовать дугу",
                 "images": {
                     "src": "images/drawArcBlock.svg"
                 },
@@ -440,35 +440,35 @@
             
                     {
                         "key": "HeightArc",
-                        "name": "Height",
+                        "name": "Высота",
                         "type": "string",
                         "value": "5"
                     },
 
                     {
                         "key": "Redraw",
-                        "name": "Redraw",
+                        "name": "Обновить картинку",
                         "type": "checkbox",
                         "value": "true"
                     },
 
                     {
                         "key": "SpanAngle",
-                        "name": "SpanAngle",
+                        "name": "Размах",
                         "type": "string",
                         "value": "20"
                     },
 
                     {
                         "key": "StartAngle",
-                        "name": "StartAngle",
+                        "name": "Начальный угол",
                         "type": "string",
                         "value": "20"
                     },
 
                     {
                         "key": "WidthArc",
-                        "name": "Width",
+                        "name": "Ширина",
                         "type": "string",
                         "value": "5"
                     },
@@ -491,28 +491,28 @@
             },
 
             "TrikSmile": {
-                "name": "Smile",
+                "name": "Смайлик",
                 "image": {
                     "src": "images/smileBlock.svg"
                 }
             },
 
             "TrikSadSmile": {
-                "name": "Sad Smile",
+                "name": "Грустный смайлик",
                 "image": {
                     "src": "images/sadSmileBlock.svg"
                 }
             },
 
             "ClearScreen": {
-                "name": "Clear Screen",
+                "name": "Очистить экран",
                 "image": {
                     "src": "images/clearScreenBlock.svg"
                 }
             },
 
             "Marker Down": {
-                "name": "Marker Down",
+                "name": "Опустить маркер",
                 "image": {
                     "src": "images/markerDownBlock.svg"
                 },
@@ -520,97 +520,97 @@
 
                     {
                         "key": "Color",
-                        "name": "Color",
+                        "name": "Цвет",
                         "type": "dropdown",
                         "selected": {
                             "key": "blue",
-                            "value": "blue"
+                            "value": "синий"
                         },
                         "variants": [
                             
                             {
                                 "key": "black",
-                                "value": "black"
+                                "value": "черный"
                             },
 
                             {
                                 "key": "blue",
-                                "value": "blue"
+                                "value": "синий"
                             },
 
                             {
                                 "key": "cyan",
-                                "value": "cyan"
+                                "value": "сине-зелёный"
                             },
 
                             {
                                 "key": "dark blue",
-                                "value": "dark blue"
+                                "value": "тёмно-синий"
                             },
 
                             {
                                 "key": "dark cyan",
-                                "value": "dark cyan"
+                                "value": "тёмно-сине-зелёный"
                             },
 
                             {
                                 "key": "dark gray",
-                                "value": "dark gray"
+                                "value": "тёмно-серый"
                             },
 
                             {
                                 "key": "dark green",
-                                "value": "dark green"
+                                "value": "тёмно-зелёный"
                             },
 
                             {
                                 "key": "dark magenta",
-                                "value": "dark magenta"
+                                "value": "тёмно-пурпурный"
                             },
 
                             {
                                 "key": "dark red",
-                                "value": "dark red"
+                                "value": "тёмно-красный"
                             },
 
                             {
                                 "key": "dark yellow",
-                                "value": "dark yellow"
+                                "value": "тёмно-жёлтый"
                             },
 
                             {
                                 "key": "gray",
-                                "value": "gray"
+                                "value": "серый"
                             },
                             
                             {
                                 "key": "green",
-                                "value": "green"
+                                "value": "зелёный"
                             },
 
                             {
                                 "key": "light gray",
-                                "value": "light gray"
+                                "value": "светло-серый"
                             },
 
                             {
                                 "key": "magenta",
-                                "value": "magenta"
+                                "value": "пурпурный"
                             },
 
                             {
                                 "key": "red",
-                                "value": "red"
+                                "value": "красный"
                             },
                             
                             {
                                 "key": "white",
-                                "value": "white"
+                                "value": "белый"
                             },
 
                             {
                                 "key": "yellow",
-                                "value": "yellow"
+                                "value": "жёлтый"
                             }
 
                         ]
@@ -621,7 +621,7 @@
             },
 
             "MarkerUp": {
-                "name": "Marker Up",
+                "name": "Поднять маркер",
                 "image": {
                     "src": "images/markerUpBlock.svg"
                 }
@@ -632,3 +632,4 @@
     }
 
 }
+
