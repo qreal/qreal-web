@@ -1,10 +1,13 @@
 package com.qreal.stepic.robots.controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.qreal.stepic.robots.constants.PathConstants;
 import com.qreal.stepic.robots.converters.JavaModelConverter;
 import com.qreal.stepic.robots.converters.XmlSaveConverter;
 import com.qreal.stepic.robots.exceptions.SubmitException;
+import com.qreal.stepic.robots.loaders.TypesLoader;
 import com.qreal.stepic.robots.model.checker.Description;
 import com.qreal.stepic.robots.model.diagram.Diagram;
 import com.qreal.stepic.robots.model.diagram.OpenResponse;
@@ -23,6 +26,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.Locale;
 
 /**
@@ -33,13 +37,19 @@ import java.util.Locale;
 public class OnlineSolutionController extends SolutionController {
 
     @Autowired
-    MessageSource messageSource;
+    private MessageSource messageSource;
+
+    private TypesLoader typesLoader;
+
+    public OnlineSolutionController() {
+        typesLoader = new TypesLoader();
+    }
 
     @RequestMapping(value = "{title}", params = { "name" }, method = RequestMethod.GET)
     public ModelAndView showTask(HttpServletRequest request, @PathVariable String title,
                                  @RequestParam(value = "name") String name, Locale locale)
             throws NoSuchRequestHandlingMethodException {
-        if (getPalette(name, locale) == null) {
+        if (getTypes(name, locale) == null) {
             throw new NoSuchRequestHandlingMethodException(request);
         }
         ModelAndView modelAndView = new ModelAndView("checker/onlineSolution");
@@ -55,20 +65,9 @@ public class OnlineSolutionController extends SolutionController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "getPalette/{name}", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-    public String getPalette(@PathVariable String name, Locale locale) {
-        try {
-            if (locale.equals(new Locale("en", ""))) {
-                return new String(Files.readAllBytes(Paths.get(PathConstants.TASKS_PATH + "/" + name + "/elements_en.xml")),
-                        StandardCharsets.UTF_8);
-            }
-
-            return new String(Files.readAllBytes(Paths.get(PathConstants.TASKS_PATH + "/" + name + "/elements_ru.xml")),
-                    StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    @RequestMapping(value = "getTypes/{name}", method = RequestMethod.POST)
+    public JsonNode getTypes(@PathVariable String name, Locale locale) {
+        return typesLoader.getTypesJson(name, locale);
     }
 
     @ResponseBody

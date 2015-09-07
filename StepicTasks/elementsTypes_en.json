@@ -34,6 +34,8 @@
         
         "Algorithms": {
 
+            "categoryName": "Algorithms",
+
             "InitialNode": {
                 "name": "Initial Node",
                 "image": {
@@ -92,6 +94,8 @@
         },
         
         "Actions": {
+
+            "categoryName": "Actions",
 
             "TrikV6EnginesForward": {
                 "name": "Motors Forward",
@@ -181,6 +185,8 @@
 
         "Wait": {
 
+            "categoryName": "Wait",
+
             "Timer": {
                 "name": "Timer",
                 "image": {
@@ -259,6 +265,8 @@
         },
 
         "Drawing": {
+
+            "categoryName": "Drawing",
                 
             "TrikSetPainterColor": {
                 "name": "Painter Color",

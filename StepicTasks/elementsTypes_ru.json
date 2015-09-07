@@ -32,8 +32,10 @@
 
     "visible": {
         
-        "Алгоритмы": {
+        "Algorithms": {
 
+            "categoryName": "Алгоритмы",
+            
             "InitialNode": {
                 "name": "Начало",
                 "image": {
@@ -91,7 +93,9 @@
 
         },
         
-        "Действия": {
+        "Actions": {
+
+            "categoryName": "Действия",
 
             "TrikV6EnginesForward": {
                 "name": "Моторы вперёд",
@@ -109,7 +113,7 @@
 
                     {
                         "key": "Power",
-                        "name": "Мощность (%)"
+                        "name": "Мощность (%)",
                         "type": "string",
                         "value": "100"
                     }
@@ -133,7 +137,7 @@
 
                     {
                         "key": "Power",
-                        "name": "Мощность (%)"
+                        "name": "Мощность (%)",
                         "type": "string",
                         "value": "100"
                     }
@@ -179,7 +183,9 @@
 
         },
 
-        "Ожидание": {
+        "Wait": {
+
+            "categoryName": "Ожидание",
 
             "Timer": {
                 "name": "Таймер",
@@ -258,7 +264,9 @@
 
         },
 
-        "Рисование": {
+        "Drawing": {
+
+            "categoryName": "Рисование",
                 
             "TrikSetPainterColor": {
                 "name": "Цвет кисти",
