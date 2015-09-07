@@ -1,0 +1,32 @@
+{
+    "notVisible": [
+        "ControlFlow"
+    ],
+
+    "visible": {
+        
+        "palette": {
+            
+            "Algorithms": [
+                "InitialNode",
+                "FinalNode"
+            ],
+
+            "Actions": [
+                "TrikSay"
+            ],
+
+            "Wait": [
+                "Timer"
+            ],
+
+            "Drawing": [
+                "TrikSmile",
+                "TrikSadSmile"
+            ]
+
+        }
+        
+    }
+
+}

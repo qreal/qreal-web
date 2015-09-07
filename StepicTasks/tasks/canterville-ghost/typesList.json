@@ -1,0 +1,40 @@
+{
+    "notVisible": [
+        "ControlFlow"
+    ],
+
+    "visible": {
+        
+        "palette": {
+            
+            "Algorithms": [
+                "InitialNode",
+                "FinalNode",
+                "Function",
+                "IfBlock",
+                "FiBlock"
+            ],
+
+            "Actions": [
+                "TrikV6EnginesForward",
+                "TrikV6EnginesBackward",
+                "TrikV6EnginesStop",
+                "TrikV62ClearEncoder"
+            ],
+
+            "Wait": [
+                "Timer",
+                "TrikV62WaitForEncoder"
+            ],
+
+            "Drawing": [
+                "TrikSmile",
+                "TrikSadSmile",
+                "ClearScreen"
+            ]
+
+        }
+        
+    }
+
+}

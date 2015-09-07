@@ -1,0 +1,29 @@
+{
+    "notVisible": [
+        "ControlFlow"
+    ],
+
+    "visible": {
+        
+        "palette": {
+            
+            "Algorithms": [
+                "InitialNode",
+                "FinalNode"
+            ],
+
+            "Actions": [
+                "TrikV6EnginesForward",
+                "TrikV6EnginesBackward",
+                "TrikV6EnginesStop"
+            ],
+
+            "Wait": [
+                "Timer"
+            ]
+
+        }
+        
+    }
+
+}

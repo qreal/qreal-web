@@ -15,9 +15,8 @@ class ElementsTypeLoader {
             type: 'POST',
             url: 'getTypes/' + this.task,
             success: (response) => {
-                console.log(response);
-                //this.handleResponse($.parseXML(response), $scope, $compile);
-                //this.controller.initPalette($scope);
+                this.handleResponse(response, $scope, $compile);
+                this.controller.initPalette($scope);
             },
             error: function (response, status, error) {
                 alert("Palette loading error: " + status + " " + error);
@@ -25,101 +24,48 @@ class ElementsTypeLoader {
         });
     }
 
-    private handleResponse(xmlDoc: XMLDocument, $scope, $compile) {
-        var notVisibleTypesMap: NodeTypesMap = this.parseNotVisibleTypes(
-            <Element> xmlDoc.getElementsByTagName("NotVisible")[0]);
-        var visibleTypesMap: NodeTypesMap = this.parseVisibleTypes(
-            <Element> xmlDoc.getElementsByTagName("Visible")[0]);
+    private handleResponse(response: any, $scope, $compile) {
+        var notVisibleTypesMap: NodeTypesMap = this.parseNotVisibleTypes(response.notVisible);
+        var visibleTypesMap: NodeTypesMap = this.parseVisibleTypes(response.visible);
 
         this.controller.setNodeTypesMap($.extend(notVisibleTypesMap, visibleTypesMap));
         this.appendHtmlContentToNavigation($scope, $compile);
     }
 
-    private createNodeType(element: Element): NodeType {
-        var name: string = element.getAttribute('name');
-        var typeName: string = element.getAttribute('type');
-
-        var elementTypeProperties: PropertiesMap = this.parseTypeProperties(typeName,
-            element.getElementsByTagName("Property"));
-
-        var imageElement = <Element> element.getElementsByTagName("Image")[0];
-
-        if (imageElement) {
-            var image: string = GeneralConstants.APP_ROOT_PATH + imageElement.getAttribute('src');
-            return new NodeType(name, elementTypeProperties, image);
-        } else {
-            return new NodeType(name, elementTypeProperties);
-        }
-    }
-
-    private parseTypeProperties(typeName: string, elementProperties: NodeList): PropertiesMap {
-        var properties: PropertiesMap = {};
-        for (var j = 0; j < elementProperties.length; j++) {
-            var propertyElement: Element = <Element> elementProperties[j];
-            var propertyKey: string = propertyElement.getAttribute('key');
-            var propertyName: string = propertyElement.getAttribute('name');
-            var propertyType: string = propertyElement.getAttribute('type');
-
-            if (propertyType === "dropdown" || propertyType === "combobox") {
-                var variants: Element = <Element> propertyElement.getElementsByTagName("Variants")[0];
-                this.addDropdownList(typeName, propertyKey, variants.getElementsByTagName("variant"));
-            }
-
-            var propertyValue: string;
-            var valueElement: Element = <Element> propertyElement.getElementsByTagName("value")[0];
-            if (valueElement.hasAttribute("key")) {
-                propertyValue = valueElement.getAttribute("key");
-            } else {
-                if (valueElement.childNodes[0]) {
-                    propertyValue = valueElement.childNodes[0].nodeValue;
-                } else {
-                    propertyValue = '';
-                }
-            }
-
-            var property:Property = new Property(propertyName, propertyValue, propertyType);
-            properties[propertyKey] = property;
-        }
-        return properties;
-    }
-
-    private parseNotVisibleTypes(notVisibleTypesElement: Element): NodeTypesMap {
-        var elements: NodeList = notVisibleTypesElement.getElementsByTagName("Element");
+    private parseNotVisibleTypes(notVisibleTypes: any): NodeTypesMap {
         var notVisibleTypesMap: NodeTypesMap = {};
 
-        for (var i = 0; i < elements.length; i++) {
-            var element: Element = <Element> elements[i];
-            var typeName: string = element.getAttribute('type');
+        for (var i in notVisibleTypes) {
+            var typeObject = notVisibleTypes[i];
+            var typeName: string = typeObject.type;
 
-            notVisibleTypesMap[typeName] = this.createNodeType(element);
+            notVisibleTypesMap[typeName] = this.createNodeType(typeObject);
         }
         return notVisibleTypesMap;
     }
 
-    private parseVisibleTypes(visibleTypesElement: Element): NodeTypesMap {
-        return this.parsePaletteTypes(<Element> visibleTypesElement.getElementsByTagName("Palette")[0]);
+    private parseVisibleTypes(visibleTypes: any): NodeTypesMap {
+        return this.parsePaletteTypes(visibleTypes.palette);
     }
 
-    private parsePaletteTypes(paletteTypesElement: Element): NodeTypesMap {
+    private parsePaletteTypes(paletteTypes: any): NodeTypesMap {
         var visibleNodeTypesMap: NodeTypesMap = {};
 
-        var categories: NodeList = paletteTypesElement.getElementsByTagName("Category");
-        for (var k = 0; k < categories.length; k++) {
-            var category: Element = <Element> categories[k];
-            this.paletteContent += '<li><p>' + category.getAttribute('name') + '</p><ul>';
-            var elements: NodeList = category.getElementsByTagName("Element");
+        for (var category in paletteTypes) {
+            this.paletteContent += '<li><p>' + category + '</p><ul>';
 
-            for (var i = 0; i < elements.length; i++) {
-                var element: Element = <Element> elements[i];
-                var name: string = element.getAttribute('name');
-                var typeName: string = element.getAttribute('type');
+            for (var i in paletteTypes[category]) {
+                var typeObject = paletteTypes[category][i];
+                var name: string = typeObject.name;
+                var typeName: string = typeObject.type;
 
                 this.paletteContent += '<li><div class="tree_element"' + 'data-type="' + typeName + '">';
 
-                var imageElement = <Element> element.getElementsByTagName("Image")[0]
-                var image: string = GeneralConstants.APP_ROOT_PATH + imageElement.getAttribute('src');
+                var imageElement: any = typeObject.image;
 
-                visibleNodeTypesMap[typeName] = this.createNodeType(element);
+                var image: string = GeneralConstants.APP_ROOT_PATH + imageElement.src;
+
+                visibleNodeTypesMap[typeName] = this.createNodeType(typeObject);
 
                 this.paletteContent += '<img class="elementImg" src="' +
                     image + '" width="30" height="30"' + '/>';
@@ -141,11 +87,52 @@ class ElementsTypeLoader {
         });
     }
 
-    private addDropdownList(typeName: string, propertyKey: string, variantElements: NodeList): void {
+    private createNodeType(typeObject: any): NodeType {
+        var name: string = typeObject.name;
+        var typeName: string = typeObject.type;
+
+        var elementTypeProperties: PropertiesMap = this.parseTypeProperties(typeName, typeObject.properties);
+
+        var imageElement: any = typeObject.image;
+
+        if (imageElement) {
+            var image: string = GeneralConstants.APP_ROOT_PATH + imageElement.src;
+            return new NodeType(name, elementTypeProperties, image);
+        } else {
+            return new NodeType(name, elementTypeProperties);
+        }
+    }
+
+    private parseTypeProperties(typeName: string, propertiesArrayNode: any): PropertiesMap {
+        var properties: PropertiesMap = {};
+        for (var i in propertiesArrayNode) {
+            var propertyObject = propertiesArrayNode[i];
+            var propertyKey: string = propertyObject.key;
+            var propertyName: string = propertyObject.name;
+            var propertyType: string = propertyObject.type;
+
+            if (propertyType === "dropdown" || propertyType === "combobox") {
+                this.addDropdownList(typeName, propertyKey, propertyObject.variants);
+            }
+
+            var propertyValue: string = "";
+            if (propertyObject.value) {
+                propertyValue = propertyObject.value;
+            } else if (propertyObject.selected) {
+                propertyValue = propertyObject.selected.key;
+            }
+
+            var property: Property = new Property(propertyName, propertyValue, propertyType);
+            properties[propertyKey] = property;
+        }
+        return properties;
+    }
+
+    private addDropdownList(typeName: string, propertyKey: string, variantsArrayNode: any): void {
         var variants: Variant[] = [];
-        for (var i = 0; i < variantElements.length; i++) {
-            var variant: Element = <Element> variantElements[i];
-            variants.push(new Variant(variant.getAttribute("key"), variant.childNodes[0].nodeValue));
+        for (var i in variantsArrayNode) {
+            var variant = variantsArrayNode[i];
+            variants.push(new Variant(variant.key, variant.value));
         }
         DropdownListManager.addDropdownList(typeName, propertyKey, variants);
     }

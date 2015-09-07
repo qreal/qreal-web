@@ -70,7 +70,7 @@
             "IfBlock": {
                 "name": "Условие",
                 "image": {
-                    "src": "images/.ifBlocksvg"
+                    "src": "images/ifBlock.svg"
                 },
                 "properties": [
                     
@@ -176,6 +176,30 @@
                         "name": "Порты",
                         "type": "string",
                         "value": "E1, E2, E3, E4"
+                    }
+
+                ]
+            },
+
+            "TrikSay": {
+                "name": "Сказать",
+                "image": {
+                    "src": "images/sayBlock.svg"
+                },
+                "properties": [
+                    
+                    {
+                        "key": "Evaluate",
+                        "name": "Вычислять",
+                        "type": "checkbox",
+                        "value": "false"
+                    },
+
+                    {
+                        "key": "Text",
+                        "name": "Текст",
+                        "type": "string",
+                        "value": "Привет!"
                     }
 
                 ]
@@ -396,7 +420,7 @@
 
             "TrikDrawEllipse": {
                 "name": "Нарисовать эллипс",
-                "images": {
+                "image": {
                     "src": "images/drawCircleBlock.svg"
                 },
                 "properties": [
@@ -441,7 +465,7 @@
 
             "TrikDrawArc": {
                 "name": "Нарисовать дугу",
-                "images": {
+                "image": {
                     "src": "images/drawArcBlock.svg"
                 },
                 "properties": [
@@ -519,7 +543,7 @@
                 }
             },
 
-            "Marker Down": {
+            "MarkerDown": {
                 "name": "Опустить маркер",
                 "image": {
                     "src": "images/markerDownBlock.svg"

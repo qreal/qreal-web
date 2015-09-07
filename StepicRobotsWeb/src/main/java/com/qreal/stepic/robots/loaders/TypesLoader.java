@@ -79,7 +79,7 @@ public class TypesLoader {
             JsonNode taskCategoryNode = palette.path(category);
             JsonNode generalCategoryNode = allVisible.path(category);
 
-            ArrayNode categoryArray = getCategotyArray(taskCategoryNode, generalCategoryNode);
+            ArrayNode categoryArray = getCategoryArray(taskCategoryNode, generalCategoryNode);
 
             resultPaletteNode.set(generalCategoryNode.get("categoryName").textValue(), categoryArray);
         }
@@ -87,7 +87,7 @@ public class TypesLoader {
         return resultPaletteNode;
     }
 
-    private ArrayNode getCategotyArray(JsonNode taskCategoryNode, JsonNode generalCategoryNode) {
+    private ArrayNode getCategoryArray(JsonNode taskCategoryNode, JsonNode generalCategoryNode) {
         ArrayNode categoryArray = mapper.createArrayNode();
 
         Iterator<JsonNode> typesIterator = taskCategoryNode.elements();
