@@ -3,41 +3,55 @@
     <world>
         <walls/>
         <colorFields>
-            <line stroke-style="solid" fill="#000000" stroke-width="6" begin="-100:-150" fill-style="none" stroke="#000000" id="" end="-100:0"/>
-            <line stroke-style="solid" fill="#000000" stroke-width="3" begin="-100:0" fill-style="none" stroke="#000000" id="" end="50:0"/>
-            <line stroke-style="solid" fill="#000000" stroke-width="6" begin="50:0" fill-style="none" stroke="#000000" id="" end="50:-150"/>
-            <line stroke-style="solid" fill="#000000" stroke-width="6" begin="50:-150" fill-style="none" stroke="#000000" id="" end="-100:-150"/>
-            <line stroke-style="solid" fill="#000000" stroke-width="6" begin="-100:0" fill-style="none" stroke="#000000" id="" end="-100:150"/>
-            <line stroke-style="solid" fill="#000000" stroke-width="6" begin="-100:150" fill-style="none" stroke="#000000" id="" end="50:150"/>
-            <line stroke-style="solid" fill="#000000" stroke-width="6" begin="50:150" fill-style="none" stroke="#000000" id="" end="50:-10"/>
+            <line stroke="#000000" stroke-style="solid" end="-100:0" fill="#000000" id="" begin="-100:-150" fill-style="none" stroke-width="6"/>
+            <line stroke="#000000" stroke-style="solid" end="50:0" fill="#000000" id="" begin="-100:0" fill-style="none" stroke-width="3"/>
+            <line stroke="#000000" stroke-style="solid" end="50:-150" fill="#000000" id="" begin="50:0" fill-style="none" stroke-width="6"/>
+            <line stroke="#000000" stroke-style="solid" end="-100:-150" fill="#000000" id="" begin="50:-150" fill-style="none" stroke-width="6"/>
+            <line stroke="#000000" stroke-style="solid" end="-100:150" fill="#000000" id="" begin="-100:0" fill-style="none" stroke-width="6"/>
+            <line stroke="#000000" stroke-style="solid" end="50:150" fill="#000000" id="" begin="-100:150" fill-style="none" stroke-width="6"/>
+            <line stroke="#000000" stroke-style="solid" end="50:-10" fill="#000000" id="" begin="50:150" fill-style="none" stroke-width="6"/>
+            <line stroke="#000000" stroke-style="solid" end="-50:151" fill="#000000" id="" begin="-50:-150" fill-style="none" stroke-width="1"/>
+            <line stroke="#000000" stroke-style="solid" end="0:-150" fill="#000000" id="" begin="0:150" fill-style="none" stroke-width="1"/>
+            <line stroke="#000000" stroke-style="solid" end="50:-100" fill="#000000" id="" begin="-100:-100" fill-style="none" stroke-width="1"/>
+            <line stroke="#000000" stroke-style="solid" end="50:-50" fill="#000000" id="" begin="-100:-50" fill-style="none" stroke-width="1"/>
+            <line stroke="#000000" stroke-style="solid" end="50:50" fill="#000000" id="" begin="-100:50" fill-style="none" stroke-width="1"/>
+            <line stroke="#000000" stroke-style="solid" end="50:100" fill="#000000" id="" begin="-100:100" fill-style="none" stroke-width="1"/>
         </colorFields>
         <regions>
-            <region filled="true" visible="false" height="25" width="25" y="-88" color="#0000ff" id="start_zone" x="-38" type="rectangle"/>
-            <region filled="true" visible="false" height="5" width="25" y="75" color="#ff0000" id="finish_zone" x="-38" type="rectangle"/>
+            <region x="-38" visible="false" filled="true" height="25" type="rectangle" color="#0000ff" width="25" id="start_zone" y="-88"/>
+            <region x="-30" visible="false" filled="true" height="5" type="rectangle" color="#ff0000" width="10" id="finish_zone" y="75"/>
+            <region text="Старт" textX="0" textY="0" x="-50" visible="true" filled="false" height="50" type="rectangle" color="#0000ff" width="50" id="start_visible" y="-100"/>
+            <region text="Финиш" textX="0" textY="0" x="-50" visible="true" filled="false" height="50" type="rectangle" color="#00ff00" width="50" id="finish_visible" y="50"/>
+            <region x="-75" visible="false" filled="false" height="250" type="rectangle" color="#ff0000" width="100" id="warzone" y="-125"/>
         </regions>
     </world>
     <robots>
-        <robot direction="0" position="-50:-100" id="trikV62KitRobot">
+        <robot position="-50:-100" direction="0" id="trikV62KitRobot">
             <sensors>
-                <sensor direction="0" port="E3###input###M3###encoder3" position="0:0" type=""/>
-                <sensor direction="0" port="M4###output######" position="0:0" type=""/>
-                <sensor direction="0" port="E2###input###M2###encoder2" position="0:0" type=""/>
-                <sensor direction="0" port="E4###input###M4###encoder4" position="0:0" type=""/>
-                <sensor direction="0" port="E1###input###M1###encoder1" position="0:0" type=""/>
-                <sensor direction="0" port="M3###output######" position="0:0" type=""/>
+                <sensor position="0:0" port="M4###output######" type="" direction="0"/>
+                <sensor position="0:0" port="A1###input######sensorA1" type="" direction="0"/>
+                <sensor position="0:0" port="M3###output######" type="" direction="0"/>
             </sensors>
-            <startPosition y="-75" direction="0" x="-25"/>
-            <wheels left="M3###output######" right="M4###output######"/>
+            <startPosition x="-25" direction="0" y="-75"/>
+            <wheels right="M4###output######" left="M3###output######"/>
         </robot>
     </robots>
     <constraints>
+
         <timelimit value="20000"/>
+        
         <!-- Проверка начального положения -->
         <constraint checkOnce="true" failMessage="Робот должен находиться в начальной точке перед запуском программы!">
             <inside regionId="start_zone" objectId="robot1"/>
         </constraint>
+
+        <!-- Проверка, что робот не выехал за границу допустимой зоны -->
+        <constraint failMessage="Робот выехал за пределы допустимой зоны">
+            <inside regionId="warzone" objectId="robot1"/>
+        </constraint>
+        
         <!-- Событие, которое говорит о том, что робот вообще поехал и стартует цепочку проверки -->
-        <event id="We are alive, first move" settedUpInitially="true">
+        <event settedUpInitially="true" id="We are alive, first move">
             <condition>
                 <greater>
                     <objectState object="robot1.M3.power"/>
@@ -48,20 +62,22 @@
                 <setUp id="Finish"/>
             </triggers>
         </event>
+        
         <!-- Событие, которое выдает ошибку, если робот не тронулся с места в первую секунду -->
-        <event id="Waiting for going forward too long" settedUpInitially="true">
+        <event settedUpInitially="true" id="Waiting for going forward too long">
             <conditions glue="and">
-                <timer forceDropOnTimeout="true" timeout="1000"/>
+                <timer timeout="1000" forceDropOnTimeout="true"/>
                 <settedUp id="We are alive, first move"/>
             </conditions>
             <trigger>
                 <fail message="Робот так и не поехал в первую секунду"/>
             </trigger>
         </event>
+        
         <!-- Событие, которое говорит, что задание выполнено, когда робот приезжает на финиш, и программа заканчивает работу -->
         <event id="Finish">
             <conditions glue="and">
-                <timer forceDropOnTimeout="false" timeout="50"/>
+                <timer timeout="50" forceDropOnTimeout="false"/>
                 <inside regionId="finish_zone" objectId="robot1"/>
             </conditions>
             <triggers>
@@ -69,6 +85,7 @@
                 <success deferred="true"/>
             </triggers>
         </event>
+        
         <!-- Событие, которое сообщает об ошибке, если робот приехал на финиш, но потом уехал с него" -->
         <event id="Leave finish">
             <condition>
@@ -80,5 +97,6 @@
                 <fail message="Робот приехал в нужное место, но уехал дальше"/>
             </trigger>
         </event>
+
     </constraints>
 </root>

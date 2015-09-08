@@ -21,7 +21,6 @@
             ],
 
             "Wait": [
-                "Timer",
                 "TrikV62WaitForEncoder"
             ]
 
