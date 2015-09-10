@@ -57,11 +57,14 @@
         </robot>
     </robots>
     <constraints>
+
         <!-- 5 min -->
         <timelimit value="300000"/>
+
         <constraint checkOnce="true" failMessage="Робот должен находиться в зоне старта перед запуском!">
             <inside objectId="robot1" regionId="start zone"/>
         </constraint>
+
         <constraint checkOnce="true" failMessage="У робота должны быть 2 инфракрасных сенсора на портах A1 и A2 и 2 сенсора света на портах А3 и А4">
             <conditions glue="and">
                 <equals>
@@ -102,9 +105,11 @@
                 </equals>
             </conditions>
         </constraint>
+
         <constraint failMessage="Робот попытался объехать лабиринт!">
             <inside objectId="robot1" regionId="warzone"/>
         </constraint>
+
         <!-- Событие, которое говорит о том, что робот вообще поехал и стартует цепочку проверки -->
         <event settedUpInitially="true" id="We are alive, first move">
             <condition>
@@ -121,6 +126,7 @@
                 <setUp id="Red area"/>
             </triggers>
         </event>
+
         <!-- Событие, которое выдает ошибку, если робот не тронулся с места в первую секунду -->
         <event settedUpInitially="true" id="Waiting for going forward too long">
             <conditions glue="and">
@@ -131,6 +137,7 @@
                 <fail message="Робот так и не поехал в первую секунду"/>
             </trigger>
         </event>
+
         <!-- Событие, которое выводит ошибку, если через 100мс после начала у робота включен светодиод -->
         <event id="Led off">
             <conditions glue="and">
@@ -146,6 +153,7 @@
                 <fail message="У робота должен быть выключен светодиод, когда он не на цветном пятне"/>
             </trigger>
         </event>
+
         <!-- Событие, которое взводит ожидание красного светодиода -->
         <event id="Red area">
             <conditions glue="and">
@@ -158,25 +166,35 @@
                     <objectState object="robot1.A3.value"/>
                 </equals>
             </conditions>
-            <trigger>
+            <triggers>
                 <setUp id="Wait for red led"/>
-            </trigger>
+				<setUp id="Fail red led"/>
+            </triggers>
         </event>
-        <!-- Событие, сообщаюшее об ошибке, если за 100 мс не включился красный светодиод -->
-        <event id="Wait for red led">
-            <conditions glue="and">
-                <timer timeout="100"/>
-                <not>
-                    <equals>
-                        <objectState object="robot1.led.color"/>
-                        <string value="red"/>
-                    </equals>
-                </not>
-            </conditions>
+
+		<!-- Событие, которое ожидает включение красного светодиода -->
+		<event id="Wait for red led">
+			<condition>
+				<equals>
+                	<objectState object="robot1.led.color"/>
+                    <string value="red"/>
+				</equals>
+			</condition>
+			<trigger>
+				<drop id="Fail red led"/>
+			</trigger>
+		</event>
+
+        <!-- Событие, сообщающее об ошибке, если за 1000 мс не включился красный светодиод -->
+        <event id="Fail red led">
+            <condition>
+                <timer timeout="1000"/>
+            </condition>
             <trigger>
                 <fail message="Робот должен помигать красным светодиодом на красном пятне"/>
             </trigger>
         </event>
+
         <!-- Событие, которое взводит ожидание зеленого светодиода -->
         <event id="Green area">
             <conditions glue="and">
@@ -195,23 +213,33 @@
             </conditions>
             <triggers>
                 <setUp id="Wait for green led"/>
+				<setUp id="Fail green led"/>
             </triggers>
         </event>
-        <!-- Событие, сообщаюшее об ошибке, если за 100 мс не включился зеленый светодиод -->
+
+        <!-- Событие, которое ожидает включение зеленого светодиода -->
         <event id="Wait for green led">
-            <conditions glue="and">
-                <timer timeout="100"/>
-                <not>
-                    <equals>
-                        <objectState object="robot1.led.color"/>
-                        <string value="green"/>
-                    </equals>
-                </not>
-            </conditions>
+            <condition>
+                <equals>
+                	<objectState object="robot1.led.color"/>
+                	<string value="green"/>
+            	</equals>
+            </condition>
             <trigger>
-                <fail message="Робот должен помигать зеленым светодиодом на зеленом пятне"/>
+                <drop id="Fail green led"/>
             </trigger>
         </event>
+
+		<!-- Событие, сообщающее об ошибке, если за 500 мс не включился красный светодиод -->
+		<event id="Fail green led">
+			<condition>
+				<timer timeout="500"/>
+			</condition>
+			<trigger>
+				<fail message="Робот должен помигать зеленым светодиодом на зеленом пятне"/>
+			</trigger>
+		</event>
+
         <!-- событие, возникающее, когда робот проезжает первый чекпоинт -->
         <event id="Checkpoint0">
             <condition>
@@ -222,6 +250,7 @@
                 <drop id="Checkpoint0_fails"/>
             </triggers>
         </event>
+
         <!-- событие, сообщающее об ошибке, если робот приехал на второй чекпоинт, когда должен был приехать на первый -->
         <event id="Checkpoint0_fails">
             <conditions glue="and">
@@ -232,6 +261,7 @@
                 <fail message="Робот едет не по правилу правой руки"/>
             </trigger>
         </event>
+
         <!-- событие, возникающее, когда робот проезжает второй чекпоинт -->
         <event id="Checkpoint1">
             <condition>
@@ -242,6 +272,7 @@
                 <setUp id="Checkpoint2_fails"/>
             </triggers>
         </event>
+
         <!-- событие, возникающее, когда робот проезжает третий чекпоинт -->
         <event id="Checkpoint2">
             <condition>
@@ -252,6 +283,7 @@
                 <drop id="Checkpoint2_fails"/>
             </triggers>
         </event>
+
         <!-- событие, сообщающее об ошибке, если робот приехал на четвертый чекпоинт, когда должен был приехать на третий -->
         <event id="Checkpoint2_fails">
             <conditions glue="and">
@@ -262,6 +294,7 @@
                 <fail message="Робот едет не по правилу правой руки"/>
             </trigger>
         </event>
+
         <!-- событие, возникающее, когда робот проезжает четвертый чекпоинт -->
         <event id="Checkpoint3">
             <condition>
@@ -271,6 +304,7 @@
                 <setUp id="Finish"/>
             </trigger>
         </event>
+
         <!-- событие, сообщающее об успехе, когда робот приехал на финиш" -->
         <event id="Finish">
             <condition>
