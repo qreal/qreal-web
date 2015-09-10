@@ -15,4 +15,6 @@ interface RobotItem extends AbstractItem {
     moveToPoint(x: number, y: number, rotation: number): void;
     setMarkerDown(down: boolean): void;
     setMarkerColor(color: string): void;
+    follow(value: boolean): void;
+    returnToStart(): void;
 }

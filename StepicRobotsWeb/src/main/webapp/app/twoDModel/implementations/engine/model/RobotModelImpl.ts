@@ -49,6 +49,7 @@ class RobotModelImpl implements RobotModel {
         this.robotItem.setStartPosition(pos, direction);
         this.robotItem.setOffsetX(offsetX);
         this.robotItem.setOffsetY(offsetY);
+        this.robotItem.returnToStart();
 
         this.sensorsConfiguration.deserialize(xml);
 
@@ -63,6 +64,7 @@ class RobotModelImpl implements RobotModel {
     stopPlay(): void {
         this.runner.stop(this.robotItem, this.displayWidget);
         this.robotItem.clearCurrentPosition();
+        this.robotItem.returnToStart();
     }
 
     closeDisplay(): void {
@@ -72,4 +74,9 @@ class RobotModelImpl implements RobotModel {
     showDisplay(): void {
         this.displayWidget.show();
     }
+
+    follow(value: boolean) {
+        this.robotItem.follow(value);
+    }
+
 }

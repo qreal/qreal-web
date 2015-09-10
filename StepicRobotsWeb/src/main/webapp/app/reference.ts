@@ -47,6 +47,7 @@
 /// <reference path="diagram/types/PropertiesMap.ts" />
 /// <reference path="diagram/types/Property.ts" />
 /// <reference path="twoDModel/implementations/engine/Runner.ts" />
+/// <reference path="twoDModel/implementations/engine/StageScroller.ts" />
 /// <reference path="twoDModel/implementations/engine/TwoDModelEngineFacadeImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/items/EllipseItemImpl.ts" />
 /// <reference path="twoDModel/implementations/engine/items/LineItemImpl.ts" />

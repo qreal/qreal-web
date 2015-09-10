@@ -18,6 +18,17 @@
     overflow: scroll;
 }
 
+#scroll_buttons {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+}
+
+.scroll_button {
+    width: 20px;
+    height: 20px;
+}
+
 #menu_button {
     position: absolute;
     top: 5px;

@@ -7,4 +7,5 @@ interface TwoDModelEngineFacade {
     openDiagram(): void;
     showCheckResult(result): void;
     stopPlay(): void;
+    followRobot(value: boolean): void;
 }

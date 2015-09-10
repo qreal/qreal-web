@@ -8,4 +8,5 @@ interface RobotModel {
     stopPlay(): void;
     closeDisplay(): void;
     showDisplay(): void;
+    follow(value: boolean): void;
 }

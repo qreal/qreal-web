@@ -1,6 +1,5 @@
 class RobotItemImpl implements RobotItem {
     private worldModel: WorldModel;
-    private robot: RobotModel;
     private marker: Marker;
     private startPosition: TwoDPosition;
     private startDirection: number;
@@ -17,19 +16,21 @@ class RobotItemImpl implements RobotItem {
     private direction: number;
     private roughening: number = 50;
     private counter: number = 0;
+    private isFollow: boolean;
+    private scroller: StageScroller;
 
     constructor(worldModel: WorldModel, position: TwoDPosition, imageFileName: string, robot: RobotModel) {
         this.worldModel = worldModel;
-        this.robot = robot;
         this.startPosition = position;
         this.direction = 0;
         this.startDirection = 0;
+        this.isFollow = false;
+        this.scroller = new StageScroller();
         var paper = worldModel.getPaper();
 
         this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
 
-        this.center.x = position.x + this.width / 2
-        this.center.y = position.y + this.height / 2;
+        this.changeCenterPosition(position.x + this.width / 2, position.y + this.height / 2);
 
         this.startCenter.x = this.center.x
         this.startCenter.y = this.center.y;
@@ -55,8 +56,7 @@ class RobotItemImpl implements RobotItem {
         this.direction = direction;
         this.startDirection = direction;
         this.image.attr({x: position.x, y: position.y});
-        this.center.x = position.x + this.width / 2
-        this.center.y = position.y + this.height / 2;
+        this.changeCenterPosition(position.x + this.width / 2, position.y + this.height / 2);
         this.startCenter.x = this.center.x
         this.startCenter.y = this.center.y;
         this.image.transform("R" + direction + "," + this.center.x + "," + this.center.y);
@@ -145,8 +145,7 @@ class RobotItemImpl implements RobotItem {
         var newCenterX = newX + this.width / 2;
         var newCenterY = newY + this.height / 2;
 
-        this.center.x = newCenterX;
-        this.center.y = newCenterY;
+        this.changeCenterPosition(newCenterX, newCenterY);
 
         this.image.transform("R" + rotation);
 
@@ -183,6 +182,22 @@ class RobotItemImpl implements RobotItem {
 
     show(): void {
         this.image.show();
+    }
+
+    follow(value: boolean): void {
+        this.isFollow = value;
+    }
+
+    returnToStart(): void {
+        this.scroller.scrollToPoint(this.startPosition.x, this.startPosition.y);
+    }
+
+    private changeCenterPosition(x: number, y: number) {
+        this.center.x = x;
+        this.center.y = y;
+        if (this.isFollow) {
+            this.scroller.scrollToPoint(x, y);
+        }
     }
 
     private clearSensorsPosition() {

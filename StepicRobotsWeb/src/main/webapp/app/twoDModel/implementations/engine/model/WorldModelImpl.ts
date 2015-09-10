@@ -144,9 +144,9 @@ class WorldModelImpl implements WorldModel {
     private getExtendedPositions(xStart: number, yStart: number, xEnd: number,
                                  yEnd: number, width: number): {start: TwoDPosition, end: TwoDPosition} {
         var extension = width / 2;
-        var cos = Math.abs(xEnd - xStart) / this.getLenght(xStart, yStart, xEnd, yEnd);
+        var cos = Math.abs(xEnd - xStart) / MathUtils.twoPointLenght(xStart, yStart, xEnd, yEnd);
         var extensionX = extension * cos;
-        var sin = Math.abs(yEnd - yStart) / this.getLenght(xStart, yStart, xEnd, yEnd);
+        var sin = Math.abs(yEnd - yStart) / MathUtils.twoPointLenght(xStart, yStart, xEnd, yEnd);
         var extensionY = extension * sin;
 
         var exStartX: number;
@@ -170,14 +170,6 @@ class WorldModelImpl implements WorldModel {
             exEndY = yEnd - extensionY;
         }
         return { start: new TwoDPosition(exStartX, exStartY), end: new TwoDPosition(exEndX, exEndY) };
-    }
-
-    private getLenght(xStart: number, yStart: number, xEnd: number, yEnd: number): number {
-        return Math.sqrt(this.sqr(xEnd - xStart) + this.sqr((yEnd - yStart)));
-    }
-
-    private sqr(x: number): number {
-        return x * x;
     }
 
     getMousePosition(e) {

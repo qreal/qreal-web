@@ -143,4 +143,10 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
     showDisplay(): void {
         this.model.getRobotModels()[0].showDisplay();
     }
+
+    followRobot(): void {
+        var robotModel = this.model.getRobotModels()[0];
+        robotModel.follow(!$("#follow_button").hasClass('active'));
+    }
+
 }
