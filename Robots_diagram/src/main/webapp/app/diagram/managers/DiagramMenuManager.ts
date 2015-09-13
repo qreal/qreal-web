@@ -193,7 +193,6 @@ class DiagramMenuManager {
     }
 
     private saveDiagramAs(): void {
-
         this.showFolderMenu();
         this.showFolderTable(this.currentFolder);
         this.showSavingMenu();
