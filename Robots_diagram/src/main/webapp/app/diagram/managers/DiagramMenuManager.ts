@@ -12,8 +12,7 @@ class DiagramMenuManager {
         var menuManager = this;
 
         this.diagramController = $scope.vm;
-        this.currentDiagramName = "";
-        this.currentDiagramFolder = null;
+        this.resetCurrentDiagram();
         this.canBeDeleted = false;
         this.pathToFolder = [];
 
@@ -42,11 +41,15 @@ class DiagramMenuManager {
         });
     }
 
+    private resetCurrentDiagram(): void {
+        this.currentDiagramName = "";
+        this.currentDiagramFolder = null;
+    }
+
     private clearAll(): void {
         this.diagramController.clearScene();
         this.canBeDeleted = false;
-        this.currentDiagramName = "";
-        this.currentDiagramFolder = null;
+        this.resetCurrentDiagram();
     }
 
     private createFolderInDatabase(folderName: string): void {
@@ -173,7 +176,7 @@ class DiagramMenuManager {
 
                 if (diagramName === menuManager.currentDiagramName
                     && menuManager.currentFolder === menuManager.currentDiagramFolder) {
-                    menuManager.clearAll();
+                    menuManager.resetCurrentDiagram();
                 }
             },
             error: function (response, status, error) {

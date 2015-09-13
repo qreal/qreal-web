@@ -347,7 +347,7 @@ class DiagramController {
             event.preventDefault();
         });
 
-        $(".custom-menu li").click(function(){
+        $("#diagram_paper .custom-menu li").click(function(){
             switch($(this).attr("data-action")) {
                 case "delete":
                     controller.removeCurrentElement();

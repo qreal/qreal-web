@@ -1,7 +1,4 @@
 <div id="diagramContent" class="unselectable" ng-controller="DiagramController">
-    <ul class='custom-menu'>
-        <li data-action="delete">Delete</li>
-    </ul>
     <div class="navbar navbar-inverse navbar-static-top">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -75,6 +72,9 @@
         </div>
 
         <div id="diagram_paper">
+            <ul class='custom-menu'>
+                <li data-action="delete">Delete</li>
+            </ul>
         </div>
 
         <div id="diagram_right-menu">
