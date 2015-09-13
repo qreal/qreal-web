@@ -19,7 +19,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.menuController.createNewDiagram()">New</a></li>
                             <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams" ng-click="vm.menuController.openFolderWindow()">Open</a></li>
-                            <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.menuController.saveCurrentDiagram()">Save</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.menuController.updateCurrentDiagramInDatabase()">Save</a></li>
                             <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams" ng-click="vm.menuController.saveDiagramAs()">SaveAs</a></li>
                         </ul>
                     </li>
