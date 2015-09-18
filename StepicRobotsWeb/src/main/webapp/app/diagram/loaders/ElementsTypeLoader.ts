@@ -111,8 +111,8 @@ class ElementsTypeLoader {
             var propertyName: string = propertyObject.name;
             var propertyType: string = propertyObject.type;
 
-            if (propertyType === "dropdown" || propertyType === "combobox") {
-                this.addDropdownList(typeName, propertyKey, propertyObject.variants);
+            if (propertyType === "dropdown" || propertyType === "combobox" || propertyType === "checkbox") {
+                this.addVariantList(typeName, propertyKey, propertyObject.variants);
             }
 
             var propertyValue: string = "";
@@ -128,13 +128,13 @@ class ElementsTypeLoader {
         return properties;
     }
 
-    private addDropdownList(typeName: string, propertyKey: string, variantsArrayNode: any): void {
+    private addVariantList(typeName: string, propertyKey: string, variantsArrayNode: any): void {
         var variants: Variant[] = [];
         for (var i in variantsArrayNode) {
             var variant = variantsArrayNode[i];
             variants.push(new Variant(variant.key, variant.value));
         }
-        DropdownListManager.addDropdownList(typeName, propertyKey, variants);
+        VariantListManager.addVariantList(typeName, propertyKey, variants);
     }
 
 }

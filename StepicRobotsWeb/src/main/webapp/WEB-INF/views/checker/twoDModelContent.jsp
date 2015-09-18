@@ -14,8 +14,8 @@
     </button>
 
     <div id="scroll_buttons">
-        <button id="follow_button" class="btn btn-default" data-toggle="button" aria-pressed="false" ng-click="vm.followRobot()">
-            <img class="scroll_button" src="<c:url value='/images/2dmodel/2d_target.png' />"/>
+        <button id="follow_button" class="btn btn-default scroll_button" data-toggle="button" aria-pressed="false" ng-click="vm.followRobot()">
+            <img class="small_image" src="<c:url value='/images/2dmodel/2d_target.png' />"/>
         </button>
     </div>
 

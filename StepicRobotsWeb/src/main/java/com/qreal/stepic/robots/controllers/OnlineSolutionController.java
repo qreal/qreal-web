@@ -13,6 +13,7 @@ import com.qreal.stepic.robots.model.diagram.Diagram;
 import com.qreal.stepic.robots.model.diagram.OpenResponse;
 import com.qreal.stepic.robots.model.diagram.SubmitRequest;
 import com.qreal.stepic.robots.model.diagram.SubmitResponse;
+import com.qreal.stepic.robots.translators.PropertyValueTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -92,6 +93,9 @@ public class OnlineSolutionController extends SolutionController {
     @RequestMapping(value = "submit/{name}", method = RequestMethod.POST)
     public SubmitResponse submit(@RequestBody SubmitRequest request, @PathVariable String name,
                                  Locale locale) throws SubmitException {
+        PropertyValueTranslator translator = new PropertyValueTranslator();
+        translator.translateAllPropertiesValue(request.getDiagram().getNodes(), locale);
+        translator.translateAllPropertiesValue(request.getDiagram().getLinks(), locale);
         JavaModelConverter javaModelConverter = new JavaModelConverter();
         String uuidStr = String.valueOf(javaModelConverter.convertToXmlSave(request.getDiagram(), name));
 

@@ -190,7 +190,20 @@
                         "key": "Evaluate",
                         "name": "Evaluate",
                         "type": "checkbox",
-                        "value": "false"
+                        "selected": {
+                            "key": "false",
+                            "value": "false"
+                        },
+		                "variants": [
+		                    {
+		                        "key": "false",
+		                        "value": "false"
+		                    },
+		                    {
+		                        "key": "true",
+		                        "value": "true"
+		                    }
+		                ]
                     },
 
                     {
@@ -434,7 +447,20 @@
                         "key": "Redraw",
                         "name": "Redraw",
                         "type": "checkbox",
-                        "value": "true"
+                        "selected": {
+                            "key": "true",
+                            "value": "true"
+                        },
+		                "variants": [
+		                    {
+		                        "key": "false",
+		                        "value": "false"
+		                    },
+		                    {
+		                        "key": "true",
+		                        "value": "true"
+		                    }
+		                ]
                     },
 
                     {
@@ -479,7 +505,20 @@
                         "key": "Redraw",
                         "name": "Redraw",
                         "type": "checkbox",
-                        "value": "true"
+                        "selected": {
+                            "key": "true",
+                            "value": "true"
+                        },
+		                "variants": [
+		                    {
+		                        "key": "false",
+		                        "value": "false"
+		                    },
+		                    {
+		                        "key": "true",
+		                        "value": "true"
+		                    }
+		                ]
                     },
 
                     {

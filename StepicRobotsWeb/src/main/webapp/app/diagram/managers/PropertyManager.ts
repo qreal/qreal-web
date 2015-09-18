@@ -5,7 +5,7 @@ class PropertyManager {
             case "combobox":
                 return this.getHtmlForString(propertyKey, property);
             case "checkbox":
-                return this.getHtmlForCheckBox(propertyKey, property);
+                return this.getHtmlForCheckBox(typeName, propertyKey, property);
             case "dropdown":
                 return this.getHtmlForDropdown(typeName, propertyKey, property);
             case "spinner":
@@ -25,16 +25,37 @@ class PropertyManager {
         return content;
     }
 
-    static getHtmlForCheckBox(propertyKey: string, property: Property): string {
+    static getHtmlForCheckBox(typeName: string, propertyKey: string, property: Property): string {
+        var variantsList: Variant[] = VariantListManager.getVariantList(typeName, propertyKey);
         var content: string = '<tr class="property">';
         content += '<td class="vert-align">' + property.name + '</td>';
-        content += '<td class="vert-align"><div class="checkbox" data-type="' + propertyKey + '">';
+        content += '<td class="vert-align"><div class="checkbox" data-type="' + propertyKey + '" ';
+        var dataTrue: string;
+        var dataFlase: string;
+
+        for (var i = 0; i < variantsList.length; i++) {
+            if (variantsList[i].getKey() === "true") {
+                dataTrue = variantsList[i].getValue();
+            }
+            if (variantsList[i].getKey() === "false") {
+                dataFlase = variantsList[i].getValue();
+            }
+        }
+
+        content += 'data-true="' + dataTrue + '" data-false="' + dataFlase + '">';
+
+        var visibleValue: string;
+        if (property.value === variantsList[0].getKey()) {
+            visibleValue = variantsList[0].getValue();
+        } else {
+            visibleValue = variantsList[1].getValue();
+        }
         var state: string = "";
         if (property.value === "true") {
             state = "checked";
         }
         content += '<label class="active"><input type="checkbox" ' +
-            state + ' >' + property.value + '</label>';
+            state + ' >' + visibleValue + '</label>';
         content += '</div></td></tr>';
         return content;
     }
@@ -43,9 +64,9 @@ class PropertyManager {
         var content: string = '<tr class="property">';
         content += '<td class="vert-align">' + property.name + '</td>';
         content += '<td class="vert-align"><select class="mydropdown" data-type="' + propertyKey + '">';
-        var dropdownList: Variant[] = DropdownListManager.getDropdownList(typeName, propertyKey);
-        for (var i = 0; i < dropdownList.length; i++) {
-            var variant = dropdownList[i];
+        var variantsList: Variant[] = VariantListManager.getVariantList(typeName, propertyKey);
+        for (var i = 0; i < variantsList.length; i++) {
+            var variant = variantsList[i];
             var selected = "";
             if (variant.getKey() === property.value) {
                 selected = 'selected = "selected" ';

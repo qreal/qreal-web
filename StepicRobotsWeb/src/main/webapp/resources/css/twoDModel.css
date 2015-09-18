@@ -20,12 +20,11 @@
 
 #scroll_buttons {
     position: absolute;
-    z-index: 1200;
     left: 5px;
     top: 5px;
 }
 
-.scroll_button {
+.small_image {
     width: 20px;
     height: 20px;
 }

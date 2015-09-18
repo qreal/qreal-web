@@ -165,19 +165,20 @@ class DiagramController {
     setCheckboxListener(): void {
         var controller: DiagramController = this;
         $(document).on('change', '.checkbox', function () {
-            var tr = $(this).closest('tr');
             var key = $(this).data('type');
-            var label = tr.find('label');
-            var value = label.contents().last()[0].textContent;
-            if (value === "true") {
-                value = "false"
-                label.contents().last()[0].textContent = value;
-            } else {
-                value = "true"
-                label.contents().last()[0].textContent = value;
-            }
             var property: Property = controller.currentElement.getProperties()[key];
-            property.value = value;
+            var currentValue = property.value;
+
+            var tr = $(this).closest('tr');
+            var label = tr.find('label');
+            if (currentValue === "true") {
+                currentValue = "false"
+                label.contents().last()[0].textContent = $(this).data("false");
+            } else {
+                currentValue = "true"
+                label.contents().last()[0].textContent =  $(this).data("true");
+            }
+            property.value = currentValue;
             controller.currentElement.setProperty(key, property);
         });
     }
@@ -207,12 +208,12 @@ class DiagramController {
     }
 
     private initCombobox(typeName: string, propertyKey: string, element) {
-        var dropdownList = DropdownListManager.getDropdownList(typeName, propertyKey);
+        var variantsList = VariantListManager.getVariantList(typeName, propertyKey);
 
         var controller: DiagramController = this;
 
         element.find('input').autocomplete({
-            source: dropdownList,
+            source: variantsList,
             minLength: 0,
             select: function (event, ui) {
                 var key = $(this).data('type');

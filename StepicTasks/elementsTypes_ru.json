@@ -13,15 +13,15 @@
                     "variants": [
                         {
                             "key": "false",
-                            "value": "false"
+                            "value": "ложь"
                         },
                         {
                             "key": "iteration",
-                            "value": "iteration"
+                            "value": "тело цикла"
                         },
                         {
                             "key": "true",
-                            "value": "true"
+                            "value": "истина"
                         }
                     ]
                 }
@@ -192,7 +192,20 @@
                         "key": "Evaluate",
                         "name": "Вычислять",
                         "type": "checkbox",
-                        "value": "false"
+                        "selected": {
+                            "key": "false",
+                            "value": "ложь"
+                        },
+		                "variants": [
+		                    {
+		                        "key": "false",
+		                        "value": "ложь"
+		                    },
+		                    {
+		                        "key": "true",
+		                        "value": "истина"
+		                    }
+		                ]
                     },
 
                     {
@@ -436,7 +449,20 @@
                         "key": "Redraw",
                         "name": "Обновить картинку",
                         "type": "checkbox",
-                        "value": "true"
+                        "selected": {
+                            "key": "true",
+                            "value": "истина"
+                        },
+		                "variants": [
+		                    {
+		                        "key": "false",
+		                        "value": "ложь"
+		                    },
+		                    {
+		                        "key": "true",
+		                        "value": "истина"
+		                    }
+		                ]
                     },
 
                     {
@@ -481,7 +507,20 @@
                         "key": "Redraw",
                         "name": "Обновить картинку",
                         "type": "checkbox",
-                        "value": "true"
+                        "selected": {
+                            "key": "true",
+                            "value": "истина"
+                        },
+		                "variants": [
+		                    {
+		                        "key": "false",
+		                        "value": "ложь"
+		                    },
+		                    {
+		                        "key": "true",
+		                        "value": "истина"
+		                    }
+		                ]
                     },
 
                     {
