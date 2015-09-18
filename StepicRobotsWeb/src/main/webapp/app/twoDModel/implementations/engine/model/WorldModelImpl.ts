@@ -18,7 +18,8 @@ class WorldModelImpl implements WorldModel {
         $('#twoDModel_paper').attr('width', 2000).attr('height', 2000);
 
         var wall_pattern = '<pattern id="wall_pattern" patternUnits="userSpaceOnUse" width="85" height="80">\
-                                        <image xlink:href="/StepicRobotsWeb/images/2dmodel/2d_wall.png" width="85" height="80" />\
+                                        <image xlink:href="' + GeneralConstants.APP_ROOT_PATH +
+            'images/2dmodel/2d_wall.png" width="85" height="80" />\
                                     </pattern>';
         $("body").append('<svg id="dummy" style="display:none"><defs>' + wall_pattern + '</defs></svg>');
         $("#twoDModel_paper defs").append($("#dummy pattern"));

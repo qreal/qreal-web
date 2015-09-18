@@ -19,7 +19,7 @@
         </button>
     </div>
 
-    <img id="controller" src="/StepicRobotsWeb/images/2dmodel/trikKit/controller.png"/>
+    <img id="controller" src="<c:url value='/images/2dmodel/trikKit/controller.png' />" />
 
     <span id="port_M1" class="port_name">M1</span>
     <span id="port_M2" class="port_name">M2</span>

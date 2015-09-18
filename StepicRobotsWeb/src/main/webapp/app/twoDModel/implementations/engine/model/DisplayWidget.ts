@@ -14,9 +14,9 @@ class DisplayWidget {
         var canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById("display");
         this.context = canvas.getContext("2d");
         this.smileImg = new Image();
-        this.smileImg.src = "/StepicRobotsWeb/images/2dmodel/trikKit/smile.png";
+        this.smileImg.src = GeneralConstants.APP_ROOT_PATH + "images/2dmodel/trikKit/smile.png";
         this.sadSmileImg = new Image();
-        this.sadSmileImg.src = "/StepicRobotsWeb/images/2dmodel/trikKit/sadSmile.png";
+        this.sadSmileImg.src = GeneralConstants.APP_ROOT_PATH + "images/2dmodel/trikKit/sadSmile.png";
         this.ledWidget = new LedWidget();
         this.isSmiles = false;
         this.isSadSmiles = false;
