@@ -142,6 +142,15 @@ class WorldModelImpl implements WorldModel {
         this.colorFields.push(line);
     }
 
+    addCubicBezier(xStart: number, yStart: number, xEnd: number, yEnd: number,
+                   cp1X: number, cp1Y: number, cp2X: number, cp2Y: number,
+                   width: number, color: string) {
+        var cubicBezier = new CubicBezierItemImpl(this, xStart, yStart, xEnd, yEnd, cp1X, cp1Y, cp2X, cp2Y,
+            width, color);
+        cubicBezier.hideHandles();
+        this.colorFields.push(cubicBezier);
+    }
+
     private getExtendedPositions(xStart: number, yStart: number, xEnd: number,
                                  yEnd: number, width: number): {start: TwoDPosition, end: TwoDPosition} {
         var extension = width / 2;
@@ -240,6 +249,111 @@ class WorldModelImpl implements WorldModel {
         }
     }
 
+    deserialize(xml, offsetX: number, offsetY: number): void {
+        var regions = xml.getElementsByTagName("region");
+        if (regions) {
+            this.deserializeRegions(regions, offsetX, offsetY);
+        }
+
+        var walls = xml.getElementsByTagName("wall");
+        if (walls) {
+            this.deserializeWalls(walls, offsetX, offsetY);
+        }
+
+        var colorFields = xml.getElementsByTagName("colorFields")[0];
+        if (colorFields) {
+            this.deserializeColorFields(colorFields, offsetX, offsetY);
+        }
+
+        var startPosition = xml.getElementsByTagName("startPosition")[0];
+        if (startPosition) {
+            this.deserializeStartPosition(startPosition, offsetX, offsetY);
+        }
+    }
+
+    private deserializeRegions(regions, offsetX: number, offsetY: number): void {
+        for (var i = 0; i < regions.length; i++) {
+            var type = regions[i].getAttribute("type");
+
+            switch (type) {
+                case "rectangle":
+                    if (regions[i].getAttribute("visible") == "true") {
+                        var region = new RectangularRegion(this);
+                        region.deserialize(regions[i], offsetX, offsetY);
+                        this.regions.push(region);
+                        break;
+                    }
+                case "ellipse":
+                    if (regions[i].getAttribute("visible") == "true") {
+                        var region = new EllipseRegion(this);
+                        region.deserialize(regions[i], offsetX, offsetY);
+                        this.regions.push(region);
+                        break;
+                    }
+                default:
+            }
+        }
+    }
+
+    private deserializeWalls(walls, offsetX: number, offsetY: number): void {
+        for (var i = 0; i < walls.length; i++) {
+            var beginPos: TwoDPosition = this.getPosition(walls[i], 'begin');
+            var endPos: TwoDPosition = this.getPosition(walls[i], 'end');
+            this.addWall(beginPos.x + offsetX, beginPos.y + offsetY, endPos.x + offsetX, endPos.y + offsetY);
+        }
+    }
+
+    private deserializeColorFields(colorFields, offsetX: number, offsetY: number): void {
+        var lines = colorFields.getElementsByTagName("line");
+        if (lines) {
+            this.deserializeLines(lines, offsetX, offsetY);
+        }
+
+        var cubicBeziers = colorFields.getElementsByTagName("cubicBezier");
+        if (cubicBeziers) {
+            this.deserializeCubicBeziers(cubicBeziers, offsetX, offsetY);
+        }
+    }
+
+    private deserializeLines(lines, offsetX: number, offsetY: number): void {
+        for (var i = 0; i < lines.length; i++) {
+            var beginPos: TwoDPosition = this.getPosition(lines[i], 'begin');
+            var endPos: TwoDPosition = this.getPosition(lines[i], 'end');
+            var width: number = parseInt(lines[i].getAttribute('stroke-width'));
+            var color: string = lines[i].getAttribute('stroke');
+
+            this.addLine(beginPos.x + offsetX, beginPos.y + offsetY,
+                endPos.x + offsetX, endPos.y + offsetY, width, color);
+        }
+    }
+
+    private deserializeCubicBeziers(cubicBeziers, offsetX: number, offsetY: number): void {
+        for (var i = 0; i < cubicBeziers.length; i++) {
+            var beginPos: TwoDPosition = this.getPosition(cubicBeziers[i], 'begin');
+            var endPos: TwoDPosition = this.getPosition(cubicBeziers[i], 'end');
+            var cp1: TwoDPosition = this.getPosition(cubicBeziers[i], 'cp1');
+            var cp2: TwoDPosition = this.getPosition(cubicBeziers[i], 'cp2');
+            var width: number = parseInt(cubicBeziers[i].getAttribute('stroke-width'));
+            var color: string = cubicBeziers[i].getAttribute('stroke');
+
+            this.addCubicBezier(beginPos.x + offsetX, beginPos.y + offsetY,
+                endPos.x + offsetX, endPos.y + offsetY, cp1.x + offsetX, cp1.y + offsetY,
+                cp2.x + offsetX, cp2.y + offsetY , width, color);
+        }
+    }
+
+    private deserializeStartPosition(startPosition, offsetX: number, offsetY: number): void {
+        var x = parseFloat(startPosition.getAttribute('x'));
+        var y = parseFloat(startPosition.getAttribute('y'));
+        var direction = parseFloat(startPosition.getAttribute('direction'));
+        this.setStartPositionCross(x, y, direction, offsetX, offsetY);
+    }
+
+    private getPosition(element, positionName): TwoDPosition {
+        var positionStr: string = element.getAttribute(positionName);
+        return this.parsePositionString(positionStr);
+    }
+
     private parsePositionString(positionStr: string): TwoDPosition {
         var splittedStr = positionStr.split(":");
         var x = parseFloat(splittedStr[0]);
@@ -247,68 +361,4 @@ class WorldModelImpl implements WorldModel {
         return new TwoDPosition(x, y);
     }
 
-    deserialize(xml, offsetX: number, offsetY: number) {
-        var regions = xml.getElementsByTagName("region");
-
-        if (regions) {
-            for (var i = 0; i < regions.length; i++) {
-                var type = regions[i].getAttribute("type");
-
-                switch (type) {
-                    case "rectangle":
-                        if (regions[i].getAttribute("visible") == "true") {
-                            var region = new RectangularRegion(this);
-                            region.deserialize(regions[i], offsetX, offsetY);
-                            this.regions.push(region);
-                            break;
-                        }
-                    case "ellipse":
-                        if (regions[i].getAttribute("visible") == "true") {
-                            var region = new EllipseRegion(this);
-                            region.deserialize(regions[i], offsetX, offsetY);
-                            this.regions.push(region);
-                            break;
-                        }
-                    default:
-                }
-            }
-        }
-
-        var walls = xml.getElementsByTagName("wall");
-
-        if (walls) {
-            for (var i = 0; i < walls.length; i++) {
-                var beginPosStr: string = walls[i].getAttribute('begin');
-                var beginPos = this.parsePositionString(beginPosStr);
-                var endPosStr: string = walls[i].getAttribute('end');
-                var endPos = this.parsePositionString(endPosStr);
-
-                this.addWall(beginPos.x + offsetX, beginPos.y + offsetY, endPos.x + offsetX, endPos.y + offsetY);
-            }
-        }
-
-        var lines = xml.getElementsByTagName("colorFields")[0].getElementsByTagName("line");
-
-        if (lines) {
-            for (var i = 0; i < lines.length; i++) {
-                var beginPosStr: string = lines[i].getAttribute('begin');
-                var beginPos: TwoDPosition = this.parsePositionString(beginPosStr);
-                var endPosStr: string = lines[i].getAttribute('end');
-                var endPos: TwoDPosition = this.parsePositionString(endPosStr);
-                var width: number = parseInt(lines[i].getAttribute('stroke-width'));
-                var color: string = lines[i].getAttribute('stroke');
-
-                this.addLine(beginPos.x + offsetX, beginPos.y + offsetY,
-                    endPos.x + offsetX, endPos.y + offsetY, width, color);
-            }
-        }
-
-        var startPosition = xml.getElementsByTagName("startPosition")[0];
-        if (startPosition) {
-            var x = parseFloat(startPosition.getAttribute('x'));
-            var y = parseFloat(startPosition.getAttribute('y'));
-            var direction = parseFloat(startPosition.getAttribute('direction'));
-            this.setStartPositionCross(x, y, direction, offsetX, offsetY);
-        }
-    }
 }

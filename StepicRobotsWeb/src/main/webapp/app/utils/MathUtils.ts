@@ -15,4 +15,8 @@ class MathUtils {
     public static sqr(x: number): number {
         return x * x;
     }
+
+    public static min(a: number, b: number): number {
+        return (a < b) ? a : b;
+    }
 }

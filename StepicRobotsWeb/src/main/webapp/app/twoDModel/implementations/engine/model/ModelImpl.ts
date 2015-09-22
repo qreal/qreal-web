@@ -2,10 +2,14 @@ class ModelImpl implements Model {
     private worldModel : WorldModel;
     private settings : Settings;
     private robotModels : RobotModel[] = [];
+    private minX: number;
+    private minY: number;
 
     constructor() {
         var model = this;
         model.worldModel = new WorldModelImpl();
+        this.minX = 2000;
+        this.minY = 2000;
     }
 
     getWorldModel() : WorldModel {
@@ -28,95 +32,10 @@ class ModelImpl implements Model {
         });
     }
 
-    private parsePositionString(positionStr: string): TwoDPosition {
-        var splittedStr = positionStr.split(":");
-        var x = parseFloat(splittedStr[0]);
-        var y = parseFloat(splittedStr[1]);
-        return new TwoDPosition(x, y);
-    }
-
-    private min(a: number, b: number): number {
-        return (a < b) ? a : b;
-    }
-
-    private findMinPos(xml): TwoDPosition {
-        var minX = 2000;
-        var minY = 2000;
-
-        var walls = xml.getElementsByTagName("wall");
-
-        if (walls) {
-            for (var i = 0; i < walls.length; i++) {
-                var beginPosStr: string = walls[i].getAttribute('begin');
-                var beginPos = this.parsePositionString(beginPosStr);
-                minX = this.min(beginPos.x, minX);
-                minY = this.min(beginPos.y, minY);
-
-                var endPosStr: string = walls[i].getAttribute('end');
-                var endPos = this.parsePositionString(endPosStr);
-                minX = this.min(endPos.x, minX);
-                minY = this.min(endPos.y, minY);
-            }
-        }
-
-        var lines = xml.getElementsByTagName("colorFields")[0].getElementsByTagName("line");
-
-        if (lines) {
-            for (var i = 0; i < lines.length; i++) {
-                var beginPosStr: string = lines[i].getAttribute('begin');
-                var beginPos: TwoDPosition = this.parsePositionString(beginPosStr);
-                var endPosStr: string = lines[i].getAttribute('end');
-                var endPos: TwoDPosition = this.parsePositionString(endPosStr);
-                var width: number = parseInt(lines[i].getAttribute('stroke-width'));
-
-                minX = this.min(beginPos.x - width, minX);
-                minY = this.min(beginPos.y - width, minY);
-                minX = this.min(endPos.x - width, minX);
-                minY = this.min(endPos.y - width, minY);
-            }
-        }
-
-        var regions = xml.getElementsByTagName("region");
-
-        if (regions) {
-            for (var i = 0; i < regions.length; i++) {
-                var x = parseFloat(regions[i].getAttribute('x'));
-                var y = parseFloat(regions[i].getAttribute('y'));
-                minX = this.min(x, minX);
-                minY = this.min(y, minY);
-            }
-        }
-
-        var robots = xml.getElementsByTagName("robot");
-
-        for (var i = 0; i < robots.length; i++) {
-            var posString = robots[i].getAttribute('position');
-            var pos = this.parsePositionString(posString);
-            minX = this.min(pos.x, minX);
-            minY = this.min(pos.y, minY);
-
-            var sensors = robots[i].getElementsByTagName("sensor");
-            for (var j = 0; j < sensors.length; j++) {
-                var posString = sensors[j].getAttribute('position');
-                var pos = this.parsePositionString(posString);
-                minX = this.min(pos.x, minX);
-                minY = this.min(pos.y, minY);
-            }
-
-            var startPosition = robots[i].getElementsByTagName("startPosition")[0];
-            if (startPosition) {
-                var x = parseFloat(startPosition.getAttribute('x'));
-                var y = parseFloat(startPosition.getAttribute('y'));
-            }
-        }
-
-        return new TwoDPosition(minX, minY);
-    }
-
     deserialize(xml): void {
-        var minPos: TwoDPosition = this.findMinPos(xml);
-        var offsetX = (minPos.x < 0) ? (-minPos.x + 700) : 700;
-        var offsetY = (minPos.y < 0) ? (-minPos.y + 700) : 700;
+        this.findMinPos(xml);
+        var offsetX = (this.minX < 0) ? (-this.minX + 700) : 700;
+        var offsetY = (this.minY < 0) ? (-this.minY + 700) : 700;
         this.worldModel.deserialize(xml, offsetX, offsetY);
 
         var robots = xml.getElementsByTagName("robot");
@@ -124,5 +43,128 @@ class ModelImpl implements Model {
         for (var i = 0; i < robots.length; i++) {
             this.robotModels[i].deserialize(robots[i], offsetX, offsetY);
         }
+    }
+
+    private findMinPos(xml): void {
+        var walls = xml.getElementsByTagName("wall");
+        if (walls) {
+            this.compareAndSetMinPositionWithWalls(walls);
+        }
+
+        var colorFields = xml.getElementsByTagName("colorFields")[0];
+        if (colorFields) {
+            this.compareAndSetMinPositionWithColorFields(colorFields);
+        }
+
+        var regions = xml.getElementsByTagName("region");
+        if (regions) {
+            this.compareAndSetMinPositionWithRegions(regions);
+        }
+
+        var robots = xml.getElementsByTagName("robot");
+        if (robots) {
+            this.compareAndSetMinPositionWithRobots(robots);
+        }
+    }
+
+    private compareAndSetMinPositionWithWalls(walls): void {
+        for (var i = 0; i < walls.length; i++) {
+            var beginPos: TwoDPosition = this.getPosition(walls[i], 'begin');
+            var endPos: TwoDPosition = this.getPosition(walls[i], 'end');
+            this.minX = MathUtils.min(beginPos.x, this.minX);
+            this.minY = MathUtils.min(beginPos.y, this.minY);
+            this.minX = MathUtils.min(endPos.x, this.minX);
+            this.minY = MathUtils.min(endPos.y, this.minY);
+        }
+    }
+
+    private compareAndSetMinPositionWithColorFields(colorFields): void {
+        var lines = colorFields.getElementsByTagName("line");
+        if (lines) {
+            this.compareAndSetMinPositionWithLines(lines);
+        }
+
+        var cubicBeziers = colorFields.getElementsByTagName("cubicBezier")
+        if (cubicBeziers) {
+            this.compareAndSetMinPositionWithCubicBeziers(cubicBeziers);
+        }
+    }
+
+    private compareAndSetMinPositionWithLines(lines): void {
+        for (var i = 0; i < lines.length; i++) {
+            var beginPos: TwoDPosition = this.getPosition(lines[i], 'begin');
+            var endPos: TwoDPosition = this.getPosition(lines[i], 'end');
+            var width: number = parseInt(lines[i].getAttribute('stroke-width'));
+
+            this.minX = MathUtils.min(beginPos.x - width, this.minX);
+            this.minY = MathUtils.min(beginPos.y - width, this.minY);
+            this.minX = MathUtils.min(endPos.x - width, this.minX);
+            this.minY = MathUtils.min(endPos.y - width, this.minY);
+        }
+    }
+
+    private compareAndSetMinPositionWithCubicBeziers(cubicBeziers): void {
+        for (var i = 0; i < cubicBeziers.length; i++) {
+            var beginPos: TwoDPosition = this.getPosition(cubicBeziers[i], 'begin');
+            var endPos: TwoDPosition = this.getPosition(cubicBeziers[i], 'end');
+            var width: number = parseInt(cubicBeziers[i].getAttribute('stroke-width'));
+
+            this.minX = MathUtils.min(beginPos.x - width, this.minX);
+            this.minY = MathUtils.min(beginPos.y - width, this.minY);
+            this.minX = MathUtils.min(endPos.x - width, this.minX);
+            this.minY = MathUtils.min(endPos.y - width, this.minY);
+        }
+    }
+
+    private compareAndSetMinPositionWithRegions(regions): void {
+        for (var i = 0; i < regions.length; i++) {
+            var x = parseFloat(regions[i].getAttribute('x'));
+            var y = parseFloat(regions[i].getAttribute('y'));
+            this.minX = MathUtils.min(x, this.minX);
+            this.minY = MathUtils.min(y, this.minY);
+        }
+    }
+
+    private compareAndSetMinPositionWithRobots(robots): void {
+        for (var i = 0; i < robots.length; i++) {
+            var posString = robots[i].getAttribute('position');
+            var pos = this.parsePositionString(posString);
+            this.minX = MathUtils.min(pos.x, this.minX);
+            this.minY = MathUtils.min(pos.y, this.minY);
+
+            var sensors = robots[i].getElementsByTagName("sensor");
+            if (sensors) {
+                this.compareAndSetMinPositionWithSensors(sensors);
+            }
+
+            var startPosition = robots[i].getElementsByTagName("startPosition")[0];
+            if (startPosition) {
+                var x = parseFloat(startPosition.getAttribute('x'));
+                var y = parseFloat(startPosition.getAttribute('y'));
+                this.minX = MathUtils.min(x, this.minX);
+                this.minY = MathUtils.min(y, this.minY);
+            }
+        }
+    }
+
+    private compareAndSetMinPositionWithSensors(sensors): void {
+        for (var j = 0; j < sensors.length; j++) {
+            var posString = sensors[j].getAttribute('position');
+            var pos = this.parsePositionString(posString);
+            this.minX = MathUtils.min(pos.x, this.minX);
+            this.minY = MathUtils.min(pos.y, this.minY);
+        }
+    }
+
+    private getPosition(element, positionName): TwoDPosition {
+        var positionStr: string = element.getAttribute(positionName);
+        return this.parsePositionString(positionStr);
+    }
+
+    private parsePositionString(positionStr: string): TwoDPosition {
+        var splittedStr = positionStr.split(":");
+        var x = parseFloat(splittedStr[0]);
+        var y = parseFloat(splittedStr[1]);
+        return new TwoDPosition(x, y);
     }
 }
