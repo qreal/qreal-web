@@ -48,17 +48,17 @@
             </triggers>
         </event>
 
-		<!-- событие, которое выводит ошибку, если робот не показывает смайлик через секунду после начала -->
+		<!-- событие, которое выводит ошибку, если робот не показывает смайлик через три секунды после начала -->
 		<event id="No smile" settedUpInitially="true">
 			<conditions glue="and">
-				<timer timeout="1000"/>
+				<timer timeout="3000"/>
 				<equals>
                     <objectState object="robot1.display.smiles"/>
                     <bool value="false"/>
                 </equals>
 			</conditions>
 			<trigger>
-				<fail message="Робот не показал смайлик через секунду после начала прогаммы"/>
+				<fail message="Робот не показал смайлик через три секунды после начала программы"/>
 			</trigger>
 		</event>
 
