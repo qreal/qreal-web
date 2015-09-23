@@ -34,6 +34,7 @@ class CubicBezierItemImpl implements CubicBezierItem {
     }
 
     remove(): void {
+        this.path.remove();
     }
 
     showHandles(): void {
