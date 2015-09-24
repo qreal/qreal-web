@@ -7,7 +7,7 @@ class CheckerController {
         $(document).ready(() => {
             $("#spinner").hide();
             $("#twoDModelContent").hide();
-            $("#showResult").prop('disabled', true);
+            $("#rerun").prop('disabled', true);
         });
 
         $scope.uploadFile = () => { this.uploadFile($scope) };
@@ -22,7 +22,7 @@ class CheckerController {
 
     uploadFile($scope) {
         this.lastResponse = null;
-        $("#showResult").prop('disabled', true);
+        $("#rerun").prop('disabled', true);
         var controller: CheckerController = this;
         var spinner = $('#spinner');
         spinner.show();
@@ -35,8 +35,9 @@ class CheckerController {
             success: function (response) {
                 spinner.hide();
                 controller.lastResponse = JSON.parse(response);
-                $("#showResult").prop('disabled', false);
+                $("#rerun").prop('disabled', false);
                 $('#result').html(controller.lastResponse.message);
+                $scope.showResult();
             },
             error: function (response, status, error) {
                 spinner.hide();

@@ -30,7 +30,7 @@
                 </form>
                 <br>
 
-                <button id="upload" class="btn btn-success" ng-click="uploadFile()"><spring:message code="label.upload"/></button>
+                <button id="upload" class="btn btn-success" ng-click="uploadFile()"><spring:message code="label.uploadAndRun"/></button>
                 <br>
                 <br>
 
@@ -40,7 +40,7 @@
                 <div id="result"></div>
                 <br>
 
-                <button id="showResult" class="btn btn-primary" ng-click="showResult()"><spring:message code="label.showResult"/></button>
+                <button id="rerun" class="btn btn-primary" ng-click="showResult()"><spring:message code="label.rerun"/></button>
                 <br>
                 <br>
             </div>
