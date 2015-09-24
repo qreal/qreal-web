@@ -3,24 +3,29 @@
     <world>
         <walls/>
         <colorFields>
+            <!-- Red area 1 -->
             <line fill="#000000" id="" fill-style="none" begin="115:-35" stroke-width="30" end="115:85" stroke-style="solid" stroke="#ff0000"/>
             <line fill="#000000" id="" fill-style="none" begin="140:-35" stroke-width="30" end="140:85" stroke-style="solid" stroke="#ff0000"/>
             <line fill="#000000" id="" fill-style="none" begin="165:-35" stroke-width="30" end="165:85" stroke-style="solid" stroke="#ff0000"/>
             <line fill="#000000" id="" fill-style="none" begin="190:-35" stroke-width="30" end="190:85" stroke-style="solid" stroke="#ff0000"/>
             <line fill="#000000" id="" fill-style="none" begin="215:-35" stroke-width="30" end="215:85" stroke-style="solid" stroke="#ff0000"/>
             <line fill="#000000" id="" fill-style="none" begin="235:-35" stroke-width="30" end="235:85" stroke-style="solid" stroke="#ff0000"/>
-            <line fill="#000000" id="" fill-style="none" begin="365:-35" stroke-width="30" end="365:85" stroke-style="solid" stroke="#ff0000"/>
-            <line fill="#000000" id="" fill-style="none" begin="390:-35" stroke-width="30" end="390:85" stroke-style="solid" stroke="#ff0000"/>
-            <line fill="#000000" id="" fill-style="none" begin="415:-35" stroke-width="30" end="415:85" stroke-style="solid" stroke="#ff0000"/>
-            <line fill="#000000" id="" fill-style="none" begin="440:-35" stroke-width="30" end="440:85" stroke-style="solid" stroke="#ff0000"/>
-            <line fill="#000000" id="" fill-style="none" begin="465:-35" stroke-width="30" end="465:85" stroke-style="solid" stroke="#ff0000"/>
-            <line fill="#000000" id="" fill-style="none" begin="485:-35" stroke-width="30" end="485:85" stroke-style="solid" stroke="#ff0000"/>
-            <line fill="#000000" id="" fill-style="none" begin="615:-35" stroke-width="30" end="615:85" stroke-style="solid" stroke="#008000"/>
-            <line fill="#000000" id="" fill-style="none" begin="640:-35" stroke-width="30" end="640:85" stroke-style="solid" stroke="#008000"/>
-            <line fill="#000000" id="" fill-style="none" begin="665:-35" stroke-width="30" end="665:85" stroke-style="solid" stroke="#008000"/>
-            <line fill="#000000" id="" fill-style="none" begin="690:-35" stroke-width="30" end="690:85" stroke-style="solid" stroke="#008000"/>
-            <line fill="#000000" id="" fill-style="none" begin="715:-35" stroke-width="30" end="715:85" stroke-style="solid" stroke="#008000"/>
-            <line fill="#000000" id="" fill-style="none" begin="735:-35" stroke-width="30" end="735:85" stroke-style="solid" stroke="#008000"/>
+
+            <!-- Green area -->
+            <line fill="#000000" id="" fill-style="none" begin="365:-35" stroke-width="30" end="365:85" stroke-style="solid" stroke="#008000"/>
+            <line fill="#000000" id="" fill-style="none" begin="390:-35" stroke-width="30" end="390:85" stroke-style="solid" stroke="#008000"/>
+            <line fill="#000000" id="" fill-style="none" begin="415:-35" stroke-width="30" end="415:85" stroke-style="solid" stroke="#008000"/>
+            <line fill="#000000" id="" fill-style="none" begin="440:-35" stroke-width="30" end="440:85" stroke-style="solid" stroke="#008000"/>
+            <line fill="#000000" id="" fill-style="none" begin="465:-35" stroke-width="30" end="465:85" stroke-style="solid" stroke="#008000"/>
+            <line fill="#000000" id="" fill-style="none" begin="485:-35" stroke-width="30" end="485:85" stroke-style="solid" stroke="#008000"/>
+
+            <!-- Red area 2 -->
+            <line fill="#000000" id="" fill-style="none" begin="615:-35" stroke-width="30" end="615:85" stroke-style="solid" stroke="#ff0000"/>
+            <line fill="#000000" id="" fill-style="none" begin="640:-35" stroke-width="30" end="640:85" stroke-style="solid" stroke="#ff0000"/>
+            <line fill="#000000" id="" fill-style="none" begin="665:-35" stroke-width="30" end="665:85" stroke-style="solid" stroke="#ff0000"/>
+            <line fill="#000000" id="" fill-style="none" begin="690:-35" stroke-width="30" end="690:85" stroke-style="solid" stroke="#ff0000"/>
+            <line fill="#000000" id="" fill-style="none" begin="715:-35" stroke-width="30" end="715:85" stroke-style="solid" stroke="#ff0000"/>
+            <line fill="#000000" id="" fill-style="none" begin="735:-35" stroke-width="30" end="735:85" stroke-style="solid" stroke="#ff0000"/>
         </colorFields>
         <regions/>
     </world>
@@ -231,3 +236,4 @@
         </event>
     </constraints>
 </root>
+
