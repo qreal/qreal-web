@@ -1,121 +1,127 @@
 [
-    
+
     {
         "title": "01",
+        "name": "introduction",
+        "online": "false"
+    },
+
+    {
+        "title": "02",
         "name": "hello-world",
         "online": true
     },
 
     {
-        "title": "02",
+        "title": "03",
         "name": "smile",
         "online": true
     },
     
     {
-        "title": "03",
+        "title": "04",
         "name": "move-forward",
         "online": true
     },
 
     {
-        "title": "04",
+        "title": "05",
         "name": "smooth-turn",
         "online": "true"
     },
 
     {
-        "title": "05",
+        "title": "06",
         "name": "turn-corner",
         "online": true
     },
 
     {
-        "title": "06",
+        "title": "07",
         "name": "circle",
         "online": true
     },
 
     {
-        "title": "07",
+        "title": "08",
         "name": "canterville-ghost",
         "online": false
     },
 
     {
-        "title": "08",
+        "title": "09",
         "name": "randomizer",
         "online": false
     },
 
     {
-        "title": "09",
+        "title": "10",
         "name": "monster",
         "online": false
     },
 
     {
-        "title": "10",
+        "title": "11",
         "name": "two-monsters",
         "online": false
     },
 
     {
-        "title": "11",
+        "title": "12",
         "name": "along-the-box",
         "online": true
     },
 
     {
-        "title": "12",
+        "title": "13",
         "name": "two-labyrinth-cell",
         "online": true
     },
 
     {
-        "title": "13",
+        "title": "14",
         "name": "labyrinth",
         "online": false
     },
 
     {
-        "title": "14",
+        "title": "15",
         "name": "image-control",
         "online": false
     },
 
     {
-        "title": "15",
+        "title": "16",
         "name": "image-control-with-check",
         "online": false
     },
 
     {
-        "title": "16",
+        "title": "17",
         "name": "labyrinth-colors",
         "online": false
     },
 
     {
-        "title": "17",
+        "title": "18",
         "name": "line-regulator",
         "online": true
     },
 
     {
-        "title": "18",
+        "title": "19",
         "name": "serpentine",
         "online": true
     },
 
     {
-        "title": "19",
+        "title": "20",
         "name": "s-type-line",
         "online": true
     },
 
     {
-        "title": "20",
+        "title": "21",
         "name": "color-traces",
         "online": false
     }
