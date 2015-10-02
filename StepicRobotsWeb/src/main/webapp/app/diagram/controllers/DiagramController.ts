@@ -236,6 +236,10 @@ class DiagramController {
                 clone.css('z-index', '1000');
                 return clone;
             },
+            cursorAt: {
+                top: 15,
+                left: 15
+            },
             revert:"invalid"
         });
 
