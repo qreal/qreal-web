@@ -134,19 +134,19 @@ class WorldModelImpl implements WorldModel {
         this.wallItems.push(wall);
     }
 
-    addLine(xStart: number, yStart: number, xEnd: number, yEnd: number, width: number, color: string) {
+    addLine(xStart: number, yStart: number, xEnd: number, yEnd: number, width: number, rgbaColor: RGBAColor) {
         var exPositions = this.getExtendedPositions(xStart, yStart, xEnd, yEnd, width);
         var line = new LineItemImpl(this, exPositions.start.x, exPositions.start.y,
-            exPositions.end.x, exPositions.end.y, width, color);
+            exPositions.end.x, exPositions.end.y, width, rgbaColor);
         line.hideHandles();
         this.colorFields.push(line);
     }
 
     addCubicBezier(xStart: number, yStart: number, xEnd: number, yEnd: number,
                    cp1X: number, cp1Y: number, cp2X: number, cp2Y: number,
-                   width: number, color: string) {
+                   width: number, rgbaColor: RGBAColor) {
         var cubicBezier = new CubicBezierItemImpl(this, xStart, yStart, xEnd, yEnd, cp1X, cp1Y, cp2X, cp2Y,
-            width, color);
+            width, rgbaColor);
         cubicBezier.hideHandles();
         this.colorFields.push(cubicBezier);
     }
@@ -321,9 +321,10 @@ class WorldModelImpl implements WorldModel {
             var endPos: TwoDPosition = this.getPosition(lines[i], 'end');
             var width: number = parseInt(lines[i].getAttribute('stroke-width'));
             var color: string = lines[i].getAttribute('stroke');
+            var rgbaColor: RGBAColor = ColorUtils.getRBGAColor(color);
 
             this.addLine(beginPos.x + offsetX, beginPos.y + offsetY,
-                endPos.x + offsetX, endPos.y + offsetY, width, color);
+                endPos.x + offsetX, endPos.y + offsetY, width, rgbaColor);
         }
     }
 
@@ -335,10 +336,11 @@ class WorldModelImpl implements WorldModel {
             var cp2: TwoDPosition = this.getPosition(cubicBeziers[i], 'cp2');
             var width: number = parseInt(cubicBeziers[i].getAttribute('stroke-width'));
             var color: string = cubicBeziers[i].getAttribute('stroke');
+            var rgbaColor: RGBAColor = ColorUtils.getRBGAColor(color);
 
             this.addCubicBezier(beginPos.x + offsetX, beginPos.y + offsetY,
                 endPos.x + offsetX, endPos.y + offsetY, cp1.x + offsetX, cp1.y + offsetY,
-                cp2.x + offsetX, cp2.y + offsetY , width, color);
+                cp2.x + offsetX, cp2.y + offsetY , width, rgbaColor);
         }
     }
 

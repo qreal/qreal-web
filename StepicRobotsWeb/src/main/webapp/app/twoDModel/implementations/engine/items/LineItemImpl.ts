@@ -5,13 +5,15 @@ class LineItemImpl implements LineItem {
     private handleEnd: RaphaelElement;
     private pathArray;
 
-    constructor(worldModel: WorldModel, xStart: number, yStart: number, xEnd: number, yEnd: number, width: number, color: string) {
+    constructor(worldModel: WorldModel, xStart: number, yStart: number, xEnd: number, yEnd: number,
+                width: number, rgbaColor: RGBAColor) {
         var paper = worldModel.getPaper();
         this.worldModel = worldModel;
         this.path = paper.path("M" + xStart + " " + yStart + " L" + xEnd + " " + yEnd);
         this.path.toBack();
         this.path.attr({
-            "stroke": color,
+            "stroke": rgbaColor.rgb,
+            "stroke-opacity": rgbaColor.alpha,
             "stroke-width": width
         });
         this.pathArray = this.path.attr("path");

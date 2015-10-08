@@ -108,8 +108,10 @@
 /// <reference path="twoDModel/interfaces/robotModel/RobotModelInterface.ts" />
 /// <reference path="twoDModel/interfaces/robotModel/robotParts/Device.ts" />
 /// <reference path="twoDModel/types/Direction.ts" />
+/// <reference path="twoDModel/types/RGBAColor.ts" />
 /// <reference path="twoDModel/types/ReservedVariableType.ts" />
 /// <reference path="twoDModel/types/TwoDPosition.ts" />
+/// <reference path="utils/ColorUtils.ts" />
 /// <reference path="utils/MathUtils.ts" />
 /// <reference path="vendor.d.ts" />
 //grunt-end

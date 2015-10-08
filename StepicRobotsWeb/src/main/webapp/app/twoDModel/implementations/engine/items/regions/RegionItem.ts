@@ -22,6 +22,10 @@ class RegionItem {
         this.shape.attr({stroke: color});
     }
 
+    setOpacity(alpha: number): void {
+        this.shape.attr({"stroke-opacity": alpha});
+    }
+
     setPosition(position: TwoDPosition): void {
         this.shape.attr({x: position.x, y: position.y});
     }
@@ -67,7 +71,9 @@ class RegionItem {
     deserialize(element, offsetX: number, offsetY: number) {
         var color = element.getAttribute("color");
         if (color) {
-            this.setColor(color);
+            var rgbaColor: RGBAColor = ColorUtils.getRBGAColor(color);
+            this.setColor(rgbaColor.rgb);
+            this.setOpacity(rgbaColor.alpha);
         }
 
         var visible = element.getAttribute("visible");
