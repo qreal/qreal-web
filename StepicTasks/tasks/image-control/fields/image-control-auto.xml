@@ -21,7 +21,9 @@
         </robot>
     </robots>
     <constraints>
-        <timelimit value="1000"/>
+
+        <timelimit value="2000"/>
+
         <!-- событие, которое проверяет, что нарисован только один эллипс, инициализирует переменные начальными значениями и начинает цепочку проверок -->
         <event id="Single_ellipse" settedUpInitially="true">
             <conditions glue="and">
@@ -44,6 +46,7 @@
                 <setUp id="Left"/>
             </triggers>
         </event>
+
         <!-- Событие, которое выдает ошибку, если эллипс не нарисован или нарисованы другие объекты -->
         <event settedUpInitially="true">
             <conditions glue="and">
@@ -54,6 +57,7 @@
                 <fail message="На экране должен быть один эллипс"/>
             </trigger>
         </event>
+
         <!-- событие, которое эмулирует нажатие на кнопку "влево" и возводит событие, которое проверяет результат -->
         <event id="Left">
             <condition>
@@ -67,6 +71,7 @@
                 <setUp id="Left_fails"/>
             </triggers>
         </event>
+
         <!-- событие, которое проверяет, что эллипс сдвинулся влево, возводит следующее событие для проверки -->
         <event id="Left_checking">
             <condition>
@@ -82,6 +87,7 @@
                 <setUp id="Right"/>
             </triggers>
         </event>
+
         <!-- Событие, которое сообщает об ошибке, если эллипс сдвинулся не туда или вообще не сдвинулся -->
         <event id="Left_fails">
             <conditions glue="and">
@@ -92,6 +98,7 @@
                 <fail message="При нажатии на кнопку влево эллипс либо не сдвинулся влево, либо вообще не сдвинулся"/>
             </triggers>
         </event>
+
         <!-- событие, которое эмулирует нажатие на кнопку "вправо" и возводит событие, которое проверяет результат -->
         <event id="Right">
             <condition>
@@ -105,6 +112,7 @@
                 <setUp id="Right_fails"/>
             </triggers>
         </event>
+
         <!-- событие, которое проверяет, что эллипс сдвинулся вправо, возводит следующее событие для проверки -->
         <event id="Right_checking">
             <condition>
@@ -120,6 +128,7 @@
                 <setUp id="Up"/>
             </triggers>
         </event>
+
         <!-- Событие, которое сообщает об ошибке, если эллипс сдвинулся не туда или вообще не сдвинулся -->
         <event id="Right_fails">
             <conditions glue="and">
@@ -130,6 +139,7 @@
                 <fail message="При нажатии на кнопку вправо эллипс либо не сдвинулся вправо, либо вообще не сдвинулся"/>
             </triggers>
         </event>
+
         <!-- событие, которое эмулирует нажатие на кнопку "вверх" и возводит событие, которое проверяет результат -->
         <event id="Up">
             <condition>
@@ -143,6 +153,7 @@
                 <setUp id="Up_fails"/>
             </triggers>
         </event>
+
         <!-- событие, которое проверяет, что эллипс сдвинулся вверх, возводит следующее событие для проверки -->
         <event id="Up_checking">
             <condition>
@@ -158,6 +169,7 @@
                 <setUp id="Down"/>
             </triggers>
         </event>
+
         <!-- Событие, которое сообщает об ошибке, если эллипс сдвинулся не туда или вообще не сдвинулся -->
         <event id="Up_fails">
             <conditions glue="and">
@@ -168,6 +180,7 @@
                 <fail message="При нажатии на кнопку вверх эллипс либо не сдвинулся вверх, либо вообще не сдвинулся"/>
             </triggers>
         </event>
+
         <!-- событие, которое эмулирует нажатие на кнопку "вниз" и возводит событие, которое проверяет результат -->
         <event id="Down">
             <condition>
@@ -181,6 +194,7 @@
                 <setUp id="Down_fails"/>
             </triggers>
         </event>
+
         <!-- событие, которое проверяет, что эллипс сдвинулся вниз, в случае успеха заканчивает проверку -->
         <event id="Down_checking">
             <condition>
@@ -190,9 +204,10 @@
                 </greater>
             </condition>
             <triggers>
-                <success/>
+                <setUp id="Esc"/>
             </triggers>
         </event>
+
         <!-- Событие, которое сообщает об ошибке, если эллипс сдвинулся не туда или вообще не сдвинулся -->
         <event id="Down_fails">
             <conditions glue="and">
@@ -203,5 +218,30 @@
                 <fail message="При нажатии на кнопку вниз эллипс либо не сдвинулся вниз, либо вообще не сдвинулся"/>
             </triggers>
         </event>
+
+        <!-- событие, которое эмулирует нажаите на кнопку "отмена" и возводит событие, которое проверяет результат -->
+        <event id="Esc">
+            <condition>
+                <timer timeout="100"/>
+            </condition>
+            <triggers>
+                <setState property="value" object="robot1.Esc">
+                    <int value="1"/>
+                </setState>
+                <success deferred="true"/>
+                <setUp id="Wait for exit"/>
+            </triggers>
+        </event>
+
+        <!-- событие, сообщающее об ошибке, если программа не завершилась через 100 мс -->
+        <event id="Wait for exit">
+            <condition>
+                <timer timeout="100"/>
+            </condition>
+            <trigger>
+                <fail message="При нажатии на кнопку отмена программа не завершает работу"/>
+            </trigger>
+        </event>
+
     </constraints>
 </root>
