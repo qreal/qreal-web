@@ -1,5 +1,0 @@
-C:\Users\Nikita\Workspace\TypeScript\MobileDesigner\MobileDesigner\MobileDesigner\bin\MobileDesigner.dll
-C:\Users\Nikita\Workspace\TypeScript\MobileDesigner\MobileDesigner\MobileDesigner\bin\MobileDesigner.pdb
-C:\Users\Nikita\Workspace\TypeScript\MobileDesigner\MobileDesigner\MobileDesigner\obj\Release\MobileDesigner.csprojResolveAssemblyReference.cache
-C:\Users\Nikita\Workspace\TypeScript\MobileDesigner\MobileDesigner\MobileDesigner\obj\Release\MobileDesigner.dll
-C:\Users\Nikita\Workspace\TypeScript\MobileDesigner\MobileDesigner\MobileDesigner\obj\Release\MobileDesigner.pdb

@@ -1,8 +1,0 @@
-<forms>
-<form form_name="main">
-<LinearLayout 
-xmlns="http://schemas.android.com/apk/res/android" 
-orientation="vertical" layout_width="fill_parent" layout_height="fill_parent" background="#ffffff"> 
-</LinearLayout>
-</form>
-</forms>
