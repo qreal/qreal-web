@@ -310,8 +310,33 @@
                 </notLess>
             </condition>
             <triggers>
-                <success/>
+                <setUp id="Esc"/>
             </triggers>
         </event>
+
+        <!-- событие, которое эмулирует нажаите на кнопку "отмена" и возводит событие, которое проверяет результат -->
+        <event id="Esc">
+            <condition>
+                <timer timeout="100"/>
+            </condition>
+            <triggers>
+                <setState property="value" object="robot1.Esc">
+                    <int value="1"/>
+                </setState>
+                <success deferred="true"/>
+                <setUp id="Wait for exit"/>
+            </triggers>
+        </event>
+
+        <!-- событие, сообщающее об ошибке, если программа не завершилась через 100 мс -->
+        <event id="Wait for exit">
+            <condition>
+                <timer timeout="100"/>
+            </condition>
+            <trigger>
+                <fail message="При нажатии на кнопку отмена программа не завершает работу"/>
+            </trigger>
+        </event>
+
     </constraints>
 </root>
