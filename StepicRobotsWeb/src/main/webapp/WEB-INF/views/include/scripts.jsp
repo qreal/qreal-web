@@ -15,7 +15,7 @@
   ~ limitations under the License.
   --%>
 
-<script src="<c:url value='/resources/js/jquery-1.11.0.min.js' />"></script>
+<script src="<c:url value='/resources/js/jquery-1.11.3.min.js' />"></script>
 <script src="<c:url value='/resources/js/joint.js' />"></script>
 <script src="<c:url value='/resources/js/jquery-ui.min.js' />"></script>
 <script src="<c:url value='/resources/js/angular.js' />"></script>
