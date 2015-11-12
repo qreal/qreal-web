@@ -42,7 +42,7 @@
                 <h4><spring:message code="label.checkSolution"/></h4>
 
                 <form id="uploadForm" method="POST" action="upload/${name}" enctype="multipart/form-data">
-                    <input type="file" name="fileName" id="fileName" class="filestyle" data-buttonText="<spring:message code="label.browse"/>" data-buttonName="btn-primary"/>
+                    <input type="file" name="fileName" id="fileName" class="filestyle" accept=".qrs" data-buttonText="<spring:message code="label.browse"/>" data-buttonName="btn-primary"/>
                 </form>
                 <br>
 

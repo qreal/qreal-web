@@ -56,6 +56,7 @@ class CheckerController {
                 $scope.showResult();
             },
             error: function (response, status, error) {
+                console.log(response);
                 spinner.hide();
                 if (status == "timeout") {
                     $('#result').html("Timed out – please try again");

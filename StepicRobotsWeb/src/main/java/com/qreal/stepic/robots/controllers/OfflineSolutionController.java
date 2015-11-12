@@ -27,7 +27,9 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +41,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Locale;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -48,7 +51,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 @Controller
 @RequestMapping("/offline")
-public class OfflineSolutionController extends SolutionController {
+public class OfflineSolutionController extends SolutionController implements HandlerExceptionResolver {
 
     private OfflineSolutionUploader offlineSolutionUploader;
 
@@ -115,6 +118,19 @@ public class OfflineSolutionController extends SolutionController {
         return checker.submit(name, uploadedSolution.getFilename(), String.valueOf(uploadedSolution.getUuid()),
                 messageSource, locale);
 
+    }
+
+    @Override
+    @ResponseBody
+    public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+                                         Object o, Exception e) {
+        httpServletResponse.setStatus(500);
+        if (e instanceof MaxUploadSizeExceededException) {
+            ModelAndView modelAndView = new ModelAndView("errors/maxSizeError");
+            return modelAndView;
+        }
+        e.printStackTrace();
+        return new ModelAndView("errors/commonError");
     }
 
 }
