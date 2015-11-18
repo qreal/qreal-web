@@ -12,10 +12,17 @@ class SwitchBlock extends Block {
         var isFound : boolean = false;
         var nextNode;
         var otherwiseNode;
+        var variableValue = "";
+        var variablesMap = InterpretManager.getVariablesMap();
         for (var i = 0; i < links.length; i++) {
             var link = links[i];
             var messageOnLink = SwitchBlock.getGuard(linksMap[link.id]);
-            if (messageOnLink === parseResult) {
+            for (var v in variablesMap) {
+                if (v == parseResult) {
+                    variableValue = variablesMap[v];
+                }
+            }
+            if (messageOnLink === variableValue) {
                 isFound = true;
                 nextNode = nodesMap[link.get('target').id];
                 break;
@@ -24,7 +31,14 @@ class SwitchBlock extends Block {
                 otherwiseNode = nodesMap[link.get('target').id];
             }
         }
-        output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+
+        if (isFound) {
+            output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+        }
+        else {
+            output += Factory.run(otherwiseNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+        }
+
         return output;
     }
 
