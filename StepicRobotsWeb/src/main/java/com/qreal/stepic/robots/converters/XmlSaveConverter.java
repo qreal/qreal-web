@@ -33,36 +33,43 @@ import java.util.*;
  * Created by vladimir-zakharov on 25.04.15.
  */
 public class XmlSaveConverter {
+
+    private Map<String, DiagramNode> nodesMap;
+    private Map<String, DiagramNode> linksMap;
+
+    public XmlSaveConverter() {
+        nodesMap = new HashMap<>();
+        linksMap = new HashMap<>();
+    }
+
     public Diagram convertToJavaModel(File folder) {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setIgnoringElementContentWhitespace(true);
         try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setIgnoringElementContentWhitespace(true);
             DocumentBuilder builder = factory.newDocumentBuilder();
 
-            Map<String, DiagramNode> nodesMap = new HashMap<String, DiagramNode>();
-            Map<String, DiagramNode> linksMap = new HashMap<String, DiagramNode>();
-
-            File robotDiagramNodeFolder = new File(folder.getPath() + "/graphical/RobotsMetamodel/RobotsDiagram/RobotsDiagramNode");
+            File robotDiagramNodeFolder = new File(folder.getPath() +
+                    "/graphical/RobotsMetamodel/RobotsDiagram/RobotsDiagramNode");
             File robotDiagramNode = robotDiagramNodeFolder.listFiles()[0];
             Set<String> robotDiagramNodeChilds = getNodeChilds(robotDiagramNode, builder);
 
             Document doc = builder.parse(robotDiagramNode);
             Element element = doc.getDocumentElement();
-            convertGraphicalPart(element, nodesMap, linksMap);
+            convertGraphicalPart(element);
 
             File graphicalFolder = new File(folder.getPath() + "/graphical");
 
             for (final File fileEntry : graphicalFolder.listFiles()) {
-                convertGraphicalModel(fileEntry, builder, robotDiagramNodeChilds, nodesMap, linksMap);
+                convertGraphicalModel(fileEntry, builder, robotDiagramNodeChilds);
             }
 
             File logicalFolder = new File(folder.getPath() + "/logical");
 
             for (final File fileEntry : logicalFolder.listFiles()) {
-                convertLogicalModel(fileEntry, builder, nodesMap, linksMap);
+                convertLogicalModel(fileEntry, builder);
             }
 
-            return new Diagram(new HashSet<DiagramNode>(nodesMap.values()), new HashSet<DiagramNode>(linksMap.values()));
+            return new Diagram(new HashSet<>(nodesMap.values()), new HashSet<>(linksMap.values()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,12 +77,11 @@ public class XmlSaveConverter {
     }
 
     private void convertGraphicalModel(final File folder, final DocumentBuilder builder,
-                                       final Set<String> robotDiagramNodeChilds,
-                                       Map<String, DiagramNode> nodesMap, Map<String, DiagramNode> linksMap) {
+                                       final Set<String> robotDiagramNodeChilds) {
 
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
-                convertGraphicalModel(fileEntry, builder, robotDiagramNodeChilds, nodesMap, linksMap);
+                convertGraphicalModel(fileEntry, builder, robotDiagramNodeChilds);
             } else {
                 try {
                     Document doc = builder.parse(fileEntry);
@@ -84,7 +90,7 @@ public class XmlSaveConverter {
                     if (element.hasAttribute("logicalId") && element.getAttribute("logicalId") != "qrm:/") {
                         String id = element.getAttribute("id");
                         if (robotDiagramNodeChilds.contains(id)) {
-                            convertGraphicalPart(element, nodesMap, linksMap);
+                            convertGraphicalPart(element);
                         }
                     }
                 } catch (SAXException e) {
@@ -96,12 +102,11 @@ public class XmlSaveConverter {
         }
     }
 
-    private void convertLogicalModel(final File folder, final DocumentBuilder builder,
-                                       Map<String, DiagramNode> nodesMap, Map<String, DiagramNode> linksMap) {
+    private void convertLogicalModel(final File folder, final DocumentBuilder builder) {
 
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
-                convertLogicalModel(fileEntry, builder, nodesMap, linksMap);
+                convertLogicalModel(fileEntry, builder);
             } else {
                 try {
                     Document doc = builder.parse(fileEntry);
@@ -112,7 +117,7 @@ public class XmlSaveConverter {
                     String id = getId(parts[parts.length - 1]);
 
                     if (nodesMap.containsKey(id) || linksMap.containsKey(id)) {
-                        convertLogicalPart(element, nodesMap, linksMap);
+                        convertLogicalPart(element);
                     }
                 } catch (SAXException e) {
                     e.printStackTrace();
@@ -142,23 +147,14 @@ public class XmlSaveConverter {
         return childs;
     }
 
-    private void convertLogicalPart(Element element, Map<String, DiagramNode> nodesMap,
-                                    Map<String, DiagramNode> linksMap) {
+    private void convertLogicalPart(Element element) {
         String logicalIdAttr = element.getAttribute("id");
         String parts[] = logicalIdAttr.split("/");
 
         String logicalId = getId(parts[parts.length - 1]);
         String type = parts[parts.length - 2];
 
-        if (type.equals("ControlFlow")) {
-            if (!linksMap.containsKey(logicalId)) {
-                linksMap.put(logicalId, new DiagramNode());
-            }
-        } else {
-            if (!nodesMap.containsKey(logicalId)) {
-                nodesMap.put(logicalId, new DiagramNode());
-            }
-        }
+        putNode(type, logicalId);
 
         DiagramNode node;
         if (type.equals("ControlFlow")) {
@@ -174,23 +170,14 @@ public class XmlSaveConverter {
         node.setLogicalProperties(convertProperties(propertiesElement));
     }
 
-    private void convertGraphicalPart(Element element, Map<String, DiagramNode> nodesMap,
-                                      Map<String, DiagramNode> linksMap) {
+    private void convertGraphicalPart(Element element) {
         String logicalIdAttr = element.getAttribute("logicalId");
         String logicalIdParts[] = logicalIdAttr.split("/");
 
         String logicalId = getId(logicalIdParts[logicalIdParts.length - 1]);
         String type = logicalIdParts[logicalIdParts.length - 2];
 
-        if (type.equals("ControlFlow")) {
-            if (!linksMap.containsKey(logicalId)) {
-                linksMap.put(logicalId, new DiagramNode());
-            }
-        } else {
-            if (!nodesMap.containsKey(logicalId)) {
-                nodesMap.put(logicalId, new DiagramNode());
-            }
-        }
+        putNode(type, logicalId);
 
         DiagramNode node;
         if (type.equals("ControlFlow")) {
@@ -224,6 +211,18 @@ public class XmlSaveConverter {
             }
         }
         return properties;
+    }
+
+    private void putNode(String type, String id) {
+        Map<String, DiagramNode> map;
+        if (type.equals("ControlFlow")) {
+            map = linksMap;
+        } else {
+            map = nodesMap;
+        }
+        if (!map.containsKey(id)) {
+            map.put(id, new DiagramNode());
+        }
     }
 
     private String getId(String idString) {
