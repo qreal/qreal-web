@@ -84,7 +84,7 @@ public class TypesLoader {
         ObjectNode resultPaletteNode = mapper.createObjectNode();
 
         JsonNode palette = tasksTypes.path("visible").path("palette");
-        JsonNode allVisible = allTypes.path("visible");
+        JsonNode allVisible = allTypes.path("visible").path("palette");
 
         Iterator<Map.Entry<String, JsonNode>> categoriesIterator = palette.fields();
 

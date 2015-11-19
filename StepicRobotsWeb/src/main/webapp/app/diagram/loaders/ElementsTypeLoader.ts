@@ -35,7 +35,7 @@ class ElementsTypeLoader {
                 this.controller.initPalette($scope);
             },
             error: function (response, status, error) {
-                alert("Palette loading error: " + status + " " + error);
+                alert("Element types loading error: " + status + " " + error);
             }
         });
     }

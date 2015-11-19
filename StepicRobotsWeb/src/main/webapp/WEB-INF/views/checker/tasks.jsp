@@ -20,7 +20,7 @@
 <head>
     <title>Tasks</title>
 
-    <script src="<c:url value='/resources/js/jquery-1.11.0.min.js' />"></script>
+    <script src="<c:url value='/resources/js/jquery-1.11.3.min.js' />"></script>
     <script src="<c:url value='/resources/bootstrap/js/bootstrap.min.js' />"></script>
 
     <script type="text/javascript">
