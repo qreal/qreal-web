@@ -62,22 +62,9 @@ public class TypesLoader {
     }
 
     private ArrayNode getNotVisibleTypes(JsonNode tasksTypes, JsonNode allTypes) {
-        ArrayNode resultNotVisibleNode = mapper.createArrayNode();
-
         JsonNode taskNotVisible = tasksTypes.path("notVisible");
         JsonNode allNotVisible = allTypes.path("notVisible");
-
-        Iterator<JsonNode> iterator = taskNotVisible.elements();
-
-        while (iterator.hasNext()) {
-            JsonNode type = iterator.next();
-            String typeName = type.textValue();
-            JsonNode typeObject = allNotVisible.path(typeName);
-            ((ObjectNode) typeObject).put("type", typeName);
-            resultNotVisibleNode.add(typeObject);
-        }
-
-        return resultNotVisibleNode;
+        return getObjectsTypes(taskNotVisible, allNotVisible);
     }
 
     private ObjectNode getPaletteTypes(JsonNode tasksTypes, JsonNode allTypes) {
@@ -95,7 +82,7 @@ public class TypesLoader {
             JsonNode taskCategoryNode = palette.path(category);
             JsonNode generalCategoryNode = allVisible.path(category);
 
-            ArrayNode categoryArray = getCategoryArray(taskCategoryNode, generalCategoryNode);
+            ArrayNode categoryArray = getObjectsTypes(taskCategoryNode, generalCategoryNode);
 
             resultPaletteNode.set(generalCategoryNode.get("categoryName").textValue(), categoryArray);
         }
@@ -103,20 +90,19 @@ public class TypesLoader {
         return resultPaletteNode;
     }
 
-    private ArrayNode getCategoryArray(JsonNode taskCategoryNode, JsonNode generalCategoryNode) {
-        ArrayNode categoryArray = mapper.createArrayNode();
-
-        Iterator<JsonNode> typesIterator = taskCategoryNode.elements();
+    private ArrayNode getObjectsTypes(JsonNode taskNode, JsonNode sourceNode) {
+        ArrayNode array = mapper.createArrayNode();
+        Iterator<JsonNode> typesIterator = taskNode.elements();
 
         while (typesIterator.hasNext()) {
             JsonNode type = typesIterator.next();
             String typeName = type.textValue();
-            JsonNode typeObject = generalCategoryNode.path(typeName);
+            JsonNode typeObject = sourceNode.path(typeName);
             ((ObjectNode) typeObject).put("type", typeName);
-            categoryArray.add(typeObject);
+            array.add(typeObject);
         }
 
-        return categoryArray;
+        return array;
     }
 
 }
