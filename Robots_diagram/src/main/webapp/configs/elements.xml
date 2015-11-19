@@ -55,6 +55,19 @@
 			<Image src="images/variableInitBlock.svg"/>
 		</Element>
 
+		<Element name="Random Initialization">
+			<Property name="Variable" type="string">
+				<value>x</value>
+			</Property>
+			<Property name="From" type="string">
+				<value>0</value>
+			</Property>
+			<Property name="To" type="string">
+				<value>10</value>
+			</Property>
+			<Image src="images/randomizerBlock.svg"/>
+		</Element>
+
 	</Category>
 	<Category name="Actions">
 

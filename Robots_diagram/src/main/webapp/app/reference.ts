@@ -55,6 +55,7 @@
 /// <reference path="interpreter/Blocks/MarkerBlock.ts" />
 /// <reference path="interpreter/Blocks/Motors.ts" />
 /// <reference path="interpreter/Blocks/MotorsStop.ts" />
+/// <reference path="interpreter/Blocks/RandomInitBlock.ts" />
 /// <reference path="interpreter/Blocks/SmileBlock.ts" />
 /// <reference path="interpreter/Blocks/SwitchBlock.ts" />
 /// <reference path="interpreter/Blocks/Timer.ts" />

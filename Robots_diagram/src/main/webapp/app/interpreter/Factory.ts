@@ -49,6 +49,10 @@ class Factory {
             case "Variable Initialization":
                 output += VariableInitBlock.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;
+
+            case "Random Initialization":
+                output += RandomInitBlock.run(node, graph, nodesMap, linksMap, env, timeline);
+                break;
             
             default:
                 output += "Not yet";
