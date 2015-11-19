@@ -32,11 +32,15 @@
 
     "visible": {
 
-        "Subprogram": {
-            "name": "Подпрограмма",
-            "image": {
-                "src": "images/subprogramRobotsBlock.svg"
+        "general": {
+
+            "Subprogram": {
+                "name": "Подпрограмма",
+                "image": {
+                    "src": "images/subprogramRobotsBlock.svg"
+                }
             }
+
         },
        
         "palette": {

@@ -31,6 +31,7 @@ class ElementsTypeLoader {
             type: 'POST',
             url: 'getTypes/' + this.task,
             success: (response) => {
+                console.log(response);
                 this.handleResponse(response, $scope, $compile);
                 this.controller.initPalette($scope);
             },

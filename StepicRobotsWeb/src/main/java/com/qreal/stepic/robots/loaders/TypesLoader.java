@@ -48,11 +48,7 @@ public class TypesLoader {
                     "elementsTypes_" + locale + ".json"));
 
             resultTasksTypes.set("notVisible", getNotVisibleTypes(tasksTypes, allTypes));
-
-            ObjectNode resultVisibleNode = mapper.createObjectNode();
-            resultVisibleNode.set("palette", getPaletteTypes(tasksTypes, allTypes));
-
-            resultTasksTypes.set("visible", resultVisibleNode);
+            resultTasksTypes.set("visible", getVisibleTypes(tasksTypes, allTypes));
 
             return resultTasksTypes;
         } catch (IOException e) {
@@ -64,25 +60,40 @@ public class TypesLoader {
     private ArrayNode getNotVisibleTypes(JsonNode tasksTypes, JsonNode allTypes) {
         JsonNode taskNotVisible = tasksTypes.path("notVisible");
         JsonNode allNotVisible = allTypes.path("notVisible");
-        return getObjectsTypes(taskNotVisible, allNotVisible);
+        return getObjectsWithTypes(taskNotVisible, allNotVisible);
     }
 
-    private ObjectNode getPaletteTypes(JsonNode tasksTypes, JsonNode allTypes) {
+    private ObjectNode getVisibleTypes(JsonNode tasksTypes, JsonNode allTypes) {
+        ObjectNode resultVisibleNode = mapper.createObjectNode();
+        JsonNode taskVisible = tasksTypes.path("visible");
+        JsonNode allVisible = allTypes.path("visible");
+        resultVisibleNode.set("general", getGeneralTypes(taskVisible, allVisible));
+        resultVisibleNode.set("palette", getPaletteTypes(taskVisible, allVisible));
+        return resultVisibleNode;
+    }
+
+    private ArrayNode getGeneralTypes(JsonNode tasksVisibleTypes, JsonNode allVisibleTypes) {
+        JsonNode taskGeneralTypes = tasksVisibleTypes.path("general");
+        JsonNode allGeneralTypes = allVisibleTypes.path("general");
+        return getObjectsWithTypes(taskGeneralTypes, allGeneralTypes);
+    }
+
+    private ObjectNode getPaletteTypes(JsonNode tasksVisibleTypes, JsonNode allVisibleTypes) {
         ObjectNode resultPaletteNode = mapper.createObjectNode();
 
-        JsonNode palette = tasksTypes.path("visible").path("palette");
-        JsonNode allVisible = allTypes.path("visible").path("palette");
+        JsonNode taskPaletteTypes = tasksVisibleTypes.path("palette");
+        JsonNode allPaletteTypes = allVisibleTypes.path("palette");
 
-        Iterator<Map.Entry<String, JsonNode>> categoriesIterator = palette.fields();
+        Iterator<Map.Entry<String, JsonNode>> categoriesIterator = taskPaletteTypes.fields();
 
         while (categoriesIterator.hasNext()) {
             Map.Entry<String, JsonNode> entry = categoriesIterator.next();
             String category = entry.getKey();
 
-            JsonNode taskCategoryNode = palette.path(category);
-            JsonNode generalCategoryNode = allVisible.path(category);
+            JsonNode taskCategoryNode = taskPaletteTypes.path(category);
+            JsonNode generalCategoryNode = allPaletteTypes.path(category);
 
-            ArrayNode categoryArray = getObjectsTypes(taskCategoryNode, generalCategoryNode);
+            ArrayNode categoryArray = getObjectsWithTypes(taskCategoryNode, generalCategoryNode);
 
             resultPaletteNode.set(generalCategoryNode.get("categoryName").textValue(), categoryArray);
         }
@@ -90,7 +101,7 @@ public class TypesLoader {
         return resultPaletteNode;
     }
 
-    private ArrayNode getObjectsTypes(JsonNode taskNode, JsonNode sourceNode) {
+    private ArrayNode getObjectsWithTypes(JsonNode taskNode, JsonNode sourceNode) {
         ArrayNode array = mapper.createArrayNode();
         Iterator<JsonNode> typesIterator = taskNode.elements();
 
