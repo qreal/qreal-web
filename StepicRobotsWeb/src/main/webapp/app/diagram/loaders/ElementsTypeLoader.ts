@@ -31,7 +31,6 @@ class ElementsTypeLoader {
             type: 'POST',
             url: 'getTypes/' + this.task,
             success: (response) => {
-                console.log(response);
                 this.handleResponse(response, $scope, $compile);
                 this.controller.initPalette($scope);
             },
@@ -62,11 +61,25 @@ class ElementsTypeLoader {
     }
 
     private parseVisibleTypes(visibleTypes: any): NodeTypesMap {
-        return this.parsePaletteTypes(visibleTypes.palette);
+        var generalTypesMap: NodeTypesMap = this.parseGeneralTypes(visibleTypes.general);
+        var paletteTypesMap: NodeTypesMap = this.parsePaletteTypes(visibleTypes.palette);
+        return $.extend(paletteTypesMap, generalTypesMap);
+    }
+
+    private parseGeneralTypes(generalTypes: any): NodeTypesMap {
+        var generalTypesMap: NodeTypesMap = {};
+
+        for (var i in generalTypes) {
+            var typeObject = generalTypes[i];
+            var typeName: string = typeObject.type;
+            generalTypesMap[typeName] = this.createNodeType(typeObject);
+        }
+
+        return generalTypesMap;
     }
 
     private parsePaletteTypes(paletteTypes: any): NodeTypesMap {
-        var visibleNodeTypesMap: NodeTypesMap = {};
+        var paletteTypesMap: NodeTypesMap = {};
 
         for (var category in paletteTypes) {
             this.paletteContent += '<li><p>' + category + '</p><ul>';
@@ -82,7 +95,7 @@ class ElementsTypeLoader {
 
                 var image: string = GeneralConstants.APP_ROOT_PATH + imageElement.src;
 
-                visibleNodeTypesMap[typeName] = this.createNodeType(typeObject);
+                paletteTypesMap[typeName] = this.createNodeType(typeObject);
 
                 this.paletteContent += '<img class="elementImg" src="' +
                     image + '" width="30" height="30"' + '/>';
@@ -93,7 +106,7 @@ class ElementsTypeLoader {
             this.paletteContent += '</ul></li>';
         }
 
-        return visibleNodeTypesMap;
+        return paletteTypesMap;
     }
 
     private appendHtmlContentToNavigation($scope, $compile): void {
