@@ -93,17 +93,19 @@ public class JavaModelConverter {
 
             File taskLogicalSubprogramDiagrams = new File(directoryPath + "/" + taskId +
                     PathConstants.PATH_TO_LOGICAL_PART + "/" + "SubprogramDiagram");
-            File targetLogicalSubprogramDiagrams = new File(targetPath +
-                    PathConstants.PATH_TO_LOGICAL_PART + "/" + "SubprogramDiagram");
-            FileUtils.copyDirectory(taskLogicalSubprogramDiagrams, targetLogicalSubprogramDiagrams);
-
             File taskGraphicalSubprogramDiagrams = new File(directoryPath + "/" + taskId +
                     PathConstants.PATH_TO_GRAPHICAL_PART + "/" + "SubprogramDiagram");
-            File targetGraphicalSubprogramDiagrams = new File(targetPath +
-                    PathConstants.PATH_TO_GRAPHICAL_PART + "/" + "SubprogramDiagram");
-            FileUtils.copyDirectory(taskGraphicalSubprogramDiagrams, targetGraphicalSubprogramDiagrams);
+            if (taskLogicalSubprogramDiagrams.exists() && taskGraphicalSubprogramDiagrams.exists()) {
+                File targetLogicalSubprogramDiagrams = new File(targetPath +
+                        PathConstants.PATH_TO_LOGICAL_PART + "/" + "SubprogramDiagram");
+                FileUtils.copyDirectory(taskLogicalSubprogramDiagrams, targetLogicalSubprogramDiagrams);
 
-            copySubprogramNodes(taskId, directoryPath, targetPath);
+                File targetGraphicalSubprogramDiagrams = new File(targetPath +
+                        PathConstants.PATH_TO_GRAPHICAL_PART + "/" + "SubprogramDiagram");
+                FileUtils.copyDirectory(taskGraphicalSubprogramDiagrams, targetGraphicalSubprogramDiagrams);
+
+                copySubprogramNodes(taskId, directoryPath, targetPath);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
