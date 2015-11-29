@@ -22,8 +22,11 @@ import com.qreal.stepic.robots.model.diagram.DiagramNode;
 import com.qreal.stepic.robots.model.diagram.IdObject;
 import com.qreal.stepic.robots.model.diagram.Property;
 import org.apache.commons.io.FileUtils;
+import org.apache.taglibs.standard.extra.spath.Path;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -58,10 +61,7 @@ public class JavaModelConverter {
             new File(targetPath + PathConstants.PATH_TO_LOGICAL_PART).mkdirs();
             new File(targetPath + PathConstants.PATH_TO_ROOT_ID).mkdirs();
 
-            File taskMetaInfo = new File(directoryPath + "/" + taskId + "/metaInfo.xml");
-            File targetMetaInfo = new File(targetPath + "/metaInfo.xml");
-            targetMetaInfo.createNewFile();
-            FileUtils.copyFile(taskMetaInfo, targetMetaInfo);
+            copyDefaultFiles(taskId, directoryPath, targetPath);
 
             DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -82,6 +82,102 @@ public class JavaModelConverter {
             e.printStackTrace();
         }
         return uuid;
+    }
+
+    private void copyDefaultFiles(String taskId, String directoryPath, String targetPath) {
+        try {
+            File taskMetaInfo = new File(directoryPath + "/" + taskId + "/metaInfo.xml");
+            File targetMetaInfo = new File(targetPath + "/metaInfo.xml");
+            targetMetaInfo.createNewFile();
+            FileUtils.copyFile(taskMetaInfo, targetMetaInfo);
+
+            File taskLogicalSubprogramDiagrams = new File(directoryPath + "/" + taskId +
+                    PathConstants.PATH_TO_LOGICAL_PART + "/" + "SubprogramDiagram");
+            File targetLogicalSubprogramDiagrams = new File(targetPath +
+                    PathConstants.PATH_TO_LOGICAL_PART + "/" + "SubprogramDiagram");
+            FileUtils.copyDirectory(taskLogicalSubprogramDiagrams, targetLogicalSubprogramDiagrams);
+
+            File taskGraphicalSubprogramDiagrams = new File(directoryPath + "/" + taskId +
+                    PathConstants.PATH_TO_GRAPHICAL_PART + "/" + "SubprogramDiagram");
+            File targetGraphicalSubprogramDiagrams = new File(targetPath +
+                    PathConstants.PATH_TO_GRAPHICAL_PART + "/" + "SubprogramDiagram");
+            FileUtils.copyDirectory(taskGraphicalSubprogramDiagrams, targetGraphicalSubprogramDiagrams);
+
+            copySubprogramNodes(taskId, directoryPath, targetPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void copySubprogramNodes(String taskId, String directoryPath, String targetPath) {
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setIgnoringElementContentWhitespace(true);
+            DocumentBuilder builder = factory.newDocumentBuilder();
+
+            File subprogramDiagramsFolder = new File(directoryPath + "/" + taskId +
+                    PathConstants.PATH_TO_GRAPHICAL_PART + "/" + "SubprogramDiagram");
+            File[] subprogramDiagrams = subprogramDiagramsFolder.listFiles();
+
+            for (File subprogram : subprogramDiagrams) {
+                Set<String> childPaths = getNodeChildPaths(subprogram, builder);
+                for (String childPath : childPaths) {
+                    File taskGraphicalPartNode = new File(directoryPath + "/" + taskId +
+                            PathConstants.PATH_TO_GRAPHICAL_PART + "/" + childPath);
+                    File targetGraphicalPartNode = new File(targetPath +
+                            PathConstants.PATH_TO_GRAPHICAL_PART + "/" + childPath);
+                    FileUtils.copyFile(taskGraphicalPartNode, targetGraphicalPartNode);
+
+                    String logicalPartPath = getLogicalPartPath(taskGraphicalPartNode, builder);
+
+                    File taskLogicalPartNode = new File(directoryPath + "/" + taskId +
+                            PathConstants.PATH_TO_LOGICAL_PART + "/" + logicalPartPath);
+                    File targetLogicalPartNode = new File(targetPath +
+                            PathConstants.PATH_TO_LOGICAL_PART + "/" + logicalPartPath);
+                    FileUtils.copyFile(taskLogicalPartNode, targetLogicalPartNode);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Set<String> getNodeChildPaths(final File node, final DocumentBuilder builder) {
+        Set<String> childPaths = new HashSet<>();
+        try {
+            Document doc = builder.parse(node);
+            Element children = (Element) doc.getElementsByTagName("children").item(0);
+            NodeList childList = children.getElementsByTagName("object");
+
+            for (int i = 0; i < childList.getLength(); i++) {
+                Element child = (Element) childList.item(i);
+                String idAttr = child.getAttribute("id");
+                String[] parts = idAttr.split("/");
+                String path = parts[parts.length - 2] + "/" + parts[parts.length - 1];
+                childPaths.add(path);
+            }
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return childPaths;
+    }
+
+    private String getLogicalPartPath(final File graphicalPartNode, final DocumentBuilder builder) {
+        String path = null;
+        try {
+            Document doc = builder.parse(graphicalPartNode);
+            Element element = doc.getDocumentElement();
+            String logicalIdAttr = element.getAttribute("logicalId");
+            String parts[] = logicalIdAttr.split("/");
+            path = parts[parts.length - 2] + "/" + parts[parts.length - 1];
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return path;
     }
 
     private void createRootIdFile(String targetPath, DocumentBuilder documentBuilder, Transformer transformer) {
