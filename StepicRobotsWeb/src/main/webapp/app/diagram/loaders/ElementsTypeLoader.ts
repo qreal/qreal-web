@@ -41,28 +41,29 @@ class ElementsTypeLoader {
     }
 
     private handleResponse(response: any, $scope, $compile) {
-        var notVisibleTypesMap: NodeTypesMap = this.parseNotVisibleTypes(response.notVisible);
-        var visibleTypesMap: NodeTypesMap = this.parseVisibleTypes(response.visible);
+        var elementsTypesMap: NodeTypesMap = this.parseElementsTypes(response.elements);
+        var blocksTypesMap: NodeTypesMap = this.parseBlocksTypes(response.blocks);
 
-        this.controller.setNodeTypesMap($.extend(notVisibleTypesMap, visibleTypesMap));
+        this.controller.setNodeTypesMap($.extend(elementsTypesMap, blocksTypesMap));
         this.appendHtmlContentToNavigation($scope, $compile);
     }
 
-    private parseNotVisibleTypes(notVisibleTypes: any): NodeTypesMap {
-        var notVisibleTypesMap: NodeTypesMap = {};
+    private parseElementsTypes(elementsTypes: any): NodeTypesMap {
+        var elementsTypesMap: NodeTypesMap = {};
 
-        for (var i in notVisibleTypes) {
-            var typeObject = notVisibleTypes[i];
+
+        for (var i in elementsTypes) {
+            var typeObject = elementsTypes[i];
             var typeName: string = typeObject.type;
 
-            notVisibleTypesMap[typeName] = this.createNodeType(typeObject);
+            elementsTypesMap[typeName] = this.createNodeType(typeObject);
         }
-        return notVisibleTypesMap;
+        return elementsTypesMap;
     }
 
-    private parseVisibleTypes(visibleTypes: any): NodeTypesMap {
-        var generalTypesMap: NodeTypesMap = this.parseGeneralTypes(visibleTypes.general);
-        var paletteTypesMap: NodeTypesMap = this.parsePaletteTypes(visibleTypes.palette);
+    private parseBlocksTypes(blocksTypes: any): NodeTypesMap {
+        var generalTypesMap: NodeTypesMap = this.parseGeneralTypes(blocksTypes.general);
+        var paletteTypesMap: NodeTypesMap = this.parsePaletteTypes(blocksTypes.palette);
         return $.extend(paletteTypesMap, generalTypesMap);
     }
 

@@ -47,8 +47,8 @@ public class TypesLoader {
             JsonNode allTypes = mapper.readTree(new File(PathConstants.STEPIC_PATH + "/" +
                     "elementsTypes_" + locale + ".json"));
 
-            resultTasksTypes.set("notVisible", getNotVisibleTypes(tasksTypes, allTypes));
-            resultTasksTypes.set("visible", getVisibleTypes(tasksTypes, allTypes));
+            resultTasksTypes.set("elements", getElementsTypes(tasksTypes, allTypes));
+            resultTasksTypes.set("blocks", getBlocksTypes(tasksTypes, allTypes));
 
             return resultTasksTypes;
         } catch (IOException e) {
@@ -57,32 +57,31 @@ public class TypesLoader {
         return null;
     }
 
-    private ArrayNode getNotVisibleTypes(JsonNode tasksTypes, JsonNode allTypes) {
-        JsonNode taskNotVisible = tasksTypes.path("notVisible");
-        JsonNode allNotVisible = allTypes.path("notVisible");
-        return getObjectsWithTypes(taskNotVisible, allNotVisible);
+    private ArrayNode getElementsTypes(JsonNode tasksTypes, JsonNode allTypes) {
+        JsonNode taskElements = tasksTypes.path("elements");
+        JsonNode allElements = allTypes.path("elements");
+        return getObjectsWithTypes(taskElements, allElements);
     }
 
-    private ObjectNode getVisibleTypes(JsonNode tasksTypes, JsonNode allTypes) {
-        ObjectNode resultVisibleNode = mapper.createObjectNode();
-        JsonNode taskVisible = tasksTypes.path("visible");
-        JsonNode allVisible = allTypes.path("visible");
-        resultVisibleNode.set("general", getGeneralTypes(taskVisible, allVisible));
-        resultVisibleNode.set("palette", getPaletteTypes(taskVisible, allVisible));
-        return resultVisibleNode;
+    private ObjectNode getBlocksTypes(JsonNode tasksTypes, JsonNode allTypes) {
+        ObjectNode resultBlocksNode = mapper.createObjectNode();
+        JsonNode taskBlocks = tasksTypes.path("blocks");
+        JsonNode allBlocks= allTypes.path("blocks");
+        JsonNode categoriesNames = allTypes.path("categoriesNames");
+        resultBlocksNode.set("general", getGeneralTypes(taskBlocks, allBlocks));
+        resultBlocksNode.set("palette", getPaletteTypes(taskBlocks, allBlocks, categoriesNames));
+        return resultBlocksNode;
     }
 
-    private ArrayNode getGeneralTypes(JsonNode tasksVisibleTypes, JsonNode allVisibleTypes) {
-        JsonNode taskGeneralTypes = tasksVisibleTypes.path("general");
-        JsonNode allGeneralTypes = allVisibleTypes.path("general");
-        return getObjectsWithTypes(taskGeneralTypes, allGeneralTypes);
+    private ArrayNode getGeneralTypes(JsonNode taskBlocksTypes, JsonNode allBlocksTypes) {
+        JsonNode taskGeneralTypes = taskBlocksTypes.path("general");
+        return getObjectsWithTypes(taskGeneralTypes, allBlocksTypes);
     }
 
-    private ObjectNode getPaletteTypes(JsonNode tasksVisibleTypes, JsonNode allVisibleTypes) {
+    private ObjectNode getPaletteTypes(JsonNode taskBlocksTypes, JsonNode allBlocksTypes, JsonNode categoriesNames) {
         ObjectNode resultPaletteNode = mapper.createObjectNode();
 
-        JsonNode taskPaletteTypes = tasksVisibleTypes.path("palette");
-        JsonNode allPaletteTypes = allVisibleTypes.path("palette");
+        JsonNode taskPaletteTypes = taskBlocksTypes.path("palette");
 
         Iterator<Map.Entry<String, JsonNode>> categoriesIterator = taskPaletteTypes.fields();
 
@@ -91,11 +90,10 @@ public class TypesLoader {
             String category = entry.getKey();
 
             JsonNode taskCategoryNode = taskPaletteTypes.path(category);
-            JsonNode generalCategoryNode = allPaletteTypes.path(category);
 
-            ArrayNode categoryArray = getObjectsWithTypes(taskCategoryNode, generalCategoryNode);
+            ArrayNode categoryArray = getObjectsWithTypes(taskCategoryNode, allBlocksTypes);
 
-            resultPaletteNode.set(generalCategoryNode.get("categoryName").textValue(), categoryArray);
+            resultPaletteNode.set(categoriesNames.get(category).textValue(), categoryArray);
         }
 
         return resultPaletteNode;
