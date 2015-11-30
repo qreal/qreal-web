@@ -1,9 +1,9 @@
 {
-    "notVisible": [
+    "elements": [
         "ControlFlow"
     ],
 
-    "visible": {
+    "blocks": {
         
         "palette": {
             
