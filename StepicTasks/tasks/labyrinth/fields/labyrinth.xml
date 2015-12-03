@@ -3,7 +3,7 @@
     <world>
         <walls>
             <wall end="450:-400" begin="-300:-400" id=""/>
-            <wall end="-300:200" begin="-300:-250" id=""/>
+            <wall end="-300:200" begin="-300:-400" id=""/>
             <wall end="450:200" begin="-300:200" id=""/>
             <wall end="450:200" begin="450:-250" id=""/>
             <wall end="150:-100" begin="150:-400" id=""/>
@@ -17,7 +17,7 @@
         </walls>
         <colorFields/>
         <regions>
-            <region textX="0" color="#0000ff" textY="0" width="150" filled="true" height="150" type="rectangle" x="-450" y="-400" visible="true" text="Старт" id="start zone"/>
+            <region textX="10" color="#0000ff" textY="10" width="150" filled="true" height="150" type="rectangle" x="-300" y="-400" visible="true" text="Старт" id="start zone"/>
             <region textX="0" color="#ff0000" textY="0" width="150" filled="true" height="150" type="rectangle" x="450" y="-400" visible="true" text="Финиш"/>
             <region color="#87cefa" width="1050" filled="true" height="600" type="rectangle" x="-450" y="-400" visible="false" id="warzone"/>
             <region color="#87cefa" width="90" filled="true" height="90" type="rectangle" x="480" y="-370" visible="false" id="factical finish"/>
@@ -28,7 +28,7 @@
         </regions>
     </world>
     <robots>
-        <robot position="-400:-350" direction="-2,797762022055394e-14" id="trikV62KitRobot">
+        <robot position="-250:-350" direction="-2,797762022055394e-14" id="trikV62KitRobot">
             <sensors>
                 <sensor type="kitBase::robotModel::robotParts::Motor" position="75:25" port="M3###output######" direction="0"/>
                 <sensor type="kitBase::robotModel::robotParts::Motor" position="75:25" port="M4###output######" direction="0"/>
@@ -39,7 +39,7 @@
                 <sensor type="trik::robotModel::parts::TrikInfraredSensor" position="25:28" port="A1###input###JA1###sensorA1" direction="0"/>
                 <sensor type="kitBase::robotModel::robotParts::Motor" position="75:25" port="M2###output######" direction="0"/>
             </sensors>
-            <startPosition x="-375" y="-325" direction="0"/>
+            <startPosition x="-225" y="-325" direction="0"/>
             <wheels left="M3###output######" right="M4###output######"/>
         </robot>
     </robots>

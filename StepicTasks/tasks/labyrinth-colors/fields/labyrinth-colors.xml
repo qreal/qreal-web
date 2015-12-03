@@ -3,7 +3,7 @@
     <world>
         <walls>
             <wall begin="-300:-400" end="450:-400" id=""/>
-            <wall begin="-300:-250" end="-300:200" id=""/>
+            <wall begin="-300:-400" end="-300:200" id=""/>
             <wall begin="-300:200" end="450:200" id=""/>
             <wall begin="450:-250" end="450:200" id=""/>
             <wall begin="150:-400" end="150:-100" id=""/>
@@ -30,7 +30,7 @@
             <line begin="250:-210" fill-style="none" stroke="#008000" end="250:-155" fill="#000000" stroke-style="solid" stroke-width="30" id=""/>
         </colorFields>
         <regions>
-            <region visible="true" color="#0000ff" filled="true" type="rectangle" height="150" width="150" id="start zone" y="-400" text="Старт" x="-450" textX="0" textY="0"/>
+            <region visible="true" color="#0000ff" filled="true" type="rectangle" height="150" width="150" id="start zone" y="-400" text="Старт" x="-300" textX="10" textY="10"/>
             <region visible="true" color="#ff0000" filled="true" type="rectangle" height="150" width="150" y="-400" text="Финиш" x="450" textX="0" textY="0"/>
             <region visible="false" color="#87cefa" filled="true" type="rectangle" height="600" width="1050" id="warzone" y="-400" x="-450"/>
             <region visible="false" color="#87cefa" filled="true" type="rectangle" height="90" width="90" id="factical finish" y="-370" x="480"/>
@@ -41,7 +41,7 @@
         </regions>
     </world>
     <robots>
-        <robot direction="0" id="trikV62KitRobot" position="-400:-350">
+        <robot direction="0" id="trikV62KitRobot" position="-250:-350">
             <sensors>
                 <sensor type="trik::robotModel::parts::TrikInfraredSensor" port="A2###input######sensorA2" direction="90" position="24:24"/>
                 <sensor type="kitBase::robotModel::robotParts::LightSensor" port="A3###input######sensorA3" direction="0" position="13:35"/>
@@ -52,7 +52,7 @@
                 <sensor type="kitBase::robotModel::robotParts::Motor" port="M1###output######" direction="0" position="75:25"/>
                 <sensor type="kitBase::robotModel::robotParts::LightSensor" port="A4###input######sensorA4" direction="0" position="38:35"/>
             </sensors>
-            <startPosition direction="0" y="-325" x="-375"/>
+            <startPosition direction="0" y="-325" x="-225"/>
             <wheels right="M4###output######" left="M3###output######"/>
         </robot>
     </robots>
