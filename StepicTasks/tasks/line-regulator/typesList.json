@@ -4,25 +4,27 @@
     ],
 
     "blocks": {
+
+        "general": [
+            "Function"
+        ],
         
         "palette": {
             
             "Algorithms": [
                 "InitialNode",
                 "FinalNode",
-                "Function"
+                "IfBlock"
             ],
 
             "Actions": [
                 "TrikV6EnginesForward",
                 "TrikV6EnginesBackward",
-                "TrikV6EnginesStop",
-                "TrikV62ClearEncoder"
+                "TrikV6EnginesStop"
             ],
 
             "Wait": [
-                "Timer",
-                "TrikV62WaitForEncoder"
+                "Timer"
             ]
 
         }
