@@ -26,25 +26,15 @@
     </h5>
 </c:if>
 
-<c:set var="motorsHint" value="${description.getMotorsHint()}"/>
-
-<c:if test="${not empty motorsHint}">
-    <div class="myTooltip textTooltip">
-        <spring:message code="label.motors_position"/>
-        <div>
-            <span>${motorsHint}</span>
+<c:set var="hints" value="${description.getHints()}"/>
+<c:if test="${not empty hints}">
+    <c:forEach var="hint" items="${hints}">
+        <div class="myTooltip textTooltip">
+            ${hint.getName()}
+            <div>
+                <span>${hint.getText()}</span>
+            </div>
         </div>
-    </div>
-</c:if>
-
-<c:set var="hint" value="${description.getHint()}"/>
-
-<c:if test="${not empty hint}">
-    <div class="myTooltip textTooltip">
-        <spring:message code="label.hint"/>
-        <div>
-            <span>${hint}</span>
-        </div>
-    </div>
+    </c:forEach>
 </c:if>
 

@@ -16,44 +16,29 @@
 
 package com.qreal.stepic.robots.model.checker;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
-import java.util.List;
 
 /**
- * Created by vladimir-zakharov on 31.08.15.
+ * Created by vladimir-zakharov on 04.12.15.
  */
-public class Description implements Serializable {
+public class Hint implements Serializable {
 
-    public String getMain() {
-        return main;
+    public String getName() {
+        return name;
     }
 
-    public void setMain(String main) {
-        this.main = main;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getNote() {
-        return note;
+    public String getText() {
+        return text;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public List<Hint> getHints() {
-        return hints;
-    }
-
-    public void setHints(List<Hint> hints) {
-        this.hints = hints;
-    }
-
-    private String main;
-
-    private String note;
-
-    private List<Hint> hints;
-
+    private String name;
+    private String text;
 }
