@@ -161,7 +161,10 @@ class WorldModelImpl implements WorldModel {
     addCubicBezier(xStart: number, yStart: number, xEnd: number, yEnd: number,
                    cp1X: number, cp1Y: number, cp2X: number, cp2Y: number,
                    width: number, rgbaColor: RGBAColor) {
-        var cubicBezier = new CubicBezierItemImpl(this, xStart, yStart, xEnd, yEnd, cp1X, cp1Y, cp2X, cp2Y,
+        var exStartPositions = this.getExtendedPositions(xStart, yStart, cp1X, cp1Y, width);
+        var exEndPositions = this.getExtendedPositions(xEnd, yEnd, cp2X, cp2Y, width);
+        var cubicBezier = new CubicBezierItemImpl(this, exStartPositions.start.x, exStartPositions.start.y,
+            exEndPositions.start.x, exEndPositions.start.y, cp1X, cp1Y, cp2X, cp2Y,
             width, rgbaColor);
         cubicBezier.hideHandles();
         this.colorFields.push(cubicBezier);
