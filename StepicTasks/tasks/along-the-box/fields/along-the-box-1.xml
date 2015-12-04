@@ -2,42 +2,45 @@
 <root>
     <world>
         <walls>
-            <wall id="" begin="207:342" end="207:92"/>
-            <wall id="" begin="207:92" end="457:92"/>
-            <wall id="" begin="457:92" end="457:342"/>
-            <wall id="" begin="457:342" end="207:342"/>
+            <wall id="" begin="200:350" end="200:100"/>
+            <wall id="" begin="200:100" end="450:100"/>
+            <wall id="" begin="450:100" end="450:350"/>
+            <wall id="" begin="450:350" end="200:350"/>
         </walls>
         <colorFields/>
         <regions>
-            <region id="start_zone" visible="false" width="25" filled="true" color="#0000ff" type="rectangle" height="25" x="83" y="200"/>
-            <region id="finish_line" visible="false" width="207" filled="true" color="#ff0000" type="rectangle" height="50" x="0" y="188"/>
-            <region id="checkpoint0" visible="false" width="150" filled="true" color="#00ff00" type="rectangle" height="150" x="57" y="-48"/>
-            <region id="checkpoint1" visible="false" width="150" filled="true" color="#00ff00" type="rectangle" height="150" x="457" y="-48"/>
-            <region id="checkpoint2" visible="false" width="150" filled="true" color="#00ff00" type="rectangle" height="150" x="457" y="342"/>
-            <region id="checkpoint3" visible="false" width="150" filled="true" color="#00ff00" type="rectangle" height="150" x="57" y="342"/>
+            <region visible="false" x="83" color="#0000ff" filled="true" y="200" width="25" type="rectangle" height="25" id="start_zone"/>
+            <region visible="false" x="0" color="#ff0000" filled="true" y="188" width="207" type="rectangle" height="50" id="finish_line"/>
+            <region visible="false" x="50" color="#ffff00" filled="true" y="-50" width="550" type="rectangle" height="550" id="warzone"/>
+            <region visible="false" x="50" color="#00ff00" filled="true" y="-50" width="150" type="rectangle" height="150" id="checkpoint0"/>
+            <region visible="false" x="450" color="#00ff00" filled="true" y="-50" width="150" type="rectangle" height="150" id="checkpoint1"/>
+            <region visible="false" x="450" color="#00ff00" filled="true" y="350" width="150" type="rectangle" height="150" id="checkpoint2"/>
+            <region visible="false" x="50" color="#00ff00" filled="true" y="350" width="150" type="rectangle" height="150" id="checkpoint3"/>
         </regions>
     </world>
     <robots>
         <robot direction="-90" id="trikV62KitRobot" position="71:188">
             <sensors>
-                <sensor direction="0" port="E4###input###M4###encoder4" position="75:25" type="kitBase::robotModel::robotParts::EncoderSensor"/>
                 <sensor direction="90" port="A1###input######sensorA1" position="75:25" type="trik::robotModel::parts::TrikInfraredSensor"/>
                 <sensor direction="0" port="M4###output######" position="75:25" type="kitBase::robotModel::robotParts::Motor"/>
-                <sensor direction="0" port="E2###input###M2###encoder2" position="0:0" type=""/>
-                <sensor direction="0" port="E1###input###M1###encoder1" position="0:0" type=""/>
                 <sensor direction="0" port="M3###output######" position="75:25" type="kitBase::robotModel::robotParts::Motor"/>
-                <sensor direction="0" port="E3###input###M3###encoder3" position="75:25" type="kitBase::robotModel::robotParts::EncoderSensor"/>
-                <sensor direction="0" port="A2###input######sensorA2" position="0:0" type=""/>
             </sensors>
             <startPosition direction="-90" x="96" y="213"/>
             <wheels left="M3###output######" right="M4###output######"/>
         </robot>
     </robots>
     <constraints>
-        <timelimit value="100000"/>
+        
+        <timelimit value="70000"/>
+        
         <constraint failMessage="Робот должен находиться в зоне старта перед запуском!" checkOnce="true">
             <inside objectId="robot1" regionId="start_zone"/>
         </constraint>
+
+        <constraint failMessage="Робот выехал за пределы допустимой зоны">
+            <inside objectId="robot1" regionId="warzone"/>
+        </constraint>
+
         <constraint failMessage="У робота должен быть только инфракрасный датчик на порте A1" checkOnce="true">
             <conditions glue="and">
                 <equals>
@@ -78,6 +81,7 @@
                 </equals>
             </conditions>
         </constraint>
+        
         <!-- Событие, которое говорит о том, что робот вообще поехал и стартует цепочку проверки -->
         <event id="We are alive, first move" settedUpInitially="true">
             <condition>
@@ -90,6 +94,7 @@
                 <setUp id="Checkpoint0 check"/>
             </triggers>
         </event>
+        
         <!-- Событие, которое выдает ошибку, если робот не тронулся с места в первую секунду -->
         <event id="Waiting for going forward too long" settedUpInitially="true">
             <conditions glue="and">
@@ -100,6 +105,7 @@
                 <fail message="Робот так и не поехал в первую секунду"/>
             </trigger>
         </event>
+        
         <!-- Событие, которое указывает, что первый чекпоинт пройден и возводит событие для второго чекпоинта -->
         <event id="Checkpoint0 check">
             <condition>
@@ -109,6 +115,7 @@
                 <setUp id="Checkpoint1 check"/>
             </trigger>
         </event>
+        
         <!-- Событие, которое указывает, что второй чекпоинт пройден и возводит событие для третьего чекпоинта -->
         <event id="Checkpoint1 check">
             <condition>
@@ -118,6 +125,7 @@
                 <setUp id="Checkpoint2 check"/>
             </trigger>
         </event>
+        
         <!-- Событие, которое указывает, что третий чекпоинт пройден и возводит событие для четвертого чекпоинта -->
         <event id="Checkpoint2 check">
             <condition>
@@ -127,6 +135,7 @@
                 <setUp id="Checkpoint3 check"/>
             </trigger>
         </event>
+        
         <!-- Событие, которое указывает, что четвертый чекпоинт пройден и возводит событие для линии финиша -->
         <event id="Checkpoint3 check">
             <condition>
@@ -136,6 +145,7 @@
                 <setUp id="Finish line"/>
             </trigger>
         </event>
+        
         <!-- Событие, которое говорит, что задание выполнено, когда робот приезжает на линию финиша-->
         <event id="Finish line">
             <conditions glue="and">
