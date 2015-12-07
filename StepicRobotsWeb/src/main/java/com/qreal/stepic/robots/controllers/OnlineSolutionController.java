@@ -65,12 +65,12 @@ public class OnlineSolutionController extends SolutionController {
 
     @RequestMapping(value = "{id}", params = { "name", "title"}, method = RequestMethod.GET)
     public ModelAndView showTask(HttpServletRequest request, @PathVariable String id,
+                                 @RequestParam(value="name") String name,
                                  @RequestParam(value="title") String title, Locale locale)
             throws NoSuchRequestHandlingMethodException {
         if (getTypes(id, locale) == null) {
             throw new NoSuchRequestHandlingMethodException(request);
         }
-        String name = getParamWithUTF8Encoding(request, "name");
         ModelAndView modelAndView = new ModelAndView("checker/onlineSolution");
         modelAndView.addObject("title", title);
         modelAndView.addObject("id", id);
@@ -127,14 +127,4 @@ public class OnlineSolutionController extends SolutionController {
         return checker.submit(id, id + ".qrs", uuidStr, messageSource, locale);
     }
 
-
-    private String getParamWithUTF8Encoding(HttpServletRequest request, String paramName) {
-        try {
-            return new String(request.getParameter(paramName).getBytes("ISO-8859-1"), "UTF-8");
-        }
-        catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

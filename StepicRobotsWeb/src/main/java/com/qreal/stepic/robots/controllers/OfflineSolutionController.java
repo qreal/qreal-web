@@ -65,6 +65,7 @@ public class OfflineSolutionController extends SolutionController implements Han
 
     @RequestMapping(value = "{id}", params = { "name", "title"}, method = RequestMethod.GET)
     public ModelAndView showTask(HttpServletRequest request, @PathVariable String id,
+                                 @RequestParam(value="name") String name,
                                  @RequestParam(value="title") String title, Locale locale) {
         try {
             compressor.decompress(id);
@@ -74,7 +75,6 @@ public class OfflineSolutionController extends SolutionController implements Han
             ie.printStackTrace();
         }
 
-        String name = getParamWithUTF8Encoding(request, "name");
         ModelAndView modelAndView = new ModelAndView("checker/offlineSolution");
         modelAndView.addObject("title", title);
         modelAndView.addObject("id", id);
@@ -131,16 +131,6 @@ public class OfflineSolutionController extends SolutionController implements Han
         }
         e.printStackTrace();
         return new ModelAndView("errors/commonError");
-    }
-
-    private String getParamWithUTF8Encoding(HttpServletRequest request, String paramName) {
-        try {
-            return new String(request.getParameter(paramName).getBytes("ISO-8859-1"), "UTF-8");
-        }
-        catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
 }
