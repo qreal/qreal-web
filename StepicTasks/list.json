@@ -2,127 +2,127 @@
 
     {
         "title": "01",
-        "name": "introduction",
+        "id": "introduction",
         "online": "false"
     },
 
     {
         "title": "02",
-        "name": "hello-world",
+        "id": "hello-world",
         "online": true
     },
 
     {
         "title": "03",
-        "name": "smile",
+        "id": "smile",
         "online": true
     },
     
     {
         "title": "04",
-        "name": "move-forward",
+        "id": "move-forward",
         "online": true
     },
 
     {
         "title": "05",
-        "name": "smooth-turn",
+        "id": "smooth-turn",
         "online": "true"
     },
 
     {
         "title": "06",
-        "name": "turn-corner",
+        "id": "turn-corner",
         "online": true
     },
 
     {
         "title": "07",
-        "name": "circle",
+        "id": "circle",
         "online": true
     },
 
     {
         "title": "08",
-        "name": "canterville-ghost",
+        "id": "canterville-ghost",
         "online": false
     },
 
     {
         "title": "09",
-        "name": "randomizer",
+        "id": "randomizer",
         "online": false
     },
 
     {
         "title": "10",
-        "name": "monster",
+        "id": "monster",
         "online": false
     },
 
     {
         "title": "11",
-        "name": "two-monsters",
+        "id": "two-monsters",
         "online": false
     },
 
     {
         "title": "12",
-        "name": "along-the-box",
+        "id": "along-the-box",
         "online": true
     },
 
     {
         "title": "13",
-        "name": "two-labyrinth-cell",
+        "id": "two-labyrinth-cell",
         "online": true
     },
 
     {
         "title": "14",
-        "name": "labyrinth",
+        "id": "labyrinth",
         "online": false
     },
 
     {
         "title": "15",
-        "name": "image-control",
+        "id": "image-control",
         "online": false
     },
 
     {
         "title": "16",
-        "name": "image-control-with-check",
+        "id": "image-control-with-check",
         "online": false
     },
 
     {
         "title": "17",
-        "name": "labyrinth-colors",
+        "id": "labyrinth-colors",
         "online": false
     },
 
     {
         "title": "18",
-        "name": "line-regulator",
+        "id": "line-regulator",
         "online": true
     },
 
     {
         "title": "19",
-        "name": "serpentine",
+        "id": "serpentine",
         "online": true
     },
 
     {
         "title": "20",
-        "name": "s-type-line",
+        "id": "s-type-line",
         "online": true
     },
 
     {
         "title": "21",
-        "name": "color-traces",
+        "id": "color-traces",
         "online": false
     }
 

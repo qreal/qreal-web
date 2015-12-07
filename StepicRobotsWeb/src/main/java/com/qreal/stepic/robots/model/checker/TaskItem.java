@@ -31,12 +31,12 @@ public class TaskItem implements Serializable {
         this.title = title;
     }
 
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Boolean isOnline() {
@@ -48,6 +48,6 @@ public class TaskItem implements Serializable {
     }
 
     private String title;
-    private String name;
+    private String id;
     private Boolean online;
 }

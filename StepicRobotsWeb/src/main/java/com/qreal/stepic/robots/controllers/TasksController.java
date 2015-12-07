@@ -27,10 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by vladimir-zakharov on 13.08.15.
@@ -49,34 +46,49 @@ public class TasksController {
     }
 
     @RequestMapping(value = "tasks", method = RequestMethod.GET)
-    public ModelAndView tasksHandler() {
+    public ModelAndView tasksHandler(Locale locale) {
         ModelAndView modelAndView = new ModelAndView("checker/tasks");
 
         List<TaskItem> taskItems = this.parseTaskList(new File(PathConstants.STEPIC_PATH + "/list.json"));
 
         File tasksDir = new File(PathConstants.TASKS_PATH);
-        Set<String> taskNames = new HashSet<>();
+        Set<String> taskIds = new HashSet<>();
         for (File task : tasksDir.listFiles()) {
-            taskNames.add(task.getName());
+            taskIds.add(task.getName());
         }
 
         List<TaskItem> tasks = new ArrayList();
         for (TaskItem item : taskItems) {
-            if (taskNames.contains(item.getName())) {
+            if (taskIds.contains(item.getId())) {
                 tasks.add(item);
             }
         }
 
         modelAndView.addObject("tasks", tasks);
-        modelAndView.addObject("tasksWithTitles");
+
+        Map<String, String> taskNames = parseTaskNames(new File(PathConstants.STEPIC_PATH +
+                "/names_" + locale + ".json"), locale);
+        modelAndView.addObject("taskNames", taskNames);
+
         return modelAndView;
     }
 
     private List<TaskItem> parseTaskList(File file) {
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
+            ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.readValue(file, new TypeReference<List<TaskItem>>() {
             });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private Map<String, String> parseTaskNames(File file, Locale locale) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map<String, String> taskNames = objectMapper.readValue(file, Map.class);
+            return taskNames;
         } catch (IOException e) {
             e.printStackTrace();
         }

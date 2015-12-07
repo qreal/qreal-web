@@ -40,6 +40,7 @@ import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMeth
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -62,18 +63,20 @@ public class OnlineSolutionController extends SolutionController {
         typesLoader = new TypesLoader();
     }
 
-    @RequestMapping(value = "{title}", params = { "name" }, method = RequestMethod.GET)
-    public ModelAndView showTask(HttpServletRequest request, @PathVariable String title,
-                                 @RequestParam(value = "name") String name, Locale locale)
+    @RequestMapping(value = "{id}", params = { "name", "title"}, method = RequestMethod.GET)
+    public ModelAndView showTask(HttpServletRequest request, @PathVariable String id,
+                                 @RequestParam(value="title") String title, Locale locale)
             throws NoSuchRequestHandlingMethodException {
-        if (getTypes(name, locale) == null) {
+        if (getTypes(id, locale) == null) {
             throw new NoSuchRequestHandlingMethodException(request);
         }
+        String name = getParamWithUTF8Encoding(request, "name");
         ModelAndView modelAndView = new ModelAndView("checker/onlineSolution");
         modelAndView.addObject("title", title);
+        modelAndView.addObject("id", id);
         modelAndView.addObject("name", name);
 
-        Description description = getDescription(name);
+        Description description = getDescription(id, locale);
         if (description != null) {
             modelAndView.addObject("description", description);
         }
@@ -82,21 +85,21 @@ public class OnlineSolutionController extends SolutionController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "getTypes/{name}", method = RequestMethod.POST)
-    public JsonNode getTypes(@PathVariable String name, Locale locale) {
-        return typesLoader.getTypesJson(name, locale);
+    @RequestMapping(value = "getTypes/{id}", method = RequestMethod.POST)
+    public JsonNode getTypes(@PathVariable String id, Locale locale) {
+        return typesLoader.getTypesJson(id, locale);
     }
 
     @ResponseBody
-    @RequestMapping(value = "open/{name}", method = RequestMethod.POST)
-    public OpenResponse open(@PathVariable String name) {
+    @RequestMapping(value = "open/{id}", method = RequestMethod.POST)
+    public OpenResponse open(@PathVariable String id) {
         XmlSaveConverter converter= new XmlSaveConverter();
 
         try {
-            compressor.decompress(name);
-            String fieldXML = checker.getWorldModelFromMetainfo(PathConstants.TASKS_PATH + "/" + name + "/"
-                    + name + "/metaInfo.xml");
-            File treeDirectory = new File(PathConstants.TASKS_PATH + "/" + name + "/" + name + "/tree");
+            compressor.decompress(id);
+            String fieldXML = checker.getWorldModelFromMetainfo(PathConstants.TASKS_PATH + "/" + id + "/"
+                    + id + "/metaInfo.xml");
+            File treeDirectory = new File(PathConstants.TASKS_PATH + "/" + id + "/" + id + "/tree");
             Diagram diagram = converter.convertToJavaModel(treeDirectory);
             return new OpenResponse(diagram, fieldXML);
         } catch (Exception e) {
@@ -106,22 +109,32 @@ public class OnlineSolutionController extends SolutionController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "submit/{name}", method = RequestMethod.POST)
-    public SubmitResponse submit(@RequestBody SubmitRequest request, @PathVariable String name,
+    @RequestMapping(value = "submit/{id}", method = RequestMethod.POST)
+    public SubmitResponse submit(@RequestBody SubmitRequest request, @PathVariable String id,
                                  Locale locale) throws SubmitException {
         PropertyValueTranslator translator = new PropertyValueTranslator();
         translator.translateAllPropertiesValue(request.getDiagram().getNodes(), locale);
         translator.translateAllPropertiesValue(request.getDiagram().getLinks(), locale);
         JavaModelConverter javaModelConverter = new JavaModelConverter();
-        String uuidStr = String.valueOf(javaModelConverter.convertToXmlSave(request.getDiagram(), name));
+        String uuidStr = String.valueOf(javaModelConverter.convertToXmlSave(request.getDiagram(), id));
 
         try {
-            compressor.compress(name, PathConstants.TASKS_PATH + "/" + name + "/solutions/" + uuidStr);
+            compressor.compress(id, PathConstants.TASKS_PATH + "/" + id + "/solutions/" + uuidStr);
         } catch (Exception e) {
             throw new SubmitException(messageSource.getMessage("label.commonError", null, locale));
         }
 
-        return checker.submit(name, name + ".qrs", uuidStr, messageSource, locale);
+        return checker.submit(id, id + ".qrs", uuidStr, messageSource, locale);
     }
 
+
+    private String getParamWithUTF8Encoding(HttpServletRequest request, String paramName) {
+        try {
+            return new String(request.getParameter(paramName).getBytes("ISO-8859-1"), "UTF-8");
+        }
+        catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

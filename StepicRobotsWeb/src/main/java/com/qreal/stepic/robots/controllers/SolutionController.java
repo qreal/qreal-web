@@ -37,6 +37,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Created by vladimir-zakharov on 31.08.15.
@@ -56,11 +57,15 @@ public abstract class SolutionController {
         checker = new Checker();
     }
 
-    protected Description getDescription(String name) {
-        String descriptionPath = PathConstants.TASKS_PATH + "/" + name + "/description_ru.json";
+    protected Description getDescription(String name, Locale locale) {
+        String descriptionPath = PathConstants.TASKS_PATH + "/" + name + "/description_" + locale + ".json";
+        File descriptionFile = new File(descriptionPath);
+        if (!descriptionFile.exists()) {
+            descriptionFile = new File(PathConstants.TASKS_PATH + "/" + name + "/description_ru.json");
+        }
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            return objectMapper.readValue(new File(descriptionPath), Description.class);
+            return objectMapper.readValue(descriptionFile, Description.class);
         } catch (IOException e) {
             e.printStackTrace();
         }

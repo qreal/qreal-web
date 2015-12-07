@@ -43,7 +43,7 @@
             <br>
         </div>
         <div class="col-md-9">
-            <div id="diagramContent" class="row unselectable" ng-controller="DiagramController" task="${name}">
+            <div id="diagramContent" class="row unselectable" ng-controller="DiagramController" task="${id}">
                 <ul class='custom-menu'>
                     <li data-action="delete">Delete</li>
                 </ul>

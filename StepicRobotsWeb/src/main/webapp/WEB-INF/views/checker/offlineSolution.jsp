@@ -33,15 +33,15 @@
 <body>
     <div class="container" ng-app ng-controller="RootDiagramController">
         <div class="col-md-9 col-centered">
-            <div id="taskContent" ng-controller="CheckerController" task="${name}">
+            <div id="taskContent" ng-controller="CheckerController" task="${id}">
                 <%@ include file="description.jsp" %>
 
-                <a href="downloadTask/${title}?name=${name}"><h4><spring:message code="label.download"/></h4></a>
+                <a href="downloadTask/${id}?title=${title}"><h4><spring:message code="label.download"/></h4></a>
                 <br>
 
                 <h4><spring:message code="label.checkSolution"/></h4>
 
-                <form id="uploadForm" method="POST" action="upload/${name}" enctype="multipart/form-data">
+                <form id="uploadForm" method="POST" action="upload/${id}" enctype="multipart/form-data">
                     <input type="file" name="fileName" id="fileName" class="filestyle" accept=".qrs" data-buttonText="<spring:message code="label.browse"/>" data-buttonName="btn-primary"/>
                 </form>
                 <br>

@@ -48,16 +48,17 @@
             <c:if test="${not empty tasks}">
                 <div id="taskList" class="list-group">
                     <c:forEach var="task" items="${tasks}">
+                        <c:set var="taskName" value="${taskNames.get(task.getId())}"/>
                         <div class="list-group-item clearfix">
                             <span class="pull-left">
-                                ${task.getTitle()}. <spring:message code="task.${task.getName()}"/>
+                                ${task.getTitle()}. ${taskName}
                             </span>
                             <span class="pull-right">
                                 <c:if test="${task.isOnline()}">
-                                    <a class="btn listButton" href="online/${task.getTitle()}?name=${task.getName()}">
+                                    <a class="btn listButton" href="online/${task.getId()}?name=${taskName}&title=${task.getTitle()}">
                                         <spring:message code="label.online"/></a>
                                 </c:if>
-                                <a class="btn listButton" href="offline/${task.getTitle()}?name=${task.getName()}">
+                                <a class="btn listButton" href="offline/${task.getId()}?name=${taskName}&title=${task.getTitle()}">
                                     <spring:message code="label.offline"/></a>
                             </span>
                         </div>

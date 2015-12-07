@@ -14,7 +14,7 @@
   ~ limitations under the License.
   --%>
 
-<h2><spring:message code="label.task"/>: ${title}. <spring:message code="task.${name}"/></h2>
+<h2><spring:message code="label.task"/>: ${title}. ${name}</h2>
 <br>
 
 <h4><spring:message code="label.description"/>: ${description.getMain()}

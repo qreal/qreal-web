@@ -34,10 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -66,21 +63,24 @@ public class OfflineSolutionController extends SolutionController implements Han
         return e.getMessage().getBytes(UTF_8);
     }
 
-    @RequestMapping(value = "{title}", params = { "name" }, method = RequestMethod.GET)
-    public ModelAndView showTask(@PathVariable String title, @RequestParam(value = "name") String name) {
+    @RequestMapping(value = "{id}", params = { "name", "title"}, method = RequestMethod.GET)
+    public ModelAndView showTask(HttpServletRequest request, @PathVariable String id,
+                                 @RequestParam(value="title") String title, Locale locale) {
         try {
-            compressor.decompress(name);
+            compressor.decompress(id);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         } catch (InterruptedException ie) {
             ie.printStackTrace();
         }
 
+        String name = getParamWithUTF8Encoding(request, "name");
         ModelAndView modelAndView = new ModelAndView("checker/offlineSolution");
         modelAndView.addObject("title", title);
+        modelAndView.addObject("id", id);
         modelAndView.addObject("name", name);
 
-        Description description = getDescription(name);
+        Description description = getDescription(id, locale);
         if (description != null) {
             modelAndView.addObject("description", description);
         }
@@ -88,12 +88,12 @@ public class OfflineSolutionController extends SolutionController implements Han
         return modelAndView;
     }
 
-    @RequestMapping(value = "/downloadTask/{title}", params = { "name" }, method = RequestMethod.GET)
+    @RequestMapping(value = "/downloadTask/{id}", params = { "title" }, method = RequestMethod.GET)
     public
     @ResponseBody
-    void downloadFiles(HttpServletRequest request, HttpServletResponse response, @PathVariable String title,
-                       @RequestParam(value = "name") String name) {
-        File downloadFile = new File(PathConstants.TASKS_PATH + "/" + name + "/" + name + ".qrs");
+    void downloadFiles(HttpServletRequest request, HttpServletResponse response, @PathVariable String id,
+                       @RequestParam(value = "title") String title) {
+        File downloadFile = new File(PathConstants.TASKS_PATH + "/" + id + "/" + id + ".qrs");
         try (FileInputStream inputStream = new FileInputStream(downloadFile);
              OutputStream outStream = response.getOutputStream()) {
             response.setContentLength((int) downloadFile.length());
@@ -110,12 +110,12 @@ public class OfflineSolutionController extends SolutionController implements Han
     }
 
     @ResponseBody
-    @RequestMapping(value = "upload/{name}", method = RequestMethod.POST)
+    @RequestMapping(value = "upload/{id}", method = RequestMethod.POST)
     public SubmitResponse handleFileUpload(MultipartHttpServletRequest request,
-                                           @PathVariable String name,
+                                           @PathVariable String id,
                                            Locale locale) throws UploadException, SubmitException {
-        UploadedSolution uploadedSolution = offlineSolutionUploader.upload(request, name, messageSource, locale);
-        return checker.submit(name, uploadedSolution.getFilename(), String.valueOf(uploadedSolution.getUuid()),
+        UploadedSolution uploadedSolution = offlineSolutionUploader.upload(request, id, messageSource, locale);
+        return checker.submit(id, uploadedSolution.getFilename(), String.valueOf(uploadedSolution.getUuid()),
                 messageSource, locale);
 
     }
@@ -131,6 +131,16 @@ public class OfflineSolutionController extends SolutionController implements Han
         }
         e.printStackTrace();
         return new ModelAndView("errors/commonError");
+    }
+
+    private String getParamWithUTF8Encoding(HttpServletRequest request, String paramName) {
+        try {
+            return new String(request.getParameter(paramName).getBytes("ISO-8859-1"), "UTF-8");
+        }
+        catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
