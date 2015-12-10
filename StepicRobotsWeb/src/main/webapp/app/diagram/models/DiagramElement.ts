@@ -19,6 +19,7 @@ interface DiagramElement {
     getJointObject();
     getName(): string;
     getType(): string;
-    getProperties(): PropertiesMap;
+    getConstPropertiesPack(): PropertiesPack;
+    getChangeableProperties(): PropertiesMap;
     setProperty(name: string, property: Property): void;
 }

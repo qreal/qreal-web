@@ -172,7 +172,7 @@ class DiagramController {
         $(document).on('input', '.form-control', function () {
             var key = $(this).data('type');
             var value = $(this).val();
-            var property: Property = controller.currentElement.getProperties()[key];
+            var property: Property = controller.currentElement.getChangeableProperties()[key];
             property.value = value;
             controller.currentElement.setProperty(key, property);
         });
@@ -182,7 +182,7 @@ class DiagramController {
         var controller: DiagramController = this;
         $(document).on('change', '.checkbox', function () {
             var key = $(this).data('type');
-            var property: Property = controller.currentElement.getProperties()[key];
+            var property: Property = controller.currentElement.getChangeableProperties()[key];
             var currentValue = property.value;
 
             var tr = $(this).closest('tr');
@@ -204,7 +204,7 @@ class DiagramController {
         $(document).on('change', '.mydropdown', function () {
             var key = $(this).data('type');
             var value = $(this).val();
-            var property: Property = controller.currentElement.getProperties()[key];
+            var property: Property = controller.currentElement.getChangeableProperties()[key];
             property.value = value;
             controller.currentElement.setProperty(key, property);
         });
@@ -216,7 +216,7 @@ class DiagramController {
             var key = $(this).data('type');
             var value = $(this).val();
             if (value !== "" && !isNaN(value)) {
-                var property: Property = controller.currentElement.getProperties()[key];
+                var property: Property = controller.currentElement.getChangeableProperties()[key];
                 property.value = value;
                 controller.currentElement.setProperty(key, property);
             }
@@ -234,7 +234,7 @@ class DiagramController {
             select: function (event, ui) {
                 var key = $(this).data('type');
                 var value = ui.item.value;
-                var property: Property = controller.currentElement.getProperties()[key];
+                var property: Property = controller.currentElement.getChangeableProperties()[key];
                 property.value = value;
                 controller.currentElement.setProperty(key, property);
             }
@@ -269,13 +269,14 @@ class DiagramController {
 
                 var type = $(ui.draggable.context).data("type");
                 var image: string = controller.nodeTypesMap[type].getImage();
+                var name: string = controller.nodeTypesMap[type].getName();
 
                 var typeProperties: PropertiesMap = controller.nodeTypesMap[type].getPropertiesMap();
 
                 var nodeProperties: PropertiesMap = {};
                 for (var property in typeProperties) {
-                    nodeProperties[property] = new Property(typeProperties[property].name,
-                        typeProperties[property].value, typeProperties[property].type);
+                    nodeProperties[property] = new Property(typeProperties[property].name, typeProperties[property].type,
+                        typeProperties[property].value);
                 }
 
                 var node = controller.createNode(name, type, leftElementPos, topElementPos, nodeProperties, image);
@@ -287,7 +288,7 @@ class DiagramController {
 
     private setNodeProperties(element): void {
         $('#property_table tbody').empty();
-        var properties: PropertiesMap = element.getProperties();
+        var properties: PropertiesMap = element.getChangeableProperties();
         for (var property in properties) {
             var newItem = $(this.getPropertyHtml(element.getType(), property, properties[property]));
             $('#property_table tbody').append(newItem);

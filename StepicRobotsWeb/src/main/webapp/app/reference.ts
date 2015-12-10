@@ -61,6 +61,7 @@
 /// <reference path="diagram/types/NodeType.ts" />
 /// <reference path="diagram/types/NodeTypesMap.ts" />
 /// <reference path="diagram/types/PropertiesMap.ts" />
+/// <reference path="diagram/types/PropertiesPack.ts" />
 /// <reference path="diagram/types/Property.ts" />
 /// <reference path="twoDModel/implementations/engine/Runner.ts" />
 /// <reference path="twoDModel/implementations/engine/StageScroller.ts" />

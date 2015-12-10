@@ -22,7 +22,6 @@ import com.qreal.stepic.robots.model.diagram.DiagramNode;
 import com.qreal.stepic.robots.model.diagram.IdObject;
 import com.qreal.stepic.robots.model.diagram.Property;
 import org.apache.commons.io.FileUtils;
-import org.apache.taglibs.standard.extra.spath.Path;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -283,21 +282,9 @@ public class JavaModelConverter {
         rootElement.appendChild(properties);
 
         for (Property property : node.getLogicalProperties()) {
-            Element propertyElement = logicalXML.createElement("QString");
-            propertyElement.setAttribute("key", property.getName());
-            propertyElement.setAttribute("value", property.getValue());
-            properties.appendChild(propertyElement);
+            Element element = convertPropertyToElement(logicalXML, property);
+            properties.appendChild(element);
         }
-
-        Element from = logicalXML.createElement("qReal::Id");
-        from.setAttribute("key", "from");
-        from.setAttribute("value", "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
-        properties.appendChild(from);
-
-        Element to = logicalXML.createElement("qReal::Id");
-        to.setAttribute("key", "to");
-        to.setAttribute("value", "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
-        properties.appendChild(to);
 
         appendDefaultLogicalProperties(logicalXML, properties);
 
@@ -339,36 +326,9 @@ public class JavaModelConverter {
         rootElement.appendChild(properties);
 
         for (Property property : node.getGraphicalProperties()) {
-            Element propertyElement = graphicalXML.createElement("QString");
-            propertyElement.setAttribute("key", property.getName());
-            propertyElement.setAttribute("value", property.getValue());
-            properties.appendChild(propertyElement);
+            Element element = convertPropertyToElement(graphicalXML, property);
+            properties.appendChild(element);
         }
-
-        Element configuration = graphicalXML.createElement("QPolygon");
-        configuration.setAttribute("key", "configuration");
-        configuration.setAttribute("value", "0, 0 : 50, 0 : 50, 50 : 0, 50 : ");
-        properties.appendChild(configuration);
-
-        Element from = graphicalXML.createElement("qReal::Id");
-        from.setAttribute("key", "from");
-        from.setAttribute("value", "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
-        properties.appendChild(from);
-
-        Element to = graphicalXML.createElement("qReal::Id");
-        to.setAttribute("key", "to");
-        to.setAttribute("value", "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
-        properties.appendChild(to);
-
-        Element fromPort = graphicalXML.createElement("double");
-        fromPort.setAttribute("key", "fromPort");
-        fromPort.setAttribute("value", "0");
-        properties.appendChild(fromPort);
-
-        Element toPort = graphicalXML.createElement("double");
-        toPort.setAttribute("key", "toPort");
-        toPort.setAttribute("value", "0");
-        properties.appendChild(toPort);
 
         Element links = graphicalXML.createElement("links");
         links.setAttribute("type", "qReal::IdList");
@@ -403,18 +363,8 @@ public class JavaModelConverter {
         rootElement.appendChild(properties);
 
         for (Property property : node.getLogicalProperties()) {
-            if (property.getType().equals("qReal::Id")) {
-                Element propertyElement = logicalXML.createElement("qReal::Id");
-                propertyElement.setAttribute("key", property.getName());
-                propertyElement.setAttribute("value",
-                        String.format("qrm:/RobotsMetamodel/RobotsDiagram/%s", property.getValue()));
-                properties.appendChild(propertyElement);
-            } else {
-                Element propertyElement = logicalXML.createElement("QString");
-                propertyElement.setAttribute("key", property.getName());
-                propertyElement.setAttribute("value", property.getValue());
-                properties.appendChild(propertyElement);
-            }
+            Element element = convertPropertyToElement(logicalXML, property);
+            properties.appendChild(element);
         }
 
         appendDefaultLogicalProperties(logicalXML, properties);
@@ -442,40 +392,10 @@ public class JavaModelConverter {
         Element properties = graphicalXML.createElement("properties");
         rootElement.appendChild(properties);
 
-        Element configuration = graphicalXML.createElement("QPolygon");
-        configuration.setAttribute("key", "configuration");
-        configuration.setAttribute("value", "0, 0 : 0, 0 : ");
-        properties.appendChild(configuration);
-
         for (Property property : node.getGraphicalProperties()) {
-            if (property.getType().equals("qReal::Id")) {
-                Element propertyElement = graphicalXML.createElement("qReal::Id");
-                propertyElement.setAttribute("key", property.getName());
-                propertyElement.setAttribute("value",
-                        String.format("qrm:/RobotsMetamodel/RobotsDiagram/%s", property.getValue()));
-                properties.appendChild(propertyElement);
-            } else {
-                Element propertyElement = graphicalXML.createElement("QString");
-                propertyElement.setAttribute("key", property.getName());
-                propertyElement.setAttribute("value", property.getValue());
-                properties.appendChild(propertyElement);
-            }
+            Element element = convertPropertyToElement(graphicalXML, property);
+            properties.appendChild(element);
         }
-
-        Element position = graphicalXML.createElement("QPointF");
-        position.setAttribute("key", "position");
-        position.setAttribute("value", "0, 0");
-        properties.appendChild(position);
-
-        Element fromPort = graphicalXML.createElement("double");
-        fromPort.setAttribute("key", "fromPort");
-        fromPort.setAttribute("value", "0");
-        properties.appendChild(fromPort);
-
-        Element toPort = graphicalXML.createElement("double");
-        toPort.setAttribute("key", "toPort");
-        toPort.setAttribute("value", "0");
-        properties.appendChild(toPort);
 
         Element links = graphicalXML.createElement("links");
         links.setAttribute("type", "qReal::IdList");
@@ -487,20 +407,17 @@ public class JavaModelConverter {
         return graphicalXML;
     }
 
+    private Element convertPropertyToElement(Document document, Property property) {
+        Element propertyElement = document.createElement(property.getType());
+        propertyElement.setAttribute("key", property.getName());
+        propertyElement.setAttribute("value", property.getValue());
+        return propertyElement;
+    }
+
     private void appendDefaultLogicalProperties(Document logicalXML, Element properties) {
         Element incomingExplosions = logicalXML.createElement("incomingExplosions");
         incomingExplosions.setAttribute("type", "qReal::IdList");
         properties.appendChild(incomingExplosions);
-
-        Element outgoingExplosion = logicalXML.createElement("qReal::Id");
-        outgoingExplosion.setAttribute("key", "outgoingExplosion");
-        outgoingExplosion.setAttribute("value", "qrm:/");
-        properties.appendChild(outgoingExplosion);
-
-        Element linkShape = logicalXML.createElement("int");
-        linkShape.setAttribute("key", "linkShape");
-        linkShape.setAttribute("value", "-1");
-        properties.appendChild(linkShape);
     }
 
     private Set<String> elementsIds = new HashSet<String>();

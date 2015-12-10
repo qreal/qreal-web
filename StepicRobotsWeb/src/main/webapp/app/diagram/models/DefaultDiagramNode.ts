@@ -22,13 +22,20 @@ class DefaultDiagramNode implements DiagramNode {
     private jointObject: joint.shapes.devs.ImageWithPorts;
     private name: string;
     private type: string;
-    private properties: PropertiesMap;
+    private constPropertiesPack: PropertiesPack;
+    private changeableProperties: PropertiesMap;
     private imagePath: string;
 
-    constructor(name: string, type: string, x: number, y: number, properties: PropertiesMap, imagePath: string, id?: string) {
+    constructor(name: string, type: string, x: number, y: number, properties: PropertiesMap, imagePath: string,
+                id?: string, constPropertiesPack?: PropertiesPack) {
         this.logicalId = UIDGenerator.generate();
         this.name = name;
         this.type = type;
+        if (constPropertiesPack) {
+            this.constPropertiesPack = constPropertiesPack;
+        } else {
+            this.constPropertiesPack = this.getDefaultConstPropertiesPack(name);
+        }
 
         var jointObjectAttributes = {
             position: { x: x, y: y },
@@ -46,7 +53,7 @@ class DefaultDiagramNode implements DiagramNode {
         }
 
         this.jointObject = new joint.shapes.devs.ImageWithPorts(jointObjectAttributes);
-        this.properties = properties;
+        this.changeableProperties = properties;
         this.imagePath = imagePath;
     }
 
@@ -78,11 +85,42 @@ class DefaultDiagramNode implements DiagramNode {
         return this.jointObject;
     }
 
-    setProperty(key: string, property: Property): void {
-        this.properties[key] = property;
+    getConstPropertiesPack(): PropertiesPack {
+        return this.constPropertiesPack;
     }
 
-    getProperties(): PropertiesMap {
-        return this.properties;
+    setProperty(key: string, property: Property): void {
+        this.changeableProperties[key] = property;
+    }
+
+    getChangeableProperties(): PropertiesMap {
+        return this.changeableProperties;
+    }
+
+    private getDefaultConstPropertiesPack(name: string): PropertiesPack {
+        var logical: PropertiesMap = this.initConstLogicalProperties(name);
+        var graphical: PropertiesMap = this.initConstGraphicalProperties(name);
+        return new PropertiesPack(logical, graphical);
+    }
+
+    private initConstLogicalProperties(name: string): PropertiesMap {
+        var logical: PropertiesMap = {};
+        logical["name"] = new Property("name", "QString", name);
+        logical["from"] = new Property("from", "qReal::Id", "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
+        logical["linkShape"] = new Property("linkShape", "int", "0");
+        logical["outgoingExplosion"] = new Property("outgoingExplosion", "qReal::Id", "qrm:/");
+        logical["to"] = new Property("to", "qReal::Id", "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
+        return logical;
+    }
+
+    private initConstGraphicalProperties(name: string): PropertiesMap {
+        var graphical: PropertiesMap = {};
+        graphical["name"] = new Property("name", "QString", name);
+        graphical["to"] = new Property("to", "qreal::Id", "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
+        graphical["configuration"] = new Property("configuration", "QPolygon", "0, 0 : 50, 0 : 50, 50 : 0, 50 : ");
+        graphical["fromPort"] = new Property("fromPort", "double", "0");
+        graphical["toPort"] = new Property("toPort", "double", "0");
+        graphical["from"] = new Property("from", "qReal::Id", "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
+        return graphical;
     }
 }

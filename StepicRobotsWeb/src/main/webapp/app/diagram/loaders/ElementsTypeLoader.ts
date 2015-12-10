@@ -51,7 +51,6 @@ class ElementsTypeLoader {
     private parseElementsTypes(elementsTypes: any): NodeTypesMap {
         var elementsTypesMap: NodeTypesMap = {};
 
-
         for (var i in elementsTypes) {
             var typeObject = elementsTypes[i];
             var typeName: string = typeObject.type;
@@ -153,7 +152,7 @@ class ElementsTypeLoader {
                 propertyValue = propertyObject.selected.key;
             }
 
-            var property: Property = new Property(propertyName, propertyValue, propertyType);
+            var property: Property = new Property(propertyName, propertyType, propertyValue);
             properties[propertyKey] = property;
         }
         return properties;

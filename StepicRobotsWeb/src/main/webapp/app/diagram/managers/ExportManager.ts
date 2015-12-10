@@ -55,7 +55,7 @@ class ExportManager {
             'graphicalProperties': []
         }
 
-        nodeJSON.logicalProperties = ExportManager.exportLogicalProperties(robotsDiagramNode.getProperties());
+        nodeJSON.logicalProperties = ExportManager.exportProperties(robotsDiagramNode.getProperties());
 
         var nameProperty = {
             'name': "name",
@@ -82,24 +82,23 @@ class ExportManager {
                 'logicalLinksIds': [],
                 'graphicalLinksIds': [],
                 'logicalProperties': [],
-                'graphicalProperties': [
-                    {
-                        "name": "position",
-                        "value": "" + node.getX() + ", " + node.getY(),
-                        "type": "QPointF"
-                    }
-                ]
+                'graphicalProperties': []
             };
 
-            nodeJSON.logicalProperties = ExportManager.exportLogicalProperties(node.getProperties());
 
-            var nameProperty = {
-                'name': "name",
-                'value': node.getName(),
-                'type': "string",
-            };
-            nodeJSON.logicalProperties.push(nameProperty);
-            nodeJSON.graphicalProperties.push(nameProperty);
+            var changeableLogicalProperties = ExportManager.exportProperties(node.getChangeableProperties());
+            var constLogicalProperties = ExportManager.exportProperties(node.getConstPropertiesPack().logical);
+            nodeJSON.logicalProperties = changeableLogicalProperties.concat(constLogicalProperties);
+
+            nodeJSON.graphicalProperties = ExportManager.exportProperties(node.getConstPropertiesPack().graphical);
+
+            nodeJSON.graphicalProperties.push(
+                {
+                    "name": "position",
+                    "value": "" + node.getX() + ", " + node.getY(),
+                    "type": "QPointF"
+                }
+            )
 
             var graphicalLinks = graph.getConnectedLinks(node.getJointObject(), { inbound: true, outbound: true });
 
@@ -133,15 +132,11 @@ class ExportManager {
                 'graphicalProperties': []
             }
 
-            linkJSON.logicalProperties = ExportManager.exportLogicalProperties(link.getProperties());
+            var changeableLogicalProperties = ExportManager.exportProperties(link.getChangeableProperties());
+            var constLogicalProperties = ExportManager.exportProperties(link.getConstPropertiesPack().logical);
+            linkJSON.logicalProperties = changeableLogicalProperties.concat(constLogicalProperties);
 
-            var nameProperty = {
-                'name': "name",
-                'value': link.getName(),
-                'type': "string",
-            };
-            linkJSON.logicalProperties.push(nameProperty);
-            linkJSON.graphicalProperties.push(nameProperty);
+            linkJSON.graphicalProperties = ExportManager.exportProperties(link.getConstPropertiesPack().graphical);
 
             var sourceObject = nodesMap[jointObject.get('source').id];
             var targetObject = nodesMap[jointObject.get('target').id];
@@ -151,7 +146,7 @@ class ExportManager {
 
             var logicalSource = {
                 'name': "from",
-                'value': logicalSourceValue,
+                'value': "qrm:/RobotsMetamodel/RobotsDiagram/" + logicalSourceValue,
                 'type': "qReal::Id"
             }
 
@@ -160,7 +155,7 @@ class ExportManager {
 
             var logicalTarget = {
                 'name': "to",
-                'value': logicalTargetValue,
+                'value': "qrm:/RobotsMetamodel/RobotsDiagram/" + logicalTargetValue,
                 'type': "qReal::Id"
             }
 
@@ -172,7 +167,7 @@ class ExportManager {
 
             var graphicalSource = {
                 'name': "from",
-                'value': graphicalSourceValue,
+                'value': "qrm:/RobotsMetamodel/RobotsDiagram/" + graphicalSourceValue,
                 'type': "qReal::Id"
             }
 
@@ -181,7 +176,7 @@ class ExportManager {
 
             var graphicalTarget = {
                 'name': "to",
-                'value': graphicalTargetValue,
+                'value': "qrm:/RobotsMetamodel/RobotsDiagram/" + graphicalTargetValue,
                 'type': "qReal::Id"
             }
 
@@ -192,13 +187,16 @@ class ExportManager {
         }
     }
 
-    static exportLogicalProperties(properties: PropertiesMap) {
+    static exportProperties(properties: PropertiesMap) {
         var propertiesJSON = [];
         for (var propertyName in properties) {
+            var type: string = properties[propertyName].type;
+            type = (type === "string" || type === "combobox" || type == "checkbox" || type == "dropdown") ?
+                "QString" : type;
             var property = {
                 'name': propertyName,
                 'value': properties[propertyName].value,
-                'type': properties[propertyName].type,
+                'type': type
             };
             propertiesJSON.push(property);
         }

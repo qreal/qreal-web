@@ -1,5 +1,5 @@
 /*
- * Copyright Vladimir Zakharov 
+ * Copyright Vladimir Zakharov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-class Property {
+class PropertiesPack {
 
-    name: string;
-    type: string;
-    value: string;
+    logical: PropertiesMap;
+    graphical: PropertiesMap;
 
-    constructor(name: string, type: string, value: string) {
-        this.name = name;
-        this.type = type;
-        this.value = value;
+    constructor(logical: PropertiesMap, graphical: PropertiesMap) {
+        this.logical = logical;
+        this.graphical = graphical;
     }
 }

@@ -17,14 +17,17 @@
 class Link implements DiagramElement {
     private logicalId: string;
     private jointObject: joint.dia.Link;
-    private properties: PropertiesMap = {};
+    private constPropertiesPack: PropertiesPack;
+    private changeableProperties: PropertiesMap = {};
     private name = "Link"
     private type = "ControlFlow";
 
     constructor(jointObject: joint.dia.Link, properties: PropertiesMap) {
         this.logicalId = UIDGenerator.generate();
+        this.constPropertiesPack = this.getDefaultConstPropertiesPack();
+
         this.jointObject = jointObject;
-        this.properties = properties;
+        this.changeableProperties = properties;
 
         jointObject.on('change:source', () => {
                 this.updateHighlight();
@@ -53,12 +56,40 @@ class Link implements DiagramElement {
         return this.type;
     }
 
-    getProperties(): PropertiesMap {
-        return this.properties;
+    getConstPropertiesPack(): PropertiesPack {
+        return this.constPropertiesPack;
+    }
+
+    getChangeableProperties(): PropertiesMap {
+        return this.changeableProperties;
     }
 
     setProperty(key: string, property: Property): void {
-        this.properties[key] = property;
+        this.changeableProperties[key] = property;
+    }
+
+    private getDefaultConstPropertiesPack(): PropertiesPack {
+        var logical: PropertiesMap = this.initConstLogicalProperties();
+        var graphical: PropertiesMap = this.initConstGraphicalProperties();
+        return new PropertiesPack(logical, graphical);
+    }
+
+    private initConstLogicalProperties(): PropertiesMap {
+        var logical: PropertiesMap = {};
+        logical["name"] = new Property("name", "QString", this.name);
+        logical["linkShape"] = new Property("linkShape", "int", "-1");
+        logical["outgoingExplosion"] = new Property("outgoingExplosion", "qReal::Id", "qrm:/");
+        return logical;
+    }
+
+    private initConstGraphicalProperties(): PropertiesMap {
+        var graphical: PropertiesMap = {};
+        graphical["name"] = new Property("name", "QString", this.name);
+        graphical["configuration"] = new Property("configuration", "QPolygon", "0, 0 : 0, 0 : ");
+        graphical["fromPort"] = new Property("fromPort", "double", "0");
+        graphical["toPort"] = new Property("toPort", "double", "0");
+        graphical["position"] = new Property("position", "QPointF", "0, 0");
+        return graphical;
     }
 
     private updateHighlight(): void {

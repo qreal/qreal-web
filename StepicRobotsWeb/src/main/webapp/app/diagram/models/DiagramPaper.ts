@@ -83,7 +83,7 @@ class DiagramPaper extends joint.dia.Paper {
                         var nodeProperties: PropertiesMap = {};
                         for (var property in typeProperties) {
                             nodeProperties[property] = new Property(typeProperties[property].name,
-                                typeProperties[property].value, typeProperties[property].type);
+                                typeProperties[property].type, typeProperties[property].value);
                         }
 
                         var linkObject: Link = new Link(link, nodeProperties);

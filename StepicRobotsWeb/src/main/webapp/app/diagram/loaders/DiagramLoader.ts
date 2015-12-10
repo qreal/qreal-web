@@ -30,7 +30,9 @@ class DiagramLoader {
                 DiagramLoader.loadRobotsDiagramNode(nodeObject);
             } else {
                 if (nodeTypesMap[type]) {
-                    var logicalProperties: PropertiesMap = {};
+                    var changeableLogicalProperties: PropertiesMap = {};
+                    var constLogicalProperties: PropertiesMap = {};
+
                     var logicalPropertiesObject = nodeObject.logicalProperties;
 
                     var typeProperties = nodeTypesMap[nodeObject.type].getPropertiesMap();
@@ -50,26 +52,36 @@ class DiagramLoader {
 
                         if (typeProperties.hasOwnProperty(propertyName)) {
                             var property:Property = new Property(typeProperties[propertyName].name,
-                                logicalPropertiesObject[j].value, typeProperties[propertyName].type);
-                            logicalProperties[propertyName] = property;
+                                typeProperties[propertyName].type, logicalPropertiesObject[j].value);
+                            changeableLogicalProperties[propertyName] = property;
+                        } else {
+                            var property:Property = new Property(logicalPropertiesObject[j].name,
+                                logicalPropertiesObject[j].type, logicalPropertiesObject[j].value);
+                            constLogicalProperties[propertyName] = property;
                         }
                     }
 
+                    var constGraphicalProperties: PropertiesMap = {};
                     var graphicalPropertiesObject = nodeObject.graphicalProperties;
 
-                    var x:number = 0;
-                    var y:number = 0;
+                    var x: number = 0;
+                    var y: number = 0;
                     for (var j = 0; j < graphicalPropertiesObject.length; j++) {
-                        if (graphicalPropertiesObject[j].name === "position") {
+                        var propertyName = graphicalPropertiesObject[j].name;
+                        if (propertyName === "position") {
                             var position:string = graphicalPropertiesObject[j].value;
                             var positionNums = this.parsePosition(position);
                             x = positionNums.x;
                             y = positionNums.y;
+                        } else {
+                            constGraphicalProperties[propertyName] = property;
                         }
                     }
 
                     this.loadNode(graph, nodesMap, nodeObject.graphicalId, name, type,
-                        x + offsetX, y + offsetY, logicalProperties, nodeTypesMap[nodeObject.type].getImage());
+                        x + offsetX, y + offsetY, changeableLogicalProperties,
+                        new PropertiesPack(constLogicalProperties, constGraphicalProperties),
+                        nodeTypesMap[nodeObject.type].getImage());
                 }
             }
         }
@@ -85,8 +97,8 @@ class DiagramLoader {
         for (var i = 0; i < logicalPropertiesObject.length; i++) {
             var propertyName = logicalPropertiesObject[i].name;
             if (propertyName === "devicesConfiguration" || propertyName === "worldModel") {
-                var property:Property = new Property(propertyName,
-                    logicalPropertiesObject[i].value, logicalPropertiesObject[i].type);
+                var property:Property = new Property(propertyName, logicalPropertiesObject[i].type,
+                    logicalPropertiesObject[i].value);
                 logicalProperties[propertyName] = property;
             }
         }
@@ -96,8 +108,10 @@ class DiagramLoader {
     }
 
     static loadNode(graph: joint.dia.Graph, nodesMap, id: string, name: string,
-                      type: string, x: number, y: number, properties, image: string): void {
-        var node: DiagramNode = new DefaultDiagramNode(name, type, x, y, properties, image, id);
+                      type: string, x: number, y: number, changeableProperties: PropertiesMap,
+                    constPropertiesPack: PropertiesPack, image: string): void {
+        var node: DiagramNode = new DefaultDiagramNode(name, type, x, y, changeableProperties, image, id,
+            constPropertiesPack);
         nodesMap[node.getJointObject().id] = node;
         graph.addCell(node.getJointObject());
     }
@@ -112,7 +126,7 @@ class DiagramLoader {
         for (var j = 0; j < logicalPropertiesObject.length; j++) {
             switch (logicalPropertiesObject[j].name) {
                 case "Guard":
-                    var property: Property = new Property("Guard", logicalPropertiesObject[j].value, "combobox");
+                    var property: Property = new Property("Guard", "combobox", logicalPropertiesObject[j].value);
                     properties["Guard"] = property;
             }
         }
@@ -134,6 +148,8 @@ class DiagramLoader {
                     break
                 case "configuration":
                     vertices = this.loadVertices(graphicalPropertiesObject[j].value);
+                default:
+
             }
         }
 
