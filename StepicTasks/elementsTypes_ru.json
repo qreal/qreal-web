@@ -330,37 +330,37 @@
                         },
 
                         {
-                            "key": "dark blue",
+                            "key": "darkBlue",
                             "value": "тёмно-синий"
                         },
 
                         {
-                            "key": "dark cyan",
+                            "key": "darkCyan",
                             "value": "тёмно-сине-зелёный"
                         },
 
                         {
-                            "key": "dark gray",
+                            "key": "darkGray",
                             "value": "тёмно-серый"
                         },
 
                         {
-                            "key": "dark green",
+                            "key": "darkGreen",
                             "value": "тёмно-зелёный"
                         },
 
                         {
-                            "key": "dark magenta",
+                            "key": "darkMagenta",
                             "value": "тёмно-пурпурный"
                         },
 
                         {
-                            "key": "dark red",
+                            "key": "darkRed",
                             "value": "тёмно-красный"
                         },
 
                         {
-                            "key": "dark yellow",
+                            "key": "darkYellow",
                             "value": "тёмно-жёлтый"
                         },
 
@@ -375,7 +375,7 @@
                         },
 
                         {
-                            "key": "light gray",
+                            "key": "lightGray",
                             "value": "светло-серый"
                         },
 
@@ -607,37 +607,37 @@
                         },
 
                         {
-                            "key": "dark blue",
+                            "key": "darkBlue",
                             "value": "тёмно-синий"
                         },
 
                         {
-                            "key": "dark cyan",
+                            "key": "darkCyan",
                             "value": "тёмно-сине-зелёный"
                         },
 
                         {
-                            "key": "dark gray",
+                            "key": "darkGray",
                             "value": "тёмно-серый"
                         },
 
                         {
-                            "key": "dark green",
+                            "key": "darkGreen",
                             "value": "тёмно-зелёный"
                         },
 
                         {
-                            "key": "dark magenta",
+                            "key": "darkMagenta",
                             "value": "тёмно-пурпурный"
                         },
 
                         {
-                            "key": "dark red",
+                            "key": "darkRed",
                             "value": "тёмно-красный"
                         },
 
                         {
-                            "key": "dark yellow",
+                            "key": "darkYellow",
                             "value": "тёмно-жёлтый"
                         },
 
@@ -652,7 +652,7 @@
                         },
 
                         {
-                            "key": "light gray",
+                            "key": "lightGray",
                             "value": "светло-серый"
                         },
 
