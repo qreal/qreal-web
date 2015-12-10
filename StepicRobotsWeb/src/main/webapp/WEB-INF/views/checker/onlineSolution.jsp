@@ -76,8 +76,22 @@
                     <div id="elements">
                         <legend style="margin-bottom: 5px"><spring:message code="label.palette"/></legend>
                         <div id="elements_tree">
-                            <ul id="navigation">
+                            <ul id="palette-tabs" class="nav nav-tabs">
+                                <li role="presentation" class="active"><a href="#blocks" aria-controls="blocks" role="tab"
+                                                                          data-toggle="tab">Blocks</a></li>
+                                <li role="presentation"><a href="#subprograms" aria-controls="subprograms" role="tab"
+                                                           data-toggle="tab">Subprograms</a></li>
                             </ul>
+                            <div id="palette-tab-content" class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="blocks">
+                                    <ul id="blocks-navigation">
+                                    </ul>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="subprograms">
+                                    <ul id="subprograms-navigation">
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -110,9 +110,9 @@ class ElementsTypeLoader {
     }
 
     private appendHtmlContentToNavigation($scope, $compile): void {
-        $('#navigation').append($compile(this.paletteContent)($scope));
+        $('#blocks-navigation').append($compile(this.paletteContent)($scope));
 
-        $("#navigation").treeview({
+        $("#blocks-navigation").treeview({
             persist: "location"
         });
     }
