@@ -286,7 +286,16 @@ public class JavaModelConverter {
             properties.appendChild(element);
         }
 
-        appendDefaultLogicalProperties(logicalXML, properties);
+        Element incomingExplosions = logicalXML.createElement("incomingExplosions");
+        incomingExplosions.setAttribute("type", "qReal::IdList");
+        properties.appendChild(incomingExplosions);
+
+        for (IdObject idObject : node.getIncomingExplosions()) {
+            Element object = logicalXML.createElement("object");
+            object.setAttribute("id",
+                    String.format("qrm:/RobotsMetamodel/RobotsDiagram/ControlFlow/{%s}", idObject.getId()));
+            incomingExplosions.appendChild(object);
+        }
 
         Element links = logicalXML.createElement("links");
         links.setAttribute("type", "qReal::IdList");
@@ -367,7 +376,16 @@ public class JavaModelConverter {
             properties.appendChild(element);
         }
 
-        appendDefaultLogicalProperties(logicalXML, properties);
+        Element incomingExplosions = logicalXML.createElement("incomingExplosions");
+        incomingExplosions.setAttribute("type", "qReal::IdList");
+        properties.appendChild(incomingExplosions);
+
+        for (IdObject idObject : node.getIncomingExplosions()) {
+            Element object = logicalXML.createElement("object");
+            object.setAttribute("id",
+                    String.format("qrm:/RobotsMetamodel/RobotsDiagram/ControlFlow/{%s}", idObject.getId()));
+            incomingExplosions.appendChild(object);
+        }
 
         Element links = logicalXML.createElement("links");
         links.setAttribute("type", "qReal::IdList");
@@ -412,12 +430,6 @@ public class JavaModelConverter {
         propertyElement.setAttribute("key", property.getName());
         propertyElement.setAttribute("value", property.getValue());
         return propertyElement;
-    }
-
-    private void appendDefaultLogicalProperties(Document logicalXML, Element properties) {
-        Element incomingExplosions = logicalXML.createElement("incomingExplosions");
-        incomingExplosions.setAttribute("type", "qReal::IdList");
-        properties.appendChild(incomingExplosions);
     }
 
     private Set<String> elementsIds = new HashSet<String>();

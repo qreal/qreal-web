@@ -104,6 +104,14 @@ public class DiagramNode implements Serializable {
         this.graphicalProperties = graphicalProperties;
     }
 
+    public Set<IdObject> getIncomingExplosions() {
+        return incomingExplosions;
+    }
+
+    public void setIncomingExplosions(Set<IdObject> incomingExplosions) {
+        this.incomingExplosions = incomingExplosions;
+    }
+
     private String logicalId;
     private String graphicalId;
     private String graphicalParent;
@@ -114,5 +122,6 @@ public class DiagramNode implements Serializable {
     private Set<IdObject> graphicalLinksIds;
     private Set<Property> logicalProperties;
     private Set<Property> graphicalProperties;
+    private Set<IdObject> incomingExplosions;
 
 }

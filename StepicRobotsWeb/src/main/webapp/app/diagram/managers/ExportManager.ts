@@ -53,7 +53,8 @@ class ExportManager {
             'logicalLinksIds': [],
             'graphicalLinksIds': [],
             'logicalProperties': [],
-            'graphicalProperties': []
+            'graphicalProperties': [],
+            'incomingExplosions': []
         }
 
         nodeJSON.logicalProperties = this.exportProperties(robotsDiagramNode.getProperties());
@@ -83,7 +84,8 @@ class ExportManager {
                 'logicalLinksIds': [],
                 'graphicalLinksIds': [],
                 'logicalProperties': [],
-                'graphicalProperties': []
+                'graphicalProperties': [],
+                'incomingExplosions': []
             };
 
 
@@ -130,7 +132,8 @@ class ExportManager {
                 'logicalLinksIds': [],
                 'graphicalLinksIds': [],
                 'logicalProperties': [],
-                'graphicalProperties': []
+                'graphicalProperties': [],
+                'incomingExplosions': []
             }
 
             var changeableLogicalProperties = this.exportProperties(link.getChangeableProperties());
