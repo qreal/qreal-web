@@ -21,6 +21,7 @@ class DiagramController {
 
     private diagramLoader: DiagramLoader;
     private exportManager: ExportManager;
+    private subprogramDiagramNodes: SubprogramDiagramNode[] = [];
     private nodeTypesMap: NodeTypesMap = {};
     private nodesMap = {};
     private linksMap = {};
@@ -37,7 +38,7 @@ class DiagramController {
         this.rootController = $scope.root;
 
         controller.taskId = $attrs.task;
-        this.diagramLoader = new DiagramLoader();
+        this.diagramLoader = new DiagramLoader(this, this.graph);
         this.exportManager = new ExportManager();
         new ElementsTypeLoader(controller, controller.taskId).load($scope, $compile);
 
@@ -165,10 +166,10 @@ class DiagramController {
         }
     }
 
-    initPalette($scope) {
+    initPalette($scope, $compile) {
         this.initDragAndDrop();
         this.isPaletteLoaded = true;
-        this.afterPaletteLoaded($scope);
+        this.afterPaletteLoaded($scope, $compile);
     }
 
     setInputStringListener(): void {
@@ -311,17 +312,21 @@ class DiagramController {
         return PropertyManager.getPropertyHtml(typeName, propertyName, property);
     }
 
-    afterPaletteLoaded($scope) {
+    afterPaletteLoaded($scope, $compile) {
         this.setInputStringListener();
         this.setCheckboxListener();
         this.setDropdownListener();
         this.setSpinnerListener();
         this.makeUnselectable(document.getElementById("paletteContent"));
-        this.openDiagram($scope, this.taskId);
+        this.openDiagram($scope, $compile, this.taskId);
     }
 
-    addLink(linkId: string, linkObject: Link) {
+    addLink(linkId: string, linkObject: Link): void {
         this.linksMap[linkId] = linkObject;
+    }
+
+    addSubprogramDiagramNode(node: SubprogramDiagramNode): void {
+        this.subprogramDiagramNodes.push(node);
     }
 
     createNode(name: string, type: string, x: number, y: number, properties: PropertiesMap,
@@ -397,7 +402,7 @@ class DiagramController {
         });
     }
 
-    openDiagram($scope, taskId: string): void {
+    openDiagram($scope, $compile, taskId: string): void {
         if (!this.isPaletteLoaded) {
             alert("Palette is not loaded!");
             return;
@@ -416,8 +421,8 @@ class DiagramController {
                 diagramSpinner.hide();
                 twoDModelSpinner.hide();
                 $scope.$emit("emit2dModelLoad", response.fieldXML);
-                controller.diagramLoader.load(response.diagram, controller.graph,
-                    controller.nodesMap, controller.linksMap, controller.nodeTypesMap);
+                controller.diagramLoader.load($scope, $compile, response.diagram, controller.nodesMap,
+                    controller.linksMap, controller.nodeTypesMap);
             },
             error: function (response, status, error) {
                 diagramSpinner.hide();

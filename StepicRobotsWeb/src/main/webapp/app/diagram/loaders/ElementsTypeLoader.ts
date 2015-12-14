@@ -32,7 +32,7 @@ class ElementsTypeLoader {
             url: 'getTypes/' + this.task,
             success: (response) => {
                 this.handleResponse(response, $scope, $compile);
-                this.controller.initPalette($scope);
+                this.controller.initPalette($scope, $compile);
             },
             error: function (response, status, error) {
                 alert("Element types loading error: " + status + " " + error);

@@ -16,8 +16,16 @@
 
 class DiagramLoader {
 
-    public load(response, graph: joint.dia.Graph,
-                nodesMap, linksMap, nodeTypesMap: NodeTypesMap): void {
+    private controller: DiagramController;
+    private graph: joint.dia.Graph;
+    private subprogramsContent = '';
+
+    constructor(controller: DiagramController, graph: joint.dia.Graph) {
+        this.controller = controller;
+        this.graph = graph;
+    }
+
+    public load($scope, $compile, response, nodesMap, linksMap, nodeTypesMap: NodeTypesMap): void {
         var minPos: {x: number; y: number} = this.findMinPosition(response, nodeTypesMap);
         var offsetX = (minPos.x < 0) ? (-minPos.x + 100) : 25;
         var offsetY = (minPos.y < 0) ? (-minPos.y + 100) : 25;
@@ -29,7 +37,10 @@ class DiagramLoader {
 
             if (type === "RobotsDiagramNode") {
                 this.loadRobotsDiagramNode(nodeObject);
-            } else {
+            } else if (type === "SubprogramDiagram") {
+                this.loadSubprogramDiagram(nodeObject, nodeTypesMap);
+            }
+            else {
                 if (nodeTypesMap[type]) {
                     var changeableLogicalProperties: PropertiesMap = {};
                     var constLogicalProperties: PropertiesMap = {};
@@ -79,7 +90,7 @@ class DiagramLoader {
                         }
                     }
 
-                    this.loadNode(graph, nodesMap, nodeObject.graphicalId, name, type,
+                    this.loadNode(nodesMap, nodeObject.graphicalId, name, type,
                         x + offsetX, y + offsetY, changeableLogicalProperties,
                         new PropertiesPack(constLogicalProperties, constGraphicalProperties),
                         nodeTypesMap[nodeObject.type].getImage());
@@ -88,11 +99,13 @@ class DiagramLoader {
         }
 
         for (var i = 0; i < response.links.length; i++) {
-            this.loadLink(graph, linksMap, response.links[i], offsetX, offsetY);
+            this.loadLink(linksMap, response.links[i], offsetX, offsetY);
         }
+
+        this.appendHtmlContentToNavigation($scope, $compile);
     }
 
-    private loadRobotsDiagramNode(nodeObject) {
+    private loadRobotsDiagramNode(nodeObject): void {
         var logicalProperties: PropertiesMap = {};
         var logicalPropertiesObject = nodeObject.logicalProperties;
         for (var i = 0; i < logicalPropertiesObject.length; i++) {
@@ -108,16 +121,43 @@ class DiagramLoader {
             logicalProperties);
     }
 
-    private loadNode(graph: joint.dia.Graph, nodesMap, id: string, name: string,
+    private loadSubprogramDiagram(nodeObject, nodeTypesMap: NodeTypesMap): void {
+        var name: string = "";
+        var logicalPropertiesObject = nodeObject.logicalProperties;
+        for (var i = 0; i < logicalPropertiesObject.length; i++) {
+            var propertyName = logicalPropertiesObject[i].name;
+            if (propertyName === "name") {
+                name = logicalPropertiesObject[i].value;
+            }
+        }
+
+        this.subprogramsContent += '<li><div class="tree_element"' + 'data-type="Subprogram">';
+        var image: string = nodeTypesMap["Subprogram"].getImage();
+        this.subprogramsContent += '<img class="elementImg" src="' +
+            image + '" width="30" height="30"' + '/>';
+        this.subprogramsContent += name;
+        this.subprogramsContent += '</div></li>'
+        this.controller.addSubprogramDiagramNode(new SubprogramDiagramNode(nodeObject.logicalId, name));
+    }
+
+    private appendHtmlContentToNavigation($scope, $compile): void {
+        $('#subprograms-navigation').append($compile(this.subprogramsContent)($scope));
+
+        $("#subprograms-navigation").treeview({
+            persist: "location"
+        });
+    }
+
+    private loadNode(nodesMap, id: string, name: string,
                       type: string, x: number, y: number, changeableProperties: PropertiesMap,
                     constPropertiesPack: PropertiesPack, image: string): void {
         var node: DiagramNode = new DefaultDiagramNode(name, type, x, y, changeableProperties, image, id,
             constPropertiesPack);
         nodesMap[node.getJointObject().id] = node;
-        graph.addCell(node.getJointObject());
+        this.graph.addCell(node.getJointObject());
     }
 
-    private loadLink(graph: joint.dia.Graph, linksMap, linkObject, offsetX: number, offsetY: number): void {
+    private loadLink(linksMap, linkObject, offsetX: number, offsetY: number): void {
         var sourceId: string = "";
         var targetId: string = "";
 
@@ -173,7 +213,7 @@ class DiagramLoader {
         });
 
         linksMap[jointObjectId] = new Link(jointObject, properties);
-        graph.addCell(jointObject);
+        this.graph.addCell(jointObject);
     }
 
     private loadVertices(configuration: string) {
