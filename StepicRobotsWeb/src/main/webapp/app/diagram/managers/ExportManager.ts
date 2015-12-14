@@ -15,20 +15,21 @@
  */
 
 class ExportManager {
-    static exportDiagramStateToJSON(graph, nodesMap, linksMap) {
+
+    exportDiagramStateToJSON(graph, nodesMap, linksMap) {
         var json = {
             'nodes': [],
             'links': []
         };
 
-        ExportManager.exportRobotsDiagramNode(json, nodesMap, linksMap);
-        ExportManager.exportNodes(graph, json, nodesMap, linksMap);
-        ExportManager.exportLinks(json, nodesMap, linksMap)
+        this.exportRobotsDiagramNode(json, nodesMap, linksMap);
+        this.exportNodes(graph, json, nodesMap, linksMap);
+        this.exportLinks(json, nodesMap, linksMap)
 
         return json;
     }
 
-    static exportRobotsDiagramNode(json, nodesMap, linksMap): void {
+    private exportRobotsDiagramNode(json, nodesMap, linksMap): void {
         var robotsDiagramNode : RobotsDiagramNode = DiagramController.robotsDiagramNode;
 
         var graphicalChildren = [];
@@ -55,7 +56,7 @@ class ExportManager {
             'graphicalProperties': []
         }
 
-        nodeJSON.logicalProperties = ExportManager.exportProperties(robotsDiagramNode.getProperties());
+        nodeJSON.logicalProperties = this.exportProperties(robotsDiagramNode.getProperties());
 
         var nameProperty = {
             'name': "name",
@@ -68,7 +69,7 @@ class ExportManager {
         json.nodes.push(nodeJSON);
     }
 
-    static exportNodes(graph, json, nodesMap, linksMap): void {
+    private exportNodes(graph, json, nodesMap, linksMap): void {
         for (var id in nodesMap) {
             var node: DiagramNode = nodesMap[id];
             var nodeJSON = {
@@ -86,11 +87,11 @@ class ExportManager {
             };
 
 
-            var changeableLogicalProperties = ExportManager.exportProperties(node.getChangeableProperties());
-            var constLogicalProperties = ExportManager.exportProperties(node.getConstPropertiesPack().logical);
+            var changeableLogicalProperties = this.exportProperties(node.getChangeableProperties());
+            var constLogicalProperties = this.exportProperties(node.getConstPropertiesPack().logical);
             nodeJSON.logicalProperties = changeableLogicalProperties.concat(constLogicalProperties);
 
-            nodeJSON.graphicalProperties = ExportManager.exportProperties(node.getConstPropertiesPack().graphical);
+            nodeJSON.graphicalProperties = this.exportProperties(node.getConstPropertiesPack().graphical);
 
             nodeJSON.graphicalProperties.push(
                 {
@@ -111,13 +112,13 @@ class ExportManager {
         }
     }
 
-    static exportLinks(json, nodesMap, linksMap): void {
+    private exportLinks(json, nodesMap, linksMap): void {
         for (var id in linksMap) {
             var link: Link = linksMap[id];
             var jointObject = link.getJointObject();
             var vertices = [];
             if (jointObject.get('vertices')) {
-                vertices = ExportManager.exportVertices(jointObject.get('vertices'));
+                vertices = this.exportVertices(jointObject.get('vertices'));
             }
             var linkJSON = {
                 'logicalId': link.getLogicalId(),
@@ -132,11 +133,11 @@ class ExportManager {
                 'graphicalProperties': []
             }
 
-            var changeableLogicalProperties = ExportManager.exportProperties(link.getChangeableProperties());
-            var constLogicalProperties = ExportManager.exportProperties(link.getConstPropertiesPack().logical);
+            var changeableLogicalProperties = this.exportProperties(link.getChangeableProperties());
+            var constLogicalProperties = this.exportProperties(link.getConstPropertiesPack().logical);
             linkJSON.logicalProperties = changeableLogicalProperties.concat(constLogicalProperties);
 
-            linkJSON.graphicalProperties = ExportManager.exportProperties(link.getConstPropertiesPack().graphical);
+            linkJSON.graphicalProperties = this.exportProperties(link.getConstPropertiesPack().graphical);
 
             var sourceObject = nodesMap[jointObject.get('source').id];
             var targetObject = nodesMap[jointObject.get('target').id];
@@ -187,7 +188,7 @@ class ExportManager {
         }
     }
 
-    static exportProperties(properties: PropertiesMap) {
+    private exportProperties(properties: PropertiesMap) {
         var propertiesJSON = [];
         for (var propertyName in properties) {
             var type: string = properties[propertyName].type;
@@ -204,7 +205,7 @@ class ExportManager {
         return propertiesJSON;
     }
 
-    static exportVertices(vertices) {
+    private exportVertices(vertices) {
         var verticesJSON = [];
         var count: number = 1;
         vertices.forEach(function (vertex) {

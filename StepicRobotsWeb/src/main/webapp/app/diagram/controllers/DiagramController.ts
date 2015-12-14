@@ -20,6 +20,7 @@ class DiagramController {
     private paper: DiagramPaper = new DiagramPaper(this, this.graph);
 
     private diagramLoader: DiagramLoader;
+    private exportManager: ExportManager;
     private nodeTypesMap: NodeTypesMap = {};
     private nodesMap = {};
     private linksMap = {};
@@ -37,6 +38,7 @@ class DiagramController {
 
         controller.taskId = $attrs.task;
         this.diagramLoader = new DiagramLoader();
+        this.exportManager = new ExportManager();
         new ElementsTypeLoader(controller, controller.taskId).load($scope, $compile);
 
         this.initDeleteListener();
@@ -377,7 +379,7 @@ class DiagramController {
             dataType: 'json',
             contentType: 'application/json',
             timeout: 60000,
-            data: (JSON.stringify({diagram: ExportManager.exportDiagramStateToJSON(controller.graph,
+            data: (JSON.stringify({diagram: controller.exportManager.exportDiagramStateToJSON(controller.graph,
                 controller.nodesMap, controller.linksMap)})),
             success: function (response) {
                 twoDModelSpinner.hide();
