@@ -36,6 +36,7 @@ public class XmlSaveConverter {
 
     private Map<String, DiagramNode> nodesMap;
     private Map<String, DiagramNode> linksMap;
+    private DocumentBuilder builder;
 
     public XmlSaveConverter() {
         nodesMap = new HashMap<>();
@@ -46,27 +47,30 @@ public class XmlSaveConverter {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setIgnoringElementContentWhitespace(true);
-            DocumentBuilder builder = factory.newDocumentBuilder();
+            builder = factory.newDocumentBuilder();
 
             File robotDiagramNodeFolder = new File(folder.getPath() +
                     "/graphical/RobotsMetamodel/RobotsDiagram/RobotsDiagramNode");
-            File robotDiagramNode = robotDiagramNodeFolder.listFiles()[0];
-            Set<String> robotDiagramNodeChilds = getNodeChilds(robotDiagramNode, builder);
+            File robotDiagramNodeFile = robotDiagramNodeFolder.listFiles()[0];
+            Set<String> robotDiagramNodeChilds = getNodeChilds(robotDiagramNodeFile);
+            convertRobotDiagramNode(robotDiagramNodeFile);
 
-            Document doc = builder.parse(robotDiagramNode);
-            Element element = doc.getDocumentElement();
-            convertGraphicalPart(element);
+            File subprogramDiagramsFolder = new File(folder.getPath() +
+                    "/logical/RobotsMetamodel/RobotsDiagram/SubprogramDiagram");
+            if (subprogramDiagramsFolder.exists()) {
+                convertSubprogramDiagrams(subprogramDiagramsFolder);
+            }
 
             File graphicalFolder = new File(folder.getPath() + "/graphical");
 
             for (final File fileEntry : graphicalFolder.listFiles()) {
-                convertGraphicalModel(fileEntry, builder, robotDiagramNodeChilds);
+                convertGraphicalModel(fileEntry, robotDiagramNodeChilds);
             }
 
             File logicalFolder = new File(folder.getPath() + "/logical");
 
             for (final File fileEntry : logicalFolder.listFiles()) {
-                convertLogicalModel(fileEntry, builder);
+                convertLogicalModel(fileEntry);
             }
 
             return new Diagram(new HashSet<>(nodesMap.values()), new HashSet<>(linksMap.values()));
@@ -76,12 +80,25 @@ public class XmlSaveConverter {
         return null;
     }
 
-    private void convertGraphicalModel(final File folder, final DocumentBuilder builder,
-                                       final Set<String> robotDiagramNodeChilds) {
+    private void convertRobotDiagramNode(File robotDiagramNodeFile) throws SAXException, IOException {
+        Document doc = builder.parse(robotDiagramNodeFile);
+        Element element = doc.getDocumentElement();
+        convertGraphicalPart(element);
+    }
+
+    private void convertSubprogramDiagrams(File subprogramDiagramsFolder) throws SAXException, IOException {
+        for (final File subprogramDiagramFile : subprogramDiagramsFolder.listFiles()) {
+            Document doc = builder.parse(subprogramDiagramFile);
+            Element element = doc.getDocumentElement();
+            convertLogicalPart(element);
+        }
+    }
+
+    private void convertGraphicalModel(final File folder, final Set<String> robotDiagramNodeChilds) {
 
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
-                convertGraphicalModel(fileEntry, builder, robotDiagramNodeChilds);
+                convertGraphicalModel(fileEntry, robotDiagramNodeChilds);
             } else {
                 try {
                     Document doc = builder.parse(fileEntry);
@@ -102,11 +119,11 @@ public class XmlSaveConverter {
         }
     }
 
-    private void convertLogicalModel(final File folder, final DocumentBuilder builder) {
+    private void convertLogicalModel(final File folder) {
 
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
-                convertLogicalModel(fileEntry, builder);
+                convertLogicalModel(fileEntry);
             } else {
                 try {
                     Document doc = builder.parse(fileEntry);
@@ -128,7 +145,7 @@ public class XmlSaveConverter {
         }
     }
 
-    private Set<String> getNodeChilds(final File node, final DocumentBuilder builder) {
+    private Set<String> getNodeChilds(final File node) {
         Set<String> childs = new HashSet<>();
         try {
             Document doc = builder.parse(node);
