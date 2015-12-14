@@ -27,14 +27,14 @@ class DefaultDiagramNode implements DiagramNode {
     private imagePath: string;
 
     constructor(name: string, type: string, x: number, y: number, properties: PropertiesMap, imagePath: string,
-                id?: string, constPropertiesPack?: PropertiesPack) {
+                id?: string, notDefaultConstProperties?: PropertiesPack) {
         this.logicalId = UIDGenerator.generate();
         this.name = name;
         this.type = type;
-        if (constPropertiesPack) {
-            this.constPropertiesPack = constPropertiesPack;
-        } else {
-            this.constPropertiesPack = this.getDefaultConstPropertiesPack(name);
+        this.constPropertiesPack = this.getDefaultConstPropertiesPack(name);
+        if (notDefaultConstProperties) {
+            $.extend(this.constPropertiesPack.logical, notDefaultConstProperties.logical);
+            $.extend(this.constPropertiesPack.graphical, notDefaultConstProperties.graphical);;
         }
 
         var jointObjectAttributes = {
