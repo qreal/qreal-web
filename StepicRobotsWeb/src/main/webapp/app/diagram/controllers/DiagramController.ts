@@ -19,6 +19,7 @@ class DiagramController {
     private graph: joint.dia.Graph = new joint.dia.Graph;
     private paper: DiagramPaper = new DiagramPaper(this, this.graph);
 
+    private diagramLoader: DiagramLoader;
     private nodeTypesMap: NodeTypesMap = {};
     private nodesMap = {};
     private linksMap = {};
@@ -35,7 +36,8 @@ class DiagramController {
         this.rootController = $scope.root;
 
         controller.taskId = $attrs.task;
-        new ElementsTypeLoader(controller, controller.taskId).loadFromXml($scope, $compile);
+        this.diagramLoader = new DiagramLoader();
+        new ElementsTypeLoader(controller, controller.taskId).load($scope, $compile);
 
         this.initDeleteListener();
 
@@ -412,7 +414,7 @@ class DiagramController {
                 diagramSpinner.hide();
                 twoDModelSpinner.hide();
                 $scope.$emit("emit2dModelLoad", response.fieldXML);
-                DiagramLoader.load(response.diagram, controller.graph,
+                controller.diagramLoader.load(response.diagram, controller.graph,
                     controller.nodesMap, controller.linksMap, controller.nodeTypesMap);
             },
             error: function (response, status, error) {

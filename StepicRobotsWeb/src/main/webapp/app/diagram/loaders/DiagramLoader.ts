@@ -15,7 +15,8 @@
  */
 
 class DiagramLoader {
-    static load(response, graph: joint.dia.Graph,
+
+    public load(response, graph: joint.dia.Graph,
                 nodesMap, linksMap, nodeTypesMap: NodeTypesMap): void {
         var minPos: {x: number; y: number} = this.findMinPosition(response, nodeTypesMap);
         var offsetX = (minPos.x < 0) ? (-minPos.x + 100) : 25;
@@ -27,7 +28,7 @@ class DiagramLoader {
             var name = "";
 
             if (type === "RobotsDiagramNode") {
-                DiagramLoader.loadRobotsDiagramNode(nodeObject);
+                this.loadRobotsDiagramNode(nodeObject);
             } else {
                 if (nodeTypesMap[type]) {
                     var changeableLogicalProperties: PropertiesMap = {};
@@ -91,7 +92,7 @@ class DiagramLoader {
         }
     }
 
-    static loadRobotsDiagramNode(nodeObject) {
+    private loadRobotsDiagramNode(nodeObject) {
         var logicalProperties: PropertiesMap = {};
         var logicalPropertiesObject = nodeObject.logicalProperties;
         for (var i = 0; i < logicalPropertiesObject.length; i++) {
@@ -107,7 +108,7 @@ class DiagramLoader {
             logicalProperties);
     }
 
-    static loadNode(graph: joint.dia.Graph, nodesMap, id: string, name: string,
+    private loadNode(graph: joint.dia.Graph, nodesMap, id: string, name: string,
                       type: string, x: number, y: number, changeableProperties: PropertiesMap,
                     constPropertiesPack: PropertiesPack, image: string): void {
         var node: DiagramNode = new DefaultDiagramNode(name, type, x, y, changeableProperties, image, id,
@@ -116,7 +117,7 @@ class DiagramLoader {
         graph.addCell(node.getJointObject());
     }
 
-    static loadLink(graph: joint.dia.Graph, linksMap, linkObject, offsetX: number, offsetY: number): void {
+    private loadLink(graph: joint.dia.Graph, linksMap, linkObject, offsetX: number, offsetY: number): void {
         var sourceId: string = "";
         var targetId: string = "";
 
@@ -175,7 +176,7 @@ class DiagramLoader {
         graph.addCell(jointObject);
     }
 
-    static loadVertices(configuration: string) {
+    private loadVertices(configuration: string) {
         var vertices = [];
         var parts = configuration.split(" : ");
 
@@ -192,23 +193,19 @@ class DiagramLoader {
         return vertices;
     }
 
-    static parsePosition(position: string): {x: number; y: number} {
+    private parsePosition(position: string): {x: number; y: number} {
         var parts = position.split(", ");
         return {x: parseFloat(parts[0]), y: parseFloat(parts[1])};
     }
 
-    static parseId(idString: string): string {
+    private parseId(idString: string): string {
         var parts = idString.split("/");
         var id = parts[parts.length - 1];
         var expr = /{(.*)}/gi;
         return id.replace(expr, "$1");
     }
 
-    static min(a: number, b: number): number {
-        return (a < b) ? a : b;
-    }
-
-    static findMinPosition(response, nodeTypesMap: NodeTypesMap): {x: number; y: number} {
+    private findMinPosition(response, nodeTypesMap: NodeTypesMap): {x: number; y: number} {
         var minX = 2000;
         var minY = 2000;
 
@@ -228,8 +225,8 @@ class DiagramLoader {
                         x = parseFloat(parts[0]);
                         y = parseFloat(parts[1]);
 
-                        minX = this.min(x, minX);
-                        minY = this.min(y, minY);
+                        minX = MathUtils.min(x, minX);
+                        minY = MathUtils.min(y, minY);
                     }
                 }
             }

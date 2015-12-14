@@ -26,7 +26,7 @@ class ElementsTypeLoader {
         this.paletteContent = '';
     }
 
-    loadFromXml($scope, $compile): void {
+    load($scope, $compile): void {
         $.ajax({
             type: 'POST',
             url: 'getTypes/' + this.task,
