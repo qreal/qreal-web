@@ -88,10 +88,16 @@ class ExportManager {
                 'incomingExplosions': []
             };
 
+            var constLogicalProperties: PropertiesMap = node.getConstPropertiesPack().logical;
+            if (node.getType() === "Subprogram") {
+                constLogicalProperties["outgoingExplosion"] = new Property("outgoingExplosion", "qReal::Id",
+                    "qrm:/RobotsMetamodel/RobotsDiagram/SubprogramDiagram/{" +
+                    (<SubprogramNode> node).getSubprogramDiagramId() + "}");
+            }
 
-            var changeableLogicalProperties = this.exportProperties(node.getChangeableProperties());
-            var constLogicalProperties = this.exportProperties(node.getConstPropertiesPack().logical);
-            nodeJSON.logicalProperties = changeableLogicalProperties.concat(constLogicalProperties);
+            var changeableLogicalPropertiesArray = this.exportProperties(node.getChangeableProperties());
+            var constLogicalPropertiesArray = this.exportProperties(constLogicalProperties);
+            nodeJSON.logicalProperties = changeableLogicalPropertiesArray.concat(constLogicalPropertiesArray);
 
             nodeJSON.graphicalProperties = this.exportProperties(node.getConstPropertiesPack().graphical);
 

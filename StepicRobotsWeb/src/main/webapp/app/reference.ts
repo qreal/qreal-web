@@ -58,6 +58,7 @@
 /// <reference path="diagram/models/Link.ts" />
 /// <reference path="diagram/models/RobotsDiagramNode.ts" />
 /// <reference path="diagram/models/SubprogramDiagramNode.ts" />
+/// <reference path="diagram/models/SubprogramNode.ts" />
 /// <reference path="diagram/models/Variant.ts" />
 /// <reference path="diagram/types/NodeType.ts" />
 /// <reference path="diagram/types/NodeTypesMap.ts" />

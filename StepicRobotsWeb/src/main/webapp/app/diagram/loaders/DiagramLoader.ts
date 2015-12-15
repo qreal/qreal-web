@@ -34,6 +34,7 @@ class DiagramLoader {
             var nodeObject = response.nodes[i];
             var type = nodeObject.type;
             var name = "";
+            var subprogramDiagramId;
 
             if (type === "RobotsDiagramNode") {
                 this.loadRobotsDiagramNode(nodeObject);
@@ -60,6 +61,12 @@ class DiagramLoader {
 
                         if (propertyName === "name") {
                             name  = logicalPropertiesObject[j].value;
+                        }
+                        if (propertyName === "outgoingExplosion") {
+                            var outgoingExplosionId = this.parseId(logicalPropertiesObject[j].value);
+                            if (outgoingExplosionId) {
+                                subprogramDiagramId = outgoingExplosionId;
+                            }
                         }
 
                         if (typeProperties.hasOwnProperty(propertyName)) {
@@ -93,7 +100,7 @@ class DiagramLoader {
                     this.loadNode(nodesMap, nodeObject.graphicalId, name, type,
                         x + offsetX, y + offsetY, changeableLogicalProperties,
                         new PropertiesPack(constLogicalProperties, constGraphicalProperties),
-                        nodeTypesMap[nodeObject.type].getImage());
+                        nodeTypesMap[nodeObject.type].getImage(), subprogramDiagramId);
                 }
             }
         }
@@ -131,7 +138,8 @@ class DiagramLoader {
             }
         }
 
-        this.subprogramsContent += '<li><div class="tree_element"' + 'data-type="Subprogram">';
+        this.subprogramsContent += '<li><div class="tree_element"' + 'data-type="Subprogram"' +
+            'data-id="' + nodeObject.logicalId + '">';
         var image: string = nodeTypesMap["Subprogram"].getImage();
         this.subprogramsContent += '<img class="elementImg" src="' +
             image + '" width="30" height="30"' + '/>';
@@ -150,9 +158,14 @@ class DiagramLoader {
 
     private loadNode(nodesMap, id: string, name: string,
                       type: string, x: number, y: number, changeableProperties: PropertiesMap,
-                    constPropertiesPack: PropertiesPack, image: string): void {
-        var node: DiagramNode = new DefaultDiagramNode(name, type, x, y, changeableProperties, image, id,
-            constPropertiesPack);
+                    constPropertiesPack: PropertiesPack, image: string, subprogramDiagramId?: string): void {
+        var node: DiagramNode;
+        if (subprogramDiagramId) {
+            node = new SubprogramNode(name, type, x, y, changeableProperties, image,
+                subprogramDiagramId, id, constPropertiesPack);
+        } else {
+            node = new DefaultDiagramNode(name, type, x, y, changeableProperties, image, id, constPropertiesPack);
+        }
         nodesMap[node.getJointObject().id] = node;
         this.graph.addCell(node.getJointObject());
     }

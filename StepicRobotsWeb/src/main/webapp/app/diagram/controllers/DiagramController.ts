@@ -167,7 +167,6 @@ class DiagramController {
     }
 
     initPalette($scope, $compile) {
-        this.initDragAndDrop();
         this.isPaletteLoaded = true;
         this.afterPaletteLoaded($scope, $compile);
     }
@@ -261,7 +260,7 @@ class DiagramController {
                 top: 15,
                 left: 15
             },
-            revert:"invalid"
+            revert: "invalid"
         });
 
         $("#diagram_paper").droppable({
@@ -284,7 +283,16 @@ class DiagramController {
                         typeProperties[property].value);
                 }
 
-                var node = controller.createNode(name, type, leftElementPos, topElementPos, nodeProperties, image);
+                var node: DiagramNode;
+                var dataId = $(ui.draggable.context).data("id");
+                if (dataId) {
+                    node = controller.createSubprogramNode(name, type, leftElementPos, topElementPos,
+                        nodeProperties, image, dataId);
+                } else {
+                    node = controller.createDefaultNode(name, type, leftElementPos, topElementPos,
+                        nodeProperties, image);
+                }
+
                 controller.setCurrentElement(node);
                 controller.setNodeProperties(node);
             }
@@ -329,9 +337,17 @@ class DiagramController {
         this.subprogramDiagramNodes.push(node);
     }
 
-    createNode(name: string, type: string, x: number, y: number, properties: PropertiesMap,
+    createDefaultNode(name: string, type: string, x: number, y: number, properties: PropertiesMap,
                       imagePath: string, id?: string): DiagramNode {
         var node: DiagramNode = new DefaultDiagramNode(name, type, x, y, properties, imagePath, id);
+        this.nodesMap[node.getJointObject().id] = node;
+        this.graph.addCell(node.getJointObject());
+        return node;
+    }
+
+    createSubprogramNode(name: string, type: string, x: number, y: number, properties: PropertiesMap,
+                         imagePath: string, subprogramDiagramId: string, id?: string) {
+        var node: DiagramNode = new SubprogramNode(name, type, x, y, properties, imagePath, subprogramDiagramId, id);
         this.nodesMap[node.getJointObject().id] = node;
         this.graph.addCell(node.getJointObject());
         return node;
@@ -423,6 +439,7 @@ class DiagramController {
                 $scope.$emit("emit2dModelLoad", response.fieldXML);
                 controller.diagramLoader.load($scope, $compile, response.diagram, controller.nodesMap,
                     controller.linksMap, controller.nodeTypesMap);
+                controller.initDragAndDrop();
             },
             error: function (response, status, error) {
                 diagramSpinner.hide();
