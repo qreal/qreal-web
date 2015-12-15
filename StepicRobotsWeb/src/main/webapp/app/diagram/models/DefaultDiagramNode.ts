@@ -44,7 +44,7 @@ class DefaultDiagramNode implements DiagramNode {
             attrs: {
                 image: {
                     'xlink:href': imagePath
-                }
+                },
             }
         }
 

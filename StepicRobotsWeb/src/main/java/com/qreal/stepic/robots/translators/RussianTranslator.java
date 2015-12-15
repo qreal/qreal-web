@@ -29,6 +29,7 @@ public class RussianTranslator extends Translator {
         translations.put("истина", "true");
         translations.put("ложь", "false");
         translations.put("тело цикла", "body");
+        appendTranslationStrings(translations);
     }
 
 }

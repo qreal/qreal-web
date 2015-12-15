@@ -286,6 +286,7 @@ class DiagramController {
                 var node: DiagramNode;
                 var dataId = $(ui.draggable.context).data("id");
                 if (dataId) {
+                    name = $(ui.draggable.context).data("name");
                     node = controller.createSubprogramNode(name, type, leftElementPos, topElementPos,
                         nodeProperties, image, dataId);
                 } else {
@@ -349,6 +350,10 @@ class DiagramController {
                          imagePath: string, subprogramDiagramId: string, id?: string) {
         var node: DiagramNode = new SubprogramNode(name, type, x, y, properties, imagePath, subprogramDiagramId, id);
         this.nodesMap[node.getJointObject().id] = node;
+        var textObject: joint.shapes.basic.Text = (<SubprogramNode> node).getTextObject();
+        node.getJointObject().embed(textObject);
+        this.graph.addCell(textObject);
+
         this.graph.addCell(node.getJointObject());
         return node;
     }

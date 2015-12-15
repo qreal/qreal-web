@@ -34,7 +34,7 @@ class DiagramLoader {
             var nodeObject = response.nodes[i];
             var type = nodeObject.type;
             var name = "";
-            var subprogramDiagramId;
+            var subprogramDiagramId: string = "";
 
             if (type === "RobotsDiagramNode") {
                 this.loadRobotsDiagramNode(nodeObject);
@@ -139,7 +139,7 @@ class DiagramLoader {
         }
 
         this.subprogramsContent += '<li><div class="tree_element"' + 'data-type="Subprogram"' +
-            'data-id="' + nodeObject.logicalId + '">';
+            'data-id="' + nodeObject.logicalId + '" data-name="' + name + '">';
         var image: string = nodeTypesMap["Subprogram"].getImage();
         this.subprogramsContent += '<img class="elementImg" src="' +
             image + '" width="30" height="30"' + '/>';
@@ -163,6 +163,9 @@ class DiagramLoader {
         if (subprogramDiagramId) {
             node = new SubprogramNode(name, type, x, y, changeableProperties, image,
                 subprogramDiagramId, id, constPropertiesPack);
+            var textObject: joint.shapes.basic.Text = (<SubprogramNode> node).getTextObject();
+            node.getJointObject().embed(textObject);
+            this.graph.addCell(textObject);
         } else {
             node = new DefaultDiagramNode(name, type, x, y, changeableProperties, image, id, constPropertiesPack);
         }
