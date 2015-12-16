@@ -78,9 +78,9 @@
                         <div id="elements_tree">
                             <ul id="palette-tabs" class="nav nav-tabs">
                                 <li role="presentation" class="active"><a href="#blocks" aria-controls="blocks" role="tab"
-                                                                          data-toggle="tab">Blocks</a></li>
+                                                                          data-toggle="tab"><spring:message code="label.blocks"/></a></li>
                                 <li role="presentation"><a href="#subprograms" aria-controls="subprograms" role="tab"
-                                                           data-toggle="tab">Subprograms</a></li>
+                                                           data-toggle="tab"><spring:message code="label.subprograms"/></a></li>
                             </ul>
                             <div id="palette-tab-content" class="tab-content">
                                 <div role="tabpanel" class="tab-pane active" id="blocks">
