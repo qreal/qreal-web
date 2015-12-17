@@ -94,6 +94,23 @@
             }
         },
 
+        "Loop": {
+            "name": "Цикл",
+            "image": {
+                "src": "images/loopBlock.svg"
+            },
+            "properties": [
+
+                {
+                    "key": "Iterations",
+                    "name": "Итераций",
+                    "type": "string",
+                    "value": "10"
+                }
+
+            ]
+        },
+
         "Subprogram": {
             "name": "Подпрограмма",
             "image": {

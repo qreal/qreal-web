@@ -94,6 +94,23 @@
             }
         },
 
+        "Loop": {
+            "name": "Loop",
+            "image": {
+                "src": "images/loopBlock.svg"
+            },
+            "properties": [
+
+                {
+                    "key": "Iterations",
+                    "name": "Iterations",
+                    "type": "string",
+                    "value": "10"
+                }
+
+            ]
+        },
+
         "Subprogram": {
             "name": "Subprogram",
             "image": {

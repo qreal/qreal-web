@@ -28,7 +28,7 @@ public class RussianTranslator extends Translator {
         Map<String, String> translations = new HashMap<>();
         translations.put("истина", "true");
         translations.put("ложь", "false");
-        translations.put("тело цикла", "body");
+        translations.put("тело цикла", "iteration");
         appendTranslationStrings(translations);
     }
 
