@@ -191,6 +191,7 @@ class DiagramLoader {
         var graphicalPropertiesObject = linkObject.graphicalProperties;
         var vertices = [];
         var linkPosition: {x: number; y: number};
+        var configuration: string = "";
 
         for (var j = 0; j < graphicalPropertiesObject.length; j++) {
             switch (graphicalPropertiesObject[j].name) {
@@ -204,6 +205,7 @@ class DiagramLoader {
                     linkPosition = this.parsePosition(graphicalPropertiesObject[j].value);
                     break
                 case "configuration":
+                    configuration = graphicalPropertiesObject[j].value;
                     vertices = this.loadVertices(graphicalPropertiesObject[j].value);
                 default:
 
@@ -217,14 +219,34 @@ class DiagramLoader {
 
         var jointObjectId = linkObject.graphicalId;
 
+        var sourceObject;
+        if (sourceId !== "ROOT_ID") {
+            sourceObject = {id: sourceId};
+        } else {
+            var sourcePosition = this.getSourcePosition(configuration);
+            sourcePosition.x += linkPosition.x + offsetX;
+            sourcePosition.y += linkPosition.y + offsetY;
+            sourceObject = sourcePosition;
+        }
+
+        var targetObject;
+        if (targetId !== "ROOT_ID") {
+            targetObject = {id: targetId};
+        } else {
+            var targetPosition = this.getTargetPosition(configuration);
+            targetPosition.x += linkPosition.x + offsetX;
+            targetPosition.y += linkPosition.y + offsetY;
+            targetObject = targetPosition;
+        }
+
         var jointObject: joint.dia.Link = new joint.dia.Link({
             id: jointObjectId,
             attrs: {
                 '.connection': { stroke: 'black' },
                 '.marker-target': { fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z' }
             },
-            source: { id: sourceId },
-            target: { id: targetId },
+            source: sourceObject,
+            target: targetObject,
             vertices: vertices
         });
 
@@ -237,16 +259,29 @@ class DiagramLoader {
         var parts = configuration.split(" : ");
 
         for (var k = 1; k < parts.length - 2; k++) {
-            var positionNums = this.parsePosition(parts[k]);
-
-            vertices.push(
-                {
-                    x: positionNums.x,
-                    y: positionNums.y
-                }
-            )
+            vertices.push(this.parsePosition(parts[k]));
         }
         return vertices;
+    }
+
+    private getSourcePosition(configuration: string) {
+        var parts = configuration.split(" : ");
+        var position = this.parsePosition(parts[0]);
+        position.x = Math.floor(position.x);
+        position.x = position.x - position.x % 5;
+        position.y = Math.floor(position.y);
+        position.y = position.y - position.y % 5;
+        return position;
+    }
+
+    private getTargetPosition(configuration: string) {
+        var parts = configuration.split(" : ");
+        var position = this.parsePosition(parts[parts.length - 2]);
+        position.x = Math.floor(position.x);
+        position.x = position.x - position.x % 5;
+        position.y = Math.floor(position.y);
+        position.y = position.y - position.y % 5;
+        return position;
     }
 
     private parsePosition(position: string): {x: number; y: number} {

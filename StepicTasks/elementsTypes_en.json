@@ -99,7 +99,14 @@
             "image": {
                 "src": "images/subprogramRobotsBlock.svg"
             }
-        },   
+        },
+
+        "Fork": {
+            "name": "Fork",
+            "image": {
+                "src": "images/forkBlock.svg"
+            }
+        },
             
         "TrikV6EnginesForward": {
             "name": "Motors Forward",
@@ -220,12 +227,54 @@
             ]
         },
 
+        "TrikLed": {
+            "name": "Led",
+            "image": {
+                "src": "images/ledBlock.svg"
+            },
+            "properties": [
+                
+                {
+                    "key": "Color",
+                    "name": "Color",
+                    "type": "dropdown",
+                    "selected": {
+                        "key": "red",
+                        "value": "red"
+                    },
+                    "variants": [
+
+                        {
+                            "key": "green",
+                            "value": "green"
+                        },
+
+                        {
+                            "key": "off",
+                            "value": "off"
+                        },
+
+                        {
+                            "key": "orange",
+                            "value": "orange"
+                        },
+
+                        {
+                            "key": "red",
+                            "value": "red"
+                        }
+                    
+                    ]
+                }
+                
+            ]
+        },
+
         "Timer": {
             "name": "Timer",
             "image": {
                 "src": "images/timerBlock.svg"
             },
-    
             "properties": [
                 
                 {

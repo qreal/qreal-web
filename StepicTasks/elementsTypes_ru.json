@@ -99,7 +99,14 @@
             "image": {
                 "src": "images/subprogramRobotsBlock.svg"
             }
-        },
+        },     
+
+        "Fork": {
+            "name": "Параллельные задачи",
+            "image": {
+                "src": "images/forkBlock.svg"
+            }
+        }, 
 
         "TrikV6EnginesForward": {
             "name": "Моторы вперёд",
@@ -219,6 +226,49 @@
                     "value": "Привет!"
                 }
 
+            ]
+        },
+
+        "TrikLed": {
+            "name": "Светодиод",
+            "image": {
+                "src": "images/ledBlock.svg"
+            },
+            "properties": [
+                
+                {
+                    "key": "Color",
+                    "name": "Цвет",
+                    "type": "dropdown",
+                    "selected": {
+                        "key": "red",
+                        "value": "красный"
+                    },
+                    "variants": [
+
+                        {
+                            "key": "green",
+                            "value": "зелёный"
+                        },
+
+                        {
+                            "key": "off",
+                            "value": "выключен"
+                        },
+
+                        {
+                            "key": "orange",
+                            "value": "оранжевый"
+                        },
+
+                        {
+                            "key": "red",
+                            "value": "красный"
+                        }
+                    
+                    ]
+                }
+                
             ]
         },
 

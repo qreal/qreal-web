@@ -28,6 +28,7 @@ class Link implements DiagramElement {
 
         this.jointObject = jointObject;
         this.changeableProperties = properties;
+        this.updateHighlight();
 
         jointObject.on('change:source', () => {
                 this.updateHighlight();
