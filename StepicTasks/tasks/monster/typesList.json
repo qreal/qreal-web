@@ -14,20 +14,11 @@
             "Algorithms": [
                 "InitialNode",
                 "FinalNode",
-                "Function",
                 "IfBlock"
             ],
 
-            "Actions": [
-                "TrikV6EnginesForward",
-                "TrikV6EnginesBackward",
-                "TrikV6EnginesStop",
-                "TrikV62ClearEncoder"
-            ],
-
             "Wait": [
-                "Timer",
-                "TrikV62WaitForEncoder"
+                "Timer"
             ]
 
         }
