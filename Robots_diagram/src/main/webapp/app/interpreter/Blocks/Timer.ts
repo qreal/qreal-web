@@ -8,8 +8,8 @@ class Timer extends Block {
         var properties = node.getProperties();
         for (var p in properties) {
             if (p == "Delay (ms)") {
-                var parser = new Parser(properties[p].value, env);
-                parser.parseExpression();
+                var parser = new Parser(properties[p].value);
+                parser.parseCondition();
                 if (parser.error == null) {
                     delay = parser.result;
                     if (delay < 0) {

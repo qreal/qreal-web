@@ -12,8 +12,8 @@ class Motors extends Block {
                 ports = properties[p].value.replace(/ /g,'').split(",");
             }
             if (p == "Power (%)") {
-                var parser = new Parser(properties[p].value, env);
-                parser.parseExpression();
+                var parser = new Parser(properties[p].value);
+                parser.parseCondition();
                 var models = timeline.getRobotModels();
                 var model = models[0];
                 if (parser.error == null) {
