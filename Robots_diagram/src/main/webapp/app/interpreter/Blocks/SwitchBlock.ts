@@ -8,6 +8,10 @@ class SwitchBlock extends Block {
         var condition : string = SwitchBlock.getCondition(node);
         var parser = new Parser(condition);
         parser.parseCondition();
+        if (parser.error != null) {
+            output += "Error: " + parser.error;
+            return output;
+        }
         var parseResult : string = parser.result.toString();
         var isFound : boolean = false;
         var nextNode;

@@ -12,7 +12,7 @@ class IfBlock extends Block {
             output += "Condition: " + parser.result + "\n";
         }
         else {
-            output += "Condition: " + parser.error + "\n";
+            output += "Condition: " + "Error: " + parser.error + "\n";
         }
 
         if (links.length == 2) {

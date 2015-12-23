@@ -22,7 +22,7 @@ class FunctionBlock extends Block {
         var parser = new Parser(body);
         parser.parseFunction();
         if (parser.error != null) {
-            output += parser.error + "\n";
+            output += "Error: " + parser.error + "\n";
         }
         else if (links.length == 1) {
             var nextNode = nodesMap[links[0].get('target').id];

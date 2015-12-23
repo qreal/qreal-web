@@ -90,7 +90,6 @@ class Parser {
                     case "<":
                         return this.calc(node.left) < this.calc(node.right);
                         break;
-                    //TODO tableconstructor, tableindexing, functioncalls, concatenation, twodtable
                 }
             }
         }
