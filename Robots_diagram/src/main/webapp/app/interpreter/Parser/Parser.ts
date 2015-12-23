@@ -35,14 +35,36 @@ class Parser {
                     case "/":
                         return this.calc(node.left) / this.calc(node.right);
                         break;
+                    case "^":
+                        return this.calc(node.left) ^ this.calc(node.right);
+                        break;
                     case ">":
                         return this.calc(node.left) > this.calc(node.right);
                         break;
                     case "<":
                         return this.calc(node.left) < this.calc(node.right);
                         break;
+                    case ">=":
+                        return this.calc(node.left) >= this.calc(node.right);
+                        break;
+                    case "<=":
+                        return this.calc(node.left) <= this.calc(node.right);
+                        break;
+                    case "==":
+                        return this.calc(node.left) == this.calc(node.right);
+                        break;
+                    case "or":
+                    case "||":
+                        return this.calc(node.left) || this.calc(node.right);
+                        break;
+                    case "and":
+                    case "&&":
+                        return this.calc(node.left) && this.calc(node.right);
+                        break;
+                    case "<":
+                        return this.calc(node.left) < this.calc(node.right);
+                        break;
                     //TODO tableconstructor, tableindexing, functioncalls, concatenation, twodtable
-                    //TODO ^,>=,<=,==,or,and,&&,||,not
                 }
             }
         }
@@ -62,6 +84,6 @@ class Parser {
             return node.value;
         }
 
-        this.error = "error";
+        this.error = "Unresolved input";
     }
 }
