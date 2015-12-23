@@ -1,18 +1,23 @@
 class Parser {
     private expr: string;
-    private env;
     error;
     result;
 
-    constructor (str: string, env) {
+    constructor (str: string) {
         this.expr = str;
-        this.env = env;
     }
 
     parseCondition() {
+        // Here we kinda adapt to normal lua grammar
+        // In lua x = y + 2 will be accepted, while y = 2 will not
         var ast = JSON.parse(JSON.stringify(luaparse.parse("x = " + this.expr)));
-        var node = ast.body[0].init[0];
-        this.result = this.calc(node);
+        if (ast.hasOwnProperty("error")) {
+            this.error = ast.error + ast.message;
+            return;
+        }
+        // And we ignore our fictive assignment when walking ast
+        var root = ast.body[0].init[0];
+        this.result = this.calc(root);
     }
 
     calc(node)
