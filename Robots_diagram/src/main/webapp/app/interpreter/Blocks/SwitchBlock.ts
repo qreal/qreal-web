@@ -6,28 +6,21 @@ class SwitchBlock extends Block {
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
         var condition : string = SwitchBlock.getCondition(node);
-        var parser = new Parser(condition, env);
-        parser.parseExpression();
+        var parser = new Parser(condition);
+        parser.parseCondition();
         var parseResult : string = parser.result.toString();
         var isFound : boolean = false;
         var nextNode;
         var otherwiseNode;
-        var variableValue = "";
-        var variablesMap = InterpretManager.getVariablesMap();
         for (var i = 0; i < links.length; i++) {
             var link = links[i];
             var messageOnLink = SwitchBlock.getGuard(linksMap[link.id]);
-            for (var v in variablesMap) {
-                if (v == parseResult) {
-                    variableValue = variablesMap[v];
-                }
-            }
-            if (messageOnLink === variableValue) {
+            if (messageOnLink === parseResult) {
                 isFound = true;
                 nextNode = nodesMap[link.get('target').id];
                 break;
             }
-            if (messageOnLink === "false") {
+            if (messageOnLink === "") {
                 otherwiseNode = nodesMap[link.get('target').id];
             }
         }
