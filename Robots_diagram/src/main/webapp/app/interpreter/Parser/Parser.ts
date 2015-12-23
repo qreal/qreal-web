@@ -20,7 +20,28 @@ class Parser {
         this.result = this.calc(root);
     }
 
-    calc(node)
+    parseFunction() {
+        //And here we do not need to adapt
+        var ast = JSON.parse(JSON.stringify(luaparse.parse(this.expr)));
+        if (ast.hasOwnProperty("error")) {
+            this.error = ast.error + ast.message;
+            return;
+        }
+
+        for (var i = 0; i < ast.body.length; i++) {
+            if (ast.body[i].type == "AssignmentStatement") {
+                for (var j = 0; j < ast.body[i].variables.length; j++) {
+                    InterpretManager.setVariable(ast.body[i].variables[j].name, this.calc(ast.body[i].init[0]));
+                }
+            }
+            else {
+                this.error = "Unresolved input";
+                return;
+            }
+        }
+    }
+
+    private calc(node)
     {
         if (node.type == "BinaryExpression")
         {

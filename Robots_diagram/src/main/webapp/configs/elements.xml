@@ -14,9 +14,6 @@
 			<Property name="Body" type="string">
 				<value></value>
 			</Property>
-			<Property name="Initialization" type="checkbox">
-				<value>True</value>
-			</Property>
 			<Image src="images/functionBlock.svg"/>
 		</Element>
 

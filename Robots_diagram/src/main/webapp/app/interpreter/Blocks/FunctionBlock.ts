@@ -13,17 +13,14 @@ class FunctionBlock extends Block {
                     body = properties[p].value;
                     output += body + "\n";
                 }
-                else if (p == "Initialization") {
-                    initialization = properties[p].value;
-                }
                 else {
                     output += "Error, cannot get properties" + "\n";
                 }
             }
         }
 
-        var parser = new Parser(body, env);
-        parser.parseAssignments();
+        var parser = new Parser(body);
+        parser.parseFunction();
         if (parser.error != null) {
             output += parser.error + "\n";
         }
