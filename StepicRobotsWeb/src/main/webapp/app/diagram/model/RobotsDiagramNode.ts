@@ -15,13 +15,14 @@
  */
 
 class RobotsDiagramNode {
+
     private logicalId: string;
     private graphicalId: string;
-    private properties: PropertiesMap;
+    private properties: Map<Property>;
     private name: string = "Robot`s Behaviour Diagram";
     private type: string = "RobotsDiagramNode";
 
-    constructor(logicalId: string, graphicalId: string, properties: PropertiesMap) {
+    constructor(logicalId: string, graphicalId: string, properties: Map<Property>) {
         this.logicalId = logicalId;
         this.graphicalId = graphicalId;
         this.properties = properties;
@@ -35,7 +36,7 @@ class RobotsDiagramNode {
         return this.graphicalId;
     }
 
-    getProperties(): PropertiesMap {
+    getProperties(): Map<Property> {
         return this.properties;
     }
 

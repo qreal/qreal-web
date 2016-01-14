@@ -17,11 +17,13 @@
 class SubprogramDiagramNode {
 
     private logicalId: string;
-    private properties: PropertiesMap;
+    private properties: Map<Property>;
     private type: string = "SubprogramDiagram";
+    private name: string;
 
     constructor(logicalId: string, name: string) {
         this.logicalId = logicalId;
+        this.name = name;
         this.initProperties(name);
     }
 
@@ -33,7 +35,11 @@ class SubprogramDiagramNode {
         return this.type;
     }
 
-    getProperties(): PropertiesMap {
+    getName(): string {
+        return this.name;
+    }
+
+    getProperties(): Map<Property> {
         return this.properties;
     }
 

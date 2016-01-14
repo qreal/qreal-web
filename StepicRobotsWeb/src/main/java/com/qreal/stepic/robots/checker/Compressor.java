@@ -27,7 +27,7 @@ public class Compressor {
 
     public void compress(String taskId, String pathToFolder) throws IOException, InterruptedException {
         File folder = new File(pathToFolder);
-        ProcessBuilder compressorProcBuilder = new ProcessBuilder("sudo", "compressor", taskId);
+        ProcessBuilder compressorProcBuilder = new ProcessBuilder(PathConstants.COMPRESSOR_PATH, taskId);
         compressorProcBuilder.directory(folder);
         compressorProcBuilder.start().waitFor();
     }

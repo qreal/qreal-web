@@ -93,7 +93,7 @@ public class OnlineSolutionController extends SolutionController {
     @ResponseBody
     @RequestMapping(value = "open/{id}", method = RequestMethod.POST)
     public OpenResponse open(@PathVariable String id) {
-        XmlSaveConverter converter= new XmlSaveConverter();
+        XmlSaveConverter converter = new XmlSaveConverter();
 
         try {
             compressor.decompress(id);

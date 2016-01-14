@@ -1,5 +1,5 @@
 /*
- * Copyright Vladimir Zakharov 
+ * Copyright Vladimir Zakharov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,19 @@
  * limitations under the License.
  */
 
-interface NodeTypesMap {
-    [typeName: string]: NodeType;
+class SpinnerPropertyView extends HtmlView {
+
+    private template: string = '' +
+        '<tr class="property">' +
+        '   <td class="vert-align">{0}</td>' +
+        '   <td class="vert-align">' +
+        '       <input type="number" data-type="{1}" class="spinner" value="{2}">' +
+        '   </td>' +
+        '</tr>';
+
+    constructor(propertyKey: string, property: Property) {
+        super();
+        this.content = StringUtils.format(this.template, property.name, propertyKey, property.value);
+    }
+
 }

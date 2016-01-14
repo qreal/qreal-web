@@ -1,5 +1,5 @@
 /*
- * Copyright Vladimir Zakharov 
+ * Copyright Vladimir Zakharov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-class VariantListManager {
+class SubprogramPaletteView extends HtmlView {
 
-    private static variantsMap = {};
+    constructor(subprogramDiagramNodes: SubprogramDiagramNode[], subprogramImageSrc: string) {
+        super();
+        var typeName: string = "Subprogram";
 
-    static addVariantList(typeName: string, propertyKey: string, variants: Variant[]) {
-        if (!this.variantsMap[typeName]) {
-            this.variantsMap[typeName] = {};
+        for (var i in subprogramDiagramNodes) {
+            var node: SubprogramDiagramNode = subprogramDiagramNodes[i];
+            var nodeView: SubprogramPaletteElementView = new SubprogramPaletteElementView(typeName, node.getName(),
+                subprogramImageSrc, node.getLogicalId());
+            this.content += nodeView.getContent();
         }
-        this.variantsMap[typeName][propertyKey] = variants;
-    }
-
-    static getVariantList(typeName: string, propertyKey: string): Variant[] {
-        return this.variantsMap[typeName][propertyKey];
     }
 }

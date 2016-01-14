@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
-interface PropertiesMap {
-    [key: string]: Property;
+interface DiagramElement {
+    getLogicalId(): string;
+    getJointObject();
+    getName(): string;
+    getType(): string;
+    getConstPropertiesPack(): PropertiesPack;
+    getChangeableProperties(): Map<Property>;
+    setProperty(name: string, property: Property): void;
 }

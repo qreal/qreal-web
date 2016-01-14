@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-interface DiagramElement {
-    getLogicalId(): string;
-    getJointObject();
-    getName(): string;
-    getType(): string;
-    getConstPropertiesPack(): PropertiesPack;
-    getChangeableProperties(): PropertiesMap;
-    setProperty(name: string, property: Property): void;
+class ElementsTypeLoader {
+
+    load(task: string, callback: (elementTypes: ElementTypes) => void): void {
+        var typesParser: TypesParser = new TypesParser();
+
+        $.ajax({
+            type: 'POST',
+            url: 'getTypes/' + task,
+            success: (response) => {
+                callback(typesParser.parse(response));
+            },
+            error: function (response, status, error) {
+                alert("Element types loading error: " + status + " " + error);
+            }
+        });
+    }
+
 }

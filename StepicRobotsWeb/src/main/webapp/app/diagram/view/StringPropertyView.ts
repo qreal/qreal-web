@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-class PropertiesPack {
+class StringPropertyView extends HtmlView {
 
-    logical: PropertiesMap;
-    graphical: PropertiesMap;
+    private template: string = '' +
+        '<tr class="property">' +
+        '   <td class="vert-align">{0}</td>' +
+        '   <td class="vert-align">' +
+        '       <div class="input-group">' +
+        '           <input type="text" data-type="{1}"class="form-control" value="{2}">' +
+        '       </div>' +
+        '   </td>' +
+        '</tr>';
 
-    constructor(logical: PropertiesMap, graphical: PropertiesMap) {
-        this.logical = logical;
-        this.graphical = graphical;
+    constructor(propertyKey: string, property: Property) {
+        super();
+        this.content = StringUtils.format(this.template, property.name, propertyKey, property.value);
     }
+
 }

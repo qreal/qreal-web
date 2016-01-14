@@ -18,15 +18,16 @@
  * Created by vladimir-zakharov on 10.10.14.
  */
 class DefaultDiagramNode implements DiagramNode {
+
     private logicalId: string;
     private jointObject: joint.shapes.devs.ImageWithPorts;
     private name: string;
     private type: string;
     private constPropertiesPack: PropertiesPack;
-    private changeableProperties: PropertiesMap;
+    private changeableProperties: Map<Property>;
     private imagePath: string;
 
-    constructor(name: string, type: string, x: number, y: number, properties: PropertiesMap, imagePath: string,
+    constructor(name: string, type: string, x: number, y: number, properties: Map<Property>, imagePath: string,
                 id?: string, notDefaultConstProperties?: PropertiesPack) {
         this.logicalId = UIDGenerator.generate();
         this.name = name;
@@ -93,18 +94,18 @@ class DefaultDiagramNode implements DiagramNode {
         this.changeableProperties[key] = property;
     }
 
-    getChangeableProperties(): PropertiesMap {
+    getChangeableProperties(): Map<Property> {
         return this.changeableProperties;
     }
 
     private getDefaultConstPropertiesPack(name: string): PropertiesPack {
-        var logical: PropertiesMap = this.initConstLogicalProperties(name);
-        var graphical: PropertiesMap = this.initConstGraphicalProperties(name);
+        var logical: Map<Property> = this.initConstLogicalProperties(name);
+        var graphical: Map<Property> = this.initConstGraphicalProperties(name);
         return new PropertiesPack(logical, graphical);
     }
 
-    private initConstLogicalProperties(name: string): PropertiesMap {
-        var logical: PropertiesMap = {};
+    private initConstLogicalProperties(name: string): Map<Property> {
+        var logical: Map<Property> = {};
         logical["name"] = new Property("name", "QString", name);
         logical["from"] = new Property("from", "qReal::Id", "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
         logical["linkShape"] = new Property("linkShape", "int", "0");
@@ -113,8 +114,8 @@ class DefaultDiagramNode implements DiagramNode {
         return logical;
     }
 
-    private initConstGraphicalProperties(name: string): PropertiesMap {
-        var graphical: PropertiesMap = {};
+    private initConstGraphicalProperties(name: string): Map<Property> {
+        var graphical: Map<Property> = {};
         graphical["name"] = new Property("name", "QString", name);
         graphical["to"] = new Property("to", "qreal::Id", "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
         graphical["configuration"] = new Property("configuration", "QPolygon", "0, 0 : 50, 0 : 50, 50 : 0, 50 : ");

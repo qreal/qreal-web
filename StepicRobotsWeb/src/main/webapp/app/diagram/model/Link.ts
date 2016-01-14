@@ -15,14 +15,15 @@
  */
 
 class Link implements DiagramElement {
+
     private logicalId: string;
     private jointObject: joint.dia.Link;
     private constPropertiesPack: PropertiesPack;
-    private changeableProperties: PropertiesMap = {};
+    private changeableProperties: Map<Property> = {};
     private name = "Link"
     private type = "ControlFlow";
 
-    constructor(jointObject: joint.dia.Link, properties: PropertiesMap) {
+    constructor(jointObject: joint.dia.Link, properties: Map<Property>) {
         this.logicalId = UIDGenerator.generate();
         this.constPropertiesPack = this.getDefaultConstPropertiesPack();
 
@@ -61,7 +62,7 @@ class Link implements DiagramElement {
         return this.constPropertiesPack;
     }
 
-    getChangeableProperties(): PropertiesMap {
+    getChangeableProperties(): Map<Property> {
         return this.changeableProperties;
     }
 
@@ -70,21 +71,21 @@ class Link implements DiagramElement {
     }
 
     private getDefaultConstPropertiesPack(): PropertiesPack {
-        var logical: PropertiesMap = this.initConstLogicalProperties();
-        var graphical: PropertiesMap = this.initConstGraphicalProperties();
+        var logical: Map<Property> = this.initConstLogicalProperties();
+        var graphical: Map<Property> = this.initConstGraphicalProperties();
         return new PropertiesPack(logical, graphical);
     }
 
-    private initConstLogicalProperties(): PropertiesMap {
-        var logical: PropertiesMap = {};
+    private initConstLogicalProperties(): Map<Property> {
+        var logical: Map<Property> = {};
         logical["name"] = new Property("name", "QString", this.name);
         logical["linkShape"] = new Property("linkShape", "int", "-1");
         logical["outgoingExplosion"] = new Property("outgoingExplosion", "qReal::Id", "qrm:/");
         return logical;
     }
 
-    private initConstGraphicalProperties(): PropertiesMap {
-        var graphical: PropertiesMap = {};
+    private initConstGraphicalProperties(): Map<Property> {
+        var graphical: Map<Property> = {};
         graphical["name"] = new Property("name", "QString", this.name);
         graphical["configuration"] = new Property("configuration", "QPolygon", "0, 0 : 0, 0 : ");
         graphical["fromPort"] = new Property("fromPort", "double", "0");

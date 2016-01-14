@@ -17,10 +17,10 @@
 class NodeType {
 
     private name: string
-    private propertiesMap: PropertiesMap;
+    private propertiesMap: Map<Property>;
     private image: string;
 
-    constructor(name: string, propertiesMap: PropertiesMap, image?: string) {
+    constructor(name: string, propertiesMap: Map<Property>, image?: string) {
         this.name = name;
         this.propertiesMap = propertiesMap;
         this.image = (image) ? image : null;
@@ -30,7 +30,7 @@ class NodeType {
         return this.name;
     }
 
-    public getPropertiesMap(): PropertiesMap {
+    public getPropertiesMap(): Map<Property> {
         return this.propertiesMap;
     }
 

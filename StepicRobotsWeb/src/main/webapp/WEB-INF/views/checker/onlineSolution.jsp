@@ -43,7 +43,7 @@
             <br>
         </div>
         <div class="col-md-9">
-            <div id="diagramContent" class="row unselectable" ng-controller="DiagramController" task="${id}">
+            <div id="diagramContent" class="row unselectable" ng-controller="DiagramEditorController" task="${id}">
                 <ul class='custom-menu'>
                     <li data-action="delete">Delete</li>
                 </ul>
@@ -51,7 +51,7 @@
                     <div id="diagramSpinner" class="centerSpinner">
                     </div>
                 </div>
-                <button id="submit_button" class="btn btn-success btn-lg" type="button" ng-click="submit()">
+                <button id="submit_button" class="btn btn-success btn-lg" type="button" ng-click="submit($scope)">
                     <spring:message code="label.submit"/>
                 </button>
             </div>
