@@ -46,9 +46,9 @@ import java.util.UUID;
  */
 public class JavaModelConverter {
 
-    public UUID convertToXmlSave(Diagram diagram, String taskId) {
+    public UUID convertToXmlSave(Diagram diagram, String kit, String taskId) {
         try {
-            String directoryPath = PathConstants.TASKS_PATH + "/" + taskId;
+            String directoryPath = PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" + "/" + taskId;
 
             this.uuid = UUID.randomUUID();
 

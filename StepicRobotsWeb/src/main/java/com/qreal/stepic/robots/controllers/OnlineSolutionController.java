@@ -63,20 +63,22 @@ public class OnlineSolutionController extends SolutionController {
         typesLoader = new TypesLoader();
     }
 
-    @RequestMapping(value = "{id}", params = { "name", "title"}, method = RequestMethod.GET)
+    @RequestMapping(value = "{id}", params = { "kit", "name", "title" }, method = RequestMethod.GET)
     public ModelAndView showTask(HttpServletRequest request, @PathVariable String id,
+                                 @RequestParam(value="kit") String kit,
                                  @RequestParam(value="name") String name,
                                  @RequestParam(value="title") String title, Locale locale)
             throws NoSuchRequestHandlingMethodException {
-        if (getTypes(id, locale) == null) {
+        if (getTypes(kit, id, locale) == null) {
             throw new NoSuchRequestHandlingMethodException(request);
         }
         ModelAndView modelAndView = new ModelAndView("checker/onlineSolution");
+        modelAndView.addObject("kit", kit);
         modelAndView.addObject("title", title);
         modelAndView.addObject("id", id);
         modelAndView.addObject("name", name);
 
-        Description description = getDescription(id, locale);
+        Description description = getDescription(kit, id, locale);
         if (description != null) {
             modelAndView.addObject("description", description);
         }
@@ -86,20 +88,21 @@ public class OnlineSolutionController extends SolutionController {
 
     @ResponseBody
     @RequestMapping(value = "getTypes/{id}", method = RequestMethod.POST)
-    public JsonNode getTypes(@PathVariable String id, Locale locale) {
-        return typesLoader.getTypesJson(id, locale);
+    public JsonNode getTypes(@RequestParam(value="kit") String kit, @PathVariable String id, Locale locale) {
+        return typesLoader.getTypesJson(kit, id, locale);
     }
 
     @ResponseBody
     @RequestMapping(value = "open/{id}", method = RequestMethod.POST)
-    public OpenResponse open(@PathVariable String id) {
+    public OpenResponse open(@PathVariable String id, @RequestParam(value="kit") String kit) {
         XmlSaveConverter converter = new XmlSaveConverter();
 
         try {
-            compressor.decompress(id);
-            String fieldXML = checker.getWorldModelFromMetainfo(PathConstants.TASKS_PATH + "/" + id + "/"
-                    + id + "/metaInfo.xml");
-            File treeDirectory = new File(PathConstants.TASKS_PATH + "/" + id + "/" + id + "/tree");
+            compressor.decompress(kit, id);
+            String fieldXML = checker.getWorldModelFromMetainfo(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
+                    "/" + id + "/" + id + "/metaInfo.xml");
+            File treeDirectory = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
+                    "/" + id + "/" + id + "/tree");
             Diagram diagram = converter.convertToJavaModel(treeDirectory);
             return new OpenResponse(diagram, fieldXML);
         } catch (Exception e) {
@@ -110,21 +113,23 @@ public class OnlineSolutionController extends SolutionController {
 
     @ResponseBody
     @RequestMapping(value = "submit/{id}", method = RequestMethod.POST)
-    public SubmitResponse submit(@RequestBody SubmitRequest request, @PathVariable String id,
-                                 Locale locale) throws SubmitException {
-        PropertyValueTranslator translator = new PropertyValueTranslator();
-        translator.translateAllPropertiesValue(request.getDiagram().getNodes(), locale);
-        translator.translateAllPropertiesValue(request.getDiagram().getLinks(), locale);
-        JavaModelConverter javaModelConverter = new JavaModelConverter();
-        String uuidStr = String.valueOf(javaModelConverter.convertToXmlSave(request.getDiagram(), id));
-
+    public SubmitResponse submit(@RequestParam(value="kit") String kit,
+                                 @RequestParam(value="diagram") String diagramString,
+                                 @PathVariable String id, Locale locale) throws SubmitException {
         try {
-            compressor.compress(id, PathConstants.TASKS_PATH + "/" + id + "/solutions/" + uuidStr);
+            ObjectMapper mapper = new ObjectMapper();
+            Diagram diagram = mapper.readValue(diagramString, Diagram.class);
+            PropertyValueTranslator translator = new PropertyValueTranslator();
+            translator.translateAllPropertiesValue(diagram.getNodes(), locale);
+            translator.translateAllPropertiesValue(diagram.getLinks(), locale);
+            JavaModelConverter javaModelConverter = new JavaModelConverter();
+            String uuidStr = String.valueOf(javaModelConverter.convertToXmlSave(diagram, kit, id));
+            compressor.compress(id, PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
+                    "/" + id + "/solutions/" + uuidStr);
+            return checker.submit(kit, id, id + ".qrs", uuidStr, messageSource, locale);
         } catch (Exception e) {
             throw new SubmitException(messageSource.getMessage("label.commonError", null, locale));
         }
-
-        return checker.submit(id, id + ".qrs", uuidStr, messageSource, locale);
     }
 
 }

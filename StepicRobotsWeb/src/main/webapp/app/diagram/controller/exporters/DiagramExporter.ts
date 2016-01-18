@@ -140,7 +140,8 @@ class DiagramExporter {
                 'graphicalParent': "qrm:/RobotsMetamodel/RobotsDiagram/RobotsDiagramNode/{" +
                     diagramParts.robotsDiagramNode.getGraphicalId() + "}",
                 'type': link.getType(),
-                'children': [],
+                'logicalChildren': [],
+                'graphicalChildren': [],
                 'logicalLinksIds': [],
                 'graphicalLinksIds': [],
                 'logicalProperties': [],

@@ -47,12 +47,13 @@ import java.util.Map;
  */
 public class Checker {
 
-    public SubmitResponse submit(String taskId, String filename, String uuidStr,
+    public SubmitResponse submit(String kit, String taskId, String filename, String uuidStr,
                                         MessageSource messageSource, Locale locale) throws SubmitException {
         String nameWithoutExt = filename.substring(0, filename.length() - 4);
         try {
-            File taskFields = new File(PathConstants.TASKS_PATH + "/" + taskId + "/fields");
-            File solutionFolder = new File(PathConstants.TASKS_PATH + "/" + taskId + "/solutions/" + uuidStr);
+            File taskFields = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" + "/" + taskId + "/fields");
+            File solutionFolder = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
+                    "/" + taskId + "/solutions/" + uuidStr);
 
             if (taskFields.exists()) {
                 File solutionFields = new File(solutionFolder.getPath() + "/fields/" + nameWithoutExt);
@@ -82,7 +83,7 @@ public class Checker {
             String trajectoryPath;
             Report report;
 
-            File failedField = new File(PathConstants.TASKS_PATH + "/" + taskId +
+            File failedField = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" + "/" + taskId +
                     "/solutions/" + uuidStr + "/failed-field");
             String fieldXML = null;
             if (failedField.exists()) {
@@ -92,14 +93,15 @@ public class Checker {
                 String[] pathParts = pathToFailedField.split("/");
                 String failedFilename = pathParts[pathParts.length - 1];
                 String failedName = failedFilename.substring(0, failedFilename.length() - 4);
-                trajectoryPath = PathConstants.TASKS_PATH + "/" + taskId +
+                trajectoryPath = PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" + "/" + taskId +
                         "/solutions/" + uuidStr + "/trajectories/" + nameWithoutExt + "/" + failedName;
 
-                report = parseReportFile(new File(PathConstants.TASKS_PATH + "/" + taskId +
-                        "/solutions/" + uuidStr + "/reports/" + nameWithoutExt + "/" + failedName),
+                report = parseReportFile(new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks"
+                        + "/" + taskId + "/solutions/" + uuidStr + "/reports/" + nameWithoutExt + "/" + failedName),
                         messageSource, locale);
             } else {
-                String pathToMetainfo = PathConstants.TASKS_PATH + "/" + taskId + "/" + taskId + "/metaInfo.xml";
+                String pathToMetainfo = PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
+                        "/" + taskId + "/" + taskId + "/metaInfo.xml";
 
                 try {
                     fieldXML = getWorldModelFromMetainfo(pathToMetainfo);
@@ -107,10 +109,11 @@ public class Checker {
                     e.printStackTrace();
                     throw new SubmitException(messageSource.getMessage("label.twoDModelError", null, locale));
                 }
-                trajectoryPath = PathConstants.TASKS_PATH + "/" + taskId + "/solutions/" + uuidStr + "/trajectory";
+                trajectoryPath = PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
+                        "/" + taskId + "/solutions/" + uuidStr + "/trajectory";
 
-                report = parseReportFile(new File(PathConstants.TASKS_PATH + "/" + taskId +
-                        "/solutions/" + uuidStr + "/report"), messageSource, locale);
+                report = parseReportFile(new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
+                        "/" + taskId + "/solutions/" + uuidStr + "/report"), messageSource, locale);
             }
 
             String trace = new String(Files.readAllBytes(Paths.get(trajectoryPath)));

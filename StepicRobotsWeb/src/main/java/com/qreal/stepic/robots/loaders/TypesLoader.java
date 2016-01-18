@@ -39,13 +39,14 @@ public class TypesLoader {
         mapper = new ObjectMapper();
     }
 
-    public JsonNode getTypesJson(String name, Locale locale) {
+    public JsonNode getTypesJson(String kit, String name, Locale locale) {
         try {
             ObjectNode resultTasksTypes = mapper.createObjectNode();
 
-            JsonNode tasksTypes =  mapper.readTree(new File(PathConstants.TASKS_PATH + "/" + name + "/typesList.json"));
+            JsonNode tasksTypes =  mapper.readTree(new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
+                    "/" + name + "/typesList.json"));
             JsonNode allTypes = mapper.readTree(new File(PathConstants.STEPIC_PATH + "/" +
-                    "elementsTypes_" + locale + ".json"));
+                    "trikKit" + kit + "/" + "elementsTypes_" + locale + ".json"));
 
             resultTasksTypes.set("elements", getElementsTypes(tasksTypes, allTypes));
             resultTasksTypes.set("blocks", getBlocksTypes(tasksTypes, allTypes));

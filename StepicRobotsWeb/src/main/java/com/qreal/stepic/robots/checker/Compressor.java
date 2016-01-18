@@ -32,8 +32,8 @@ public class Compressor {
         compressorProcBuilder.start().waitFor();
     }
 
-    public void decompress(String taskId) throws IOException, InterruptedException {
-        String pathToFile = PathConstants.TASKS_PATH + "/" + taskId;
+    public void decompress(String kit, String taskId) throws IOException, InterruptedException {
+        String pathToFile = PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" + "/" + taskId;
         File folder = new File(pathToFile);
         File diagramDirectory = new File(pathToFile + "/" + taskId);
 

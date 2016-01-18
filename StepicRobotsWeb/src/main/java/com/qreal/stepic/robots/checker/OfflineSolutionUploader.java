@@ -42,8 +42,7 @@ public class OfflineSolutionUploader {
 
     private static final Logger LOG = Logger.getLogger(OfflineSolutionUploader.class);
 
-    public UploadedSolution upload(MultipartHttpServletRequest request,
-                                 @PathVariable String name,
+    public UploadedSolution upload(MultipartHttpServletRequest request, String kit, String name,
                                  MessageSource messageSource, Locale locale) throws UploadException, SubmitException {
         Iterator<String> iterator = request.getFileNames();
         MultipartFile file;
@@ -57,7 +56,7 @@ public class OfflineSolutionUploader {
 
         if (!file.isEmpty()) {
             try {
-                String directoryPath = PathConstants.TASKS_PATH + "/" + name;
+                String directoryPath = PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" + "/" + name;
 
                 UUID uuid = UUID.randomUUID();
 

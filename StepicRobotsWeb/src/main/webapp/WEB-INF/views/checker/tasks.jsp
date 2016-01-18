@@ -55,10 +55,12 @@
                             </span>
                             <span class="pull-right">
                                 <c:if test="${task.isOnline()}">
-                                    <a class="btn listButton" href="online/${task.getId()}?name=${taskName}&title=${task.getTitle()}">
+                                    <a class="btn listButton"
+                                        href="online/${task.getId()}?kit=${kit}&name=${taskName}&title=${task.getTitle()}">
                                         <spring:message code="label.online"/></a>
                                 </c:if>
-                                <a class="btn listButton" href="offline/${task.getId()}?name=${taskName}&title=${task.getTitle()}">
+                                <a class="btn listButton"
+                                    href="offline/${task.getId()}?kit=${kit}&name=${taskName}&title=${task.getTitle()}">
                                     <spring:message code="label.offline"/></a>
                             </span>
                         </div>

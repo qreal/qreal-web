@@ -31,6 +31,14 @@ public class SubmitRequest implements Serializable {
         this.id = id;
     }
 
+    public String getKit() {
+        return kit;
+    }
+
+    public void setKit(String kit) {
+        this.kit = kit;
+    }
+
     public Diagram getDiagram() {
         return diagram;
     }
@@ -40,5 +48,6 @@ public class SubmitRequest implements Serializable {
     }
 
     private String id;
+    private String kit;
     private Diagram diagram;
 }

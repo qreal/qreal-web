@@ -33,10 +33,10 @@
 <body>
     <div class="container" ng-app ng-controller="RootDiagramController">
         <div class="col-md-9 col-centered">
-            <div id="taskContent" ng-controller="CheckerController" task="${id}">
+            <div id="taskContent" ng-controller="CheckerController" task="${id}" kit="${kit}">
                 <%@ include file="description.jsp" %>
 
-                <a href="downloadTask/${id}?title=${title}"><h4><spring:message code="label.download"/></h4></a>
+                <a href="downloadTask/${id}?kit=${kit}&title=${title}"><h4><spring:message code="label.download"/></h4></a>
                 <br>
 
                 <h4><spring:message code="label.checkSolution"/></h4>

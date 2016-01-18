@@ -63,12 +63,13 @@ public class OfflineSolutionController extends SolutionController implements Han
         return e.getMessage().getBytes(UTF_8);
     }
 
-    @RequestMapping(value = "{id}", params = { "name", "title"}, method = RequestMethod.GET)
+    @RequestMapping(value = "{id}", params = { "kit", "name", "title"}, method = RequestMethod.GET)
     public ModelAndView showTask(HttpServletRequest request, @PathVariable String id,
+                                 @RequestParam(value="kit") String kit,
                                  @RequestParam(value="name") String name,
                                  @RequestParam(value="title") String title, Locale locale) {
         try {
-            compressor.decompress(id);
+            compressor.decompress(kit, id);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         } catch (InterruptedException ie) {
@@ -79,8 +80,9 @@ public class OfflineSolutionController extends SolutionController implements Han
         modelAndView.addObject("title", title);
         modelAndView.addObject("id", id);
         modelAndView.addObject("name", name);
+        modelAndView.addObject("kit", kit);
 
-        Description description = getDescription(id, locale);
+        Description description = getDescription(kit, id, locale);
         if (description != null) {
             modelAndView.addObject("description", description);
         }
@@ -88,12 +90,14 @@ public class OfflineSolutionController extends SolutionController implements Han
         return modelAndView;
     }
 
-    @RequestMapping(value = "/downloadTask/{id}", params = { "title" }, method = RequestMethod.GET)
+    @RequestMapping(value = "/downloadTask/{id}", params = { "kit", "title" }, method = RequestMethod.GET)
     public
     @ResponseBody
     void downloadFiles(HttpServletRequest request, HttpServletResponse response, @PathVariable String id,
+                       @RequestParam(value="kit") String kit,
                        @RequestParam(value = "title") String title) {
-        File downloadFile = new File(PathConstants.TASKS_PATH + "/" + id + "/" + id + ".qrs");
+        File downloadFile = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
+                "/" + id + "/" + id + ".qrs");
         try (FileInputStream inputStream = new FileInputStream(downloadFile);
              OutputStream outStream = response.getOutputStream()) {
             response.setContentLength((int) downloadFile.length());
@@ -113,9 +117,10 @@ public class OfflineSolutionController extends SolutionController implements Han
     @RequestMapping(value = "upload/{id}", method = RequestMethod.POST)
     public SubmitResponse handleFileUpload(MultipartHttpServletRequest request,
                                            @PathVariable String id,
+                                           @RequestParam(value="kit") String kit,
                                            Locale locale) throws UploadException, SubmitException {
-        UploadedSolution uploadedSolution = offlineSolutionUploader.upload(request, id, messageSource, locale);
-        return checker.submit(id, uploadedSolution.getFilename(), String.valueOf(uploadedSolution.getUuid()),
+        UploadedSolution uploadedSolution = offlineSolutionUploader.upload(request, kit, id, messageSource, locale);
+        return checker.submit(kit, id, uploadedSolution.getFilename(), String.valueOf(uploadedSolution.getUuid()),
                 messageSource, locale);
 
     }

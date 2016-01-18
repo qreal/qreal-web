@@ -16,12 +16,16 @@
 
 class ElementsTypeLoader {
 
-    load(task: string, callback: (elementTypes: ElementTypes) => void): void {
+    load(kit: string, task: string, callback: (elementTypes: ElementTypes) => void): void {
         var typesParser: TypesParser = new TypesParser();
 
         $.ajax({
             type: 'POST',
             url: 'getTypes/' + task,
+            dataType: 'json',
+            data: {
+                'kit': kit
+            },
             success: (response) => {
                 callback(typesParser.parse(response));
             },

@@ -57,11 +57,13 @@ public abstract class SolutionController {
         checker = new Checker();
     }
 
-    protected Description getDescription(String name, Locale locale) {
-        String descriptionPath = PathConstants.TASKS_PATH + "/" + name + "/description_" + locale + ".json";
+    protected Description getDescription(String kit, String name, Locale locale) {
+        String descriptionPath = PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
+                "/" + name + "/description_" + locale + ".json";
         File descriptionFile = new File(descriptionPath);
         if (!descriptionFile.exists()) {
-            descriptionFile = new File(PathConstants.TASKS_PATH + "/" + name + "/description_ru.json");
+            descriptionFile = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
+                    "/" + name + "/description_ru.json");
         }
         ObjectMapper objectMapper = new ObjectMapper();
         try {

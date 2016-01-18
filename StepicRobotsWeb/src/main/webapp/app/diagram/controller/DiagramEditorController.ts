@@ -27,11 +27,13 @@ class DiagramEditorController {
     private robotsDiagramNode: RobotsDiagramNode;
     private nodeTypesMap: Map<NodeType> = {};
     private taskId: string;
+    private kit: string;
     private isPaletteLoaded = false;
 
     constructor($scope, $attrs) {
         this.scope = $scope;
         this.taskId = $attrs.task;
+        this.kit = $attrs.kit;
         this.diagramJsonParser = new DiagramJsonParser();
         this.diagramExporter = new DiagramExporter();
         this.paletteController = new PaletteController();
@@ -41,7 +43,7 @@ class DiagramEditorController {
         this.diagramEditor = new DiagramEditor();
         this.paperController = new PaperController(this, this.diagramEditor.getPaper());
         this.elementsTypeLoader = new ElementsTypeLoader();
-        this.elementsTypeLoader.load(this.taskId, (elementTypes: ElementTypes): void => {
+        this.elementsTypeLoader.load(this.kit, this.taskId, (elementTypes: ElementTypes): void => {
             this.handleLoadedTypes(elementTypes);
         });
         $scope.submit = (): void => {
@@ -65,7 +67,7 @@ class DiagramEditorController {
 
         this.paletteController.appendBlocksPalette(elementTypes.paletteTypes);
         this.isPaletteLoaded = true;
-        this.openDiagram(this.scope, this.taskId);
+        this.openDiagram(this.scope, this.kit, this.taskId);
     }
 
     public setNodeProperties(element: DiagramElement): void {
@@ -100,10 +102,12 @@ class DiagramEditorController {
             type: 'POST',
             url: 'submit/' + controller.taskId,
             dataType: 'json',
-            contentType: 'application/json',
             timeout: 60000,
-            data: (JSON.stringify({diagram: controller.diagramExporter.exportDiagramStateToJSON(
-                this.diagramEditor.getGraph(), diagramParts)})),
+            data: {
+                'kit': controller.kit,
+                'diagram': JSON.stringify(controller.diagramExporter.exportDiagramStateToJSON(this.diagramEditor.getGraph(),
+                    diagramParts))
+            },
             success: function (response) {
                 twoDModelSpinner.hide();
                 scope.$emit("emitCheckingResult", response);
@@ -120,7 +124,7 @@ class DiagramEditorController {
         });
     }
 
-    public openDiagram(scope: ng.IScope, taskId: string): void {
+    public openDiagram(scope: ng.IScope, kit: string, taskId: string): void {
         if (!this.isPaletteLoaded) {
             alert("Palette is not loaded!");
             return;
@@ -134,6 +138,9 @@ class DiagramEditorController {
             type: 'POST',
             url: 'open/' + taskId,
             timeout: 60000,
+            data: {
+                'kit': kit
+            },
             success: function (response) {
                 controller.clearState();
                 diagramSpinner.hide();

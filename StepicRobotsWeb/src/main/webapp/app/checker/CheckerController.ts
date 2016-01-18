@@ -16,9 +16,11 @@
 
 class CheckerController {
 
+    private kit: string;
     private lastResponse;
 
     constructor($scope, $compile, $attrs) {
+        this.kit = $attrs.kit;
         $scope.checker = this;
         $(document).ready(() => {
             $("#spinner").hide();
@@ -46,11 +48,14 @@ class CheckerController {
         $('#result').html('');
 
         $("#uploadForm").ajaxForm({
-            dataType: "text",
+            dataType: "json",
+            data: {
+                'kit': controller.kit
+            },
             timeout: 60000,
             success: function (response) {
                 spinner.hide();
-                controller.lastResponse = JSON.parse(response);
+                controller.lastResponse = response;
                 $("#rerun").prop('disabled', false);
                 $('#result').html(controller.lastResponse.message);
                 $scope.showResult();

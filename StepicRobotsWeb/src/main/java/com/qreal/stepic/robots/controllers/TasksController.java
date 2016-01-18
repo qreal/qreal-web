@@ -21,8 +21,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qreal.stepic.robots.constants.PathConstants;
 import com.qreal.stepic.robots.model.checker.TaskItem;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
@@ -32,6 +34,7 @@ import java.util.*;
 /**
  * Created by vladimir-zakharov on 13.08.15.
  */
+
 @Controller
 public class TasksController {
 
@@ -46,12 +49,18 @@ public class TasksController {
     }
 
     @RequestMapping(value = "tasks", method = RequestMethod.GET)
-    public ModelAndView tasksHandler(Locale locale) {
+    public ModelAndView kitsHandler(Locale locale) {
+        ModelAndView modelAndView = new ModelAndView("checker/kits");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "tasks", params = { "kit" }, method = RequestMethod.GET)
+    public ModelAndView tasksHandler(Locale locale, @RequestParam(value="kit") String kit) {
         ModelAndView modelAndView = new ModelAndView("checker/tasks");
 
         List<TaskItem> taskItems = this.parseTaskList(new File(PathConstants.STEPIC_PATH + "/list.json"));
 
-        File tasksDir = new File(PathConstants.TASKS_PATH);
+        File tasksDir = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks");
         Set<String> taskIds = new HashSet<>();
         for (File task : tasksDir.listFiles()) {
             taskIds.add(task.getName());
@@ -69,6 +78,8 @@ public class TasksController {
         Map<String, String> taskNames = parseTaskNames(new File(PathConstants.STEPIC_PATH +
                 "/names_" + locale + ".json"), locale);
         modelAndView.addObject("taskNames", taskNames);
+
+        modelAndView.addObject("kit", kit);
 
         return modelAndView;
     }
