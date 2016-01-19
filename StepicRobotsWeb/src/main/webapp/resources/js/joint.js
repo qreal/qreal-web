@@ -88,6 +88,8 @@
         rmsPrefix = /^-ms-/,
         rdashAlpha = /-([\da-z])/gi,
 
+        current,
+
     // Used by jQuery.camelCase as callback to replace()
         fcamelCase = function (all, letter) {
             return letter.toUpperCase();
@@ -21283,8 +21285,11 @@ joint.dia.LinkView = joint.dia.CellView.extend({
 
                     // Store the index at which the new vertex has just been placed.
                     // We'll be update the very same vertex position in `pointermove()`.
-                    this._vertexIdx = this.addVertex({ x: x, y: y });
-                    this._action = 'vertex-move';
+                    if (this === current) {
+                        this._vertexIdx = this.addVertex({ x: x, y: y });
+                        this._action = 'vertex-move';
+                    }
+
                 }
         }
     },
@@ -21823,10 +21828,12 @@ joint.dia.Paper = Backbone.View.extend({
             this.sourceView = view;
 
             view.pointerdown(evt, localPoint.x, localPoint.y);
+            current = view;
 
         } else {
 
             this.trigger('blank:pointerdown', evt, localPoint.x, localPoint.y);
+            current = undefined;
         }
     },
 
