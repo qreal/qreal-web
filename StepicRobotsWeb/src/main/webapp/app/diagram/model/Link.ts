@@ -29,6 +29,16 @@ class Link implements DiagramElement {
 
         this.jointObject = jointObject;
         this.changeableProperties = properties;
+        if (properties["Guard"].value) {
+            this.jointObject.label(0, {
+                position: 0.5,
+                attrs: {
+                    text: {
+                        text: properties["Guard"].value , 'font-size': 14
+                    }
+                }
+            });
+        }
         this.updateHighlight();
 
         jointObject.on('change:source', () => {
@@ -68,6 +78,16 @@ class Link implements DiagramElement {
 
     setProperty(key: string, property: Property): void {
         this.changeableProperties[key] = property;
+        if (key === "Guard" && property.value) {
+            this.jointObject.label(0, {
+                position: 0.5,
+                attrs: {
+                    text: {
+                        text: property.value , 'font-size': 14
+                    }
+                }
+            });
+        }
     }
 
     private getDefaultConstPropertiesPack(): PropertiesPack {
