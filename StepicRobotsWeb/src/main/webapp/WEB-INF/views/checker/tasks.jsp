@@ -42,8 +42,8 @@
             <br>
 
             <div style="text-align: left;"><spring:message code="label.language"/>:
-                <a href="tasks?locale=ru"><img class="language" src="<c:url value='/resources/css/images/Russia.png' />"/></a>
-                <a href="tasks?locale=en"><img class="language" src="<c:url value='/resources/css/images/United-Kingdom.png' />"/></a>
+                <a href="tasks?kit=${kit}&locale=ru"><img class="language" src="<c:url value='/resources/css/images/Russia.png' />"/></a>
+                <a href="tasks?kit=${kit}&locale=en"><img class="language" src="<c:url value='/resources/css/images/United-Kingdom.png' />"/></a>
             </div>
             <c:if test="${not empty tasks}">
                 <div id="taskList" class="list-group">
