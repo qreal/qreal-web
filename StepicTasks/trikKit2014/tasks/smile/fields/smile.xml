@@ -21,10 +21,9 @@
     </robots>
     <constraints>
         <timelimit value="2000"/>
-        <!-- Событие, которое проверяет, что через 1 секунду после начала на экране нарисовано 2 эллипса и 1 дуга -->
+        <!-- Событие, которое сообщает об успехе, если на экране робота нарисовано 2 эллипса и 1 дуга -->
         <event settedUpInitially="true">
             <conditions glue="and">
-                <timer forceDropOnTimeout="false" timeout="1000"/>
                 <equals>
                     <objectState object="robot1.display.ellipses.size"/>
                     <int value="2"/>
@@ -35,13 +34,13 @@
                 </equals>
             </conditions>
             <trigger>
-                <success/>
+                <success deferred="true"/>
             </trigger>
         </event>
-        <!-- Событие, которое выводит ошибку, если нарисовано больше 2 эллипсов -->
+        <!-- Событие, которое выводит ошибку, если нарисовано не 2 эллипса -->
         <event settedUpInitially="true">
             <conditions glue="and">
-                <timer forceDropOnTimeout="true" timeout="500"/>
+                <timer forceDropOnTimeout="true" timeout="1900"/>
                 <not>
                     <equals>
                         <objectState object="robot1.display.ellipses.size"/>
@@ -50,13 +49,13 @@
                 </not>
             </conditions>
             <trigger>
-                <fail message="На экране должно быть ровно два эллипса"/>
+                <fail message="На экране должно быть два эллипса"/>
             </trigger>
         </event>
         <!-- Событие, которое выводит ошибку, если нарисовано не 1 дуга -->
         <event settedUpInitially="true">
             <conditions glue="and">
-                <timer forceDropOnTimeout="true" timeout="600"/>
+                <timer forceDropOnTimeout="true" timeout="1900"/>
                 <not>
                     <equals>
                         <objectState object="robot1.display.arcs.size"/>
@@ -65,13 +64,13 @@
                 </not>
             </conditions>
             <trigger>
-                <fail message="На экране должна быть ровно одна дуга"/>
+                <fail message="На экране должна быть одна дуга"/>
             </trigger>
         </event>
         <!-- Событие, которое выводит ошибку, если нарисовано не ровно три объекта -->
         <event settedUpInitially="true">
             <conditions glue="and">
-                <timer forceDropOnTimeout="true" timeout="700"/>
+                <timer forceDropOnTimeout="true" timeout="1900"/>
                 <not>
                     <equals>
                         <objectState object="robot1.display.objects.size"/>
