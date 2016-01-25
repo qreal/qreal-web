@@ -24,4 +24,10 @@
 
 <script src="<c:url value='/app/out.js' />"></script>
 
+<script type="text/javascript">
+    SVGElement.prototype.getTransformToElement = SVGElement.prototype.getTransformToElement || function(elem) {
+    return elem.getScreenCTM().inverse().multiply(this.getScreenCTM());
+    };
+</script>
+
 
