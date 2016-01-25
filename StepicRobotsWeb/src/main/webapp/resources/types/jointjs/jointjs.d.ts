@@ -74,6 +74,7 @@ declare module joint {
         }
 
         class Paper extends Backbone.View<Backbone.Model> {
+            constructor(options?: any);
             options:IOptions;
 
             setDimensions(width:number, height:number) : void;
