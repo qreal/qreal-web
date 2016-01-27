@@ -14,6 +14,7 @@
     </robots>
     <constraints>
         <timelimit value="100000"/>
+
         <!-- событие, которое проверяет, что нарисован только один эллипс, инициализирует переменные начальными значениями, начинает проверку на движение -->
         <event settedUpInitially="true" id="Single_ellipse">
             <conditions glue="and">
@@ -38,6 +39,7 @@
                 <setUp id="Check_move_fails"/>
             </triggers>
         </event>
+
         <!-- событие, которое эмулирует нажатие на кнопку "влево" 1 раз -->
         <event id="Left_single">
             <condition>
@@ -50,10 +52,11 @@
                 <setUp id="Right_single"/>
             </triggers>
         </event>
+
         <!-- событие, которое эмулирует нажатие на кнопку "вправо" 1 раз -->
         <event id="Right_single">
             <condition>
-                <timer timeout="100"/>
+                <timer timeout="500"/>
             </condition>
             <triggers>
                 <setState property="value" object="robot1.Right">
@@ -61,6 +64,7 @@
                 </setState>
             </triggers>
         </event>
+
         <!-- событие, которое проверяет, что эллипс вообще двигается, и начинает цепочку проверок -->
         <event id="Check_move">
             <condition>
@@ -77,6 +81,7 @@
                 <setUp id="Check_position"/>
             </triggers>
         </event>
+
         <!-- событие, которое сообщает, что эллипс не двигается -->
         <event id="Check_move_fails">
             <conditions glue="and">
@@ -87,6 +92,7 @@
                 <fail message="Эллипс не двигается при нажатии на кнопки"/>
             </trigger>
         </event>
+
         <!-- Событие, которое выдает ошибку, если эллипс не нарисован или нарисованы другие объекты -->
         <event settedUpInitially="true">
             <conditions glue="and">
@@ -97,6 +103,7 @@
                 <fail message="На экране должен быть один эллипс"/>
             </trigger>
         </event>
+
         <!-- Событие, которое выводит ошибку, если эллипс вышел за пределы экрана -->
         <event id="Check_position">
             <conditions glue="and">
@@ -139,10 +146,11 @@
                 <fail message="Эллипс вышел за пределы экрана"/>
             </trigger>
         </event>
+
         <!-- событие, которое эмулирует нажатие на кнопку "влево" -->
         <event id="Left">
             <condition>
-                <timer timeout="30"/>
+                <timer timeout="10"/>
             </condition>
             <triggers>
                 <setState property="value" object="robot1.Left">
@@ -157,21 +165,23 @@
                 <setUp id="Delay_left"/>
             </triggers>
         </event>
+
         <!-- событие для задержки между нажатиями левой кнопки -->
         <event id="Delay_left">
             <condition>
-                <timer timeout="30"/>
+                <timer timeout="300"/>
             </condition>
             <trigger>
                 <setUp id="Left"/>
             </trigger>
         </event>
+
         <!-- событие для цикла нажатий левой кнопки -->
         <event id="Left_cycle">
             <condition>
                 <notLess>
                     <variableValue name="counter"/>
-                    <int value="210"/>
+                    <int value="45"/>
                 </notLess>
             </condition>
             <triggers>
@@ -184,10 +194,11 @@
                 <setUp id="Right"/>
             </triggers>
         </event>
+
         <!-- событие, которое эмулирует нажатие на кнопку "вправо" -->
         <event id="Right">
             <condition>
-                <timer timeout="30"/>
+                <timer timeout="10"/>
             </condition>
             <triggers>
                 <setState property="value" object="robot1.Right">
@@ -202,21 +213,23 @@
                 <setUp id="Delay_right"/>
             </triggers>
         </event>
+
         <!-- событие для задержки между нажатиями правой кнопки -->
         <event id="Delay_right">
             <condition>
-                <timer timeout="30"/>
+                <timer timeout="300"/>
             </condition>
             <trigger>
                 <setUp id="Right"/>
             </trigger>
         </event>
+
         <!-- событие для цикла нажатий правой кнопки -->
         <event id="Right_cycle">
             <condition>
                 <notLess>
                     <variableValue name="counter"/>
-                    <int value="210"/>
+                    <int value="45"/>
                 </notLess>
             </condition>
             <triggers>
@@ -229,10 +242,11 @@
                 <setUp id="Up"/>
             </triggers>
         </event>
+
         <!-- событие, которое эмулирует нажатие на кнопку "вверх" -->
         <event id="Up">
             <condition>
-                <timer timeout="30"/>
+                <timer timeout="10"/>
             </condition>
             <triggers>
                 <setState property="value" object="robot1.Up">
@@ -247,21 +261,23 @@
                 <setUp id="Delay_up"/>
             </triggers>
         </event>
+
         <!-- событие для задержки между нажатиями кнопки "вверх" -->
         <event id="Delay_up">
             <condition>
-                <timer timeout="30"/>
+                <timer timeout="300"/>
             </condition>
             <trigger>
                 <setUp id="Up"/>
             </trigger>
         </event>
+
         <!-- событие для цикла нажатий кнопки "вверх" -->
         <event id="Up_cycle">
             <condition>
                 <notLess>
                     <variableValue name="counter"/>
-                    <int value="270"/>
+                    <int value="56"/>
                 </notLess>
             </condition>
             <triggers>
@@ -274,10 +290,11 @@
                 <setUp id="Down"/>
             </triggers>
         </event>
+
         <!-- событие, которое эмулирует нажатие на кнопку "вниз" -->
         <event id="Down">
             <condition>
-                <timer timeout="30"/>
+                <timer timeout="10"/>
             </condition>
             <triggers>
                 <setState property="value" object="robot1.Down">
@@ -292,21 +309,23 @@
                 <setUp id="Delay_down"/>
             </triggers>
         </event>
+
         <!-- событие для задержки между нажатиями кнопки "вниз" -->
         <event id="Delay_down">
             <condition>
-                <timer timeout="30"/>
+                <timer timeout="300"/>
             </condition>
             <trigger>
                 <setUp id="Down"/>
             </trigger>
         </event>
+
         <!-- событие для цикла нажатий кнопки "вниз" -->
         <event id="Down_cycle">
             <condition>
                 <notLess>
                     <variableValue name="counter"/>
-                    <int value="270"/>
+                    <int value="56"/>
                 </notLess>
             </condition>
             <triggers>

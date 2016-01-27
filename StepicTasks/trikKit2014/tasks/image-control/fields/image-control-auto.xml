@@ -22,7 +22,7 @@
     </robots>
     <constraints>
 
-        <timelimit value="2000"/>
+        <timelimit value="5000"/>
 
         <!-- событие, которое проверяет, что нарисован только один эллипс, инициализирует переменные начальными значениями и начинает цепочку проверок -->
         <event id="Single_ellipse" settedUpInitially="true">
@@ -61,7 +61,7 @@
         <!-- событие, которое эмулирует нажатие на кнопку "влево" и возводит событие, которое проверяет результат -->
         <event id="Left">
             <condition>
-                <timer timeout="100"/>
+                <timer timeout="500"/>
             </condition>
             <triggers>
                 <setState property="value" object="robot1.Left">
@@ -91,7 +91,7 @@
         <!-- Событие, которое сообщает об ошибке, если эллипс сдвинулся не туда или вообще не сдвинулся -->
         <event id="Left_fails">
             <conditions glue="and">
-                <timer forceDropOnTimeout="true" timeout="100"/>
+                <timer forceDropOnTimeout="true" timeout="500"/>
                 <settedUp id="Left_checking"/>
             </conditions>
             <triggers>
@@ -102,7 +102,7 @@
         <!-- событие, которое эмулирует нажатие на кнопку "вправо" и возводит событие, которое проверяет результат -->
         <event id="Right">
             <condition>
-                <timer timeout="100"/>
+                <timer timeout="500"/>
             </condition>
             <triggers>
                 <setState property="value" object="robot1.Right">
@@ -132,7 +132,7 @@
         <!-- Событие, которое сообщает об ошибке, если эллипс сдвинулся не туда или вообще не сдвинулся -->
         <event id="Right_fails">
             <conditions glue="and">
-                <timer forceDropOnTimeout="true" timeout="100"/>
+                <timer forceDropOnTimeout="true" timeout="500"/>
                 <settedUp id="Right_checking"/>
             </conditions>
             <triggers>
@@ -143,7 +143,7 @@
         <!-- событие, которое эмулирует нажатие на кнопку "вверх" и возводит событие, которое проверяет результат -->
         <event id="Up">
             <condition>
-                <timer timeout="100"/>
+                <timer timeout="500"/>
             </condition>
             <triggers>
                 <setState property="value" object="robot1.Up">
@@ -173,7 +173,7 @@
         <!-- Событие, которое сообщает об ошибке, если эллипс сдвинулся не туда или вообще не сдвинулся -->
         <event id="Up_fails">
             <conditions glue="and">
-                <timer forceDropOnTimeout="true" timeout="100"/>
+                <timer forceDropOnTimeout="true" timeout="500"/>
                 <settedUp id="Up_checking"/>
             </conditions>
             <triggers>
@@ -184,7 +184,7 @@
         <!-- событие, которое эмулирует нажатие на кнопку "вниз" и возводит событие, которое проверяет результат -->
         <event id="Down">
             <condition>
-                <timer timeout="100"/>
+                <timer timeout="500"/>
             </condition>
             <triggers>
                 <setState property="value" object="robot1.Down">
@@ -211,7 +211,7 @@
         <!-- Событие, которое сообщает об ошибке, если эллипс сдвинулся не туда или вообще не сдвинулся -->
         <event id="Down_fails">
             <conditions glue="and">
-                <timer forceDropOnTimeout="true" timeout="100"/>
+                <timer forceDropOnTimeout="true" timeout="500"/>
                 <settedUp id="Down_checking"/>
             </conditions>
             <triggers>
@@ -222,7 +222,7 @@
         <!-- событие, которое эмулирует нажаите на кнопку "отмена" и возводит событие, которое проверяет результат -->
         <event id="Esc">
             <condition>
-                <timer timeout="100"/>
+                <timer timeout="500"/>
             </condition>
             <triggers>
                 <setState property="value" object="robot1.Esc">
