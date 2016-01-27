@@ -105,6 +105,68 @@
             </triggers>
         </event>
 
+        <!-- Событие для ожидания 1-й (погрешность в 100 мс) секунды -->
+        <event id="Wait 1 second with smile">
+            <conditions glue="and">
+                <equals>
+                    <objectState object="robot1.M3.power"/>
+                    <int value="0"/>
+                </equals>
+                <equals>
+                    <objectState object="robot1.M4.power"/>
+                    <int value="0"/>
+                </equals>
+                <equals>
+                    <objectState object="robot1.display.smiles"/>
+                    <bool value="true"/>
+                </equals>
+                <timer timeout="900"/>
+            </conditions>
+            <triggers>
+                <drop id="Stay"/>
+                <setUp id="Not red area"/>
+            </triggers>
+        </event>
+
+        <!-- Событие, сообющее об ошибке, если робот поехал раньше времени -->
+        <event id="Stay">
+            <conditions glue="or">
+                <greater>
+                    <objectState object="robot1.M3.power"/>
+                    <int value="0"/>
+                </greater>
+                <greater>
+                    <objectState object="robot1.M4.power"/>
+                    <int value="0"/>
+                </greater>
+            </conditions>
+            <trigger>
+                <fail message="Робот остановился меньше, чем на 1 секунду"/>
+            </trigger>
+        </event>
+
+        <!-- Событие, сообщающее об ошибке, если прошло больше 1-й секунды -->
+        <event id="More than 1 second">
+            <conditions glue="and">
+                <timer timeout="1100" forceDropOnTimeout="true"/>
+                <equals>
+                    <objectState object="robot1.M3.power"/>
+                    <int value="0"/>
+                </equals>
+                <equals>
+                    <objectState object="robot1.M4.power"/>
+                    <int value="0"/>
+                </equals>
+                <equals>
+                    <objectState object="robot1.display.smiles"/>
+                    <bool value="true"/>
+                </equals>
+            </conditions>
+            <triggers>
+                <fail message="Робот остановился больше, чем на 1 секунду"/>
+            </triggers>
+        </event>
+
         <!-- Событие для ожидания веселого смайлика -->
         <event id="Wait for smile">
             <condition>
@@ -114,7 +176,9 @@
                 </equals>
             </condition>
             <triggers>
-                <setUp id="Not red area"/>
+                <setUp id="Wait 1 second with smile"/>
+                <setUp id="More than 1 second"/>
+                <setUp id="Stay"/>
             </triggers>
         </event>
 
