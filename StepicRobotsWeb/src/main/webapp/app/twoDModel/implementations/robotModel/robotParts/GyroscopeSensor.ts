@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="ScalarSensor" />
+
 class GyroscopeSensor extends ScalarSensor {
     static parentType = ScalarSensor;
     static name: string = "gyroscope";

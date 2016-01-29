@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="../../robotParts/Speaker.ts" />
+
 class TrikSpeaker extends Speaker {
     static parentType = Speaker;
 }

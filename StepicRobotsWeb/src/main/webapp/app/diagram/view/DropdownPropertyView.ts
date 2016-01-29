@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/// <reference path="HtmlView.ts" />
+/// <reference path="../controller/VariantListMapper.ts" />
+/// <reference path="../model/Property.ts" />
+/// <reference path="../../utils/StringUtils.ts" />
+
 class DropdownPropertyView extends HtmlView {
 
     private template: string = '' +

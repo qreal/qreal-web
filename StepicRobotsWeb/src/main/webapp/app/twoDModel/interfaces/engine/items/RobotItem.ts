@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/// <reference path="AbstractItem.ts" />
+/// <reference path="../../robotModel/DeviceInfo.ts" />
+/// <reference path="../../../types/TwoDPosition.ts" />
+
+
 interface RobotItem extends AbstractItem {
     getWidth(): number;
     getHeight(): number;

@@ -17,6 +17,9 @@
 /**
  * Created by vladimir-zakharov on 10.10.14.
  */
+
+/// <reference path="DiagramElement.ts" />
+
 interface DiagramNode extends DiagramElement {
     getX(): number;
     getY(): number;

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="../../../interfaces/robotModel/robotParts/Device" />
+
 class DeviceImpl implements Device {
     static parentType;
 }

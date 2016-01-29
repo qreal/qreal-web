@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/// <reference path="../../../interfaces/engine/items/WallItem.ts" />
+/// <reference path="../../../interfaces/engine/model/WorldModel.ts" />
+/// <reference path="../../../../vendor.d.ts" />
+
 class WallItemImpl implements WallItem {
     private static width: number = 15;
     private path: RaphaelPath;

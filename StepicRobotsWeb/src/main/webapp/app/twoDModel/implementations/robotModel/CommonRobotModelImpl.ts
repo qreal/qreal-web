@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/// <reference path="../../interfaces/robotModel/CommonRobotModel.ts" />
+/// <reference path="../../interfaces/robotModel/PortInfo.ts" />
+/// <reference path="../../interfaces/robotModel/DeviceInfo.ts" />
+
 class CommonRobotModelImpl implements CommonRobotModel {
     protected ports: PortInfo[] = [];
     protected allowedConnections: {number?: DeviceInfo[]} = {};

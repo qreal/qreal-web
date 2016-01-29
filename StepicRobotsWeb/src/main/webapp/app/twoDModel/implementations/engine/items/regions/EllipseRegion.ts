@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/// <reference path="RegionItem.ts" />
+/// <reference path="../../../../interfaces/engine/model/WorldModel.ts" />
+/// <reference path="../../../../types/TwoDPosition.ts" />
+
 class EllipseRegion extends RegionItem {
 
     constructor(worldModel: WorldModel) {

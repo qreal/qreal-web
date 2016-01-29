@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="../model/Variant.ts" />
+
 class VariantListMapper {
 
     private static variantsMap = {};

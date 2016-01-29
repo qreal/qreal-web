@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/// <reference path="../../../interfaces/engine/items/CubicBezierItem.ts" />
+/// <reference path="../../../interfaces/engine/model/WorldModel.ts" />
+/// <reference path="../../../../vendor.d.ts" />
+
 class CubicBezierItemImpl implements CubicBezierItem {
 
     private path: RaphaelPath;

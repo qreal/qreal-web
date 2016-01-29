@@ -7,3 +7,5 @@ target/
 *.iml
 src/main/webapp/.tscache
 *out.js
+.baseDir.ts
+src/main/webapp/resources/js/compiled/

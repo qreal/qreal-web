@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/// <reference path="twoDModel/interfaces/robotModel/CommonRobotModel.ts" />
+/// <reference path="twoDModel/implementations/robotModel/TwoDRobotModel.ts" />
+/// <reference path="twoDModel/implementations/robotModel/TrikKit/TrikRobotModelBase.ts" />
+
 class RootDiagramController {
     private realModel: CommonRobotModel;
     private robotModel: TwoDRobotModel;

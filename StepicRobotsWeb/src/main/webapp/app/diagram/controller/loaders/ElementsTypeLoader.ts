@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/// <reference path="../../model/ElementTypes.ts" />
+/// <reference path="../parsers/TypesParser.ts" />
+/// <reference path="../../../vendor.d.ts" />
+
 class ElementsTypeLoader {
 
     load(kit: string, task: string, callback: (elementTypes: ElementTypes) => void): void {

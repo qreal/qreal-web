@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="../../robotParts/DeviceImpl.ts" />
+
 class TrikLed extends DeviceImpl {
     static parentType = DeviceImpl;
     static name = "led";

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="../../interfaces/robotModel/DeviceInfo.ts" />
+
 class DevicesConfigurationProvider {
     private currentConfiguration: {string?: {string?: DeviceInfo}} = {};
 

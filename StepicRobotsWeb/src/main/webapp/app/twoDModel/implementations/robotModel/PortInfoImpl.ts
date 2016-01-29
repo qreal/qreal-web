@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/// <reference path="../../interfaces/robotModel/PortInfo.ts" />
+/// <reference path="../../types/Direction.ts" />
+/// <reference path="../../types/ReservedVariableType.ts" />
+
 class PortInfoImpl implements PortInfo {
     private name: string;
     private direction: Direction;

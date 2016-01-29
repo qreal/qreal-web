@@ -14,6 +14,34 @@
  * limitations under the License.
  */
 
+/// <reference path="../CommonRobotModelImpl.ts" />
+/// <reference path="../PortInfoImpl.ts" />
+/// <reference path="../DeviceInfoImpl.ts" />
+/// <reference path="../robotParts/Display.ts" />
+/// <reference path="../robotParts/Speaker.ts" />
+/// <reference path="../robotParts/Button.ts" />
+/// <reference path="../robotParts/Motor.ts" />
+/// <reference path="../robotParts/EncoderSensor.ts" />
+/// <reference path="../robotParts/LightSensor.ts" />
+/// <reference path="../robotParts/GyroscopeSensor.ts" />
+/// <reference path="../robotParts/AccelerometerSensor.ts" />
+/// <reference path="../TrikKit/parts/TrikInfraredSensor.ts" />
+/// <reference path="../TrikKit/parts/TrikSonarSensor.ts" />
+/// <reference path="../TrikKit/parts/TrikMotionSensor.ts" />
+/// <reference path="../TrikKit/parts/TrikLed.ts" />
+/// <reference path="../TrikKit/parts/TrikLineSensor.ts" />
+/// <reference path="../TrikKit/parts/TrikColorSensor.ts" />
+/// <reference path="../TrikKit/parts/TrikObjectSensor.ts" />
+/// <reference path="../TrikKit/parts/TrikShell.ts" />
+/// <reference path="../TrikKit/parts/TrikGamepadButton.ts" />
+/// <reference path="../TrikKit/parts/TrikGamepadPad.ts" />
+/// <reference path="../TrikKit/parts/TrikGamepadPadPressSensor.ts" />
+/// <reference path="../TrikKit/parts/TrikGamepadWheel.ts" />
+/// <reference path="../TrikKit/parts/TrikGamepadConnectionIndicator.ts" />
+/// <reference path="../../../interfaces/robotModel/PortInfo.ts" />
+/// <reference path="../../../interfaces/robotModel/DeviceInfo.ts" />
+/// <reference path="../../../types/Direction.ts" />
+
 class TrikRobotModelBase extends CommonRobotModelImpl {
     private digitalPorts: PortInfo[];
     

@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+/// <reference path="SensorItem.ts" />
+/// <reference path="../../../interfaces/engine/model/WorldModel.ts" />
+/// <reference path="../../../interfaces/engine/items/RobotItem.ts" />
+/// <reference path="../../../interfaces/robotModel/DeviceInfo.ts" />
+/// <reference path="../../../types/TwoDPosition.ts" />
+/// <reference path="../../../../vendor.d.ts" />
+
 class SonarSensorItem extends SensorItem {
     private scanningRegion: RaphaelPath;
     private sonarRange = 255;
@@ -22,8 +29,8 @@ class SonarSensorItem extends SensorItem {
     protected regionTranslation: string;
     protected regionRotation: string;
 
-    constructor(robotItem:RobotItem, worldModel:WorldModel, sensorType:DeviceInfo,
-                pathToImage:string, position?:TwoDPosition) {
+    constructor(robotItem: RobotItem, worldModel: WorldModel, sensorType: DeviceInfo,
+                pathToImage: string, position?: TwoDPosition) {
         super(robotItem, worldModel, sensorType, pathToImage, position);
         var paper:RaphaelPaper = worldModel.getPaper();
         var defaultPosition = this.getStartPosition(position);

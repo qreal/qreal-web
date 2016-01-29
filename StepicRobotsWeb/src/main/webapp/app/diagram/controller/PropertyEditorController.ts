@@ -14,6 +14,15 @@
  * limitations under the License.
  */
 
+/// <reference path="PropertyViewFactory.ts" />
+/// <reference path="PaperController.ts" />
+/// <reference path="VariantListMapper.ts" />
+/// <reference path="../model/DiagramElement.ts" />
+/// <reference path="../model/Map.ts" />
+/// <reference path="../model/Property.ts" />
+/// <reference path="../view/HtmlView.ts" />
+/// <reference path="../../vendor.d.ts" />
+
 class PropertyEditorController {
 
     private propertyViewFactory: PropertyViewFactory;

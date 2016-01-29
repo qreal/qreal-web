@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/// <reference path="Map.ts" />
+/// <reference path="Property.ts" />
+
 class PropertiesPack {
 
     logical: Map<Property>;

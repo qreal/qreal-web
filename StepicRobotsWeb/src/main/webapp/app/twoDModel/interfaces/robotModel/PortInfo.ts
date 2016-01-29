@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/// <reference path="../../types/Direction.ts" />
+/// <reference path="../../types/ReservedVariableType.ts" />
+
 interface PortInfo {
     getName(): string;
     getDirection(): Direction;

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="RGBAColor.ts" />
+
 class ColorUtils {
 
     public static getRBGAColor(color: string): RGBAColor {

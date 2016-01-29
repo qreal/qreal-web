@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/// <reference path="../../../../interfaces/engine/model/WorldModel.ts" />
+/// <reference path="../../../../types/TwoDPosition.ts" />
+/// <reference path="../../../../../utils/ColorUtils.ts" />
+/// <reference path="../../../../../vendor.d.ts" />
+
 class RegionItem {
     protected shape: RaphaelElement;
     protected defaultColor: string = "#87CEFA";

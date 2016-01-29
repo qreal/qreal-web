@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+/// <reference path="../../model/Map.ts" />
+/// <reference path="../../model/NodeType.ts" />
+/// <reference path="../../model/PaletteTypes.ts" />
+/// <reference path="../../model/ElementTypes.ts" />
+/// <reference path="../../../constants/GeneralConstants.ts" />
+/// <reference path="../../../vendor.d.ts" />
+
 class TypesParser {
 
     public parse(typesJson: any): ElementTypes {

@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/// <reference path="AbstractItem.ts" />
+/// <reference path="../../../../vendor.d.ts"/>
+
 interface WallItem extends AbstractItem {
     getPath(): RaphaelPath;
     updateStart(x: number, y: number): void;

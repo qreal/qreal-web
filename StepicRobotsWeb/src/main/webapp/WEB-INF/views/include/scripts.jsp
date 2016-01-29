@@ -22,7 +22,11 @@
 <script src="<c:url value='/resources/bootstrap/js/bootstrap.min.js' />"></script>
 <script src="<c:url value='/resources/js/raphael-min.js' />"></script>
 
-<script src="<c:url value='/app/out.js' />"></script>
+<script src="<c:url value='/resources/js/compiled/utils.js' />"></script>
+<script src="<c:url value='/resources/js/compiled/root.js' />"></script>
+<script src="<c:url value='/resources/js/compiled/diagram-core.js' />"></script>
+<script src="<c:url value='/resources/js/compiled/checker-core.js' />"></script>
+<script src="<c:url value='/resources/js/compiled/two-d-model-core.js' />"></script>
 
 <script type="text/javascript">
     SVGElement.prototype.getTransformToElement = SVGElement.prototype.getTransformToElement || function(elem) {

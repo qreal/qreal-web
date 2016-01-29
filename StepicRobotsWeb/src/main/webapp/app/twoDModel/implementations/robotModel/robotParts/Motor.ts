@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="DeviceImpl" />
+
 class Motor extends DeviceImpl {
     static parentType  = DeviceImpl;
     static name: string = "motor";

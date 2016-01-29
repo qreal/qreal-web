@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="ScalarSensor" />
+
 class AccelerometerSensor extends ScalarSensor {
     static parentType = ScalarSensor;
     static name: string = "accelerometer";

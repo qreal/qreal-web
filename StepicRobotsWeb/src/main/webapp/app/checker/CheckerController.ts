@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="../vendor.d.ts" />
+
 class CheckerController {
 
     private kit: string;

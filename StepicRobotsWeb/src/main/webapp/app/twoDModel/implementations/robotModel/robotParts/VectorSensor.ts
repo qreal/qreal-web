@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="AbstractSensor" />
+
 class VectorSensor extends AbstractSensor {
     static parentType = AbstractSensor;
 }

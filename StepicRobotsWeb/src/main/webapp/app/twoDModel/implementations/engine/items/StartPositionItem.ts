@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/// <reference path="../../../interfaces/engine/model/WorldModel.ts" />
+/// <reference path="../../../../constants/GeneralConstants.ts" />
+/// <reference path="../../../../vendor.d.ts" />
+
 class StartPositionItem {
     private width = 15;
     private height = 15;

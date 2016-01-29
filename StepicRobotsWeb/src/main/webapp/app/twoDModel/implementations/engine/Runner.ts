@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/// <reference path="model/DisplayWidget.ts" />
+/// <reference path="../../interfaces/engine/items/RobotItem.ts" />
+
 class Runner {
 
     private timeoutId: number;

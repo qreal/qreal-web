@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/// <reference path="model/ModelImpl.ts" />
+/// <reference path="../robotModel/TwoDRobotModel.ts" />
+/// <reference path="../robotModel/DeviceInfoImpl.ts" />
+/// <reference path="../../interfaces/engine/model/Model.ts" />
+
 class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
     private robotModelName: string;
     private model: Model;

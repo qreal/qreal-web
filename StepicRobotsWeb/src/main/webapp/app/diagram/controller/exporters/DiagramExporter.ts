@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+/// <reference path="../../model/RobotsDiagramNode.ts" />
+/// <reference path="../../model/DiagramParts.ts" />
+/// <reference path="../../model/DiagramNode.ts" />
+/// <reference path="../../model/Map.ts" />
+/// <reference path="../../model/Property.ts" />
+/// <reference path="../../../vendor.d.ts" />
+
 class DiagramExporter {
 
     public exportDiagramStateToJSON(graph: joint.dia.Graph, diagramParts: DiagramParts) {

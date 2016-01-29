@@ -14,6 +14,17 @@
  * limitations under the License.
  */
 
+/// <reference path="../../model/RobotsDiagramNode.ts" />
+/// <reference path="../../model/SubprogramDiagramNode.ts" />
+/// <reference path="../../model/DiagramNode.ts" />
+/// <reference path="../../model/Link.ts" />
+/// <reference path="../../model/DiagramParts.ts" />
+/// <reference path="../../model/NodeType.ts" />
+/// <reference path="../../model/Map.ts" />
+/// <reference path="../../model/Property.ts" />
+/// <reference path="../../../utils/MathUtils.ts" />
+/// <reference path="../../../vendor.d.ts" />
+
 class DiagramJsonParser {
 
     public parse(diagramJson: any, nodeTypesMap: Map<NodeType>): DiagramParts {

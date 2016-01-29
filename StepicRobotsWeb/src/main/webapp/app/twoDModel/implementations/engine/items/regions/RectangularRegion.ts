@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/// <reference path="RegionItem.ts" />
+/// <reference path="../../../../interfaces/engine/model/WorldModel.ts" />
+
 class RectangularRegion extends RegionItem {
 
     constructor(worldModel: WorldModel) {

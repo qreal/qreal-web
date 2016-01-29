@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/// <reference path="PropertiesPack.ts" />
+/// <reference path="Map.ts" />
+/// <reference path="Property.ts" />
+
 interface DiagramElement {
     getLogicalId(): string;
     getJointObject();

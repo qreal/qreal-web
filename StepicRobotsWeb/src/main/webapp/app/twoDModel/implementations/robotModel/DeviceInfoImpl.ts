@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="../../interfaces/robotModel/DeviceInfo.ts" />
+
 class DeviceInfoImpl implements DeviceInfo {
     static createdInfos: {string?: DeviceInfo} = {};
 

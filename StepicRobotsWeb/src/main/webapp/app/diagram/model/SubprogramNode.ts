@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+/// <reference path="DefaultDiagramNode.ts" />
+/// <reference path="Map.ts" />
+/// <reference path="Property.ts" />
+/// <reference path="PropertiesPack.ts" />
+/// <reference path="../../vendor.d.ts" />
+
 class SubprogramNode extends DefaultDiagramNode {
 
     private subprogramDiagramId: string;

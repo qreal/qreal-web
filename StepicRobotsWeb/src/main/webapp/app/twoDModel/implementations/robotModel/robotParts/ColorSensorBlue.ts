@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="ColorSensor" />
+
 class ColorSensorBlue extends ColorSensor {
     static parentType = ColorSensor;
     static name: string = "colorBlue";

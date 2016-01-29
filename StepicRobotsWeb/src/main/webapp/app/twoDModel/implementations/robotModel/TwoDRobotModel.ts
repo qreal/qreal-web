@@ -14,6 +14,15 @@
  * limitations under the License.
  */
 
+/// <reference path="CommonRobotModelImpl.ts" />
+/// <reference path="robotParts/LightSensor.ts" />
+/// <reference path="TrikKit/parts/TrikInfraredSensor.ts" />
+/// <reference path="TrikKit/parts/TrikSonarSensor.ts" />
+/// <reference path="TrikKit/parts/TrikLineSensor.ts" />
+/// <reference path="../../interfaces/robotModel/RobotModelInterface.ts" />
+/// <reference path="../../interfaces/robotModel/PortInfo.ts" />
+/// <reference path="../../../constants/GeneralConstants.ts" />
+
 class TwoDRobotModel extends CommonRobotModelImpl {
     private name: string;
     private image: string;

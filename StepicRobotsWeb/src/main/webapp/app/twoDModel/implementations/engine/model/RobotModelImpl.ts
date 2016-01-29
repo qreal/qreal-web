@@ -14,6 +14,17 @@
  * limitations under the License.
  */
 
+/// <reference path="DisplayWidget.ts" />
+/// <reference path="SensorsConfiguration.ts" />
+/// <reference path="../Runner.ts" />
+/// <reference path="../items/RobotItemImpl.ts" />
+/// <reference path="../../robotModel/TwoDRobotModel.ts" />
+/// <reference path="../../../interfaces/engine/model/RobotModel.ts" />
+/// <reference path="../../../interfaces/engine/items/RobotItem.ts" />
+/// <reference path="../../../interfaces/engine/model/WorldModel.ts" />
+/// <reference path="../../../interfaces/robotModel/DeviceInfo.ts" />
+/// <reference path="../../../types/TwoDPosition.ts" />
+
 class RobotModelImpl implements RobotModel {
     private robotItem: RobotItem;
     private twoDRobotModel: TwoDRobotModel;

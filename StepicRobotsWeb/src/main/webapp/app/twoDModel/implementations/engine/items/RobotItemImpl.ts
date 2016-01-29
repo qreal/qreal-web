@@ -14,6 +14,18 @@
  * limitations under the License.
  */
 
+/// <reference path="SensorItem.ts" />
+/// <reference path="SonarSensorItem.ts" />
+/// <reference path="../StageScroller.ts" />
+/// <reference path="../model/Marker.ts" />
+/// <reference path="../../robotModel/robotParts/RangeSensor.ts" />
+/// <reference path="../../../interfaces/engine/items/RobotItem.ts" />
+/// <reference path="../../../interfaces/engine/model/WorldModel.ts" />
+/// <reference path="../../../interfaces/engine/model/RobotModel.ts" />
+/// <reference path="../../../interfaces/robotModel/DeviceInfo.ts" />
+/// <reference path="../../../types/TwoDPosition.ts" />
+/// <reference path="../../../../vendor.d.ts" />
+
 class RobotItemImpl implements RobotItem {
     private worldModel: WorldModel;
     private marker: Marker;

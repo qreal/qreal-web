@@ -14,6 +14,19 @@
  * limitations under the License.
  */
 
+/// <reference path="../items/regions/RegionItem.ts" />
+/// <reference path="../items/StartPositionItem.ts" />
+/// <reference path="../items/LineItemImpl.ts" />
+/// <reference path="../items/WallItemImpl.ts" />
+/// <reference path="../items/PencilItemImpl.ts" />
+/// <reference path="../items/EllipseItemImpl.ts" />
+/// <reference path="../../../interfaces/engine/model/WorldModel.ts" />
+/// <reference path="../../../interfaces/engine/items/AbstractItem.ts" />
+/// <reference path="../../../interfaces/engine/items/ColorFieldItem.ts" />
+/// <reference path="../../../interfaces/engine/items/WallItem.ts" />
+/// <reference path="../../../../utils/ColorUtils.ts" />
+/// <reference path="../../../../vendor.d.ts" />
+
 class WorldModelImpl implements WorldModel {
     private drawMode: number = 0;
     private paper: RaphaelPaper;

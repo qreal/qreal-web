@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/// <reference path="HtmlView.ts" />
+/// <reference path="CategoryView.ts" />
+/// <reference path="../model/Map.ts" />
+/// <reference path="../model/NodeType.ts" />
+
 class BlocksPaletteView extends HtmlView {
 
     constructor(paletteTypes: PaletteTypes) {

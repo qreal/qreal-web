@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/// <reference path="HtmlView.ts" />
+/// <reference path="../../utils/StringUtils.ts" />
+
 class SubprogramPaletteElementView extends HtmlView {
 
     private imageWidth: number = 30;

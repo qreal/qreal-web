@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+/// <reference path="HtmlView.ts" />
+/// <reference path="PaletteElementView.ts" />
+/// <reference path="../model/Map.ts" />
+/// <reference path="../model/NodeType.ts" />
+/// <reference path="../../utils/StringUtils.ts" />
+
 class CategoryView extends HtmlView {
 
     private template: string = '' +

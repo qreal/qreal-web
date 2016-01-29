@@ -17,6 +17,13 @@
 /**
  * Created by vladimir-zakharov on 10.10.14.
  */
+
+/// <reference path="DiagramNode.ts" />
+/// <reference path="PropertiesPack.ts" />
+/// <reference path="Map.ts" />
+/// <reference path="Property.ts" />
+/// <reference path="../../vendor.d.ts" />
+
 class DefaultDiagramNode implements DiagramNode {
 
     private logicalId: string;

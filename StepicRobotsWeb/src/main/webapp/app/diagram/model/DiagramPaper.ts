@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+/// <reference path="Map.ts" />
+/// <reference path="DiagramNode.ts" />
+/// <reference path="Link.ts" />
+/// <reference path="../controller/DiagramElementListener.ts" />
+/// <reference path="../../vendor.d.ts" />
+
 class DiagramPaper extends joint.dia.Paper {
 
     private graph: joint.dia.Graph;

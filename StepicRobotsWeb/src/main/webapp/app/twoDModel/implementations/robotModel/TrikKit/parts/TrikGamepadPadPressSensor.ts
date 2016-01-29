@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="../../robotParts/Button.ts" />
+
 class TrikGamepadPadPressSensor extends Button {
     static parentType = Button;
     static name = "gamepadPadPressSensor";

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="../../robotParts/Motor.ts" />
+
 class TrikPowerMotor extends Motor {
     static parentType = Motor;
     static name = "power";

@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/// <reference path="../../robotModel/DeviceInfo.ts" />
+/// <reference path="../../../types/TwoDPosition.ts" />
+/// <reference path="../../../implementations/robotModel/TwoDRobotModel.ts" />
+/// <reference path="../../../implementations/engine/model/SensorsConfiguration.ts" />
+
 interface RobotModel {
     info(): TwoDRobotModel;
     removeSensorItem(portName: string): void;

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="../../robotParts/VectorSensor.ts" />
+
 class TrikGamepadPad extends VectorSensor {
     static parentType = VectorSensor;
     static name = "gamepadPad";

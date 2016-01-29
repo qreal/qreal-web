@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/// <reference path="LedWidget.ts" />
+/// <reference path="../../../../utils/MathUtils.ts" />
+/// <reference path="../../../../constants/GeneralConstants.ts" />
+/// <reference path="../../../../vendor.d.ts" />
+
 class DisplayWidget {
 
     private width: number = 218;

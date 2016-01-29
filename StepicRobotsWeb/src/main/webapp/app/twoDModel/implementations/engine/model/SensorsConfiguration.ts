@@ -14,6 +14,16 @@
  * limitations under the License.
  */
 
+/// <reference path="../../robotModel/DevicesConfigurationProvider.ts" />
+/// <reference path="../../robotModel/robotParts/TouchSensor.ts" />
+/// <reference path="../../robotModel/robotParts/ColorSensor.ts" />
+/// <reference path="../../robotModel/robotParts/LightSensor.ts" />
+/// <reference path="../../robotModel/robotParts/RangeSensor.ts" />
+/// <reference path="../../robotModel/robotParts/VectorSensor.ts" />
+/// <reference path="../../../interfaces/engine/model/RobotModel.ts" />
+/// <reference path="../../../interfaces/robotModel/DeviceInfo.ts" />
+/// <reference path="../../../types/TwoDPosition.ts" />
+
 class SensorsConfiguration extends DevicesConfigurationProvider {
     private robotModel: RobotModel;
     private robotModelName: string;

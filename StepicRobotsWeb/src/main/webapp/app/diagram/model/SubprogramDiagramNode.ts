@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/// <reference path="Map.ts" />
+/// <reference path="Property.ts" />
+
 class SubprogramDiagramNode {
 
     private logicalId: string;

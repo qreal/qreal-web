@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/// <reference path="HtmlView.ts" />
+/// <reference path="SubprogramPaletteElementView.ts" />
+/// <reference path="../model/SubprogramDiagramNode.ts" />
+
 class SubprogramPaletteView extends HtmlView {
 
     constructor(subprogramDiagramNodes: SubprogramDiagramNode[], subprogramImageSrc: string) {

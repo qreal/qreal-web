@@ -1,20 +1,30 @@
 module.exports = function (grunt) {
 
-    // load the task
-    grunt.loadNpmTasks("grunt-ts");
-
-    // Configure grunt here
     grunt.initConfig({
         ts: {
-            dev: {                          // a particular target
-                src: ["app/**/*.ts"], // The source typescript files, http://gruntjs.com/configuring-tasks#files
-                html: ["app/**/*.html"], // The source html files, https://github.com/basarat/grunt-ts#html-2-typescript-support
-				reference: "./app/reference.ts",
-				out: 'app/out.js',         // If specified, generate an out.js file which is the merged js file
-                watch: 'app'
+            root: {
+                src: ["app/*.ts"],
+                out: "resources/js/compiled/root.js"
             },
+            diagramCore: {
+                src: ["app/diagram/**/*.ts"],
+                out: "resources/js/compiled/diagram-core.js"
+            },
+            checkerCore: {
+                src: ["app/checker/**/*.ts"],
+                out: "resources/js/compiled/checker-core.js"
+            },
+            twoDModelCore: {
+                src: ["app/twoDModel/**/*.ts"],
+                out: "resources/js/compiled/two-d-model-core.js"
+            },
+            utils: {
+                src: ["app/utils/**/*.ts"],
+                out: "resources/js/compiled/utils.js"
+            }
         }
     });
 
-    grunt.registerTask("default", ["ts:dev"]);
+    grunt.loadNpmTasks("grunt-ts");
+    grunt.registerTask("default", ["ts:root", "ts:diagramCore", "ts:checkerCore", "ts:twoDModelCore", "ts:utils"]);
 }

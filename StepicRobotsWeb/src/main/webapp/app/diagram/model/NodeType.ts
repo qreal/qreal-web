@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/// <reference path="Map.ts" />
+/// <reference path="Property.ts" />
+/// <reference path="../../vendor.d.ts" />
+
 class NodeType {
 
     private name: string

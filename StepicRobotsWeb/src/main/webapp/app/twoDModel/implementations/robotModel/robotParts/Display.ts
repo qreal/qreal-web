@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="DeviceImpl" />
+
 class Display extends DeviceImpl {
     static parentType = DeviceImpl;
     static name: string = "display";

@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/// <reference path="PortInfo.ts" />
+/// <reference path="DeviceInfo.ts" />
+
 interface RobotModelInterface {
     getAvailablePorts(): PortInfo[];
     getConfigurablePorts(): PortInfo[];

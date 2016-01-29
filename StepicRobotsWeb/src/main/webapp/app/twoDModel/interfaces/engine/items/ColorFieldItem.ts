@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/// <reference path="AbstractItem.ts" />
+
 interface ColorFieldItem extends AbstractItem {
     remove(): void;
 }
