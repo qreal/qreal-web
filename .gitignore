@@ -8,3 +8,4 @@
 **/.tscache
 .baseDir.ts
 **/js/compiled/
+tscommand*

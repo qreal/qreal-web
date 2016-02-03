@@ -14,19 +14,10 @@
  * limitations under the License.
  */
 
-/// <reference path="twoDModel/interfaces/robotModel/CommonRobotModel.ts" />
-/// <reference path="twoDModel/implementations/robotModel/TwoDRobotModel.ts" />
-/// <reference path="twoDModel/implementations/robotModel/TrikKit/TrikRobotModelBase.ts" />
-
 class RootDiagramController {
-    private realModel: CommonRobotModel;
-    private robotModel: TwoDRobotModel;
 
     constructor($scope, $compile) {
         $scope.root = this;
-
-        this.realModel = new TrikRobotModelBase();
-        this.robotModel = new TwoDRobotModel(this.realModel, "model");
 
         $scope.$on("emitDisplayResult", (event, result) => {
             $scope.$broadcast("displayResult", result);
@@ -39,13 +30,5 @@ class RootDiagramController {
         $scope.$on("emit2dModelLoad", (event, fieldXML) => {
             $scope.$broadcast("2dModelLoad", fieldXML);
         });
-    }
-
-    setRobotModel(robotModel: TwoDRobotModel) {
-        this.robotModel = robotModel;
-    }
-
-    getRobotModel(): TwoDRobotModel {
-        return this.robotModel;
     }
 }

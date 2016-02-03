@@ -14,15 +14,7 @@
  * limitations under the License.
  */
 
-/// <reference path="PaperController.ts" />
-/// <reference path="PropertyEditorController.ts" />
-/// <reference path="loaders/ElementsTypeLoader.ts" />
-/// <reference path="PaletteController.ts" />
-/// <reference path="parsers/DiagramJsonParser.ts" />
-/// <reference path="exporters/DiagramExporter.ts" />
-/// <reference path="../model/DiagramEditor.ts" />
-/// <reference path="../model/RobotsDiagramNode.ts" />
-/// <reference path="../model/Map.ts"/>
+/// <reference path="../../diagramCore.d.ts" />
 /// <reference path="../../vendor.d.ts" />
 
 class DiagramEditorController {
