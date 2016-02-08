@@ -24,6 +24,7 @@ interface WorldModel {
     getDrawMode(): number;
     setNoneMode(): void;
     getPaper(): RaphaelPaper;
+    getZoom(): number;
     setCurrentElement(element): void;
     clearPaper(): void;
     deserialize(xml, offsetX: number, offsetY: number): void;

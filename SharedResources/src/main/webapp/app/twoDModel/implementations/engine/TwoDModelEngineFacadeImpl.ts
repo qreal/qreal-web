@@ -30,7 +30,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         var robotModel = new TwoDRobotModel(new TrikRobotModelBase(), "model");
         this.robotModelName = robotModel.getName();
 
-        this.model = new ModelImpl();
+        this.model = new ModelImpl(parseFloat($("#twoDModel_stage").attr("zoom")));
         this.model.addRobotModel(robotModel);
 
         $(document).ready(() => {

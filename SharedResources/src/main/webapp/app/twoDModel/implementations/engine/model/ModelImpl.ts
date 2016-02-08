@@ -30,11 +30,11 @@ class ModelImpl implements Model {
     private minX: number;
     private minY: number;
 
-    constructor() {
+    constructor(zoom: number) {
         var model = this;
-        model.worldModel = new WorldModelImpl();
-        this.minX = 2000;
-        this.minY = 2000;
+        model.worldModel = new WorldModelImpl(zoom);
+        this.minX = 3000;
+        this.minY = 3000;
     }
 
     getWorldModel() : WorldModel {

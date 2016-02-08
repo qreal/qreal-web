@@ -28,6 +28,7 @@
 /// <reference path="../../../../vendor.d.ts" />
 
 class WorldModelImpl implements WorldModel {
+
     private drawMode: number = 0;
     private paper: RaphaelPaper;
     private currentElement: AbstractItem = null;
@@ -35,16 +36,20 @@ class WorldModelImpl implements WorldModel {
     private wallItems: WallItem[] = [];
     private regions: RegionItem[] = [];
     private startPositionCross: StartPositionItem;
+    private zoom: number;
+    private width: number = 3000;
+    private height: number = 3000;
 
-    constructor() {
-        this.paper = Raphael("twoDModel_stage", 3000, 3000);
+    constructor(zoom: number) {
+        this.zoom = (zoom) ? zoom : 1;
+        this.paper = Raphael("twoDModel_stage", this.width, this.height);
 
         $(this.paper.canvas).attr("id", "twoDModel_paper");
         $(this.paper.canvas).css('overflow', 'auto');
 
-        this.paper.setViewBox(0, 0, 3000, 3000, true);
+        this.paper.setViewBox(0, 0, this.width, this.height, true);
         this.paper.canvas.setAttribute('preserveAspectRatio', 'none');
-        $('#twoDModel_paper').attr('width', 2000).attr('height', 2000);
+        $('#twoDModel_paper').attr('width', this.width * zoom).attr('height', this.height * zoom);
 
         var wall_pattern = '<pattern id="wall_pattern" patternUnits="userSpaceOnUse" width="85" height="80">\
                                         <image xlink:href="' + GeneralConstants.APP_ROOT_PATH +
@@ -153,6 +158,10 @@ class WorldModelImpl implements WorldModel {
                 }
             });
         });
+    }
+
+    getZoom(): number {
+        return this.zoom;
     }
 
     addWall(xStart: number, yStart: number, xEnd: number, yEnd: number): void {

@@ -224,8 +224,8 @@ class RobotItemImpl implements RobotItem {
                 return this;
             },
             moveHandle = function (dx, dy) {
-                var newX : number = this.cx + dx;
-                var newY : number = this.cy + dy;
+                var newX : number = this.cx + dx * (1 / robotItem.worldModel.getZoom());
+                var newY : number = this.cy + dy * (1 / robotItem.worldModel.getZoom());
 
                 var center: TwoDPosition = robotItem.getCurrentCenter();
                 var diffX : number = newX - center.x;
@@ -251,10 +251,15 @@ class RobotItemImpl implements RobotItem {
         var start = function (event) {
                 if (!robotItem.worldModel.getDrawMode()) {
                     robotItem.worldModel.setCurrentElement(robotItem);
+                    this.lastOffsetX = robotItem.offsetPosition.x;
+                    this.lastOffsetY = robotItem.offsetPosition.y;
                 }
                 return this;
             },
             move = function (dx, dy) {
+                robotItem.offsetPosition.x = this.lastOffsetX + dx * (1 / robotItem.worldModel.getZoom());
+                robotItem.offsetPosition.y = this.lastOffsetY + dy * (1 / robotItem.worldModel.getZoom());
+                robotItem.updateTransformation();
                 return this;
             },
             up = function () {
