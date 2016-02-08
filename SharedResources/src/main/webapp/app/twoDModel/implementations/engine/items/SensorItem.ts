@@ -170,7 +170,7 @@ class SensorItem {
         var newY = positionY + this.offsetPosition.y;
         var positionOffsetX = newX - this.startPosition.x;
         var positionOffsetY = newY - this.startPosition.y;
-        this.currentTranslation = "t" + positionOffsetX + "," + positionOffsetY;
+        this.currentTranslation = "T" + positionOffsetX + "," + positionOffsetY;
         this.currentRobotRotation = "R" + direction + "," + rotationCX + "," + rotationCY;
         this.image.transform(this.getTransformation());
     }
@@ -200,6 +200,6 @@ class SensorItem {
     }
 
     private getTransformation(): string {
-        return this.currentRobotRotation + this.currentTranslation + this.currentRotation;
+        return this.currentTranslation + this.currentRobotRotation + this.currentRotation;
     }
 }

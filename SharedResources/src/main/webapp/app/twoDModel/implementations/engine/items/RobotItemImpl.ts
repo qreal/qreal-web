@@ -32,9 +32,8 @@ class RobotItemImpl implements RobotItem {
     private startPosition: TwoDPosition;
     private startDirection: number;
     private startCenter: TwoDPosition = new TwoDPosition();
-    private center: TwoDPosition = new TwoDPosition();
     private image: RaphaelElement;
-    private rotateHandle: RaphaelElement;
+    private rotationHandle: RaphaelElement;
     private width: number = 50;
     private height: number = 50;
     private offsetX: number = 0;
@@ -46,6 +45,7 @@ class RobotItemImpl implements RobotItem {
     private counter: number = 0;
     private isFollow: boolean;
     private scroller: StageScroller;
+    private offsetPosition: TwoDPosition;
 
     constructor(worldModel: WorldModel, position: TwoDPosition, imageFileName: string, robot: RobotModel) {
         this.worldModel = worldModel;
@@ -54,16 +54,15 @@ class RobotItemImpl implements RobotItem {
         this.startDirection = 0;
         this.isFollow = false;
         this.scroller = new StageScroller();
+        this.offsetPosition = new TwoDPosition();
         var paper = worldModel.getPaper();
 
         this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
 
-        this.changeCenterPosition(position.x + this.width / 2, position.y + this.height / 2);
+        this.startCenter.x = position.x + this.width / 2
+        this.startCenter.y = position.y + this.height / 2;
 
-        this.startCenter.x = this.center.x
-        this.startCenter.y = this.center.y;
-
-        this.marker = new Marker(paper, new TwoDPosition(this.center.x, this.center.y));
+        this.marker = new Marker(paper, new TwoDPosition(this.startCenter.x, this.startCenter.y));
 
         var handleRadius: number = 10;
 
@@ -74,32 +73,33 @@ class RobotItemImpl implements RobotItem {
             stroke: "black"
         };
 
-        this.rotateHandle = paper.circle(position.x + this.width + 20,
+        this.rotationHandle = paper.circle(position.x + this.width + 20,
             position.y + this.height / 2, handleRadius).attr(handleAttrs);
+        this.initDragAndDrop();
         this.hideHandles();
     }
 
     setStartPosition(position: TwoDPosition, direction: number): void {
         this.startPosition = position;
         this.direction = direction;
+        this.offsetPosition.x = 0;
+        this.offsetPosition.y = 0;
         this.startDirection = direction;
         this.image.attr({x: position.x, y: position.y});
-        this.changeCenterPosition(position.x + this.width / 2, position.y + this.height / 2);
-        this.startCenter.x = this.center.x
-        this.startCenter.y = this.center.y;
-        this.image.transform("R" + direction + "," + this.center.x + "," + this.center.y);
-        this.rotateHandle.attr({"cx": + position.x + this.width + 20, "cy": position.y + this.height / 2 });
-
-        this.marker.setCenter(new TwoDPosition(this.center.x, this.center.y));
+        this.startCenter.x = position.x + this.width / 2;
+        this.startCenter.y = position.y + this.height / 2;
+        this.rotationHandle.attr({"cx": + position.x + this.width + 20, "cy": position.y + this.height / 2 });
+        this.updateTransformation();
+        this.marker.setCenter(new TwoDPosition(this.startCenter.x, this.startCenter.y));
     }
 
     hideHandles(): void {
-        this.rotateHandle.hide();
+        this.rotationHandle.hide();
     }
 
     showHandles(): void {
-        this.rotateHandle.toFront();
-        this.rotateHandle.show();
+        this.rotationHandle.toFront();
+        this.rotationHandle.show();
     }
 
     getWidth(): number {
@@ -130,7 +130,8 @@ class RobotItemImpl implements RobotItem {
         } else {
             sensor = new SensorItem(this, this.worldModel, sensorType, pathToImage, position);
         }
-        sensor.rotateByRobot(this.direction, this.center.x, this.center.y);
+        var center: TwoDPosition = this.getCurrentCenter();
+        sensor.rotateByRobot(this.direction, center.x, center.y);
         if (direction) {
             sensor.setStartDirection(direction);
         }
@@ -151,7 +152,6 @@ class RobotItemImpl implements RobotItem {
         }
         this.marker.setDown(false);
         this.marker.setColor("#000000");
-        this.marker.setCenter(new TwoDPosition(this.center.x, this.center.y));
         this.marker.clear();
         this.setStartPosition(this.startPosition, this.startDirection);
         this.clearSensorsPosition();
@@ -170,29 +170,24 @@ class RobotItemImpl implements RobotItem {
         var newX = x + this.offsetX;
         var newY = y + this.offsetY;
 
-        var newCenterX = newX + this.width / 2;
-        var newCenterY = newY + this.height / 2;
-
-        this.changeCenterPosition(newCenterX, newCenterY);
-
-        this.image.transform("R" + rotation);
+        this.offsetPosition.x = newX - this.startPosition.x;
+        this.offsetPosition.y = newY - this.startPosition.y;
 
         this.direction = rotation;
-
-        this.moveSensors(newX, newY, rotation, this.center.x, this.center.y);
-
-        this.image.attr({x: newX, y: newY});
+        this.updateTransformation();
+        var center: TwoDPosition = this.getCurrentCenter();
+        this.moveSensors(newX, newY, rotation, center.x, center.y);
 
         if (this.marker.isDown()) {
             if (this.counter > this.roughening) {
-                this.marker.setCenter(new TwoDPosition(this.center.x, this.center.y));
+                this.marker.setCenter(new TwoDPosition(center.x, center.y));
                 this.marker.drawPoint();
                 this.counter = 0;
             } else {
                 this.counter++;
             }
         } else {
-            this.marker.setCenter(new TwoDPosition(this.center.x, this.center.y));
+            this.marker.setCenter(new TwoDPosition(center.x, center.y));
         }
     }
 
@@ -220,20 +215,90 @@ class RobotItemImpl implements RobotItem {
         this.scroller.scrollToPoint(this.startPosition.x, this.startPosition.y);
     }
 
-    private changeCenterPosition(x: number, y: number) {
-        this.center.x = x;
-        this.center.y = y;
-        if (this.isFollow) {
-            this.scroller.scrollToPoint(x, y);
+    private initDragAndDrop(): void {
+        var robotItem = this;
+
+        var startHandle = function () {
+                this.cx = robotItem.rotationHandle.matrix.x(this.attr("cx"), this.attr("cy"));
+                this.cy = robotItem.rotationHandle.matrix.y(this.attr("cx"), this.attr("cy"));
+                return this;
+            },
+            moveHandle = function (dx, dy) {
+                var newX : number = this.cx + dx;
+                var newY : number = this.cy + dy;
+
+                var center: TwoDPosition = robotItem.getCurrentCenter();
+                var diffX : number = newX - center.x;
+                var diffY : number = newY - center.y;
+                var tan : number = diffY / diffX;
+                var angle : number = Math.atan(tan) / (Math.PI / 180);
+                if (diffX < 0) {
+                    angle += 180;
+                }
+
+                robotItem.direction = angle;
+                robotItem.updateTransformation();
+                robotItem.rotateSensors(angle, center.x, center.y);
+
+                return this;
+            },
+            upHandle = function () {
+                return this;
+            };
+
+        robotItem.rotationHandle.drag(moveHandle, startHandle, upHandle);
+
+        var start = function (event) {
+                if (!robotItem.worldModel.getDrawMode()) {
+                    robotItem.worldModel.setCurrentElement(robotItem);
+                }
+                return this;
+            },
+            move = function (dx, dy) {
+                return this;
+            },
+            up = function () {
+                return this;
+            };
+
+        this.image.drag(move, start, up);
+    }
+
+    private rotateSensors(angle: number, centerX: number, centerY: number): void {
+        for (var portName in this.sensors) {
+            var sensor = this.sensors[portName];
+            sensor.rotateByRobot(angle, centerX, centerY);
         }
     }
 
-    private clearSensorsPosition() {
+    private clearSensorsPosition(): void {
         for (var portName in this.sensors) {
             var sensor = this.sensors[portName];
             sensor.setStartPosition();
-            sensor.rotateByRobot(this.direction, this.center.x, this.center.y);
+            var center: TwoDPosition = this.getCurrentCenter();
+            sensor.rotateByRobot(this.direction, center.x, center.y);
             sensor.restoreStartDirection();
         }
+    }
+
+    private updateTransformation(): void {
+        this.image.transform(this.getTransformation());
+        this.rotationHandle.transform(this.getTransformation());
+        var center: TwoDPosition = this.getCurrentCenter();
+        if (this.isFollow) {
+            this.scroller.scrollToPoint(center.x, center.y);
+        }
+    }
+
+    private getTransformation(): string {
+        var cx = this.startCenter.x + this.offsetPosition.x;
+        var cy = this.startCenter.y + this.offsetPosition.y;
+        return "T" + this.offsetPosition.x + "," + this.offsetPosition.y + "R" + this.direction + "," + cx + "," + cy;
+    }
+
+    private getCurrentCenter(): TwoDPosition {
+        var centerX = this.image.matrix.x(this.startCenter.x, this.startCenter.y);
+        var centerY = this.image.matrix.y(this.startCenter.x, this.startCenter.y);
+        return new TwoDPosition(centerX, centerY);
     }
 }

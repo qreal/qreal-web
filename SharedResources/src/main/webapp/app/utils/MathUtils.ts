@@ -35,4 +35,19 @@ class MathUtils {
     public static min(a: number, b: number): number {
         return (a < b) ? a : b;
     }
+
+    public static toRadians(angle : number): number {
+        return angle * Math.PI / 180.0;
+    }
+
+    public static toDegrees(angle : number): number {
+        return angle * 180.0 / Math.PI;
+    }
+
+    public static rotateVector(x: number, y: number, angle: number): {x: number, y: number} {
+        angle = MathUtils.toRadians(angle);
+        var newX: number = x * Math.cos(angle) - y * Math.sin(angle);
+        var newY: number = x * Math.sin(angle) + y * Math.cos(angle);
+        return { x: newX, y: newY };
+    }
 }

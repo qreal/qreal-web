@@ -27,7 +27,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         $scope.vm = this;
 
         var facade = this;
-        var robotModel = $scope.root.getRobotModel();
+        var robotModel = new TwoDRobotModel(new TrikRobotModelBase(), "model");
         this.robotModelName = robotModel.getName();
 
         this.model = new ModelImpl();
