@@ -84,22 +84,19 @@ class SonarSensorItem extends SensorItem {
         this.scanningRegion.transform("");
     }
 
-    moveToPoint(positionX: number, positionY: number, direction: number, rotationCX: number, rotationCY: number): void {
-        super.moveToPoint(positionX, positionY, direction, rotationCX, rotationCY);
+    move(deltaX: number, deltaY: number): void {
+        super.move(deltaX, deltaY);
+        this.updateRegionTransformation();
+    }
 
-        this.regionTranslation = "T" + this.offsetPosition.x + "," + this.offsetPosition.y;
-        this.scanningRegion.transform(this.getRegionTransformation());
+    public updateTransformation(): void {
+        super.updateTransformation();
+        this.updateRegionTransformation();
     }
 
     rotate(angle: number): void {
         super.rotate(angle);
-        this.regionRotation = "r" + angle + "," + this.regionStartX + "," + this.regionStartY;
-        this.scanningRegion.transform(this.getRegionTransformation());
-    }
-
-    rotateByRobot(angle: number, centerX: number, centerY: number) {
-        super.rotateByRobot(angle, centerX, centerY);
-        this.scanningRegion.transform(this.getRegionTransformation());
+        this.updateRegionTransformation();
     }
 
     remove():void {
@@ -107,13 +104,15 @@ class SonarSensorItem extends SensorItem {
         this.scanningRegion.remove();
     }
 
-    protected updateTransformation(): void {
-        super.updateTransformation();
-        this.regionTranslation = "T" + this.offsetPosition.x + "," + this.offsetPosition.y;
+    protected updateRegionTransformation(): void {
+        var offsetX: number = this.offsetPosition.x + this.robotOffsetPosition.x;
+        var offsetY: number = this.offsetPosition.y + this.robotOffsetPosition.y;
+        this.regionTranslation = "T" + offsetX + "," + offsetY;
         this.scanningRegion.transform(this.getRegionTransformation());
     }
 
     private getRegionTransformation(): string {
-        return this.regionTranslation + this.currentRobotRotation + this.regionRotation;
+        return  this.regionTranslation + this.getRobotRotationTransformation() +
+            "r" + this.direction + "," + this.regionStartX + "," + this.regionStartY;
     }
 }

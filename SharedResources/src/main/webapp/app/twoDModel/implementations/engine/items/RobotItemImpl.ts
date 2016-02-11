@@ -114,6 +114,16 @@ class RobotItemImpl implements RobotItem {
         return this.startPosition;
     }
 
+    getDirection(): number {
+        return this.direction;
+    }
+
+    getCenter(): TwoDPosition {
+        var centerX = this.image.matrix.x(this.startCenter.x, this.startCenter.y);
+        var centerY = this.image.matrix.y(this.startCenter.x, this.startCenter.y);
+        return new TwoDPosition(centerX, centerY);
+    }
+
     removeSensorItem(portName: string): void {
         var sensor = this.sensors[portName];
         if (sensor) {
@@ -130,18 +140,17 @@ class RobotItemImpl implements RobotItem {
         } else {
             sensor = new SensorItem(this, this.worldModel, sensorType, pathToImage, position);
         }
-        var center: TwoDPosition = this.getCurrentCenter();
-        sensor.rotateByRobot(this.direction, center.x, center.y);
         if (direction) {
             sensor.setStartDirection(direction);
         }
+        sensor.updateTransformation();
         this.sensors[portName] = sensor;
     }
 
-    moveSensors(positionX: number, positionY: number, direction: number, centerX: number, centerY: number): void {
+    moveSensors(deltaX: number, deltaY: number, direction: number, centerX: number, centerY: number): void {
         for (var portName in this.sensors) {
             var sensor = this.sensors[portName];
-            sensor.moveToPoint(positionX, positionY, direction, centerX, centerY);
+            sensor.move(deltaX, deltaY, direction, centerX, centerY);
         }
     }
 
@@ -175,8 +184,8 @@ class RobotItemImpl implements RobotItem {
 
         this.direction = rotation;
         this.updateTransformation();
-        var center: TwoDPosition = this.getCurrentCenter();
-        this.moveSensors(newX, newY, rotation, center.x, center.y);
+        var center: TwoDPosition = this.getCenter();
+        this.moveSensors(this.offsetPosition.x, this.offsetPosition.y, rotation, center.x, center.y);
 
         if (this.marker.isDown()) {
             if (this.counter > this.roughening) {
@@ -227,7 +236,7 @@ class RobotItemImpl implements RobotItem {
                 var newX : number = this.cx + dx * (1 / robotItem.worldModel.getZoom());
                 var newY : number = this.cy + dy * (1 / robotItem.worldModel.getZoom());
 
-                var center: TwoDPosition = robotItem.getCurrentCenter();
+                var center: TwoDPosition = robotItem.getCenter();
                 var diffX : number = newX - center.x;
                 var diffY : number = newY - center.y;
                 var tan : number = diffY / diffX;
@@ -238,7 +247,7 @@ class RobotItemImpl implements RobotItem {
 
                 robotItem.direction = angle;
                 robotItem.updateTransformation();
-                robotItem.rotateSensors(angle, center.x, center.y);
+                robotItem.updateSensorsTransformation();
 
                 return this;
             },
@@ -260,6 +269,9 @@ class RobotItemImpl implements RobotItem {
                 robotItem.offsetPosition.x = this.lastOffsetX + dx * (1 / robotItem.worldModel.getZoom());
                 robotItem.offsetPosition.y = this.lastOffsetY + dy * (1 / robotItem.worldModel.getZoom());
                 robotItem.updateTransformation();
+                var center: TwoDPosition = robotItem.getCenter();
+                robotItem.moveSensors(robotItem.offsetPosition.x, robotItem.offsetPosition.y,
+                    robotItem.direction, center.x, center.y);
                 return this;
             },
             up = function () {
@@ -269,10 +281,10 @@ class RobotItemImpl implements RobotItem {
         this.image.drag(move, start, up);
     }
 
-    private rotateSensors(angle: number, centerX: number, centerY: number): void {
+    private updateSensorsTransformation(): void {
         for (var portName in this.sensors) {
             var sensor = this.sensors[portName];
-            sensor.rotateByRobot(angle, centerX, centerY);
+            sensor.updateTransformation();
         }
     }
 
@@ -280,8 +292,6 @@ class RobotItemImpl implements RobotItem {
         for (var portName in this.sensors) {
             var sensor = this.sensors[portName];
             sensor.setStartPosition();
-            var center: TwoDPosition = this.getCurrentCenter();
-            sensor.rotateByRobot(this.direction, center.x, center.y);
             sensor.restoreStartDirection();
         }
     }
@@ -289,7 +299,7 @@ class RobotItemImpl implements RobotItem {
     private updateTransformation(): void {
         this.image.transform(this.getTransformation());
         this.rotationHandle.transform(this.getTransformation());
-        var center: TwoDPosition = this.getCurrentCenter();
+        var center: TwoDPosition = this.getCenter();
         if (this.isFollow) {
             this.scroller.scrollToPoint(center.x, center.y);
         }
@@ -301,9 +311,4 @@ class RobotItemImpl implements RobotItem {
         return "T" + this.offsetPosition.x + "," + this.offsetPosition.y + "R" + this.direction + "," + cx + "," + cy;
     }
 
-    private getCurrentCenter(): TwoDPosition {
-        var centerX = this.image.matrix.x(this.startCenter.x, this.startCenter.y);
-        var centerY = this.image.matrix.y(this.startCenter.x, this.startCenter.y);
-        return new TwoDPosition(centerX, centerY);
-    }
 }
