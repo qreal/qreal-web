@@ -27,7 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class EditorController {
 
-    @RequestMapping(value = "/redactor", method = RequestMethod.GET)
+    @RequestMapping(value = "/editor", method = RequestMethod.GET)
     public ModelAndView index() {
         return new ModelAndView("editor/editor");
     }

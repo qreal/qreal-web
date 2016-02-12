@@ -9,3 +9,4 @@
 .baseDir.ts
 **/js/compiled/
 tscommand*
+overlays

@@ -16,7 +16,7 @@
   ~ limitations under the License.
   --%>
 
-<div id="diagramContent" class="unselectable" ng-controller="DiagramController">
+<div id="diagramContent" class="unselectable" ng-controller="RobotsDiagramEditorController">
     <ul class='custom-menu'>
         <li data-action="delete">Delete</li>
     </ul>

@@ -21,7 +21,6 @@
 <head>
     <title>Robots Diagram</title>
 
-    <script src="<c:url value='/resources/js/jquery-1.11.0.min.js' />"></script>
     <jsp:include page="include/scripts.jsp"/>
     <link rel="stylesheet" href="<c:url value='/resources/css/error.css'/>"/>
     <script src="<c:url value='/resources/js/map.js' />"></script>

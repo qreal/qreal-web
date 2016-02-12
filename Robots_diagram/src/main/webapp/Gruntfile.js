@@ -10,5 +10,5 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks("grunt-ts");
-    grunt.registerTask("default", ["ts:diagramRobots", "ts:checkerCore"]);
-};
+    grunt.registerTask("default", ["ts:diagramRobots"]);
+}
