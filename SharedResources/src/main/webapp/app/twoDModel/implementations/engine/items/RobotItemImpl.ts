@@ -200,6 +200,15 @@ class RobotItemImpl implements RobotItem {
         }
     }
 
+    move(deltaX: number, deltaY: number, direction: number): void {
+        this.offsetPosition.x += deltaX;
+        this.offsetPosition.y += deltaY;
+        this.direction = direction;
+        this.updateTransformation();
+        var center: TwoDPosition = this.getCenter();
+        this.moveSensors(this.offsetPosition.x, this.offsetPosition.y, direction, center.x, center.y);
+    }
+
     setMarkerDown(down: boolean): void {
         this.marker.setDown(down);
     }
