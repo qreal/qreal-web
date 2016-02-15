@@ -28,9 +28,9 @@ class StepicDiagramEditorController extends DiagramEditorController {
         super($scope, $attrs);
         this.taskId = $attrs.task;
         this.kit = $attrs.kit;
-        this.elementsTypeLoader.load(this.kit, this.taskId, (elementTypes: ElementTypes): void => {
+        this.elementsTypeLoader.load((elementTypes: ElementTypes): void => {
             this.handleLoadedTypes(elementTypes);
-        });
+        }, this.kit, this.taskId);
         $scope.submit = (): void => {
             this.submit(this.scope);
         };

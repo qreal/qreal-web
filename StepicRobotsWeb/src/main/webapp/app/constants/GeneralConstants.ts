@@ -17,5 +17,6 @@
 class GeneralConstants {
 
     static APP_ROOT_PATH: string = "/StepicRobotsWeb/";
+    static DEFAULT_KIT: string = "2015";
 
 }

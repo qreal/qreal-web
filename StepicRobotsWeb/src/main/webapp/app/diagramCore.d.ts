@@ -181,7 +181,7 @@ declare class PropertyEditorController {
 
 declare class ElementsTypeLoader {
 
-    load(kit: string, task: string, callback: (elementTypes: ElementTypes) => void): void;
+    load(callback: (elementTypes: ElementTypes) => void, kit?: string, task?: string): void;
 
 }
 

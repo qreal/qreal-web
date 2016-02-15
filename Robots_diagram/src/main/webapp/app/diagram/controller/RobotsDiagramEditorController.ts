@@ -24,9 +24,33 @@
 
 class RobotsDiagramEditorController extends DiagramEditorController {
 
+    private isPaletteLoaded = false;
+
     constructor($scope, $attrs) {
         super($scope, $attrs);
         $scope.openTwoDModel = this.openTwoDModel;
+        this.elementsTypeLoader.load((elementTypes: ElementTypes): void => {
+            this.handleLoadedTypes(elementTypes);
+        });
+    }
+
+    public handleLoadedTypes(elementTypes: ElementTypes): void {
+        this.propertyEditorController = new PropertyEditorController(this.paperController);
+
+        for (var typeName in elementTypes.uncategorisedTypes) {
+            this.nodeTypesMap[typeName] = elementTypes.uncategorisedTypes[typeName];
+        }
+
+        var categories: Map<Map<NodeType>> = elementTypes.paletteTypes.categories;
+        for (var category in categories) {
+            for (var typeName in categories[category]) {
+                this.nodeTypesMap[typeName] = categories[category][typeName];
+            }
+        }
+
+        this.paletteController.appendBlocksPalette(elementTypes.paletteTypes);
+        this.paletteController.initDraggable();
+        this.isPaletteLoaded = true;
     }
 
     openTwoDModel(): void {

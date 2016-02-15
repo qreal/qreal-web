@@ -77,75 +77,94 @@
         </div>
     </div>
 
-    <div id="diagram_container">
-        <div id="diagram_left-menu">
-            <legend style="padding: 10px">Property Editor</legend>
-            <table class="table table-condensed" id="property_table">
-                <thead>
-                <tr>
-                    <th>Property</th>
-                    <th>Value</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-
-        <div id="diagram_paper">
-        </div>
-
-        <div id="diagram_right-menu">
-            <legend style="height: 40px; padding: 10px">Palette</legend>
-            <div id="elements_tree">
-                <ul id="navigation">
-                </ul>
+    <div id="content-row" class="row unselectable content-row">
+        <div class="col-md-3 content-col">
+            <div id="diagram_left-menu">
+                <legend style="padding: 10px">Property Editor</legend>
+                <table class="table table-condensed" id="property_table">
+                    <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
         </div>
-
-        <div class="modal fade" id="diagrams" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Diagrams</h4>
-                    </div>
-                    <div class="modal-body_nopadding">
-                        <div class="folderMenu">
-                        </div>
-                        <div class="folderPath">
-                        </div>
-                        <div class="folderView">
-                            <ul class="folderTable">
+        <div class="col-md-7 content-col">
+            <div id="diagram_paper">
+            </div>
+        </div>
+        <div class="col-md-2 content-col">
+            <div id="diagram_right-menu">
+                <legend style="height: 40px; padding: 10px">Palette</legend>
+                <div id="elements_tree">
+                    <ul id="palette-tabs" class="nav nav-tabs">
+                        <li role="presentation" class="active"><a href="#blocks" aria-controls="blocks" role="tab"
+                                                                  data-toggle="tab">Blocks</a></li>
+                        <li role="presentation"><a href="#subprograms" aria-controls="subprograms" role="tab"
+                                                   data-toggle="tab">Subprograms</a></li>
+                    </ul>
+                    <div id="palette-tab-content" class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="blocks">
+                            <ul id="blocks-navigation">
                             </ul>
                         </div>
-                        <div class="savingMenu">
+                        <div role="tabpanel" class="tab-pane" id="subprograms">
+                            <ul id="subprograms-navigation">
+                            </ul>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="confirmNew" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Create</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>Do you want to save current diagram?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" id="saveAfterCreate" data-dismiss="modal">Yes</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.menuController.clearAll()">No</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="diagrams" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Diagrams</h4>
+                </div>
+                <div class="modal-body_nopadding">
+                    <div class="folderMenu">
+                    </div>
+                    <div class="folderPath">
+                    </div>
+                    <div class="folderView">
+                        <ul class="folderTable">
+                        </ul>
+                    </div>
+                    <div class="savingMenu">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmNew" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Create</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Do you want to save current diagram?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="saveAfterCreate" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.menuController.clearAll()">No</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

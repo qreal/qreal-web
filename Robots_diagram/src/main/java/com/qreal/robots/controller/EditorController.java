@@ -16,10 +16,13 @@
 
 package com.qreal.robots.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.qreal.robots.loaders.TypesLoader;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Locale;
 
 /**
  * Created by vladzx on 25.10.14.
@@ -27,8 +30,20 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class EditorController {
 
+    private TypesLoader typesLoader;
+
+    public EditorController() {
+        this.typesLoader = new TypesLoader();
+    }
+
     @RequestMapping(value = "/editor", method = RequestMethod.GET)
     public ModelAndView index() {
         return new ModelAndView("editor/editor");
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "getTypes/", method = RequestMethod.POST)
+    public JsonNode getTypes(@RequestParam(value="kit") String kit) {
+        return typesLoader.getTypesJson();
     }
 }
