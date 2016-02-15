@@ -47,7 +47,7 @@
                 <ul class='custom-menu'>
                     <li data-action="delete">Delete</li>
                 </ul>
-                <div id="diagram_paper">
+                <div id="diagram_paper" zoom="0.8">
                     <div id="diagramSpinner" class="centerSpinner">
                     </div>
                 </div>

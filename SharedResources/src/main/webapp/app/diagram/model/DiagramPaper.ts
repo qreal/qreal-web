@@ -33,7 +33,8 @@ class DiagramPaper extends joint.dia.Paper {
         this.nodesMap = {};
         this.linksMap = {};
         this.gridSize = 25;
-        this.zoom = 0.8;
+        var zoomAttr: number = parseFloat($('#diagram_paper').attr("zoom"));
+        this.zoom = (zoomAttr) ? zoomAttr : 1;
 
         super({
             el: $('#diagram_paper'),

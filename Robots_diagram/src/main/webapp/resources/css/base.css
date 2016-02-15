@@ -89,9 +89,13 @@ body{
 }
 
 #diagram_paper {
-    background: #ffffff url('bg.png');
     border: 1px solid gray;
     height: 100%;
+    overflow: scroll;
+}
+
+#diagram_paper svg {
+    background: #ffffff url('bg.png');
 }
 
 .elementImg {
