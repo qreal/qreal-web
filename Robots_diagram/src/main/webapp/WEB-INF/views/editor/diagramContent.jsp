@@ -42,7 +42,7 @@
                         </ul>
                     </li>
                     <li>
-                        <p class="navbar-text" ng-click="vm.openTwoDModel()">
+                        <p class="navbar-text" ng-click="openTwoDModel()">
                             <img src="images/2dmodel/2d-model.svg" style="width: 18px; height: 18px; cursor: pointer"/>
                         </p>
                     </li>

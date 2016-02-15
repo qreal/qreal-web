@@ -49,7 +49,7 @@ class WorldModelImpl implements WorldModel {
 
         this.paper.setViewBox(0, 0, this.width, this.height, true);
         this.paper.canvas.setAttribute('preserveAspectRatio', 'none');
-        $('#twoDModel_paper').attr('width', this.width * zoom).attr('height', this.height * zoom);
+        $('#twoDModel_paper').attr('width', this.width * this.zoom).attr('height', this.height * this.zoom);
 
         var wall_pattern = '<pattern id="wall_pattern" patternUnits="userSpaceOnUse" width="85" height="80">\
                                         <image xlink:href="' + GeneralConstants.APP_ROOT_PATH +
@@ -81,7 +81,7 @@ class WorldModelImpl implements WorldModel {
                         var y = position.y;
                         var width = $("#pen_width_spinner").val();
                         var color = $("#pen_color_dropdown").val();
-                        shape = new LineItemImpl(worldModel, x, y, x, y, width, color);
+                        shape = new LineItemImpl(worldModel, x, y, x, y, width, new RGBAColor(1, color));
                         worldModel.colorFields.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;

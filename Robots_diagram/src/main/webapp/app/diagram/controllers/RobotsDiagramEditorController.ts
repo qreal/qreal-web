@@ -24,4 +24,14 @@
 
 class RobotsDiagramEditorController extends DiagramEditorController {
 
+    constructor($scope, $attrs) {
+        super($scope, $attrs);
+        $scope.openTwoDModel = this.openTwoDModel;
+    }
+
+    openTwoDModel(): void {
+        $("#diagramContent").hide();
+        $("#twoDModelContent").show();
+    }
+
 }
