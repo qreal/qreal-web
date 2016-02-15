@@ -35,7 +35,8 @@ class EllipseItemImpl implements EllipseItem {
             fill: "transparent",
             "stroke": color,
             "stroke-width": width
-        })
+        });
+        worldModel.insertBeforeRobots(this.ellipse);
 
         var handleAttrs = {
             fill: "transparent",

@@ -36,6 +36,8 @@ class CubicBezierItemImpl implements CubicBezierItem {
             "stroke-opacity": rgbaColor.alpha,
             "stroke-width": width
         });
+
+        worldModel.insertBeforeRobots(this.path);
     }
 
     getPath(): RaphaelPath {

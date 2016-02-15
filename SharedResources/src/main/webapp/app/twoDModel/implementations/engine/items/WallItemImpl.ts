@@ -37,6 +37,8 @@ class WallItemImpl implements WallItem {
         $(".path").attr("stroke", "url(#wall_pattern)");
         this.pathArray = this.path.attr("path");
 
+        worldModel.insertBeforeRobots(this.path);
+
         var handleRadius: number = 10;
 
         this.handleStart = paper.circle(xStart, yStart, handleRadius).attr({

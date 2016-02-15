@@ -32,6 +32,8 @@ class PencilItemImpl implements PencilItem {
             "stroke": color,
             "stroke-width": width
         });
+
+        worldModel.insertBeforeRobots(this.path);
     }
 
     setDraggable(): void {

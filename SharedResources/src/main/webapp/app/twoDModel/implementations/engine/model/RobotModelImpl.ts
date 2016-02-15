@@ -37,7 +37,6 @@ class RobotModelImpl implements RobotModel {
         this.worldModel = worldModel;
         this.twoDRobotModel = twoDRobotModel;
         this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), this);
-        this.robotItem.hide();
         this.sensorsConfiguration = new SensorsConfiguration(this);
         this.displayWidget = new DisplayWidget();
         this.runner = new Runner();

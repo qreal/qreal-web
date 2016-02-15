@@ -55,6 +55,8 @@ class SonarSensorItem extends SensorItem {
         "Z");
         this.scanningRegion.attr({fill: "#c5d0de", stroke: "#b1bbc7", opacity: 0.5});
 
+        worldModel.insertAfterRobots(this.scanningRegion);
+
         this.regionTranslation = "T0,0";
         this.regionRotation = "R0";
     }

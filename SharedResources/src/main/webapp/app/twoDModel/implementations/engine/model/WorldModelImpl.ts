@@ -32,6 +32,7 @@ class WorldModelImpl implements WorldModel {
     private drawMode: number = 0;
     private paper: RaphaelPaper;
     private currentElement: AbstractItem = null;
+    private robotItemSet: RaphaelSet;
     private colorFields: ColorFieldItem[] = [];
     private wallItems: WallItem[] = [];
     private regions: RegionItem[] = [];
@@ -43,6 +44,7 @@ class WorldModelImpl implements WorldModel {
     constructor(zoom: number) {
         this.zoom = (zoom) ? zoom : 1;
         this.paper = Raphael("twoDModel_stage", this.width, this.height);
+        this.robotItemSet = this.paper.set();
 
         $(this.paper.canvas).attr("id", "twoDModel_paper");
         $(this.paper.canvas).css('overflow', 'auto');
@@ -162,6 +164,18 @@ class WorldModelImpl implements WorldModel {
 
     getZoom(): number {
         return this.zoom;
+    }
+
+    addRobotItemElement(element: RaphaelElement): void {
+        this.robotItemSet.push(element);
+    }
+
+    insertBeforeRobots(element: RaphaelElement): void {
+        element.insertBefore(this.robotItemSet);
+    }
+
+    insertAfterRobots(element: RaphaelElement): void {
+        element.insertAfter(this.robotItemSet);
     }
 
     addWall(xStart: number, yStart: number, xEnd: number, yEnd: number): void {

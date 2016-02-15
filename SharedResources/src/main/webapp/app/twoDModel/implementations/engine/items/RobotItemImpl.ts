@@ -55,26 +55,12 @@ class RobotItemImpl implements RobotItem {
         this.isFollow = false;
         this.scroller = new StageScroller();
         this.offsetPosition = new TwoDPosition();
-        var paper = worldModel.getPaper();
-
-        this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
 
         this.startCenter.x = position.x + this.width / 2
         this.startCenter.y = position.y + this.height / 2;
 
-        this.marker = new Marker(paper, new TwoDPosition(this.startCenter.x, this.startCenter.y));
+        this.createElement(worldModel, position, imageFileName);
 
-        var handleRadius: number = 10;
-
-        var handleAttrs = {
-            fill: "transparent",
-            cursor: "pointer",
-            "stroke-width": 1,
-            stroke: "black"
-        };
-
-        this.rotationHandle = paper.circle(position.x + this.width + 20,
-            position.y + this.height / 2, handleRadius).attr(handleAttrs);
         this.initDragAndDrop();
         this.hideHandles();
     }
@@ -288,6 +274,27 @@ class RobotItemImpl implements RobotItem {
             };
 
         this.image.drag(move, start, up);
+    }
+
+    private createElement(worldModel: WorldModel, position: TwoDPosition, imageFileName: string): void {
+        var paper = worldModel.getPaper();
+
+        this.image = paper.image(imageFileName, position.x, position.y, this.width, this.height);
+        worldModel.addRobotItemElement(this.image);
+        this.marker = new Marker(paper, new TwoDPosition(this.startCenter.x, this.startCenter.y));
+
+
+        var handleRadius: number = 10;
+
+        var handleAttrs = {
+            fill: "transparent",
+            cursor: "pointer",
+            "stroke-width": 1,
+            stroke: "black"
+        };
+
+        this.rotationHandle = paper.circle(position.x + this.width + 20,
+            position.y + this.height / 2, handleRadius).attr(handleAttrs);
     }
 
     private updateSensorsTransformation(): void {

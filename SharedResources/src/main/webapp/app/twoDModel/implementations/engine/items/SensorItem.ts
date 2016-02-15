@@ -62,6 +62,8 @@ class SensorItem {
         this.image = paper.image((pathToImage) ? pathToImage : this.pathToImage(),
             this.startPosition.x, this.startPosition.y, this.width, this.height);
 
+        worldModel.insertAfterRobots(this.image);
+
         this.startCenter = new TwoDPosition(this.startPosition.x + this.width / 2, this.startPosition.y + this.height / 2);
 
         var handleRadius: number = 10;

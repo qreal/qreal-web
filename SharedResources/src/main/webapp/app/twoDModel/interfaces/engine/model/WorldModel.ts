@@ -28,4 +28,7 @@ interface WorldModel {
     setCurrentElement(element): void;
     clearPaper(): void;
     deserialize(xml, offsetX: number, offsetY: number): void;
+    addRobotItemElement(element: RaphaelElement): void;
+    insertBeforeRobots(element: RaphaelElement): void;
+    insertAfterRobots(element: RaphaelElement): void;
 }
