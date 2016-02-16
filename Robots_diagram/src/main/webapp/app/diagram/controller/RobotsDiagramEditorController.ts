@@ -1,10 +1,5 @@
 /*
  * Copyright Vladimir Zakharov
- * Copyright Anastasia Kornilova
- * Copyright Lidiya Chernigovskaya
- * Copyright Semen Yuriev
- * Copyright Artemii Bezguzikov
- * Copyright Lada Gagina
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

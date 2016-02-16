@@ -33,15 +33,12 @@ abstract class DiagramEditorController {
     protected propertyEditorController: PropertyEditorController;
     protected elementsTypeLoader: ElementsTypeLoader;
     protected paletteController: PaletteController;
-    protected diagramJsonParser: DiagramJsonParser;
-    protected diagramExporter: DiagramExporter;
+
     protected nodeTypesMap: Map<NodeType>;
 
     constructor($scope, $attrs) {
         this.scope = $scope;
         this.nodeTypesMap = {};
-        this.diagramJsonParser = new DiagramJsonParser();
-        this.diagramExporter = new DiagramExporter();
         this.paletteController = new PaletteController();
         DiagramElementListener.getNodeProperties = (type: string): Map<Property> => {
             return this.getNodeProperties(type);
@@ -49,6 +46,20 @@ abstract class DiagramEditorController {
         this.diagramEditor = new DiagramEditor();
         this.paperController = new PaperController(this, this.diagramEditor.getPaper());
         this.elementsTypeLoader = new ElementsTypeLoader();
+    }
+
+    public getGraph(): joint.dia.Graph {
+        return this.diagramEditor.getGraph();
+    }
+
+    public getNodesMap(): Map<DiagramNode> {
+        var paper = this.diagramEditor.getPaper();
+        return paper.getNodesMap();
+    }
+
+    public getLinksMap(): Map<Link> {
+        var paper = this.diagramEditor.getPaper();
+        return paper.getLinksMap();
     }
 
     public setNodeProperties(element: DiagramElement): void {

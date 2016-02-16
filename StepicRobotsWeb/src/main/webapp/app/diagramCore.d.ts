@@ -152,6 +152,9 @@ declare abstract class DiagramEditorController {
 
     constructor($scope, $attrs);
 
+    public getGraph(): joint.dia.Graph;
+    public getNodesMap(): Map<DiagramNode>;
+    public getLinksMap(): Map<Link>;
     public setNodeProperties(element: DiagramElement): void;
     public clearNodeProperties(): void;
     public getNodeType(type: string): NodeType;
@@ -205,6 +208,10 @@ declare class DiagramJsonParser {
 declare class DiagramExporter {
 
     public exportDiagramStateToJSON(graph: joint.dia.Graph, diagramParts: DiagramParts);
+
+    protected exportNodes(graph: joint.dia.Graph, diagramParts: DiagramParts);
+
+    protected exportLinks(diagramParts: DiagramParts);
 
 }
 

@@ -23,9 +23,13 @@ class StepicDiagramEditorController extends DiagramEditorController {
     private taskId: string;
     private kit: string;
     private isPaletteLoaded = false;
+    protected diagramJsonParser: DiagramJsonParser;
+    protected diagramExporter: DiagramExporter;
 
     constructor($scope, $attrs) {
         super($scope, $attrs);
+        this.diagramJsonParser = new DiagramJsonParser();
+        this.diagramExporter = new DiagramExporter();
         this.taskId = $attrs.task;
         this.kit = $attrs.kit;
         this.elementsTypeLoader.load((elementTypes: ElementTypes): void => {
@@ -64,8 +68,7 @@ class StepicDiagramEditorController extends DiagramEditorController {
         var twoDModelSpinner = $('#twoDModelSpinner');
         twoDModelSpinner.show();
         var controller = this;
-        var paper = controller.diagramEditor.getPaper();
-        var diagramParts: DiagramParts = new DiagramParts(paper.getNodesMap(), paper.getLinksMap(),
+        var diagramParts: DiagramParts = new DiagramParts(this.getNodesMap(), this.getLinksMap(),
             this.robotsDiagramNode);
         $.ajax({
             type: 'POST',
@@ -74,14 +77,14 @@ class StepicDiagramEditorController extends DiagramEditorController {
             timeout: 60000,
             data: {
                 'kit': controller.kit,
-                'diagram': JSON.stringify(controller.diagramExporter.exportDiagramStateToJSON(this.diagramEditor.getGraph(),
+                'diagram': JSON.stringify(controller.diagramExporter.exportDiagramStateToJSON(this.getGraph(),
                     diagramParts))
             },
-            success: function (response) {
+            success: function (response, status, jqXHR): any {
                 twoDModelSpinner.hide();
                 scope.$emit("emitCheckingResult", response);
             },
-            error: function (response, status, error) {
+            error: function (response, status, error): any {
                 twoDModelSpinner.hide();
                 if (status == "timeout") {
                     alert("Timed out – please try again");
@@ -110,7 +113,7 @@ class StepicDiagramEditorController extends DiagramEditorController {
             data: {
                 'kit': kit
             },
-            success: function (response) {
+            success: function (response, status, jqXHR): any {
                 controller.clearState();
                 diagramSpinner.hide();
                 twoDModelSpinner.hide();
@@ -118,7 +121,7 @@ class StepicDiagramEditorController extends DiagramEditorController {
                 controller.handleLoadedDiagram(controller.diagramJsonParser.parse(response.diagram,
                     controller.nodeTypesMap));
             },
-            error: function (response, status, error) {
+            error: function (response, status, error): any {
                 diagramSpinner.hide();
                 twoDModelSpinner.hide();
                 alert("error: " + status + " " + error);

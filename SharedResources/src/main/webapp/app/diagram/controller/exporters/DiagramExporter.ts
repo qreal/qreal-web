@@ -1,5 +1,5 @@
 /*
- * Copyright Vladimir Zakharov 
+ * Copyright Vladimir Zakharov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,7 +77,7 @@ class DiagramExporter {
         return nodeJSON;
     }
 
-    private exportNodes(graph: joint.dia.Graph, diagramParts: DiagramParts) {
+    protected exportNodes(graph: joint.dia.Graph, diagramParts: DiagramParts) {
         var nodes = [];
 
         for (var id in diagramParts.nodesMap) {
@@ -131,7 +131,7 @@ class DiagramExporter {
         return nodes;
     }
 
-    private exportLinks(diagramParts: DiagramParts) {
+    protected exportLinks(diagramParts: DiagramParts) {
         var links = [];
 
         for (var id in diagramParts.linksMap) {
