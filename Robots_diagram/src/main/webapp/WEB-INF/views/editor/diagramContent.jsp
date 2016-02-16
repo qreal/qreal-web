@@ -77,26 +77,31 @@
         </div>
     </div>
 
-    <div id="content-row" class="row unselectable content-row">
-        <div class="col-md-3 content-col">
-            <div id="diagram_left-menu">
-                <legend style="padding: 10px">Property Editor</legend>
-                <table class="table table-condensed" id="property_table">
-                    <thead>
-                    <tr>
-                        <th>Property</th>
-                        <th>Value</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+    <div id="content-row" class="row unselectable">
+        <div class="col-md-10 content-col">
+            <div class="row sub-row">
+                <div class="col-md-3 content-col">
+                    <div id="diagram_left-menu">
+                        <legend style="padding: 10px">Property Editor</legend>
+                        <table class="table table-condensed" id="property_table">
+                            <thead>
+                            <tr>
+                                <th>Property</th>
+                                <th>Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-9 content-col">
+                    <div id="diagram_paper">
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-md-7 content-col">
-            <div id="diagram_paper">
-            </div>
-        </div>
+
         <div class="col-md-2 content-col">
             <div id="diagram_right-menu">
                 <legend style="height: 40px; padding: 10px">Palette</legend>
