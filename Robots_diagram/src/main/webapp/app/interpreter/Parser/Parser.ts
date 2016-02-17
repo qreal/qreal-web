@@ -94,8 +94,7 @@ class Parser {
             }
         }
 
-        if (node.type == "Identifier")
-        {
+        if (node.type == "Identifier") {
             var variablesMap = InterpretManager.getVariablesMap();
             if (variablesMap[node.name] == null) {
                 this.error = "No such variable:" + node.name;

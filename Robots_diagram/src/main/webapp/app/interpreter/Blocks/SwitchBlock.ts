@@ -31,8 +31,7 @@ class SwitchBlock extends Block {
 
         if (isFound) {
             output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
-        }
-        else {
+        } else {
             output += Factory.run(otherwiseNode, graph, nodesMap, linksMap, env, timeline) + "\n";
         }
 
