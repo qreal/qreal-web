@@ -10,13 +10,13 @@ class Parser {
     parseCondition() {
         // Here we kinda adapt to normal lua grammar
         // In lua x = y + 2 will be accepted, while y = 2 will not
-        var ast = JSON.parse(JSON.stringify(luaparse.parse("x = " + this.expr)));
-        if (ast.hasOwnProperty("error")) {
-            this.error = ast.error + ast.message;
+        var abstractSyntaxTree = JSON.parse(JSON.stringify(luaparse.parse("x = " + this.expr)));
+        if (abstractSyntaxTree.hasOwnProperty("error")) {
+            this.error = abstractSyntaxTree.error + abstractSyntaxTree.message;
             return;
         }
         // And we ignore our fictive assignment when walking ast
-        var root = ast.body[0].init[0];
+        var root = abstractSyntaxTree.body[0].init[0];
         this.result = this.calc(root);
     }
 
