@@ -13,11 +13,9 @@ class RandomInitBlock extends Block {
         for (var p in properties) {
             if (p == "Variable") {
                 variableName = properties[p].value;
-            }
-            if (p == "From") {
+            } else if (p == "From") {
                 minValue = +properties[p].value;
-            }
-            if (p == "To") {
+            } else if (p == "To") {
                 maxValue = +properties[p].value;
             }
         }
