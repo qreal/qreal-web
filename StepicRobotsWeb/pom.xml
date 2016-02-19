@@ -31,6 +31,7 @@
                     <systemProperties>
                         <log4j.configuration>file:./src/main/tomcat/conf/log4j.xml</log4j.configuration>
                     </systemProperties>
+                    <uriEncoding>utf-8</uriEncoding>
                 </configuration>
             </plugin>
 
