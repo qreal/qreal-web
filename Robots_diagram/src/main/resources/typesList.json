@@ -14,19 +14,37 @@
             "Algorithms": [
                 "InitialNode",
                 "FinalNode",
+                "Function",
                 "IfBlock",
                 "FiBlock",
-                "Loop"
+                "Loop",
+                "Fork"
+            ],
+
+            "Actions": [
+                "TrikV6EnginesForward",
+                "TrikV6EnginesBackward",
+                "TrikV6EnginesStop",
+                "TrikV62ClearEncoder",
+                "TrikSay",
+                "TrikLed"
             ],
 
             "Wait": [
-                "Timer"
+                "Timer",
+                "TrikV62WaitForEncoder"
             ],
 
             "Drawing": [
+                "TrikSetPainterColor",
+                "TrikSetPainterWidth",
+                "TrikDrawEllipse",
+                "TrikDrawArc",
                 "TrikSmile",
                 "TrikSadSmile",
-                "ClearScreen"
+                "ClearScreen",
+                "MarkerDown",
+                "MarkerUp"
             ]
 
         }
