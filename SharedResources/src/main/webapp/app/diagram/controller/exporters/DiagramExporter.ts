@@ -36,7 +36,7 @@ class DiagramExporter {
         return json;
     }
 
-    private exportRobotsDiagramNode(diagramParts: DiagramParts) {
+    protected exportRobotsDiagramNode(diagramParts: DiagramParts) {
         var robotsDiagramNode : RobotsDiagramNode = diagramParts.robotsDiagramNode;
 
         var graphicalChildren = [];
@@ -137,9 +137,8 @@ class DiagramExporter {
         for (var id in diagramParts.linksMap) {
             var link: Link = diagramParts.linksMap[id];
             var jointObject = link.getJointObject();
-            var vertices = [];
             if (jointObject.get('vertices')) {
-                vertices = this.exportVertices(jointObject.get('vertices'));
+                var vertices = this.exportVertices(jointObject);
             }
             var linkJSON = {
                 'logicalId': link.getLogicalId(),
@@ -217,7 +216,7 @@ class DiagramExporter {
         return links;
     }
 
-    private exportProperties(properties: Map<Property>) {
+    protected exportProperties(properties: Map<Property>) {
         var propertiesJSON = [];
         for (var propertyName in properties) {
             var type: string = properties[propertyName].type;
@@ -234,19 +233,16 @@ class DiagramExporter {
         return propertiesJSON;
     }
 
-    private exportVertices(vertices) {
-        var verticesJSON = [];
-        var count: number = 1;
-        vertices.forEach(function (vertex) {
-            verticesJSON.push(
-                {
-                    x : vertex.x,
-                    y : vertex.y,
-                    number : count
-                }
-            )
-            count++;
-        });
-        return verticesJSON;
+    protected exportVertices(jointObject): string {
+        var vertices = jointObject.get('vertices');
+        var verticesStr: string = (jointObject.get('source').id) ? "0, 0 : " :
+            "" + jointObject.get('source').x + ", " + jointObject.get('source').y + " : ";
+        if (vertices) {
+            vertices.forEach(function (vertex) {
+                verticesStr += vertex.x + ", " + vertex.y + " : ";
+            });
+        }
+        return verticesStr + (jointObject.get('target').id ? "0, 0 : " :
+            "" + jointObject.get('target').x + ", " + jointObject.get('target').y + " : ");
     }
 }

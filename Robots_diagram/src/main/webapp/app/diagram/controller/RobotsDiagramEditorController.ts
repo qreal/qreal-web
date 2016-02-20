@@ -14,16 +14,27 @@
  * limitations under the License.
  */
 
+/// <reference path="DiagramMenuController.ts" />
 /// <reference path="../../diagramCore.d.ts" />
 /// <reference path="../../vendor.d.ts" />
 
 class RobotsDiagramEditorController extends DiagramEditorController {
 
-    private isPaletteLoaded = false;
+    private diagramJsonParser: DiagramJsonParser;
+    private menuController: DiagramMenuController;
 
     constructor($scope, $attrs) {
         super($scope, $attrs);
-        $scope.openTwoDModel = this.openTwoDModel;
+        this.diagramJsonParser = new RobotsDiagramJsonParser();
+        this.menuController = new DiagramMenuController(this);
+
+        $scope.openTwoDModel = () => { this.openTwoDModel(); };
+        $scope.createNewDiagram = () => { this.menuController.createNewDiagram(); };
+        $scope.openFolderWindow = () => { this.menuController.openFolderWindow(); };
+        $scope.saveCurrentDiagram = () => { this.menuController.saveCurrentDiagram(); };
+        $scope.saveDiagramAs = () => { this.menuController.saveDiagramAs(); };
+        $scope.clearAll = () => { this.clearAll(); };
+
         this.elementsTypeLoader.load((elementTypes: ElementTypes): void => {
             this.handleLoadedTypes(elementTypes);
         });
@@ -45,12 +56,27 @@ class RobotsDiagramEditorController extends DiagramEditorController {
 
         this.paletteController.appendBlocksPalette(elementTypes.paletteTypes);
         this.paletteController.initDraggable();
-        this.isPaletteLoaded = true;
     }
 
-    openTwoDModel(): void {
+    public handleLoadedDiagramJson(diagramJson: any): void {
+        var diagramParts: DiagramParts = this.diagramJsonParser.parse(diagramJson, this.nodeTypesMap);
+        var paper = this.diagramEditor.getPaper();
+        paper.addNodesFromMap(diagramParts.nodesMap);
+        paper.addLinksFromMap(diagramParts.linksMap);
+    }
+
+    public getDiagramParts(): DiagramParts {
+        return new DiagramParts(this.getNodesMap(), this.getLinksMap());
+    }
+
+    public openTwoDModel(): void {
         $("#diagramContent").hide();
         $("#twoDModelContent").show();
+    }
+
+    public clearAll(): void {
+        this.clearState();
+        this.menuController.clearState();
     }
 
 }

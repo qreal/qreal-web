@@ -28,74 +28,38 @@ import java.util.Set;
 public class Link implements Serializable {
 
     @Id
-    @Column(name = "link_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long linkId;
+    @Column(name = "logical_id")
+    private String logicalId;
 
-    @Column(name = "joint_object_id")
-    private String jointObjectId;
-
-    @Column(name = "source")
-    private String source;
-
-    @Column(name = "target")
-    private String target;
+    @Column(name = "graphical_id")
+    private String graphicalId;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "link_id", referencedColumnName = "link_id")
-    @OrderBy("number")
-    private Set<LinkVertex> vertices;
+    @JoinColumn(name = "link_id", referencedColumnName = "logical_id")
+    private Set<LinkProperty> properties;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "link_id", referencedColumnName = "link_id")
-    @OrderBy("position")
-    private Set<Property> properties;
-
-    public Long getLinkId() {
-        return linkId;
+    public String getLogicalId() {
+        return logicalId;
     }
 
-    public void setLinkId(Long linkId) {
-        this.linkId = linkId;
+    public void setLogicalId(String logicalId) {
+        this.logicalId = logicalId;
     }
 
-    public String getSource() {
-        return source;
+    public String getGraphicalId() {
+        return graphicalId;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setGraphicalId(String graphicalId) {
+        this.graphicalId = graphicalId;
     }
 
-    public String getTarget() {
-        return target;
-    }
-
-    public void setTarget(String target) {
-        this.target = target;
-    }
-
-    public Set<LinkVertex> getVertices() {
-        return vertices;
-    }
-
-    public void setVertices(Set<LinkVertex> vertices) {
-        this.vertices = vertices;
-    }
-
-    public String getJointObjectId() {
-        return jointObjectId;
-    }
-
-    public void setJointObjectId(String jointObjectId) {
-        this.jointObjectId = jointObjectId;
-    }
-
-    public Set<Property> getProperties() {
+    public Set<LinkProperty> getProperties() {
         return properties;
     }
 
-    public void setProperties(Set<Property> properties) {
+    public void setProperties(Set<LinkProperty> properties) {
         this.properties = properties;
     }
+
 }

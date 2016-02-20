@@ -22,6 +22,18 @@ class Folder {
     private childrenFolders: Folder[];
     private diagrams: Diagram[];
 
+    public static createFromJson(folderJson: any) {
+        var childrenFolders: Folder[] = [];
+        for (var i = 0; i < folderJson.childrenFolders.length; i++) {
+            childrenFolders.push(Folder.createFromJson(folderJson.childrenFolders[i]));
+        }
+        var diagrams: Diagram[] = [];
+        for (var i = 0; i < folderJson.diagrams.length; i++) {
+            diagrams.push(Diagram.createFromJson(folderJson.diagrams[i]));
+        }
+        return new Folder(folderJson.folderId, folderJson.folderName, folderJson.folderParentId, childrenFolders, diagrams);
+    }
+
     constructor(id: number, name: string, parentId: number, childrenFolders?: Folder[], diagrams?: Diagram[]) {
         this.id = id;
         this.name = name;

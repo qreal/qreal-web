@@ -35,10 +35,10 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.menuController.createNewDiagram()">New</a></li>
-                            <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams" ng-click="vm.menuController.openFolderWindow()">Open</a></li>
-                            <li><a href="" role="menuitem" tabindex="-1" ng-click="vm.menuController.saveCurrentDiagram()">Save</a></li>
-                            <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" ng-click="vm.menuController.saveDiagramAs()">SaveAs</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" ng-click="createNewDiagram()">New</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams" ng-click="openFolderWindow()">Open</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" ng-click="saveCurrentDiagram()">Save</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" ng-click="saveDiagramAs()">SaveAs</a></li>
                         </ul>
                     </li>
                     <li>
@@ -165,7 +165,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" id="saveAfterCreate" data-dismiss="modal">Yes</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.menuController.clearAll()">No</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearAll()">No</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>

@@ -16,46 +16,55 @@
 
 package com.qreal.robots.model.diagram;
 
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 /**
- * Created by vladzx on 31.10.14.
+ * Created by vladzx on 05.11.14.
  */
 @Entity
-@Table(name = "nodes")
-public class DefaultDiagramNode implements Serializable {
+@Table(name = "node_properties")
+public class NodeProperty implements Serializable {
 
     @Id
-    @Column(name = "logical_id")
-    private String logicalId;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(name = "property_id")
+    private String propertyId;
 
-    @Column(name = "graphical_id")
-    private String graphicalId;
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "value")
+    private String value;
 
     @Column(name = "type")
     private String type;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "node_id", referencedColumnName = "logical_id")
-    private Set<NodeProperty> properties;
-
-    public String getLogicalId() {
-        return logicalId;
+    public String getPropertyId() {
+        return propertyId;
     }
 
-    public void setLogicalId(String logicalId) {
-        this.logicalId = logicalId;
+    public void setPropertyId(String propertyId) {
+        this.propertyId = propertyId;
     }
 
-    public String getGraphicalId() {
-        return graphicalId;
+    public String getName() {
+        return name;
     }
 
-    public void setGraphicalId(String graphicalId) {
-        this.graphicalId = graphicalId;
+    public String getValue() {
+        return value;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public String getType() {
@@ -64,14 +73,6 @@ public class DefaultDiagramNode implements Serializable {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public Set<NodeProperty> getProperties() {
-        return properties;
-    }
-
-    public void setProperties(Set<NodeProperty> properties) {
-        this.properties = properties;
     }
 
 }

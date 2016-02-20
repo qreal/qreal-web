@@ -181,7 +181,6 @@ class PaperController {
         $('html').keyup((event) => {
             if(event.keyCode == deleteKey) {
                 if(!(document.activeElement.tagName === "INPUT")) {
-                    console.log(document.activeElement.tagName);
                     this.removeCurrentElement();
                 }
             }

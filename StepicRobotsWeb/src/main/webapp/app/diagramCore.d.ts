@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+declare class UIDGenerator {
+    static generate(): string;
+}
+
 declare class PropertiesPack {
     logical: Map<Property>;
     graphical: Map<Property>;
@@ -22,6 +26,7 @@ declare class PropertiesPack {
 }
 
 declare class Link implements DiagramElement {
+    constructor(jointObject: joint.dia.Link, properties: Map<Property>);
     getLogicalId(): string;
     getJointObject(): any;
     getName(): string;
@@ -55,6 +60,7 @@ declare class SubprogramDiagramNode {
 }
 
 declare class RobotsDiagramNode {
+    constructor(logicalId: string, graphicalId: string, properties: Map<Property>);
     getLogicalId(): string;
     getGraphicalId(): string;
     getName(): string;
@@ -63,6 +69,8 @@ declare class RobotsDiagramNode {
 }
 
 declare class DefaultDiagramNode implements DiagramNode {
+    constructor(name: string, type: string, x: number, y: number, properties: Map<Property>, imagePath: string,
+                id?: string, notDefaultConstProperties?: PropertiesPack);
     getLogicalId(): string;
     getJointObject(): any;
     getName(): string;
@@ -82,6 +90,7 @@ declare class NodeType {
 }
 
 declare class Property {
+    constructor(name: string, type: string, value: string);
 }
 
 declare class SubprogramNode extends DefaultDiagramNode {
@@ -146,9 +155,8 @@ declare abstract class DiagramEditorController {
     protected propertyEditorController: PropertyEditorController;
     protected elementsTypeLoader: ElementsTypeLoader;
     protected paletteController: PaletteController;
-    protected diagramJsonParser: DiagramJsonParser;
-    protected diagramExporter: DiagramExporter;
     protected nodeTypesMap: Map<NodeType>;
+    protected robotsDiagramNode: RobotsDiagramNode;
 
     constructor($scope, $attrs);
 
@@ -203,15 +211,46 @@ declare class DiagramJsonParser {
 
     public parse(diagramJson: any, nodeTypesMap: Map<NodeType>): DiagramParts;
 
+    protected findMinPosition(diagramJson: any, nodeTypesMap: Map<NodeType>): {x: number; y: number};
+
+    protected parseNodes(diagramJson: any, nodeTypesMap: Map<NodeType>, offsetX: number, offsetY: number): DiagramParts;
+
+    protected parseRobotsDiagramNode(nodeObject: any): RobotsDiagramNode;
+
+    protected parseSubprogramDiagram(nodeObject: any): SubprogramDiagramNode;
+
+    protected parseDiagramNodeObject(nodeObject: any, nodeTypesMap: Map<NodeType>,
+                                     offsetX: number, offsetY: number): DiagramNode;
+
+    protected parseLinks(diagramJson: any, offsetX: number, offsetY: number): Map<Link>;
+
+    protected parseLinkObject(linkObject: any, offsetX: number, offsetY: number): Link;
+
+    protected parseVertices(configuration: string);
+
+    protected getSourcePosition(configuration: string);
+
+    protected getTargetPosition(configuration: string);
+
+    protected parsePosition(position: string): {x: number; y: number};
+
+    protected parseId(idString: string): string;
+
 }
 
 declare class DiagramExporter {
 
     public exportDiagramStateToJSON(graph: joint.dia.Graph, diagramParts: DiagramParts);
 
+    protected exportRobotsDiagramNode(diagramParts: DiagramParts);
+
     protected exportNodes(graph: joint.dia.Graph, diagramParts: DiagramParts);
 
     protected exportLinks(diagramParts: DiagramParts);
+
+    protected exportProperties(properties: Map<Property>);
+
+    protected exportVertices(vertices): string;
 
 }
 

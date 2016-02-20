@@ -39,37 +39,46 @@ CREATE TABLE diagrams (
 );
 
 CREATE TABLE nodes (
-  node_id    BIGINT       NOT NULL AUTO_INCREMENT,
-  joint_object_id         VARCHAR(50)  NOT NULL,
+  logical_id          VARCHAR(50)  NOT NULL,
+  graphical_id        VARCHAR(50)  NOT NULL,
   type       VARCHAR(50)  NOT NULL,
   x          DOUBLE       NOT NULL,
   y          DOUBLE       NOT NULL,
   diagram_id BIGINT,
-  PRIMARY KEY (node_id),
+  PRIMARY KEY (logical_id),
   FOREIGN KEY (diagram_id) REFERENCES diagrams (diagram_id)
 );
 
 CREATE TABLE links (
-  link_id    BIGINT      NOT NULL AUTO_INCREMENT,
-  joint_object_id        VARCHAR(50)  NOT NULL,
+  logical_id          VARCHAR(50)  NOT NULL,
+  graphical_id        VARCHAR(50)  NOT NULL,
   source     VARCHAR(50) NOT NULL,
   target     VARCHAR(50) NOT NULL,
   diagram_id BIGINT,
-  PRIMARY KEY (link_id),
+  PRIMARY KEY (logical_id),
   FOREIGN KEY (diagram_id) REFERENCES diagrams (diagram_id)
 );
 
-CREATE TABLE properties (
-  property_id BIGINT      NOT NULL AUTO_INCREMENT,
+CREATE TABLE node_properties (
+  property_id VARCHAR(50) NOT NULL,
   name        VARCHAR(50) NOT NULL,
   value       VARCHAR(50) NOT NULL,
   type        VARCHAR(50) NOT NULL,
   position    INT         NOT NULL,
-  node_id     BIGINT,
-  link_id     BIGINT,
+  node_id     VARCHAR(50),
   PRIMARY KEY (property_id),
-  FOREIGN KEY (node_id) REFERENCES nodes (node_id),
-  FOREIGN KEY (link_id) REFERENCES links (link_id)
+  FOREIGN KEY (node_id) REFERENCES links (logical_id)
+);
+
+CREATE TABLE link_properties (
+  property_id VARCHAR(50) NOT NULL,
+  name        VARCHAR(50) NOT NULL,
+  value       VARCHAR(50) NOT NULL,
+  type        VARCHAR(50) NOT NULL,
+  position    INT         NOT NULL,
+  link_id     VARCHAR(50),
+  PRIMARY KEY (property_id),
+  FOREIGN KEY (link_id) REFERENCES links (logical_id)
 );
 
 CREATE TABLE vertices (

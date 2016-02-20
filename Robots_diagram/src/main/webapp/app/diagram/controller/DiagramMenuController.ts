@@ -23,19 +23,17 @@
 
 class DiagramMenuController {
 
-    private diagramEditorController: DiagramEditorController;
-    protected diagramJsonParser: DiagramJsonParser;
-    protected diagramExporter: RobotsDiagramExporter;
+    private diagramEditorController: RobotsDiagramEditorController;
+    private diagramExporter: RobotsDiagramExporter;
     private currentDiagramName: string;
     private currentDiagramFolder: Folder;
     private canBeDeleted: boolean;
     private pathToFolder;
-    private folderTree;
-    private currentFolder;
+    private folderTree: Folder;
+    private currentFolder: Folder;
 
-    constructor(diagramEditorController: DiagramEditorController) {
+    constructor(diagramEditorController: RobotsDiagramEditorController) {
         this.diagramEditorController = diagramEditorController;
-        this.diagramJsonParser = new DiagramJsonParser();
         this.diagramExporter = new RobotsDiagramExporter();
         this.currentDiagramName = "";
         this.currentDiagramFolder = null;
@@ -49,8 +47,8 @@ class DiagramMenuController {
             url: 'getFolderTree',
             dataType: 'json',
             success: function (response, status, jqXHR) {
-                menuManager.folderTree = response;
-                menuManager.currentFolder = response;
+                menuManager.folderTree = Folder.createFromJson(response);
+                menuManager.currentFolder = menuManager.folderTree;
             },
             error: function (response, status, error) {
                 console.log("error: " + status + " " + error);
@@ -69,125 +67,17 @@ class DiagramMenuController {
         });
     }
 
-    private clearAll(): void {
-        this.diagramEditorController.clearState();
-        this.canBeDeleted = false;
-        this.currentDiagramName = "";
-        this.currentDiagramFolder = null;
-    }
-
-    private createFolderInDatabase(folderName: string): void {
-        var menuManager = this;
-        $.ajax({
-            type: 'POST',
-            url: 'createFolder',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: ({
-                'folderName': folderName,
-                'folderParentId': menuManager.currentFolder.getId()
-            }),
-            success: function (createdFolderId, status, jqXHR): any {
-                menuManager.currentFolder.addChild(
-                    new Folder(createdFolderId, folderName, menuManager.currentFolder.getId()));
-                menuManager.showFolderMenu();
-                menuManager.showFolderTable(menuManager.currentFolder);
-            },
-            error: function (response, status, error): any {
-                console.log("error: " + status + " " + error);
-            }
-        });
-    }
-
-    private saveDiagramInDatabase(diagramName: string): void {
-        var menuManager = this;
-        this.currentDiagramName = diagramName;
-        this.currentDiagramFolder = this.currentFolder;
-        $.ajax({
-            type: 'POST',
-            url: 'saveDiagram',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: (menuManager.diagramExporter.exportSavingDiagramStateToJSON(this.diagramEditorController.getGraph(),
-                new DiagramParts(this.diagramEditorController.getNodesMap(), this.diagramEditorController.getLinksMap()),
-                diagramName, this.currentFolder.folderId)),
-            success: function (diagramId, status, jqXHR): any {
-                menuManager.currentFolder.addDiagram(new Diagram(diagramId, diagramName));
-                menuManager.currentFolder = menuManager.folderTree;
-                menuManager.pathToFolder = [];
-                $('#diagrams').modal('hide');
-
-                if (menuManager.canBeDeleted) {
-                    menuManager.clearAll();
-                }
-            },
-            error: function (response, status, error): any {
-                console.log("error: " + status + " " + error);
-            }
-        });
-    }
-
-    private updateCurrentDiagramInDatabase(): void {
-        var menuManager = this;
-        if (this.currentDiagramName === "") {
-            $('#diagrams').modal('show');
-            this.saveDiagramAs();
-        } else {
-            $.ajax({
-                type: 'POST',
-                url: 'updateDiagram',
-                dataType: 'text',
-                contentType: 'application/json',
-                data: (menuManager.diagramExporter.exportUpdatingDiagramStateToJSON(this.diagramEditorController.getGraph(),
-                    new DiagramParts(this.diagramEditorController.getNodesMap(), this.diagramEditorController.getLinksMap()),
-                    this.currentDiagramName, this.currentDiagramFolder)),
-                success: function (response, status, jqXHR): any {
-                    if (menuManager.canBeDeleted) {
-                        menuManager.clearAll();
-                    }
-                },
-                error: function (response, status, error): any {
-                    console.log("error: " + status + " " + error);
-                }
-            });
-        }
-    }
-
-    private openDiagramFromDatabase(diagramName: string): void {
-        var menuManager = this;
-        this.currentDiagramName = diagramName;
-        this.currentDiagramFolder = this.currentFolder;
-        this.currentFolder = this.folderTree;
-        this.pathToFolder = [];
-        $.ajax({
-            type: 'POST',
-            url: 'openDiagram',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: (JSON.stringify({id: menuManager.currentDiagramFolder.getDiagramIdByName(diagramName)})),
-            success: function (response, status, jqXHR): any {
-                menuManager.diagramEditorController.clearState();
-                // TODO: import
-            },
-            error: function (response, status, error): any {
-                console.log("error: " + status + " " + error);
-            }
-        });
-    }
-
-    // TODO: should be migrated to view
-
-    private createNewDiagram(): void {
+    public createNewDiagram(): void {
         $('#confirmNew').modal('show');
     }
 
-    private openFolderWindow(): void {
+    public openFolderWindow(): void {
         this.showFolderMenu();
         this.showFolderTable(this.currentFolder);
         this.clearSavingMenu();
     }
 
-    private saveCurrentDiagram(): void {
+    public saveCurrentDiagram(): void {
         if (this.currentDiagramName === "") {
             this.saveDiagramAs();
         } else {
@@ -195,28 +85,14 @@ class DiagramMenuController {
         }
     }
 
-    private saveDiagramAs(): void {
+    public saveDiagramAs(): void {
         $('#diagrams').modal('show');
         this.showFolderMenu();
         this.showFolderTable(this.currentFolder);
         this.showSavingMenu();
     }
 
-    private showFolderMenu(): void {
-        var menuManager = this;
-        this.clearFolderMenu();
-        $('.folderMenu').append("<i id='levelUp'><span class='glyphicon glyphicon-arrow-left'></span></i>");
-        $('.folderMenu #levelUp').click(function() {
-            menuManager.levelUpFolder();
-        });
-
-        $('.folderMenu').append("<i id='creatingMenu'><span class='glyphicon glyphicon-plus'></span></i>");
-        $('.folderMenu #creatingMenu').click(function() {
-            menuManager.showCreatingMenu();
-        });
-    }
-
-    private showCreatingMenu() {
+    public showCreatingMenu() {
         var menuManager = this;
         this.clearFolderMenu();
         $('.folderMenu').append(
@@ -241,7 +117,7 @@ class DiagramMenuController {
         });
     }
 
-    private showSavingMenu(): void {
+    public showSavingMenu(): void {
         var menuManager = this;
         this.clearSavingMenu();
 
@@ -257,6 +133,123 @@ class DiagramMenuController {
                 menuManager.writeWarning("The diagram with this name already exists", '.savingMenu');
             } else {
                 menuManager.saveDiagramInDatabase(diagramName);
+            }
+        });
+    }
+
+    public clearState(): void {
+        this.canBeDeleted = false;
+        this.currentDiagramName = "";
+        this.currentDiagramFolder = null;
+    }
+
+    private showFolderMenu(): void {
+        var menuManager = this;
+        this.clearFolderMenu();
+        $('.folderMenu').append("<i id='levelUp'><span class='glyphicon glyphicon-arrow-left'></span></i>");
+        $('.folderMenu #levelUp').click(function() {
+            menuManager.levelUpFolder();
+        });
+
+        $('.folderMenu').append("<i id='creatingMenu'><span class='glyphicon glyphicon-plus'></span></i>");
+        $('.folderMenu #creatingMenu').click(function() {
+            menuManager.showCreatingMenu();
+        });
+    }
+
+    private createFolderInDatabase(folderName: string): void {
+        var menuManager = this;
+        $.ajax({
+            type: 'POST',
+            url: 'createFolder',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                'folderName': folderName,
+                'folderParentId': menuManager.currentFolder.getId()
+            }),
+            success: function (createdFolderId, status, jqXHR): any {
+                menuManager.currentFolder.addChild(
+                    new Folder(createdFolderId, folderName, menuManager.currentFolder.getId()));
+                menuManager.showFolderMenu();
+                menuManager.showFolderTable(menuManager.currentFolder);
+            },
+            error: function (response, status, error): any {
+                console.log("error: " + status + " " + error);
+            }
+        });
+    }
+
+    private saveDiagramInDatabase(diagramName: string): void {
+        var menuManager = this;
+        this.currentDiagramName = diagramName;
+        this.currentDiagramFolder = this.currentFolder;
+        $.ajax({
+            type: 'POST',
+            url: 'saveDiagram',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(menuManager.diagramExporter.exportSavingDiagramStateToJSON(this.diagramEditorController.getGraph(),
+                this.diagramEditorController.getDiagramParts(), diagramName, this.currentFolder.getId())),
+            success: function (diagramId, status, jqXHR): any {
+                menuManager.currentFolder.addDiagram(new Diagram(diagramId, diagramName));
+                menuManager.currentFolder = menuManager.folderTree;
+                menuManager.pathToFolder = [];
+                $('#diagrams').modal('hide');
+
+                if (menuManager.canBeDeleted) {
+                    menuManager.diagramEditorController.clearAll();
+                }
+            },
+            error: function (response, status, error): any {
+                console.log("error: " + status + " " + error);
+            }
+        });
+    }
+
+    private updateCurrentDiagramInDatabase(): void {
+        var menuManager = this;
+        if (this.currentDiagramName === "") {
+            $('#diagrams').modal('show');
+            this.saveDiagramAs();
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: 'updateDiagram',
+                dataType: 'text',
+                contentType: 'application/json',
+                data: JSON.stringify(menuManager.diagramExporter.exportUpdatingDiagramStateToJSON(this.diagramEditorController.getGraph(),
+                    this.diagramEditorController.getDiagramParts(), this.currentDiagramName, this.currentDiagramFolder)),
+                success: function (response, status, jqXHR): any {
+                    if (menuManager.canBeDeleted) {
+                        menuManager.diagramEditorController.clearAll();
+                    }
+                },
+                error: function (response, status, error): any {
+                    console.log("error: " + status + " " + error);
+                }
+            });
+        }
+    }
+
+    private openDiagramFromDatabase(diagramName: string): void {
+        var menuManager = this;
+        this.currentDiagramName = diagramName;
+        this.currentDiagramFolder = this.currentFolder;
+        this.currentFolder = this.folderTree;
+        this.pathToFolder = [];
+        $.ajax({
+            type: 'POST',
+            url: 'openDiagram',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({id: menuManager.currentDiagramFolder.getDiagramIdByName(diagramName)}),
+            success: function (response, status, jqXHR): any {
+                menuManager.diagramEditorController.clearState();
+                menuManager.diagramEditorController.handleLoadedDiagramJson(response);
+            },
+            error: function (response, status, error): any {
+                console.log("error: " + status + " " + error);
             }
         });
     }
@@ -299,8 +292,8 @@ class DiagramMenuController {
             path = path + this.pathToFolder[i].folderName + "/";
         }
 
-        if (this.currentFolder.folderName !== "root") {
-            path = path + this.currentFolder.folderName;
+        if (this.currentFolder.getName() !== "root") {
+            path = path + this.currentFolder.getName();
         }
 
         $('.folderPath').prepend("<p>" + path + "</p>");

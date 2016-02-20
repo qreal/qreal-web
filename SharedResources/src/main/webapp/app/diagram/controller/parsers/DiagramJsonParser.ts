@@ -37,7 +37,7 @@ class DiagramJsonParser {
         return diagramParts;
     }
 
-    private findMinPosition(diagramJson: any, nodeTypesMap: Map<NodeType>): {x: number; y: number} {
+    protected findMinPosition(diagramJson: any, nodeTypesMap: Map<NodeType>): {x: number; y: number} {
         var minX = Infinity;
         var minY = Infinity;
 
@@ -67,7 +67,7 @@ class DiagramJsonParser {
         return {x: minX, y: minY};
     }
 
-    private parseNodes(diagramJson: any, nodeTypesMap: Map<NodeType>, offsetX: number, offsetY: number): DiagramParts {
+    protected parseNodes(diagramJson: any, nodeTypesMap: Map<NodeType>, offsetX: number, offsetY: number): DiagramParts {
         var diagramParts: DiagramParts = new DiagramParts();
 
         for (var i = 0; i < diagramJson.nodes.length; i++) {
@@ -89,7 +89,7 @@ class DiagramJsonParser {
         return diagramParts;
     }
 
-    private parseRobotsDiagramNode(nodeObject: any): RobotsDiagramNode {
+    protected parseRobotsDiagramNode(nodeObject: any): RobotsDiagramNode {
         var logicalProperties: Map<Property> = {};
         var logicalPropertiesObject = nodeObject.logicalProperties;
         for (var i = 0; i < logicalPropertiesObject.length; i++) {
@@ -104,7 +104,7 @@ class DiagramJsonParser {
         return new RobotsDiagramNode(nodeObject.logicalId, nodeObject.graphicalId, logicalProperties);
     }
 
-    private parseSubprogramDiagram(nodeObject: any): SubprogramDiagramNode {
+    protected parseSubprogramDiagram(nodeObject: any): SubprogramDiagramNode {
         var name: string = "";
         var logicalPropertiesObject = nodeObject.logicalProperties;
         for (var i = 0; i < logicalPropertiesObject.length; i++) {
@@ -117,7 +117,7 @@ class DiagramJsonParser {
         return new SubprogramDiagramNode(nodeObject.logicalId, name);
     }
 
-    private parseDiagramNodeObject(nodeObject: any, nodeTypesMap: Map<NodeType>,
+    protected parseDiagramNodeObject(nodeObject: any, nodeTypesMap: Map<NodeType>,
                                    offsetX: number, offsetY: number): DiagramNode {
         var changeableLogicalProperties: Map<Property> = {};
         var constLogicalProperties: Map<Property> = {};
@@ -133,7 +133,7 @@ class DiagramJsonParser {
             if (a.name < b.name) return -1;
             if (a.name > b.name) return 1;
             return 0;
-        })
+        });
 
         for (var j = 0; j < logicalPropertiesObject.length; j++) {
             var propertyName = logicalPropertiesObject[j].name;
@@ -191,7 +191,7 @@ class DiagramJsonParser {
         return node;
     }
 
-    private parseLinks(diagramJson: any, offsetX: number, offsetY: number): Map<Link> {
+    protected parseLinks(diagramJson: any, offsetX: number, offsetY: number): Map<Link> {
         var linksMap: Map<Link> = {};
 
         for (var i = 0; i < diagramJson.links.length; i++) {
@@ -201,7 +201,7 @@ class DiagramJsonParser {
         return linksMap;
     }
 
-    private parseLinkObject(linkObject: any, offsetX: number, offsetY: number): Link {
+    protected parseLinkObject(linkObject: any, offsetX: number, offsetY: number): Link {
         var sourceId: string = "";
         var targetId: string = "";
 
@@ -213,6 +213,7 @@ class DiagramJsonParser {
                 case "Guard":
                     var property: Property = new Property("Guard", "combobox", logicalPropertiesObject[j].value);
                     properties["Guard"] = property;
+                    break;
             }
         }
 
@@ -235,6 +236,7 @@ class DiagramJsonParser {
                 case "configuration":
                     configuration = graphicalPropertiesObject[j].value;
                     vertices = this.parseVertices(graphicalPropertiesObject[j].value);
+                    break;
                 default:
 
             }
@@ -281,7 +283,7 @@ class DiagramJsonParser {
         return new Link(jointObject, properties);
     }
 
-    private parseVertices(configuration: string) {
+    protected parseVertices(configuration: string) {
         var vertices = [];
         var parts = configuration.split(" : ");
 
@@ -291,7 +293,7 @@ class DiagramJsonParser {
         return vertices;
     }
 
-    private getSourcePosition(configuration: string) {
+    protected getSourcePosition(configuration: string) {
         var parts = configuration.split(" : ");
         var position = this.parsePosition(parts[0]);
         position.x = Math.floor(position.x);
@@ -301,7 +303,7 @@ class DiagramJsonParser {
         return position;
     }
 
-    private getTargetPosition(configuration: string) {
+    protected getTargetPosition(configuration: string) {
         var parts = configuration.split(" : ");
         var position = this.parsePosition(parts[parts.length - 2]);
         position.x = Math.floor(position.x);
@@ -311,12 +313,12 @@ class DiagramJsonParser {
         return position;
     }
 
-    private parsePosition(position: string): {x: number; y: number} {
+    protected parsePosition(position: string): {x: number; y: number} {
         var parts = position.split(", ");
         return {x: parseFloat(parts[0]), y: parseFloat(parts[1])};
     }
 
-    private parseId(idString: string): string {
+    protected parseId(idString: string): string {
         var parts = idString.split("/");
         var id = parts[parts.length - 1];
         var expr = /{(.*)}/gi;
