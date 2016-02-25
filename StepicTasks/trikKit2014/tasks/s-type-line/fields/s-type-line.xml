@@ -3,73 +3,108 @@
     <world>
         <walls/>
         <colorFields>
-            <line stroke="#000000" id="line0" begin="-679:314" fill-style="none" stroke-width="20" end="-624:351" stroke-style="solid" fill="#000000"/>
-            <line stroke="#000000" id="line1" begin="-610:358" fill-style="none" stroke-width="20" end="-545:380" stroke-style="solid" fill="#000000"/>
-            <line stroke="#000000" id="line2" begin="-532:380" fill-style="none" stroke-width="20" end="-430:345" stroke-style="solid" fill="#000000"/>
-            <line stroke="#000000" id="line3" begin="-422:337" fill-style="none" stroke-width="20" end="-387:256" stroke-style="solid" fill="#000000"/>
-            <line stroke="#000000" id="line4" begin="-387:245" fill-style="none" stroke-width="20" end="-417:160" stroke-style="solid" fill="#000000"/>
-            <line stroke="#000000" id="line5" begin="-423:154" fill-style="none" stroke-width="20" end="-526:116" stroke-style="solid" fill="#000000"/>
-            <line stroke="#000000" id="line6" begin="-540:112" fill-style="none" stroke-width="20" end="-633:100" stroke-style="solid" fill="#000000"/>
-            <line stroke="#000000" id="line7" begin="-641:95" fill-style="none" stroke-width="20" end="-671:52" stroke-style="solid" fill="#000000"/>
-            <line stroke="#000000" id="line8" begin="-673:41" fill-style="none" stroke-width="20" end="-658:-53" stroke-style="solid" fill="#000000"/>
-            <line stroke="#000000" id="line9" begin="-652:-62" fill-style="none" stroke-width="20" end="-601:-113" stroke-style="solid" fill="#000000"/>
-            <line stroke="#000000" id="line10" begin="-591:-118" fill-style="none" stroke-width="20" end="-514:-123" stroke-style="solid" fill="#000000"/>
-            <line stroke="#000000" id="line11" begin="-501:-120" fill-style="none" stroke-width="20" end="-420:-72" stroke-style="solid" fill="#000000"/>
+            <line stroke-width="12" fill="#ff000000" stroke="#ff000000" fill-style="none" id="line0" stroke-style="solid" end="-78:24" begin="102:24"/>
+            <line stroke-width="12" fill="#ff000000" stroke="#ff000000" fill-style="none" id="line6" stroke-style="solid" end="6:576" begin="-149:576"/>
+            <cubicBezier cp1="206:27" stroke-width="12" fill="#ff000000" stroke="#ff000000" fill-style="none" cp2="204:170" id="line1" stroke-style="solid" end="104:174" begin="107:24"/>
+            <cubicBezier cp1="46:131" stroke-width="12" fill="#ff000000" stroke="#ff000000" fill-style="none" cp2="37:166" id="line2" stroke-style="solid" end="101:174" begin="9:107"/>
+            <cubicBezier cp1="193:378" stroke-width="12" fill="#ff000000" stroke="#ff000000" fill-style="none" cp2="173:414" id="line3" stroke-style="solid" end="175:489" begin="75:322"/>
+            <cubicBezier cp1="177:575" stroke-width="12" fill="#ff000000" stroke="#ff000000" fill-style="none" cp2="107:578" id="line4" stroke-style="solid" end="1:576" begin="175:498"/>
+            <cubicBezier cp1="-68:64" stroke-width="12" fill="#ff000000" stroke="#ff000000" fill-style="none" cp2="-199:190" id="line5" stroke-style="solid" end="75:322" begin="4:104"/>
+            <cubicBezier cp1="-252:432" stroke-width="12" fill="#ff000000" stroke="#ff000000" fill-style="none" cp2="-251:574" id="line7" stroke-style="solid" end="-155:576" begin="-155:432"/>
+            <cubicBezier cp1="140:420" stroke-width="12" fill="#ff000000" stroke="#ff000000" fill-style="none" cp2="27:546" id="line8" stroke-style="solid" end="-43:514" begin="-114:296"/>
+            <cubicBezier cp1="-74:437" stroke-width="12" fill="#ff000000" stroke="#ff000000" fill-style="none" cp2="-82:497" id="line9" stroke-style="solid" end="-47:511" begin="-150:432"/>
+            <cubicBezier cp1="-218:249" stroke-width="12" fill="#ff000000" stroke="#ff000000" fill-style="none" cp2="-167:264" id="line10" stroke-style="solid" end="-117:294" begin="-226:160"/>
+            <cubicBezier cp1="-188:24" stroke-width="12" fill="#ff000000" stroke="#ff000000" fill-style="none" cp2="-224:40" id="line11" stroke-style="solid" end="-226:157" begin="-85:25"/>
         </colorFields>
         <regions>
-            <region stroke="25" id="line0_region" visible="false" width="155" boundItem="line0" filled="true" color="#87cefa" type="bound" height="137" x="0" y="0"/>
-            <region stroke="25" id="line1_region" visible="false" width="165" boundItem="line1" filled="true" color="#87cefa" type="bound" height="122" x="0" y="0"/>
-            <region stroke="25" id="line2_region" visible="false" width="202" boundItem="line2" filled="true" color="#87cefa" type="bound" height="135" x="0" y="0"/>
-            <region stroke="25" id="line3_region" visible="false" width="135" boundItem="line3" filled="true" color="#87cefa" type="bound" height="181" x="0" y="0"/>
-            <region stroke="25" id="line4_region" visible="false" width="130" boundItem="line4" filled="true" color="#87cefa" type="bound" height="185" x="0" y="0"/>
-            <region stroke="25" id="line5_region" visible="false" width="203" boundItem="line5" filled="true" color="#87cefa" type="bound" height="138" x="0" y="0"/>
-            <region stroke="25" id="line6_region" visible="false" width="193" boundItem="line6" filled="true" color="#87cefa" type="bound" height="112" x="0" y="0"/>
-            <region stroke="25" id="line7_region" visible="false" width="130" boundItem="line7" filled="true" color="#87cefa" type="bound" height="143" x="0" y="0"/>
-            <region stroke="25" id="line8_region" visible="false" width="115" boundItem="line8" filled="true" color="#87cefa" type="bound" height="194" x="0" y="0"/>
-            <region stroke="25" id="line9_region" visible="false" width="151" boundItem="line9" filled="true" color="#87cefa" type="bound" height="151" x="0" y="0"/>
-            <region stroke="25" id="line10_region" visible="false" width="177" boundItem="line10" filled="true" color="#87cefa" type="bound" height="105" x="0" y="0"/>
-            <region stroke="25" id="line11_region" visible="false" width="181" boundItem="line11" filled="true" color="#87cefa" type="bound" height="148" x="0" y="0"/>
-            <region id="start_zone" visible="false" width="25" filled="true" color="#87cefa" type="rectangle" height="25" x="-739" y="273"/>
-            <region id="finish_zone" visible="false" width="50" filled="true" color="#ff0000" type="rectangle" height="50" x="-470" y="-107"/>
+            <region boundItem="line0" stroke="22" width="1" type="bound" height="1" x="0" visible="false" color="#87cefa" filled="true" y="0" id="line0_region"/>
+            <region boundItem="line1" stroke="34" width="1" type="bound" height="1" x="0" visible="false" color="#87cefa" filled="true" y="0" id="line1_region"/>
+            <region boundItem="line2" stroke="34" width="1" type="bound" height="1" x="0" visible="false" color="#87cefa" filled="true" y="0" id="line2_region"/>
+            <region boundItem="line3" stroke="34" width="1" type="bound" height="1" x="0" visible="false" color="#87cefa" filled="true" y="0" id="line3_region"/>
+            <region boundItem="line4" stroke="34" width="1" type="bound" height="1" x="0" visible="false" color="#87cefa" filled="true" y="0" id="line4_region"/>
+            <region boundItem="line5" stroke="34" width="1" type="bound" height="1" x="0" visible="false" color="#87cefa" filled="true" y="0" id="line5_region"/>
+            <region boundItem="line6" stroke="22" width="1" type="bound" height="1" x="0" visible="false" color="#87cefa" filled="true" y="0" id="line6_region"/>
+            <region boundItem="line7" stroke="34" width="1" type="bound" height="1" x="0" visible="false" color="#87cefa" filled="true" y="0" id="line7_region"/>
+            <region boundItem="line8" stroke="34" width="1" type="bound" height="1" x="0" visible="false" color="#87cefa" filled="true" y="0" id="line8_region"/>
+            <region boundItem="line9" stroke="34" width="1" type="bound" height="1" x="0" visible="false" color="#87cefa" filled="true" y="0" id="line9_region"/>
+            <region boundItem="line10" stroke="34" width="1" type="bound" height="1" x="0" visible="false" color="#87cefa" filled="true" y="0" id="line10_region"/>
+            <region boundItem="line11" stroke="34" width="1" type="bound" height="1" x="0" visible="false" color="#87cefa" filled="true" y="0" id="line11_region"/>
+            <region id="start_zone" visible="false" width="25" filled="true" color="#87cefa" type="rectangle" height="25" x="-39" y="12"/>
+            <region id="checkpoint" visible="false" width="50" filled="true" color="#ffff00" type="rectangle" height="50" x="-39" y="550"/>
         </regions>
     </world>
     <robots>
-        <robot direction="30" id="trikKitRobot" position="-751:261">
+        <robot position="-52:-1" id="trikKitRobot" direction="0">
             <sensors>
-                <sensor direction="0" port="B4###input###M4###encoder4" position="0:0" type=""/>
-                <sensor direction="0" port="A1###input######sensorA1" position="75:13" type="kitBase::robotModel::robotParts::LightSensor"/>
-                <sensor direction="0" port="M4###output######" position="75:25" type="kitBase::robotModel::robotParts::Motor"/>
-                <sensor direction="0" port="B2###input###M2###encoder2" position="0:0" type=""/>
-                <sensor direction="0" port="B1###input###M1###encoder1" position="0:0" type=""/>
-                <sensor direction="0" port="M3###output######" position="75:25" type="kitBase::robotModel::robotParts::Motor"/>
-                <sensor direction="0" port="B3###input###M3###encoder3" position="0:0" type=""/>
-                <sensor direction="0" port="A2###input######sensorA2" position="76:37" type="kitBase::robotModel::robotParts::LightSensor"/>
+                <sensor position="49:13" port="A1###input######sensorA1" direction="0" type="kitBase::robotModel::robotParts::LightSensor"/>
+                <sensor position="75:25" port="M3###output######" direction="0" type="kitBase::robotModel::robotParts::Motor"/>
+                <sensor position="75:25" port="M4###output######" direction="0" type="kitBase::robotModel::robotParts::Motor"/>
+                <sensor position="49:37" port="A2###input######sensorA2" direction="0" type="kitBase::robotModel::robotParts::LightSensor"/>
             </sensors>
-            <startPosition direction="30" x="-726" y="286"/>
-            <wheels left="M3###output######" right="M4###output######"/>
+            <startPosition x="-27" y="24" direction="0"/>
+            <wheels left="M3###output###М3###" right="M4###output###М4###"/>
         </robot>
     </robots>
     <constraints>
-        <timelimit value="30000"/>
+        <timelimit value="100000"/>
+
         <constraint failMessage="Робот должен находиться в начальной точке перед запуском!" checkOnce="true">
             <inside objectId="robot1" regionId="start_zone"/>
         </constraint>
+
         <constraint failMessage="Робот должен ехать по линии!">
             <conditions glue="or">
-                <inside objectId="robot1.A1" regionId="line0_region"/>
-                <inside objectId="robot1.A1" regionId="line1_region"/>
-                <inside objectId="robot1.A1" regionId="line2_region"/>
-                <inside objectId="robot1.A1" regionId="line3_region"/>
-                <inside objectId="robot1.A1" regionId="line4_region"/>
-                <inside objectId="robot1.A1" regionId="line5_region"/>
-                <inside objectId="robot1.A1" regionId="line6_region"/>
-                <inside objectId="robot1.A1" regionId="line7_region"/>
-                <inside objectId="robot1.A1" regionId="line8_region"/>
-                <inside objectId="robot1.A1" regionId="line9_region"/>
-                <inside objectId="robot1.A1" regionId="line10_region"/>
-                <inside objectId="robot1.A1" regionId="line11_region"/>
+                <conditions glue="and">
+                    <inside objectId="robot1.A1" regionId="line0_region"/>
+                    <inside objectId="robot1.A2" regionId="line0_region"/>
+                </conditions>
+                <conditions glue="and">
+                    <inside objectId="robot1.A1" regionId="line1_region"/>
+                    <inside objectId="robot1.A2" regionId="line1_region"/>
+                </conditions>
+                <conditions glue="and">
+                    <inside objectId="robot1.A1" regionId="line2_region"/>
+                    <inside objectId="robot1.A2" regionId="line2_region"/>
+                </conditions>
+                <conditions glue="and">
+                    <inside objectId="robot1.A1" regionId="line3_region"/>
+                    <inside objectId="robot1.A2" regionId="line3_region"/>
+                </conditions>
+                <conditions glue="and">
+                    <inside objectId="robot1.A1" regionId="line4_region"/>
+                    <inside objectId="robot1.A2" regionId="line4_region"/>
+                </conditions>
+                <conditions glue="and">
+                    <inside objectId="robot1.A1" regionId="line5_region"/>
+                    <inside objectId="robot1.A2" regionId="line5_region"/>
+                </conditions>
+                <conditions glue="and">
+                    <inside objectId="robot1.A1" regionId="line6_region"/>
+                    <inside objectId="robot1.A2" regionId="line6_region"/>
+                </conditions>
+                <conditions glue="and">
+                    <inside objectId="robot1.A1" regionId="line7_region"/>
+                    <inside objectId="robot1.A2" regionId="line7_region"/>
+                </conditions>
+                <conditions glue="and">
+                    <inside objectId="robot1.A1" regionId="line8_region"/>
+                    <inside objectId="robot1.A2" regionId="line8_region"/>
+                </conditions>
+                <conditions glue="and">
+                    <inside objectId="robot1.A1" regionId="line9_region"/>
+                    <inside objectId="robot1.A2" regionId="line9_region"/>
+                </conditions>
+                <conditions glue="and">
+                    <inside objectId="robot1.A1" regionId="line10_region"/>
+                    <inside objectId="robot1.A2" regionId="line10_region"/>
+                </conditions>
+                <conditions glue="and">
+                    <inside objectId="robot1.A1" regionId="line11_region"/>
+                    <inside objectId="robot1.A2" regionId="line11_region"/>
+                </conditions>
             </conditions>
         </constraint>
+
         <!-- Событие, которое говорит о том, что робот вообще поехал и стартует цепочку проверки -->
         <event id="We are alive, first move" settedUpInitially="true">
             <condition>
@@ -79,9 +114,10 @@
                 </greater>
             </condition>
             <triggers>
-                <setUp id="Finish"/>
+                <setUp id="Checkpoint"/>
             </triggers>
         </event>
+
         <!-- Событие, которое выдает ошибку, если робот не тронулся с места в первую секунду -->
         <event id="Waiting for going forward too long" settedUpInitially="true">
             <conditions glue="and">
@@ -92,15 +128,27 @@
                 <fail message="Робот так и не поехал в первую секунду"/>
             </trigger>
         </event>
-        <!-- Событие, которое говорит, что задание выполнено, когда робот приезжает на линию финиша-->
+
+        <!-- Событие, проверяющие, что робот проехал чекпоинт. При срабатывании поднимает событие Finish -->
+        <event id="Checkpoint">
+            <condition>
+                <inside objectId="robot1" regionId="checkpoint"/>
+            </condition>
+            <trigger>
+                <setUp id="Finish"/>
+            </trigger>
+        </event>
+
+        <!-- Событие, которое говорит, что задание выполнено, когда робот приезжает на линию старта-финиша -->
         <event id="Finish">
             <conditions glue="and">
                 <timer forceDropOnTimeout="false" timeout="50"/>
-                <inside objectId="robot1" regionId="finish_zone"/>
+                <inside objectId="robot1" regionId="start_zone"/>
             </conditions>
             <trigger>
                 <success/>
             </trigger>
         </event>
+
     </constraints>
 </root>
