@@ -19,13 +19,16 @@ declare class UIDGenerator {
 }
 
 declare class PropertiesPack {
+
     logical: Map<Property>;
     graphical: Map<Property>;
 
     constructor(logical: Map<Property>, graphical: Map<Property>);
+
 }
 
 declare class Link implements DiagramElement {
+
     constructor(jointObject: joint.dia.Link, properties: Map<Property>);
     getLogicalId(): string;
     getJointObject(): any;
@@ -34,9 +37,11 @@ declare class Link implements DiagramElement {
     getConstPropertiesPack(): PropertiesPack;
     getChangeableProperties(): Map<Property>;
     setProperty(key: string, property: Property): void;
+
 }
 
 declare interface DiagramElement {
+
     getLogicalId(): string;
     getJointObject();
     getName(): string;
@@ -44,31 +49,40 @@ declare interface DiagramElement {
     getConstPropertiesPack(): PropertiesPack;
     getChangeableProperties(): Map<Property>;
     setProperty(name: string, property: Property): void;
+
 }
 
 declare interface DiagramNode extends DiagramElement {
+
     getX(): number;
     getY(): number;
     getImagePath(): string;
+
 }
 
 declare class SubprogramDiagramNode {
+
+    constructor(logicalId: string, name: string);
     getLogicalId(): string;
     getName(): string;
     getType(): string;
-    setProperty(name: string, property: Property): void;
+    getProperties(): Map<Property>;
+
 }
 
 declare class RobotsDiagramNode {
+
     constructor(logicalId: string, graphicalId: string, properties: Map<Property>);
     getLogicalId(): string;
     getGraphicalId(): string;
     getName(): string;
     getType(): string;
-    setProperty(name: string, property: Property): void;
+    getProperties(): Map<Property>;
+
 }
 
 declare class DefaultDiagramNode implements DiagramNode {
+
     constructor(name: string, type: string, x: number, y: number, properties: Map<Property>, imagePath: string,
                 id?: string, notDefaultConstProperties?: PropertiesPack);
     getLogicalId(): string;
@@ -81,25 +95,43 @@ declare class DefaultDiagramNode implements DiagramNode {
     getImagePath(): string;
     getX(): number;
     getY(): number;
+
 }
 
-declare class Map<T> {
+declare interface Map<T> {
+    [key: string]: T;
 }
 
 declare class NodeType {
+
+    constructor(name: string, propertiesMap: Map<Property>, image?: string);
+    getName(): string;
+    getPropertiesMap(): Map<Property>;
+    getImage(): string;
+
 }
 
 declare class Property {
+
+    name: string;
+    type: string;
+    value: string;
+
     constructor(name: string, type: string, value: string);
 }
 
 declare class SubprogramNode extends DefaultDiagramNode {
+
+    constructor(name: string, type: string, x: number, y: number, properties: Map<Property>, imagePath: string,
+                subprogramDiagramId: string, id?: string, notDefaultConstProperties?: PropertiesPack);
     getSubprogramDiagramId(): string;
     getTextObject(): joint.shapes.basic.Text;
+
 }
 
 declare class DiagramPaper {
 
+    constructor(graph: joint.dia.Graph);
     public getGridSize(): number;
     public getZoom(): number;
     public getNodesMap(): Map<DiagramNode>;
@@ -109,6 +141,7 @@ declare class DiagramPaper {
     public addNodesFromMap(nodesMap: Map<DiagramNode>): void;
     public addLinksFromMap(linksMap: Map<Link>): void;
     public addLinkToMap(linkId: string, linkObject: Link): void;
+    public addLinkToPaper(link: Link): void;
     public removeNode(nodeId: string): void;
     public removeLink(linkId: string): void;
     public clear(): void;
@@ -142,13 +175,69 @@ declare class DiagramParts {
 
 declare class DiagramEditor {
 
+    constructor();
     public getGraph(): joint.dia.Graph;
     public getPaper(): DiagramPaper;
     public clear(): void;
 
 }
 
+declare class Gesture {
+
+    name: string;
+    key: string[];
+    factor: number;
+
+    constructor(name : string, key : string[], factor: number)
+
+}
+
+declare class HtmlView {
+
+    protected content: string;
+
+    public getContent(): string;
+
+}
+
+declare class SubprogramPaletteView extends HtmlView {
+    constructor(subprogramDiagramNodes: SubprogramDiagramNode[], subprogramImageSrc: string);
+}
+
+declare class BlocksPaletteView extends HtmlView {
+    constructor(paletteTypes: PaletteTypes);
+}
+
+declare class CategoryView extends HtmlView {
+    constructor(categoryName: string, category: Map<NodeType>);
+}
+
+declare class CheckboxPropertyView extends HtmlView {
+    constructor(typeName: string, propertyKey: string, property: Property);
+}
+
+declare class DropdownPropertyView extends HtmlView {
+    constructor(typeName: string, propertyKey: string, property: Property);
+}
+
+declare class PaletteElementView extends HtmlView {
+    constructor(typeName: string, name: string, imageSrc: string);
+}
+
+declare class SpinnerPropertyView extends HtmlView {
+    constructor(propertyKey: string, property: Property);
+}
+
+declare class StringPropertyView extends HtmlView {
+    constructor(propertyKey: string, property: Property);
+}
+
+declare class SubprogramPaletteElementView extends HtmlView {
+    constructor(typeName: string, name: string, imageSrc: string, nodeLogicalId: string);
+}
+
 declare abstract class DiagramEditorController {
+
     protected scope: ng.IScope;
     protected diagramEditor: DiagramEditor;
     protected paperController: PaperController;
@@ -156,7 +245,6 @@ declare abstract class DiagramEditorController {
     protected elementsTypeLoader: ElementsTypeLoader;
     protected paletteController: PaletteController;
     protected nodeTypesMap: Map<NodeType>;
-    protected robotsDiagramNode: RobotsDiagramNode;
 
     constructor($scope, $attrs);
 
@@ -168,25 +256,32 @@ declare abstract class DiagramEditorController {
     public getNodeType(type: string): NodeType;
     public getNodeProperties(type: string): Map<Property>;
     public clearState(): void;
+
 }
 
 declare class PaperController {
 
     constructor(diagramEditorController: DiagramEditorController, paper: DiagramPaper);
-
     public getCurrentElement(): DiagramElement;
-
     public clearState(): void;
+    public createLink(sourceId: string, targetId: string): void;
+    public createNode(type: string, x: number, y: number): void;
+    public createNodeInEventPositionFromNames(names: string[], event): void;
+    public createLinkBetweenCurrentAndEventTargetElements(event): void;
 
 }
 
 declare class PropertyEditorController {
 
     constructor(paperController: PaperController);
-
     public setNodeProperties(element: DiagramElement): void;
-
     public clearState(): void;
+
+}
+
+declare class PropertyViewFactory {
+
+    public createView(typeName: string, propertyKey: string, property: Property): HtmlView;
 
 }
 
@@ -199,10 +294,8 @@ declare class ElementsTypeLoader {
 declare class PaletteController {
 
     public initDraggable(): void;
-
     public appendSubprogramsPalette(subprogramDiagramNodes: SubprogramDiagramNode[],
                                     nodeTypesMap: Map<NodeType>): void;
-
     public appendBlocksPalette(paletteTypes: PaletteTypes): void;
 
 }
@@ -210,30 +303,18 @@ declare class PaletteController {
 declare class DiagramJsonParser {
 
     public parse(diagramJson: any, nodeTypesMap: Map<NodeType>): DiagramParts;
-
     protected findMinPosition(diagramJson: any, nodeTypesMap: Map<NodeType>): {x: number; y: number};
-
     protected parseNodes(diagramJson: any, nodeTypesMap: Map<NodeType>, offsetX: number, offsetY: number): DiagramParts;
-
     protected parseRobotsDiagramNode(nodeObject: any): RobotsDiagramNode;
-
     protected parseSubprogramDiagram(nodeObject: any): SubprogramDiagramNode;
-
     protected parseDiagramNodeObject(nodeObject: any, nodeTypesMap: Map<NodeType>,
                                      offsetX: number, offsetY: number): DiagramNode;
-
     protected parseLinks(diagramJson: any, offsetX: number, offsetY: number): Map<Link>;
-
     protected parseLinkObject(linkObject: any, offsetX: number, offsetY: number): Link;
-
     protected parseVertices(configuration: string);
-
     protected getSourcePosition(configuration: string);
-
     protected getTargetPosition(configuration: string);
-
     protected parsePosition(position: string): {x: number; y: number};
-
     protected parseId(idString: string): string;
 
 }
@@ -241,21 +322,50 @@ declare class DiagramJsonParser {
 declare class DiagramExporter {
 
     public exportDiagramStateToJSON(graph: joint.dia.Graph, diagramParts: DiagramParts);
-
     protected exportRobotsDiagramNode(diagramParts: DiagramParts);
-
     protected exportNodes(graph: joint.dia.Graph, diagramParts: DiagramParts);
-
     protected exportLinks(diagramParts: DiagramParts);
-
     protected exportProperties(properties: Map<Property>);
-
     protected exportVertices(vertices): string;
 
 }
 
+declare module GesturesUtils {
+
+    export class Pair {
+        first: number;
+        second: number;
+
+        constructor(first : number, second : number);
+    }
+
+    export class PairString {
+        first: string;
+        second: string;
+
+        constructor(curString: string);
+
+        public getString(): string;
+    }
+
+}
+
+declare class GesturesController {
+
+    constructor(paperController: PaperController);
+    public startDrawing(): void;
+    public onMouseMove(event): void;
+    public onMouseUp(event): void;
+
+}
+
+declare class GesturesMatcher {
+
+    constructor(gestures: Gesture[])
+    public getMatches(pointList: GesturesUtils.Pair[]): string[];
+
+}
+
 declare class DiagramElementListener {
-
     static getNodeProperties: (type: string) => Map<Property>;
-
 }

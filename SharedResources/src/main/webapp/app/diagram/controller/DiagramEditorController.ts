@@ -33,7 +33,6 @@ abstract class DiagramEditorController {
     protected propertyEditorController: PropertyEditorController;
     protected elementsTypeLoader: ElementsTypeLoader;
     protected paletteController: PaletteController;
-    protected robotsDiagramNode: RobotsDiagramNode;
 
     protected nodeTypesMap: Map<NodeType>;
 

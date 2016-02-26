@@ -76,6 +76,46 @@ class PaperController {
         this.clearCurrentElement();
     }
 
+    public createLink(sourceId: string, targetId: string): void {
+        var link: joint.dia.Link = new joint.dia.Link({
+            attrs: {
+                '.connection': { stroke: 'black' },
+                '.marker-target': { fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z' }
+            },
+            source: { id: sourceId },
+            target: { id: targetId },
+        });
+
+        var typeProperties = this.diagramEditorController.getNodeProperties("ControlFlow");
+
+        var linkProperties: Map<Property> = {};
+        for (var property in typeProperties) {
+            linkProperties[property] = new Property(typeProperties[property].name,
+                typeProperties[property].type, typeProperties[property].value);
+        }
+
+        var linkObject: Link = new Link(link, linkProperties);
+        this.paper.addLinkToPaper(linkObject);
+    }
+
+    public createNode(type: string, x: number, y: number): void {
+        var controller: PaperController = this;
+        var image: string = controller.diagramEditorController.getNodeType(type).getImage();
+        var name: string = controller.diagramEditorController.getNodeType(type).getName();
+
+        var typeProperties: Map<Property> = controller.diagramEditorController.getNodeType(type).getPropertiesMap();
+
+        var nodeProperties: Map<Property> = {};
+        for (var property in typeProperties) {
+            nodeProperties[property] = new Property(typeProperties[property].name, typeProperties[property].type,
+                typeProperties[property].value);
+        }
+
+        var node: DiagramNode = this.paper.createDefaultNode(name, type, x, y, nodeProperties, image);
+        controller.setCurrentElement(node);
+        controller.diagramEditorController.setNodeProperties(node);
+    }
+
     public createNodeInEventPositionFromNames(names: string[], event): void {
         var offsetX = (event.pageX - $("#diagram_paper").offset().left + $("#diagram_paper").scrollLeft()) /
             this.paper.getZoom();
@@ -244,46 +284,6 @@ class PaperController {
                 controller.diagramEditorController.setNodeProperties(node);
             }
         });
-    }
-
-    public createLink(sourceId: string, targetId: string): void {
-        var link: joint.dia.Link = new joint.dia.Link({
-            attrs: {
-                '.connection': { stroke: 'black' },
-                '.marker-target': { fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z' }
-            },
-            source: { id: sourceId },
-            target: { id: targetId },
-        });
-
-        var typeProperties = this.diagramEditorController.getNodeProperties("ControlFlow");
-
-        var linkProperties: Map<Property> = {};
-        for (var property in typeProperties) {
-            linkProperties[property] = new Property(typeProperties[property].name,
-                typeProperties[property].type, typeProperties[property].value);
-        }
-
-        var linkObject: Link = new Link(link, linkProperties);
-        this.paper.addLinkToPaper(linkObject);
-    }
-
-    public createNode(type: string, x: number, y: number): void {
-        var controller: PaperController = this;
-        var image: string = controller.diagramEditorController.getNodeType(type).getImage();
-        var name: string = controller.diagramEditorController.getNodeType(type).getName();
-
-        var typeProperties: Map<Property> = controller.diagramEditorController.getNodeType(type).getPropertiesMap();
-
-        var nodeProperties: Map<Property> = {};
-        for (var property in typeProperties) {
-            nodeProperties[property] = new Property(typeProperties[property].name, typeProperties[property].type,
-                typeProperties[property].value);
-        }
-
-        var node: DiagramNode = this.paper.createDefaultNode(name, type, x, y, nodeProperties, image);
-        controller.setCurrentElement(node);
-        controller.diagramEditorController.setNodeProperties(node);
     }
 
     private setCurrentElement(element): void {

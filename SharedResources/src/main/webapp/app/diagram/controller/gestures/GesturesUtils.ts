@@ -21,9 +21,9 @@ module GesturesUtils {
         first: number;
         second: number;
 
-        constructor (public newFirst : number, public newSecond : number) {
-            this.first = newFirst;
-            this.second = newSecond;
+        constructor(first : number, second : number) {
+            this.first = first;
+            this.second = second;
         }
     }
 
@@ -31,13 +31,13 @@ module GesturesUtils {
         first: string;
         second: string;
 
-        constructor (public curString: string) {
+        constructor(curString: string) {
             var index = curString.indexOf(" ");
             this.first = curString.substr(0, index);
             this.second = curString.substr(index, curString.length - index);
         }
 
-        getString() {
+        public getString(): string {
             return this.first + " - " + this.second;
         }
     }

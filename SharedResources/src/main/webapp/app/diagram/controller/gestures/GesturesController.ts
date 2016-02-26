@@ -40,7 +40,7 @@ class GesturesController {
         this.loadGestures();
     }
 
-    public startDrawing() {
+    public startDrawing(): void {
         var n = this.date.getTime();
         this.currentTime = n;
         this.flagAdd = false;
@@ -48,7 +48,7 @@ class GesturesController {
         this.flagDraw = true;
     }
 
-    public onMouseMove(event) {
+    public onMouseMove(event): void {
         if (!(event.button == 2))
             return;
 
@@ -73,7 +73,7 @@ class GesturesController {
         this.pointList.push(pair);
     }
 
-    public onMouseUp(event) {
+    public onMouseUp(event): void {
         if (this.flagDraw === false) {
             return;
         }
@@ -85,7 +85,7 @@ class GesturesController {
         }
     }
 
-    private finishDraw(event) {
+    private finishDraw(event): void {
         if (this.flagDraw === true)
             return;
         var pencil = document.getElementsByClassName('pencil');

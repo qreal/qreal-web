@@ -24,6 +24,7 @@ class StepicDiagramEditorController extends DiagramEditorController {
     private isPaletteLoaded = false;
     private diagramJsonParser: DiagramJsonParser;
     private diagramExporter: DiagramExporter;
+    private robotsDiagramNode: RobotsDiagramNode;
 
     constructor($scope, $attrs) {
         super($scope, $attrs);

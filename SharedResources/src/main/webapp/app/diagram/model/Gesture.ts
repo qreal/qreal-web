@@ -20,10 +20,10 @@ class Gesture {
     key: string[];
     factor: number;
 
-    constructor(newName : string, newKey : string[], newFactor: number) {
-        this.name = newName;
-        this.key = newKey;
-        this.factor = newFactor;
+    constructor(name : string, key : string[], factor: number) {
+        this.name = name;
+        this.key = key;
+        this.factor = factor;
     }
 
 }
