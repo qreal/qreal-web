@@ -105,8 +105,13 @@ class DiagramPaper extends joint.dia.Paper {
         }
     }
 
-    public addLinkToMap(linkId: string, linkObject: Link): void {
-        this.linksMap[linkId] = linkObject;
+    public addLinkToMap(link: Link): void {
+        this.linksMap[link.getJointObject().id] = link;
+    }
+
+    public addLinkToPaper(link: Link): void {
+        this.addLink(link);
+        this.addLinkToMap(link);
     }
 
     public removeNode(nodeId: string): void {
@@ -165,8 +170,8 @@ class DiagramPaper extends joint.dia.Paper {
     }
 
     private getDiagramElementView() {
-        DiagramElementListener.addLinkToMap = (linkId: string, linkObject: Link): void => {
-            this.addLinkToMap(linkId, linkObject);
+        DiagramElementListener.addLinkToMap = (linkObject: Link): void => {
+            this.addLinkToMap(linkObject);
         };
         return jQuery.extend(joint.shapes.basic.PortsViewInterface,
             {

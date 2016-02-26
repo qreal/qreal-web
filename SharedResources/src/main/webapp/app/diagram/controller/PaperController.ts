@@ -27,16 +27,41 @@ class PaperController {
     private diagramEditorController: DiagramEditorController;
     private paper: DiagramPaper;
     private currentElement: DiagramElement;
+    private clickFlag : boolean;
+    private rightClickFlag : boolean;
+    private gesturesController: GesturesController;
 
     constructor(diagramEditorController: DiagramEditorController, paper: DiagramPaper) {
         this.diagramEditorController = diagramEditorController;
         this.paper = paper;
+        this.clickFlag = false;
+        this.rightClickFlag = false;
+        this.gesturesController = new GesturesController(this);
+
         this.paper.on('cell:pointerdown', (cellView, event, x, y): void => {
             this.cellPointerdownListener(cellView, event, x, y);
         });
         this.paper.on('blank:pointerdown', (event, x, y): void => {
             this.blankPoinerdownListener(event, x, y);
         });
+
+        this.paper.on('cell:pointerup', (cellView, event, x, y): void => {
+            this.cellPointerupListener(cellView, event, x, y);
+        });
+        this.paper.on('cell:pointermove', (cellView, event, x, y): void => {
+            this.cellPointermoveListener(cellView, event, x, y);
+        });
+
+        this.diagramEditorController.getGraph().on('change:position', (cell) => {
+            if (!this.rightClickFlag) {
+                return;
+            }
+            cell.set('position', cell.previous('position'));
+        });
+
+        document.addEventListener('mouseup', (event) => { this.gesturesController.onMouseUp(event) } );
+        $("#diagram_paper").mousemove((event) => { this.gesturesController.onMouseMove(event) } );
+
         this.initDropPaletteElementListener();
 
         this.initDeleteListener();
@@ -51,10 +76,82 @@ class PaperController {
         this.clearCurrentElement();
     }
 
+    public createNodeInEventPositionFromNames(names: string[], event): void {
+        var offsetX = (event.pageX - $("#diagram_paper").offset().left + $("#diagram_paper").scrollLeft()) /
+            this.paper.getZoom();
+        var offsetY = (event.pageY - $("#diagram_paper").offset().top + $("#diagram_paper").scrollTop()) /
+            this.paper.getZoom();
+        var gridSize: number = this.paper.getGridSize();
+        offsetX -= offsetX % gridSize;
+        offsetY -= offsetY % gridSize;
+
+        var filteredNames: string[] = names.filter((type: string) => {
+            return this.diagramEditorController.getNodeType(type) !== undefined;
+        });
+
+        if (filteredNames.length === 0) {
+            return;
+        }
+        if (filteredNames.length === 1) {
+            this.createNode(filteredNames[0], offsetX, offsetY);
+            return;
+        }
+
+        var items = [];
+        for (var i = 0; i < filteredNames.length; ++i) {
+            items.push(
+                {
+                    "name": filteredNames[i],
+                    "action": ((type, offsetX, offsetY) => { this.createNode(type, offsetX, offsetY);})
+                        .bind(this, filteredNames[i], offsetX, offsetY)
+                });
+        }
+
+        var contextMenu = new ContextMenu();
+        var menuDiv = document.createElement("div");
+        menuDiv.className = "gestures-menu";
+        menuDiv.style.left = event.x + "px";
+        menuDiv.style.top = event.y + "px";
+        document.body.appendChild(menuDiv);
+        contextMenu.showMenu(new CustomEvent("context-menu"), menuDiv, items);
+    }
+
+    public createLinkBetweenCurrentAndEventTargetElements(event): void {
+        var diagramPaper: HTMLDivElement = <HTMLDivElement> document.getElementById('diagram_paper');
+
+        var elementBelow = this.diagramEditorController.getGraph().get('cells').find((cell) => {
+            if (cell instanceof joint.dia.Link) return false; // Not interested in links.
+            if (cell.id === this.currentElement.getJointObject().id) return false; // The same element as the dropped one.
+            var mXBegin = cell.getBBox().origin().x;
+            var mYBegin = cell.getBBox().origin().y;
+            var mXEnd = cell.getBBox().corner().x;
+            var mYEnd = cell.getBBox().corner().y;
+
+            var leftElementPos:number = (event.pageX - $(diagramPaper).offset().left + $(diagramPaper).scrollLeft()) /
+                this.paper.getZoom();
+            var topElementPos:number = (event.pageY - $(diagramPaper).offset().top + $(diagramPaper).scrollTop()) /
+                this.paper.getZoom();
+
+            if ((mXBegin <= leftElementPos) && (mXEnd >= leftElementPos)
+                && (mYBegin <= topElementPos) && (mYEnd >= topElementPos) && (this.rightClickFlag))
+                return true;
+            return false;
+        });
+
+        if (elementBelow) {
+            this.createLink(this.currentElement.getJointObject().id, elementBelow.id);
+        }
+    }
+
     private blankPoinerdownListener(event, x, y): void {
         if (!($(event.target).parents(".custom-menu").length > 0)) {
             $(".custom-menu").hide(100);
         }
+
+        if (event.button == 2) {
+            this.gesturesController.startDrawing();
+        }
+
         this.diagramEditorController.clearNodeProperties();
         if (this.currentElement) {
             this.clearCurrentElement();
@@ -66,10 +163,18 @@ class PaperController {
             $(".custom-menu").hide(100);
         }
 
+        this.clickFlag = true;
+        this.rightClickFlag = false;
+
         var node: DiagramNode = this.paper.getNodeById(cellView.model.id);
         if (node) {
             this.setCurrentElement(node);
             this.diagramEditorController.setNodeProperties(node);
+
+            if (event.button == 2) {
+                this.rightClickFlag = true;
+                this.gesturesController.startDrawing();
+            }
         } else {
             var link: Link = this.paper.getLinkById(cellView.model.id);
             if (link) {
@@ -79,14 +184,23 @@ class PaperController {
                 this.clearCurrentElement();
             }
         }
+    }
 
-        if (event.button == 2) {
+    private cellPointerupListener(cellView, event, x, y): void {
+        if (!($(event.target).parents(".custom-menu").length > 0)) {
+            $(".custom-menu").hide(100);
+        }
+        if ((this.clickFlag) && (event.button == 2)) {
             $(".custom-menu").finish().toggle(100).
             css({
-                left: event.clientX + "px",
-                top: event.clientY + "px"
+                top: event.pageY + "px",
+                left: event.pageX + "px"
             });
         }
+    }
+
+    private cellPointermoveListener(cellView, event, x, y): void {
+        this.clickFlag = false;
     }
 
     private initDropPaletteElementListener(): void {
@@ -130,6 +244,46 @@ class PaperController {
                 controller.diagramEditorController.setNodeProperties(node);
             }
         });
+    }
+
+    public createLink(sourceId: string, targetId: string): void {
+        var link: joint.dia.Link = new joint.dia.Link({
+            attrs: {
+                '.connection': { stroke: 'black' },
+                '.marker-target': { fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z' }
+            },
+            source: { id: sourceId },
+            target: { id: targetId },
+        });
+
+        var typeProperties = this.diagramEditorController.getNodeProperties("ControlFlow");
+
+        var linkProperties: Map<Property> = {};
+        for (var property in typeProperties) {
+            linkProperties[property] = new Property(typeProperties[property].name,
+                typeProperties[property].type, typeProperties[property].value);
+        }
+
+        var linkObject: Link = new Link(link, linkProperties);
+        this.paper.addLinkToPaper(linkObject);
+    }
+
+    public createNode(type: string, x: number, y: number): void {
+        var controller: PaperController = this;
+        var image: string = controller.diagramEditorController.getNodeType(type).getImage();
+        var name: string = controller.diagramEditorController.getNodeType(type).getName();
+
+        var typeProperties: Map<Property> = controller.diagramEditorController.getNodeType(type).getPropertiesMap();
+
+        var nodeProperties: Map<Property> = {};
+        for (var property in typeProperties) {
+            nodeProperties[property] = new Property(typeProperties[property].name, typeProperties[property].type,
+                typeProperties[property].value);
+        }
+
+        var node: DiagramNode = this.paper.createDefaultNode(name, type, x, y, nodeProperties, image);
+        controller.setCurrentElement(node);
+        controller.diagramEditorController.setNodeProperties(node);
     }
 
     private setCurrentElement(element): void {

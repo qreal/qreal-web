@@ -56,7 +56,7 @@ class DiagramElementListener {
             }
 
             var linkObject: Link = new Link(link, nodeProperties);
-            DiagramElementListener.addLinkToMap(link.id, linkObject);
+            DiagramElementListener.addLinkToMap(linkObject);
 
             this.paper.model.addCell(link);
 
@@ -77,7 +77,7 @@ class DiagramElementListener {
         return null;
     };
 
-    static addLinkToMap: (linkId: string, linkObject: Link) => void = function(linkId: string, linkObject: Link): void {
+    static addLinkToMap: (linkObject: Link) => void = function(linkObject: Link): void {
         console.error("DiagramElementListener addLink method is empty")
     };
 }

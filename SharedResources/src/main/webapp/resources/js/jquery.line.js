@@ -1,18 +1,9 @@
-/*-------------------------------------------------------------------------------------------------
-  This plugin is based on the GAPJUMPER line example http://www.gapjumper.com/research/lines.html.
-  Special thanks to its author!
-  Author: Tiago do Bem 
-  Date: March 2013
-  URL: https://github.com/tbem/jquery.line
-  The jQuery.line.js plugin is distributed under the GNU General Public License version 3 (GPLv3).
-  -------------------------------------------------------------------------------------------------
-*/ 
 
 (function($) {
 
   var helpers = {
     createLine: function(x1, y1, x2, y2, options){
-      
+
                   // Check if browser is Internet Exploder ;)
                   var isIE = navigator.userAgent.indexOf("MSIE") > -1;
                   if (x2 < x1){
@@ -24,7 +15,7 @@
                     y2 = temp;
                   }
                   var line = document.createElement("div");
-                  
+
                   // Formula for the distance between two points
                   // http://www.mathopenref.com/coorddist.html
                   var length = Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
@@ -51,28 +42,29 @@
                   return line;
                 }
   }
-  
+
 
   $.fn.line = function( x1, y1, x2, y2, options, callbacks) {
-                return $(this).each(function(){
-                  if($.isFunction(options)){
-                      callback = options;
-                      options = null;
-                  }else{
-                    callback = callbacks;
-                  }
-                  options = $.extend({}, $.fn.line.defaults, options);
+      return $(this).each(function(){
+          if($.isFunction(options)){
+              callback = options;
+              options = null;
+          }else{
+              callback = callbacks;
+          }
+          options = $.extend({}, $.fn.line.defaults, options);
 
-                  $(this).append(helpers.createLine(x1,y1,x2,y2,options)).promise().done(function(){
-                    if($.isFunction(callback)){
-                      callback.call();
-                    }
-                  });
+          $(this).append(helpers.createLine(x1,y1,x2,y2,options)).promise().done(function(){
+              if($.isFunction(callback)){
+                  callback.call();
+              }
+          });
 
-                
-              });
+
+      });
   };
-  $.fn.line.defaults = {  zindex : 10000,
+  $.fn.line.defaults = {
+      zindex : 10000,
                           color : '#000000',
                           stroke: "1",
                           style: "solid"

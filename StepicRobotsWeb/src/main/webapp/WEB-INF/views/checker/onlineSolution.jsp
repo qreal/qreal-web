@@ -30,6 +30,7 @@
 
     <link rel="stylesheet" href="<c:url value='/resources/css/jquery-ui.css' />"/>
 
+    <link rel="stylesheet" href="<c:url value='/resources/css/context-menu.css' />" />
 
     <link rel="stylesheet" href="<c:url value='/resources/css/onlineSolution.css' />"/>
     <link rel="stylesheet" href="<c:url value='/resources/css/twoDModel.css' />"/>

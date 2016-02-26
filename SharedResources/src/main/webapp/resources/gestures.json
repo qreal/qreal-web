@@ -1,7 +1,7 @@
 [
 
 	{
-		"name": "Final Node",
+		"name": "FinalNode",
 		"key": [
 			"A0", "B1", "C2", "D3", "E4", "F5", "G6", "H7", "I8",
 			"I0", "H1", "G2", "F3", "D5", "C6", "B7", "A8"
@@ -28,7 +28,7 @@
 	},
 
 	{
-		"name": "Condition",
+		"name": "IfBlock",
 		"key": [
 			"E0", "F1", "G2", "H3", "I4", "H5", "G6", "F7",
 			"E8", "D7", "C6", "B5", "A4", "B3", "C2", "D1"
@@ -37,7 +37,7 @@
 	},
 
 	{
-		"name": "Initial Node",
+		"name": "InitialNode",
 		"key": [
 			"C0", "D0", "E0", "F0", "G0", "H1", "I2", "I3", "I4", "I5", "I6", "H7",
 			"G8", "F8", "E8", "D8", "C8", "B7", "A6", "A5", "A4", "A3", "A2", "B1"
@@ -67,7 +67,7 @@
 	},
 
 	{
-		"name": "Led",
+		"name": "TrikLed",
 		"key": [
 			"A0", "B0", "C0", "D0", "E0", "F0", "G0", "H0",
 			"I0", "I1", "I2", "I3", "I4", "I5", "A1", "A2",
@@ -78,7 +78,7 @@
 	},
 
 	{
-		"name": "Smile",
+		"name": "TrikSmile",
 		"key": [
 			"C0", "C1", "C2", "C3", "G0", "G1", "G2",
 			"G3", "A5", "A6", "B7", "C8", "D8", "E8",
@@ -88,7 +88,7 @@
 	},
 
 	{
-		"name": "Clear Encoder",
+		"name": "TrikV62ClearEncoder",
 		"key": [
 			"A0", "B0", "C0", "D0", "E0", "F0", "G0", "H0",
 			"I0", "A1", "A2", "A3", "A4", "A5", "A6", "A7",
@@ -100,7 +100,7 @@
 	},
 
 	{
-		"name": "Motors Backward",
+		"name": "TrikV6EnginesBackward",
 		"key": [
 			"A4", "B4", "C4", "D4", "E4", "F4", "G4", "H4", "I4",
 			"B3", "C2", "D1", "E0", "B5", "C6", "D7", "E8"
@@ -109,7 +109,7 @@
 	},
 
 	{
-		"name": "Motors Forward",
+		"name": "TrikV6EnginesForward",
 		"key": [
 			"A4", "B4", "C4", "D4", "E4", "F4", "G4", "H4", "I4",
 			"H3", "G2", "F1", "E0", "H5", "G6", "F7", "E8"
@@ -118,21 +118,12 @@
 	},
 
 	{
-		"name": "Stop Motors",
+		"name": "TrikV6EnginesStop",
 		"key": [
 			"C0", "D0", "E0", "F0", "G0", "H1", "I2", "I3",
 			"I4", "I5", "I6", "H7", "G8", "F8", "E8", "D8",
 			"C8", "B7", "A6", "A5", "A4", "A3", "A2", "B1",
 			"C4", "D4", "E4", "F4", "G4"
-        ],
-        "factor": 0.4
-	},
-
-	{
-		"name": "Wait for Light",
-		"key": [
-			"D0", "D1", "C2", "D2", "E2", "F3", "G4", "G5", "H5", "I5",
-			"G6", "F7", "E8", "D8", "C8", "B7", "A6", "A5", "A4", "B3"
         ],
         "factor": 0.4
 	}
