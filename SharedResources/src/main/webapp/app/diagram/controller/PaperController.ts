@@ -59,6 +59,7 @@ class PaperController {
             cell.set('position', cell.previous('position'));
         });
 
+        document.addEventListener('mousedown', (event) => { this.gesturesController.onMouseDown(event) } );
         document.addEventListener('mouseup', (event) => { this.gesturesController.onMouseUp(event) } );
         $("#diagram_paper").mousemove((event) => { this.gesturesController.onMouseMove(event) } );
 

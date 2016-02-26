@@ -423,6 +423,7 @@ var PaperController = (function () {
             }
             cell.set('position', cell.previous('position'));
         });
+        document.addEventListener('mousedown', function (event) { _this.gesturesController.onMouseDown(event); });
         document.addEventListener('mouseup', function (event) { _this.gesturesController.onMouseUp(event); });
         $("#diagram_paper").mousemove(function (event) { _this.gesturesController.onMouseMove(event); });
         this.initDropPaletteElementListener();
@@ -1816,6 +1817,7 @@ var GesturesController = (function () {
         this.paperController = paperController;
         this.date = new Date();
         this.flagDraw = false;
+        this.rightButtonDown = false;
         this.pointList = [];
         this.loadGestures();
     }
@@ -1827,10 +1829,12 @@ var GesturesController = (function () {
         this.flagDraw = true;
     };
     GesturesController.prototype.onMouseMove = function (event) {
-        if (!(event.button == 2))
+        if (!(this.rightButtonDown)) {
             return;
-        if (this.flagDraw === false)
+        }
+        if (this.flagDraw === false) {
             return;
+        }
         var offsetX = (event.pageX - $("#diagram_paper").offset().left + $("#diagram_paper").scrollLeft());
         var offsetY = (event.pageY - $("#diagram_paper").offset().top + $("#diagram_paper").scrollTop());
         var pair = new GesturesUtils.Pair(offsetX, offsetY);
@@ -1845,8 +1849,14 @@ var GesturesController = (function () {
         this.flagAdd = true;
         this.pointList.push(pair);
     };
+    GesturesController.prototype.onMouseDown = function (event) {
+        if (event.button === 2) {
+            this.rightButtonDown = true;
+        }
+    };
     GesturesController.prototype.onMouseUp = function (event) {
         var _this = this;
+        this.rightButtonDown = false;
         if (this.flagDraw === false) {
             return;
         }

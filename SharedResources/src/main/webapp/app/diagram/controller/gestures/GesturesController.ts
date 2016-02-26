@@ -31,11 +31,13 @@ class GesturesController {
     private flagDraw: boolean;
     private pointList: GesturesUtils.Pair[];
     private gesturesMatcher: GesturesMatcher;
+    private rightButtonDown;
 
     constructor(paperController: PaperController) {
         this.paperController = paperController;
         this.date = new Date();
         this.flagDraw = false;
+        this.rightButtonDown = false;
         this.pointList = [];
         this.loadGestures();
     }
@@ -49,11 +51,13 @@ class GesturesController {
     }
 
     public onMouseMove(event): void {
-        if (!(event.button == 2))
+        if (!(this.rightButtonDown)) {
             return;
+        }
 
-        if (this.flagDraw === false)
+        if (this.flagDraw === false) {
             return;
+        }
 
         var offsetX = (event.pageX - $("#diagram_paper").offset().left + $("#diagram_paper").scrollLeft());
         var offsetY = (event.pageY - $("#diagram_paper").offset().top + $("#diagram_paper").scrollTop());
@@ -73,7 +77,14 @@ class GesturesController {
         this.pointList.push(pair);
     }
 
+    public onMouseDown(event): void {
+        if (event.button === 2) {
+            this.rightButtonDown = true;
+        }
+    }
+
     public onMouseUp(event): void {
+        this.rightButtonDown = false;
         if (this.flagDraw === false) {
             return;
         }
