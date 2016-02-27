@@ -13,6 +13,7 @@
         <module>StepicRobotsWeb</module>
         <module>Robots_diagram</module>
         <module>OverlayExample</module>
+        <module>SeparateExample</module>
     </modules>
 
     <build>
