@@ -16,8 +16,8 @@
     <script src="<c:url value='/resources/bootstrap/js/bootstrap.min.js' />"></script>
     <script src="<c:url value='/resources/js/transform-to-element-fix.js' />"></script>
 
-    <script src="<c:url value='/resources/js/compiled/utils.js' />"></script>
-    <script src="<c:url value='/resources/js/compiled/diagram-core.js' />"></script>
+    <script src="<c:url value='/resources/js/utils.js' />"></script>
+    <script src="<c:url value='/resources/js/diagram-core.js' />"></script>
     <script src="<c:url value='/resources/js/compiled/separate-example.js' />"></script>
 
     <link rel="stylesheet" href="<c:url value='/resources/bootstrap/css/bootstrap.min.css' />"/>
