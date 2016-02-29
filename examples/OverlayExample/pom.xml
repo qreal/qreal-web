@@ -8,9 +8,9 @@
         <groupId>qreal-web</groupId>
         <artifactId>parent</artifactId>
         <version>1.0-SNAPSHOT</version>
-		<relativePath>
-			../../pom.xml
-		</relativePath>
+        <relativePath>
+            ../../pom.xml
+        </relativePath>
     </parent>
 
     <groupId>qreal-web</groupId>
