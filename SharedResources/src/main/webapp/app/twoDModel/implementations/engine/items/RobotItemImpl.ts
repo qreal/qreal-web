@@ -131,14 +131,15 @@ class RobotItemImpl implements RobotItem {
         if (direction) {
             sensor.setStartDirection(direction);
         }
+        sensor.move(this.offsetPosition.x, this.offsetPosition.y);
         sensor.updateTransformation();
         this.sensors[portName] = sensor;
     }
 
-    moveSensors(deltaX: number, deltaY: number, direction: number, centerX: number, centerY: number): void {
+    moveSensors(deltaX: number, deltaY: number): void {
         for (var portName in this.sensors) {
-            var sensor = this.sensors[portName];
-            sensor.move(deltaX, deltaY, direction, centerX, centerY);
+            var sensor: SensorItem = this.sensors[portName];
+            sensor.move(deltaX, deltaY);
         }
     }
 
@@ -172,9 +173,9 @@ class RobotItemImpl implements RobotItem {
 
         this.direction = rotation;
         this.updateTransformation();
-        var center: TwoDPosition = this.getCenter();
-        this.moveSensors(this.offsetPosition.x, this.offsetPosition.y, rotation, center.x, center.y);
+        this.moveSensors(this.offsetPosition.x, this.offsetPosition.y);
 
+        var center: TwoDPosition = this.getCenter();
         if (this.marker.isDown()) {
             if (this.counter > this.roughening) {
                 this.marker.setCenter(new TwoDPosition(center.x, center.y));
@@ -193,8 +194,7 @@ class RobotItemImpl implements RobotItem {
         this.offsetPosition.y += deltaY;
         this.direction = direction;
         this.updateTransformation();
-        var center: TwoDPosition = this.getCenter();
-        this.moveSensors(this.offsetPosition.x, this.offsetPosition.y, direction, center.x, center.y);
+        this.moveSensors(this.offsetPosition.x, this.offsetPosition.y);
     }
 
     setMarkerDown(down: boolean): void {
@@ -266,9 +266,7 @@ class RobotItemImpl implements RobotItem {
                 robotItem.offsetPosition.x = this.lastOffsetX + dx * (1 / robotItem.worldModel.getZoom());
                 robotItem.offsetPosition.y = this.lastOffsetY + dy * (1 / robotItem.worldModel.getZoom());
                 robotItem.updateTransformation();
-                var center: TwoDPosition = robotItem.getCenter();
-                robotItem.moveSensors(robotItem.offsetPosition.x, robotItem.offsetPosition.y,
-                    robotItem.direction, center.x, center.y);
+                robotItem.moveSensors(robotItem.offsetPosition.x, robotItem.offsetPosition.y);
                 return this;
             },
             up = function () {
