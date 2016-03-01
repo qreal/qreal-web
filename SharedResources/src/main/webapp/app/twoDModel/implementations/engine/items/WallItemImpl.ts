@@ -59,7 +59,7 @@ class WallItemImpl implements WallItem {
         $(".handleEnd").attr("fill", "url(#wall_pattern)");
 
         if (isInteractive) {
-            this.setDraggable();
+            this.setDraggable(worldModel.getZoom());
         }
     }
 
@@ -67,7 +67,7 @@ class WallItemImpl implements WallItem {
         return WallItemImpl.width;
     }
 
-    setDraggable() {
+    setDraggable(zoom: number) {
         var wall = this;
         wall.path.attr({cursor: "pointer"});
 
@@ -80,16 +80,16 @@ class WallItemImpl implements WallItem {
             },
             moveStart = function (dx, dy) {
                 if (!wall.worldModel.getDrawMode()) {
-                    var newX = this.cx + dx;
-                    var newY = this.cy + dy;
+                    var newX = this.cx + dx / zoom;
+                    var newY = this.cy + dy / zoom;
                     wall.updateStart(newX, newY)
                 }
                 return this;
             },
             moveEnd = function (dx, dy) {
                 if (!wall.worldModel.getDrawMode()) {
-                    var newX = this.cx + dx;
-                    var newY = this.cy + dy;
+                    var newX = this.cx + dx / zoom;
+                    var newY = this.cy + dy / zoom;
                     wall.updateEnd(newX, newY);
                 }
                 return this;
@@ -115,6 +115,8 @@ class WallItemImpl implements WallItem {
                 return this;
             },
             movePath = function (dx, dy) {
+                dx /= zoom;
+                dy /= zoom;
                 if (!wall.worldModel.getDrawMode()) {
                     var trans_x = dx - this.ox;
                     var trans_y = dy - this.oy;

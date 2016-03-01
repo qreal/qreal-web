@@ -520,10 +520,10 @@ var LineItemImpl = (function () {
         this.handleStart = paper.circle(xStart, yStart, handleRadius).attr(handleAttrs);
         this.handleEnd = paper.circle(xEnd, yEnd, handleRadius).attr(handleAttrs);
         if (isInteractive) {
-            this.setDraggable();
+            this.setDraggable(worldModel.getZoom());
         }
     }
-    LineItemImpl.prototype.setDraggable = function () {
+    LineItemImpl.prototype.setDraggable = function (zoom) {
         var line = this;
         line.path.attr({ cursor: "pointer" });
         var startHandle = function () {
@@ -534,15 +534,15 @@ var LineItemImpl = (function () {
             return this;
         }, moveHandleStart = function (dx, dy) {
             if (!line.worldModel.getDrawMode()) {
-                var newX = this.cx + dx;
-                var newY = this.cy + dy;
+                var newX = this.cx + dx / zoom;
+                var newY = this.cy + dy / zoom;
                 line.updateStart(newX, newY);
             }
             return this;
         }, moveHandleEnd = function (dx, dy) {
             if (!line.worldModel.getDrawMode()) {
-                var newX = this.cx + dx;
-                var newY = this.cy + dy;
+                var newX = this.cx + dx / zoom;
+                var newY = this.cy + dy / zoom;
                 line.updateEnd(newX, newY);
             }
             return this;
@@ -563,6 +563,8 @@ var LineItemImpl = (function () {
             }
             return this;
         }, movePath = function (dx, dy) {
+            dx /= zoom;
+            dy /= zoom;
             if (!line.worldModel.getDrawMode()) {
                 var trans_x = dx - this.ox;
                 var trans_y = dy - this.oy;
@@ -644,13 +646,13 @@ var WallItemImpl = (function () {
         $(this.handleEnd.node).attr("class", "handleEnd");
         $(".handleEnd").attr("fill", "url(#wall_pattern)");
         if (isInteractive) {
-            this.setDraggable();
+            this.setDraggable(worldModel.getZoom());
         }
     }
     WallItemImpl.getWidth = function () {
         return WallItemImpl.width;
     };
-    WallItemImpl.prototype.setDraggable = function () {
+    WallItemImpl.prototype.setDraggable = function (zoom) {
         var wall = this;
         wall.path.attr({ cursor: "pointer" });
         var start = function () {
@@ -661,15 +663,15 @@ var WallItemImpl = (function () {
             return this;
         }, moveStart = function (dx, dy) {
             if (!wall.worldModel.getDrawMode()) {
-                var newX = this.cx + dx;
-                var newY = this.cy + dy;
+                var newX = this.cx + dx / zoom;
+                var newY = this.cy + dy / zoom;
                 wall.updateStart(newX, newY);
             }
             return this;
         }, moveEnd = function (dx, dy) {
             if (!wall.worldModel.getDrawMode()) {
-                var newX = this.cx + dx;
-                var newY = this.cy + dy;
+                var newX = this.cx + dx / zoom;
+                var newY = this.cy + dy / zoom;
                 wall.updateEnd(newX, newY);
             }
             return this;
@@ -690,6 +692,8 @@ var WallItemImpl = (function () {
             }
             return this;
         }, movePath = function (dx, dy) {
+            dx /= zoom;
+            dy /= zoom;
             if (!wall.worldModel.getDrawMode()) {
                 var trans_x = dx - this.ox;
                 var trans_y = dy - this.oy;
@@ -757,10 +761,10 @@ var PencilItemImpl = (function () {
         });
         worldModel.insertBeforeRobots(this.path);
         if (isInteractive) {
-            this.setDraggable();
+            this.setDraggable(worldModel.getZoom());
         }
     }
-    PencilItemImpl.prototype.setDraggable = function () {
+    PencilItemImpl.prototype.setDraggable = function (zoom) {
         var pencilItem = this;
         pencilItem.path.attr({ cursor: "pointer" });
         var startPath = function () {
@@ -770,6 +774,8 @@ var PencilItemImpl = (function () {
             }
             return this;
         }, movePath = function (dx, dy) {
+            dx /= zoom;
+            dy /= zoom;
             if (!pencilItem.worldModel.getDrawMode()) {
                 this.transform(this.transformation + "T" + dx + "," + dy);
             }
@@ -818,10 +824,10 @@ var EllipseItemImpl = (function () {
         this.handleBottomLeft = paper.rect(xStart, yStart - this.handleSize, this.handleSize, this.handleSize).attr(handleAttrs);
         this.handleBottomRight = paper.rect(xStart - this.handleSize, yStart - this.handleSize, this.handleSize, this.handleSize).attr(handleAttrs);
         if (isInteractive) {
-            this.setDraggable();
+            this.setDraggable(worldModel.getZoom());
         }
     }
-    EllipseItemImpl.prototype.setDraggable = function () {
+    EllipseItemImpl.prototype.setDraggable = function (zoom) {
         var ellipseItem = this;
         ellipseItem.ellipse.attr({ cursor: "pointer" });
         var startTopLeftHandle = function () {
@@ -858,8 +864,8 @@ var EllipseItemImpl = (function () {
             return this;
         }, moveHandle = function (dx, dy) {
             if (!ellipseItem.worldModel.getDrawMode()) {
-                var newX = this.ox + dx;
-                var newY = this.oy + dy;
+                var newX = this.ox + dx / zoom;
+                var newY = this.oy + dy / zoom;
                 ellipseItem.updateCorner(this.oppositeCornerX, this.oppositeCornerY, newX, newY);
             }
             return this;
@@ -894,6 +900,8 @@ var EllipseItemImpl = (function () {
             }
             return this;
         }, moveEllipse = function (dx, dy) {
+            dx /= zoom;
+            dy /= zoom;
             if (!ellipseItem.worldModel.getDrawMode()) {
                 var newX = this.cx + dx;
                 var newY = this.cy + dy;
@@ -1146,8 +1154,8 @@ var WorldModelImpl = (function () {
     WorldModelImpl.prototype.getMousePosition = function (e) {
         var offset = $("#twoDModel_stage").offset();
         var position = {
-            x: e.pageX - offset.left,
-            y: e.pageY - offset.top
+            x: (e.pageX - offset.left + $("#twoDModel_stage").scrollLeft()) / this.zoom,
+            y: (e.pageY - offset.top + $("#twoDModel_stage").scrollTop()) / this.zoom
         };
         return position;
     };

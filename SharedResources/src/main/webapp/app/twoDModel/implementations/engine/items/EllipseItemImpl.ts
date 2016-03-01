@@ -52,11 +52,11 @@ class EllipseItemImpl implements EllipseItem {
         this.handleBottomRight = paper.rect(xStart - this.handleSize, yStart - this.handleSize, this.handleSize, this.handleSize).attr(handleAttrs);
 
         if (isInteractive) {
-            this.setDraggable();
+            this.setDraggable(worldModel.getZoom());
         }
     }
 
-    setDraggable(): void {
+    setDraggable(zoom: number): void {
         var ellipseItem = this;
         ellipseItem.ellipse.attr({cursor: "pointer"});
         var startTopLeftHandle = function () {
@@ -97,8 +97,8 @@ class EllipseItemImpl implements EllipseItem {
             },
             moveHandle = function (dx, dy) {
                 if (!ellipseItem.worldModel.getDrawMode()) {
-                    var newX = this.ox + dx;
-                    var newY = this.oy + dy;
+                    var newX = this.ox + dx / zoom;
+                    var newY = this.oy + dy / zoom;
                     ellipseItem.updateCorner(this.oppositeCornerX, this.oppositeCornerY, newX, newY);
                 }
                 return this;
@@ -137,6 +137,8 @@ class EllipseItemImpl implements EllipseItem {
                 return this;
             },
             moveEllipse = function (dx, dy) {
+                dx /= zoom;
+                dy /= zoom;
                 if (!ellipseItem.worldModel.getDrawMode()) {
                     var newX = this.cx + dx;
                     var newY = this.cy + dy;

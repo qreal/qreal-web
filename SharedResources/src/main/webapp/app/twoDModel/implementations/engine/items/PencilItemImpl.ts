@@ -37,11 +37,11 @@ class PencilItemImpl implements PencilItem {
         worldModel.insertBeforeRobots(this.path);
 
         if (isInteractive) {
-            this.setDraggable();
+            this.setDraggable(worldModel.getZoom());
         }
     }
 
-    setDraggable(): void {
+    setDraggable(zoom: number): void {
         var pencilItem = this;
         pencilItem.path.attr({cursor: "pointer"});
 
@@ -53,6 +53,8 @@ class PencilItemImpl implements PencilItem {
                 return this;
             },
             movePath = function (dx, dy) {
+                dx /= zoom;
+                dy /= zoom;
                 if (!pencilItem.worldModel.getDrawMode()) {
                     this.transform(this.transformation + "T" + dx + "," + dy);
                 }

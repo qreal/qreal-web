@@ -52,11 +52,11 @@ class LineItemImpl implements LineItem {
         this.handleEnd = paper.circle(xEnd, yEnd, handleRadius).attr(handleAttrs);
 
         if (isInteractive) {
-            this.setDraggable();
+            this.setDraggable(worldModel.getZoom());
         }
     }
 
-    setDraggable(): void {
+    setDraggable(zoom: number): void {
         var line = this;
         line.path.attr({cursor: "pointer"});
 
@@ -69,16 +69,16 @@ class LineItemImpl implements LineItem {
             },
             moveHandleStart = function (dx, dy) {
                 if (!line.worldModel.getDrawMode()) {
-                    var newX = this.cx + dx;
-                    var newY = this.cy + dy;
+                    var newX = this.cx + dx / zoom;
+                    var newY = this.cy + dy / zoom;
                     line.updateStart(newX, newY)
                 }
                 return this;
             },
             moveHandleEnd = function (dx, dy) {
                 if (!line.worldModel.getDrawMode()) {
-                    var newX = this.cx + dx;
-                    var newY = this.cy + dy;
+                    var newX = this.cx + dx / zoom;
+                    var newY = this.cy + dy / zoom;
                     line.updateEnd(newX, newY);
                 }
                 return this;
@@ -104,6 +104,8 @@ class LineItemImpl implements LineItem {
                 return this;
             },
             movePath = function (dx, dy) {
+                dx /= zoom;
+                dy /= zoom;
                 if (!line.worldModel.getDrawMode()) {
                     var trans_x = dx - this.ox;
                     var trans_y = dy - this.oy;

@@ -243,8 +243,8 @@ class WorldModelImpl implements WorldModel {
     getMousePosition(e) {
         var offset = $("#twoDModel_stage").offset();
         var position = {
-            x : e.pageX - offset.left,
-            y : e.pageY - offset.top
+            x : (e.pageX - offset.left + $("#twoDModel_stage").scrollLeft()) / this.zoom,
+            y : (e.pageY - offset.top + $("#twoDModel_stage").scrollTop()) / this.zoom
         }
         return position;
     }
