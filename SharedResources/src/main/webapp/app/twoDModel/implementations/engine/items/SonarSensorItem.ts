@@ -30,8 +30,8 @@ class SonarSensorItem extends SensorItem {
     protected regionRotation: string;
 
     constructor(robotItem: RobotItem, worldModel: WorldModel, sensorType: DeviceInfo,
-                pathToImage: string, position?: TwoDPosition) {
-        super(robotItem, worldModel, sensorType, pathToImage, position);
+                pathToImage: string, isInteractive: boolean, position?: TwoDPosition) {
+        super(robotItem, worldModel, sensorType, pathToImage, isInteractive, position);
         var paper:RaphaelPaper = worldModel.getPaper();
         var defaultPosition = this.getStartPosition(position);
 

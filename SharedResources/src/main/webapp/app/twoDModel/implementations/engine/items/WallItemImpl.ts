@@ -26,7 +26,8 @@ class WallItemImpl implements WallItem {
     private handleEnd: RaphaelElement;
     private pathArray;
 
-    constructor(worldModel: WorldModel, xStart: number, yStart: number, xEnd: number, yEnd: number) {
+    constructor(worldModel: WorldModel, xStart: number, yStart: number, xEnd: number, yEnd: number,
+                isInteractive: boolean) {
         var paper = worldModel.getPaper();
         this.worldModel = worldModel;
         this.path = paper.path("M" + xStart + " " + yStart + " L" + xEnd + " " + yEnd);
@@ -56,6 +57,10 @@ class WallItemImpl implements WallItem {
         });
         $(this.handleEnd.node).attr("class", "handleEnd");
         $(".handleEnd").attr("fill", "url(#wall_pattern)");
+
+        if (isInteractive) {
+            this.setDraggable();
+        }
     }
 
     static getWidth(): number {

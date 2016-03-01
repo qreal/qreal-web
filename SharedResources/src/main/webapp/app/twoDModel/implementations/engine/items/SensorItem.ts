@@ -47,7 +47,7 @@ class SensorItem {
     protected direction: number;
 
     constructor(robotItem: RobotItem, worldModel: WorldModel, sensorType: DeviceInfo,
-                pathToImage: string, position?: TwoDPosition) {
+                pathToImage: string, isInteractive: boolean, position?: TwoDPosition) {
         this.robotItem = robotItem;
         this.worldModel = worldModel;
         var paper: RaphaelPaper = worldModel.getPaper();
@@ -77,7 +77,11 @@ class SensorItem {
 
         this.rotationHandle = paper.circle(this.startPosition.x + this.width + 20,
             this.startPosition.y + this.height / 2, handleRadius).attr(handleAttrs);
-        this.initDragAndDrop();
+
+        if (isInteractive) {
+            this.initDragAndDrop();
+        }
+
         this.hideHandles();
     }
 

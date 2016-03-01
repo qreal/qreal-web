@@ -23,7 +23,8 @@ class PencilItemImpl implements PencilItem {
     private worldModel: WorldModel;
     private pathArray = new Array();
 
-    constructor(worldModel: WorldModel, xStart: number, yStart: number, width: number, color: string) {
+    constructor(worldModel: WorldModel, xStart: number, yStart: number, width: number, color: string,
+                isInteractive: boolean) {
         var paper = worldModel.getPaper();
         this.worldModel = worldModel;
         this.pathArray[0] = ["M", xStart, yStart];
@@ -34,6 +35,10 @@ class PencilItemImpl implements PencilItem {
         });
 
         worldModel.insertBeforeRobots(this.path);
+
+        if (isInteractive) {
+            this.setDraggable();
+        }
     }
 
     setDraggable(): void {

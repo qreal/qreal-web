@@ -26,7 +26,7 @@ class LineItemImpl implements LineItem {
     private pathArray;
 
     constructor(worldModel: WorldModel, xStart: number, yStart: number, xEnd: number, yEnd: number,
-                width: number, rgbaColor: RGBAColor) {
+                width: number, rgbaColor: RGBAColor, isInteractive: boolean) {
         var paper = worldModel.getPaper();
         this.worldModel = worldModel;
         this.path = paper.path("M" + xStart + " " + yStart + " L" + xEnd + " " + yEnd);
@@ -50,6 +50,10 @@ class LineItemImpl implements LineItem {
 
         this.handleStart = paper.circle(xStart, yStart, handleRadius).attr(handleAttrs);
         this.handleEnd = paper.circle(xEnd, yEnd, handleRadius).attr(handleAttrs);
+
+        if (isInteractive) {
+            this.setDraggable();
+        }
     }
 
     setDraggable(): void {

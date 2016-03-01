@@ -29,10 +29,13 @@ class ModelImpl implements Model {
     private robotModels : RobotModel[] = [];
     private minX: number;
     private minY: number;
+    private isInteractive: boolean;
 
     constructor(zoom: number) {
+        var interactiveAttr: string = $("#twoDModel_stage").attr("interactive");
+        this.isInteractive = (interactiveAttr === "false") ? false : true;
         var model = this;
-        model.worldModel = new WorldModelImpl(zoom);
+        model.worldModel = new WorldModelImpl(zoom, this.isInteractive);
         this.minX = 3000;
         this.minY = 3000;
     }
@@ -51,8 +54,9 @@ class ModelImpl implements Model {
 
     addRobotModel(robotModel: TwoDRobotModel): void {
         var model = this;
-        $(document).ready(function() {
-            var robot:RobotModel = new RobotModelImpl(model.worldModel, robotModel, new TwoDPosition(300, 300));
+        $(document).ready(() => {
+            var robot:RobotModel = new RobotModelImpl(model.worldModel, robotModel, new TwoDPosition(300, 300),
+                this.isInteractive);
             model.robotModels.push(robot);
         });
     }

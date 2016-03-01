@@ -40,9 +40,11 @@ class WorldModelImpl implements WorldModel {
     private zoom: number;
     private width: number = 3000;
     private height: number = 3000;
+    private isInteractive: boolean;
 
-    constructor(zoom: number) {
+    constructor(zoom: number, isInteractive: boolean) {
         this.zoom = (zoom) ? zoom : 1;
+        this.isInteractive = isInteractive;
         this.paper = Raphael("twoDModel_stage", this.width, this.height);
         this.robotItemSet = this.paper.set();
 
@@ -83,7 +85,8 @@ class WorldModelImpl implements WorldModel {
                         var y = position.y;
                         var width = $("#pen_width_spinner").val();
                         var color = $("#pen_color_dropdown").val();
-                        shape = new LineItemImpl(worldModel, x, y, x, y, width, new RGBAColor(1, color));
+                        shape = new LineItemImpl(worldModel, x, y, x, y, width, new RGBAColor(1, color),
+                            isInteractive);
                         worldModel.colorFields.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
@@ -92,7 +95,7 @@ class WorldModelImpl implements WorldModel {
                         var position = worldModel.getMousePosition(e);
                         var x = position.x;
                         var y = position.y;
-                        shape = new WallItemImpl(worldModel, x, y, x, y);
+                        shape = new WallItemImpl(worldModel, x, y, x, y, isInteractive);
                         worldModel.wallItems.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
@@ -103,7 +106,7 @@ class WorldModelImpl implements WorldModel {
                         var y = position.y;
                         var width = $("#pen_width_spinner").val();
                         var color = $("#pen_color_dropdown").val();
-                        shape = new PencilItemImpl(worldModel, x, y, width, color);
+                        shape = new PencilItemImpl(worldModel, x, y, width, color, isInteractive);
                         worldModel.colorFields.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
@@ -118,7 +121,7 @@ class WorldModelImpl implements WorldModel {
                             "x": x,
                             "y": y
                         }
-                        shape = new EllipseItemImpl(worldModel, x, y, width, color);
+                        shape = new EllipseItemImpl(worldModel, x, y, width, color, isInteractive);
                         worldModel.colorFields.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
@@ -127,8 +130,8 @@ class WorldModelImpl implements WorldModel {
                 }
             });
 
-            $("#twoDModel_stage").mousemove(function(e) {
-                if (isDrawing) {
+            $("#twoDModel_stage").mousemove((e) => {
+                if (isInteractive && isDrawing) {
                     switch (worldModel.drawMode) {
                         case 1:
                         case 2:
@@ -181,7 +184,7 @@ class WorldModelImpl implements WorldModel {
     addWall(xStart: number, yStart: number, xEnd: number, yEnd: number): void {
         var exPositions = this.getExtendedPositions(xStart, yStart, xEnd, yEnd, WallItemImpl.getWidth());
         var wall = new WallItemImpl(this, exPositions.start.x, exPositions.start.y,
-            exPositions.end.x, exPositions.end.y);
+            exPositions.end.x, exPositions.end.y, this.isInteractive);
         wall.hideHandles();
         this.wallItems.push(wall);
     }
@@ -189,7 +192,7 @@ class WorldModelImpl implements WorldModel {
     addLine(xStart: number, yStart: number, xEnd: number, yEnd: number, width: number, rgbaColor: RGBAColor) {
         var exPositions = this.getExtendedPositions(xStart, yStart, xEnd, yEnd, width);
         var line = new LineItemImpl(this, exPositions.start.x, exPositions.start.y,
-            exPositions.end.x, exPositions.end.y, width, rgbaColor);
+            exPositions.end.x, exPositions.end.y, width, rgbaColor, this.isInteractive);
         line.hideHandles();
         this.colorFields.push(line);
     }
@@ -201,7 +204,7 @@ class WorldModelImpl implements WorldModel {
         var exEndPositions = this.getExtendedPositions(xEnd, yEnd, cp2X, cp2Y, width);
         var cubicBezier = new CubicBezierItemImpl(this, exStartPositions.start.x, exStartPositions.start.y,
             exEndPositions.start.x, exEndPositions.start.y, cp1X, cp1Y, cp2X, cp2Y,
-            width, rgbaColor);
+            width, rgbaColor, this.isInteractive);
         cubicBezier.hideHandles();
         this.colorFields.push(cubicBezier);
     }

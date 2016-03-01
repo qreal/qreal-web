@@ -47,7 +47,7 @@ class RobotItemImpl implements RobotItem {
     private scroller: StageScroller;
     private offsetPosition: TwoDPosition;
 
-    constructor(worldModel: WorldModel, position: TwoDPosition, imageFileName: string, robot: RobotModel) {
+    constructor(worldModel: WorldModel, position: TwoDPosition, imageFileName: string, isInteractive: boolean) {
         this.worldModel = worldModel;
         this.startPosition = position;
         this.direction = 0;
@@ -61,7 +61,9 @@ class RobotItemImpl implements RobotItem {
 
         this.createElement(worldModel, position, imageFileName);
 
-        this.initDragAndDrop();
+        if (isInteractive) {
+            this.initDragAndDrop();
+        }
         this.hideHandles();
     }
 
@@ -118,13 +120,13 @@ class RobotItemImpl implements RobotItem {
         }
     }
 
-    addSensorItem(portName: string, sensorType: DeviceInfo, pathToImage: string,
+    addSensorItem(portName: string, sensorType: DeviceInfo, pathToImage: string, isInteractive: boolean,
                   position?: TwoDPosition, direction?: number): void {
         var sensor: SensorItem;
         if (sensorType.isA(RangeSensor)) {
-            sensor = new SonarSensorItem(this, this.worldModel, sensorType, pathToImage, position);
+            sensor = new SonarSensorItem(this, this.worldModel, sensorType, pathToImage, isInteractive, position);
         } else {
-            sensor = new SensorItem(this, this.worldModel, sensorType, pathToImage, position);
+            sensor = new SensorItem(this, this.worldModel, sensorType, pathToImage, isInteractive, position);
         }
         if (direction) {
             sensor.setStartDirection(direction);

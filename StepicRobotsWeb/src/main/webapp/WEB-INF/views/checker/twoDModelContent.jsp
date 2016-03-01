@@ -15,7 +15,7 @@
   --%>
 
 <div id="twoDModelContent" class="row unselectable" ng-controller="TwoDModelEngineFacadeImpl">
-    <div id="twoDModel_stage" task="${taskId}" zoom="${2 / 3}">
+    <div id="twoDModel_stage" interactive="false" task="${taskId}" zoom="${2 / 3}">
     </div>
     <div id="twoDModelSpinner" class="centerSpinner">
     </div>

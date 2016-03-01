@@ -48,7 +48,8 @@ class SensorsConfiguration extends DevicesConfigurationProvider {
         }
         this.deviceConfigurationChanged(this.robotModel.info().getName(), portName, sensorType);
         if (this.isSensorHaveView(sensorType)) {
-            this.robotModel.addSensorItem(portName, sensorType, position, direction);
+            this.robotModel.addSensorItem(portName, sensorType, this.robotModel.isModelInteractive(),
+                position, direction);
         }
     }
 

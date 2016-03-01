@@ -22,7 +22,9 @@
 interface RobotModel {
     info(): TwoDRobotModel;
     removeSensorItem(portName: string): void;
-    addSensorItem(portName: string, deviceType: DeviceInfo, position?: TwoDPosition, direction?: number): void;
+    addSensorItem(portName: string, deviceType: DeviceInfo, isInteractive: boolean, position?: TwoDPosition,
+                  direction?: number): void;
+    isModelInteractive(): boolean;
     getSensorsConfiguration(): SensorsConfiguration;
     deserialize(xml, offsetX: number, offsetY: number): void;
     showCheckResult(result);

@@ -27,7 +27,8 @@ class EllipseItemImpl implements EllipseItem {
     private handleBottomRight: RaphaelElement;
     private handleSize: number  = 10;
 
-    constructor(worldModel: WorldModel, xStart: number, yStart: number, width: number, color: string) {
+    constructor(worldModel: WorldModel, xStart: number, yStart: number, width: number, color: string,
+                isInteractive: boolean) {
         var paper = worldModel.getPaper();
         this.worldModel = worldModel;
         this.ellipse = paper.ellipse(xStart, yStart, 0, 0);
@@ -49,6 +50,10 @@ class EllipseItemImpl implements EllipseItem {
         this.handleTopRight = paper.rect(xStart - this.handleSize, yStart, this.handleSize, this.handleSize).attr(handleAttrs);
         this.handleBottomLeft = paper.rect(xStart, yStart - this.handleSize, this.handleSize, this.handleSize).attr(handleAttrs);
         this.handleBottomRight = paper.rect(xStart - this.handleSize, yStart - this.handleSize, this.handleSize, this.handleSize).attr(handleAttrs);
+
+        if (isInteractive) {
+            this.setDraggable();
+        }
     }
 
     setDraggable(): void {

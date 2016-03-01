@@ -32,11 +32,14 @@ class RobotModelImpl implements RobotModel {
     private worldModel: WorldModel;
     private displayWidget: DisplayWidget;
     private runner: Runner;
+    private isInteractive: boolean;
 
-    constructor(worldModel: WorldModel, twoDRobotModel: TwoDRobotModel, position: TwoDPosition) {
+    constructor(worldModel: WorldModel, twoDRobotModel: TwoDRobotModel, position: TwoDPosition,
+        isInteractive: boolean) {
         this.worldModel = worldModel;
         this.twoDRobotModel = twoDRobotModel;
-        this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), this);
+        this.isInteractive = isInteractive;
+        this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), isInteractive);
         this.sensorsConfiguration = new SensorsConfiguration(this);
         this.displayWidget = new DisplayWidget();
         this.runner = new Runner();
@@ -54,9 +57,14 @@ class RobotModelImpl implements RobotModel {
         return this.sensorsConfiguration;
     }
 
-    addSensorItem(portName: string, deviceType: DeviceInfo, position?: TwoDPosition, direction?: number): void {
+    addSensorItem(portName: string, deviceType: DeviceInfo, isInteractive: boolean, position?: TwoDPosition,
+                  direction?: number): void {
         this.robotItem.addSensorItem(portName, deviceType, this.twoDRobotModel.sensorImagePath(deviceType),
-            position, direction);
+            isInteractive, position, direction);
+    }
+
+    isModelInteractive(): boolean {
+        return this.isInteractive;
     }
 
     private parsePositionString(positionStr: string): TwoDPosition {

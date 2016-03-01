@@ -499,7 +499,7 @@ var StartPositionItem = (function () {
     return StartPositionItem;
 })();
 var LineItemImpl = (function () {
-    function LineItemImpl(worldModel, xStart, yStart, xEnd, yEnd, width, rgbaColor) {
+    function LineItemImpl(worldModel, xStart, yStart, xEnd, yEnd, width, rgbaColor, isInteractive) {
         var paper = worldModel.getPaper();
         this.worldModel = worldModel;
         this.path = paper.path("M" + xStart + " " + yStart + " L" + xEnd + " " + yEnd);
@@ -519,6 +519,9 @@ var LineItemImpl = (function () {
         };
         this.handleStart = paper.circle(xStart, yStart, handleRadius).attr(handleAttrs);
         this.handleEnd = paper.circle(xEnd, yEnd, handleRadius).attr(handleAttrs);
+        if (isInteractive) {
+            this.setDraggable();
+        }
     }
     LineItemImpl.prototype.setDraggable = function () {
         var line = this;
@@ -614,7 +617,7 @@ var LineItemImpl = (function () {
     return LineItemImpl;
 })();
 var WallItemImpl = (function () {
-    function WallItemImpl(worldModel, xStart, yStart, xEnd, yEnd) {
+    function WallItemImpl(worldModel, xStart, yStart, xEnd, yEnd, isInteractive) {
         var paper = worldModel.getPaper();
         this.worldModel = worldModel;
         this.path = paper.path("M" + xStart + " " + yStart + " L" + xEnd + " " + yEnd);
@@ -640,6 +643,9 @@ var WallItemImpl = (function () {
         });
         $(this.handleEnd.node).attr("class", "handleEnd");
         $(".handleEnd").attr("fill", "url(#wall_pattern)");
+        if (isInteractive) {
+            this.setDraggable();
+        }
     }
     WallItemImpl.getWidth = function () {
         return WallItemImpl.width;
@@ -739,7 +745,7 @@ var WallItemImpl = (function () {
     return WallItemImpl;
 })();
 var PencilItemImpl = (function () {
-    function PencilItemImpl(worldModel, xStart, yStart, width, color) {
+    function PencilItemImpl(worldModel, xStart, yStart, width, color, isInteractive) {
         this.pathArray = new Array();
         var paper = worldModel.getPaper();
         this.worldModel = worldModel;
@@ -750,6 +756,9 @@ var PencilItemImpl = (function () {
             "stroke-width": width
         });
         worldModel.insertBeforeRobots(this.path);
+        if (isInteractive) {
+            this.setDraggable();
+        }
     }
     PencilItemImpl.prototype.setDraggable = function () {
         var pencilItem = this;
@@ -787,7 +796,7 @@ var PencilItemImpl = (function () {
     return PencilItemImpl;
 })();
 var EllipseItemImpl = (function () {
-    function EllipseItemImpl(worldModel, xStart, yStart, width, color) {
+    function EllipseItemImpl(worldModel, xStart, yStart, width, color, isInteractive) {
         this.handleSize = 10;
         var paper = worldModel.getPaper();
         this.worldModel = worldModel;
@@ -808,6 +817,9 @@ var EllipseItemImpl = (function () {
         this.handleTopRight = paper.rect(xStart - this.handleSize, yStart, this.handleSize, this.handleSize).attr(handleAttrs);
         this.handleBottomLeft = paper.rect(xStart, yStart - this.handleSize, this.handleSize, this.handleSize).attr(handleAttrs);
         this.handleBottomRight = paper.rect(xStart - this.handleSize, yStart - this.handleSize, this.handleSize, this.handleSize).attr(handleAttrs);
+        if (isInteractive) {
+            this.setDraggable();
+        }
     }
     EllipseItemImpl.prototype.setDraggable = function () {
         var ellipseItem = this;
@@ -951,7 +963,7 @@ var EllipseItemImpl = (function () {
     return EllipseItemImpl;
 })();
 var WorldModelImpl = (function () {
-    function WorldModelImpl(zoom) {
+    function WorldModelImpl(zoom, isInteractive) {
         this.drawMode = 0;
         this.currentElement = null;
         this.colorFields = [];
@@ -960,6 +972,7 @@ var WorldModelImpl = (function () {
         this.width = 3000;
         this.height = 3000;
         this.zoom = (zoom) ? zoom : 1;
+        this.isInteractive = isInteractive;
         this.paper = Raphael("twoDModel_stage", this.width, this.height);
         this.robotItemSet = this.paper.set();
         $(this.paper.canvas).attr("id", "twoDModel_paper");
@@ -995,7 +1008,7 @@ var WorldModelImpl = (function () {
                         var y = position.y;
                         var width = $("#pen_width_spinner").val();
                         var color = $("#pen_color_dropdown").val();
-                        shape = new LineItemImpl(worldModel, x, y, x, y, width, new RGBAColor(1, color));
+                        shape = new LineItemImpl(worldModel, x, y, x, y, width, new RGBAColor(1, color), isInteractive);
                         worldModel.colorFields.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
@@ -1004,7 +1017,7 @@ var WorldModelImpl = (function () {
                         var position = worldModel.getMousePosition(e);
                         var x = position.x;
                         var y = position.y;
-                        shape = new WallItemImpl(worldModel, x, y, x, y);
+                        shape = new WallItemImpl(worldModel, x, y, x, y, isInteractive);
                         worldModel.wallItems.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
@@ -1015,7 +1028,7 @@ var WorldModelImpl = (function () {
                         var y = position.y;
                         var width = $("#pen_width_spinner").val();
                         var color = $("#pen_color_dropdown").val();
-                        shape = new PencilItemImpl(worldModel, x, y, width, color);
+                        shape = new PencilItemImpl(worldModel, x, y, width, color, isInteractive);
                         worldModel.colorFields.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
@@ -1030,7 +1043,7 @@ var WorldModelImpl = (function () {
                             "x": x,
                             "y": y
                         };
-                        shape = new EllipseItemImpl(worldModel, x, y, width, color);
+                        shape = new EllipseItemImpl(worldModel, x, y, width, color, isInteractive);
                         worldModel.colorFields.push(shape);
                         worldModel.setCurrentElement(shape);
                         isDrawing = true;
@@ -1039,7 +1052,7 @@ var WorldModelImpl = (function () {
                 }
             });
             $("#twoDModel_stage").mousemove(function (e) {
-                if (isDrawing) {
+                if (isInteractive && isDrawing) {
                     switch (worldModel.drawMode) {
                         case 1:
                         case 2:
@@ -1085,20 +1098,20 @@ var WorldModelImpl = (function () {
     };
     WorldModelImpl.prototype.addWall = function (xStart, yStart, xEnd, yEnd) {
         var exPositions = this.getExtendedPositions(xStart, yStart, xEnd, yEnd, WallItemImpl.getWidth());
-        var wall = new WallItemImpl(this, exPositions.start.x, exPositions.start.y, exPositions.end.x, exPositions.end.y);
+        var wall = new WallItemImpl(this, exPositions.start.x, exPositions.start.y, exPositions.end.x, exPositions.end.y, this.isInteractive);
         wall.hideHandles();
         this.wallItems.push(wall);
     };
     WorldModelImpl.prototype.addLine = function (xStart, yStart, xEnd, yEnd, width, rgbaColor) {
         var exPositions = this.getExtendedPositions(xStart, yStart, xEnd, yEnd, width);
-        var line = new LineItemImpl(this, exPositions.start.x, exPositions.start.y, exPositions.end.x, exPositions.end.y, width, rgbaColor);
+        var line = new LineItemImpl(this, exPositions.start.x, exPositions.start.y, exPositions.end.x, exPositions.end.y, width, rgbaColor, this.isInteractive);
         line.hideHandles();
         this.colorFields.push(line);
     };
     WorldModelImpl.prototype.addCubicBezier = function (xStart, yStart, xEnd, yEnd, cp1X, cp1Y, cp2X, cp2Y, width, rgbaColor) {
         var exStartPositions = this.getExtendedPositions(xStart, yStart, cp1X, cp1Y, width);
         var exEndPositions = this.getExtendedPositions(xEnd, yEnd, cp2X, cp2Y, width);
-        var cubicBezier = new CubicBezierItemImpl(this, exStartPositions.start.x, exStartPositions.start.y, exEndPositions.start.x, exEndPositions.start.y, cp1X, cp1Y, cp2X, cp2Y, width, rgbaColor);
+        var cubicBezier = new CubicBezierItemImpl(this, exStartPositions.start.x, exStartPositions.start.y, exEndPositions.start.x, exEndPositions.start.y, cp1X, cp1Y, cp2X, cp2Y, width, rgbaColor, this.isInteractive);
         cubicBezier.hideHandles();
         this.colorFields.push(cubicBezier);
     };
@@ -1504,7 +1517,7 @@ var SensorsConfiguration = (function (_super) {
         }
         this.deviceConfigurationChanged(this.robotModel.info().getName(), portName, sensorType);
         if (this.isSensorHaveView(sensorType)) {
-            this.robotModel.addSensorItem(portName, sensorType, position, direction);
+            this.robotModel.addSensorItem(portName, sensorType, this.robotModel.isModelInteractive(), position, direction);
         }
     };
     SensorsConfiguration.prototype.removeSensor = function (portName) {
@@ -1542,8 +1555,10 @@ var SensorsConfiguration = (function (_super) {
 var ModelImpl = (function () {
     function ModelImpl(zoom) {
         this.robotModels = [];
+        var interactiveAttr = $("#twoDModel_stage").attr("interactive");
+        this.isInteractive = (interactiveAttr === "false") ? false : true;
         var model = this;
-        model.worldModel = new WorldModelImpl(zoom);
+        model.worldModel = new WorldModelImpl(zoom, this.isInteractive);
         this.minX = 3000;
         this.minY = 3000;
     }
@@ -1557,9 +1572,10 @@ var ModelImpl = (function () {
         return this.settings;
     };
     ModelImpl.prototype.addRobotModel = function (robotModel) {
+        var _this = this;
         var model = this;
         $(document).ready(function () {
-            var robot = new RobotModelImpl(model.worldModel, robotModel, new TwoDPosition(300, 300));
+            var robot = new RobotModelImpl(model.worldModel, robotModel, new TwoDPosition(300, 300), _this.isInteractive);
             model.robotModels.push(robot);
         });
     };
@@ -1851,7 +1867,7 @@ var TwoDModelEngineFacadeImpl = (function () {
     return TwoDModelEngineFacadeImpl;
 })();
 var CubicBezierItemImpl = (function () {
-    function CubicBezierItemImpl(worldModel, xStart, yStart, xEnd, yEnd, cp1X, cp1Y, cp2X, cp2Y, width, rgbaColor) {
+    function CubicBezierItemImpl(worldModel, xStart, yStart, xEnd, yEnd, cp1X, cp1Y, cp2X, cp2Y, width, rgbaColor, isInteractive) {
         var paper = worldModel.getPaper();
         this.worldModel = worldModel;
         this.path = paper.path("M " + xStart + "," + yStart + " C " + cp1X + "," + cp1Y + " " + cp2X + "," + cp2Y +
@@ -1935,7 +1951,7 @@ var ColorSensorBlue = (function (_super) {
     return ColorSensorBlue;
 })(ColorSensor);
 var SensorItem = (function () {
-    function SensorItem(robotItem, worldModel, sensorType, pathToImage, position) {
+    function SensorItem(robotItem, worldModel, sensorType, pathToImage, isInteractive, position) {
         this.robotItem = robotItem;
         this.worldModel = worldModel;
         var paper = worldModel.getPaper();
@@ -1957,7 +1973,9 @@ var SensorItem = (function () {
             stroke: "black"
         };
         this.rotationHandle = paper.circle(this.startPosition.x + this.width + 20, this.startPosition.y + this.height / 2, handleRadius).attr(handleAttrs);
-        this.initDragAndDrop();
+        if (isInteractive) {
+            this.initDragAndDrop();
+        }
         this.hideHandles();
     }
     SensorItem.prototype.setStartDirection = function (direction) {
@@ -2132,8 +2150,8 @@ var SensorItem = (function () {
 })();
 var SonarSensorItem = (function (_super) {
     __extends(SonarSensorItem, _super);
-    function SonarSensorItem(robotItem, worldModel, sensorType, pathToImage, position) {
-        _super.call(this, robotItem, worldModel, sensorType, pathToImage, position);
+    function SonarSensorItem(robotItem, worldModel, sensorType, pathToImage, isInteractive, position) {
+        _super.call(this, robotItem, worldModel, sensorType, pathToImage, isInteractive, position);
         this.sonarRange = 255;
         var paper = worldModel.getPaper();
         var defaultPosition = this.getStartPosition(position);
@@ -2261,7 +2279,7 @@ var Marker = (function () {
     return Marker;
 })();
 var RobotItemImpl = (function () {
-    function RobotItemImpl(worldModel, position, imageFileName, robot) {
+    function RobotItemImpl(worldModel, position, imageFileName, isInteractive) {
         this.startCenter = new TwoDPosition();
         this.width = 50;
         this.height = 50;
@@ -2280,7 +2298,9 @@ var RobotItemImpl = (function () {
         this.startCenter.x = position.x + this.width / 2;
         this.startCenter.y = position.y + this.height / 2;
         this.createElement(worldModel, position, imageFileName);
-        this.initDragAndDrop();
+        if (isInteractive) {
+            this.initDragAndDrop();
+        }
         this.hideHandles();
     }
     RobotItemImpl.prototype.setStartPosition = function (position, direction) {
@@ -2327,13 +2347,13 @@ var RobotItemImpl = (function () {
             delete this.sensors[portName];
         }
     };
-    RobotItemImpl.prototype.addSensorItem = function (portName, sensorType, pathToImage, position, direction) {
+    RobotItemImpl.prototype.addSensorItem = function (portName, sensorType, pathToImage, isInteractive, position, direction) {
         var sensor;
         if (sensorType.isA(RangeSensor)) {
-            sensor = new SonarSensorItem(this, this.worldModel, sensorType, pathToImage, position);
+            sensor = new SonarSensorItem(this, this.worldModel, sensorType, pathToImage, isInteractive, position);
         }
         else {
-            sensor = new SensorItem(this, this.worldModel, sensorType, pathToImage, position);
+            sensor = new SensorItem(this, this.worldModel, sensorType, pathToImage, isInteractive, position);
         }
         if (direction) {
             sensor.setStartDirection(direction);
@@ -2551,10 +2571,11 @@ var Constants = (function () {
     return Constants;
 })();
 var RobotModelImpl = (function () {
-    function RobotModelImpl(worldModel, twoDRobotModel, position) {
+    function RobotModelImpl(worldModel, twoDRobotModel, position, isInteractive) {
         this.worldModel = worldModel;
         this.twoDRobotModel = twoDRobotModel;
-        this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), this);
+        this.isInteractive = isInteractive;
+        this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), isInteractive);
         this.sensorsConfiguration = new SensorsConfiguration(this);
         this.displayWidget = new DisplayWidget();
         this.runner = new Runner();
@@ -2568,8 +2589,11 @@ var RobotModelImpl = (function () {
     RobotModelImpl.prototype.getSensorsConfiguration = function () {
         return this.sensorsConfiguration;
     };
-    RobotModelImpl.prototype.addSensorItem = function (portName, deviceType, position, direction) {
-        this.robotItem.addSensorItem(portName, deviceType, this.twoDRobotModel.sensorImagePath(deviceType), position, direction);
+    RobotModelImpl.prototype.addSensorItem = function (portName, deviceType, isInteractive, position, direction) {
+        this.robotItem.addSensorItem(portName, deviceType, this.twoDRobotModel.sensorImagePath(deviceType), isInteractive, position, direction);
+    };
+    RobotModelImpl.prototype.isModelInteractive = function () {
+        return this.isInteractive;
     };
     RobotModelImpl.prototype.parsePositionString = function (positionStr) {
         var splittedStr = positionStr.split(":");
