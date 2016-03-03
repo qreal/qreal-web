@@ -18,28 +18,30 @@ class Folder {
 
     private id: number;
     private name: string;
-    private parentId: number;
+    private parent: Folder;
     private childrenFolders: Folder[];
     private diagrams: Diagram[];
 
-    public static createFromJson(folderJson: any) {
-        var childrenFolders: Folder[] = [];
-        for (var i = 0; i < folderJson.childrenFolders.length; i++) {
-            childrenFolders.push(Folder.createFromJson(folderJson.childrenFolders[i]));
-        }
+    public static createFromJson(folderJson: any, parent: Folder): Folder {
         var diagrams: Diagram[] = [];
         for (var i = 0; i < folderJson.diagrams.length; i++) {
             diagrams.push(Diagram.createFromJson(folderJson.diagrams[i]));
         }
-        return new Folder(folderJson.folderId, folderJson.folderName, folderJson.folderParentId, childrenFolders, diagrams);
+        var resutlFolder: Folder = new Folder(folderJson.folderId, folderJson.folderName, parent, diagrams);
+
+        for (var i = 0; i < folderJson.childrenFolders.length; i++) {
+            resutlFolder.addChild(Folder.createFromJson(folderJson.childrenFolders[i], resutlFolder));
+        }
+
+        return resutlFolder;
     }
 
-    constructor(id: number, name: string, parentId: number, childrenFolders?: Folder[], diagrams?: Diagram[]) {
+    constructor(id: number, name: string, parent: Folder, diagrams: Diagram[]= [], childrenFolders: Folder[] = []) {
         this.id = id;
         this.name = name;
-        this.parentId = parentId;
-        this.childrenFolders = (childrenFolders) ? childrenFolders : [];
-        this.diagrams = (diagrams) ? diagrams : [];
+        this.parent = parent;
+        this.diagrams = diagrams;
+        this.childrenFolders = childrenFolders;
     }
 
     public getChildrenNames(): string[] {
@@ -115,8 +117,8 @@ class Folder {
         return this.name;
     }
 
-    public getParentId(): number {
-        return this.parentId;
+    public getParent(): Folder {
+        return this.parent;
     }
 
     public addChild(folder: Folder): void {

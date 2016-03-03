@@ -28,7 +28,6 @@ class DiagramMenuController {
     private currentDiagramName: string;
     private currentDiagramFolder: Folder;
     private canBeDeleted: boolean;
-    private pathToFolder;
     private folderTree: Folder;
     private currentFolder: Folder;
 
@@ -38,7 +37,6 @@ class DiagramMenuController {
         this.currentDiagramName = "";
         this.currentDiagramFolder = null;
         this.canBeDeleted = false;
-        this.pathToFolder = [];
 
         var menuManager = this;
 
@@ -47,7 +45,7 @@ class DiagramMenuController {
             url: 'getFolderTree',
             dataType: 'json',
             success: function (response, status, jqXHR) {
-                menuManager.folderTree = Folder.createFromJson(response);
+                menuManager.folderTree = Folder.createFromJson(response, null);
                 menuManager.currentFolder = menuManager.folderTree;
             },
             error: function (response, status, error) {
@@ -58,7 +56,6 @@ class DiagramMenuController {
         $(document).ready(function() {
             $('.modal-footer button').click(function() {
                 menuManager.currentFolder = menuManager.folderTree;
-                menuManager.pathToFolder = [];
             });
             $('#saveAfterCreate').click(function () {
                 menuManager.canBeDeleted = true;
@@ -170,7 +167,7 @@ class DiagramMenuController {
             }),
             success: function (createdFolderId, status, jqXHR): any {
                 menuManager.currentFolder.addChild(
-                    new Folder(createdFolderId, folderName, menuManager.currentFolder.getId()));
+                    new Folder(createdFolderId, folderName, menuManager.currentFolder));
                 menuManager.showFolderMenu();
                 menuManager.showFolderTable(menuManager.currentFolder);
             },
@@ -194,7 +191,6 @@ class DiagramMenuController {
             success: function (diagramId, status, jqXHR): any {
                 menuManager.currentFolder.addDiagram(new Diagram(diagramId, diagramName));
                 menuManager.currentFolder = menuManager.folderTree;
-                menuManager.pathToFolder = [];
                 $('#diagrams').modal('hide');
 
                 if (menuManager.canBeDeleted) {
@@ -237,7 +233,6 @@ class DiagramMenuController {
         this.currentDiagramName = diagramName;
         this.currentDiagramFolder = this.currentFolder;
         this.currentFolder = this.folderTree;
-        this.pathToFolder = [];
         $.ajax({
             type: 'POST',
             url: 'openDiagram',
@@ -277,23 +272,13 @@ class DiagramMenuController {
 
     private showPathToFolder(): void {
         var path: string = "";
-        var i: number = 0;
 
         $('.folderPath p').remove();
 
-        if (this.pathToFolder.length > 3) {
-            i = this.pathToFolder.length - 2;
-            path = "...";
-        } else {
-            i = 1;
-        }
-
-        for (i; i < this.pathToFolder.length; i++) {
-            path = path + this.pathToFolder[i].folderName + "/";
-        }
-
-        if (this.currentFolder.getName() !== "root") {
-            path = path + this.currentFolder.getName();
+        var folder: Folder = this.currentFolder;
+        while (folder.getParent()) {
+            path = folder.getName() + "/" + path;
+            folder = folder.getParent();
         }
 
         $('.folderPath').prepend("<p>" + path + "</p>");
@@ -317,7 +302,6 @@ class DiagramMenuController {
         });
 
         $('.folderTable .folders').click(function () {
-            menuManager.pathToFolder.push(menuManager.currentFolder);
             menuManager.showFolderTable(menuManager.currentFolder.findChildByName($(this).text()));
         });
         $('.folderTable .diagrams').click(function () {
@@ -327,8 +311,8 @@ class DiagramMenuController {
     }
 
     private levelUpFolder(): void {
-        if (this.pathToFolder.length > 0) {
-            this.showFolderTable(this.pathToFolder.pop());
+        if (this.currentFolder.getParent()) {
+            this.showFolderTable(this.currentFolder.getParent());
         }
     }
 }
