@@ -20,7 +20,7 @@ class FunctionBlock extends Block {
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
 
         var output = "Function: ";
-        var properties = node.getProperties();
+        var properties = node.getChangeableProperties();
         var body = "";
         var initialization = true;
         for (var p in properties) {

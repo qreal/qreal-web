@@ -55,6 +55,11 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
             this.model.deserialize($.parseXML(fieldXML));
         });
 
+        $scope.start = () => {
+            var timeline = this.model.getTimeline();
+            $scope.$emit("timeline", timeline);
+        }
+
         $("#infoAlert").hide();
         $(".close").click(function () {
             $(this).parent().hide();
@@ -99,7 +104,7 @@ class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
         this.model.getWorldModel().setNoneMode();
     }
 
-    openDiagram(): void {
+    openDiagramEditor(): void {
         $("#twoDModelContent").hide();
         $("#diagramContent").show();
     }

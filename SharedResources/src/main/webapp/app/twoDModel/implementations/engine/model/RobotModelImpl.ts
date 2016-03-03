@@ -33,6 +33,7 @@ class RobotModelImpl implements RobotModel {
     private displayWidget: DisplayWidget;
     private runner: Runner;
     private isInteractive: boolean;
+    private deviceConfiguration: DeviceConfiguration;
 
     constructor(worldModel: WorldModel, twoDRobotModel: TwoDRobotModel, position: TwoDPosition,
         isInteractive: boolean) {
@@ -42,6 +43,7 @@ class RobotModelImpl implements RobotModel {
         this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), isInteractive);
         this.sensorsConfiguration = new SensorsConfiguration(this);
         this.displayWidget = new DisplayWidget();
+        this.deviceConfiguration = new DeviceConfiguration();
         this.runner = new Runner();
     }
 
@@ -111,6 +113,54 @@ class RobotModelImpl implements RobotModel {
 
     follow(value: boolean) {
         this.robotItem.follow(value);
+    }
+
+    getDeviceByPortName(portName: string): Device {
+        return this.deviceConfiguration.getDeviceByPortName(portName);
+    }
+
+    nextFragment(): void {
+        var angle = MathUtils.toRadians(this.robotItem.getDirection());
+        var robotHeight = 50;
+        var timeInterval = 1;
+        var speedLeft = (<Motor> this.getDeviceByPortName("M3")).getPower() / 70;
+        var speedRight = (<Motor> this.getDeviceByPortName("M4")).getPower() / 70
+        var averageSpeed = (speedLeft + speedRight) / 2;
+        var deltaX = 0;
+        var deltaY = 0;
+        if (speedLeft != speedRight) {
+            var radius = speedLeft * robotHeight / (speedLeft - speedRight);
+            var averageRadius = radius - robotHeight / 2;
+            var angularSpeed = 0;
+            if (speedLeft == -speedRight) {
+                angularSpeed = speedLeft / radius;
+            } else {
+                angularSpeed = averageSpeed / averageRadius;
+            }
+            var gammaRadians = timeInterval * angularSpeed;
+            angle += gammaRadians;
+
+            deltaX = averageSpeed * Math.cos(angle);
+            deltaY = averageSpeed * Math.sin(angle);
+        }
+        else {
+            deltaX = averageSpeed * Math.cos(angle);
+            deltaY += averageSpeed * Math.sin(angle);
+        }
+
+        this.robotItem.move(deltaX, deltaY, MathUtils.toDegrees(angle));
+    }
+
+    setMarkerDown(down: boolean): void {
+        this.robotItem.setMarkerDown(down);
+    }
+
+    setMarkerColor(color: string): void {
+        this.robotItem.setMarkerColor(color);
+    }
+
+    clearState(): void {
+        this.deviceConfiguration.clearState();
     }
 
 }

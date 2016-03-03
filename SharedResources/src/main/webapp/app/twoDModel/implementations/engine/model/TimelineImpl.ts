@@ -57,6 +57,7 @@ class TimelineImpl implements Timeline {
     stop(): void {
         this.setActive(false);
         clearInterval(this.intervalId);
+        this.robotModels.forEach((model) => { model.clearState(); });
     }
 
     /**
@@ -71,7 +72,7 @@ class TimelineImpl implements Timeline {
         this.cyclesCount++;
         if (this.cyclesCount >= this.speedFactor) {
             timeline.getRobotModels().forEach(function(model) {
-                // TODO: next fragment
+                model.nextFragment();
             });
             this.cyclesCount = 0;
         }

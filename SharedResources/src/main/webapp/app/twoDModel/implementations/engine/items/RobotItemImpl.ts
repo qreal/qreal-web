@@ -41,7 +41,7 @@ class RobotItemImpl implements RobotItem {
     private timeoutId: number;
     private sensors: {string?: SensorItem} = {};
     private direction: number;
-    private roughening: number = 50;
+    private roughening: number = 5;
     private counter: number = 0;
     private isFollow: boolean;
     private scroller: StageScroller;
@@ -174,19 +174,7 @@ class RobotItemImpl implements RobotItem {
         this.direction = rotation;
         this.updateTransformation();
         this.moveSensors(this.offsetPosition.x, this.offsetPosition.y);
-
-        var center: TwoDPosition = this.getCenter();
-        if (this.marker.isDown()) {
-            if (this.counter > this.roughening) {
-                this.marker.setCenter(new TwoDPosition(center.x, center.y));
-                this.marker.drawPoint();
-                this.counter = 0;
-            } else {
-                this.counter++;
-            }
-        } else {
-            this.marker.setCenter(new TwoDPosition(center.x, center.y));
-        }
+        this.updateMarkerState();
     }
 
     move(deltaX: number, deltaY: number, direction: number): void {
@@ -195,6 +183,7 @@ class RobotItemImpl implements RobotItem {
         this.direction = direction;
         this.updateTransformation();
         this.moveSensors(this.offsetPosition.x, this.offsetPosition.y);
+        this.updateMarkerState();
     }
 
     setMarkerDown(down: boolean): void {
@@ -274,6 +263,21 @@ class RobotItemImpl implements RobotItem {
             };
 
         this.image.drag(move, start, up);
+    }
+
+    private updateMarkerState(): void {
+        var center: TwoDPosition = this.getCenter();
+        if (this.marker.isDown()) {
+            if (this.counter > this.roughening) {
+                this.marker.setCenter(new TwoDPosition(center.x, center.y));
+                this.marker.drawPoint();
+                this.counter = 0;
+            } else {
+                this.counter++;
+            }
+        } else {
+            this.marker.setCenter(new TwoDPosition(center.x, center.y));
+        }
     }
 
     private createElement(worldModel: WorldModel, position: TwoDPosition, imageFileName: string): void {

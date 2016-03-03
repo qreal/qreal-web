@@ -10,6 +10,9 @@ var RootDiagramController = (function () {
         $scope.$on("emit2dModelLoad", function (event, fieldXML) {
             $scope.$broadcast("2dModelLoad", fieldXML);
         });
+        $scope.$on("timeline", function (event, timeline) {
+            $scope.$broadcast("interpret", timeline);
+        });
     }
     return RootDiagramController;
 })();

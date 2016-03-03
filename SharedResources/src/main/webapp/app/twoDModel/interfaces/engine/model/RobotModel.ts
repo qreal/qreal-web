@@ -32,4 +32,9 @@ interface RobotModel {
     closeDisplay(): void;
     showDisplay(): void;
     follow(value: boolean): void;
+    getDeviceByPortName(portName: string): Device;
+    nextFragment(): void;
+    setMarkerDown(down: boolean): void;
+    setMarkerColor(color: string): void;
+    clearState(): void;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright Vladimir Zakharov 
+ * Copyright Vladimir Zakharov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-interface TwoDModelEngineFacade {
+declare interface TwoDModelEngineFacade {
+
     setDrawLineMode(): void;
     setDrawWallMode(): void;
     setDrawPencilMode(): void;
@@ -24,4 +25,26 @@ interface TwoDModelEngineFacade {
     showCheckResult(result): void;
     stopPlay(): void;
     followRobot(value: boolean): void;
+
+}
+
+declare class TwoDModelEngineFacadeImpl implements TwoDModelEngineFacade {
+
+    setDrawLineMode(): void;
+    setDrawWallMode(): void;
+    setDrawPencilMode(): void;
+    setDrawEllipseMode(): void;
+    setNoneMode(): void;
+    openDiagramEditor(): void;
+    showCheckResult(result): void;
+    stopPlay(): void;
+    followRobot(value: boolean): void;
+
+}
+
+declare class Motor {
+
+    public getPower(): number;
+    public setPower(power: number): void;
+
 }

@@ -15,6 +15,7 @@
  */
 
 /// <reference path="DiagramMenuController.ts" />
+/// <reference path="../../interpreter/InterpretManager.ts" />
 /// <reference path="../../diagramCore.d.ts" />
 /// <reference path="../../vendor.d.ts" />
 
@@ -34,6 +35,10 @@ class RobotsDiagramEditorController extends DiagramEditorController {
         $scope.saveCurrentDiagram = () => { this.menuController.saveCurrentDiagram(); };
         $scope.saveDiagramAs = () => { this.menuController.saveDiagramAs(); };
         $scope.clearAll = () => { this.clearAll(); };
+
+        $scope.$on("interpret", (event, timeline) => {
+            console.log(InterpretManager.interpret(this.getGraph(), this.getNodesMap(), this.getLinksMap(), timeline));
+        });
 
         this.elementsTypeLoader.load((elementTypes: ElementTypes): void => {
             this.handleLoadedTypes(elementTypes);

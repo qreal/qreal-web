@@ -30,6 +30,7 @@ class ModelImpl implements Model {
     private minX: number;
     private minY: number;
     private isInteractive: boolean;
+    private timeline: Timeline;
 
     constructor(zoom: number) {
         var interactiveAttr: string = $("#twoDModel_stage").attr("interactive");
@@ -38,6 +39,11 @@ class ModelImpl implements Model {
         model.worldModel = new WorldModelImpl(zoom, this.isInteractive);
         this.minX = 3000;
         this.minY = 3000;
+        this.timeline = new TimelineImpl();
+    }
+
+    getTimeline(): Timeline {
+        return this.timeline;
     }
 
     getWorldModel() : WorldModel {
@@ -58,6 +64,7 @@ class ModelImpl implements Model {
             var robot:RobotModel = new RobotModelImpl(model.worldModel, robotModel, new TwoDPosition(300, 300),
                 this.isInteractive);
             model.robotModels.push(robot);
+            model.timeline.addRobotModel(robot);
         });
     }
 

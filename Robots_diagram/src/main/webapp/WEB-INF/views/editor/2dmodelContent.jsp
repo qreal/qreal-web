@@ -28,7 +28,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>
-                        <p class="navbar-text" ng-click="vm.openDiagram()">
+                        <p class="navbar-text" ng-click="vm.openDiagramEditor()">
                             <span id="back" class="glyphicon glyphicon-arrow-left" style="vertical-align: middle; cursor: pointer"></span>
                         </p>
                     </li>
@@ -187,7 +187,7 @@
 
                     <tr>
                         <td colspan="2">
-                            <button class="twoDModel_button" style="width: 204px; height: 70px;" ng-click="vm.start()">
+                            <button class="twoDModel_button" style="width: 204px; height: 70px;" ng-click="start()">
                                 <img src="images/2dmodel/2d_run.png"
                                      style="width: 40px; height: 40px; vertical-align: middle"/>
                             </button>

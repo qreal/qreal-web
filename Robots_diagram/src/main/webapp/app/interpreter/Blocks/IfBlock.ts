@@ -68,7 +68,7 @@ class IfBlock extends Block {
 
     private static getCondition(node) {
         var condition = "";
-        var properties = node.getProperties();
+        var properties = node.getChangeableProperties();
         for (var p in properties) {
             if (p == "Condition") {
                 condition = properties[p].value;
@@ -79,7 +79,7 @@ class IfBlock extends Block {
 
     private static getGuard(link : Link) {
         var guard = "";
-        var properties = link.getProperties();
+        var properties = link.getChangeableProperties();
         for (var p in properties) {
             if (p == "Guard") {
                 guard = properties[p].value;

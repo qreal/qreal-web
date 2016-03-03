@@ -25,4 +25,5 @@ interface Model {
     getSetting() : Settings;
     addRobotModel(robotModel: TwoDRobotModel): void;
     deserialize(xml): void;
+    getTimeline(): Timeline;
 }

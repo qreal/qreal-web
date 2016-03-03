@@ -1569,7 +1569,11 @@ var ModelImpl = (function () {
         model.worldModel = new WorldModelImpl(zoom, this.isInteractive);
         this.minX = 3000;
         this.minY = 3000;
+        this.timeline = new TimelineImpl();
     }
+    ModelImpl.prototype.getTimeline = function () {
+        return this.timeline;
+    };
     ModelImpl.prototype.getWorldModel = function () {
         return this.worldModel;
     };
@@ -1585,6 +1589,7 @@ var ModelImpl = (function () {
         $(document).ready(function () {
             var robot = new RobotModelImpl(model.worldModel, robotModel, new TwoDPosition(300, 300), _this.isInteractive);
             model.robotModels.push(robot);
+            model.timeline.addRobotModel(robot);
         });
     };
     ModelImpl.prototype.deserialize = function (xml) {
@@ -1773,6 +1778,10 @@ var TwoDModelEngineFacadeImpl = (function () {
         $scope.$on("2dModelLoad", function (event, fieldXML) {
             _this.model.deserialize($.parseXML(fieldXML));
         });
+        $scope.start = function () {
+            var timeline = _this.model.getTimeline();
+            $scope.$emit("timeline", timeline);
+        };
         $("#infoAlert").hide();
         $(".close").click(function () {
             $(this).parent().hide();
@@ -1809,7 +1818,7 @@ var TwoDModelEngineFacadeImpl = (function () {
     TwoDModelEngineFacadeImpl.prototype.setNoneMode = function () {
         this.model.getWorldModel().setNoneMode();
     };
-    TwoDModelEngineFacadeImpl.prototype.openDiagram = function () {
+    TwoDModelEngineFacadeImpl.prototype.openDiagramEditor = function () {
         $("#twoDModelContent").hide();
         $("#diagramContent").show();
     };
@@ -2294,7 +2303,7 @@ var RobotItemImpl = (function () {
         this.offsetX = 0;
         this.offsetY = 0;
         this.sensors = {};
-        this.roughening = 50;
+        this.roughening = 5;
         this.counter = 0;
         this.worldModel = worldModel;
         this.startPosition = position;
@@ -2402,20 +2411,7 @@ var RobotItemImpl = (function () {
         this.direction = rotation;
         this.updateTransformation();
         this.moveSensors(this.offsetPosition.x, this.offsetPosition.y);
-        var center = this.getCenter();
-        if (this.marker.isDown()) {
-            if (this.counter > this.roughening) {
-                this.marker.setCenter(new TwoDPosition(center.x, center.y));
-                this.marker.drawPoint();
-                this.counter = 0;
-            }
-            else {
-                this.counter++;
-            }
-        }
-        else {
-            this.marker.setCenter(new TwoDPosition(center.x, center.y));
-        }
+        this.updateMarkerState();
     };
     RobotItemImpl.prototype.move = function (deltaX, deltaY, direction) {
         this.offsetPosition.x += deltaX;
@@ -2423,6 +2419,7 @@ var RobotItemImpl = (function () {
         this.direction = direction;
         this.updateTransformation();
         this.moveSensors(this.offsetPosition.x, this.offsetPosition.y);
+        this.updateMarkerState();
     };
     RobotItemImpl.prototype.setMarkerDown = function (down) {
         this.marker.setDown(down);
@@ -2484,6 +2481,22 @@ var RobotItemImpl = (function () {
             return this;
         };
         this.image.drag(move, start, up);
+    };
+    RobotItemImpl.prototype.updateMarkerState = function () {
+        var center = this.getCenter();
+        if (this.marker.isDown()) {
+            if (this.counter > this.roughening) {
+                this.marker.setCenter(new TwoDPosition(center.x, center.y));
+                this.marker.drawPoint();
+                this.counter = 0;
+            }
+            else {
+                this.counter++;
+            }
+        }
+        else {
+            this.marker.setCenter(new TwoDPosition(center.x, center.y));
+        }
     };
     RobotItemImpl.prototype.createElement = function (worldModel, position, imageFileName) {
         var paper = worldModel.getPaper();
@@ -2577,6 +2590,33 @@ var Constants = (function () {
     Constants.pixelsInCm = Constants.robotWheelDiameterInPx / Constants.robotWheelDiameterInCm;
     return Constants;
 })();
+var DeviceConfiguration = (function () {
+    function DeviceConfiguration() {
+        this.configurationMap = {};
+        this.configurationMap["M1"] = new Motor();
+        this.configurationMap["M2"] = new Motor();
+        this.configurationMap["M3"] = new Motor();
+        this.configurationMap["M4"] = new Motor();
+    }
+    DeviceConfiguration.prototype.getConfigurationMap = function () {
+        return this.configurationMap;
+    };
+    DeviceConfiguration.prototype.getDeviceByPortName = function (portName) {
+        return this.configurationMap[portName];
+    };
+    DeviceConfiguration.prototype.setDeviceToPort = function (portName, device) {
+        this.configurationMap[portName] = device;
+    };
+    DeviceConfiguration.prototype.clearState = function () {
+        for (var portName in this.configurationMap) {
+            if (this.configurationMap[portName] instanceof Motor) {
+                var motor = this.configurationMap[portName];
+                motor.setPower(0);
+            }
+        }
+    };
+    return DeviceConfiguration;
+})();
 var RobotModelImpl = (function () {
     function RobotModelImpl(worldModel, twoDRobotModel, position, isInteractive) {
         this.worldModel = worldModel;
@@ -2585,6 +2625,7 @@ var RobotModelImpl = (function () {
         this.robotItem = new RobotItemImpl(worldModel, position, twoDRobotModel.getRobotImage(), isInteractive);
         this.sensorsConfiguration = new SensorsConfiguration(this);
         this.displayWidget = new DisplayWidget();
+        this.deviceConfiguration = new DeviceConfiguration();
         this.runner = new Runner();
     }
     RobotModelImpl.prototype.info = function () {
@@ -2639,6 +2680,48 @@ var RobotModelImpl = (function () {
     RobotModelImpl.prototype.follow = function (value) {
         this.robotItem.follow(value);
     };
+    RobotModelImpl.prototype.getDeviceByPortName = function (portName) {
+        return this.deviceConfiguration.getDeviceByPortName(portName);
+    };
+    RobotModelImpl.prototype.nextFragment = function () {
+        var angle = MathUtils.toRadians(this.robotItem.getDirection());
+        var robotHeight = 50;
+        var timeInterval = 1;
+        var speedLeft = this.getDeviceByPortName("M3").getPower() / 70;
+        var speedRight = this.getDeviceByPortName("M4").getPower() / 70;
+        var averageSpeed = (speedLeft + speedRight) / 2;
+        var deltaX = 0;
+        var deltaY = 0;
+        if (speedLeft != speedRight) {
+            var radius = speedLeft * robotHeight / (speedLeft - speedRight);
+            var averageRadius = radius - robotHeight / 2;
+            var angularSpeed = 0;
+            if (speedLeft == -speedRight) {
+                angularSpeed = speedLeft / radius;
+            }
+            else {
+                angularSpeed = averageSpeed / averageRadius;
+            }
+            var gammaRadians = timeInterval * angularSpeed;
+            angle += gammaRadians;
+            deltaX = averageSpeed * Math.cos(angle);
+            deltaY = averageSpeed * Math.sin(angle);
+        }
+        else {
+            deltaX = averageSpeed * Math.cos(angle);
+            deltaY += averageSpeed * Math.sin(angle);
+        }
+        this.robotItem.move(deltaX, deltaY, MathUtils.toDegrees(angle));
+    };
+    RobotModelImpl.prototype.setMarkerDown = function (down) {
+        this.robotItem.setMarkerDown(down);
+    };
+    RobotModelImpl.prototype.setMarkerColor = function (color) {
+        this.robotItem.setMarkerColor(color);
+    };
+    RobotModelImpl.prototype.clearState = function () {
+        this.deviceConfiguration.clearState();
+    };
     return RobotModelImpl;
 })();
 var TimelineImpl = (function () {
@@ -2665,6 +2748,7 @@ var TimelineImpl = (function () {
     TimelineImpl.prototype.stop = function () {
         this.setActive(false);
         clearInterval(this.intervalId);
+        this.robotModels.forEach(function (model) { model.clearState(); });
     };
     TimelineImpl.prototype.onTimer = function (timeline) {
         if (!this.isActive) {
@@ -2673,6 +2757,7 @@ var TimelineImpl = (function () {
         this.cyclesCount++;
         if (this.cyclesCount >= this.speedFactor) {
             timeline.getRobotModels().forEach(function (model) {
+                model.nextFragment();
             });
             this.cyclesCount = 0;
         }
@@ -2753,9 +2838,17 @@ var Button = (function (_super) {
 })(ScalarSensor);
 var Motor = (function (_super) {
     __extends(Motor, _super);
-    function Motor() {
-        _super.apply(this, arguments);
+    function Motor(power) {
+        if (power === void 0) { power = 0; }
+        _super.call(this);
+        this.power = power;
     }
+    Motor.prototype.getPower = function () {
+        return this.power;
+    };
+    Motor.prototype.setPower = function (power) {
+        this.power = power;
+    };
     Motor.parentType = DeviceImpl;
     Motor.name = "motor";
     Motor.friendlyName = "Motor";
