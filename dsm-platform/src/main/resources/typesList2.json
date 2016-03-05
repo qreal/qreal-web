@@ -1,0 +1,21 @@
+{
+  "elements": [
+    "ControlFlow"
+  ],
+  "blocks": {
+    "general": [
+      "Subprogram"
+    ],
+    "palette": {
+      "Algorithms": [
+        "InitialNode",
+        "FinalNode",
+        "Function",
+        "IfBlock",
+        "FiBlock",
+        "Loop",
+        "Fork"
+      ]
+    }
+  }
+}
