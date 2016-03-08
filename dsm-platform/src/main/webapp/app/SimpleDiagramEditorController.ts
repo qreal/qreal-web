@@ -20,7 +20,7 @@ class SimpleDiagramEditorController extends DiagramEditorController {
 
     constructor($scope, $attrs) {
         super($scope, $attrs);
-        this.choosePalette("typeList1/")
+        this.choosePalette("typesList1.json");
         $scope.choosePalette = (typeList: string) => { this.choosePalette(typeList); }
     }
 
@@ -43,9 +43,9 @@ class SimpleDiagramEditorController extends DiagramEditorController {
         this.paletteController.initDraggable();
     }
 
-    public choosePalette(typeList: string) {
+    public choosePalette(typesList: string) {
         this.elementsTypeLoader.load((elementTypes: ElementTypes): void => {
             this.handleLoadedTypes(elementTypes);
-        }, null, typeList);
+        }, typesList);
     }
 }

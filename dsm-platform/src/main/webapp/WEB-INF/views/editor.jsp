@@ -68,8 +68,8 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="" role="menuitem" tabindex="-1" ng-click="choosePalette('typeList1/')">palette1</a></li>
-                        <li><a href="" role="menuitem" tabindex="-1" ng-click="choosePalette('typeList2/')">palette2</a></li>
+                        <li><a href="" role="menuitem" tabindex="-1" ng-click="choosePalette('typesList1.json')">palette1</a></li>
+                        <li><a href="" role="menuitem" tabindex="-1" ng-click="choosePalette('typesList2.json')">palette2</a></li>
                     </ul>
                 </li>
                 <legend style="height: 40px; padding: 10px">Palette</legend>

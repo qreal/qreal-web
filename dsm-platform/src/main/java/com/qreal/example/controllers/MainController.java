@@ -43,14 +43,9 @@ public class MainController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "getTypes/typeList2/", method = RequestMethod.POST)
-    public JsonNode getTypes1() {
-        return typesLoader.getTypesJson("typesList2.json");
+    @RequestMapping(value = "getTypes/", method = RequestMethod.POST)
+    public JsonNode getTypes(@RequestParam(value="kit") String kit) {
+        return typesLoader.getTypesJson(kit);
     }
 
-    @ResponseBody
-    @RequestMapping(value = "getTypes/typeList1/", method = RequestMethod.POST)
-    public JsonNode getTypes2() {
-        return typesLoader.getTypesJson("typesList1.json");
-    }
 }
