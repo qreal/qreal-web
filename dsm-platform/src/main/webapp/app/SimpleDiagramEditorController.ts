@@ -20,7 +20,7 @@ class SimpleDiagramEditorController extends DiagramEditorController {
 
     constructor($scope, $attrs) {
         super($scope, $attrs);
-        this.choosePalette("typesList1.json");
+        this.choosePalette("typesList.json");
         $scope.choosePalette = (typeList: string) => { this.choosePalette(typeList); }
     }
 

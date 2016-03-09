@@ -70,6 +70,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="" role="menuitem" tabindex="-1" ng-click="choosePalette('typesList1.json')">palette1</a></li>
                         <li><a href="" role="menuitem" tabindex="-1" ng-click="choosePalette('typesList2.json')">palette2</a></li>
+                        <li><a href="" role="menuitem" tabindex="-1" ng-click="choosePalette('metaEditor.json')">metaEditor</a></li>
                     </ul>
                 </li>
                 <legend style="height: 40px; padding: 10px">Palette</legend>
