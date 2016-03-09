@@ -27,14 +27,6 @@
     }
   },
   "blocks": {
-    "general": {
-      "Subprogram": {
-        "name": "Subprogram",
-        "image": {
-          "src": "images/subprogramRobotsBlock.svg"
-        }
-      }
-    },
     "palette": {
       "Algorithms": {
         "InitialNode": {

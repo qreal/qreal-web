@@ -1,0 +1,69 @@
+{
+  "elements": {
+  },
+  "blocks": {
+    "palette": {
+      "Base": {
+        "Entity": {
+          "name": "Entity",
+          "image": {
+            "src": "images/ledBlock.svg"
+          },
+          "properties": [
+            {
+              "key": "name",
+              "name": "name",
+              "type": "string",
+              "value": "entity"
+            },
+            {
+              "key": "image",
+              "name": "image",
+              "type": "string",
+              "value": ""
+            }
+          ]
+        },
+        "Property": {
+          "name": "Property",
+          "image": {
+            "src": "images/printTextBlock.svg"
+          },
+          "properties": [
+            {
+              "key": "name",
+              "name": "name",
+              "type": "string",
+              "value": "entity"
+            },
+            {
+              "key": "type",
+              "name": "type",
+              "type": "dropdown",
+              "selected": {
+                "key": "string",
+                "value": "string"
+              },
+              "variants": [
+                {
+                  "key": "combobox",
+                  "value": "combobox"
+                },
+                {
+                  "key": "dropdown",
+                  "value": "dropdown"
+                }
+              ]
+            },
+            {
+              "key": "value",
+              "name": "value",
+              "type": "string",
+              "value": ""
+            }
+          ]
+        }
+      }
+    }
+  }
+}
