@@ -20,7 +20,7 @@ class UndoRedoController {
 
     private stack: Command[];
     private pointer: number;
-    private maxSize: number = 100;
+    private maxSize: number = 10000;
 
     constructor() {
         this.stack = [];

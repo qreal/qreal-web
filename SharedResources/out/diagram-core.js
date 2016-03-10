@@ -1830,7 +1830,7 @@ var UIDGenerator = (function () {
 var UndoRedoController = (function () {
     function UndoRedoController() {
         var _this = this;
-        this.maxSize = 100;
+        this.maxSize = 10000;
         this.stack = [];
         this.pointer = -1;
         $(document).ready(function () {
