@@ -85,6 +85,10 @@ class DefaultDiagramNode implements DiagramNode {
         return (this.jointObject.get("position"))['y'];
     }
 
+    setPosition(x: number, y: number): void {
+        this.jointObject.position(x, y);
+    }
+
     getImagePath(): string {
         return this.imagePath;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright Vladimir Zakharov 
+ * Copyright Vladimir Zakharov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-/**
- * Created by vladimir-zakharov on 10.10.14.
- */
+interface Command {
 
-/// <reference path="DiagramElement.ts" />
+    execute(): void;
+    revert(): void;
+    isRevertible(): boolean;
 
-interface DiagramNode extends DiagramElement {
-    getX(): number;
-    getY(): number;
-    getImagePath(): string;
-    setPosition(x: number, y: number): void;
 }

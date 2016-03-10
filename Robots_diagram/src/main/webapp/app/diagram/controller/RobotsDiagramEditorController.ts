@@ -46,7 +46,7 @@ class RobotsDiagramEditorController extends DiagramEditorController {
     }
 
     public handleLoadedTypes(elementTypes: ElementTypes): void {
-        this.propertyEditorController = new PropertyEditorController(this.paperController);
+        this.propertyEditorController = new PropertyEditorController(this.paperController, this.undoRedoController);
 
         for (var typeName in elementTypes.uncategorisedTypes) {
             this.nodeTypesMap[typeName] = elementTypes.uncategorisedTypes[typeName];

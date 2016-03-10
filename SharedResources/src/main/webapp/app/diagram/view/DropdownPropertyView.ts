@@ -25,8 +25,8 @@ class DropdownPropertyView extends HtmlView {
         '<tr class="property">' +
         '   <td class="vert-align">{0}</td>' +
         '   <td class="vert-align">' +
-        '       <select class="mydropdown" data-type="{1}">' +
-        '           {2}' +
+        '       <select id="{1}" class="mydropdown" data-type="{2}">' +
+        '           {3}' +
         '       </select>' +
         '   </td>' +
         '</tr>';
@@ -43,7 +43,8 @@ class DropdownPropertyView extends HtmlView {
             }
             options += '<option ' + selected + 'value="' + variant.getKey() + '">' + variant.getValue() + '</option>';
         }
-        this.content = StringUtils.format(this.template, property.name, propertyKey, options);
+        this.content = StringUtils.format(this.template, property.name, propertyKey + "Property",
+            propertyKey, options);
     }
 
 }

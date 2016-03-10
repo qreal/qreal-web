@@ -138,30 +138,15 @@ class DiagramPaper extends joint.dia.Paper {
         this.linksMap = {};
     }
 
-    public createDefaultNode(name: string, type: string, x: number, y: number, properties: Map<Property>,
-                      imagePath: string, id?: string): DiagramNode {
-        var node: DiagramNode = new DefaultDiagramNode(name, type, x, y, properties, imagePath, id);
-        this.nodesMap[node.getJointObject().id] = node;
-        this.addNode(node);
-        return node;
-    }
-
-    public createSubprogramNode(name: string, type: string, x: number, y: number, properties: Map<Property>,
-                         imagePath: string, subprogramDiagramId: string, id?: string): SubprogramNode {
-        var node: SubprogramNode = new SubprogramNode(name, type, x, y, properties, imagePath, subprogramDiagramId, id);
-        this.nodesMap[node.getJointObject().id] = node;
-        this.addSubprogramNode(node);
-        return node;
-    }
-
-    private addSubprogramNode(node: SubprogramNode): void {
+    public addSubprogramNode(node: SubprogramNode): void {
         var textObject: joint.shapes.basic.Text = node.getTextObject();
         node.getJointObject().embed(textObject);
         this.graph.addCell(textObject);
         this.addNode(node);
     }
 
-    private addNode(node: DiagramNode): void {
+    public addNode(node: DiagramNode): void {
+        this.nodesMap[node.getJointObject().id] = node;
         this.graph.addCell(node.getJointObject());
     }
 
@@ -170,9 +155,6 @@ class DiagramPaper extends joint.dia.Paper {
     }
 
     private getDiagramElementView() {
-        DiagramElementListener.addLinkToMap = (linkObject: Link): void => {
-            this.addLinkToMap(linkObject);
-        };
         return jQuery.extend(joint.shapes.basic.PortsViewInterface,
             {
                 pointerdown: DiagramElementListener.pointerdown
