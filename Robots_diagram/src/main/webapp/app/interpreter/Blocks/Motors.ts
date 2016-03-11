@@ -1,6 +1,7 @@
 /*
  * Copyright Lada Gagina
  * Copyright Anton Gulikov
+ * Copyright Vladimit Zakharov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +24,12 @@ class Motors extends Block {
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
 
-        var properties = node.getProperties();
+        var properties = node.getChangeableProperties();
         for (var p in properties) {
             if (p == "Ports") {
                 ports = properties[p].value.replace(/ /g,'').split(",");
             }
-            if (p == "Power (%)") {
+            if (p == "Power") {
                 var parser = new Parser(properties[p].value, env);
                 parser.parseExpression();
                 var models = timeline.getRobotModels();
@@ -37,46 +38,28 @@ class Motors extends Block {
                     power = parser.result;
                     if (power < 0 || power > 100) {
                         output += "Error: incorrect power value";
-                    }
-                    else {
+                    } else {
                         output += "Ports: " + ports + "\n" + "Power: " + power + "\n";
 
                         power = (forward) ? power : -power;
-                        if (ports.length == 1) {
-                            if (ports[0] == "M3") {
-                                model.setMotor1(power);
-                            }
-                            else if (ports[0] == "M4") {
-                                model.setMotor2(power);
-                            }
-                            else {
-                                output += "Error: Incorrect port name";
-                            }
-                        }
-                        else if (ports.length == 2) {
-                            if (ports[0] == "M3" && ports[1] == "M4" || ports[0] == "M4" && ports[1] == "M3") {
 
-                                model.setMotor1(power);
-                                model.setMotor2(power);
+                        for (var i = 0; i < ports.length; i++) {
+                            var motor: Motor = <Motor> model.getDeviceByPortName(ports[i]);
+                            if (motor) {
+                                motor.setPower(power);
+                            } else {
+                                output += "Error: Incorrect port name " + ports[i];
                             }
-                            else {
-                                output += "Error: Incorrect port names";
-                            }
-                        }
-                        else {
-                            output += "Error: Incorrect number of ports";
                         }
 
                         if (links.length == 1) {
                             var nextNode = nodesMap[links[0].get('target').id];
                             output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline);
-                        }
-                        else if (links.length > 1) {
+                        } else if (links.length > 1) {
                             output += "Error: too many links\n";
                         }
                     }
-                }
-                else {
+                } else {
                     output += "Error: " + parser.error + "\n";
                 }
             }

@@ -1,5 +1,6 @@
 /*
  * Copyright Lada Gagina
+ * Copyright Vladimir Zakharov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/// <reference path="Factory.ts" />
+/// <reference path="../diagramCore.d.ts" />
+/// <reference path="../two-d-model-core.d.ts" />
+/// <reference path="../vendor.d.ts" />
 
 class InterpretManager {
     static interpret(graph: joint.dia.Graph, nodesMap, linksMap, timeline): string {
@@ -48,7 +54,7 @@ class InterpretManager {
         for (var id in nodesMap) {
             if (nodesMap.hasOwnProperty(id)) {
                 var node = nodesMap[id];
-                if (node.type == "Initial Node") {
+                if (node.type == "InitialNode") {
                     firstNodeId = id;
                     break;
                 }

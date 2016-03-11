@@ -21,9 +21,9 @@ class Timer extends Block {
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
 
-        var properties = node.getProperties();
+        var properties = node.getChangeableProperties();
         for (var p in properties) {
-            if (p == "Delay (ms)") {
+            if (p == "Delay") {
                 var parser = new Parser(properties[p].value, env);
                 parser.parseExpression();
                 if (parser.error == null) {

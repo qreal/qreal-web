@@ -91,8 +91,6 @@ interface RaphaelElement {
     untouchend(handler: Function): RaphaelElement;
     untouchmove(handler: Function): RaphaelElement;
     untouchstart(handler: Function): RaphaelElement;
-    x : number;
-    y : number;
 }
 
 interface RaphaelPath extends RaphaelElement {
@@ -225,7 +223,6 @@ interface RaphaelPaper {
     text(x: number, y: number, text: string): RaphaelElement;
     top: RaphaelElement;
     width: number;
-    customAttributes;
 }
 
 interface RaphaelStatic {

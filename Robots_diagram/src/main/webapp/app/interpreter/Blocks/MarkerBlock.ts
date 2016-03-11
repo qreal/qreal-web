@@ -31,9 +31,18 @@ class MarkerBlock extends Block {
 
         var models = timeline.getRobotModels();
 
+        var color: string;
+        var properties = node.getChangeableProperties();
+        for (var p in properties) {
+            if (p == "Color") {
+                color = properties[p].value;
+            }
+        }
+
         for (var modelId = 0; modelId < models.length; modelId++) {
             var model = models[modelId];
-            model.setDrawingState(isUp);
+            model.setMarkerDown(isUp);
+            model.setMarkerColor(color);
         }
 
         if (links.length == 1) {

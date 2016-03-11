@@ -30,6 +30,7 @@
 
     <link rel="stylesheet" href="<c:url value='/resources/css/jquery-ui.css' />"/>
 
+    <link rel="stylesheet" href="<c:url value='/resources/css/context-menu.css' />" />
 
     <link rel="stylesheet" href="<c:url value='/resources/css/onlineSolution.css' />"/>
     <link rel="stylesheet" href="<c:url value='/resources/css/twoDModel.css' />"/>
@@ -43,11 +44,11 @@
             <br>
         </div>
         <div class="col-md-9">
-            <div id="diagramContent" class="row unselectable" ng-controller="DiagramEditorController" task="${id}" kit="${kit}">
+            <div id="diagramContent" class="row unselectable" ng-controller="StepicDiagramEditorController" task="${id}" kit="${kit}">
                 <ul class='custom-menu'>
                     <li data-action="delete">Delete</li>
                 </ul>
-                <div id="diagram_paper">
+                <div id="diagram_paper" zoom="0.8">
                     <div id="diagramSpinner" class="centerSpinner">
                     </div>
                 </div>

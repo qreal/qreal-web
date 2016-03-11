@@ -17,21 +17,19 @@
 
 <script src="<c:url value='/resources/js/jquery-1.11.3.min.js' />"></script>
 <script src="<c:url value='/resources/js/joint.js' />"></script>
+<script src="<c:url value='/resources/js/jquery.line.js' />"></script>
 <script src="<c:url value='/resources/js/jquery-ui.min.js' />"></script>
 <script src="<c:url value='/resources/js/angular.js' />"></script>
+<script src="<c:url value='/resources/js/context-menu.js' />"></script>
 <script src="<c:url value='/resources/bootstrap/js/bootstrap.min.js' />"></script>
 <script src="<c:url value='/resources/js/raphael-min.js' />"></script>
+<script src="<c:url value='/resources/js/transform-to-element-fix.js' />"></script>
 
 <script src="<c:url value='/resources/js/compiled/utils.js' />"></script>
 <script src="<c:url value='/resources/js/compiled/root.js' />"></script>
 <script src="<c:url value='/resources/js/compiled/diagram-core.js' />"></script>
 <script src="<c:url value='/resources/js/compiled/checker-core.js' />"></script>
 <script src="<c:url value='/resources/js/compiled/two-d-model-core.js' />"></script>
-
-<script type="text/javascript">
-    SVGElement.prototype.getTransformToElement = SVGElement.prototype.getTransformToElement || function(elem) {
-    return elem.getScreenCTM().inverse().multiply(this.getScreenCTM());
-    };
-</script>
+<script src="<c:url value='/resources/js/compiled/diagram-stepic.js' />"></script>
 
 

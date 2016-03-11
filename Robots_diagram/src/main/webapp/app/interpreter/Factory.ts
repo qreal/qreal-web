@@ -15,19 +15,31 @@
  * limitations under the License.
  */
 
+/// <reference path="Blocks/AbstractBlock.ts" />
+/// <reference path="Blocks/InitialBlock.ts" />
+/// <reference path="Blocks/FinalBlock.ts" />
+/// <reference path="Blocks/IfBlock.ts" />
+/// <reference path="Blocks/FunctionBlock.ts" />
+/// <reference path="Blocks/Motors.ts" />
+/// <reference path="Blocks/MotorsStop.ts" />
+/// <reference path="Blocks/Timer.ts" />
+/// <reference path="Blocks/SwitchBlock.ts" />
+/// <reference path="Blocks/MarkerBlock.ts" />
+/// <reference path="Parser/Parser.ts" />
+
 class Factory {
     static run(node, graph, nodesMap, linksMap, env, timeline): string {
         var output = "";
         switch (node.type) {
-            case "Initial Node":
+            case "InitialNode":
                 output += InitialBlock.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;
 
-            case "Final Node":
+            case "FinalNode":
                 output += FinalBlock.run(node, graph, timeline);
                 break;
 
-            case "Condition":
+            case "IfBlock":
                 output += IfBlock.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;
 
@@ -35,15 +47,15 @@ class Factory {
                 output += FunctionBlock.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;
 
-            case "Motors Forward":
+            case "TrikV6EnginesForward":
                 output += Motors.run(node, graph, nodesMap, linksMap, true, env, timeline);
                 break;
 
-            case "Motors Backward":
+            case "TrikV6EnginesBackward":
                 output += Motors.run(node, graph, nodesMap, linksMap, false, env, timeline);
                 break;
 
-            case "Stop Motors":
+            case "TrikV6EnginesStop":
                 output += MotorsStop.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;
 
@@ -55,11 +67,11 @@ class Factory {
                 output += SwitchBlock.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;
 
-            case "Marker Up":
+            case "MarkerUp":
                 output += MarkerBlock.run(node, graph, nodesMap, linksMap, env, timeline, false);
                 break;
 
-            case "Marker Down":
+            case "MarkerDown":
                 output += MarkerBlock.run(node, graph, nodesMap, linksMap, env, timeline, true);
                 break;
             

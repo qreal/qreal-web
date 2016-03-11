@@ -46,7 +46,7 @@ class SwitchBlock extends Block {
 
     private static getCondition(node) : string {
         var condition : string = "";
-        var properties = node.getProperties();
+        var properties = node.getChangeableProperties();
         for (var property in properties) {
             if (property == "Condition") {
                 condition = properties[property].value;
@@ -57,7 +57,7 @@ class SwitchBlock extends Block {
 
     private static getGuard(link : Link) : string {
         var guard : string = "";
-        var properties = link.getProperties();
+        var properties = link.getChangeableProperties();
         for (var property in properties) {
             if (property == "Guard") {
                 guard = properties[property].value;

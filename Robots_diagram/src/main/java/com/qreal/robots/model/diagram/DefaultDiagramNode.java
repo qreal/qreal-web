@@ -29,41 +29,33 @@ import java.util.Set;
 public class DefaultDiagramNode implements Serializable {
 
     @Id
-    @Column(name = "node_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long nodeId;
+    @Column(name = "logical_id")
+    private String logicalId;
 
-    @Column(name = "joint_object_id")
-    private String jointObjectId;
+    @Column(name = "graphical_id")
+    private String graphicalId;
 
     @Column(name = "type")
     private String type;
 
-    @Column(name = "x")
-    private double x;
-
-    @Column(name = "y")
-    private double y;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "node_id", referencedColumnName = "node_id")
-    @OrderBy("position")
-    private Set<Property> properties;
+    @JoinColumn(name = "node_id", referencedColumnName = "logical_id")
+    private Set<NodeProperty> properties;
 
-    public Long getNodeId() {
-        return nodeId;
+    public String getLogicalId() {
+        return logicalId;
     }
 
-    public void setNodeId(Long nodeId) {
-        this.nodeId = nodeId;
+    public void setLogicalId(String logicalId) {
+        this.logicalId = logicalId;
     }
 
-    public String getJointObjectId() {
-        return jointObjectId;
+    public String getGraphicalId() {
+        return graphicalId;
     }
 
-    public void setJointObjectId(String jointObjectId) {
-        this.jointObjectId = jointObjectId;
+    public void setGraphicalId(String graphicalId) {
+        this.graphicalId = graphicalId;
     }
 
     public String getType() {
@@ -74,27 +66,12 @@ public class DefaultDiagramNode implements Serializable {
         this.type = type;
     }
 
-    public double getX() {
-        return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    public Set<Property> getProperties() {
+    public Set<NodeProperty> getProperties() {
         return properties;
     }
 
-    public void setProperties(Set<Property> properties) {
+    public void setProperties(Set<NodeProperty> properties) {
         this.properties = properties;
     }
+
 }

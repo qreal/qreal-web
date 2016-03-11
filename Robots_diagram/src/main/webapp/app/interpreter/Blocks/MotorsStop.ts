@@ -21,7 +21,7 @@ class MotorsStop extends Block {
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
 
-        var properties = node.getProperties();
+        var properties = node.getChangeableProperties();
         for (var p in properties) {
             if (p == "Ports") {
                 ports += properties[p].value.replace(/ /g,'').split(",");
