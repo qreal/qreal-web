@@ -2,17 +2,14 @@ DROP DATABASE IF EXISTS diagram;
 CREATE DATABASE diagram;
 USE diagram;
 
-
 DROP TABLE IF EXISTS robots;
 DROP TABLE IF EXISTS user_roles;
-DROP TABLE IF EXISTS vertices;
 DROP TABLE IF EXISTS properties;
 DROP TABLE IF EXISTS links;
 DROP TABLE IF EXISTS nodes;
 DROP TABLE IF EXISTS diagrams;
 DROP TABLE IF EXISTS folders;
 DROP TABLE IF EXISTS users;
-
 
 CREATE TABLE users (
   username VARCHAR(45) NOT NULL,
@@ -80,17 +77,6 @@ CREATE TABLE link_properties (
   PRIMARY KEY (property_id),
   FOREIGN KEY (link_id) REFERENCES links (logical_id)
 );
-
-CREATE TABLE vertices (
-  vertex_id BIGINT NOT NULL AUTO_INCREMENT,
-  x         DOUBLE NOT NULL,
-  y         DOUBLE NOT NULL,
-  number    INT    NOT NULL,
-  link_id   BIGINT,
-  PRIMARY KEY (vertex_id),
-  FOREIGN KEY (link_id) REFERENCES links (link_id)
-);
-
 
 CREATE TABLE user_roles (
   user_role_id INT(11)     NOT NULL AUTO_INCREMENT,

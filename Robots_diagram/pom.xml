@@ -24,6 +24,7 @@
                 <version>2.2</version>
                 <configuration>
                     <url>http://localhost:8080/manager/text</url>
+                    <server>TomcatServer</server>
                     <path>/${project.build.finalName}</path>
                     <additionalConfigFilesDir>${basedir}/src/main/tomcat/conf</additionalConfigFilesDir>
                     <systemProperties>
