@@ -1512,13 +1512,6 @@ var SensorsConfiguration = (function (_super) {
         this.robotModel = robotModel;
         this.robotModelName = robotModel.info().getName();
     }
-    SensorsConfiguration.prototype.isSensorHaveView = function (sensorType) {
-        return sensorType.isA(TouchSensor)
-            || sensorType.isA(ColorSensor)
-            || sensorType.isA(LightSensor)
-            || sensorType.isA(RangeSensor)
-            || sensorType.isA(VectorSensor);
-    };
     SensorsConfiguration.prototype.addSensor = function (portName, sensorType, position, direction) {
         if (this.getCurrentConfiguration(this.robotModelName, portName)) {
             this.removeSensor(portName);
@@ -1537,12 +1530,6 @@ var SensorsConfiguration = (function (_super) {
             this.deviceConfigurationChanged(this.robotModelName, portName, null);
         }
     };
-    SensorsConfiguration.prototype.parsePositionString = function (positionStr) {
-        var splittedStr = positionStr.split(":");
-        var x = parseFloat(splittedStr[0]);
-        var y = parseFloat(splittedStr[1]);
-        return new TwoDPosition(x, y);
-    };
     SensorsConfiguration.prototype.deserialize = function (xml) {
         var sensors = xml.getElementsByTagName("sensor");
         for (var i = 0; i < sensors.length; i++) {
@@ -1557,6 +1544,19 @@ var SensorsConfiguration = (function (_super) {
             var direction = parseFloat(sensors[i].getAttribute('direction'));
             this.addSensor(portName, device, pos, direction);
         }
+    };
+    SensorsConfiguration.prototype.parsePositionString = function (positionStr) {
+        var splittedStr = positionStr.split(":");
+        var x = parseFloat(splittedStr[0]);
+        var y = parseFloat(splittedStr[1]);
+        return new TwoDPosition(x, y);
+    };
+    SensorsConfiguration.prototype.isSensorHaveView = function (sensorType) {
+        return sensorType.isA(TouchSensor)
+            || sensorType.isA(ColorSensor)
+            || sensorType.isA(LightSensor)
+            || sensorType.isA(RangeSensor)
+            || sensorType.isA(VectorSensor);
     };
     return SensorsConfiguration;
 })(DevicesConfigurationProvider);
@@ -1755,54 +1755,23 @@ var DeviceInfoImpl = (function () {
 var TwoDModelEngineFacadeImpl = (function () {
     function TwoDModelEngineFacadeImpl($scope, $compile, $attrs) {
         var _this = this;
-        $scope.vm = this;
-        var facade = this;
         var robotModel = new TwoDRobotModel(new TrikRobotModelBase(), "model");
         this.robotModelName = robotModel.getName();
         this.model = new ModelImpl(parseFloat($("#twoDModel_stage").attr("zoom")));
         this.model.addRobotModel(robotModel);
         $(document).ready(function () {
-            $('#confirmDelete').find('.modal-footer #confirm').on('click', function () {
-                facade.model.getWorldModel().clearPaper();
-                $('#confirmDelete').modal('hide');
-            });
-            _this.initPortsConfigation($scope, $compile, robotModel);
+            _this.initPortsConfiguration($scope, $compile, robotModel);
             _this.makeUnselectable(document.getElementById("twoDModelContent"));
         });
-        $scope.$on("displayResult", function (event, result) {
-            _this.showCheckResult(result);
-        });
-        $scope.$on("displayCheckingResult", function (event, result) {
-            _this.displayResult(result);
-        });
-        $scope.$on("2dModelLoad", function (event, fieldXML) {
-            _this.model.deserialize($.parseXML(fieldXML));
-        });
-        $scope.start = function () {
-            var timeline = _this.model.getTimeline();
-            $scope.$emit("timeline", timeline);
-        };
-        $("#infoAlert").hide();
-        $(".close").click(function () {
-            $(this).parent().hide();
-        });
+        $scope.followRobot = function () { _this.followRobot(); };
+        $scope.closeDisplay = function () { _this.closeDisplay(); };
+        $scope.showDisplay = function () { _this.showDisplay(); };
+        $scope.setDrawLineMode = function () { _this.setDrawLineMode(); };
+        $scope.setDrawWallMode = function () { _this.setDrawWallMode(); };
+        $scope.setDrawPencilMode = function () { _this.setDrawPencilMode(); };
+        $scope.setDrawEllipseMode = function () { _this.setDrawEllipseMode(); };
+        $scope.setNoneMode = function () { _this.setNoneMode(); };
     }
-    TwoDModelEngineFacadeImpl.prototype.makeUnselectable = function (element) {
-        if (element.nodeType == 1) {
-            element.setAttribute("unselectable", "on");
-        }
-        var child = element.firstChild;
-        while (child) {
-            this.makeUnselectable(child);
-            child = child.nextSibling;
-        }
-    };
-    TwoDModelEngineFacadeImpl.prototype.displayResult = function (result) {
-        this.model.getWorldModel().clearPaper();
-        this.model.deserialize($.parseXML(result.fieldXML));
-        $("#twoDModelContent").show();
-        this.showCheckResult(result);
-    };
     TwoDModelEngineFacadeImpl.prototype.setDrawLineMode = function () {
         this.model.getWorldModel().setDrawLineMode();
     };
@@ -1818,11 +1787,17 @@ var TwoDModelEngineFacadeImpl = (function () {
     TwoDModelEngineFacadeImpl.prototype.setNoneMode = function () {
         this.model.getWorldModel().setNoneMode();
     };
-    TwoDModelEngineFacadeImpl.prototype.openDiagramEditor = function () {
-        $("#twoDModelContent").hide();
-        $("#diagramContent").show();
+    TwoDModelEngineFacadeImpl.prototype.closeDisplay = function () {
+        this.model.getRobotModels()[0].closeDisplay();
     };
-    TwoDModelEngineFacadeImpl.prototype.initPortsConfigation = function ($scope, $compile, twoDRobotModel) {
+    TwoDModelEngineFacadeImpl.prototype.showDisplay = function () {
+        this.model.getRobotModels()[0].showDisplay();
+    };
+    TwoDModelEngineFacadeImpl.prototype.followRobot = function () {
+        var robotModel = this.model.getRobotModels()[0];
+        robotModel.follow(!$("#follow_button").hasClass('active'));
+    };
+    TwoDModelEngineFacadeImpl.prototype.initPortsConfiguration = function ($scope, $compile, twoDRobotModel) {
         var configurationDropdownsContent = "<p>";
         twoDRobotModel.getConfigurablePorts().forEach(function (port) {
             var portName = port.getName();
@@ -1833,7 +1808,8 @@ var TwoDModelEngineFacadeImpl = (function () {
             configurationDropdownsContent += "<option value='Unused'>Unused</option>";
             var devices = twoDRobotModel.getAllowedDevices(port);
             devices.forEach(function (device) {
-                configurationDropdownsContent += "<option value='" + device.getName() + "'>" + device.getFriendlyName();
+                configurationDropdownsContent += "<option value='" + device.getName() + "'>" +
+                    device.getFriendlyName();
                 +"</option>";
             });
             configurationDropdownsContent += "</select>";
@@ -1862,24 +1838,15 @@ var TwoDModelEngineFacadeImpl = (function () {
             });
         });
     };
-    TwoDModelEngineFacadeImpl.prototype.showCheckResult = function (result) {
-        var robotModel = this.model.getRobotModels()[0];
-        robotModel.showCheckResult(result);
-    };
-    TwoDModelEngineFacadeImpl.prototype.stopPlay = function () {
-        var robotModel = this.model.getRobotModels()[0];
-        $("#infoAlert").hide();
-        robotModel.stopPlay();
-    };
-    TwoDModelEngineFacadeImpl.prototype.closeDisplay = function () {
-        this.model.getRobotModels()[0].closeDisplay();
-    };
-    TwoDModelEngineFacadeImpl.prototype.showDisplay = function () {
-        this.model.getRobotModels()[0].showDisplay();
-    };
-    TwoDModelEngineFacadeImpl.prototype.followRobot = function () {
-        var robotModel = this.model.getRobotModels()[0];
-        robotModel.follow(!$("#follow_button").hasClass('active'));
+    TwoDModelEngineFacadeImpl.prototype.makeUnselectable = function (element) {
+        if (element.nodeType == 1) {
+            element.setAttribute("unselectable", "on");
+        }
+        var child = element.firstChild;
+        while (child) {
+            this.makeUnselectable(child);
+            child = child.nextSibling;
+        }
     };
     return TwoDModelEngineFacadeImpl;
 })();

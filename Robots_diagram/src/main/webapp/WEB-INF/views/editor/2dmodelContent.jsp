@@ -14,7 +14,7 @@
   ~ limitations under the License.
   --%>
 
-<div id="twoDModelContent" class="unselectable" ng-controller="TwoDModelEngineFacadeImpl" style="display: none">
+<div id="twoDModelContent" class="unselectable" ng-controller="RobotsTwoDModelEngineFacade" style="display: none">
     <div class="navbar navbar-inverse navbar-static-top">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -28,7 +28,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>
-                        <p class="navbar-text" ng-click="vm.openDiagramEditor()">
+                        <p class="navbar-text" ng-click="openDiagramEditor()">
                             <span id="back" class="glyphicon glyphicon-arrow-left" style="vertical-align: middle; cursor: pointer"></span>
                         </p>
                     </li>
@@ -95,13 +95,13 @@
                             <table class="twoDModel_table">
                                 <tr>
                                     <td>
-                                        <button class="twoDModel_button palette_button" ng-click="vm.setDrawLineMode()">
+                                        <button class="twoDModel_button palette_button" ng-click="setDrawLineMode()">
                                             <img src="images/2dmodel/2d_ruler.png"
                                                  style="width: 20px; height: 20px; vertical-align: middle"/>
                                         </button>
                                     </td>
                                     <td>
-                                        <button class="twoDModel_button palette_button_right" ng-click="vm.setDrawWallMode()">
+                                        <button class="twoDModel_button palette_button_right" ng-click="setDrawWallMode()">
                                             <img src="images/2dmodel/2d_wall.png"
                                                  style="width: 20px; height: 20px; vertical-align: middle"/>
                                         </button>
@@ -110,13 +110,13 @@
 
                                 <tr>
                                     <td>
-                                        <button class="twoDModel_button palette_button" ng-click="vm.setDrawPencilMode()">
+                                        <button class="twoDModel_button palette_button" ng-click="setDrawPencilMode()">
                                             <img src="images/2dmodel/2d_pencil.png"
                                                  style="width: 20px; height: 20px; vertical-align: middle"/>
                                         </button>
                                     </td>
                                     <td>
-                                        <button class="twoDModel_button palette_button_right" ng-click="vm.setDrawEllipseMode()">
+                                        <button class="twoDModel_button palette_button_right" ng-click="setDrawEllipseMode()">
                                             <img src="images/2dmodel/2d_ellipse.png"
                                                  style="width: 20px; height: 20px; vertical-align: middle"/>
                                         </button>
@@ -131,7 +131,7 @@
                                         </button>
                                     </td>
                                     <td>
-                                        <button class="twoDModel_button palette_button_right" ng-click="vm.setNoneMode()">
+                                        <button class="twoDModel_button palette_button_right" ng-click="setNoneMode()">
                                             <img src="images/2dmodel/2d_none.png"
                                                  style="width: 13px; height: 20px; vertical-align: middle"/>
                                         </button>
@@ -237,7 +237,7 @@
         </div>
 
         <div id="twoDModel_right-menu">
-            <button id="menu_button" type="button" class="btn btn-default" ng-click="vm.showDisplay()">
+            <button id="menu_button" type="button" class="btn btn-default" ng-click="showDisplay()">
                 <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
             </button>
 
@@ -248,7 +248,7 @@
             <span id="port_M3" class="port_name">M3</span>
             <span id="port_M4" class="port_name">M4</span>
 
-            <span id="close_display" class="glyphicon glyphicon-remove-circle" aria-hidden="true" ng-click="vm.closeDisplay()"></span>
+            <span id="close_display" class="glyphicon glyphicon-remove-circle" aria-hidden="true" ng-click="closeDisplay()"></span>
             <canvas id="display" width="218" height="274"></canvas>
             <div id="led"></div>
         </div>

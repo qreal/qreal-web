@@ -25,6 +25,7 @@
 /// <reference path="../../../types/TwoDPosition.ts" />
 
 class SensorsConfiguration extends DevicesConfigurationProvider {
+
     private robotModel: RobotModel;
     private robotModelName: string;
 
@@ -32,14 +33,6 @@ class SensorsConfiguration extends DevicesConfigurationProvider {
         super();
         this.robotModel = robotModel;
         this.robotModelName = robotModel.info().getName();
-    }
-
-    private isSensorHaveView(sensorType: DeviceInfo): boolean {
-        return sensorType.isA(TouchSensor)
-            || sensorType.isA(ColorSensor)
-            || sensorType.isA(LightSensor)
-            || sensorType.isA(RangeSensor)
-            || sensorType.isA(VectorSensor);
     }
 
     addSensor(portName: string, sensorType: DeviceInfo, position?: TwoDPosition, direction?: number): void {
@@ -63,13 +56,6 @@ class SensorsConfiguration extends DevicesConfigurationProvider {
         }
     }
 
-    private parsePositionString(positionStr: string): TwoDPosition {
-        var splittedStr = positionStr.split(":");
-        var x = parseFloat(splittedStr[0]);
-        var y = parseFloat(splittedStr[1]);
-        return new TwoDPosition(x, y);
-    }
-
     deserialize(xml): void {
         var sensors = xml.getElementsByTagName("sensor");
         for (var i = 0; i < sensors.length; i++) {
@@ -86,5 +72,20 @@ class SensorsConfiguration extends DevicesConfigurationProvider {
 
             this.addSensor(portName, device, pos, direction);
         }
+    }
+
+    private parsePositionString(positionStr: string): TwoDPosition {
+        var splittedStr = positionStr.split(":");
+        var x = parseFloat(splittedStr[0]);
+        var y = parseFloat(splittedStr[1]);
+        return new TwoDPosition(x, y);
+    }
+
+    private isSensorHaveView(sensorType: DeviceInfo): boolean {
+        return sensorType.isA(TouchSensor)
+            || sensorType.isA(ColorSensor)
+            || sensorType.isA(LightSensor)
+            || sensorType.isA(RangeSensor)
+            || sensorType.isA(VectorSensor);
     }
 }

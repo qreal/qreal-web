@@ -31,5 +31,7 @@
 <script src="<c:url value='/resources/js/compiled/two-d-model-core.js' />"></script>
 <script src="<c:url value='/resources/js/compiled/diagram-robots.js' />"></script>
 <script src="<c:url value='/resources/js/compiled/interpreter.js' />"></script>
+<script src="<c:url value='/resources/js/compiled/two-d-model-robots.js' />"></script>
+
 
 

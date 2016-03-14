@@ -14,7 +14,7 @@
   ~ limitations under the License.
   --%>
 
-<div id="twoDModelContent" class="row unselectable" ng-controller="TwoDModelEngineFacadeImpl">
+<div id="twoDModelContent" class="row unselectable" ng-controller="StepicTwoDModelEngineFacade">
     <div id="twoDModel_stage" interactive="false" task="${taskId}" zoom="${2 / 3}">
     </div>
     <div id="twoDModelSpinner" class="centerSpinner">
@@ -25,12 +25,12 @@
     <div id="sayAlert" class="alert alert-info fade in">
     </div>
 
-    <button id="menu_button" type="button" class="btn btn-default" ng-click="vm.showDisplay()">
+    <button id="menu_button" type="button" class="btn btn-default" ng-click="showDisplay()">
         <span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span>
     </button>
 
     <div id="scroll_buttons">
-        <button id="follow_button" class="btn btn-default scroll_button" data-toggle="button" aria-pressed="false" ng-click="vm.followRobot()">
+        <button id="follow_button" class="btn btn-default scroll_button" data-toggle="button" aria-pressed="false" ng-click="followRobot()">
             <img class="small_image" src="<c:url value='/images/2dmodel/2d_target.png' />"/>
         </button>
     </div>
@@ -42,11 +42,11 @@
     <span id="port_M3" class="port_name">M3</span>
     <span id="port_M4" class="port_name">M4</span>
 
-    <span id="close_display" class="glyphicon glyphicon-remove-circle" aria-hidden="true" ng-click="vm.closeDisplay()"></span>
+    <span id="close_display" class="glyphicon glyphicon-remove-circle" aria-hidden="true" ng-click="closeDisplay()"></span>
     <canvas id="display" width="218" height="274"></canvas>
     <div id="led"></div>
 
-    <button id="stop_button" class="btn btn-danger btn-lg" type="button" ng-click="vm.stopPlay()">
+    <button id="stop_button" class="btn btn-danger btn-lg" type="button" ng-click="stopPlay()">
         <spring:message code="label.stop"/>
     </button>
 </div>

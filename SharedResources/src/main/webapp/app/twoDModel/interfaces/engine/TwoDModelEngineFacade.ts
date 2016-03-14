@@ -20,8 +20,5 @@ interface TwoDModelEngineFacade {
     setDrawPencilMode(): void;
     setDrawEllipseMode(): void;
     setNoneMode(): void;
-    openDiagramEditor(): void;
-    showCheckResult(result): void;
-    stopPlay(): void;
     followRobot(value: boolean): void;
 }

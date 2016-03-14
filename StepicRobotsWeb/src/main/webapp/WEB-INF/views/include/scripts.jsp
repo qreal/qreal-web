@@ -31,5 +31,6 @@
 <script src="<c:url value='/resources/js/compiled/checker-core.js' />"></script>
 <script src="<c:url value='/resources/js/compiled/two-d-model-core.js' />"></script>
 <script src="<c:url value='/resources/js/compiled/diagram-stepic.js' />"></script>
+<script src="<c:url value='/resources/js/compiled/two-d-model-stepic.js' />"></script>
 
 

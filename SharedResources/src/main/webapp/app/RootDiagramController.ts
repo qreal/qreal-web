@@ -19,10 +19,6 @@ class RootDiagramController {
     constructor($scope, $compile) {
         $scope.root = this;
 
-        $scope.$on("emitDisplayResult", (event, result) => {
-            $scope.$broadcast("displayResult", result);
-        });
-
         $scope.$on("emitCheckingResult", (event, result) => {
             $scope.$broadcast("displayCheckingResult", result);
         });
@@ -31,7 +27,7 @@ class RootDiagramController {
             $scope.$broadcast("2dModelLoad", fieldXML);
         });
 
-        $scope.$on("timeline", function(event, timeline) {
+        $scope.$on("emitInterpret", function(event, timeline) {
             $scope.$broadcast("interpret", timeline);
         });
     }
