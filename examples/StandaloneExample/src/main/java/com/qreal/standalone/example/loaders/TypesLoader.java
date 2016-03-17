@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.qreal.separate.example.loaders;
+package com.qreal.standalone.example.loaders;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

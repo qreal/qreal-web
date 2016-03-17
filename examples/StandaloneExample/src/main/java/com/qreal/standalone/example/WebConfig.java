@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.qreal.separate.example;
+package com.qreal.standalone.example;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -29,7 +29,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @EnableWebMvc
 @EnableTransactionManagement
 
-@ComponentScan("com.qreal.separate.example")
+@ComponentScan("com.qreal.standalone.example")
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     /* Time, in seconds, to have the browser cache static resources (one day). */

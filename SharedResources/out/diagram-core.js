@@ -675,7 +675,7 @@ var PaperController = (function () {
         var deleteKey = 46;
         $('html').keyup(function (event) {
             if (event.keyCode == deleteKey) {
-                if (!(document.activeElement.tagName === "INPUT")) {
+                if ($("#diagram_paper").is(":visible") && !(document.activeElement.tagName === "INPUT")) {
                     _this.removeCurrentElement();
                 }
             }
@@ -1833,17 +1833,18 @@ var UndoRedoController = (function () {
         this.maxSize = 10000;
         this.stack = [];
         this.pointer = -1;
-        $(document).ready(function () {
-            var zKey = 90;
-            $(document).keydown(function (event) {
+        var zKey = 90;
+        this.keyDownHandler = function (event) {
+            if ($("#diagramContent").is(":visible")) {
                 if (event.keyCode == zKey && event.ctrlKey && event.shiftKey) {
                     _this.redo();
                 }
                 else if (event.keyCode == zKey && event.ctrlKey) {
                     _this.undo();
                 }
-            });
-        });
+            }
+        };
+        this.bindKeyboardHandler();
     }
     UndoRedoController.prototype.addCommand = function (command) {
         if (command.isRevertible()) {
@@ -1874,6 +1875,15 @@ var UndoRedoController = (function () {
     UndoRedoController.prototype.clearStack = function () {
         this.stack.splice(0, this.stack.length);
         this.pointer = -1;
+    };
+    UndoRedoController.prototype.bindKeyboardHandler = function () {
+        var _this = this;
+        $(document).ready(function () {
+            $(document).keydown(_this.keyDownHandler);
+        });
+    };
+    UndoRedoController.prototype.unbindKeyboardHandler = function () {
+        $(document).unbind('keydown', this.keyDownHandler);
     };
     UndoRedoController.prototype.popNCommands = function (n) {
         while (n && this.stack.pop()) {

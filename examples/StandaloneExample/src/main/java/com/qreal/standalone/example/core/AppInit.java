@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.qreal.separate.example.core;
+package com.qreal.standalone.example.core;
 
-import com.qreal.separate.example.WebConfig;
+import com.qreal.standalone.example.WebConfig;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

@@ -57,6 +57,7 @@ declare interface DiagramNode extends DiagramElement {
     getX(): number;
     getY(): number;
     getImagePath(): string;
+    setPosition(x: number, y: number): void;
 
 }
 
@@ -95,6 +96,7 @@ declare class DefaultDiagramNode implements DiagramNode {
     getImagePath(): string;
     getX(): number;
     getY(): number;
+    setPosition(x: number, y: number): void;
 
 }
 
@@ -196,6 +198,8 @@ declare class UndoRedoController {
     public undo(): void;
     public redo(): void;
     public clearStack(): void;
+    public bindKeyboardHandler();
+    public unbindKeyboardHandler();
 
 }
 

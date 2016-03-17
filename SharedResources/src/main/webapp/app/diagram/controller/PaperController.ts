@@ -377,7 +377,7 @@ class PaperController {
         var deleteKey: number = 46;
         $('html').keyup((event) => {
             if(event.keyCode == deleteKey) {
-                if(!(document.activeElement.tagName === "INPUT")) {
+                if($("#diagram_paper").is(":visible") && !(document.activeElement.tagName === "INPUT")) {
                     this.removeCurrentElement();
                 }
             }

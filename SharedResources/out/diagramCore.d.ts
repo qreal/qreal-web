@@ -198,6 +198,8 @@ declare class UndoRedoController {
     public undo(): void;
     public redo(): void;
     public clearStack(): void;
+    public bindKeyboardHandler();
+    public unbindKeyboardHandler();
 
 }
 

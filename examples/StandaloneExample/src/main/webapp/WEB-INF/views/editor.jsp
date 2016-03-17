@@ -18,7 +18,7 @@
 
     <script src="<c:url value='/resources/js/utils.js' />"></script>
     <script src="<c:url value='/resources/js/diagram-core.js' />"></script>
-    <script src="<c:url value='/resources/js/compiled/separate-example.js' />"></script>
+    <script src="<c:url value='/resources/js/compiled/standalone-example.js' />"></script>
 
     <link rel="stylesheet" href="<c:url value='/resources/bootstrap/css/bootstrap.min.css' />"/>
     <link rel="stylesheet" href="<c:url value='/resources/css/joint.css' />"/>

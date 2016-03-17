@@ -1829,21 +1829,10 @@ var UIDGenerator = (function () {
 })();
 var UndoRedoController = (function () {
     function UndoRedoController() {
-        var _this = this;
         this.maxSize = 10000;
         this.stack = [];
         this.pointer = -1;
-        $(document).ready(function () {
-            var zKey = 90;
-            $(document).keydown(function (event) {
-                if (event.keyCode == zKey && event.ctrlKey && event.shiftKey) {
-                    _this.redo();
-                }
-                else if (event.keyCode == zKey && event.ctrlKey) {
-                    _this.undo();
-                }
-            });
-        });
+        this.bindKeyboardHandler();
     }
     UndoRedoController.prototype.addCommand = function (command) {
         if (command.isRevertible()) {
@@ -1875,9 +1864,27 @@ var UndoRedoController = (function () {
         this.stack.splice(0, this.stack.length);
         this.pointer = -1;
     };
+    UndoRedoController.prototype.bindKeyboardHandler = function () {
+        var _this = this;
+        $(document).ready(function () {
+            $(document).keydown(_this.keyDownHandler.bind(_this));
+        });
+    };
+    UndoRedoController.prototype.unbindKeyboardHandler = function () {
+        $(document).unbind('keydown', this.keyDownHandler.bind(this));
+    };
     UndoRedoController.prototype.popNCommands = function (n) {
         while (n && this.stack.pop()) {
             n--;
+        }
+    };
+    UndoRedoController.prototype.keyDownHandler = function (event) {
+        var zKey = 90;
+        if (event.keyCode == zKey && event.ctrlKey && event.shiftKey) {
+            this.redo();
+        }
+        else if (event.keyCode == zKey && event.ctrlKey) {
+            this.undo();
         }
     };
     return UndoRedoController;

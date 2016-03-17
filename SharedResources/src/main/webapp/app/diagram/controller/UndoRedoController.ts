@@ -21,21 +21,22 @@ class UndoRedoController {
     private stack: Command[];
     private pointer: number;
     private maxSize: number = 10000;
+    private keyDownHandler: (event) => void;
 
     constructor() {
         this.stack = [];
         this.pointer = -1;
-
-        $(document).ready(() => {
-            var zKey: number = 90;
-            $(document).keydown((event) => {
+        var zKey: number = 90;
+        this.keyDownHandler = (event) => {
+            if ($("#diagramContent").is(":visible")) {
                 if (event.keyCode == zKey && event.ctrlKey && event.shiftKey) {
                     this.redo();
                 } else if (event.keyCode == zKey && event.ctrlKey) {
                     this.undo();
                 }
-            });
-        });
+            }
+        };
+        this.bindKeyboardHandler();
     }
 
     public addCommand(command: Command) {
@@ -69,6 +70,16 @@ class UndoRedoController {
     public clearStack(): void {
         this.stack.splice(0, this.stack.length);
         this.pointer = -1;
+    }
+
+    public bindKeyboardHandler() {
+        $(document).ready(() => {
+            $(document).keydown(this.keyDownHandler);
+        });
+    }
+
+    public unbindKeyboardHandler() {
+        $(document).unbind('keydown', this.keyDownHandler);
     }
 
     private popNCommands(n: number) {

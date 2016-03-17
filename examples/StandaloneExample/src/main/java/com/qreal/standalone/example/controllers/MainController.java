@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.qreal.separate.example.controllers;
+package com.qreal.standalone.example.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.qreal.separate.example.loaders.TypesLoader;
+import com.qreal.standalone.example.loaders.TypesLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
