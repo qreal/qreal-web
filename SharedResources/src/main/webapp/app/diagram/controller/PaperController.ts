@@ -130,8 +130,10 @@ class PaperController {
             node = new DefaultDiagramNode(name, type, x, y, nodeProperties, image);
         }
 
-        this.makeAndExecuteCreateNodeCommand(node);
-        this.changeCurrentElement(node);
+        var command: Command = new MultiCommand([this.makeCreateNodeCommand(node),
+            this.makeChangeCurrentElementCommand(node)]);
+        this.undoRedoController.addCommand(command);
+        command.execute();
     }
 
     public createNodeInEventPositionFromNames(names: string[], event): void {
@@ -201,28 +203,39 @@ class PaperController {
         }
     }
 
+    public makeChangeCurrentElementCommand(element: DiagramElement): Command {
+        return new ChangeCurrentElementCommand(element, this.currentElement, this.setCurrentElement.bind(this));
+    }
+
     public changeCurrentElement(element: DiagramElement): void {
-        var changeCurrentElementCommand: Command = new ChangeCurrentElementCommand(element,
-            this.currentElement, this.setCurrentElement.bind(this));
+        var changeCurrentElementCommand: Command = this.makeChangeCurrentElementCommand(element);
         this.undoRedoController.addCommand(changeCurrentElementCommand);
         changeCurrentElementCommand.execute();
     }
 
-    public makeAndExecuteCreateNodeCommand(node: DiagramNode) {
-        var createNodeCommand: Command = new CreateElementCommand(node, this.addNode.bind(this),
+    public makeCreateNodeCommand(node: DiagramNode): Command {
+        return new CreateElementCommand(node, this.addNode.bind(this),
             this.removeElement.bind(this));
+    }
+
+    public makeAndExecuteCreateNodeCommand(node: DiagramNode): void {
+        var createNodeCommand: Command = this.makeCreateNodeCommand(node);
         this.undoRedoController.addCommand(createNodeCommand);
         createNodeCommand.execute();
     }
 
-    public makeAndExecuteCreateLinkCommand(link: Link) {
-        var createLinkCommand: Command = new CreateElementCommand(link, this.paper.addLinkToPaper.bind(this.paper),
+    public makeCreateLinkCommand(link: Link): Command {
+        return new CreateElementCommand(link, this.paper.addLinkToPaper.bind(this.paper),
             this.removeElement.bind(this));
+    }
+
+    public makeAndExecuteCreateLinkCommand(link: Link) {
+        var createLinkCommand: Command = this.makeCreateLinkCommand(link);
         this.undoRedoController.addCommand(createLinkCommand);
         createLinkCommand.execute();
     }
 
-    public makeAndExecuteRemoveElementCommand(element: DiagramElement): void {
+    public makeRemoveElementCommand(element: DiagramElement): Command {
         var removeElementCommand: Command;
         if (element instanceof DefaultDiagramNode) {
             removeElementCommand = new RemoveElementCommand(element, this.removeElement.bind(this),
@@ -231,13 +244,17 @@ class PaperController {
             removeElementCommand = new RemoveElementCommand(element, this.removeElement.bind(this),
                 this.paper.addLinkToPaper.bind(this.paper));
         }
+        return removeElementCommand;
+    }
+
+    public makeAndExecuteRemoveElementCommand(element: DiagramElement): void {
+        var removeElementCommand: Command = this.makeRemoveElementCommand(element);
         this.undoRedoController.addCommand(removeElementCommand);
         removeElementCommand.execute();
     }
 
-    public makeMoveCommand(node: DiagramNode, oldX: number, oldY: number, newX: number, newY: number): void {
-        var moveCommand: Command = new MoveCommand(oldX, oldY, newX, newY, node.setPosition.bind(node));
-        this.undoRedoController.addCommand(moveCommand);
+    public makeMoveCommand(node: DiagramNode, oldX: number, oldY: number, newX: number, newY: number): Command {
+        return new MoveCommand(oldX, oldY, newX, newY, node.setPosition.bind(node));
     }
 
     private addNode(node: DiagramNode): void {
@@ -298,8 +315,9 @@ class PaperController {
         } else if (event.button !== 2){
             var node: DiagramNode = this.paper.getNodeById(cellView.model.id);
             if (node) {
-                this.makeMoveCommand(node, this.lastCellMouseDownPosition.x, this.lastCellMouseDownPosition.y,
-                    node.getX(), node.getY());
+                var command: Command = this.makeMoveCommand(node, this.lastCellMouseDownPosition.x,
+                    this.lastCellMouseDownPosition.y, node.getX(), node.getY());
+                this.undoRedoController.addCommand(command);
             }
         }
     }

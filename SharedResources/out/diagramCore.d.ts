@@ -287,7 +287,7 @@ declare class PaperController {
     public getCurrentElement(): DiagramElement;
     public clearState(): void;
     public createLink(sourceId: string, targetId: string): void;
-    public createNode(type: string, x: number, y: number): void;
+    public createNode(type: string, x: number, y: number, subprogramId?: string, subprogramName?: string): void;
     public createNodeInEventPositionFromNames(names: string[], event): void;
     public createLinkBetweenCurrentAndEventTargetElements(event): void;
 
