@@ -646,8 +646,8 @@ var PaperController = (function () {
         if ((this.clickFlag) && (event.button == 2)) {
             $(".custom-menu").finish().toggle(100).
                 css({
-                top: event.pageY + "px",
-                left: event.pageX + "px"
+                left: event.pageX - $(document).scrollLeft() + "px",
+                top: event.pageY - $(document).scrollTop() + "px"
             });
         }
         else if (event.button !== 2) {
@@ -715,20 +715,20 @@ var PaperController = (function () {
     };
     PaperController.prototype.removeCurrentElement = function () {
         var _this = this;
-        var removeCommand;
+        var removeCommands = [];
+        removeCommands.push(this.paperCommandFactory.makeChangeCurrentElementCommand(null, this.currentElement));
         if (this.currentElement instanceof DefaultDiagramNode) {
             var node = this.currentElement;
-            var removeCommandArray = [];
             var connectedLinks = this.paper.getConnectedLinkObjects(node);
-            connectedLinks.forEach(function (link) { return removeCommandArray.push(_this.paperCommandFactory.makeRemoveLinkCommand(link)); });
-            removeCommandArray.push(this.paperCommandFactory.makeRemoveNodeCommand(node));
-            removeCommand = new MultiCommand(removeCommandArray);
+            connectedLinks.forEach(function (link) { return removeCommands.push(_this.paperCommandFactory.makeRemoveLinkCommand(link)); });
+            removeCommands.push(this.paperCommandFactory.makeRemoveNodeCommand(node));
         }
         else if (this.currentElement instanceof Link) {
-            removeCommand = this.paperCommandFactory.makeRemoveLinkCommand(this.currentElement);
+            removeCommands.push(this.paperCommandFactory.makeRemoveLinkCommand(this.currentElement));
         }
-        this.undoRedoController.addCommand(removeCommand);
-        removeCommand.execute();
+        var multiCommand = new MultiCommand(removeCommands);
+        this.undoRedoController.addCommand(multiCommand);
+        multiCommand.execute();
     };
     return PaperController;
 })();

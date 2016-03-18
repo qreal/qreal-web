@@ -305,8 +305,9 @@ class PaperController {
         if ((this.clickFlag) && (event.button == 2)) {
             $(".custom-menu").finish().toggle(100).
             css({
-                top: event.pageY + "px",
-                left: event.pageX + "px"
+                left: event.pageX - $(document).scrollLeft() + "px",
+                top: event.pageY - $(document).scrollTop() + "px"
+
             });
         } else if (event.button !== 2){
             var node: DiagramNode = this.paper.getNodeById(cellView.model.id);
@@ -385,20 +386,20 @@ class PaperController {
     }
 
     private removeCurrentElement(): void {
-        var removeCommand: Command;
+        var removeCommands: Command[] = [];
+        removeCommands.push(this.paperCommandFactory.makeChangeCurrentElementCommand(null, this.currentElement));
         if (this.currentElement instanceof DefaultDiagramNode) {
             var node: DiagramNode = <DiagramNode> this.currentElement;
-            var removeCommandArray: Command[] = [];
             var connectedLinks: Link[] = this.paper.getConnectedLinkObjects(node);
-            connectedLinks.forEach((link: Link) => removeCommandArray.push(
+            connectedLinks.forEach((link: Link) => removeCommands.push(
                 this.paperCommandFactory.makeRemoveLinkCommand(link)));
-            removeCommandArray.push(this.paperCommandFactory.makeRemoveNodeCommand(node));
-            removeCommand = new MultiCommand(removeCommandArray);
+            removeCommands.push(this.paperCommandFactory.makeRemoveNodeCommand(node));
         } else if (this.currentElement instanceof Link) {
-            removeCommand = this.paperCommandFactory.makeRemoveLinkCommand(<Link> this.currentElement);
+            removeCommands.push(this.paperCommandFactory.makeRemoveLinkCommand(<Link> this.currentElement));
         }
-        this.undoRedoController.addCommand(removeCommand);
-        removeCommand.execute();
+        var multiCommand: Command = new MultiCommand(removeCommands);
+        this.undoRedoController.addCommand(multiCommand);
+        multiCommand.execute();
     }
 
 }
