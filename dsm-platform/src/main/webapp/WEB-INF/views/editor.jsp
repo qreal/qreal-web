@@ -72,6 +72,10 @@
                         <li><a href="" role="menuitem" tabindex="-1" ng-click="choosePalette('typesList.json')">robots</a></li>
                     </ul>
                 </li>
+                <div>
+                    <input type="text" id="namePalette">
+                    <button ng-click="createPalette()">Create</button>
+                </div>
                 <legend style="height: 40px; padding: 10px">Palette</legend>
                 <div id="elements_tree">
                     <ul id="palette-tabs" class="nav nav-tabs">

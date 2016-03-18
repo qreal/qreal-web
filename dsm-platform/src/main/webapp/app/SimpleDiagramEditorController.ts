@@ -18,10 +18,14 @@
 
 class SimpleDiagramEditorController extends DiagramEditorController {
 
+    private exporter: PaletteExporter;
+
     constructor($scope, $attrs) {
         super($scope, $attrs);
-        this.choosePalette("typesList.json");
-        $scope.choosePalette = (typeList: string) => { this.choosePalette(typeList); }
+        this.exporter = new PaletteExporter();
+        this.choosePalette("metaEditor.json");
+        $scope.choosePalette = (typeList: string) => { this.choosePalette(typeList); };
+        $scope.createPalette = () => { this.createPalette(); }
     }
 
     public handleLoadedTypes(elementTypes: ElementTypes): void {
@@ -47,5 +51,22 @@ class SimpleDiagramEditorController extends DiagramEditorController {
         this.elementsTypeLoader.load((elementTypes: ElementTypes): void => {
             this.handleLoadedTypes(elementTypes);
         }, typesList);
+    }
+
+    public createPalette() {
+        var name = $('#namePalette').val();
+        var controller = this;
+        $.ajax({
+            type: 'POST',
+            url: 'createPalette',
+            contentType: 'application/json',
+            data: JSON.stringify(controller.exporter.exportPaletteToJson(controller.getNodesMap(), name)),
+            success: function (response): any {
+               console.log(response);
+            },
+            error: function (response, status, error): any {
+                console.log("error: " + status + " " + error);
+            }
+        });
     }
 }
