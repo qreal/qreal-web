@@ -246,6 +246,13 @@ var DiagramPaper = (function (_super) {
         node.getJointObject().remove();
         delete this.nodesMap[nodeId];
     };
+    DiagramPaper.prototype.getConnectedLinkObjects = function (node) {
+        var _this = this;
+        var links = this.graph.getConnectedLinks(node.getJointObject(), { inbound: true, outbound: true });
+        var linkObjects = [];
+        links.forEach(function (link) { return linkObjects.push(_this.linksMap[link.id]); });
+        return linkObjects;
+    };
     DiagramPaper.prototype.removeLink = function (linkId) {
         var link = this.linksMap[linkId];
         link.getJointObject().remove();
@@ -385,12 +392,37 @@ var DefaultDiagramNode = (function () {
     };
     return DefaultDiagramNode;
 })();
+var PaperCommandFactory = (function () {
+    function PaperCommandFactory(paperController) {
+        this.paperController = paperController;
+    }
+    PaperCommandFactory.prototype.makeChangeCurrentElementCommand = function (newElement, oldElement) {
+        return new ChangeCurrentElementCommand(newElement, oldElement, this.paperController.setCurrentElement.bind(this.paperController));
+    };
+    PaperCommandFactory.prototype.makeCreateNodeCommand = function (node) {
+        return new CreateElementCommand(node, this.paperController.addNode.bind(this.paperController), this.paperController.removeElement.bind(this.paperController));
+    };
+    PaperCommandFactory.prototype.makeCreateLinkCommand = function (link) {
+        return new CreateElementCommand(link, this.paperController.addLink.bind(this.paperController), this.paperController.removeElement.bind(this.paperController));
+    };
+    PaperCommandFactory.prototype.makeRemoveNodeCommand = function (node) {
+        return new RemoveElementCommand(node, this.paperController.removeElement.bind(this.paperController), this.paperController.addNode.bind(this.paperController));
+    };
+    PaperCommandFactory.prototype.makeRemoveLinkCommand = function (link) {
+        return new RemoveElementCommand(link, this.paperController.removeElement.bind(this.paperController), this.paperController.addLink.bind(this.paperController));
+    };
+    PaperCommandFactory.prototype.makeMoveCommand = function (node, oldX, oldY, newX, newY) {
+        return new MoveCommand(oldX, oldY, newX, newY, node.setPosition.bind(node));
+    };
+    return PaperCommandFactory;
+})();
 var PaperController = (function () {
     function PaperController(diagramEditorController, paper) {
         var _this = this;
         this.diagramEditorController = diagramEditorController;
         this.undoRedoController = diagramEditorController.getUndoRedoController();
         this.paper = paper;
+        this.paperCommandFactory = new PaperCommandFactory(this);
         this.clickFlag = false;
         this.rightClickFlag = false;
         this.gesturesController = new GesturesController(this);
@@ -464,8 +496,10 @@ var PaperController = (function () {
         else {
             node = new DefaultDiagramNode(name, type, x, y, nodeProperties, image);
         }
-        this.makeAndExecuteCreateNodeCommand(node);
-        this.changeCurrentElement(node);
+        var command = new MultiCommand([this.paperCommandFactory.makeCreateNodeCommand(node),
+            this.paperCommandFactory.makeChangeCurrentElementCommand(node, this.currentElement)]);
+        this.undoRedoController.addCommand(command);
+        command.execute();
     };
     PaperController.prototype.createNodeInEventPositionFromNames = function (names, event) {
         var _this = this;
@@ -528,34 +562,27 @@ var PaperController = (function () {
         }
     };
     PaperController.prototype.changeCurrentElement = function (element) {
-        var changeCurrentElementCommand = new ChangeCurrentElementCommand(element, this.currentElement, this.setCurrentElement.bind(this));
+        var changeCurrentElementCommand = this.paperCommandFactory.makeChangeCurrentElementCommand(element, this.currentElement);
         this.undoRedoController.addCommand(changeCurrentElementCommand);
         changeCurrentElementCommand.execute();
     };
-    PaperController.prototype.makeAndExecuteCreateNodeCommand = function (node) {
-        var createNodeCommand = new CreateElementCommand(node, this.addNode.bind(this), this.removeElement.bind(this));
-        this.undoRedoController.addCommand(createNodeCommand);
-        createNodeCommand.execute();
-    };
     PaperController.prototype.makeAndExecuteCreateLinkCommand = function (link) {
-        var createLinkCommand = new CreateElementCommand(link, this.paper.addLinkToPaper.bind(this.paper), this.removeElement.bind(this));
+        var createLinkCommand = this.paperCommandFactory.makeCreateLinkCommand(link);
         this.undoRedoController.addCommand(createLinkCommand);
         createLinkCommand.execute();
     };
-    PaperController.prototype.makeAndExecuteRemoveElementCommand = function (element) {
-        var removeElementCommand;
-        if (element instanceof DefaultDiagramNode) {
-            removeElementCommand = new RemoveElementCommand(element, this.removeElement.bind(this), this.paper.addNode.bind(this.paper));
+    PaperController.prototype.setCurrentElement = function (element) {
+        if (this.currentElement) {
+            this.unselectElement(this.currentElement.getJointObject());
+        }
+        this.currentElement = element;
+        if (element) {
+            this.selectElement(this.currentElement.getJointObject());
+            this.diagramEditorController.setNodeProperties(element);
         }
         else {
-            removeElementCommand = new RemoveElementCommand(element, this.removeElement.bind(this), this.paper.addLinkToPaper.bind(this.paper));
+            this.diagramEditorController.clearNodeProperties();
         }
-        this.undoRedoController.addCommand(removeElementCommand);
-        removeElementCommand.execute();
-    };
-    PaperController.prototype.makeMoveCommand = function (node, oldX, oldY, newX, newY) {
-        var moveCommand = new MoveCommand(oldX, oldY, newX, newY, node.setPosition.bind(node));
-        this.undoRedoController.addCommand(moveCommand);
     };
     PaperController.prototype.addNode = function (node) {
         if (node instanceof SubprogramNode) {
@@ -564,6 +591,23 @@ var PaperController = (function () {
         else {
             this.paper.addNode(node);
         }
+    };
+    PaperController.prototype.removeElement = function (element) {
+        if (element) {
+            if (element instanceof DefaultDiagramNode) {
+                this.paper.removeNode(element.getJointObject().id);
+            }
+            else {
+                this.paper.removeLink(element.getJointObject().id);
+            }
+            if (this.currentElement && element === this.currentElement) {
+                this.diagramEditorController.clearNodeProperties();
+                this.currentElement = null;
+            }
+        }
+    };
+    PaperController.prototype.addLink = function (link) {
+        this.paper.addLinkToPaper(link);
     };
     PaperController.prototype.blankPoinerdownListener = function (event, x, y) {
         if (!($(event.target).parents(".custom-menu").length > 0)) {
@@ -609,7 +653,8 @@ var PaperController = (function () {
         else if (event.button !== 2) {
             var node = this.paper.getNodeById(cellView.model.id);
             if (node) {
-                this.makeMoveCommand(node, this.lastCellMouseDownPosition.x, this.lastCellMouseDownPosition.y, node.getX(), node.getY());
+                var command = this.paperCommandFactory.makeMoveCommand(node, this.lastCellMouseDownPosition.x, this.lastCellMouseDownPosition.y, node.getX(), node.getY());
+                this.undoRedoController.addCommand(command);
             }
         }
     };
@@ -632,19 +677,6 @@ var PaperController = (function () {
                 controller.createNode(type, leftElementPos, topElementPos, $(ui.draggable.context).data("id"), $(ui.draggable.context).data("name"));
             }
         });
-    };
-    PaperController.prototype.setCurrentElement = function (element) {
-        if (this.currentElement) {
-            this.unselectElement(this.currentElement.getJointObject());
-        }
-        this.currentElement = element;
-        if (element) {
-            this.selectElement(this.currentElement.getJointObject());
-            this.diagramEditorController.setNodeProperties(element);
-        }
-        else {
-            this.diagramEditorController.clearNodeProperties();
-        }
     };
     PaperController.prototype.selectElement = function (jointObject) {
         var jQueryEl = this.paper.findViewByModel(jointObject).$el;
@@ -675,28 +707,28 @@ var PaperController = (function () {
         var deleteKey = 46;
         $('html').keyup(function (event) {
             if (event.keyCode == deleteKey) {
-                if (!(document.activeElement.tagName === "INPUT")) {
+                if ($("#diagram_paper").is(":visible") && !(document.activeElement.tagName === "INPUT")) {
                     _this.removeCurrentElement();
                 }
             }
         });
     };
-    PaperController.prototype.removeElement = function (element) {
-        if (element) {
-            if (element instanceof DefaultDiagramNode) {
-                this.paper.removeNode(element.getJointObject().id);
-            }
-            else {
-                this.paper.removeLink(element.getJointObject().id);
-            }
-            if (this.currentElement && element === this.currentElement) {
-                this.diagramEditorController.clearNodeProperties();
-                this.currentElement = null;
-            }
-        }
-    };
     PaperController.prototype.removeCurrentElement = function () {
-        this.makeAndExecuteRemoveElementCommand(this.currentElement);
+        var _this = this;
+        var removeCommand;
+        if (this.currentElement instanceof DefaultDiagramNode) {
+            var node = this.currentElement;
+            var removeCommandArray = [];
+            var connectedLinks = this.paper.getConnectedLinkObjects(node);
+            connectedLinks.forEach(function (link) { return removeCommandArray.push(_this.paperCommandFactory.makeRemoveLinkCommand(link)); });
+            removeCommandArray.push(this.paperCommandFactory.makeRemoveNodeCommand(node));
+            removeCommand = new MultiCommand(removeCommandArray);
+        }
+        else if (this.currentElement instanceof Link) {
+            removeCommand = this.paperCommandFactory.makeRemoveLinkCommand(this.currentElement);
+        }
+        this.undoRedoController.addCommand(removeCommand);
+        removeCommand.execute();
     };
     return PaperController;
 })();
@@ -1829,9 +1861,21 @@ var UIDGenerator = (function () {
 })();
 var UndoRedoController = (function () {
     function UndoRedoController() {
+        var _this = this;
         this.maxSize = 10000;
         this.stack = [];
         this.pointer = -1;
+        var zKey = 90;
+        this.keyDownHandler = function (event) {
+            if ($("#diagramContent").is(":visible")) {
+                if (event.keyCode == zKey && event.ctrlKey && event.shiftKey) {
+                    _this.redo();
+                }
+                else if (event.keyCode == zKey && event.ctrlKey) {
+                    _this.undo();
+                }
+            }
+        };
         this.bindKeyboardHandler();
     }
     UndoRedoController.prototype.addCommand = function (command) {
@@ -1867,24 +1911,15 @@ var UndoRedoController = (function () {
     UndoRedoController.prototype.bindKeyboardHandler = function () {
         var _this = this;
         $(document).ready(function () {
-            $(document).keydown(_this.keyDownHandler.bind(_this));
+            $(document).keydown(_this.keyDownHandler);
         });
     };
     UndoRedoController.prototype.unbindKeyboardHandler = function () {
-        $(document).unbind('keydown', this.keyDownHandler.bind(this));
+        $(document).unbind('keydown', this.keyDownHandler);
     };
     UndoRedoController.prototype.popNCommands = function (n) {
         while (n && this.stack.pop()) {
             n--;
-        }
-    };
-    UndoRedoController.prototype.keyDownHandler = function (event) {
-        var zKey = 90;
-        if (event.keyCode == zKey && event.ctrlKey && event.shiftKey) {
-            this.redo();
-        }
-        else if (event.keyCode == zKey && event.ctrlKey) {
-            this.undo();
         }
     };
     return UndoRedoController;
@@ -2298,6 +2333,25 @@ var MoveCommand = (function () {
         return !(this.newX === this.oldX && this.newY === this.oldY);
     };
     return MoveCommand;
+})();
+var MultiCommand = (function () {
+    function MultiCommand(commands) {
+        this.commands = commands;
+    }
+    MultiCommand.prototype.execute = function () {
+        this.commands.forEach(function (command) { return command.execute(); });
+    };
+    MultiCommand.prototype.revert = function () {
+        for (var i = this.commands.length - 1; i >= 0; i--) {
+            this.commands[i].revert();
+        }
+    };
+    MultiCommand.prototype.isRevertible = function () {
+        return this.commands.reduce(function (previousValue, command) {
+            return previousValue && command.isRevertible();
+        }, true);
+    };
+    return MultiCommand;
 })();
 var RemoveElementCommand = (function () {
     function RemoveElementCommand(element, executionFunction, revertFunction) {

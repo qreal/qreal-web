@@ -20,6 +20,8 @@
 /// <reference path="../model/PaletteTypes.ts" />
 /// <reference path="../model/DiagramNode.ts" />
 /// <reference path="../model/DefaultDiagramNode.ts" />
+/// <reference path="../model/commands/Command.ts"/>
+/// <reference path="../model/commands/PaperCommandFactory.ts" />
 /// <reference path="../../vendor.d.ts" />
 
 class PaperController {
@@ -32,11 +34,13 @@ class PaperController {
     private gesturesController: GesturesController;
     private undoRedoController: UndoRedoController;
     private lastCellMouseDownPosition: {x: number, y: number};
+    private paperCommandFactory: PaperCommandFactory;
 
     constructor(diagramEditorController: DiagramEditorController, paper: DiagramPaper) {
         this.diagramEditorController = diagramEditorController;
         this.undoRedoController = diagramEditorController.getUndoRedoController();
         this.paper = paper;
+        this.paperCommandFactory = new PaperCommandFactory(this);
         this.clickFlag = false;
         this.rightClickFlag = false;
         this.gesturesController = new GesturesController(this);
@@ -130,8 +134,8 @@ class PaperController {
             node = new DefaultDiagramNode(name, type, x, y, nodeProperties, image);
         }
 
-        var command: Command = new MultiCommand([this.makeCreateNodeCommand(node),
-            this.makeChangeCurrentElementCommand(node)]);
+        var command: Command = new MultiCommand([this.paperCommandFactory.makeCreateNodeCommand(node),
+            this.paperCommandFactory.makeChangeCurrentElementCommand(node, this.currentElement)]);
         this.undoRedoController.addCommand(command);
         command.execute();
     }
@@ -203,66 +207,58 @@ class PaperController {
         }
     }
 
-    public makeChangeCurrentElementCommand(element: DiagramElement): Command {
-        return new ChangeCurrentElementCommand(element, this.currentElement, this.setCurrentElement.bind(this));
-    }
-
     public changeCurrentElement(element: DiagramElement): void {
-        var changeCurrentElementCommand: Command = this.makeChangeCurrentElementCommand(element);
+        var changeCurrentElementCommand: Command = this.paperCommandFactory.makeChangeCurrentElementCommand(element,
+            this.currentElement);
         this.undoRedoController.addCommand(changeCurrentElementCommand);
         changeCurrentElementCommand.execute();
     }
 
-    public makeCreateNodeCommand(node: DiagramNode): Command {
-        return new CreateElementCommand(node, this.addNode.bind(this),
-            this.removeElement.bind(this));
-    }
-
-    public makeAndExecuteCreateNodeCommand(node: DiagramNode): void {
-        var createNodeCommand: Command = this.makeCreateNodeCommand(node);
-        this.undoRedoController.addCommand(createNodeCommand);
-        createNodeCommand.execute();
-    }
-
-    public makeCreateLinkCommand(link: Link): Command {
-        return new CreateElementCommand(link, this.paper.addLinkToPaper.bind(this.paper),
-            this.removeElement.bind(this));
-    }
-
-    public makeAndExecuteCreateLinkCommand(link: Link) {
-        var createLinkCommand: Command = this.makeCreateLinkCommand(link);
+    public makeAndExecuteCreateLinkCommand(link: Link): void {
+        var createLinkCommand: Command = this.paperCommandFactory.makeCreateLinkCommand(link);
         this.undoRedoController.addCommand(createLinkCommand);
         createLinkCommand.execute();
     }
 
-    public makeRemoveElementCommand(element: DiagramElement): Command {
-        var removeElementCommand: Command;
-        if (element instanceof DefaultDiagramNode) {
-            removeElementCommand = new RemoveElementCommand(element, this.removeElement.bind(this),
-                this.paper.addNode.bind(this.paper));
-        } else {
-            removeElementCommand = new RemoveElementCommand(element, this.removeElement.bind(this),
-                this.paper.addLinkToPaper.bind(this.paper));
+    public setCurrentElement(element: DiagramElement): void {
+        if (this.currentElement) {
+            this.unselectElement(this.currentElement.getJointObject());
         }
-        return removeElementCommand;
+        this.currentElement = element;
+        if (element) {
+            this.selectElement(this.currentElement.getJointObject());
+            this.diagramEditorController.setNodeProperties(element);
+        } else {
+            this.diagramEditorController.clearNodeProperties();
+        }
+
     }
 
-    public makeAndExecuteRemoveElementCommand(element: DiagramElement): void {
-        var removeElementCommand: Command = this.makeRemoveElementCommand(element);
-        this.undoRedoController.addCommand(removeElementCommand);
-        removeElementCommand.execute();
-    }
-
-    public makeMoveCommand(node: DiagramNode, oldX: number, oldY: number, newX: number, newY: number): Command {
-        return new MoveCommand(oldX, oldY, newX, newY, node.setPosition.bind(node));
-    }
-
-    private addNode(node: DiagramNode): void {
+    public addNode(node: DiagramNode): void {
         if (node instanceof SubprogramNode) {
             this.paper.addSubprogramNode(node);
         } else {
             this.paper.addNode(node);
         }
+    }
+
+    public removeElement(element: DiagramElement): void {
+        if (element) {
+            if (element instanceof DefaultDiagramNode) {
+                this.paper.removeNode(element.getJointObject().id);
+            } else {
+                this.paper.removeLink(element.getJointObject().id);
+            }
+
+            if (this.currentElement && element === this.currentElement) {
+                this.diagramEditorController.clearNodeProperties();
+                this.currentElement = null;
+            }
+        }
+    }
+
+    public addLink(link: Link): void {
+        this.paper.addLinkToPaper(link);
     }
 
     private blankPoinerdownListener(event, x, y): void {
@@ -315,7 +311,7 @@ class PaperController {
         } else if (event.button !== 2){
             var node: DiagramNode = this.paper.getNodeById(cellView.model.id);
             if (node) {
-                var command: Command = this.makeMoveCommand(node, this.lastCellMouseDownPosition.x,
+                var command: Command = this.paperCommandFactory.makeMoveCommand(node, this.lastCellMouseDownPosition.x,
                     this.lastCellMouseDownPosition.y, node.getX(), node.getY());
                 this.undoRedoController.addCommand(command);
             }
@@ -346,20 +342,6 @@ class PaperController {
                     $(ui.draggable.context).data("name"));
             }
         });
-    }
-
-    private setCurrentElement(element: DiagramElement): void {
-        if (this.currentElement) {
-            this.unselectElement(this.currentElement.getJointObject());
-        }
-        this.currentElement = element;
-        if (element) {
-            this.selectElement(this.currentElement.getJointObject());
-            this.diagramEditorController.setNodeProperties(element);
-        } else {
-            this.diagramEditorController.clearNodeProperties();
-        }
-
     }
 
     private selectElement(jointObject): void {
@@ -402,23 +384,21 @@ class PaperController {
         });
     }
 
-    private removeElement(element: DiagramElement): void {
-        if (element) {
-            if (element instanceof DefaultDiagramNode) {
-                this.paper.removeNode(element.getJointObject().id);
-            } else {
-                this.paper.removeLink(element.getJointObject().id);
-            }
-
-            if (this.currentElement && element === this.currentElement) {
-                this.diagramEditorController.clearNodeProperties();
-                this.currentElement = null;
-            }
-        }
-    }
-
     private removeCurrentElement(): void {
-        this.makeAndExecuteRemoveElementCommand(this.currentElement);
+        var removeCommand: Command;
+        if (this.currentElement instanceof DefaultDiagramNode) {
+            var node: DiagramNode = <DiagramNode> this.currentElement;
+            var removeCommandArray: Command[] = [];
+            var connectedLinks: Link[] = this.paper.getConnectedLinkObjects(node);
+            connectedLinks.forEach((link: Link) => removeCommandArray.push(
+                this.paperCommandFactory.makeRemoveLinkCommand(link)));
+            removeCommandArray.push(this.paperCommandFactory.makeRemoveNodeCommand(node));
+            removeCommand = new MultiCommand(removeCommandArray);
+        } else if (this.currentElement instanceof Link) {
+            removeCommand = this.paperCommandFactory.makeRemoveLinkCommand(<Link> this.currentElement);
+        }
+        this.undoRedoController.addCommand(removeCommand);
+        removeCommand.execute();
     }
 
 }

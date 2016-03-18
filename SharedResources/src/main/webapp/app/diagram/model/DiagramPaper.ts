@@ -126,6 +126,14 @@ class DiagramPaper extends joint.dia.Paper {
         node.getJointObject().remove();
         delete this.nodesMap[nodeId];
     }
+    
+    public getConnectedLinkObjects(node: DiagramNode): Link[] {
+        var links = this.graph.getConnectedLinks(node.getJointObject(), { inbound: true, outbound: true });
+        var linkObjects: Link[] = [];
+        
+        links.forEach((link) => linkObjects.push(this.linksMap[link.id]));
+        return linkObjects;
+    }
 
     public removeLink(linkId: string): void {
         var link: Link = this.linksMap[linkId];

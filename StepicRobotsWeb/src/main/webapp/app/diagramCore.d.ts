@@ -290,6 +290,11 @@ declare class PaperController {
     public createNode(type: string, x: number, y: number, subprogramId?: string, subprogramName?: string): void;
     public createNodeInEventPositionFromNames(names: string[], event): void;
     public createLinkBetweenCurrentAndEventTargetElements(event): void;
+    public setCurrentElement(element: DiagramElement): void;
+    public addNode(node: DiagramNode):void;
+    public removeElement(element: DiagramElement): void;
+    public addLink(link: Link): void;
+    public changeCurrentElement(element: DiagramElement): void;
 
 }
 
