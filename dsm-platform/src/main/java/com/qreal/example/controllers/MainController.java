@@ -17,6 +17,7 @@
 package com.qreal.example.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qreal.example.loaders.TypesLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.File;
+import java.io.IOException;
+
 /**
  * Created by vladimir-zakharov on 27.02.16.
  */
@@ -32,9 +36,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class MainController {
 
     private TypesLoader typesLoader;
+    private ObjectMapper mapper;
 
     public MainController() {
         this.typesLoader = new TypesLoader();
+        this.mapper = new ObjectMapper();
     }
 
     @RequestMapping("/")
@@ -45,7 +51,14 @@ public class MainController {
     @ResponseBody
     @RequestMapping(value = "getTypes/", method = RequestMethod.POST)
     public JsonNode getTypes(@RequestParam(value="kit") String kit) {
-        return typesLoader.getTypesJson(kit);
+        try {
+            ClassLoader classLoader = getClass().getClassLoader();
+            JsonNode typesList = mapper.readTree(new File(classLoader.getResource(kit).getFile()));
+            return typesLoader.getTypesJson(typesList);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
-
 }

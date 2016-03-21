@@ -62,11 +62,29 @@ class SimpleDiagramEditorController extends DiagramEditorController {
             contentType: 'application/json',
             data: JSON.stringify(controller.exporter.exportPaletteToJson(controller.getNodesMap(), name)),
             success: function (response): any {
-               console.log(response);
+                console.log('ok');
             },
             error: function (response, status, error): any {
                 console.log("error: " + status + " " + error);
             }
         });
+
+        var newPalette = new PaletteTypes();
+        var basePalette: Map<NodeType> = {};
+
+        for (var id in this.getNodesMap()) {
+            var nodeName = this.getNodesMap()[id].getChangeableProperties()["name"].value;
+            var nodeImage = this.getNodesMap()[id].getChangeableProperties()["image"].value;
+            var node = new NodeType(nodeName, {}, nodeImage);
+            basePalette[nodeName] = node;
+            this.nodeTypesMap[nodeName] = node;
+        }
+
+        newPalette.categories[name] = basePalette;
+
+        this.clearState();
+        this.paletteController.clearBlocksPalette();
+        this.paletteController.appendBlocksPalette(newPalette);
+        this.paletteController.initDraggable();
     }
 }

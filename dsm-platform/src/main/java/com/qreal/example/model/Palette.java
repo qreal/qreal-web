@@ -11,7 +11,6 @@ import java.util.Set;
 @Entity
 @Table(name = "palettes")
 public class Palette implements Serializable {
-
     @Id
     @Column(name = "palette_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +20,10 @@ public class Palette implements Serializable {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "name", referencedColumnName = "name")
+    @JoinColumn(name = "palette_id", referencedColumnName = "palette_id")
     private Set<Node> nodes;
+
+    public Set<Node> getNodes() {
+        return this.nodes;
+    }
 }

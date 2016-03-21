@@ -21,4 +21,12 @@ public class Node implements Serializable {
 
     @Column(name = "image")
     private String image;
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getImage() {
+        return this.image;
+    }
 }

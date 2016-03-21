@@ -1,5 +1,6 @@
 package com.qreal.example.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qreal.example.model.Palette;
 import com.qreal.example.service.PaletteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class EditorController {
-
     @Autowired
     private PaletteService paletteService;
 
     @ResponseBody
     @RequestMapping(value = "/createPalette", method = RequestMethod.POST)
-    public void saveDiagram(@RequestBody Palette palette) {
+    public void createPalette(@RequestBody Palette palette) {
         paletteService.createPalette(palette);
     }
+
 }
