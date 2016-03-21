@@ -16,8 +16,6 @@
 
 package com.qreal.stepic.robots.model.checker;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -25,6 +23,24 @@ import java.util.List;
  * Created by vladimir-zakharov on 31.08.15.
  */
 public class Description implements Serializable {
+
+    public Description() {
+    }
+
+    public Description(String main) {
+        this.main = main;
+    }
+
+    public Description(String main, String note) {
+        this.main = main;
+        this.note = note;
+    }
+
+    public Description(String main, String note, List<Hint> hints) {
+        this.main = main;
+        this.note = note;
+        this.hints = hints;
+    }
 
     public String getMain() {
         return main;

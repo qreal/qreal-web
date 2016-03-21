@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qreal.stepic.robots.constants.PathConstants;
 import com.qreal.stepic.robots.model.checker.TaskItem;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,54 +54,36 @@ public class TasksController {
     }
 
     @RequestMapping(value = "tasks", params = { "kit" }, method = RequestMethod.GET)
-    public ModelAndView tasksHandler(Locale locale, @RequestParam(value="kit") String kit) {
+    public ModelAndView tasksHandler(Locale locale, @RequestParam(value="kit") String kit)
+        throws IOException {
         ModelAndView modelAndView = new ModelAndView("checker/tasks");
 
         List<TaskItem> taskItems = this.parseTaskList(new File(PathConstants.STEPIC_PATH + "/list.json"));
 
         File tasksDir = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks");
         Set<String> taskIds = new HashSet<>();
-        for (File task : tasksDir.listFiles()) {
-            taskIds.add(task.getName());
-        }
+        Arrays.asList(tasksDir.listFiles()).forEach(task -> taskIds.add(task.getName()));
 
         List<TaskItem> tasks = new ArrayList();
-        for (TaskItem item : taskItems) {
-            if (taskIds.contains(item.getId())) {
-                tasks.add(item);
-            }
-        }
+        taskItems.forEach(item -> tasks.add(item));
 
         modelAndView.addObject("tasks", tasks);
-
         Map<String, String> taskNames = parseTaskNames(new File(PathConstants.STEPIC_PATH +
                 "/names_" + locale + ".json"), locale);
         modelAndView.addObject("taskNames", taskNames);
-
         modelAndView.addObject("kit", kit);
 
         return modelAndView;
     }
 
-    private List<TaskItem> parseTaskList(File file) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(file, new TypeReference<List<TaskItem>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    private List<TaskItem> parseTaskList(File file) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(file, new TypeReference<List<TaskItem>>() {});
     }
 
-    private Map<String, String> parseTaskNames(File file, Locale locale) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            Map<String, String> taskNames = objectMapper.readValue(file, Map.class);
-            return taskNames;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    private Map<String, String> parseTaskNames(File file, Locale locale) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, String> taskNames = objectMapper.readValue(file, Map.class);
+        return taskNames;
     }
 }

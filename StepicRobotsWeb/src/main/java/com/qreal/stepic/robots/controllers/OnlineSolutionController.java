@@ -18,16 +18,15 @@ package com.qreal.stepic.robots.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.qreal.stepic.robots.constants.PathConstants;
 import com.qreal.stepic.robots.converters.JavaModelConverter;
 import com.qreal.stepic.robots.converters.XmlSaveConverter;
 import com.qreal.stepic.robots.exceptions.SubmitException;
 import com.qreal.stepic.robots.loaders.TypesLoader;
 import com.qreal.stepic.robots.model.checker.Description;
+import com.qreal.stepic.robots.model.checker.SolutionInfo;
 import com.qreal.stepic.robots.model.diagram.Diagram;
 import com.qreal.stepic.robots.model.diagram.OpenResponse;
-import com.qreal.stepic.robots.model.diagram.SubmitRequest;
 import com.qreal.stepic.robots.model.diagram.SubmitResponse;
 import com.qreal.stepic.robots.translators.PropertyValueTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +39,6 @@ import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMeth
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Iterator;
 import java.util.Locale;
 
 /**
@@ -68,7 +62,7 @@ public class OnlineSolutionController extends SolutionController {
                                  @RequestParam(value="kit") String kit,
                                  @RequestParam(value="name") String name,
                                  @RequestParam(value="title") String title, Locale locale)
-            throws NoSuchRequestHandlingMethodException {
+            throws NoSuchRequestHandlingMethodException, IOException {
         if (getTypes(kit, id, locale) == null) {
             throw new NoSuchRequestHandlingMethodException(request);
         }
@@ -78,11 +72,9 @@ public class OnlineSolutionController extends SolutionController {
         modelAndView.addObject("id", id);
         modelAndView.addObject("name", name);
 
-        Description description = getDescription(kit, id, locale);
-        if (description != null) {
-            modelAndView.addObject("description", description);
-        }
-
+        Description description;
+        description = getDescription(kit, id, locale);
+        modelAndView.addObject("description", description);
         return modelAndView;
     }
 
@@ -94,21 +86,15 @@ public class OnlineSolutionController extends SolutionController {
 
     @ResponseBody
     @RequestMapping(value = "open/{id}", method = RequestMethod.POST)
-    public OpenResponse open(@PathVariable String id, @RequestParam(value="kit") String kit) {
+    public OpenResponse open(@PathVariable String id, @RequestParam(value="kit") String kit) throws Exception {
         XmlSaveConverter converter = new XmlSaveConverter();
-
-        try {
-            compressor.decompress(kit, id);
-            String fieldXML = checker.getWorldModelFromMetainfo(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
-                    "/" + id + "/" + id + "/metaInfo.xml");
-            File treeDirectory = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
-                    "/" + id + "/" + id + "/tree");
-            Diagram diagram = converter.convertToJavaModel(treeDirectory);
-            return new OpenResponse(diagram, fieldXML);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        compressor.decompress(kit, id);
+        String fieldXML = checker.getWorldModelFromMetainfo(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit +
+                "/tasks" + "/" + id + "/" + id + "/metaInfo.xml");
+        File treeDirectory = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
+                "/" + id + "/" + id + "/tree");
+        Diagram diagram = converter.convertToJavaModel(treeDirectory);
+        return new OpenResponse(diagram, fieldXML);
     }
 
     @ResponseBody
@@ -126,7 +112,7 @@ public class OnlineSolutionController extends SolutionController {
             String uuidStr = String.valueOf(javaModelConverter.convertToXmlSave(diagram, kit, id));
             compressor.compress(id, PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
                     "/" + id + "/solutions/" + uuidStr);
-            return checker.submit(kit, id, id + ".qrs", uuidStr, messageSource, locale);
+            return checker.submit(new SolutionInfo(id + ".qrs", kit, id, uuidStr), messageSource, locale);
         } catch (Exception e) {
             throw new SubmitException(messageSource.getMessage("label.commonError", null, locale));
         }

@@ -22,7 +22,6 @@ import com.qreal.stepic.robots.exceptions.UploadException;
 import com.qreal.stepic.robots.model.checker.UploadedSolution;
 import org.apache.log4j.Logger;
 import org.springframework.context.MessageSource;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -56,7 +55,7 @@ public class OfflineSolutionUploader {
 
         if (!file.isEmpty()) {
             try {
-                String directoryPath = PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" + "/" + name;
+                String directoryPath = String.format("%s/trikKit%s/tasks/%s", PathConstants.STEPIC_PATH, kit, name);
 
                 UUID uuid = UUID.randomUUID();
 
@@ -64,7 +63,7 @@ public class OfflineSolutionUploader {
                 File targetDirectory = new File(targetPath);
                 targetDirectory.mkdirs();
 
-                File serverFile = new File(targetDirectory.getAbsolutePath() + '/' + filename);
+                File serverFile = new File(String.format("%s/%s", targetDirectory.getAbsolutePath(), filename));
 
                 byte[] bytes = file.getBytes();
                 BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));

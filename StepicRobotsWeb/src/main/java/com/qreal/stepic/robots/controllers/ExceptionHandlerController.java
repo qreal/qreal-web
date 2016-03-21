@@ -17,11 +17,15 @@
 package com.qreal.stepic.robots.controllers;
 
 import com.qreal.stepic.robots.exceptions.SubmitException;
+import com.qreal.stepic.robots.exceptions.UploadException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -34,7 +38,33 @@ public class ExceptionHandlerController {
     @ExceptionHandler(SubmitException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public byte[] handleUploadException(SubmitException e) {
+    public byte[] handleSubmitException(SubmitException e) {
+        e.printStackTrace();
         return e.getMessage().getBytes(UTF_8);
     }
+
+    @ExceptionHandler(UploadException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public byte[] handleUploadException(UploadException e) {
+        e.printStackTrace();
+        return e.getMessage().getBytes(UTF_8);
+    }
+
+    @ExceptionHandler({ NoHandlerFoundException.class, NoSuchRequestHandlingMethodException.class })
+    public String handleNotFoundException(Exception e) {
+        e.printStackTrace();
+        return "errors/404";
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ModelAndView handleException(Exception e) {
+        e.printStackTrace();
+        ModelAndView modelAndView = new ModelAndView("errors/common");
+        modelAndView.addObject("message", "An error occurred. Please contact the developers.");
+        return modelAndView;
+    }
+
+
+
 }

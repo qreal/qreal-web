@@ -20,21 +20,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qreal.stepic.robots.checker.Checker;
 import com.qreal.stepic.robots.checker.Compressor;
 import com.qreal.stepic.robots.constants.PathConstants;
-import com.qreal.stepic.robots.exceptions.NotExistsException;
 import com.qreal.stepic.robots.model.checker.Description;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-import sun.security.krb5.internal.crypto.Des;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
@@ -57,7 +47,7 @@ public abstract class SolutionController {
         checker = new Checker();
     }
 
-    protected Description getDescription(String kit, String name, Locale locale) {
+    protected Description getDescription(String kit, String name, Locale locale) throws IOException {
         String descriptionPath = PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
                 "/" + name + "/description_" + locale + ".json";
         File descriptionFile = new File(descriptionPath);
@@ -66,12 +56,7 @@ public abstract class SolutionController {
                     "/" + name + "/description_ru.json");
         }
         ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.readValue(descriptionFile, Description.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return objectMapper.readValue(descriptionFile, Description.class);
     }
 
 }

@@ -33,7 +33,7 @@ public class Compressor {
     }
 
     public void decompress(String kit, String taskId) throws IOException, InterruptedException {
-        String pathToFile = PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" + "/" + taskId;
+        String pathToFile = String.format("%s/trikKit%s/tasks/%s", PathConstants.STEPIC_PATH, kit, taskId);
         File folder = new File(pathToFile);
         File diagramDirectory = new File(pathToFile + "/" + taskId);
 

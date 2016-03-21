@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qreal.stepic.robots.constants.PathConstants;
 import com.qreal.stepic.robots.exceptions.NotExistsException;
 import com.qreal.stepic.robots.exceptions.SubmitException;
+import com.qreal.stepic.robots.model.checker.SolutionInfo;
 import com.qreal.stepic.robots.model.diagram.Report;
 import com.qreal.stepic.robots.model.diagram.ReportMessage;
 import com.qreal.stepic.robots.model.diagram.SubmitResponse;
@@ -47,84 +48,16 @@ import java.util.Map;
  */
 public class Checker {
 
-    public SubmitResponse submit(String kit, String taskId, String filename, String uuidStr,
-                                        MessageSource messageSource, Locale locale) throws SubmitException {
-        String nameWithoutExt = filename.substring(0, filename.length() - 4);
+    public SubmitResponse submit(SolutionInfo solutionInfo, MessageSource messageSource, Locale locale)
+            throws SubmitException {
         try {
-            File taskFields = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" + "/" + taskId + "/fields");
-            File solutionFolder = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
-                    "/" + taskId + "/solutions/" + uuidStr);
-
-            if (taskFields.exists()) {
-                File solutionFields = new File(solutionFolder.getPath() + "/fields/" + nameWithoutExt);
-                FileUtils.copyDirectory(taskFields, solutionFields);
-            }
-
-            ProcessBuilder interpreterProcBuilder = new ProcessBuilder(PathConstants.CHECKER_PATH, filename);
-            Map<String, String> environment = interpreterProcBuilder.environment();
-
-            if (locale.equals(new Locale("en", ""))) {
-                environment.put("LANG", "en_US.utf8");
-            } else {
-                environment.put("LANG", "ru_RU.utf8");
-            }
-            interpreterProcBuilder.directory(solutionFolder);
-
-            final Process process = interpreterProcBuilder.start();
-            InputStream is = process.getInputStream();
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader bufferedReader = new BufferedReader(isr);
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                System.out.println(line);
-            }
-            process.waitFor();
-
-            String trajectoryPath;
-            Report report;
-
-            File failedField = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" + "/" + taskId +
-                    "/solutions/" + uuidStr + "/failed-field");
-            String fieldXML = null;
-            if (failedField.exists()) {
-                BufferedReader br = new BufferedReader(new FileReader(failedField));
-                String pathToFailedField = br.readLine();
-                fieldXML = new String(Files.readAllBytes(Paths.get(pathToFailedField)), StandardCharsets.UTF_8);
-                String[] pathParts = pathToFailedField.split("/");
-                String failedFilename = pathParts[pathParts.length - 1];
-                String failedName = failedFilename.substring(0, failedFilename.length() - 4);
-                trajectoryPath = PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" + "/" + taskId +
-                        "/solutions/" + uuidStr + "/trajectories/" + nameWithoutExt + "/" + failedName;
-
-                report = parseReportFile(new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks"
-                        + "/" + taskId + "/solutions/" + uuidStr + "/reports/" + nameWithoutExt + "/" + failedName),
-                        messageSource, locale);
-            } else {
-                String pathToMetainfo = PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
-                        "/" + taskId + "/" + taskId + "/metaInfo.xml";
-
-                try {
-                    fieldXML = getWorldModelFromMetainfo(pathToMetainfo);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new SubmitException(messageSource.getMessage("label.twoDModelError", null, locale));
-                }
-                trajectoryPath = PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
-                        "/" + taskId + "/solutions/" + uuidStr + "/trajectory";
-
-                report = parseReportFile(new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
-                        "/" + taskId + "/solutions/" + uuidStr + "/report"), messageSource, locale);
-            }
-
-            String trace = new String(Files.readAllBytes(Paths.get(trajectoryPath)));
-            //FileUtils.deleteDirectory(solutionFolder);
-
-            return new SubmitResponse(messageSource.getMessage("label.successUpload", null, locale),
-                    report, trace, fieldXML);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new SubmitException(messageSource.getMessage("label.checkingError", null, locale));
-        } catch (InterruptedException e) {
+            File solutionFolder = new File(String.format("%s/trikKit%s/tasks/%s/solutions/%s",
+                    PathConstants.STEPIC_PATH, solutionInfo.getKit(), solutionInfo.getTaskId(),
+                    solutionInfo.getUuidStr()));
+            prepareSolutionFolder(solutionFolder, solutionInfo);
+            runCheckerProcess(solutionInfo.getFilename(), solutionFolder, locale);
+            return handleCheckingResult(solutionInfo, messageSource, locale);
+        } catch (Exception e) {
             e.printStackTrace();
             throw new SubmitException(messageSource.getMessage("label.checkingError", null, locale));
         }
@@ -157,6 +90,78 @@ public class Checker {
             e.printStackTrace();
             throw new SubmitException(messageSource.getMessage("label.reportError", null, locale));
         }
+    }
+
+    private void prepareSolutionFolder(File solutionFolder, SolutionInfo solutionInfo)
+            throws IOException {
+        File taskFields = new File(String.format("%s/trikKit%s/tasks/%s/fields",
+                PathConstants.STEPIC_PATH, solutionInfo.getKit(), solutionInfo.getTaskId()));
+        File solutionFields = new File(String.format("%s/fields/%s",
+                solutionFolder.getPath(), solutionInfo.getFilenameWithoutExtension()));
+        FileUtils.copyDirectory(taskFields, solutionFields);
+    }
+
+    private void runCheckerProcess(String filename, File solutionFolder, Locale locale)
+            throws IOException, InterruptedException {
+        ProcessBuilder interpreterProcBuilder = new ProcessBuilder(PathConstants.CHECKER_PATH, filename);
+        Map<String, String> environment = interpreterProcBuilder.environment();
+
+        if (locale.equals(new Locale("en", ""))) {
+            environment.put("LANG", "en_US.utf8");
+        } else {
+            environment.put("LANG", "ru_RU.utf8");
+        }
+        interpreterProcBuilder.directory(solutionFolder);
+
+        final Process process = interpreterProcBuilder.start();
+        InputStream is = process.getInputStream();
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader bufferedReader = new BufferedReader(isr);
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            System.out.println(line);
+        }
+        process.waitFor();
+    }
+
+    private SubmitResponse handleCheckingResult(SolutionInfo solutionInfo, MessageSource messageSource, Locale locale)
+            throws Exception {
+        String filename = solutionInfo.getFilename();
+        String nameWithoutExtension = filename.substring(0, filename.length() - 4);
+        String kit = solutionInfo.getKit();
+        String taskId = solutionInfo.getTaskId();
+        String uuidStr = solutionInfo.getUuidStr();
+        String trajectoryPath;
+        Report report;
+        String fieldXML;
+        File failedField = new File(String.format("%s/trikKit%s/tasks/%s/solutions/%s/failed-field",
+                PathConstants.STEPIC_PATH, kit, taskId, uuidStr));
+        if (failedField.exists()) {
+            BufferedReader br = new BufferedReader(new FileReader(failedField));
+            String pathToFailedField = br.readLine();
+            fieldXML = new String(Files.readAllBytes(Paths.get(pathToFailedField)), StandardCharsets.UTF_8);
+            String[] pathParts = pathToFailedField.split("/");
+            String failedFilename = pathParts[pathParts.length - 1];
+            String failedName = failedFilename.substring(0, failedFilename.length() - 4);
+            trajectoryPath = String.format("%s/trikKit%s/tasks/%s/solutions/%s/reports/%s/%s",
+                    PathConstants.STEPIC_PATH, kit, taskId, uuidStr, nameWithoutExtension, failedName);
+            report = parseReportFile(new File(trajectoryPath), messageSource, locale);
+        } else {
+            String pathToMetainfo = String.format("%s/trikKit%s/tasks/%s/%s/metaInfo.xml",
+                    PathConstants.STEPIC_PATH, kit, taskId, taskId);
+
+            fieldXML = getWorldModelFromMetainfo(pathToMetainfo);
+            trajectoryPath = String.format("%s/trikKit%s/tasks/%s/solutions/%s/trajectory",
+                    PathConstants.STEPIC_PATH, kit, taskId, uuidStr);
+
+            report = parseReportFile(new File(String.format("%s/trikKit%s/tasks/%s/solutions/%s/report",
+                    PathConstants.STEPIC_PATH, kit, taskId, uuidStr)), messageSource, locale);
+        }
+
+        String trace = new String(Files.readAllBytes(Paths.get(trajectoryPath)));
+
+        return new SubmitResponse(messageSource.getMessage("label.successUpload", null, locale),
+                report, trace, fieldXML);
     }
 
 }

@@ -18,9 +18,11 @@ package com.qreal.stepic.robots.controllers;
 
 import com.qreal.stepic.robots.checker.OfflineSolutionUploader;
 import com.qreal.stepic.robots.constants.PathConstants;
+import com.qreal.stepic.robots.exceptions.NotExistsException;
 import com.qreal.stepic.robots.exceptions.SubmitException;
 import com.qreal.stepic.robots.exceptions.UploadException;
 import com.qreal.stepic.robots.model.checker.Description;
+import com.qreal.stepic.robots.model.checker.SolutionInfo;
 import com.qreal.stepic.robots.model.checker.UploadedSolution;
 import com.qreal.stepic.robots.model.diagram.SubmitResponse;
 import org.apache.commons.io.IOUtils;
@@ -56,26 +58,13 @@ public class OfflineSolutionController extends SolutionController implements Han
         offlineSolutionUploader = new OfflineSolutionUploader();
     }
 
-    @ExceptionHandler(UploadException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public byte[] handleUploadException(UploadException e) {
-        return e.getMessage().getBytes(UTF_8);
-    }
-
     @RequestMapping(value = "{id}", params = { "kit", "name", "title"}, method = RequestMethod.GET)
     public ModelAndView showTask(HttpServletRequest request, @PathVariable String id,
                                  @RequestParam(value="kit") String kit,
                                  @RequestParam(value="name") String name,
-                                 @RequestParam(value="title") String title, Locale locale) {
-        try {
-            compressor.decompress(kit, id);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        } catch (InterruptedException ie) {
-            ie.printStackTrace();
-        }
-
+                                 @RequestParam(value="title") String title, Locale locale)
+            throws IOException, InterruptedException {
+        compressor.decompress(kit, id);
         ModelAndView modelAndView = new ModelAndView("checker/offlineSolution");
         modelAndView.addObject("title", title);
         modelAndView.addObject("id", id);
@@ -83,9 +72,7 @@ public class OfflineSolutionController extends SolutionController implements Han
         modelAndView.addObject("kit", kit);
 
         Description description = getDescription(kit, id, locale);
-        if (description != null) {
-            modelAndView.addObject("description", description);
-        }
+        modelAndView.addObject("description", description);
 
         return modelAndView;
     }
@@ -95,22 +82,19 @@ public class OfflineSolutionController extends SolutionController implements Han
     @ResponseBody
     void downloadFiles(HttpServletRequest request, HttpServletResponse response, @PathVariable String id,
                        @RequestParam(value="kit") String kit,
-                       @RequestParam(value = "title") String title) {
+                       @RequestParam(value = "title") String title) throws IOException {
         File downloadFile = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
                 "/" + id + "/" + id + ".qrs");
-        try (FileInputStream inputStream = new FileInputStream(downloadFile);
-             OutputStream outStream = response.getOutputStream()) {
-            response.setContentLength((int) downloadFile.length());
-            response.setContentType("application/octet-stream");
+        FileInputStream inputStream = new FileInputStream(downloadFile);
+        OutputStream outStream = response.getOutputStream();
+        response.setContentLength((int) downloadFile.length());
+        response.setContentType("application/octet-stream");
 
-            String headerKey = "Content-Disposition";
-            String headerValue = String.format("attachment; filename=\"%s-%s\"", title, downloadFile.getName());
-            response.setHeader(headerKey, headerValue);
+        String headerKey = "Content-Disposition";
+        String headerValue = String.format("attachment; filename=\"%s-%s\"", title, downloadFile.getName());
+        response.setHeader(headerKey, headerValue);
 
-            IOUtils.copy(inputStream, outStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        IOUtils.copy(inputStream, outStream);
     }
 
     @ResponseBody
@@ -120,9 +104,8 @@ public class OfflineSolutionController extends SolutionController implements Han
                                            @RequestParam(value="kit") String kit,
                                            Locale locale) throws UploadException, SubmitException {
         UploadedSolution uploadedSolution = offlineSolutionUploader.upload(request, kit, id, messageSource, locale);
-        return checker.submit(kit, id, uploadedSolution.getFilename(), String.valueOf(uploadedSolution.getUuid()),
-                messageSource, locale);
-
+        return checker.submit(new SolutionInfo(uploadedSolution.getFilename(), kit, id,
+                String.valueOf(uploadedSolution.getUuid())), messageSource, locale);
     }
 
     @Override

@@ -18,6 +18,8 @@ package com.qreal.robots.controller;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 /**
  * Created by vladzx on 23.06.15.
@@ -25,8 +27,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionHandlerController {
 
-    @ExceptionHandler(Exception.class)
-    public String handleException(Exception e) {
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public String handleNotFoundException(Exception e) {
         return "errors/404";
     }
+
+    @ExceptionHandler(Exception.class)
+    public ModelAndView handleException(Exception e) {
+        ModelAndView modelAndView = new ModelAndView("errors/common");
+        modelAndView.addObject("message", e.getMessage());
+        return modelAndView;
+    }
+
 }
