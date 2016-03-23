@@ -146,13 +146,7 @@
             <version>3.0.5</version>
         </dependency>
 
-        <!-- Utilities --> 
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>18.0</version>
-        </dependency>
-
+        <!-- Utilities -->
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>

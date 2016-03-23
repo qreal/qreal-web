@@ -16,9 +16,7 @@
 
 package com.qreal.stepic.robots.converters;
 
-import com.qreal.stepic.robots.model.diagram.Diagram;
-import com.qreal.stepic.robots.model.diagram.DiagramNode;
-import com.qreal.stepic.robots.model.diagram.Property;
+import com.qreal.stepic.robots.model.diagram.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -27,197 +25,166 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by vladimir-zakharov on 25.04.15.
  */
 public class XmlSaveConverter {
 
-    private Map<String, DiagramNode> nodesMap;
-    private Map<String, DiagramNode> linksMap;
     private DocumentBuilder builder;
 
-    public XmlSaveConverter() {
-        nodesMap = new HashMap<>();
-        linksMap = new HashMap<>();
+    public XmlSaveConverter() throws ParserConfigurationException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setIgnoringElementContentWhitespace(true);
+        builder = factory.newDocumentBuilder();
     }
 
-    public Diagram convertToJavaModel(File folder) {
-        try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setIgnoringElementContentWhitespace(true);
-            builder = factory.newDocumentBuilder();
+    public Diagram convertToJavaModel(File folder) throws Exception {
+        Map<String, ElementGraphicalPart> graphicalPartsMap = new HashMap<>();
+        Map<String, ElementLogicalPart> logicalPartsMap = new HashMap<>();
 
-            File robotDiagramNodeFolder = new File(folder.getPath() +
-                    "/graphical/RobotsMetamodel/RobotsDiagram/RobotsDiagramNode");
-            File robotDiagramNodeFile = robotDiagramNodeFolder.listFiles()[0];
-            Set<String> robotDiagramNodeChilds = getNodeChilds(robotDiagramNodeFile);
-            convertRobotDiagramNode(robotDiagramNodeFile);
+        File graphicalFolder = new File(folder.getPath() + "/graphical");
+        graphicalPartsMap.putAll(convertGraphicalModel(graphicalFolder));
 
-            File subprogramDiagramsFolder = new File(folder.getPath() +
-                    "/logical/RobotsMetamodel/RobotsDiagram/SubprogramDiagram");
-            if (subprogramDiagramsFolder.exists()) {
-                convertSubprogramDiagrams(subprogramDiagramsFolder);
-            }
+        File logicalFolder = new File(folder.getPath() + "/logical");
+        logicalPartsMap.putAll(convertLogicalModel(logicalFolder));
 
-            File graphicalFolder = new File(folder.getPath() + "/graphical");
+        File robotDiagramNodeFolder = new File(folder.getPath() +
+                "/graphical/RobotsMetamodel/RobotsDiagram/RobotsDiagramNode");
+        File robotDiagramNodeFile = robotDiagramNodeFolder.listFiles()[0];
+        Set<String> robotDiagramNodeChildGraphicalIds = getNodeChildIds(robotDiagramNodeFile);
 
-            for (final File fileEntry : graphicalFolder.listFiles()) {
-                convertGraphicalModel(fileEntry, robotDiagramNodeChilds);
-            }
+        graphicalPartsMap = graphicalPartsMap.entrySet()
+                .stream()
+                .filter(entry -> robotDiagramNodeChildGraphicalIds.contains(entry.getValue().getId()))
+                .collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
 
-            File logicalFolder = new File(folder.getPath() + "/logical");
+        ElementGraphicalPart robotDiagramNodeGraphicalPart = convertRobotDiagramNodeGraphicalPart(robotDiagramNodeFile);
+        graphicalPartsMap.put(robotDiagramNodeGraphicalPart.getLogicalId(), robotDiagramNodeGraphicalPart);
 
-            for (final File fileEntry : logicalFolder.listFiles()) {
-                convertLogicalModel(fileEntry);
-            }
+        logicalPartsMap.keySet().retainAll(graphicalPartsMap.keySet());
 
-            return new Diagram(new HashSet<>(nodesMap.values()), new HashSet<>(linksMap.values()));
-        } catch (Exception e) {
-            e.printStackTrace();
+        Diagram diagram = buildDiagramFromMaps(graphicalPartsMap, logicalPartsMap);
+
+        Set<DiagramElement> additionalNodes = new HashSet<>();
+
+        File subprogramDiagramsFolder = new File(folder.getPath() +
+                "/logical/RobotsMetamodel/RobotsDiagram/SubprogramDiagram");
+        if (subprogramDiagramsFolder.exists()) {
+            Map<String, ElementLogicalPart> subprogramDiagramLogicalPartsMap =
+                    convertSubprogramDiagramLogicalParts(subprogramDiagramsFolder);
+            subprogramDiagramLogicalPartsMap.entrySet().forEach(entry ->
+                    additionalNodes.add(buildElementFromLogicalPart(entry.getValue())));
         }
-        return null;
+
+        diagram.addNodes(additionalNodes);
+
+        return diagram;
     }
 
-    private void convertRobotDiagramNode(File robotDiagramNodeFile) throws SAXException, IOException {
+    private ElementGraphicalPart convertRobotDiagramNodeGraphicalPart(File robotDiagramNodeFile)
+            throws SAXException, IOException {
         Document doc = builder.parse(robotDiagramNodeFile);
         Element element = doc.getDocumentElement();
-        convertGraphicalPart(element);
+        return convertGraphicalPart(element);
     }
 
-    private void convertSubprogramDiagrams(File subprogramDiagramsFolder) throws SAXException, IOException {
+    private Map<String, ElementLogicalPart> convertSubprogramDiagramLogicalParts(File subprogramDiagramsFolder)
+            throws SAXException, IOException {
+        Map<String, ElementLogicalPart> logicalPartsMap = new HashMap<>();
         for (final File subprogramDiagramFile : subprogramDiagramsFolder.listFiles()) {
             Document doc = builder.parse(subprogramDiagramFile);
             Element element = doc.getDocumentElement();
-            convertLogicalPart(element);
+            ElementLogicalPart logicalPart = convertLogicalPart(element);
+            logicalPartsMap.put(logicalPart.getId(), logicalPart);
         }
+        return logicalPartsMap;
     }
 
-    private void convertGraphicalModel(final File folder, final Set<String> robotDiagramNodeChilds) {
-
+    private Map<String, ElementGraphicalPart> convertGraphicalModel(final File folder)
+            throws SAXException, IOException {
+        Map<String, ElementGraphicalPart> graphicalPartsMap = new HashMap<>();
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
-                convertGraphicalModel(fileEntry, robotDiagramNodeChilds);
+                graphicalPartsMap.putAll(convertGraphicalModel(fileEntry));
             } else {
-                try {
-                    Document doc = builder.parse(fileEntry);
-                    Element element = doc.getDocumentElement();
+                Document doc = builder.parse(fileEntry);
+                Element element = doc.getDocumentElement();
 
-                    if (element.hasAttribute("logicalId") && element.getAttribute("logicalId") != "qrm:/") {
-                        String id = element.getAttribute("id");
-                        if (robotDiagramNodeChilds.contains(id)) {
-                            convertGraphicalPart(element);
-                        }
-                    }
-                } catch (SAXException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (element.hasAttribute("logicalId") && element.getAttribute("logicalId") != "qrm:/") {
+                    ElementGraphicalPart graphicalPart = convertGraphicalPart(element);
+                    graphicalPartsMap.put(graphicalPart.getLogicalId(), graphicalPart);
                 }
             }
         }
+        return graphicalPartsMap;
     }
 
-    private void convertLogicalModel(final File folder) {
-
+    private Map<String, ElementLogicalPart> convertLogicalModel(final File folder) throws SAXException, IOException {
+        Map<String, ElementLogicalPart> logicalPartsMap = new HashMap<>();
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
-                convertLogicalModel(fileEntry);
+                logicalPartsMap.putAll(convertLogicalModel(fileEntry));
             } else {
-                try {
-                    Document doc = builder.parse(fileEntry);
-                    Element element = doc.getDocumentElement();
-
-                    String idAttr = element.getAttribute("id");
-                    String parts[] = idAttr.split("/");
-                    String id = getId(parts[parts.length - 1]);
-
-                    if (nodesMap.containsKey(id) || linksMap.containsKey(id)) {
-                        convertLogicalPart(element);
-                    }
-                } catch (SAXException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Document doc = builder.parse(fileEntry);
+                Element element = doc.getDocumentElement();
+                ElementLogicalPart logicalPart = convertLogicalPart(element);
+                logicalPartsMap.put(logicalPart.getId(), logicalPart);
             }
         }
+        return logicalPartsMap;
     }
 
-    private Set<String> getNodeChilds(final File node) {
-        Set<String> childs = new HashSet<>();
-        try {
-            Document doc = builder.parse(node);
-            Element children = (Element) doc.getElementsByTagName("children").item(0);
-            NodeList childList = children.getElementsByTagName("object");
+    private Set<String> getNodeChildIds(final File node) throws SAXException, IOException {
+        Set<String> children = new HashSet<>();
+        Document doc = builder.parse(node);
+        Element childrenElement = (Element) doc.getElementsByTagName("children").item(0);
+        NodeList childList = childrenElement.getElementsByTagName("object");
 
-            for (int i = 0; i < childList.getLength(); i++) {
-                Element child = (Element) childList.item(i);
-                childs.add(child.getAttribute("id"));
-            }
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (int i = 0; i < childList.getLength(); i++) {
+            Element child = (Element) childList.item(i);
+            String idParts[] = child.getAttribute("id").split("/");
+            children.add(removeBraces(idParts[idParts.length - 1]));
         }
-        return childs;
+        return children;
     }
 
-    private void convertLogicalPart(Element element) {
+    private ElementLogicalPart convertLogicalPart(Element element) {
         String logicalIdAttr = element.getAttribute("id");
         String parts[] = logicalIdAttr.split("/");
 
-        String logicalId = getId(parts[parts.length - 1]);
+        String logicalId = removeBraces(parts[parts.length - 1]);
         String type = parts[parts.length - 2];
 
-        putNode(type, logicalId);
-
-        DiagramNode node;
-        if (type.equals("ControlFlow")) {
-            node = linksMap.get(logicalId);
-        } else {
-            node = nodesMap.get(logicalId);
-        }
-
-        node.setLogicalId(logicalId);
-        node.setType(type);
 
         Element propertiesElement = (Element) element.getElementsByTagName("properties").item(0);
-        node.setLogicalProperties(convertProperties(propertiesElement));
-
+        Set<Property> properties = convertProperties(propertiesElement);
+        return new ElementLogicalPart(logicalId, type, properties);
     }
 
-    private void convertGraphicalPart(Element element) {
+    private ElementGraphicalPart convertGraphicalPart(Element element) {
         String logicalIdAttr = element.getAttribute("logicalId");
         String logicalIdParts[] = logicalIdAttr.split("/");
 
-        String logicalId = getId(logicalIdParts[logicalIdParts.length - 1]);
+        String logicalId = removeBraces(logicalIdParts[logicalIdParts.length - 1]);
         String type = logicalIdParts[logicalIdParts.length - 2];
-
-        putNode(type, logicalId);
-
-        DiagramNode node;
-        if (type.equals("ControlFlow")) {
-            node = linksMap.get(logicalId);
-        } else {
-            node = nodesMap.get(logicalId);
-        }
 
         String graphicalIdAttr = element.getAttribute("id");
         String graphicalIdParts[] = graphicalIdAttr.split("/");
 
-        String graphicalId = getId(graphicalIdParts[graphicalIdParts.length - 1]);
-
-        node.setGraphicalId(graphicalId);
+        String graphicalId = removeBraces(graphicalIdParts[graphicalIdParts.length - 1]);
 
         Element propertiesElement = (Element) element.getElementsByTagName("properties").item(0);
-        node.setGraphicalProperties(convertProperties(propertiesElement));
+        Set<Property> properties = convertProperties(propertiesElement);
+        return new ElementGraphicalPart(graphicalId, logicalId, type, properties);
     }
 
     private Set<Property> convertProperties(Element propertiesElement) {
@@ -236,19 +203,32 @@ public class XmlSaveConverter {
         return properties;
     }
 
-    private void putNode(String type, String id) {
-        Map<String, DiagramNode> map;
-        if (type.equals("ControlFlow")) {
-            map = linksMap;
-        } else {
-            map = nodesMap;
-        }
-        if (!map.containsKey(id)) {
-            map.put(id, new DiagramNode());
-        }
+    private Diagram buildDiagramFromMaps(Map<String, ElementGraphicalPart> graphicalPartsMap,
+                                         Map<String, ElementLogicalPart> logicalPartsMap) {
+        Set<DiagramElement> nodes = new HashSet<>();
+        Set<DiagramElement> links = new HashSet<>();
+        graphicalPartsMap.forEach((key, graphicalPart) -> {
+            DiagramElement diagramElement;
+            if (logicalPartsMap.containsKey(key)) {
+                ElementLogicalPart logicalPart = logicalPartsMap.get(key);
+                diagramElement = new DiagramElement(logicalPart.getId(), graphicalPart.getId(),
+                        logicalPart.getType(), logicalPart.getProperties(), graphicalPart.getProperties());
+                if (logicalPart.getType().equals("ControlFlow")) {
+                    links.add(diagramElement);
+                } else {
+                    nodes.add(diagramElement);
+                }
+            }
+        });
+        return new Diagram(nodes, links);
     }
 
-    private String getId(String idString) {
+    private DiagramElement buildElementFromLogicalPart(ElementLogicalPart logicalPart) {
+       return new DiagramElement(logicalPart.getId(), logicalPart.getType(),
+                logicalPart.getProperties());
+    }
+
+    private String removeBraces(String idString) {
         String pattern = "\\{(.*)\\}";
         return idString.replaceAll(pattern, "$1");
     }

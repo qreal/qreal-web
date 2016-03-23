@@ -48,12 +48,12 @@ public abstract class SolutionController {
     }
 
     protected Description getDescription(String kit, String name, Locale locale) throws IOException {
-        String descriptionPath = PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
-                "/" + name + "/description_" + locale + ".json";
+        String descriptionPath = String.format("%s/trikKit%s/tasks/%s/description_%s.json",
+                PathConstants.STEPIC_PATH, kit, name, locale);
         File descriptionFile = new File(descriptionPath);
         if (!descriptionFile.exists()) {
-            descriptionFile = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
-                    "/" + name + "/description_ru.json");
+            descriptionFile = new File(String.format("%s/trikKit%s/tasks/%s/description_ru.json",
+                    PathConstants.STEPIC_PATH, kit, name));
         }
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(descriptionFile, Description.class);

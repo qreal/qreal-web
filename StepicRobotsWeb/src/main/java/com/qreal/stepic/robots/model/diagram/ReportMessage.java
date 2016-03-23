@@ -23,6 +23,9 @@ import java.io.Serializable;
  */
 public class ReportMessage implements Serializable {
 
+    private String level;
+    private String message;
+
     public String getLevel() {
         return level;
     }
@@ -39,6 +42,4 @@ public class ReportMessage implements Serializable {
         this.message = message;
     }
 
-    private String level;
-    private String message;
 }

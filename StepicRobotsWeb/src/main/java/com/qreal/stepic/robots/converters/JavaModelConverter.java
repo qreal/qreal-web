@@ -18,7 +18,7 @@ package com.qreal.stepic.robots.converters;
 
 import com.qreal.stepic.robots.constants.PathConstants;
 import com.qreal.stepic.robots.model.diagram.Diagram;
-import com.qreal.stepic.robots.model.diagram.DiagramNode;
+import com.qreal.stepic.robots.model.diagram.DiagramElement;
 import com.qreal.stepic.robots.model.diagram.IdObject;
 import com.qreal.stepic.robots.model.diagram.Property;
 import org.apache.commons.io.FileUtils;
@@ -68,11 +68,11 @@ public class JavaModelConverter {
             Transformer transformer = transformerFactory.newTransformer();
             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 
-            for (DiagramNode node : diagram.getNodes()) {
+            for (DiagramElement node : diagram.getNodes()) {
                 convertElement(node, targetPath, documentBuilder, transformer);
             }
 
-            for (DiagramNode link : diagram.getLinks()) {
+            for (DiagramElement link : diagram.getLinks()) {
                 convertElement(link, targetPath, documentBuilder, transformer);
             }
 
@@ -219,8 +219,8 @@ public class JavaModelConverter {
         }
     }
 
-    private void convertElement(DiagramNode element, String targetPath,
-                                       DocumentBuilder documentBuilder, Transformer transformer) {
+    private void convertElement(DiagramElement element, String targetPath,
+                                DocumentBuilder documentBuilder, Transformer transformer) {
         try {
             String logicalXmlTargetPath = targetPath + PathConstants.PATH_TO_LOGICAL_PART + "/" + element.getType();
             File logicalXmlTargetDirectory = new File(logicalXmlTargetPath);
@@ -267,7 +267,7 @@ public class JavaModelConverter {
         }
     }
 
-    private Document convertNodeLogicalPart(DocumentBuilder documentBuilder, DiagramNode node) {
+    private Document convertNodeLogicalPart(DocumentBuilder documentBuilder, DiagramElement node) {
         Document logicalXML = documentBuilder.newDocument();
         Element rootElement = logicalXML.createElement("object");
         rootElement.setAttribute("id", String.format("qrm:/RobotsMetamodel/RobotsDiagram/%s/{%s}",
@@ -312,7 +312,7 @@ public class JavaModelConverter {
         return logicalXML;
     }
 
-    private Document convertNodeGraphicalPart(DocumentBuilder documentBuilder, DiagramNode node) {
+    private Document convertNodeGraphicalPart(DocumentBuilder documentBuilder, DiagramElement node) {
         Document graphicalXML = documentBuilder.newDocument();
         Element rootElement = graphicalXML.createElement("object");
         rootElement.setAttribute("id", String.format("qrm:/RobotsMetamodel/RobotsDiagram/%s/{%s}",
@@ -357,7 +357,7 @@ public class JavaModelConverter {
         return graphicalXML;
     }
 
-    private Document convertLinkLogicalPart(DocumentBuilder documentBuilder, DiagramNode node) {
+    private Document convertLinkLogicalPart(DocumentBuilder documentBuilder, DiagramElement node) {
         Document logicalXML = documentBuilder.newDocument();
         Element rootElement = logicalXML.createElement("object");
         rootElement.setAttribute("id", String.format("qrm:/RobotsMetamodel/RobotsDiagram/%s/{%s}",
@@ -394,7 +394,7 @@ public class JavaModelConverter {
         return logicalXML;
     }
 
-    private Document convertLinkGraphicalPart(DocumentBuilder documentBuilder, DiagramNode node) {
+    private Document convertLinkGraphicalPart(DocumentBuilder documentBuilder, DiagramElement node) {
         Document graphicalXML = documentBuilder.newDocument();
         Element rootElement = graphicalXML.createElement("object");
         rootElement.setAttribute("id", String.format("qrm:/RobotsMetamodel/RobotsDiagram/%s/{%s}",

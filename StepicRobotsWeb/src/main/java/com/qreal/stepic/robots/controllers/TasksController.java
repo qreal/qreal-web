@@ -60,7 +60,7 @@ public class TasksController {
 
         List<TaskItem> taskItems = this.parseTaskList(new File(PathConstants.STEPIC_PATH + "/list.json"));
 
-        File tasksDir = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks");
+        File tasksDir = new File(String.format("%s/trikKit%s/tasks", PathConstants.STEPIC_PATH, kit));
         Set<String> taskIds = new HashSet<>();
         Arrays.asList(tasksDir.listFiles()).forEach(task -> taskIds.add(task.getName()));
 
@@ -68,8 +68,8 @@ public class TasksController {
         taskItems.forEach(item -> tasks.add(item));
 
         modelAndView.addObject("tasks", tasks);
-        Map<String, String> taskNames = parseTaskNames(new File(PathConstants.STEPIC_PATH +
-                "/names_" + locale + ".json"), locale);
+        Map<String, String> taskNames = parseTaskNames(new File(String.format("%s/names_%s.json",
+                PathConstants.STEPIC_PATH, locale)), locale);
         modelAndView.addObject("taskNames", taskNames);
         modelAndView.addObject("kit", kit);
 

@@ -43,10 +43,10 @@ public class TypesLoader {
         try {
             ObjectNode resultTasksTypes = mapper.createObjectNode();
 
-            JsonNode tasksTypes =  mapper.readTree(new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
-                    "/" + name + "/typesList.json"));
-            JsonNode allTypes = mapper.readTree(new File(PathConstants.STEPIC_PATH + "/" +
-                    "trikKit" + kit + "/" + "elementsTypes_" + locale + ".json"));
+            JsonNode tasksTypes =  mapper.readTree(new File(String.format("%s/trikKit%s/tasks/%s/typesList.json",
+                    PathConstants.STEPIC_PATH, kit, name)));
+            JsonNode allTypes = mapper.readTree(new File(String.format("%s/trikKit%s/elementsTypes_%s.json",
+                    PathConstants.STEPIC_PATH, kit, locale)));
 
             resultTasksTypes.set("elements", getElementsTypes(tasksTypes, allTypes));
             resultTasksTypes.set("blocks", getBlocksTypes(tasksTypes, allTypes));
@@ -81,19 +81,14 @@ public class TypesLoader {
 
     private ObjectNode getPaletteTypes(JsonNode taskBlocksTypes, JsonNode allBlocksTypes, JsonNode categoriesNames) {
         ObjectNode resultPaletteNode = mapper.createObjectNode();
-
         JsonNode taskPaletteTypes = taskBlocksTypes.path("palette");
-
         Iterator<Map.Entry<String, JsonNode>> categoriesIterator = taskPaletteTypes.fields();
 
         while (categoriesIterator.hasNext()) {
             Map.Entry<String, JsonNode> entry = categoriesIterator.next();
             String category = entry.getKey();
-
             JsonNode taskCategoryNode = taskPaletteTypes.path(category);
-
             ArrayNode categoryArray = getObjectsWithTypes(taskCategoryNode, allBlocksTypes);
-
             resultPaletteNode.set(categoriesNames.get(category).textValue(), categoryArray);
         }
 

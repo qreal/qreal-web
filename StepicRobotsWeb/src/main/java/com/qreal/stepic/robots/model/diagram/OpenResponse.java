@@ -23,6 +23,9 @@ import java.io.Serializable;
  */
 public class OpenResponse implements Serializable {
 
+    private Diagram diagram;
+    private String fieldXML;
+
     public OpenResponse(Diagram diagram, String fieldXML) {
         this.diagram = diagram;
         this.fieldXML = fieldXML;
@@ -44,6 +47,4 @@ public class OpenResponse implements Serializable {
         this.fieldXML = fieldXML;
     }
 
-    private Diagram diagram;
-    private String fieldXML;
 }

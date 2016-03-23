@@ -23,6 +23,10 @@ import java.io.Serializable;
  */
 public class SubmitRequest implements Serializable {
 
+    private String id;
+    private String kit;
+    private Diagram diagram;
+
     public String getId() {
         return id;
     }
@@ -47,7 +51,4 @@ public class SubmitRequest implements Serializable {
         this.diagram = diagram;
     }
 
-    private String id;
-    private String kit;
-    private Diagram diagram;
 }

@@ -27,28 +27,37 @@ import java.util.Set;
  */
 public class Diagram implements Serializable {
 
+    private Set<DiagramElement> nodes;
+    private Set<DiagramElement> links;
+
     @JsonCreator
-    public Diagram(@JsonProperty("nodes") Set<DiagramNode> nodes, @JsonProperty("links") Set<DiagramNode> links) {
+    public Diagram(@JsonProperty("nodes") Set<DiagramElement> nodes, @JsonProperty("links") Set<DiagramElement> links) {
         this.nodes = nodes;
         this.links = links;
     }
 
-    public Set<DiagramNode> getNodes() {
+    public Set<DiagramElement> getNodes() {
         return nodes;
     }
 
-    public void setNodes(Set<DiagramNode> nodes) {
+    public void setNodes(Set<DiagramElement> nodes) {
         this.nodes = nodes;
     }
 
-    public Set<DiagramNode> getLinks() {
+    public Set<DiagramElement> getLinks() {
         return links;
     }
 
-    public void setLinks(Set<DiagramNode> links) {
+    public void setLinks(Set<DiagramElement> links) {
         this.links = links;
     }
 
-    private Set<DiagramNode> nodes;
-    private Set<DiagramNode> links;
+    public void addNodes(Set<DiagramElement> nodes) {
+        this.nodes.addAll(nodes);
+    }
+
+    public void addLinks(Set<DiagramElement> links) {
+        this.links.addAll(links);
+    }
+
 }

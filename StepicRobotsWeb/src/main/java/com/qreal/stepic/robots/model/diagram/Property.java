@@ -26,6 +26,10 @@ import java.io.Serializable;
  */
 public class Property implements Serializable {
 
+    private String name;
+    private String value;
+    private String type;
+
     @JsonCreator
     public Property(@JsonProperty("name") String name,
                     @JsonProperty("value") String value,
@@ -59,7 +63,4 @@ public class Property implements Serializable {
         this.type = type;
     }
 
-    private String name;
-    private String value;
-    private String type;
 }

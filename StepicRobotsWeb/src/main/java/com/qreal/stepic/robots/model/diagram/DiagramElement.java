@@ -22,7 +22,37 @@ import java.util.Set;
 /**
  * Created by vladimir-zakharov on 31.10.14.
  */
-public class DiagramNode implements Serializable {
+public class DiagramElement implements Serializable {
+
+    private String logicalId;
+    private String graphicalId;
+    private String graphicalParent;
+    private String type;
+    private Set<IdObject> logicalChildren;
+    private Set<IdObject> graphicalChildren;
+    private Set<IdObject> logicalLinksIds;
+    private Set<IdObject> graphicalLinksIds;
+    private Set<Property> logicalProperties;
+    private Set<Property> graphicalProperties;
+    private Set<IdObject> incomingExplosions;
+
+    public DiagramElement() {
+    }
+
+    public DiagramElement(String logicalId, String type, Set<Property> logicalProperties) {
+        this.logicalId = logicalId;
+        this.type = type;
+        this.logicalProperties = logicalProperties;
+    }
+
+    public DiagramElement(String logicalId, String graphicalId, String type,
+                          Set<Property> logicalProperties, Set<Property> graphicalProperties) {
+        this.logicalId = logicalId;
+        this.graphicalId = graphicalId;
+        this.type = type;
+        this.logicalProperties = logicalProperties;
+        this.graphicalProperties = graphicalProperties;
+    }
 
     public String getLogicalId() {
         return logicalId;
@@ -111,17 +141,5 @@ public class DiagramNode implements Serializable {
     public void setIncomingExplosions(Set<IdObject> incomingExplosions) {
         this.incomingExplosions = incomingExplosions;
     }
-
-    private String logicalId;
-    private String graphicalId;
-    private String graphicalParent;
-    private String type;
-    private Set<IdObject> logicalChildren;
-    private Set<IdObject> graphicalChildren;
-    private Set<IdObject> logicalLinksIds;
-    private Set<IdObject> graphicalLinksIds;
-    private Set<Property> logicalProperties;
-    private Set<Property> graphicalProperties;
-    private Set<IdObject> incomingExplosions;
 
 }

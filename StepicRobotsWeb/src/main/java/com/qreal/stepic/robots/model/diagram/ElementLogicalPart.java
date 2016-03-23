@@ -16,20 +16,33 @@
 
 package com.qreal.stepic.robots.model.diagram;
 
-import java.io.Serializable;
+import java.util.Set;
 
 /**
- * Created by vladimir-zakharov on 01.06.15.
+ * Created by vladimir-zakharov on 21.03.16.
  */
-public class IdObject implements Serializable {
+public class ElementLogicalPart {
 
     private String id;
+    private String type;
+    private Set<Property> properties;
+
+    public ElementLogicalPart(String id, String type, Set<Property> properties) {
+        this.id = id;
+        this.type = type;
+        this.properties = properties;
+    }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getType() {
+        return type;
     }
+
+    public Set<Property> getProperties() {
+        return properties;
+    }
+
 }

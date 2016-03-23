@@ -16,7 +16,7 @@
 
 package com.qreal.stepic.robots.translators;
 
-import com.qreal.stepic.robots.model.diagram.DiagramNode;
+import com.qreal.stepic.robots.model.diagram.DiagramElement;
 import com.qreal.stepic.robots.model.diagram.Property;
 
 import java.util.Locale;
@@ -27,10 +27,10 @@ import java.util.Set;
  */
 public class PropertyValueTranslator {
 
-    public void translateAllPropertiesValue(Set<DiagramNode> nodes, Locale locale) {
+    public void translateAllPropertiesValue(Set<DiagramElement> nodes, Locale locale) {
         TranslatorFactory factory = new TranslatorFactory();
         Translator translator = factory.createTranslator(locale);
-        for (DiagramNode node : nodes) {
+        for (DiagramElement node : nodes) {
             translatePropertiesValue(node.getLogicalProperties(), translator);
         }
     }

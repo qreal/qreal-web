@@ -24,6 +24,8 @@ import java.util.List;
  */
 public class Report implements Serializable {
 
+    private List<ReportMessage> messages;
+
     public Report(List<ReportMessage> messages) {
         this.messages = messages;
     }
@@ -36,5 +38,4 @@ public class Report implements Serializable {
         this.messages = messages;
     }
 
-    private List<ReportMessage> messages;
 }
