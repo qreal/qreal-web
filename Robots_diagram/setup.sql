@@ -20,7 +20,7 @@ CREATE TABLE users (
 
 CREATE TABLE folders (
   folder_id        BIGINT      NOT NULL AUTO_INCREMENT,
-  folder_name      VARCHAR(50) NOT NULL,
+  folder_name      VARCHAR(255) NOT NULL,
   username         VARCHAR(45) NOT NULL,
   folder_parent_id BIGINT,
   PRIMARY KEY (folder_id),
@@ -29,51 +29,45 @@ CREATE TABLE folders (
 
 CREATE TABLE diagrams (
   diagram_id BIGINT      NOT NULL AUTO_INCREMENT,
-  name       VARCHAR(50) NOT NULL,
+  name       VARCHAR(255) NOT NULL,
   folder_id  BIGINT      DEFAULT NULL,
   PRIMARY KEY (diagram_id),
   FOREIGN KEY (folder_id) REFERENCES folders (folder_id)
 );
 
 CREATE TABLE nodes (
-  logical_id          VARCHAR(50)  NOT NULL,
+  logical_id          VARCHAR(255)  NOT NULL,
   graphical_id        VARCHAR(50)  NOT NULL,
-  type       VARCHAR(50)  NOT NULL,
-  x          DOUBLE       NOT NULL,
-  y          DOUBLE       NOT NULL,
-  diagram_id BIGINT,
+  type                VARCHAR(50)  NOT NULL,
+  diagram_id          BIGINT,
   PRIMARY KEY (logical_id),
   FOREIGN KEY (diagram_id) REFERENCES diagrams (diagram_id)
 );
 
 CREATE TABLE links (
-  logical_id          VARCHAR(50)  NOT NULL,
+  logical_id          VARCHAR(255)  NOT NULL,
   graphical_id        VARCHAR(50)  NOT NULL,
-  source     VARCHAR(50) NOT NULL,
-  target     VARCHAR(50) NOT NULL,
-  diagram_id BIGINT,
+  diagram_id          BIGINT,
   PRIMARY KEY (logical_id),
   FOREIGN KEY (diagram_id) REFERENCES diagrams (diagram_id)
 );
 
 CREATE TABLE node_properties (
-  property_id VARCHAR(50) NOT NULL,
+  property_id VARCHAR(255) NOT NULL,
   name        VARCHAR(50) NOT NULL,
-  value       VARCHAR(50) NOT NULL,
+  value       VARCHAR(255) NOT NULL,
   type        VARCHAR(50) NOT NULL,
-  position    INT         NOT NULL,
-  node_id     VARCHAR(50),
+  node_id     VARCHAR(255),
   PRIMARY KEY (property_id),
-  FOREIGN KEY (node_id) REFERENCES links (logical_id)
+  FOREIGN KEY (node_id) REFERENCES nodes (logical_id)
 );
 
 CREATE TABLE link_properties (
   property_id VARCHAR(50) NOT NULL,
   name        VARCHAR(50) NOT NULL,
-  value       VARCHAR(50) NOT NULL,
+  value       VARCHAR(255) NOT NULL,
   type        VARCHAR(50) NOT NULL,
-  position    INT         NOT NULL,
-  link_id     VARCHAR(50),
+  link_id     VARCHAR(255),
   PRIMARY KEY (property_id),
   FOREIGN KEY (link_id) REFERENCES links (logical_id)
 );
