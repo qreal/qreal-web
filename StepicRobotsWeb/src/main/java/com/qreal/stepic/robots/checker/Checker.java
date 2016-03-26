@@ -143,9 +143,11 @@ public class Checker {
             String[] pathParts = pathToFailedField.split("/");
             String failedFilename = pathParts[pathParts.length - 1];
             String failedName = failedFilename.substring(0, failedFilename.length() - 4);
-            trajectoryPath = String.format("%s/trikKit%s/tasks/%s/solutions/%s/reports/%s/%s",
+            trajectoryPath = String.format("%s/trikKit%s/tasks/%s/solutions/%s/trajectories/%s/%s",
                     PathConstants.STEPIC_PATH, kit, taskId, uuidStr, nameWithoutExtension, failedName);
-            report = parseReportFile(new File(trajectoryPath), messageSource, locale);
+            report = parseReportFile(new File(String.format("%s/trikKit%s/tasks/%s/solutions/%s/reports/%s/%s",
+                    PathConstants.STEPIC_PATH, kit, taskId, uuidStr, nameWithoutExtension, failedName)),
+                    messageSource, locale);
         } else {
             String pathToMetainfo = String.format("%s/trikKit%s/tasks/%s/%s/metaInfo.xml",
                     PathConstants.STEPIC_PATH, kit, taskId, taskId);

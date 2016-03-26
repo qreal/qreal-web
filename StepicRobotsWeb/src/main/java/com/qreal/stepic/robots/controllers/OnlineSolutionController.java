@@ -22,6 +22,7 @@ import com.qreal.stepic.robots.constants.PathConstants;
 import com.qreal.stepic.robots.converters.JavaModelConverter;
 import com.qreal.stepic.robots.converters.XmlSaveConverter;
 import com.qreal.stepic.robots.exceptions.SubmitException;
+import com.qreal.stepic.robots.exporters.DiagramExporter;
 import com.qreal.stepic.robots.loaders.TypesLoader;
 import com.qreal.stepic.robots.model.checker.Description;
 import com.qreal.stepic.robots.model.checker.SolutionInfo;
@@ -52,9 +53,11 @@ public class OnlineSolutionController extends SolutionController {
     private MessageSource messageSource;
 
     private TypesLoader typesLoader;
+    private DiagramExporter diagramExporter;
 
     public OnlineSolutionController() {
         typesLoader = new TypesLoader();
+        diagramExporter = new DiagramExporter();
     }
 
     @RequestMapping(value = "{id}", params = { "kit", "name", "title" }, method = RequestMethod.GET)
@@ -89,10 +92,10 @@ public class OnlineSolutionController extends SolutionController {
     public OpenResponse open(@PathVariable String id, @RequestParam(value="kit") String kit) throws Exception {
         XmlSaveConverter converter = new XmlSaveConverter();
         compressor.decompress(kit, id);
-        String fieldXML = checker.getWorldModelFromMetainfo(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit +
-                "/tasks" + "/" + id + "/" + id + "/metaInfo.xml");
-        File treeDirectory = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
-                "/" + id + "/" + id + "/tree");
+        String fieldXML = checker.getWorldModelFromMetainfo(String.format("%s/trikKit%s/tasks/%s/%s/metaInfo.xml",
+                PathConstants.STEPIC_PATH, kit, id, id));
+        File treeDirectory = new File(String.format("%s/trikKit%s/tasks/%s/%s/tree", PathConstants.STEPIC_PATH,
+                kit, id, id));
         Diagram diagram = converter.convertToJavaModel(treeDirectory);
         return new OpenResponse(diagram, fieldXML);
     }
@@ -108,12 +111,12 @@ public class OnlineSolutionController extends SolutionController {
             PropertyValueTranslator translator = new PropertyValueTranslator();
             translator.translateAllPropertiesValue(diagram.getNodes(), locale);
             translator.translateAllPropertiesValue(diagram.getLinks(), locale);
-            JavaModelConverter javaModelConverter = new JavaModelConverter();
-            String uuidStr = String.valueOf(javaModelConverter.convertToXmlSave(diagram, kit, id));
-            compressor.compress(id, PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
-                    "/" + id + "/solutions/" + uuidStr);
+            String uuidStr = String.valueOf(diagramExporter.exportDiagram(diagram, kit, id));
+            compressor.compress(id, String.format("%s/trikKit%s/tasks/%s/solutions/%s", PathConstants.STEPIC_PATH,
+                    kit, id, uuidStr));
             return checker.submit(new SolutionInfo(id + ".qrs", kit, id, uuidStr), messageSource, locale);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new SubmitException(messageSource.getMessage("label.commonError", null, locale));
         }
     }
