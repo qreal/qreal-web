@@ -78,6 +78,7 @@ class PropertyEditorController {
                 var value = ui.item.value;
                 controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(
                     controller, $(this).attr("id")));
+                controller.setProperty(key, value);
             }
         }).focus(function() {
             $(this).autocomplete("search", $(this).val());
@@ -91,6 +92,7 @@ class PropertyEditorController {
             var value = $(this).val();
             controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(
                 controller, $(this).attr("id")));
+            controller.setProperty(key, value);
         });
     }
 
@@ -104,6 +106,7 @@ class PropertyEditorController {
             var newValue = controller.changeCheckboxValue(currentValue);
             controller.addChangePropertyCommand(key, newValue, controller.changeCheckboxHtml.bind(
                 controller, $(this).attr("id")));
+            controller.setProperty(key, newValue);
         });
     }
 
@@ -131,6 +134,7 @@ class PropertyEditorController {
             var value = $(this).val();
             controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(
                 controller, $(this).attr("id")));
+            controller.setProperty(key, value);
         });
     }
 
@@ -142,6 +146,7 @@ class PropertyEditorController {
             if (value !== "" && !isNaN(value)) {
                 controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(
                     controller, $(this).attr("id")));
+                controller.setProperty(key, value);
             }
         });
     }

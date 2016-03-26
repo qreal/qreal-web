@@ -940,6 +940,7 @@ var PropertyEditorController = (function () {
                 var key = $(this).data('type');
                 var value = ui.item.value;
                 controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(controller, $(this).attr("id")));
+                controller.setProperty(key, value);
             }
         }).focus(function () {
             $(this).autocomplete("search", $(this).val());
@@ -951,6 +952,7 @@ var PropertyEditorController = (function () {
             var key = $(this).data('type');
             var value = $(this).val();
             controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(controller, $(this).attr("id")));
+            controller.setProperty(key, value);
         });
     };
     PropertyEditorController.prototype.initCheckboxListener = function () {
@@ -962,6 +964,7 @@ var PropertyEditorController = (function () {
             var currentValue = property.value;
             var newValue = controller.changeCheckboxValue(currentValue);
             controller.addChangePropertyCommand(key, newValue, controller.changeCheckboxHtml.bind(controller, $(this).attr("id")));
+            controller.setProperty(key, newValue);
         });
     };
     PropertyEditorController.prototype.changeCheckboxValue = function (value) {
@@ -986,6 +989,7 @@ var PropertyEditorController = (function () {
             var key = $(this).data('type');
             var value = $(this).val();
             controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(controller, $(this).attr("id")));
+            controller.setProperty(key, value);
         });
     };
     PropertyEditorController.prototype.initSpinnerListener = function () {
@@ -995,6 +999,7 @@ var PropertyEditorController = (function () {
             var value = $(this).val();
             if (value !== "" && !isNaN(value)) {
                 controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(controller, $(this).attr("id")));
+                controller.setProperty(key, value);
             }
         });
     };
