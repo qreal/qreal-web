@@ -99,7 +99,6 @@ CREATE TABLE robots (
   FOREIGN KEY (username) REFERENCES users (username)
 );
 
-INSERT INTO users (username, password, enabled)
-VALUES ('denis', '$2a$10$04TVADrR6/SPLBjsK0N30.Jf5fNjBugSACeGv1S69dZALR7lSov0y', TRUE);
-
-INSERT INTO user_roles (username, ROLE) VALUES ('denis', 'ROLE_USER');
+INSERT INTO users (username, password, enabled) VALUES ('user', '$2a$04$eWY0Czs5avEcJTDVRcB66.8n5mQmMnRCCTi6P/9oNAncfzyb8.D7e', TRUE);
+INSERT INTO user_roles (username, ROLE) VALUES ('user', 'ROLE_USER');
+INSERT INTO folders (folder_id, folder_name, username) VALUES (1, 'root', 'user');
