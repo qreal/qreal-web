@@ -54,13 +54,12 @@ class PropertyEditorController {
         }
     }
 
-    public changeProperty(key: string, value: string, changeHtmlFunction: () => void): void {
+    public addChangePropertyCommand(key: string, value: string, changeHtmlFunction: () => void): void {
         var currentElement: DiagramElement = this.paperController.getCurrentElement();
         var property: Property = currentElement.getChangeableProperties()[key];
         var changePropertyCommand: Command = new ChangePropertyCommand(key, value, property.value,
             this.setProperty.bind(this), changeHtmlFunction);
         this.undoRedoController.addCommand(changePropertyCommand);
-        changePropertyCommand.execute();
     }
 
     public clearState(): void {
@@ -77,7 +76,7 @@ class PropertyEditorController {
             select: function (event, ui) {
                 var key = $(this).data('type');
                 var value = ui.item.value;
-                controller.changeProperty(key, value, controller.changeHtmlElementValue.bind(
+                controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(
                     controller, $(this).attr("id")));
             }
         }).focus(function() {
@@ -90,7 +89,7 @@ class PropertyEditorController {
         $(document).on('input', '.form-control', function () {
             var key = $(this).data('type');
             var value = $(this).val();
-            controller.changeProperty(key, value, controller.changeHtmlElementValue.bind(
+            controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(
                 controller, $(this).attr("id")));
         });
     }
@@ -103,7 +102,7 @@ class PropertyEditorController {
             var property: Property = currentElement.getChangeableProperties()[key];
             var currentValue = property.value;
             var newValue = controller.changeCheckboxValue(currentValue);
-            controller.changeProperty(key, newValue, controller.changeCheckboxHtml.bind(
+            controller.addChangePropertyCommand(key, newValue, controller.changeCheckboxHtml.bind(
                 controller, $(this).attr("id")));
         });
     }
@@ -130,7 +129,7 @@ class PropertyEditorController {
         $(document).on('change', '.mydropdown', function () {
             var key = $(this).data('type');
             var value = $(this).val();
-            controller.changeProperty(key, value, controller.changeHtmlElementValue.bind(
+            controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(
                 controller, $(this).attr("id")));
         });
     }
@@ -141,7 +140,7 @@ class PropertyEditorController {
             var key = $(this).data('type');
             var value = $(this).val();
             if (value !== "" && !isNaN(value)) {
-                controller.changeProperty(key, value, controller.changeHtmlElementValue.bind(
+                controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(
                     controller, $(this).attr("id")));
             }
         });

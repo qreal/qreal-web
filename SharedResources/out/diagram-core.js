@@ -921,12 +921,11 @@ var PropertyEditorController = (function () {
             }
         }
     };
-    PropertyEditorController.prototype.changeProperty = function (key, value, changeHtmlFunction) {
+    PropertyEditorController.prototype.addChangePropertyCommand = function (key, value, changeHtmlFunction) {
         var currentElement = this.paperController.getCurrentElement();
         var property = currentElement.getChangeableProperties()[key];
         var changePropertyCommand = new ChangePropertyCommand(key, value, property.value, this.setProperty.bind(this), changeHtmlFunction);
         this.undoRedoController.addCommand(changePropertyCommand);
-        changePropertyCommand.execute();
     };
     PropertyEditorController.prototype.clearState = function () {
         $(".property").remove();
@@ -940,7 +939,7 @@ var PropertyEditorController = (function () {
             select: function (event, ui) {
                 var key = $(this).data('type');
                 var value = ui.item.value;
-                controller.changeProperty(key, value, controller.changeHtmlElementValue.bind(controller, $(this).attr("id")));
+                controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(controller, $(this).attr("id")));
             }
         }).focus(function () {
             $(this).autocomplete("search", $(this).val());
@@ -951,7 +950,7 @@ var PropertyEditorController = (function () {
         $(document).on('input', '.form-control', function () {
             var key = $(this).data('type');
             var value = $(this).val();
-            controller.changeProperty(key, value, controller.changeHtmlElementValue.bind(controller, $(this).attr("id")));
+            controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(controller, $(this).attr("id")));
         });
     };
     PropertyEditorController.prototype.initCheckboxListener = function () {
@@ -962,7 +961,7 @@ var PropertyEditorController = (function () {
             var property = currentElement.getChangeableProperties()[key];
             var currentValue = property.value;
             var newValue = controller.changeCheckboxValue(currentValue);
-            controller.changeProperty(key, newValue, controller.changeCheckboxHtml.bind(controller, $(this).attr("id")));
+            controller.addChangePropertyCommand(key, newValue, controller.changeCheckboxHtml.bind(controller, $(this).attr("id")));
         });
     };
     PropertyEditorController.prototype.changeCheckboxValue = function (value) {
@@ -986,7 +985,7 @@ var PropertyEditorController = (function () {
         $(document).on('change', '.mydropdown', function () {
             var key = $(this).data('type');
             var value = $(this).val();
-            controller.changeProperty(key, value, controller.changeHtmlElementValue.bind(controller, $(this).attr("id")));
+            controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(controller, $(this).attr("id")));
         });
     };
     PropertyEditorController.prototype.initSpinnerListener = function () {
@@ -995,7 +994,7 @@ var PropertyEditorController = (function () {
             var key = $(this).data('type');
             var value = $(this).val();
             if (value !== "" && !isNaN(value)) {
-                controller.changeProperty(key, value, controller.changeHtmlElementValue.bind(controller, $(this).attr("id")));
+                controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(controller, $(this).attr("id")));
             }
         });
     };
