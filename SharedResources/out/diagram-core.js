@@ -1467,6 +1467,7 @@ var DiagramJsonParser = (function () {
                 y = positionNums.y + offsetY;
             }
             else {
+                var property = new Property(graphicalPropertiesObject[j].name, graphicalPropertiesObject[j].type, graphicalPropertiesObject[j].value);
                 constGraphicalProperties[propertyName] = property;
             }
         }

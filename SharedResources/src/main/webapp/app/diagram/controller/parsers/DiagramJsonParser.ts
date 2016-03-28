@@ -149,11 +149,11 @@ class DiagramJsonParser {
             }
 
             if (typeProperties.hasOwnProperty(propertyName)) {
-                var property:Property = new Property(typeProperties[propertyName].name,
+                var property: Property = new Property(typeProperties[propertyName].name,
                     typeProperties[propertyName].type, logicalPropertiesObject[j].value);
                 changeableLogicalProperties[propertyName] = property;
             } else {
-                var property:Property = new Property(logicalPropertiesObject[j].name,
+                var property: Property = new Property(logicalPropertiesObject[j].name,
                     logicalPropertiesObject[j].type, logicalPropertiesObject[j].value);
                 constLogicalProperties[propertyName] = property;
             }
@@ -172,6 +172,8 @@ class DiagramJsonParser {
                 x = positionNums.x + offsetX;
                 y = positionNums.y + offsetY;
             } else {
+                var property: Property = new Property(graphicalPropertiesObject[j].name,
+                    graphicalPropertiesObject[j].type, graphicalPropertiesObject[j].value);
                 constGraphicalProperties[propertyName] = property;
             }
         }
