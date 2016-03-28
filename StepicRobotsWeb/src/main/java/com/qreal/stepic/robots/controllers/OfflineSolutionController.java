@@ -85,16 +85,18 @@ public class OfflineSolutionController extends SolutionController implements Han
                        @RequestParam(value = "title") String title) throws IOException {
         File downloadFile = new File(PathConstants.STEPIC_PATH + "/" + "trikKit" + kit + "/tasks" +
                 "/" + id + "/" + id + ".qrs");
-        FileInputStream inputStream = new FileInputStream(downloadFile);
-        OutputStream outStream = response.getOutputStream();
-        response.setContentLength((int) downloadFile.length());
-        response.setContentType("application/octet-stream");
+        try (FileInputStream inputStream = new FileInputStream(downloadFile);
+             OutputStream outStream = response.getOutputStream()) {
+            response.setContentLength((int) downloadFile.length());
+            response.setContentType("application/octet-stream");
 
-        String headerKey = "Content-Disposition";
-        String headerValue = String.format("attachment; filename=\"%s-%s\"", title, downloadFile.getName());
-        response.setHeader(headerKey, headerValue);
-
-        IOUtils.copy(inputStream, outStream);
+            String headerKey = "Content-Disposition";
+            String headerValue = String.format("attachment; filename=\"%s-%s\"", title, downloadFile.getName());
+            response.setHeader(headerKey, headerValue);
+            IOUtils.copy(inputStream, outStream);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @ResponseBody
