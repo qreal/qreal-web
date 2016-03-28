@@ -52,8 +52,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/app/**").addResourceLocations("/app/");
         registry.addResourceHandler("/configs/**").addResourceLocations("/configs/");
         registry.addResourceHandler("/tasks/**").addResourceLocations("/tasks/");
-        registry.addResourceHandler("/images/**").addResourceLocations("/images/").setCachePeriod(BROWSER_CACHE_CONTROL);
-
+        registry.addResourceHandler("/images/**").addResourceLocations("/images/")
+                .setCachePeriod(BROWSER_CACHE_CONTROL);
     }
 
     @Bean
@@ -62,7 +62,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         resolver.setPrefix("/WEB-INF/views/");
         resolver.setSuffix(".jsp");
         resolver.setViewClass(JstlView.class);
-
         return resolver;
     }
 
@@ -89,6 +88,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
+
     @Bean
     public LocaleResolver localeResolver(){
         CookieLocaleResolver resolver = new CookieLocaleResolver();
@@ -97,10 +97,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         resolver.setCookieMaxAge(7 * 24 * 3600);
         return resolver;
     }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
         interceptor.setParamName("locale");
         registry.addInterceptor(interceptor);
     }
+
 }

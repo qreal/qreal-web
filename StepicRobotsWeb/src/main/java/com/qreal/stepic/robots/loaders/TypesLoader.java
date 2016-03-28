@@ -39,23 +39,18 @@ public class TypesLoader {
         mapper = new ObjectMapper();
     }
 
-    public JsonNode getTypesJson(String kit, String name, Locale locale) {
-        try {
-            ObjectNode resultTasksTypes = mapper.createObjectNode();
+    public JsonNode getTypesJson(String kit, String name, Locale locale) throws IOException {
+        ObjectNode resultTasksTypes = mapper.createObjectNode();
 
-            JsonNode tasksTypes =  mapper.readTree(new File(String.format("%s/trikKit%s/tasks/%s/typesList.json",
-                    PathConstants.STEPIC_PATH, kit, name)));
-            JsonNode allTypes = mapper.readTree(new File(String.format("%s/trikKit%s/elementsTypes_%s.json",
-                    PathConstants.STEPIC_PATH, kit, locale)));
+        JsonNode tasksTypes =  mapper.readTree(new File(String.format("%s/trikKit%s/tasks/%s/typesList.json",
+                PathConstants.STEPIC_PATH, kit, name)));
+        JsonNode allTypes = mapper.readTree(new File(String.format("%s/trikKit%s/elementsTypes_%s.json",
+                PathConstants.STEPIC_PATH, kit, locale)));
 
-            resultTasksTypes.set("elements", getElementsTypes(tasksTypes, allTypes));
-            resultTasksTypes.set("blocks", getBlocksTypes(tasksTypes, allTypes));
+        resultTasksTypes.set("elements", getElementsTypes(tasksTypes, allTypes));
+        resultTasksTypes.set("blocks", getBlocksTypes(tasksTypes, allTypes));
 
-            return resultTasksTypes;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return resultTasksTypes;
     }
 
     private ArrayNode getElementsTypes(JsonNode tasksTypes, JsonNode allTypes) {

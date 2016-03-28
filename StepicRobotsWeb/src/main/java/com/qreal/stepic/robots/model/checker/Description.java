@@ -24,6 +24,10 @@ import java.util.List;
  */
 public class Description implements Serializable {
 
+    private String main;
+    private String note;
+    private List<Hint> hints;
+
     public Description() {
     }
 
@@ -65,11 +69,5 @@ public class Description implements Serializable {
     public void setHints(List<Hint> hints) {
         this.hints = hints;
     }
-
-    private String main;
-
-    private String note;
-
-    private List<Hint> hints;
 
 }

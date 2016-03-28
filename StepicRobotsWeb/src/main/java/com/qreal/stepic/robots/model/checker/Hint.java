@@ -23,6 +23,9 @@ import java.io.Serializable;
  */
 public class Hint implements Serializable {
 
+    private String name;
+    private String text;
+
     public String getName() {
         return name;
     }
@@ -39,6 +42,4 @@ public class Hint implements Serializable {
         this.text = text;
     }
 
-    private String name;
-    private String text;
 }

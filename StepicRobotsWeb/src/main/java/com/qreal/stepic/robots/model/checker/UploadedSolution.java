@@ -23,6 +23,9 @@ import java.util.UUID;
  */
 public class UploadedSolution {
 
+    private UUID uuid;
+    private String filename;
+
     public UploadedSolution(UUID uuid, String filename) {
         this.uuid = uuid;
         this.filename = filename;
@@ -35,8 +38,5 @@ public class UploadedSolution {
     public String getFilename() {
         return filename;
     }
-
-    private UUID uuid;
-    private String filename;
 
 }

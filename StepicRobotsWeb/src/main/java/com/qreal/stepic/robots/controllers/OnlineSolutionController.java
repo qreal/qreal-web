@@ -83,7 +83,8 @@ public class OnlineSolutionController extends SolutionController {
 
     @ResponseBody
     @RequestMapping(value = "getTypes/{id}", method = RequestMethod.POST)
-    public JsonNode getTypes(@RequestParam(value="kit") String kit, @PathVariable String id, Locale locale) {
+    public JsonNode getTypes(@RequestParam(value="kit") String kit, @PathVariable String id, Locale locale)
+            throws IOException {
         return typesLoader.getTypesJson(kit, id, locale);
     }
 

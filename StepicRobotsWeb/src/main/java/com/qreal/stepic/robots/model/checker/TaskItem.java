@@ -23,6 +23,10 @@ import java.io.Serializable;
  */
 public class TaskItem implements Serializable {
 
+    private String title;
+    private String id;
+    private Boolean online;
+
     public String getTitle() {
         return title;
     }
@@ -47,7 +51,4 @@ public class TaskItem implements Serializable {
         this.online = online;
     }
 
-    private String title;
-    private String id;
-    private Boolean online;
 }
