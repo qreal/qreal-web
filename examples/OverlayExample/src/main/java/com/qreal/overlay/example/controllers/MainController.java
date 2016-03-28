@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
+
 /**
  * Created by vladimir-zakharov on 27.02.16.
  */
@@ -44,7 +46,8 @@ public class MainController {
 
     @ResponseBody
     @RequestMapping(value = "getTypes/", method = RequestMethod.POST)
-    public JsonNode getTypes(@RequestParam(value="kit") String kit) {
+    public JsonNode getTypes(@RequestParam(value="kit") String kit) throws IOException {
         return typesLoader.getTypesJson();
     }
+
 }
