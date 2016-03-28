@@ -36,19 +36,21 @@ CREATE TABLE diagrams (
 );
 
 CREATE TABLE nodes (
+  id                  VARCHAR(255)  NOT NULL,
   logical_id          VARCHAR(255)  NOT NULL,
   graphical_id        VARCHAR(50)  NOT NULL,
   type                VARCHAR(50)  NOT NULL,
   diagram_id          BIGINT,
-  PRIMARY KEY (logical_id),
+  PRIMARY KEY (id),
   FOREIGN KEY (diagram_id) REFERENCES diagrams (diagram_id)
 );
 
 CREATE TABLE links (
+  id                  VARCHAR(255)  NOT NULL,
   logical_id          VARCHAR(255)  NOT NULL,
   graphical_id        VARCHAR(50)  NOT NULL,
   diagram_id          BIGINT,
-  PRIMARY KEY (logical_id),
+  PRIMARY KEY (id),
   FOREIGN KEY (diagram_id) REFERENCES diagrams (diagram_id)
 );
 
@@ -59,7 +61,7 @@ CREATE TABLE node_properties (
   type        VARCHAR(50) NOT NULL,
   node_id     VARCHAR(255),
   PRIMARY KEY (property_id),
-  FOREIGN KEY (node_id) REFERENCES nodes (logical_id)
+  FOREIGN KEY (node_id) REFERENCES nodes (id)
 );
 
 CREATE TABLE link_properties (
@@ -69,7 +71,7 @@ CREATE TABLE link_properties (
   type        VARCHAR(50) NOT NULL,
   link_id     VARCHAR(255),
   PRIMARY KEY (property_id),
-  FOREIGN KEY (link_id) REFERENCES links (logical_id)
+  FOREIGN KEY (link_id) REFERENCES links (id)
 );
 
 CREATE TABLE user_roles (

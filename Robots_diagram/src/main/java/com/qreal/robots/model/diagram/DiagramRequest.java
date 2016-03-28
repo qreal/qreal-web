@@ -26,6 +26,7 @@ import java.io.Serializable;
 public class DiagramRequest implements Serializable {
 
     private Diagram diagram;
+
     private Long folderId;
 
     public Diagram getDiagram() {
@@ -43,5 +44,4 @@ public class DiagramRequest implements Serializable {
     public void setFolderId(Long folderId) {
         this.folderId = folderId;
     }
-
 }

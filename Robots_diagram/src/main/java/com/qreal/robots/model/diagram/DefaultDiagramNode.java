@@ -17,6 +17,8 @@
 package com.qreal.robots.model.diagram;
 
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -29,6 +31,11 @@ import java.util.Set;
 public class DefaultDiagramNode implements Serializable {
 
     @Id
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(name = "id")
+    private String id;
+
     @Column(name = "logical_id")
     private String logicalId;
 
@@ -39,8 +46,16 @@ public class DefaultDiagramNode implements Serializable {
     private String type;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "node_id", referencedColumnName = "logical_id")
+    @JoinColumn(name = "node_id", referencedColumnName = "id")
     private Set<NodeProperty> properties;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getLogicalId() {
         return logicalId;
