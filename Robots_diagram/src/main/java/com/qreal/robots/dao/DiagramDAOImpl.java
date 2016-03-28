@@ -68,11 +68,7 @@ public class DiagramDAOImpl implements DiagramDAO {
 
     public void rewriteDiagram(Diagram diagram) {
         Session session = sessionFactory.getCurrentSession();
-        Diagram oldDiagram = (Diagram) session.get(Diagram.class, diagram.getDiagramId());
-        if (oldDiagram != null) {
-            session.delete(oldDiagram);
-        }
-        session.save(diagram);
+        session.merge(diagram);
     }
 
     public Long createFolder(Folder folder) {

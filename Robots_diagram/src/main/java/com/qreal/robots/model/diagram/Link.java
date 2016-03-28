@@ -41,7 +41,7 @@ public class Link implements Serializable {
     @Column(name = "graphical_id")
     private String graphicalId;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "link_id", referencedColumnName = "id")
     private Set<LinkProperty> properties;
 

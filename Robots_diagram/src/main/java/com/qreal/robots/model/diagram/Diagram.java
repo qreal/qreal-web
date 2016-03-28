@@ -37,11 +37,11 @@ public class Diagram implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "diagram_id", referencedColumnName = "diagram_id")
     private Set<DefaultDiagramNode> nodes;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "diagram_id", referencedColumnName = "diagram_id")
     private Set<Link> links;
 

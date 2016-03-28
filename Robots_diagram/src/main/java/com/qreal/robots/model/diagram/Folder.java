@@ -43,11 +43,11 @@ public class Folder implements Serializable {
     @Column(name = "folder_parent_id")
     private Long folderParentId;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "folder_parent_id", insertable = false, updatable = false)
     private List<Folder> childrenFolders;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "folder_id", referencedColumnName = "folder_id")
     private List<Diagram> diagrams;
 

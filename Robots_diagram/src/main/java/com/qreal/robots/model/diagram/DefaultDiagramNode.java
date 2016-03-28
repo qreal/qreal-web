@@ -45,7 +45,7 @@ public class DefaultDiagramNode implements Serializable {
     @Column(name = "type")
     private String type;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "node_id", referencedColumnName = "id")
     private Set<NodeProperty> properties;
 
