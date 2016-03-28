@@ -29,14 +29,6 @@ import java.util.List;
 @Table(name = "folders")
 public class Folder implements Serializable {
 
-    public Folder() {
-    }
-
-    public Folder(String folderName, String userName) {
-        this.folderName = folderName;
-        this.userName = userName;
-    }
-
     @Id
     @Column(name = "folder_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,6 +50,14 @@ public class Folder implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "folder_id", referencedColumnName = "folder_id")
     private List<Diagram> diagrams;
+
+    public Folder() {
+    }
+
+    public Folder(String folderName, String userName) {
+        this.folderName = folderName;
+        this.userName = userName;
+    }
 
     public void setFolderId(Long folderId) {
         this.folderId = folderId;
@@ -102,4 +102,5 @@ public class Folder implements Serializable {
     public String getUserName() {
         return this.userName;
     }
+
 }

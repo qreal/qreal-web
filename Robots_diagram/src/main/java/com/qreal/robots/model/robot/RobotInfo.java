@@ -35,9 +35,7 @@ public class RobotInfo {
     private String program;
 
     public RobotInfo() {
-
     }
-
 
     public RobotInfo(String owner, String name, String ssid) {
         this.owner = owner;
@@ -103,4 +101,5 @@ public class RobotInfo {
     public void setName(String name) {
         this.name = name;
     }
+
 }

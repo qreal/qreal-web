@@ -44,7 +44,6 @@ public class Robot {
         this.ssid = ssid;
     }
 
-
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id",
@@ -85,20 +84,18 @@ public class Robot {
         this.ssid = ssid;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Robot)) return false;
 
         Robot robot = (Robot) o;
-
         return name.equals(robot.name);
-
     }
 
     @Override
     public int hashCode() {
         return name.hashCode();
     }
+
 }

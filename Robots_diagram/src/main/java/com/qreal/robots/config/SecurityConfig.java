@@ -36,17 +36,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final Logger LOG = Logger.getLogger(SecurityConfig.class);
 
-
     @Autowired
     @Qualifier("userDetailsService")
     UserDetailsService userDetailsService;
-
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
-
 
     //.csrf() is optional, enabled by default, if using WebSecurityConfigurerAdapter constructor
     @Override
@@ -57,7 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/register").permitAll()
                 .antMatchers("/**").authenticated()
                 .and()
-                .formLogin().loginPage("/login").permitAll().loginProcessingUrl("/j_spring_security_check").failureUrl("/login?error")
+                .formLogin().loginPage("/login").permitAll()
+                .loginProcessingUrl("/j_spring_security_check").failureUrl("/login?error")
                 .usernameParameter("username").passwordParameter("password")
                 .and()
                 .logout().logoutSuccessUrl("/login").logoutUrl("/j_spring_security_logout")
@@ -66,13 +64,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().exceptionHandling().accessDeniedPage("/login");
     }
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
-
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder;
     }
-
 
 }

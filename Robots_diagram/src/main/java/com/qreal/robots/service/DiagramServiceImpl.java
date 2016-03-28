@@ -66,7 +66,6 @@ public class DiagramServiceImpl implements DiagramService {
     public Long createFolder(Folder folder) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         folder.setUserName(userName);
-
         return diagramDAO.createFolder(folder);
     }
 
@@ -76,4 +75,5 @@ public class DiagramServiceImpl implements DiagramService {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         return diagramDAO.getFolderTree(userName);
     }
+
 }

@@ -25,6 +25,8 @@ import java.io.Serializable;
  */
 public class OpenRequest implements Serializable {
 
+    private Long id;
+
     public Long getId() {
         return id;
     }
@@ -33,5 +35,4 @@ public class OpenRequest implements Serializable {
         this.id = id;
     }
 
-    private Long id;
 }

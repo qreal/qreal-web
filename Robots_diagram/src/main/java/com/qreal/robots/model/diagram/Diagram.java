@@ -76,4 +76,5 @@ public class Diagram implements Serializable {
     public Set<Link> getLinks() {
         return links;
     }
+
 }

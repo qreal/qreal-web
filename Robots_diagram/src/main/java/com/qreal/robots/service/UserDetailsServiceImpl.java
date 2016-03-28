@@ -32,7 +32,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -51,7 +50,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return buildUserForAuthentication(user, authorities);
 
     }
-
 
     private User buildUserForAuthentication(com.qreal.robots.model.auth.User user,
                                             List<GrantedAuthority> authorities) {

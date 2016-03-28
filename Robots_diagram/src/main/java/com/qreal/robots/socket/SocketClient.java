@@ -45,7 +45,6 @@ public class SocketClient {
         return false;
     }
 
-
     public String sendMessage(String message) {
         Socket socket = null;
         DataOutputStream outToServer = null;
@@ -86,4 +85,5 @@ public class SocketClient {
             }
         }
     }
+
 }

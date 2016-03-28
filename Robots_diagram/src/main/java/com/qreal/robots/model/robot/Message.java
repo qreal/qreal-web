@@ -30,19 +30,17 @@ public class Message {
     private List<RobotInfo> robots;
 
     public Message() {
+    }
 
+    public Message(String from, String type) {
+        this.from = from;
+        this.type = type;
     }
 
     public Message(String from, String type, RobotInfo robots) {
         this.from = from;
         this.type = type;
         this.robot = robots;
-    }
-
-
-    public Message(String from, String type) {
-        this.from = from;
-        this.type = type;
     }
 
     public Message(String from, String type, List<RobotInfo> robots) {
@@ -90,4 +88,5 @@ public class Message {
     public void setRobots(List<RobotInfo> robots) {
         this.robots = robots;
     }
+
 }

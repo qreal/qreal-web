@@ -63,8 +63,7 @@ public class Coordinates {
 
     @Override
     public int hashCode() {
-        int result = latitude.hashCode();
-        result = 31 * result + longitude.hashCode();
-        return result;
+        return 31 * latitude.hashCode() + longitude.hashCode();
     }
+
 }

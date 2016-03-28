@@ -49,12 +49,12 @@ public class AuthController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login(@RequestParam(value = "error", required = false) String error) {
-
         ModelAndView model = new ModelAndView();
 
         if (error != null) {
             model.addObject("error", "Invalid login or password");
         }
+
         model.setViewName("auth/login");
 
         return model;
@@ -94,4 +94,5 @@ public class AuthController {
         modelAndView.setViewName("auth/register");
         return modelAndView;
     }
+
 }

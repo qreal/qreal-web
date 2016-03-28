@@ -37,22 +37,17 @@ public class TypesLoader {
         mapper = new ObjectMapper();
     }
 
-    public JsonNode getTypesJson() {
-        try {
-            ObjectNode resultTypes = mapper.createObjectNode();
+    public JsonNode getTypesJson() throws IOException {
+        ObjectNode resultTypes = mapper.createObjectNode();
 
-            ClassLoader classLoader = getClass().getClassLoader();
-            JsonNode typesList =  mapper.readTree(new File(classLoader.getResource("typesList.json").getFile()));
-            JsonNode allTypes = mapper.readTree(new File(classLoader.getResource("elementsTypes_en.json").getFile()));
+        ClassLoader classLoader = getClass().getClassLoader();
+        JsonNode typesList =  mapper.readTree(new File(classLoader.getResource("typesList.json").getFile()));
+        JsonNode allTypes = mapper.readTree(new File(classLoader.getResource("elementsTypes_en.json").getFile()));
 
-            resultTypes.set("elements", getElementsTypes(typesList, allTypes));
-            resultTypes.set("blocks", getBlocksTypes(typesList, allTypes));
+        resultTypes.set("elements", getElementsTypes(typesList, allTypes));
+        resultTypes.set("blocks", getBlocksTypes(typesList, allTypes));
 
-            return resultTypes;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return resultTypes;
     }
 
     private ArrayNode getElementsTypes(JsonNode typesList, JsonNode allTypes) {
@@ -78,19 +73,14 @@ public class TypesLoader {
 
     private ObjectNode getPaletteTypes(JsonNode listBlocksTypes, JsonNode allBlocksTypes, JsonNode categoriesNames) {
         ObjectNode resultPaletteNode = mapper.createObjectNode();
-
         JsonNode listPaletteTypes = listBlocksTypes.path("palette");
-
         Iterator<Map.Entry<String, JsonNode>> categoriesIterator = listPaletteTypes.fields();
 
         while (categoriesIterator.hasNext()) {
             Map.Entry<String, JsonNode> entry = categoriesIterator.next();
             String category = entry.getKey();
-
             JsonNode taskCategoryNode = listPaletteTypes.path(category);
-
             ArrayNode categoryArray = getObjectsWithTypes(taskCategoryNode, allBlocksTypes);
-
             resultPaletteNode.set(categoriesNames.get(category).textValue(), categoryArray);
         }
 

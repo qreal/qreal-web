@@ -59,7 +59,8 @@ public class RobotRestService {
 
     @ResponseBody
     @RequestMapping(value = "/sendDiagram", method = RequestMethod.POST)
-    public String sendProgram(@RequestParam("robotName") String robotName, @RequestParam("program") String program) throws JsonProcessingException {
+    public String sendProgram(@RequestParam("robotName") String robotName, @RequestParam("program") String program)
+            throws JsonProcessingException {
         Robot robot = robotDAO.findByName(robotName);
         SocketClient socketClient = new SocketClient(MainController.HOST_NAME, MainController.PORT);
         return socketClient.sendMessage(generateSendProgramRequest(robotName, robot.getSsid(), program));
@@ -86,14 +87,12 @@ public class RobotRestService {
         return false;
     }
 
-
     @ResponseBody
     @RequestMapping(value = "/deleteRobot", method = RequestMethod.POST)
     public String delete(@RequestParam("robotName") String name) {
         Robot robot = robotDAO.findByName(name);
         robotDAO.delete(robot);
         return "{\"message\":\"OK\"}";
-
     }
 
     @ResponseBody
@@ -116,7 +115,6 @@ public class RobotRestService {
         } else {
             return buildResultMessage(result);
         }
-
     }
 
     private SystemConfig getSystemConfig(Robot robot, List<RobotWrapper> fullRobotInfo) {
@@ -148,14 +146,16 @@ public class RobotRestService {
         return new ModelConfig(map, propertyList);
     }
 
-    private String generateSendProgramRequest(String robotName, String ssid, String program) throws JsonProcessingException {
+    private String generateSendProgramRequest(String robotName, String ssid, String program)
+            throws JsonProcessingException {
         RobotInfo robotInfo = new RobotInfo(getUserName(), robotName, ssid);
         robotInfo.setProgram(program);
         Message message = new Message("WebApp", "sendDiagram", robotInfo);
         return mapper.writeValueAsString(message);
     }
 
-    private String generateSendModelConfigRequest(String robotName, String ssid, ModelConfig modelConfig) throws JsonProcessingException {
+    private String generateSendModelConfigRequest(String robotName, String ssid, ModelConfig modelConfig)
+            throws JsonProcessingException {
         RobotInfo robotInfo = new RobotInfo(getUserName(), robotName, ssid);
         robotInfo.setModelConfig(modelConfig.convertToXml());
         Message message = new Message("WebApp", "sendModelConfig", robotInfo);

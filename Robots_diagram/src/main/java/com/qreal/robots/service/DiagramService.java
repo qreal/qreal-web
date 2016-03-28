@@ -38,4 +38,5 @@ public interface DiagramService {
     public Long createFolder(Folder folder);
 
     public Folder getFolderTree();
+
 }

@@ -28,4 +28,5 @@ public interface UserService {
     public User findByUserName(String username);
 
     public boolean isUserExist(String username);
+
 }

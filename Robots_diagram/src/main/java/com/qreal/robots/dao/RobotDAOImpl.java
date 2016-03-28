@@ -56,15 +56,10 @@ public class RobotDAOImpl implements RobotDAO {
     }
 
     public Robot findByName(String robotName) {
-
         Session session = sessionFactory.getCurrentSession();
 
         List<Robot> robots = session.createQuery("from Robot where name=?").setParameter(0, robotName).list();
-        if (robots.size() > 0) {
-            return robots.get(0);
-        } else {
-            return null;
-        }
+        return (robots.size() > 0) ? robots.get(0) : null;
     }
 
     public boolean isRobotExists(String robotName) {
@@ -72,7 +67,6 @@ public class RobotDAOImpl implements RobotDAO {
 
         List<User> robots = session.createQuery("from Robot where name=?").setParameter(0, robotName).list();
         return robots.size() > 0;
-
     }
 
 }

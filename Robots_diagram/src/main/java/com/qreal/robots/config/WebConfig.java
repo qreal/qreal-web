@@ -17,7 +17,6 @@
 
 package com.qreal.robots.config;
 
-
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -69,15 +68,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         resolver.setPrefix("/WEB-INF/views/");
         resolver.setSuffix(".jsp");
         resolver.setViewClass(JstlView.class);
-
         return resolver;
     }
 
     @Bean
     public SessionFactory sessionFactory() {
-
         LocalSessionFactoryBuilder sessionBuilder = new LocalSessionFactoryBuilder(dataSource);
-
         sessionBuilder.scanPackages("com.qreal.robots.model");
         sessionBuilder.addProperties(hibernateProperties);
         return sessionBuilder.buildSessionFactory();
