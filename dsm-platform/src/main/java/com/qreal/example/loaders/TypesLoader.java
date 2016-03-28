@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -19,17 +21,23 @@ public class TypesLoader {
         mapper = new ObjectMapper();
     }
 
-    public JsonNode getTypesJson(JsonNode typesList) {
-        ObjectNode resultTypes = mapper.createObjectNode();
-        //ClassLoader classLoader = getClass().getClassLoader();
-        //JsonNode typesList = mapper.readTree(new File(classLoader.getResource(list).getFile()));
+    public JsonNode getTypesJson() {
+        try {
+            ClassLoader classLoader = getClass().getClassLoader();
+            JsonNode typesList = mapper.readTree(new File(classLoader.getResource("metaEditor.json").getFile()));
+            ObjectNode resultTypes = mapper.createObjectNode();
 
-        JsonNode listElements = typesList.path("elements");
-        resultTypes.set("elements", getObjects(listElements));
+            JsonNode listElements = typesList.path("elements");
+            resultTypes.set("elements", getObjects(listElements));
 
-        resultTypes.set("blocks", getBlocksTypes(typesList));
+            resultTypes.set("blocks", getBlocksTypes(typesList));
 
-        return resultTypes;
+            return resultTypes;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private ObjectNode getBlocksTypes(JsonNode typesList) {

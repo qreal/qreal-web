@@ -50,15 +50,7 @@ public class MainController {
 
     @ResponseBody
     @RequestMapping(value = "getTypes/", method = RequestMethod.POST)
-    public JsonNode getTypes(@RequestParam(value="kit") String kit) {
-        try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            JsonNode typesList = mapper.readTree(new File(classLoader.getResource(kit).getFile()));
-            return typesLoader.getTypesJson(typesList);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public JsonNode getTypes() {
+        return typesLoader.getTypesJson();
     }
 }

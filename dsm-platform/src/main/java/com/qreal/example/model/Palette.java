@@ -16,8 +16,8 @@ public class Palette implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paletteId;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "palette_name")
+    private String paletteName;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "palette_id", referencedColumnName = "palette_id")
@@ -25,5 +25,25 @@ public class Palette implements Serializable {
 
     public Set<Node> getNodes() {
         return this.nodes;
+    }
+
+    public Long getPaletteId() {
+        return this.paletteId;
+    }
+
+    public String getPaletteName() {
+        return this.paletteName;
+    }
+
+    public void setPaletteId(Long id) {
+        this.paletteId = id;
+    }
+
+    public void setPaletteName(String name) {
+        this.paletteName = name;
+    }
+
+    public void setNodes(Set<Node> nodes) {
+        this.nodes = nodes;
     }
 }

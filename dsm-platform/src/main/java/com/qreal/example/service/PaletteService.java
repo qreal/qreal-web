@@ -18,4 +18,9 @@ public class PaletteService {
     public void createPalette(Palette palette) {
         paletteDAO.createPalette(palette);
     }
+
+    @Transactional
+    public Palette getPalette(String namePalette) {
+        return(paletteDAO.getPalette(namePalette));
+    }
 }

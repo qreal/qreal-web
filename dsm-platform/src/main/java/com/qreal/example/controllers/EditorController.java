@@ -1,6 +1,6 @@
 package com.qreal.example.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.qreal.example.model.OpenRequest;
 import com.qreal.example.model.Palette;
 import com.qreal.example.service.PaletteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,4 +22,9 @@ public class EditorController {
         paletteService.createPalette(palette);
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/getPalette", method = RequestMethod.POST)
+    public Palette getPalette(@RequestBody OpenRequest request) {
+        return(paletteService.getPalette(request.getName()));
+    }
 }

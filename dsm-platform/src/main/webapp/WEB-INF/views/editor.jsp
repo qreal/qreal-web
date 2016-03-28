@@ -33,7 +33,7 @@
 </head>
 <body ng-app>
 
-<div id="diagramContent" class="unselectable" ng-controller="SimpleDiagramEditorController">
+<div id="diagramContent" class="unselectable" ng-controller="PaletteDiagramEditorController">
     <ul class='custom-menu'>
         <li data-action="delete">Delete</li>
     </ul>
@@ -67,9 +67,8 @@
             <div id="diagram_right-menu">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Palette<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="" role="menuitem" tabindex="-1" ng-click="choosePalette('metaEditor.json')">metaEditor</a></li>
-                        <li><a href="" role="menuitem" tabindex="-1" ng-click="choosePalette('typesList.json')">robots</a></li>
+                    <ul class="dropdown-menu" id="palettes">
+                        <li><a href="" role="menuitem" tabindex="-1" ng-click="loadMetaEditor()">Meta Editor</a></li>
                     </ul>
                 </li>
                 <div>

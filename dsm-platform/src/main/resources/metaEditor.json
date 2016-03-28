@@ -1,4 +1,31 @@
 {
+  "elements": {
+    "ControlFlow": {
+      "name": "Link",
+      "properties": [
+        {
+          "key": "Guard",
+          "name": "Guard",
+          "type": "combobox",
+          "value": "",
+          "variants": [
+            {
+              "key": "false",
+              "value": "false"
+            },
+            {
+              "key": "iteration",
+              "value": "iteration"
+            },
+            {
+              "key": "true",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    }
+  },
   "blocks": {
     "palette": {
       "Base": {
@@ -32,26 +59,13 @@
               "key": "name",
               "name": "name",
               "type": "string",
-              "value": "entity"
+              "value": "property"
             },
             {
               "key": "type",
               "name": "type",
-              "type": "dropdown",
-              "selected": {
-                "key": "string",
-                "value": "string"
-              },
-              "variants": [
-                {
-                  "key": "combobox",
-                  "value": "combobox"
-                },
-                {
-                  "key": "dropdown",
-                  "value": "dropdown"
-                }
-              ]
+              "type": "string",
+              "value": "string"
             },
             {
               "key": "value",
