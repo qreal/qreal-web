@@ -5,7 +5,7 @@ class PaletteParser {
         this.controller = controller;
     }
 
-    public parse(json) {
+    public parse(json: any) {
         var newPalette = new PaletteTypes();
         var basePalette: Map<NodeType> = {};
         var nodes = json.nodes;

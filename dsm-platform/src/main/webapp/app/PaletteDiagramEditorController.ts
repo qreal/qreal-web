@@ -51,6 +51,7 @@ class PaletteDiagramEditorController extends DiagramEditorController {
             data: JSON.stringify({name: paletteName}),
             success: function (response): any {
                 controller.changePalette(controller.parser.parse(response));
+                controller.addLinks();
             },
             error: function (response, status, error): any {
                 console.log("error: " + status + " " + error);
@@ -64,29 +65,25 @@ class PaletteDiagramEditorController extends DiagramEditorController {
         var newPalette = '<li><a href="" role="menuitem" tabindex="-1" ng-click="choosePalette(' + "'" + name + "'" + ')">' + name + '</a></li>';
         $("#palettes").append($compile(newPalette) ($scope));
         var paletteJson = this.exporter.exportPaletteToJson(controller.getNodesMap(), controller.getLinksMap(), name);
-        console.log(paletteJson);
         $.ajax({
             type: 'POST',
             url: 'createPalette',
             contentType: 'application/json',
             data: JSON.stringify(paletteJson),
             success: function (): any {
+                controller.changePalette(controller.parser.parse(paletteJson));
+                controller.addLinks();
                 console.log('ok');
             },
             error: function (response, status, error): any {
                 console.log("error: " + status + " " + error);
             }
         });
-
-        this.changePalette(this.parser.parse(paletteJson));
     }
 
     private handleLoadedTypes(elementTypes: ElementTypes): void {
         this.propertyEditorController = new PropertyEditorController(this.paperController);
 
-        for (var typeName in elementTypes.uncategorisedTypes) {
-            this.nodeTypesMap[typeName] = elementTypes.uncategorisedTypes[typeName];
-        }
         var categories: Map<Map<NodeType>> = elementTypes.paletteTypes.categories;
         for (var category in categories) {
             for (var typeName in categories[category]) {
@@ -94,7 +91,15 @@ class PaletteDiagramEditorController extends DiagramEditorController {
             }
         }
 
+        this.addLinks();
         this.changePalette(elementTypes.paletteTypes);
+    }
+
+    private addLinks() {
+        var properties: Map<Property> = {};
+        properties["Guard"] = new Property("Guard", "combobox", "");
+        var node: NodeType = new NodeType("Link", properties);
+        this.nodeTypesMap["ControlFlow"] = node;
     }
 
     private changePalette(newPalette: PaletteTypes) {

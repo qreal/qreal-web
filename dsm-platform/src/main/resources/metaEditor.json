@@ -32,7 +32,7 @@
         "Entity": {
           "name": "Entity",
           "image": {
-            "src": "images/ledBlock.svg"
+            "src": "images/entity.svg"
           },
           "properties": [
             {
