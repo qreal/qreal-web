@@ -21,6 +21,7 @@
 /// <reference path="../vendor.d.ts" />
 
 class InterpretManager {
+
     static variablesMap: Map<string> = {};
 
     static interpret(graph: joint.dia.Graph, nodesMap, linksMap, timeline): string {
@@ -79,7 +80,7 @@ class InterpretManager {
             }
         }
     }
-
+    
     static getVariablesMap(): Map<string> {
         return this.variablesMap;
     }

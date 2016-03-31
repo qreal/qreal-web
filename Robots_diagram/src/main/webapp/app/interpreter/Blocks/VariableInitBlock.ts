@@ -1,11 +1,11 @@
 class VariableInitBlock extends AbstractBlock {
-    
+
     static run(node, graph, nodesMap, linksMap, env, timeline): string {
         var output = "Variable Initialization" + "\n";
 
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
-
+        
         var properties = node.getChangeableProperties();
         var variableName = properties["variable"].value;
         var variableValue = properties["value"].value;

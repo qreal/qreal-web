@@ -77,7 +77,7 @@ class Factory {
             case "MarkerDown":
                 output += MarkerBlock.run(node, graph, nodesMap, linksMap, env, timeline, true);
                 break;
-
+            
             case "VariableInit":
                 output += VariableInitBlock.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;

@@ -18,7 +18,7 @@
 
 class Parser {
 
-    public parseExpression(expression: string): any {
+    public parseExpression(expression:string):any {
         // Here we kinda adapt to normal lua grammar
         // In lua x = y + 2 will be accepted, while y = 2 will not
         var abstractSyntaxTree = JSON.parse(JSON.stringify(luaparse.parse("x = " + expression)));
@@ -30,7 +30,7 @@ class Parser {
         return this.calc(root);
     }
 
-    public parseFunction(functionStr: string): void {
+    public parseFunction(functionStr:string):void {
         //And here we do not need to adapt
         var abstractSyntaxTree = JSON.parse(JSON.stringify(luaparse.parse(functionStr)));
         if (abstractSyntaxTree.hasOwnProperty("error")) {
@@ -71,4 +71,5 @@ class Parser {
 
         throw new Error("Unresolved input");
     }
+    
 }

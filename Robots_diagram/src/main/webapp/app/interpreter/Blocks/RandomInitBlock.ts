@@ -5,7 +5,7 @@ class RandomInitBlock extends AbstractBlock {
 
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
-
+        
         var properties = node.getChangeableProperties();
         var variableName = properties["Variable"].value;
         var minValue = properties["LowerBound"].value;
@@ -30,5 +30,5 @@ class RandomInitBlock extends AbstractBlock {
 
         return output;
     }
-    
+
 }
