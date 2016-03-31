@@ -18,28 +18,23 @@
 
 class Parser {
 
-    private error: string;
-    private result: any;
-
-    public parseExpression(expression: string) {
+    public parseExpression(expression: string): any {
         // Here we kinda adapt to normal lua grammar
         // In lua x = y + 2 will be accepted, while y = 2 will not
         var abstractSyntaxTree = JSON.parse(JSON.stringify(luaparse.parse("x = " + expression)));
         if (abstractSyntaxTree.hasOwnProperty("error")) {
-            this.error = abstractSyntaxTree.error + abstractSyntaxTree.message;
-            return;
+            throw new Error(abstractSyntaxTree.error + abstractSyntaxTree.message);
         }
         // And we ignore our fictive assignment when walking ast
         var root = abstractSyntaxTree.body[0].init[0];
-        this.result = this.calc(root);
+        return this.calc(root);
     }
 
-    public parseFunction(functionStr: string) {
+    public parseFunction(functionStr: string): void {
         //And here we do not need to adapt
         var abstractSyntaxTree = JSON.parse(JSON.stringify(luaparse.parse(functionStr)));
         if (abstractSyntaxTree.hasOwnProperty("error")) {
-            this.error = abstractSyntaxTree.error + abstractSyntaxTree.message;
-            return;
+            throw new Error(abstractSyntaxTree.error + abstractSyntaxTree.message);
         }
 
         for (var i = 0; i < abstractSyntaxTree.body.length; i++) {
@@ -48,19 +43,9 @@ class Parser {
                     InterpretManager.setVariable(abstractSyntaxTree.body[i].variables[j].name,
                         this.calc(abstractSyntaxTree.body[i].init[0]));
                 }
-            } else {
-                this.error = "Unresolved input";
-                return;
             }
+            throw new Error("Unresolved input");
         }
-    }
-    
-    public getError(): string {
-        return this.error;
-    }
-    
-    public getResult(): any {
-        return this.result;
     }
 
     private calc(node) {
@@ -74,7 +59,7 @@ class Parser {
         if (node.type === "Identifier") {
             var variablesMap = InterpretManager.getVariablesMap();
             if (variablesMap[node.name] == null) {
-                this.error = "No such variable:" + node.name;
+                throw new Error("No such variable:" + node.name);
                 return 0;
             }
             return variablesMap[node.name];
@@ -84,6 +69,6 @@ class Parser {
             return node.value;
         }
 
-        this.error = "Unresolved input";
+        throw new Error("Unresolved input");
     }
 }

@@ -11,10 +11,8 @@ class VariableInitBlock extends AbstractBlock {
         var variableValue = properties["value"].value;
 
         var parser = new Parser();
-        parser.parseExpression(variableValue);
-
-        if (!parser.getError()) {
-            InterpretManager.setVariable(variableName, parser.getResult());
+        try {
+            InterpretManager.setVariable(variableName, parser.parseExpression(variableValue));
 
             if (links.length == 1) {
                 var nextNode = nodesMap[links[0].get('target').id];
@@ -22,8 +20,8 @@ class VariableInitBlock extends AbstractBlock {
             } else if (links.length > 1) {
                 output += "Error: too many links\n";
             }
-        } else {
-            output += "Error: " + parser.getError() + "\n";
+        } catch (error) {
+            output += "Error: " + error.message + "\n";
         }
         
         return output;

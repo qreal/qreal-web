@@ -30,14 +30,16 @@ class FunctionBlock extends AbstractBlock {
         }
 
         var parser = new Parser();
-        parser.parseFunction(body);
-        if (parser.getError()) {
-            output += "Error: " + parser.getError() + "\n";
-        } else if (links.length == 1) {
-            var nextNode = nodesMap[links[0].get('target').id];
-            output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
-        } else {
-            output += "Error: more than one link from Function node";
+        try {
+            parser.parseFunction(body);
+            if (links.length == 1) {
+                var nextNode = nodesMap[links[0].get('target').id];
+                output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+            } else {
+                output += "Error: more than one link from Function node";
+            }
+        } catch (error) {
+            output += "Error: " + error.message + "\n";
         }
 
         return output;

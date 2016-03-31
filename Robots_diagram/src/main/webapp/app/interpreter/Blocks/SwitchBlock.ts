@@ -22,32 +22,32 @@ class SwitchBlock extends ConditionBlock {
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
         var condition: string = SwitchBlock.getCondition(node);
         var parser = new Parser();
-        parser.parseExpression(condition);
-        if (parser.getError()) {
-            output += "Error: " + parser.getError();
-            return output;
-        }
-        var parseResult: string = parser.getResult().toString();
-        var isFound: boolean = false;
-        var nextNode;
-        var otherwiseNode;
-        for (var i = 0; i < links.length; i++) {
-            var link = links[i];
-            var messageOnLink = SwitchBlock.getGuard(linksMap[link.id]);
-            if (messageOnLink === parseResult) {
-                isFound = true;
-                nextNode = nodesMap[link.get('target').id];
-                break;
+        try {
+            var parseResult: string = parser.parseExpression(condition).toString();
+            var isFound: boolean = false;
+            var nextNode;
+            var otherwiseNode;
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i];
+                var messageOnLink = SwitchBlock.getGuard(linksMap[link.id]);
+                if (messageOnLink === parseResult) {
+                    isFound = true;
+                    nextNode = nodesMap[link.get('target').id];
+                    break;
+                }
+                if (messageOnLink === "") {
+                    otherwiseNode = nodesMap[link.get('target').id];
+                }
             }
-            if (messageOnLink === "") {
-                otherwiseNode = nodesMap[link.get('target').id];
-            }
-        }
 
-        if (isFound) {
-            output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
-        } else {
-            output += Factory.run(otherwiseNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+            if (isFound) {
+                output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+            } else {
+                output += Factory.run(otherwiseNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+            }
+
+        } catch (error) {
+            output += "Error: " + error.message + "\n";
         }
 
         return output;

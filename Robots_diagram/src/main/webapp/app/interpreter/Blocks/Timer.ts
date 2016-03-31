@@ -24,9 +24,8 @@ class Timer extends AbstractBlock {
 
         var properties = node.getChangeableProperties();
         var parser = new Parser();
-        parser.parseExpression(properties["Delay"].value);
-        if (!parser.getError()) {
-            delay = parser.getResult();
+        try {
+            delay = parser.parseExpression(properties["Delay"].value);
             if (delay < 0) {
                 output += "Error: incorrect delay value";
             } else {
@@ -39,8 +38,8 @@ class Timer extends AbstractBlock {
                     output += "Error: too many links\n";
                 }
             }
-        } else {
-            output += "Error: " + parser.getError() + "\n";
+        } catch (error) {
+            output += "Error: " + error.message + "\n";
         }
         
         return output;

@@ -1,4 +1,3 @@
-import parse = luaparse.parse;
 class RandomInitBlock extends AbstractBlock {
     
     static run(node, graph: joint.dia.Graph, nodesMap: Map<DiagramNode>, linksMap: Map<Link>, env, timeline): string {
@@ -13,31 +12,21 @@ class RandomInitBlock extends AbstractBlock {
         var maxValue = properties["UpperBound"].value;
 
         var parser: Parser = new Parser();
-        parser.parseExpression(minValue);
+        try {
+            minValue = parser.parseExpression(minValue);
+            maxValue = parser.parseExpression(maxValue);
+            InterpretManager.setVariable(variableName,
+                (Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue).toString());
 
-        if (!parser.getError()) {
-            minValue = parser.getResult();
-
-            parser.parseExpression(maxValue);
-
-            if (!parser.getError()) {
-                maxValue = parser.getResult();
-                InterpretManager.setVariable(variableName,
-                    (Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue).toString());
-
-                if (links.length === 1) {
-                    var nextNode = nodesMap[links[0].get('target').id];
-                    output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
-                } else if (links.length > 1) {
-                    output += "Error: too many links\n";
-                }
-            } else {
-                output += "Error: " + parser.getError() + "\n";
+            if (links.length === 1) {
+                var nextNode = nodesMap[links[0].get('target').id];
+                output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+            } else if (links.length > 1) {
+                output += "Error: too many links\n";
             }
-        } else {
-            output += "Error: " + parser.getError() + "\n";
+        } catch (error) {
+            output += "Error: " + error.message + "\n";
         }
-
 
         return output;
     }

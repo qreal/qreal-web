@@ -33,11 +33,10 @@ class Motors extends AbstractBlock {
 
             if (p == "Power") {
                 var parser = new Parser();
-                parser.parseExpression(properties[p].value);
-                var models = timeline.getRobotModels();
-                var model = models[0];
-                if (!parser.getError()) {
-                    power = parser.getResult();
+                try {
+                    power = parser.parseExpression(properties[p].value);
+                    var models = timeline.getRobotModels();
+                    var model = models[0];
                     if (power < 0 || power > 100) {
                         output += "Error: incorrect power value";
                     } else {
@@ -61,8 +60,8 @@ class Motors extends AbstractBlock {
                             output += "Error: too many links\n";
                         }
                     }
-                } else {
-                    output += "Error: " + parser.getError() + "\n";
+                } catch (error) {
+                    output += "Error: " + error.message + "\n";
                 }
             }
         }

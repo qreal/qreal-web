@@ -24,38 +24,39 @@ class IfBlock extends ConditionBlock {
 
         var condition = IfBlock.getCondition(node);
         var parser = new Parser();
-        parser.parseExpression(condition);
-        if (!parser.getError()) {
-            output += "Condition: " + parser.getResult() + "\n";
-        } else {
-            output += "Condition: " + "Error: " + parser.getError() + "\n";
-        }
+        try {
+            var result = parser.parseExpression(condition);
+            output += "Condition: " + result + "\n";
 
-        if (links.length === 2) {
-            var link0 = links[0];
-            var link1 = links[1];
-            var link0Guard = IfBlock.getGuard(linksMap[link0.id]);
-            var link1Guard = IfBlock.getGuard(linksMap[link1.id]);
-            var nextNode;
-            if (link0Guard === "true" && link1Guard === "false") {
-                if (parser.getResult()) {
-                    nextNode = nodesMap[link0.get('target').id];
+            if (links.length === 2) {
+                var link0 = links[0];
+                var link1 = links[1];
+                var link0Guard = IfBlock.getGuard(linksMap[link0.id]);
+                var link1Guard = IfBlock.getGuard(linksMap[link1.id]);
+                var nextNode;
+                if (link0Guard === "true" && link1Guard === "false") {
+                    if (result) {
+                        nextNode = nodesMap[link0.get('target').id];
+                    } else {
+                        nextNode = nodesMap[link1.get('target').id];
+                    }
+                    output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+                } else if (link0Guard === "false" && link1Guard === "true") {
+                    if (result) {
+                        nextNode = nodesMap[link1.get('target').id];
+                    } else {
+                        nextNode = nodesMap[link0.get('target').id];
+                    }
+                    output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
                 } else {
-                    nextNode = nodesMap[link1.get('target').id];
+                    output += "Error: there must be both true and false links";
                 }
-                output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
-            } else if (link0Guard === "false" && link1Guard === "true") {
-                if (parser.getResult()) {
-                    nextNode = nodesMap[link1.get('target').id];
-                } else {
-                    nextNode = nodesMap[link0.get('target').id];
-                }
-                output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
             } else {
-                output += "Error: there must be both true and false links";
+                output += "Error: must be 2 links from If Node";
             }
-        } else {
-            output += "Error: must be 2 links from If Node";
+            
+        } catch (error) {
+            output += output += "Condition: " + "Error: " + error.message + "\n";
         }
 
         return output;
