@@ -21,6 +21,8 @@
 /// <reference path="../vendor.d.ts" />
 
 class InterpretManager {
+    static variablesMap: Map<string> = {};
+
     static interpret(graph: joint.dia.Graph, nodesMap, linksMap, timeline): string {
         var elements = graph.getElements();
         var links = graph.getLinks();
@@ -29,7 +31,7 @@ class InterpretManager {
 
         if (elements.length > 0) {
             if (links.length > 0) {
-                var firstNodeId = InterpretManager.findInitialNode(nodesMap);
+                var firstNodeId = InterpretManager.findInitialNodeId(nodesMap);
                 if (firstNodeId != "") {
                     timeline.start();
                     output += Factory.run(nodesMap[firstNodeId], graph, nodesMap, linksMap, env, timeline);
@@ -49,7 +51,7 @@ class InterpretManager {
         return output;
     }
 
-    static findInitialNode(nodesMap) {
+    static findInitialNodeId(nodesMap): string {
         var firstNodeId = "";
         for (var id in nodesMap) {
             if (nodesMap.hasOwnProperty(id)) {
@@ -75,6 +77,14 @@ class InterpretManager {
                 if (nodesMap[property] === node)
                     return property;
             }
+        }
     }
-}
+
+    static getVariablesMap(): Map<string> {
+        return this.variablesMap;
+    }
+
+    static setVariable(name: string, value: string): void {
+        this.variablesMap[name] = value;
+    }
 }

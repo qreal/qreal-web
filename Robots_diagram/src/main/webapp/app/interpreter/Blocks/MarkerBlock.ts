@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-class MarkerBlock extends Block {
+class MarkerBlock extends AbstractBlock {
 
     static run(node, graph, nodesMap, linksMap, env, timeline, isUp : boolean): string {
         var output : string = "Marker " + ((isUp) ? "UP" : "DOWN") + "\n";
@@ -22,22 +22,14 @@ class MarkerBlock extends Block {
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
 
-        if (links.length == 0) {
+        if (links.length === 0) {
             output += "Too small links";
-        } else
-        if (links.length > 1) {
+        } else if (links.length > 1) {
             output += "Too much links";
         }
 
         var models = timeline.getRobotModels();
-
-        var color: string;
-        var properties = node.getChangeableProperties();
-        for (var p in properties) {
-            if (p == "Color") {
-                color = properties[p].value;
-            }
-        }
+        var color: string = node.getChangeableProperties()["Color"].value;
 
         for (var modelId = 0; modelId < models.length; modelId++) {
             var model = models[modelId];

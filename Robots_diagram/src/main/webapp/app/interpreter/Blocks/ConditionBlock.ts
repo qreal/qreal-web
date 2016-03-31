@@ -1,5 +1,5 @@
 /*
- * Copyright Lada Gagina
+ * Copyright Vladimir Zakharov 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-class SmileBlock extends AbstractBlock {
+abstract class ConditionBlock extends AbstractBlock {
     
-    static run(node): string {
-        var name = "Smile" + "\n";
-        return name;
+    protected static getCondition(node: DiagramNode): string {
+        return node.getChangeableProperties()["Condition"].value;
+    }
+
+    protected static getGuard(link : Link): string {
+        return link.getChangeableProperties()["Guard"].value;
     }
     
 }

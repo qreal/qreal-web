@@ -14,55 +14,36 @@
  * limitations under the License.
  */
 
-class MotorsStop extends Block {
+class MotorsStop extends AbstractBlock {
+    
     static run(node, graph, nodesMap, linksMap, env, timeline): string {
         var output = "Motors stop" + "\n";
-        var ports = [];
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
 
-        var properties = node.getChangeableProperties();
-        for (var p in properties) {
-            if (p == "Ports") {
-                ports += properties[p].value.replace(/ /g,'').split(",");
-            }
-        }
+        var ports = node.getChangeableProperties()["Ports"].value.replace(/ /g,'').split(",");
         output += "Ports: " + ports + "\n";
 
         var models = timeline.getRobotModels();
         var model = models[0];
-        if (ports.length == 1) {
-            if (ports[0] == "M3") {
-                model.setMotor1(0);
+
+        for (var i = 0; i < ports.length; i++) {
+            var motor: Motor = <Motor> model.getDeviceByPortName(ports[i]);
+            if (motor) {
+                motor.setPower(0);
+            } else {
+                output += "Error: Incorrect port name " + ports[i];
             }
-            else if (ports[0] == "M4") {
-                model.setMotor2(0);
-            }
-            else {
-                output += "Error: Incorrect port name";
-            }
-        }
-        else if (ports.length == 2) {
-            if (ports[0] == "M3" && ports[1] == "M4" || ports[0] == "M4" && ports[1] == "M3") {
-                model.setMotor1(0);
-                model.setMotor2(0);
-            }
-            else {
-                output += "Error: Incorrect port names";
-            }
-        }
-        else {
-            output += "Error: Incorrect number of ports";
         }
 
-        if (links.length == 1) {
+        if (links.length === 1) {
             var nextNode = nodesMap[links[0].get('target').id];
             output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline);
-        }
-        else if (links.length > 1) {
+        } else if (links.length > 1) {
             output += "Error: too many links\n";
         }
 
         return output;
     }
+    
 }

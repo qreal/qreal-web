@@ -1,7 +1,7 @@
 /*
  * Copyright Lada Gagina
  * Copyright Anton Gulikov
- * Copyright Vladimit Zakharov
+ * Copyright Vladimir Zakharov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
  * limitations under the License.
  */
 
-class Motors extends Block {
+class Motors extends AbstractBlock {
+    
     static run(node, graph, nodesMap, linksMap, forward, env, timeline): string {
         var output = "Motors forward/backward" + "\n";
         var ports = [];
@@ -29,13 +30,14 @@ class Motors extends Block {
             if (p == "Ports") {
                 ports = properties[p].value.replace(/ /g,'').split(",");
             }
+
             if (p == "Power") {
-                var parser = new Parser(properties[p].value, env);
-                parser.parseExpression();
+                var parser = new Parser();
+                parser.parseExpression(properties[p].value);
                 var models = timeline.getRobotModels();
                 var model = models[0];
-                if (parser.error == null) {
-                    power = parser.result;
+                if (!parser.getError()) {
+                    power = parser.getResult();
                     if (power < 0 || power > 100) {
                         output += "Error: incorrect power value";
                     } else {
@@ -60,11 +62,12 @@ class Motors extends Block {
                         }
                     }
                 } else {
-                    output += "Error: " + parser.error + "\n";
+                    output += "Error: " + parser.getError() + "\n";
                 }
             }
         }
 
         return output;
     }
+    
 }

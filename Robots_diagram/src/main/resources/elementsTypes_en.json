@@ -124,6 +124,61 @@
                 "src": "images/forkBlock.svg"
             }
         },
+
+        "VariableInit": {
+            "name": "Variable Initialization",
+            "image": {
+                "src": "images/variableInitBlock.svg"
+            },
+            "properties": [
+
+                {
+                    "key": "variable",
+                    "name": "Variable",
+                    "type": "string",
+                    "value": "x"
+                },
+
+                {
+                    "key": "value",
+                    "name": "Value",
+                    "type": "string",
+                    "value": "0"
+                }
+
+            ]
+        },
+
+        "Randomizer": {
+            "name": "Random Initialization",
+            "image": {
+                "src": "images/randomizerBlock.svg"
+            },
+            "properties": [
+
+                {
+                    "key": "Variable",
+                    "name": "Variable",
+                    "type": "string",
+                    "value": "x"
+                },
+
+                {
+                    "key": "LowerBound",
+                    "name": "From",
+                    "type": "string",
+                    "value": "0"
+                },
+
+                {
+                    "key": "UpperBound",
+                    "name": "To",
+                    "type": "string",
+                    "value": "10"
+                }
+
+            ]
+        },
             
         "TrikV6EnginesForward": {
             "name": "Motors Forward",

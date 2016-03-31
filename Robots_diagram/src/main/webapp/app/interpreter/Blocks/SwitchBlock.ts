@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-class SwitchBlock extends Block {
+class SwitchBlock extends ConditionBlock {
 
     static run(node, graph, nodesMap, linksMap, env, timeline): string {
-
         var output = "Switch\n";
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
-        var condition : string = SwitchBlock.getCondition(node);
-        var parser = new Parser(condition, env);
-        parser.parseExpression();
-        var parseResult : string = parser.result.toString();
-        var isFound : boolean = false;
+        var condition: string = SwitchBlock.getCondition(node);
+        var parser = new Parser();
+        parser.parseExpression(condition);
+        if (parser.getError()) {
+            output += "Error: " + parser.getError();
+            return output;
+        }
+        var parseResult: string = parser.getResult().toString();
+        var isFound: boolean = false;
         var nextNode;
         var otherwiseNode;
         for (var i = 0; i < links.length; i++) {
@@ -36,33 +39,18 @@ class SwitchBlock extends Block {
                 nextNode = nodesMap[link.get('target').id];
                 break;
             }
-            if (messageOnLink === "false") {
+            if (messageOnLink === "") {
                 otherwiseNode = nodesMap[link.get('target').id];
             }
         }
-        output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+
+        if (isFound) {
+            output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+        } else {
+            output += Factory.run(otherwiseNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+        }
+
         return output;
     }
-
-    private static getCondition(node) : string {
-        var condition : string = "";
-        var properties = node.getChangeableProperties();
-        for (var property in properties) {
-            if (property == "Condition") {
-                condition = properties[property].value;
-            }
-        }
-        return condition;
-    }
-
-    private static getGuard(link : Link) : string {
-        var guard : string = "";
-        var properties = link.getChangeableProperties();
-        for (var property in properties) {
-            if (property == "Guard") {
-                guard = properties[property].value;
-            }
-        }
-        return guard;
-    }
+    
 }

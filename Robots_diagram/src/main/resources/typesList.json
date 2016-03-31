@@ -18,7 +18,9 @@
                 "IfBlock",
                 "FiBlock",
                 "Loop",
-                "Fork"
+                "Fork",
+                "VariableInit",
+                "Randomizer"
             ],
 
             "Actions": [

@@ -16,6 +16,7 @@
  */
 
 /// <reference path="Blocks/AbstractBlock.ts" />
+/// <reference path="Blocks/ConditionBlock.ts" />
 /// <reference path="Blocks/InitialBlock.ts" />
 /// <reference path="Blocks/FinalBlock.ts" />
 /// <reference path="Blocks/IfBlock.ts" />
@@ -25,6 +26,8 @@
 /// <reference path="Blocks/Timer.ts" />
 /// <reference path="Blocks/SwitchBlock.ts" />
 /// <reference path="Blocks/MarkerBlock.ts" />
+/// <reference path="Blocks/RandomInitBlock.ts" />
+/// <reference path="Blocks/VariableInitBlock.ts" />
 /// <reference path="Parser/Parser.ts" />
 
 class Factory {
@@ -73,6 +76,14 @@ class Factory {
 
             case "MarkerDown":
                 output += MarkerBlock.run(node, graph, nodesMap, linksMap, env, timeline, true);
+                break;
+
+            case "VariableInit":
+                output += VariableInitBlock.run(node, graph, nodesMap, linksMap, env, timeline);
+                break;
+
+            case "Randomizer":
+                output += RandomInitBlock.run(node, graph, nodesMap, linksMap, env, timeline);
                 break;
             
             default:

@@ -15,7 +15,9 @@
  * limitations under the License.
  */
 
-class Block {
-    run(node): void {
+abstract class AbstractBlock {
+    
+    static run(...args: any[]): void {
     }
+    
 }
