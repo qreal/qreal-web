@@ -17,6 +17,7 @@
 class FunctionBlock extends AbstractBlock {
     
     static run(node, graph, nodesMap, linksMap, env, timeline): string {
+
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
 
@@ -26,7 +27,7 @@ class FunctionBlock extends AbstractBlock {
         if (body) {
             output += body + "\n";
         } else {
-            output += "Error, cannot get properties" + "\n";
+            AbstractBlock.error(timeline, "Error, cannot get properties\n");
         }
 
         var parser = new Parser();
@@ -36,10 +37,10 @@ class FunctionBlock extends AbstractBlock {
                 var nextNode = nodesMap[links[0].get('target').id];
                 output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
             } else {
-                output += "Error: more than one link from Function node";
+                AbstractBlock.error(timeline, "Error: more than one link from Function block");
             }
         } catch (error) {
-            output += "Error: " + error.message + "\n";
+            AbstractBlock.error(timeline, "Parser error in Function block: " + error.message + "\n");
         }
 
         return output;

@@ -17,11 +17,10 @@
 class IfBlock extends ConditionBlock {
     
     static run(node, graph, nodesMap, linksMap, env, timeline): string {
-        var output = "If" + "\n";
 
+        var output = "If" + "\n";
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
-
         var condition = IfBlock.getCondition(node);
         var parser = new Parser();
         try {
@@ -49,14 +48,14 @@ class IfBlock extends ConditionBlock {
                     }
                     output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
                 } else {
-                    output += "Error: there must be both true and false links";
+                    AbstractBlock.error(timeline, "Error: there must be both true and false links from If block");
                 }
             } else {
-                output += "Error: must be 2 links from If Node";
+                AbstractBlock.error(timeline, "Error: there must be 2 links from If block");
             }
             
         } catch (error) {
-            output += output += "Condition: " + "Error: " + error.message + "\n";
+            AbstractBlock.error(timeline, "Parser error in If block: " + error.message + "\n");
         }
 
         return output;

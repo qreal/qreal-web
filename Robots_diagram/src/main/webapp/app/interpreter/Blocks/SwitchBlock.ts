@@ -47,7 +47,7 @@ class SwitchBlock extends ConditionBlock {
             }
 
         } catch (error) {
-            output += "Error: " + error.message + "\n";
+            AbstractBlock.error(timeline, "Parser error in Switch block: " + error.message + "\n");
         }
 
         return output;

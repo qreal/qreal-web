@@ -16,7 +16,7 @@
 
 class Timer extends AbstractBlock {
     
-    static run(node, graph, nodesMap, linksMap, env, timeline):string {
+    static run(node, graph, nodesMap, linksMap, env, timeline): string {
         var output = "Timer" + "\n";
         var delay = 0;
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
@@ -27,19 +27,21 @@ class Timer extends AbstractBlock {
         try {
             delay = parser.parseExpression(properties["Delay"].value);
             if (delay < 0) {
-                output += "Error: incorrect delay value";
+                AbstractBlock.error(timeline, "Error: incorrect delay value in Timer block");
             } else {
                 output += "Delay: " + delay + "\n";
-
+                
                 if (links.length == 1) {
                     var nextNode = nodesMap[links[0].get('target').id];
-                    setTimeout(function () { output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline); }, delay);
+                    setTimeout(function () { 
+                        output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline); 
+                    }, delay);
                 } else if (links.length > 1) {
-                    output += "Error: too many links\n";
+                    AbstractBlock.error(timeline, "Error: too many links from Timer block");
                 }
             }
         } catch (error) {
-            output += "Error: " + error.message + "\n";
+            AbstractBlock.error(timeline, "Parser error in Timer block: " + error.message + "\n");
         }
         
         return output;

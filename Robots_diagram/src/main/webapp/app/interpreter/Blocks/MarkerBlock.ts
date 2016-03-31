@@ -22,10 +22,8 @@ class MarkerBlock extends AbstractBlock {
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
 
-        if (links.length === 0) {
-            output += "Too small links";
-        } else if (links.length > 1) {
-            output += "Too much links";
+        if (links.length != 1) {
+            AbstractBlock.error(timeline, "Error: there must be 1 link from Marker up (down) block");
         }
 
         var models = timeline.getRobotModels();
@@ -37,11 +35,9 @@ class MarkerBlock extends AbstractBlock {
             model.setMarkerColor(color);
         }
 
-        if (links.length == 1) {
-            var link = links[0];
-            var nextNode = nodesMap[link.get('target').id];
-            output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline);
-        }
+        var link = links[0];
+        var nextNode = nodesMap[link.get('target').id];
+        output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline);
 
         return output;
     }

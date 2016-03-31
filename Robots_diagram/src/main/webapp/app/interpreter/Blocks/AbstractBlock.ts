@@ -19,5 +19,16 @@ abstract class AbstractBlock {
     
     static run(...args: any[]): void {
     }
+
+    /**
+     * Stops the robot's movement and reports an error
+     * @param timeline
+     * @param message
+     */
+    static error(timeline : Timeline, message : string): void {
+        InterpretManager.error = true;
+        timeline.stop();
+        alert(message);
+    }
     
 }

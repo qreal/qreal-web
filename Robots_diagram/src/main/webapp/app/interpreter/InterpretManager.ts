@@ -21,8 +21,9 @@
 /// <reference path="../vendor.d.ts" />
 
 class InterpretManager {
-
+    
     static variablesMap: Map<string> = {};
+    static error = false;
 
     static interpret(graph: joint.dia.Graph, nodesMap, linksMap, timeline): string {
         var elements = graph.getElements();
@@ -33,6 +34,7 @@ class InterpretManager {
         if (elements.length > 0) {
             if (links.length > 0) {
                 var firstNodeId = InterpretManager.findInitialNodeId(nodesMap);
+                InterpretManager.error = false; // Interpretation starts without errors
                 if (firstNodeId != "") {
                     timeline.start();
                     output += Factory.run(nodesMap[firstNodeId], graph, nodesMap, linksMap, env, timeline);

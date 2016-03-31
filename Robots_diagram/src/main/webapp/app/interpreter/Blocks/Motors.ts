@@ -19,51 +19,48 @@
 class Motors extends AbstractBlock {
     
     static run(node, graph, nodesMap, linksMap, forward, env, timeline): string {
+
         var output = "Motors forward/backward" + "\n";
-        var ports = [];
-        var power = 0;
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
-
+        
         var properties = node.getChangeableProperties();
-        for (var p in properties) {
-            if (p == "Ports") {
-                ports = properties[p].value.replace(/ /g,'').split(",");
+        var ports = properties["Ports"].value.replace(/ /g,'').split(",");
+
+        var power = 0;
+        var parser = new Parser();
+        try {
+            power = parser.parseExpression(properties["Power"].value);
+            var models = timeline.getRobotModels();
+            var model = models[0];
+            if (power < 0 || power > 100) {
+                AbstractBlock.error(timeline, "Error: incorrect power value in Motors Forward(Backward) block" +
+                    " (must be between 0 and 100)");
+            } else {
+                output += "Ports: " + ports + "\n" + "Power: " + power + "\n";
             }
+            power = (forward) ? power : -power;
 
-            if (p == "Power") {
-                var parser = new Parser();
-                try {
-                    power = parser.parseExpression(properties[p].value);
-                    var models = timeline.getRobotModels();
-                    var model = models[0];
-                    if (power < 0 || power > 100) {
-                        output += "Error: incorrect power value";
-                    } else {
-                        output += "Ports: " + ports + "\n" + "Power: " + power + "\n";
-
-                        power = (forward) ? power : -power;
-
-                        for (var i = 0; i < ports.length; i++) {
-                            var motor: Motor = <Motor> model.getDeviceByPortName(ports[i]);
-                            if (motor) {
-                                motor.setPower(power);
-                            } else {
-                                output += "Error: Incorrect port name " + ports[i];
-                            }
-                        }
-
-                        if (links.length == 1) {
-                            var nextNode = nodesMap[links[0].get('target').id];
-                            output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline);
-                        } else if (links.length > 1) {
-                            output += "Error: too many links\n";
-                        }
-                    }
-                } catch (error) {
-                    output += "Error: " + error.message + "\n";
+            for (var i = 0; i < ports.length; i++) {
+                var motor: Motor = <Motor> model.getDeviceByPortName(ports[i]);
+                if (motor) {
+                    motor.setPower(power);
+                } else {
+                    AbstractBlock.error(timeline, "Error: Incorrect port name " + ports[i] +
+                        " in Motors Forward(Backward) block");
                 }
             }
+
+            if (links.length == 1) {
+                var nextNode = nodesMap[links[0].get('target').id];
+                output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline);
+            } else if (links.length > 1) {
+                AbstractBlock.error(timeline, "Error: too many links from Motors Forward(Backwards) block");
+            } else {
+                AbstractBlock.error(timeline, "Error: cannot find next node after Motors Forward(Backwards) block");
+            }
+        } catch (error) {
+            AbstractBlock.error(timeline, "Parser error in Motors Forward(Backward) block: " + error.message + "\n");
         }
 
         return output;

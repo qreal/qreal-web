@@ -17,6 +17,7 @@
 class MotorsStop extends AbstractBlock {
     
     static run(node, graph, nodesMap, linksMap, env, timeline): string {
+
         var output = "Motors stop" + "\n";
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
@@ -32,7 +33,7 @@ class MotorsStop extends AbstractBlock {
             if (motor) {
                 motor.setPower(0);
             } else {
-                output += "Error: Incorrect port name " + ports[i];
+                AbstractBlock.error(timeline, "Error: Incorrect port name " + ports[i] + " in Motors Stop block");
             }
         }
 
@@ -40,7 +41,9 @@ class MotorsStop extends AbstractBlock {
             var nextNode = nodesMap[links[0].get('target').id];
             output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline);
         } else if (links.length > 1) {
-            output += "Error: too many links\n";
+            AbstractBlock.error(timeline, "Error: too many links from Motors Stop block");
+        } else {
+            AbstractBlock.error(timeline, "Error: cannot find next node after Motors Stop block");
         }
 
         return output;

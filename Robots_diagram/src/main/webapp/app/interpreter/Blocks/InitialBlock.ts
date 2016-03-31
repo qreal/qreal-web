@@ -25,7 +25,7 @@ class InitialBlock extends AbstractBlock {
             var nextNode = nodesMap[links[0].get('target').id];
             output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
         } else if (links.length > 1) {
-            output += "Error: too many links\n"
+            AbstractBlock.error(timeline, "Error: too many links from Initial block");
         }
 
         return output;
