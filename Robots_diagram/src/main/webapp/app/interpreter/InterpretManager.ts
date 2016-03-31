@@ -15,6 +15,8 @@
  */
 
 class InterpretManager {
+    static variablesMap: VariablesMap = {};
+
     static interpret(graph: joint.dia.Graph, nodesMap, linksMap, timeline): string {
         var elements = graph.getElements();
         var links = graph.getLinks();
@@ -69,6 +71,14 @@ class InterpretManager {
                 if (nodesMap[property] === node)
                     return property;
             }
+        }
     }
-}
+
+    static getVariablesMap() : VariablesMap {
+        return this.variablesMap;
+    }
+
+    static setVariable(name: string, value: string) {
+        this.variablesMap[name] = value;
+    }
 }

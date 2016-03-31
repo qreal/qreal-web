@@ -23,6 +23,7 @@
 /// <reference path="../resources/types/raphael/raphael.d.ts" />
 /// <reference path="../resources/types/bootstrap/bootstrap.d.ts" />
 /// <reference path="../resources/types/treeview/treeview.d.ts" />
+/// <reference path="../resources/types/luaparse/luaparse.d.ts" />
 
 
 

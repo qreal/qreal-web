@@ -62,6 +62,14 @@ class Factory {
             case "Marker Down":
                 output += MarkerBlock.run(node, graph, nodesMap, linksMap, env, timeline, true);
                 break;
+
+            case "Variable Initialization":
+                output += VariableInitBlock.run(node, graph, nodesMap, linksMap, env, timeline);
+                break;
+
+            case "Random Initialization":
+                output += RandomInitBlock.run(node, graph, nodesMap, linksMap, env, timeline);
+                break;
             
             default:
                 output += "Not yet";

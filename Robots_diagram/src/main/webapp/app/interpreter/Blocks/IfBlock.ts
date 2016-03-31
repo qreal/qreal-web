@@ -22,13 +22,13 @@ class IfBlock extends Block {
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
 
         var condition = IfBlock.getCondition(node);
-        var parser = new Parser(condition, env);
-        parser.parseExpression();
+        var parser = new Parser(condition);
+        parser.parseCondition();
         if (parser.error == null) {
             output += "Condition: " + parser.result + "\n";
         }
         else {
-            output += "Condition: " + parser.error + "\n";
+            output += "Condition: " + "Error: " + parser.error + "\n";
         }
 
         if (links.length == 2) {

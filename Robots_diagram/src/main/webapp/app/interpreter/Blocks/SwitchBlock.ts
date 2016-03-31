@@ -22,8 +22,12 @@ class SwitchBlock extends Block {
         var nodeId = InterpretManager.getIdByNode(node, nodesMap);
         var links = InterpretManager.getOutboundLinks(graph, nodeId);
         var condition : string = SwitchBlock.getCondition(node);
-        var parser = new Parser(condition, env);
-        parser.parseExpression();
+        var parser = new Parser(condition);
+        parser.parseCondition();
+        if (parser.error != null) {
+            output += "Error: " + parser.error;
+            return output;
+        }
         var parseResult : string = parser.result.toString();
         var isFound : boolean = false;
         var nextNode;
@@ -36,11 +40,17 @@ class SwitchBlock extends Block {
                 nextNode = nodesMap[link.get('target').id];
                 break;
             }
-            if (messageOnLink === "false") {
+            if (messageOnLink === "") {
                 otherwiseNode = nodesMap[link.get('target').id];
             }
         }
-        output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+
+        if (isFound) {
+            output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+        } else {
+            output += Factory.run(otherwiseNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+        }
+
         return output;
     }
 
