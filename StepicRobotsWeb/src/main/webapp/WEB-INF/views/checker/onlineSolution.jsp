@@ -45,7 +45,7 @@
         </div>
         <div class="col-md-9">
             <div id="diagramContent" class="row unselectable" ng-controller="StepicDiagramEditorController" task="${id}" kit="${kit}">
-                <ul class='custom-menu'>
+                <ul id="paper_context_menu" class='custom-menu'>
                     <li data-action="delete">Delete</li>
                 </ul>
                 <div id="diagram_paper" zoom="0.8">

@@ -18,6 +18,7 @@
 /// <reference path="exporters/RobotsDiagramExporter.ts" />
 /// <reference path="../model/Diagram.ts" />
 /// <reference path="../model/Folder.ts" />
+/// <reference path="../model/DiagramMenuElement.ts" />
 /// <reference path="../../diagramCore.d.ts" />
 /// <reference path="../../vendor.d.ts" />
 
@@ -30,6 +31,8 @@ class DiagramMenuController {
     private canBeDeleted: boolean;
     private folderTree: Folder;
     private currentFolder: Folder;
+    private contextMenuId = "diagram_menu_context_menu";
+    private selectedElement: DiagramMenuElement;
 
     constructor(diagramEditorController: RobotsDiagramEditorController) {
         this.diagramEditorController = diagramEditorController;
@@ -138,6 +141,7 @@ class DiagramMenuController {
         this.canBeDeleted = false;
         this.currentDiagramName = "";
         this.currentDiagramFolder = null;
+        this.selectedElement = null;
     }
 
     private showFolderMenu(): void {
@@ -186,7 +190,8 @@ class DiagramMenuController {
             url: 'saveDiagram',
             dataType: 'text',
             contentType: 'application/json',
-            data: JSON.stringify(menuManager.diagramExporter.exportSavingDiagramStateToJSON(this.diagramEditorController.getGraph(),
+            data: JSON.stringify(
+                menuManager.diagramExporter.exportSavingDiagramStateToJSON(this.diagramEditorController.getGraph(),
                 this.diagramEditorController.getDiagramParts(), diagramName, this.currentFolder.getId())),
             success: function (diagramId, status, jqXHR): any {
                 menuManager.currentFolder.addDiagram(new Diagram(diagramId, diagramName));
@@ -214,7 +219,8 @@ class DiagramMenuController {
                 url: 'updateDiagram',
                 dataType: 'text',
                 contentType: 'application/json',
-                data: JSON.stringify(menuManager.diagramExporter.exportUpdatingDiagramStateToJSON(this.diagramEditorController.getGraph(),
+                data: JSON.stringify(
+                    menuManager.diagramExporter.exportUpdatingDiagramStateToJSON(this.diagramEditorController.getGraph(),
                     this.diagramEditorController.getDiagramParts(), this.currentDiagramName, this.currentDiagramFolder)),
                 success: function (response, status, jqXHR): any {
                     if (menuManager.canBeDeleted) {
@@ -244,6 +250,45 @@ class DiagramMenuController {
                 menuManager.diagramEditorController.handleLoadedDiagramJson(response);
             },
             error: function (response, status, error): any {
+                console.log("error: " + status + " " + error);
+            }
+        });
+    }
+
+    private deleteDiagramFromDatabase(diagramName: string): void {
+        var menuManager = this;
+        $.ajax({
+            type: 'POST',
+            url: 'deleteDiagram',
+            contentType: 'application/json',
+            data: (JSON.stringify({id: menuManager.currentFolder.getDiagramIdByName(diagramName)})),
+            success: function () {
+                menuManager.currentFolder.deleteDiagramByName(diagramName);
+                menuManager.showFolderTable(menuManager.currentFolder);
+
+                if (diagramName === menuManager.currentDiagramName
+                    && menuManager.currentFolder === menuManager.currentDiagramFolder) {
+                    menuManager.clearState();
+                }
+            },
+            error: function (response, status, error) {
+                console.log("error: " + status + " " + error);
+            }
+        });
+    }
+
+    private  deleteFolderFromDatabase(folderName: string) {
+        var menuManager = this;
+        $.ajax({
+            type: 'POST',
+            url: 'deleteFolder',
+            contentType: 'application/json',
+            data: (JSON.stringify({id: menuManager.currentFolder.findChildByName(folderName).getId()})),
+            success: function () {
+                menuManager.currentFolder.deleteChildByName(folderName);
+                menuManager.showFolderTable(menuManager.currentFolder);
+            },
+            error: function (response, status, error) {
                 console.log("error: " + status + " " + error);
             }
         });
@@ -293,11 +338,13 @@ class DiagramMenuController {
         var diagramNames: string[] = this.currentFolder.getDiagramNames();
         this.showPathToFolder();
         $.each(folderNames, function (i) {
-            $('.folderView ul').prepend("<li class='folders'><span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>" +
+            $('.folderView ul').prepend("<li class='folders'>" +
+                "<span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>" +
                 "<span class='glyphicon-class'>" + folderNames[i] + "</span></li>");
         });
         $.each(diagramNames, function (i) {
-            $('.folderView ul').append("<li class='diagrams'><span class='glyphicon glyphicon-file' aria-hidden='true'></span>" +
+            $('.folderView ul').append("<li class='diagrams'>" +
+                "<span class='glyphicon glyphicon-file' aria-hidden='true'></span>" +
                 "<span class='glyphicon-class'>" + diagramNames[i] + "</span></li>");
         });
 
@@ -308,6 +355,8 @@ class DiagramMenuController {
             menuManager.openDiagramFromDatabase($(this).text());
             $('#diagrams').modal('hide');
         });
+
+        this.initContextMenu();
     }
 
     private levelUpFolder(): void {
@@ -315,4 +364,34 @@ class DiagramMenuController {
             this.showFolderTable(this.currentFolder.getParent());
         }
     }
+
+    private initContextMenu(): void {
+        var controller = this;
+
+        $('#diagrams li').mouseup(function (event) {
+            if (event.button == 2) {
+                $("#" + controller.contextMenuId).finish().toggle(100)
+                    .css({
+                        top: event.pageY + "px",
+                        left: event.pageX + "px"
+                    });
+                controller.selectedElement = new DiagramMenuElement($(this).text(), $(this).attr("class"));
+            }
+        });
+
+        $("#" + controller.contextMenuId + " li").click(function () {
+            switch($(this).attr("data-action")) {
+                case "delete":
+                    if (controller.selectedElement.getType() === 'diagrams') {
+                        controller.deleteDiagramFromDatabase(controller.selectedElement.getName());
+                    } else if (controller.selectedElement.getType() === 'folders') {
+                        controller.deleteFolderFromDatabase(controller.selectedElement.getName());
+                    }
+                    break;
+            }
+
+            $("#" + controller.contextMenuId).hide(100);
+        });
+    }
+    
 }

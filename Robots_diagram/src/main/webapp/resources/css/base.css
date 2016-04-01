@@ -174,7 +174,7 @@ body{
 
 .custom-menu {
     display: none;
-    z-index: 1000;
+    z-index: 2000;
     position: absolute;
     overflow: hidden;
     border: 1px solid #CCC;

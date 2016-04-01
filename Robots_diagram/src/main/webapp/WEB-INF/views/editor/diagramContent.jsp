@@ -17,7 +17,10 @@
   --%>
 
 <div id="diagramContent" class="unselectable" ng-controller="RobotsDiagramEditorController">
-    <ul class='custom-menu'>
+    <ul id="diagram_menu_context_menu" class='custom-menu'>
+        <li data-action="delete">Delete</li>
+    </ul>
+    <ul id="paper_context_menu" class='custom-menu'>
         <li data-action="delete">Delete</li>
     </ul>
     <div class="navbar navbar-inverse navbar-static-top">
@@ -36,9 +39,11 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a href="" role="menuitem" tabindex="-1" ng-click="createNewDiagram()">New</a></li>
-                            <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams" ng-click="openFolderWindow()">Open</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams"
+                                   ng-click="openFolderWindow()">Open</a></li>
                             <li><a href="" role="menuitem" tabindex="-1" ng-click="saveCurrentDiagram()">Save</a></li>
-                            <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" ng-click="saveDiagramAs()">SaveAs</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams"
+                                   ng-click="saveDiagramAs()">SaveAs</a></li>
                         </ul>
                     </li>
                     <li>

@@ -14,30 +14,22 @@
  * limitations under the License.
  */
 
-/// <reference path="DiagramPaper.ts" />
-/// <reference path="../../vendor.d.ts" />
+class DiagramMenuElement {
 
-class DiagramEditor {
+    private name: string;
+    private type: string;
 
-    private graph: joint.dia.Graph;
-    private paper: DiagramPaper;
-
-    constructor() {
-        this.graph = new joint.dia.Graph;
-        this.paper = new DiagramPaper("diagram_paper", this.graph);
+    constructor(name: string, type: string) {
+        this.name = name;
+        this.type = type;
     }
 
-    public getGraph(): joint.dia.Graph {
-        return this.graph;
+    public getName(): string {
+        return this.name;
     }
 
-    public getPaper(): DiagramPaper {
-        return this.paper;
-    }
-
-    public clear(): void {
-        this.graph.clear();
-        this.paper.clear();
+    public getType(): string {
+        return this.type;
     }
 
 }

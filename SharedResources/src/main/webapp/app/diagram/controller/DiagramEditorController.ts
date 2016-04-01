@@ -55,6 +55,12 @@ abstract class DiagramEditorController {
         $scope.redo = () => {
             this.undoRedoController.redo();
         };
+
+        $(document).bind("mousedown", function (e) {
+            if (!($(e.target).parents(".custom-menu").length > 0)) {
+                $(".custom-menu").hide(100);
+            }
+        });
     }
 
     public getGraph(): joint.dia.Graph {

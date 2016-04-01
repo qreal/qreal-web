@@ -34,7 +34,7 @@
 <body ng-app>
 
 <div id="diagramContent" class="unselectable" ng-controller="SimpleDiagramEditorController">
-    <ul class='custom-menu'>
+    <ul id="paper_context_menu" class='custom-menu'>
         <li data-action="delete">Delete</li>
     </ul>
 

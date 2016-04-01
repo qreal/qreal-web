@@ -24,6 +24,7 @@
 class GesturesController {
 
     private paperController: PaperController;
+    private paper: DiagramPaper;
     private timer: number;
     private currentTime: number;
     private date: Date;
@@ -33,8 +34,9 @@ class GesturesController {
     private gesturesMatcher: GesturesMatcher;
     private rightButtonDown;
 
-    constructor(paperController: PaperController) {
+    constructor(paperController: PaperController, paper: DiagramPaper) {
         this.paperController = paperController;
+        this.paper = paper;
         this.date = new Date();
         this.flagDraw = false;
         this.rightButtonDown = false;
@@ -59,8 +61,10 @@ class GesturesController {
             return;
         }
 
-        var offsetX = (event.pageX - $("#diagram_paper").offset().left + $("#diagram_paper").scrollLeft());
-        var offsetY = (event.pageY - $("#diagram_paper").offset().top + $("#diagram_paper").scrollTop());
+        var offsetX = (event.pageX - $("#" + this.paper.getId()).offset().left +
+            $("#" + this.paper.getId()).scrollLeft());
+        var offsetY = (event.pageY - $("#" + this.paper.getId()).offset().top +
+            $("#" + this.paper.getId()).scrollTop());
 
         var pair: GesturesUtils.Pair = new GesturesUtils.Pair(offsetX, offsetY);
         if (this.flagAdd) {
@@ -71,7 +75,7 @@ class GesturesController {
             this.currentTime = n;
             pair = this.smoothing(currentPair, new GesturesUtils.Pair(offsetX, offsetY), diff);
 
-            $('#diagram_paper').line(currentPair.first, currentPair.second, pair.first, pair.second);
+            $("#" + this.paper.getId()).line(currentPair.first, currentPair.second, pair.first, pair.second);
         }
         this.flagAdd = true;
         this.pointList.push(pair);
@@ -140,7 +144,8 @@ class GesturesController {
         var fileData = JSON.parse(xhr.responseText);
         var gestureList = [];
         for (var i = 0; i < fileData.length; i++) {
-            gestureList.push(new Gesture(<string> fileData[i].name, <string[]> fileData[i].key, <number> fileData[i].factor));
+            gestureList.push(new Gesture(<string> fileData[i].name, <string[]> fileData[i].key,
+                <number> fileData[i].factor));
         }
         return gestureList;
     }

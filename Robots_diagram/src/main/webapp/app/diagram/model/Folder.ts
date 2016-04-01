@@ -101,6 +101,14 @@ class Folder {
         return false;
     }
 
+    public deleteChildByName(folderName: string): void {
+        this.childrenFolders = this.childrenFolders.filter((folder) => !(folder.getName() === folderName));
+    }
+
+    public deleteDiagramByName(diagramName: string): void {
+        this.diagrams = this.diagrams.filter((diagram) => !(diagram.getName() === diagramName));
+    }
+
     public setId(id: number): void {
         this.id = id;
     }

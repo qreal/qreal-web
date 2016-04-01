@@ -22,22 +22,24 @@
 
 class DiagramPaper extends joint.dia.Paper {
 
+    private htmlId: string;
     private graph: joint.dia.Graph;
     private nodesMap: Map<DiagramNode>;
     private linksMap: Map<Link>;
     private gridSize: number;
     private zoom: number;
 
-    constructor(graph: joint.dia.Graph) {
+    constructor(id: string, graph: joint.dia.Graph) {
+        this.htmlId = id;
         this.graph = graph;
         this.nodesMap = {};
         this.linksMap = {};
         this.gridSize = 25;
-        var zoomAttr: number = parseFloat($('#diagram_paper').attr("zoom"));
+        var zoomAttr: number = parseFloat($("#" + this.htmlId).attr("zoom"));
         this.zoom = (zoomAttr) ? zoomAttr : 1;
 
         super({
-            el: $('#diagram_paper'),
+            el: $('#' + this.htmlId),
             width: 2000,
             height: 2000,
             model: graph,
@@ -59,6 +61,10 @@ class DiagramPaper extends joint.dia.Paper {
         });
 
         this.scale(this.zoom, this.zoom);
+    }
+    
+    public getId(): string {
+        return this.htmlId;
     }
 
     public getGridSize(): number {

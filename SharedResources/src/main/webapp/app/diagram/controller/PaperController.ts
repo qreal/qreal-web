@@ -35,6 +35,7 @@ class PaperController {
     private undoRedoController: UndoRedoController;
     private lastCellMouseDownPosition: {x: number, y: number};
     private paperCommandFactory: PaperCommandFactory;
+    private contextMenuId = "paper_context_menu";
 
     constructor(diagramEditorController: DiagramEditorController, paper: DiagramPaper) {
         this.diagramEditorController = diagramEditorController;
@@ -43,7 +44,7 @@ class PaperController {
         this.paperCommandFactory = new PaperCommandFactory(this);
         this.clickFlag = false;
         this.rightClickFlag = false;
-        this.gesturesController = new GesturesController(this);
+        this.gesturesController = new GesturesController(this, paper);
         this.lastCellMouseDownPosition = { x: 0, y: 0 };
 
         this.paper.on('cell:pointerdown', (cellView, event, x, y): void => {
@@ -69,7 +70,7 @@ class PaperController {
 
         document.addEventListener('mousedown', (event) => { this.gesturesController.onMouseDown(event) } );
         document.addEventListener('mouseup', (event) => { this.gesturesController.onMouseUp(event) } );
-        $("#diagram_paper").mousemove((event) => { this.gesturesController.onMouseMove(event) } );
+        $("#" + this.paper.getId()).mousemove((event) => { this.gesturesController.onMouseMove(event) } );
 
         this.initDropPaletteElementListener();
 
@@ -141,10 +142,10 @@ class PaperController {
     }
 
     public createNodeInEventPositionFromNames(names: string[], event): void {
-        var offsetX = (event.pageX - $("#diagram_paper").offset().left + $("#diagram_paper").scrollLeft()) /
-            this.paper.getZoom();
-        var offsetY = (event.pageY - $("#diagram_paper").offset().top + $("#diagram_paper").scrollTop()) /
-            this.paper.getZoom();
+        var offsetX = (event.pageX - $("#" + this.paper.getId()).offset().left +
+            $("#" + this.paper.getId()).scrollLeft()) / this.paper.getZoom();
+        var offsetY = (event.pageY - $("#" + this.paper.getId()).offset().top +
+            $("#" + this.paper.getId()).scrollTop()) / this.paper.getZoom();
         var gridSize: number = this.paper.getGridSize();
         offsetX -= offsetX % gridSize;
         offsetY -= offsetY % gridSize;
@@ -181,7 +182,7 @@ class PaperController {
     }
 
     public createLinkBetweenCurrentAndEventTargetElements(event): void {
-        var diagramPaper: HTMLDivElement = <HTMLDivElement> document.getElementById('diagram_paper');
+        var diagramPaper: HTMLDivElement = <HTMLDivElement> document.getElementById(this.paper.getId());
 
         var elementBelow = this.diagramEditorController.getGraph().get('cells').find((cell) => {
             if (cell instanceof joint.dia.Link) return false; // Not interested in links.
@@ -262,10 +263,6 @@ class PaperController {
     }
 
     private blankPoinerdownListener(event, x, y): void {
-        if (!($(event.target).parents(".custom-menu").length > 0)) {
-            $(".custom-menu").hide(100);
-        }
-
         if (event.button == 2) {
             this.gesturesController.startDrawing();
         }
@@ -274,10 +271,6 @@ class PaperController {
     }
 
     private cellPointerdownListener(cellView, event, x, y): void {
-        if (!($(event.target).parents(".custom-menu").length > 0)) {
-            $(".custom-menu").hide(100);
-        }
-
         this.clickFlag = true;
         this.rightClickFlag = false;
 
@@ -299,11 +292,8 @@ class PaperController {
     }
 
     private cellPointerupListener(cellView, event, x, y): void {
-        if (!($(event.target).parents(".custom-menu").length > 0)) {
-            $(".custom-menu").hide(100);
-        }
         if ((this.clickFlag) && (event.button == 2)) {
-            $(".custom-menu").finish().toggle(100).
+            $("#" + this.contextMenuId).finish().toggle(100).
             css({
                 left: event.pageX - $(document).scrollLeft() + "px",
                 top: event.pageY - $(document).scrollTop() + "px"
@@ -327,7 +317,7 @@ class PaperController {
         var controller: PaperController = this;
         var paper: DiagramPaper = this.paper;
 
-        $("#diagram_paper").droppable({
+        $("#" + this.paper.getId()).droppable({
             drop: function(event, ui) {
                 var topElementPos: number = (ui.offset.top - $(this).offset().top + $(this).scrollTop()) /
                     paper.getZoom();
@@ -363,14 +353,14 @@ class PaperController {
             event.preventDefault();
         });
 
-        $(".custom-menu li").click(function(){
+        $("#" + controller.contextMenuId + " li").click(function(){
             switch($(this).attr("data-action")) {
                 case "delete":
                     controller.removeCurrentElement();
                     break;
             }
 
-            $(".custom-menu").hide(100);
+            $("#" + controller.contextMenuId).hide(100);
         });
     }
 
@@ -378,7 +368,7 @@ class PaperController {
         var deleteKey: number = 46;
         $('html').keyup((event) => {
             if(event.keyCode == deleteKey) {
-                if($("#diagram_paper").is(":visible") && !(document.activeElement.tagName === "INPUT")) {
+                if($("#" + this.paper.getId()).is(":visible") && !(document.activeElement.tagName === "INPUT")) {
                     this.removeCurrentElement();
                 }
             }

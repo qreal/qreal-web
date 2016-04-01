@@ -71,11 +71,23 @@ public class DiagramDAOImpl implements DiagramDAO {
         session.merge(diagram);
     }
 
+    public void deleteDiagram(Long diagramId) {
+        Session session = sessionFactory.getCurrentSession();
+        Diagram diagram = (Diagram) session.get(Diagram.class, diagramId);
+        session.delete(diagram);
+    }
+
     public Long createFolder(Folder folder) {
         LOG.debug("creating folder");
         Session session = sessionFactory.getCurrentSession();
         session.save(folder);
         return folder.getFolderId();
+    }
+
+    public void deleteFolder(Long folderId) {
+        Session session = sessionFactory.getCurrentSession();
+        Folder folder = (Folder) session.get(Folder.class, folderId);
+        session.delete(folder);
     }
 
     public Folder getFolderTree(String userName) {

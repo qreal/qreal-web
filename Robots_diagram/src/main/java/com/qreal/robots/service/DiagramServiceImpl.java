@@ -56,6 +56,12 @@ public class DiagramServiceImpl implements DiagramService {
 
     @Transactional
     @Override
+    public void deleteDiagram(Long diagramId) {
+        diagramDAO.deleteDiagram(diagramId);
+    }
+
+    @Transactional
+    @Override
     public void createRootFolder(String userName) {
         Folder rootFolder = new Folder("root", userName);
         diagramDAO.createFolder(rootFolder);
@@ -67,6 +73,12 @@ public class DiagramServiceImpl implements DiagramService {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         folder.setUserName(userName);
         return diagramDAO.createFolder(folder);
+    }
+
+    @Transactional
+    @Override
+    public void deleteFolder(Long folderId) {
+        diagramDAO.deleteFolder(folderId);
     }
 
     @Transactional

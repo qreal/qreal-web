@@ -162,15 +162,16 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var DiagramPaper = (function (_super) {
     __extends(DiagramPaper, _super);
-    function DiagramPaper(graph) {
+    function DiagramPaper(id, graph) {
+        this.htmlId = id;
         this.graph = graph;
         this.nodesMap = {};
         this.linksMap = {};
         this.gridSize = 25;
-        var zoomAttr = parseFloat($('#diagram_paper').attr("zoom"));
+        var zoomAttr = parseFloat($("#" + this.htmlId).attr("zoom"));
         this.zoom = (zoomAttr) ? zoomAttr : 1;
         _super.call(this, {
-            el: $('#diagram_paper'),
+            el: $('#' + this.htmlId),
             width: 2000,
             height: 2000,
             model: graph,
@@ -192,6 +193,9 @@ var DiagramPaper = (function (_super) {
         });
         this.scale(this.zoom, this.zoom);
     }
+    DiagramPaper.prototype.getId = function () {
+        return this.htmlId;
+    };
     DiagramPaper.prototype.getGridSize = function () {
         return this.gridSize;
     };
@@ -419,13 +423,14 @@ var PaperCommandFactory = (function () {
 var PaperController = (function () {
     function PaperController(diagramEditorController, paper) {
         var _this = this;
+        this.contextMenuId = "paper_context_menu";
         this.diagramEditorController = diagramEditorController;
         this.undoRedoController = diagramEditorController.getUndoRedoController();
         this.paper = paper;
         this.paperCommandFactory = new PaperCommandFactory(this);
         this.clickFlag = false;
         this.rightClickFlag = false;
-        this.gesturesController = new GesturesController(this);
+        this.gesturesController = new GesturesController(this, paper);
         this.lastCellMouseDownPosition = { x: 0, y: 0 };
         this.paper.on('cell:pointerdown', function (cellView, event, x, y) {
             _this.cellPointerdownListener(cellView, event, x, y);
@@ -447,7 +452,7 @@ var PaperController = (function () {
         });
         document.addEventListener('mousedown', function (event) { _this.gesturesController.onMouseDown(event); });
         document.addEventListener('mouseup', function (event) { _this.gesturesController.onMouseUp(event); });
-        $("#diagram_paper").mousemove(function (event) { _this.gesturesController.onMouseMove(event); });
+        $("#" + this.paper.getId()).mousemove(function (event) { _this.gesturesController.onMouseMove(event); });
         this.initDropPaletteElementListener();
         this.initDeleteListener();
         this.initCustomContextMenu();
@@ -503,10 +508,10 @@ var PaperController = (function () {
     };
     PaperController.prototype.createNodeInEventPositionFromNames = function (names, event) {
         var _this = this;
-        var offsetX = (event.pageX - $("#diagram_paper").offset().left + $("#diagram_paper").scrollLeft()) /
-            this.paper.getZoom();
-        var offsetY = (event.pageY - $("#diagram_paper").offset().top + $("#diagram_paper").scrollTop()) /
-            this.paper.getZoom();
+        var offsetX = (event.pageX - $("#" + this.paper.getId()).offset().left +
+            $("#" + this.paper.getId()).scrollLeft()) / this.paper.getZoom();
+        var offsetY = (event.pageY - $("#" + this.paper.getId()).offset().top +
+            $("#" + this.paper.getId()).scrollTop()) / this.paper.getZoom();
         var gridSize = this.paper.getGridSize();
         offsetX -= offsetX % gridSize;
         offsetY -= offsetY % gridSize;
@@ -538,7 +543,7 @@ var PaperController = (function () {
     };
     PaperController.prototype.createLinkBetweenCurrentAndEventTargetElements = function (event) {
         var _this = this;
-        var diagramPaper = document.getElementById('diagram_paper');
+        var diagramPaper = document.getElementById(this.paper.getId());
         var elementBelow = this.diagramEditorController.getGraph().get('cells').find(function (cell) {
             if (cell instanceof joint.dia.Link)
                 return false;
@@ -610,18 +615,12 @@ var PaperController = (function () {
         this.paper.addLinkToPaper(link);
     };
     PaperController.prototype.blankPoinerdownListener = function (event, x, y) {
-        if (!($(event.target).parents(".custom-menu").length > 0)) {
-            $(".custom-menu").hide(100);
-        }
         if (event.button == 2) {
             this.gesturesController.startDrawing();
         }
         this.changeCurrentElement(null);
     };
     PaperController.prototype.cellPointerdownListener = function (cellView, event, x, y) {
-        if (!($(event.target).parents(".custom-menu").length > 0)) {
-            $(".custom-menu").hide(100);
-        }
         this.clickFlag = true;
         this.rightClickFlag = false;
         var element = this.paper.getNodeById(cellView.model.id) ||
@@ -640,11 +639,8 @@ var PaperController = (function () {
         }
     };
     PaperController.prototype.cellPointerupListener = function (cellView, event, x, y) {
-        if (!($(event.target).parents(".custom-menu").length > 0)) {
-            $(".custom-menu").hide(100);
-        }
         if ((this.clickFlag) && (event.button == 2)) {
-            $(".custom-menu").finish().toggle(100).
+            $("#" + this.contextMenuId).finish().toggle(100).
                 css({
                 left: event.pageX - $(document).scrollLeft() + "px",
                 top: event.pageY - $(document).scrollTop() + "px"
@@ -664,7 +660,7 @@ var PaperController = (function () {
     PaperController.prototype.initDropPaletteElementListener = function () {
         var controller = this;
         var paper = this.paper;
-        $("#diagram_paper").droppable({
+        $("#" + this.paper.getId()).droppable({
             drop: function (event, ui) {
                 var topElementPos = (ui.offset.top - $(this).offset().top + $(this).scrollTop()) /
                     paper.getZoom();
@@ -693,13 +689,13 @@ var PaperController = (function () {
         $("#diagramContent").bind("contextmenu", function (event) {
             event.preventDefault();
         });
-        $(".custom-menu li").click(function () {
+        $("#" + controller.contextMenuId + " li").click(function () {
             switch ($(this).attr("data-action")) {
                 case "delete":
                     controller.removeCurrentElement();
                     break;
             }
-            $(".custom-menu").hide(100);
+            $("#" + controller.contextMenuId).hide(100);
         });
     };
     PaperController.prototype.initDeleteListener = function () {
@@ -707,7 +703,7 @@ var PaperController = (function () {
         var deleteKey = 46;
         $('html').keyup(function (event) {
             if (event.keyCode == deleteKey) {
-                if ($("#diagram_paper").is(":visible") && !(document.activeElement.tagName === "INPUT")) {
+                if ($("#" + _this.paper.getId()).is(":visible") && !(document.activeElement.tagName === "INPUT")) {
                     _this.removeCurrentElement();
                 }
             }
@@ -1785,7 +1781,7 @@ var DiagramExporter = (function () {
 var DiagramEditor = (function () {
     function DiagramEditor() {
         this.graph = new joint.dia.Graph;
-        this.paper = new DiagramPaper(this.graph);
+        this.paper = new DiagramPaper("diagram_paper", this.graph);
     }
     DiagramEditor.prototype.getGraph = function () {
         return this.graph;
@@ -1818,6 +1814,11 @@ var DiagramEditorController = (function () {
         $scope.redo = function () {
             _this.undoRedoController.redo();
         };
+        $(document).bind("mousedown", function (e) {
+            if (!($(e.target).parents(".custom-menu").length > 0)) {
+                $(".custom-menu").hide(100);
+            }
+        });
     }
     DiagramEditorController.prototype.getGraph = function () {
         return this.diagramEditor.getGraph();
@@ -1962,8 +1963,9 @@ var XmlHttpFactory = (function () {
     return XmlHttpFactory;
 })();
 var GesturesController = (function () {
-    function GesturesController(paperController) {
+    function GesturesController(paperController, paper) {
         this.paperController = paperController;
+        this.paper = paper;
         this.date = new Date();
         this.flagDraw = false;
         this.rightButtonDown = false;
@@ -1984,8 +1986,10 @@ var GesturesController = (function () {
         if (this.flagDraw === false) {
             return;
         }
-        var offsetX = (event.pageX - $("#diagram_paper").offset().left + $("#diagram_paper").scrollLeft());
-        var offsetY = (event.pageY - $("#diagram_paper").offset().top + $("#diagram_paper").scrollTop());
+        var offsetX = (event.pageX - $("#" + this.paper.getId()).offset().left +
+            $("#" + this.paper.getId()).scrollLeft());
+        var offsetY = (event.pageY - $("#" + this.paper.getId()).offset().top +
+            $("#" + this.paper.getId()).scrollTop());
         var pair = new GesturesUtils.Pair(offsetX, offsetY);
         if (this.flagAdd) {
             var currentPair = this.pointList[this.pointList.length - 1];
@@ -1993,7 +1997,7 @@ var GesturesController = (function () {
             var diff = n - this.currentTime;
             this.currentTime = n;
             pair = this.smoothing(currentPair, new GesturesUtils.Pair(offsetX, offsetY), diff);
-            $('#diagram_paper').line(currentPair.first, currentPair.second, pair.first, pair.second);
+            $("#" + this.paper.getId()).line(currentPair.first, currentPair.second, pair.first, pair.second);
         }
         this.flagAdd = true;
         this.pointList.push(pair);
