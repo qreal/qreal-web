@@ -29,6 +29,7 @@ class InterpretManager {
         var elements = graph.getElements();
         var links = graph.getLinks();
         var output = "";
+        this.variablesMap = {};
         var env = {};
 
         if (elements.length > 0) {
