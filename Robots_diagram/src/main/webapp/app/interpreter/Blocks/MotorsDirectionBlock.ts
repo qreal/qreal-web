@@ -14,30 +14,24 @@
  * limitations under the License.
  */
 
-class FunctionBlock extends AbstractBlock {
+abstract class MotorsDirectionBlock extends MotorsBlock {
 
     private interpreter: Interpreter;
-    private EXPECTED_NUMBER_OF_OUTBOUND_LINKS = 1;
-
-    constructor(node: DiagramNode, outboundLinks: Link[], interpreter: Interpreter) {
-        super(node, outboundLinks);
+    
+    constructor(node: DiagramNode, outboundLinks: Link[], robotModels: RobotModel[], interpreter: Interpreter) {
+        super(node, outboundLinks, robotModels);
         this.interpreter = interpreter;
     }
     
-    public run(): void {
-        var output = this.node.getName(); + " \n";
-        this.checkExpectedNumberOfOutboundLinks(this.EXPECTED_NUMBER_OF_OUTBOUND_LINKS);
+    protected getPowerProperty(): number {
         var properties = this.node.getChangeableProperties();
-        var body = properties["Body"].value;
-        output += body + "\n";
-
         var parser = new Parser();
-        this.interpreter.addOrChangeVariableMap(parser.parseFunction(body, this.interpreter));
-        console.log(output);
+        var power = parser.parseExpression(properties["Power"].value, this.interpreter);
+        if (power < -100 || power > 100) {
+            throw new Error("Error: incorrect power value in " + this.node.getName() +
+                " (must be between -100 and 100)");
+        }
+        return power;
     }
-    
-    public getNextNodeId(): string {
-        return this.outboundLinks[0].getJointObject().get('target').id;
-    }
-    
+
 }

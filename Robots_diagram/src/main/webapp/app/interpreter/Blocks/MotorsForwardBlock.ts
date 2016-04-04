@@ -1,5 +1,5 @@
 /*
- * Copyright Vladimir Zakharov 
+ * Copyright Vladimir Zakharov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-abstract class ConditionBlock extends AbstractBlock {
-    
-    protected getCondition(node: DiagramNode): string {
-        return node.getChangeableProperties()["Condition"].value;
+class MotorsForwardBlock extends MotorsDirectionBlock {
+
+    constructor(node: DiagramNode, outboundLinks: Link[], robotModels: RobotModel[], interpreter: Interpreter) {
+        super(node, outboundLinks, robotModels, interpreter);
     }
 
-    protected getGuard(link : Link): string {
-        return link.getChangeableProperties()["Guard"].value;
+    protected getPower(): number {
+        return this.getPowerProperty();
     }
     
 }

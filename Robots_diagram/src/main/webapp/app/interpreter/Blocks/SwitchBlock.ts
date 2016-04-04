@@ -16,41 +16,45 @@
 
 class SwitchBlock extends ConditionBlock {
 
-    static run(node, graph, nodesMap, linksMap, env, timeline): string {
-        var output = "Switch\n";
-        var nodeId = InterpretManager.getIdByNode(node, nodesMap);
-        var links = InterpretManager.getOutboundLinks(graph, nodeId);
-        var condition: string = SwitchBlock.getCondition(node);
+    private interpreter: Interpreter;
+    private parsedResult: string;
+    private MIN_NUMBER_OF_OUTBOUND_LINKS = 1;
+    private MAX_NUMBER_OF_OUTBOUND_LINKS = 32767;
+
+    constructor(node: DiagramNode, outboundLinks: Link[], interpreter: Interpreter) {
+        super(node, outboundLinks);
+        this.interpreter = interpreter;
+    }
+
+    public run(): void {
+        var output = this.node.getName(); + "\n";
+        this.checkRangeNumberOfOutboundLinks(this.MIN_NUMBER_OF_OUTBOUND_LINKS, this.MAX_NUMBER_OF_OUTBOUND_LINKS);
+        
+        var condition: string = this.getCondition(this.node);
         var parser = new Parser();
-        try {
-            var parseResult: string = parser.parseExpression(condition).toString();
-            var isFound: boolean = false;
-            var nextNode;
-            var otherwiseNode;
-            for (var i = 0; i < links.length; i++) {
-                var link = links[i];
-                var messageOnLink = SwitchBlock.getGuard(linksMap[link.id]);
-                if (messageOnLink === parseResult) {
-                    isFound = true;
-                    nextNode = nodesMap[link.get('target').id];
-                    break;
-                }
-                if (messageOnLink === "") {
-                    otherwiseNode = nodesMap[link.get('target').id];
-                }
-            }
+        this.parsedResult = parser.parseExpression(condition, this.interpreter).toString();
+        console.log(output);
+    }
 
-            if (isFound) {
-                output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
-            } else {
-                output += Factory.run(otherwiseNode, graph, nodesMap, linksMap, env, timeline) + "\n";
+    public getNextNodeId(): string {
+        var nextNodeId: string;
+        var otherwiseNodeId: string;
+        for (var i = 0; i < this.outboundLinks.length; i++) {
+            var link: Link = this.outboundLinks[i];
+            var messageOnLink = this.getGuard(link);
+            if (messageOnLink === this.parsedResult) {
+                nextNodeId = link.getJointObject().get('target').id;
             }
-
-        } catch (error) {
-            AbstractBlock.error(timeline, "Parser error in Switch block: " + error.message + "\n");
+            if (messageOnLink === "") {
+                otherwiseNodeId = link.getJointObject().get('target').id;
+            }
         }
-
-        return output;
+        
+        if (!nextNodeId && !otherwiseNodeId) {
+            throw new Error("Next link after " + this.node.getName() + " was not found");
+        }
+        
+        return (nextNodeId) ? nextNodeId : otherwiseNodeId;
     }
     
 }

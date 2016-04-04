@@ -1,30 +1,46 @@
+/*
+ * Copyright Vladimir Zakharov
+ * Copyright Nikita Smolyakov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 class VariableInitBlock extends AbstractBlock {
 
-    static run(node, graph, nodesMap, linksMap, env, timeline): string {
-        var output = "Variable Initialization" + "\n";
+    private interpreter: Interpreter;
+    private EXPECTED_NUMBER_OF_OUTBOUND_LINKS = 1;
 
-        var nodeId = InterpretManager.getIdByNode(node, nodesMap);
-        var links = InterpretManager.getOutboundLinks(graph, nodeId);
-        
-        var properties = node.getChangeableProperties();
+    constructor(node: DiagramNode, outboundLinks: Link[], interpreter: Interpreter) {
+        super(node, outboundLinks);
+        this.interpreter = interpreter;
+    }
+
+    public run(): void {
+        var output = this.node.getName() + "\n";
+        this.checkExpectedNumberOfOutboundLinks(this.EXPECTED_NUMBER_OF_OUTBOUND_LINKS);
+
+        var properties = this.node.getChangeableProperties();
         var variableName = properties["variable"].value;
         var variableValue = properties["value"].value;
 
-        var parser = new Parser();
-        try {
-            InterpretManager.setVariable(variableName, parser.parseExpression(variableValue));
+        var parser: Parser = new Parser();
+        this.interpreter.addOrChangeVariable(variableName, parser.parseExpression(variableValue, this.interpreter));
 
-            if (links.length == 1) {
-                var nextNode = nodesMap[links[0].get('target').id];
-                output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
-            } else if (links.length > 1) {
-                AbstractBlock.error(timeline, "Error: too many links from Variable Initialization block");
-            }
-        } catch (error) {
-            AbstractBlock.error(timeline, "Parser error in Variable Initialization block: " + error.message + "\n");
-        }
-        
-        return output;
+        console.log(output);
+    }
+
+    public getNextNodeId(): string {
+        return this.outboundLinks[0].getJointObject().get('target').id;
     }
     
 }

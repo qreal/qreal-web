@@ -1,36 +1,50 @@
-class RandomInitBlock extends AbstractBlock {
-    
-    static run(node, graph: joint.dia.Graph, nodesMap: Map<DiagramNode>, linksMap: Map<Link>, env, timeline): string {
-        var output = "Random Initialization" + "\n";
+/*
+ * Copyright Vladimir Zakharov
+ * Copyright Nikita Smolyakov
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-        var nodeId = InterpretManager.getIdByNode(node, nodesMap);
-        var links = InterpretManager.getOutboundLinks(graph, nodeId);
+class RandomInitBlock extends AbstractBlock {
+
+    private interpreter: Interpreter;
+    private EXPECTED_NUMBER_OF_OUTBOUND_LINKS = 1;
+
+    constructor(node: DiagramNode, outboundLinks: Link[], interpreter: Interpreter) {
+        super(node, outboundLinks);
+        this.interpreter = interpreter;
+    }
+    
+    public run(): void {
+        var output = this.node.getName() + "\n";
+        this.checkExpectedNumberOfOutboundLinks(this.EXPECTED_NUMBER_OF_OUTBOUND_LINKS);
         
-        var properties = node.getChangeableProperties();
+        var properties = this.node.getChangeableProperties();
         var variableName = properties["Variable"].value;
-        var minValue = properties["LowerBound"].value;
-        var maxValue = properties["UpperBound"].value;
+        var minValue: any = properties["LowerBound"].value;
+        var maxValue: any = properties["UpperBound"].value;
 
         var parser: Parser = new Parser();
-        try {
-            minValue = parser.parseExpression(minValue);
-            maxValue = parser.parseExpression(maxValue);
-            InterpretManager.setVariable(variableName,
-                (Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue).toString());
+        minValue = parser.parseExpression(minValue, this.interpreter);
+        maxValue = parser.parseExpression(maxValue, this.interpreter);
+        this.interpreter.addOrChangeVariable(variableName,
+            Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue);
 
-            if (links.length === 1) {
-                var nextNode = nodesMap[links[0].get('target').id];
-                output += Factory.run(nextNode, graph, nodesMap, linksMap, env, timeline) + "\n";
-            } else if (links.length > 1) {
-                AbstractBlock.error(timeline, "Error: too many links from Random Initialization block");
-            } else {
-                AbstractBlock.error(timeline, "Error: cannot find next node after Random Initialization block");
-            }
-        } catch (error) {
-            AbstractBlock.error(timeline, "Parser error in Random Initialization block: " + error.message + "\n");
-        }
+        console.log(output);
+    }
 
-        return output;
+    public getNextNodeId(): string {
+        return this.outboundLinks[0].getJointObject().get('target').id;
     }
 
 }

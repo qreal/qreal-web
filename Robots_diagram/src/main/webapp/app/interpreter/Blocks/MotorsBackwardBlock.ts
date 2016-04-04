@@ -1,5 +1,5 @@
 /*
- * Copyright Lada Gagina
+ * Copyright Vladimir Zakharov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-class SmileBlock extends AbstractBlock {
-    
-    static run(node): string {
-        var name = "Smile" + "\n";
-        return name;
+class MotorsBackwardBlock extends MotorsDirectionBlock {
+
+    constructor(node: DiagramNode, outboundLinks: Link[], robotModels: RobotModel[], interpreter: Interpreter) {
+        super(node, outboundLinks, robotModels, interpreter);
     }
     
+    protected getPower(): number {
+        return -this.getPowerProperty();
+    }
+
 }

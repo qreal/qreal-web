@@ -69,6 +69,14 @@ class RobotsDiagramExporter extends  DiagramExporter {
 
             nodeJSON.properties.push(
                 {
+                    "name": "name",
+                    "value": node.getName(),
+                    "type": "string"
+                }
+            );
+
+            nodeJSON.properties.push(
+                {
                     "name": "position",
                     "value": "" + node.getX() + ", " + node.getY(),
                     "type": "QPointF"
@@ -92,7 +100,15 @@ class RobotsDiagramExporter extends  DiagramExporter {
                 'graphicalId': jointObject.id,
                 'type': link.getType(),
                 'properties': []
-            }
+            };
+
+            linkJSON.properties.push(
+                {
+                    "name": "name",
+                    "value": link.getName(),
+                    "type": "string"
+                }
+            );
 
             linkJSON.properties = this.exportProperties(link.getChangeableProperties());
 

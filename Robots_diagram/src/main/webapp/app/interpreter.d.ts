@@ -1,5 +1,5 @@
 /*
- * Copyright Vladimir Zakharov 
+ * Copyright Vladimir Zakharov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-abstract class ConditionBlock extends AbstractBlock {
-    
-    protected getCondition(node: DiagramNode): string {
-        return node.getChangeableProperties()["Condition"].value;
-    }
+/// <reference path="vendor.d.ts" />
+/// <reference path="two-d-model-core.d.ts" />
 
-    protected getGuard(link : Link): string {
-        return link.getChangeableProperties()["Guard"].value;
-    }
+declare class Interpreter {
     
+    public interpret(graph: joint.dia.Graph, nodesMap: Map<DiagramNode>, linksMap: Map<Link>, timeline: Timeline);
 }

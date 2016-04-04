@@ -15,7 +15,7 @@
  */
 
 /// <reference path="DiagramMenuController.ts" />
-/// <reference path="../../interpreter/InterpretManager.ts" />
+/// <reference path="../../interpreter.d.ts" />
 /// <reference path="../../diagramCore.d.ts" />
 /// <reference path="../../vendor.d.ts" />
 
@@ -23,11 +23,13 @@ class RobotsDiagramEditorController extends DiagramEditorController {
 
     private diagramJsonParser: DiagramJsonParser;
     private menuController: DiagramMenuController;
+    private diagramInterpreter: Interpreter;
 
     constructor($scope, $attrs) {
         super($scope, $attrs);
         this.diagramJsonParser = new RobotsDiagramJsonParser();
         this.menuController = new DiagramMenuController(this);
+        this.diagramInterpreter = new Interpreter();
 
         $scope.openTwoDModel = () => { this.openTwoDModel(); };
         $scope.createNewDiagram = () => { this.menuController.createNewDiagram(); };
@@ -37,7 +39,7 @@ class RobotsDiagramEditorController extends DiagramEditorController {
         $scope.clearAll = () => { this.clearAll(); };
 
         $scope.$on("interpret", (event, timeline) => {
-            console.log(InterpretManager.interpret(this.getGraph(), this.getNodesMap(), this.getLinksMap(), timeline));
+            this.diagramInterpreter.interpret(this.getGraph(), this.getNodesMap(), this.getLinksMap(), timeline);
         });
 
         this.elementsTypeLoader.load((elementTypes: ElementTypes): void => {
