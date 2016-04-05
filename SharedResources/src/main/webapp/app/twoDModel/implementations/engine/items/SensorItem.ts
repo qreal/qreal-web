@@ -91,19 +91,12 @@ class SensorItem {
     }
 
     setStartPosition() {
-        this.direction = 0;
-        this.offsetPosition.x = 0;
-        this.offsetPosition.y = 0;
         this.robotOffsetPosition.x = 0;
         this.robotOffsetPosition.y = 0;
         this.image.attr({x: this.startPosition.x, y: this.startPosition.y});
         this.startCenter = new TwoDPosition(this.startPosition.x + this.width / 2, this.startPosition.y + this.height / 2);
         this.rotationHandle.attr({"cx": + this.startPosition.x + this.width + 20, "cy": this.startPosition.y + this.height / 2 });
         this.updateTransformation();
-    }
-
-    restoreStartDirection() {
-        this.rotate(this.startDirection);
     }
 
     getStartPosition(position: TwoDPosition): TwoDPosition {

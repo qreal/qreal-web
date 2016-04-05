@@ -112,6 +112,7 @@ declare interface RobotModel {
     setMarkerDown(down: boolean): void;
     setMarkerColor(color: string): void;
     clearState(): void;
+    clearCurrentPosition(): void;
 }
 
 declare class DevicesConfigurationProvider {

@@ -170,20 +170,6 @@
             </div>
             <div id="controll_buttons_container">
                 <table class="twoDModel_table">
-                    <tr>
-                        <td>
-                            <button class="twoDModel_button" style="width: 100px; height: 45px;">
-                                <img src="images/2dmodel/2d_save.png"
-                                     style="width: 25px; height: 25px; vertical-align: middle"/>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="twoDModel_button" style="width: 100px; height: 45px;">
-                                <img src="images/2dmodel/2d_open.png"
-                                     style="width: 25px; height: 25px; vertical-align: middle"/>
-                            </button>
-                        </td>
-                    </tr>
 
                     <tr>
                         <td colspan="2">
@@ -195,36 +181,27 @@
                     </tr>
 
                     <tr>
-                        <td colspan="2">
-                            <div class="btn-group" data-toggle="buttons">
-
-                                <label class="btn btn-default active" style="width: 104px; height: 30px;">
-                                    <input type="radio" name="selection_modes" id="hand_mode" autocomplete="off" checked>
-                                    <img src="images/2dmodel/2d_hand.png"
-                                         style="width: 20px; height: 20px; vertical-align: middle"/>
-                                </label>
-
-
-                                <label class="btn btn-default" style="width: 104px; height: 30px;">
-                                    <input type="radio" name="selection_modes" id="multiselection_mode" autocomplete="off">
-                                    <img src="images/2dmodel/2d_multiselection.png"
-                                         style="width: 20px; height: 20px; vertical-align: middle"/>
-                                </label>
-
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
                         <td>
-                            <button class="twoDModel_button btn btn-default" data-toggle="button" aria-pressed="false" style="width: 100px; height: 30px;">
+                            <button id="follow_button" class="twoDModel_button btn btn-default" data-toggle="button"
+                                    ng-click="followRobot()" aria-pressed="false" style="width: 100px; height: 30px;">
                                 <img src="images/2dmodel/2d_target.png"
                                      style="width: 20px; height: 20px; vertical-align: middle"/>
                             </button>
                         </td>
                         <td>
-                            <button class="twoDModel_button btn btn-default" style="width: 100px; height: 30px;">
+                            <button class="twoDModel_button btn btn-default" ng-click="resetPosition()"
+                                    style="width: 100px; height: 30px;">
                                 <img src="images/2dmodel/2d_robot_back.png"
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <button class="twoDModel_button btn btn-default" data-toggle="button"
+                                    ng-click="stop()" aria-pressed="false" style="width: 100px; height: 30px;">
+                                <img src="images/2dmodel/2d_stop.png"
                                      style="width: 20px; height: 20px; vertical-align: middle"/>
                             </button>
                         </td>

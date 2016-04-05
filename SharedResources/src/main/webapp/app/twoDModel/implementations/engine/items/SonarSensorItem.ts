@@ -63,27 +63,7 @@ class SonarSensorItem extends SensorItem {
 
     setStartPosition() {
         super.setStartPosition();
-        this.regionTranslation = "T0,0";
-        this.regionRotation = "r0";
-        var regAngle = 20;
-        var halfRegAngleInRad = regAngle / 2 * (Math.PI / 180)
-
-        var rangeInPixels = this.sonarRange * Constants.pixelsInCm;
-
-        var regionTopX = this.regionStartX + Math.cos(halfRegAngleInRad) * rangeInPixels;
-        var regionTopY = this.regionStartY - Math.sin(halfRegAngleInRad) * rangeInPixels;
-
-        var regionBottomX = regionTopX;
-        var regionBottomY = this.regionStartY + Math.sin(halfRegAngleInRad) * rangeInPixels;
-
-        this.scanningRegion.attr({
-            path: "M" + this.regionStartX + "," + this.regionStartY +
-            "L" + regionTopX + "," + regionTopY +
-            "Q" + (this.regionStartX + rangeInPixels) + "," + this.regionStartY + " " + regionBottomX + "," + regionBottomY +
-            "Z"
-        });
-
-        this.scanningRegion.transform("");
+        this.updateRegionTransformation();
     }
 
     move(deltaX: number, deltaY: number): void {

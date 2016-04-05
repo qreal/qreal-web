@@ -53,7 +53,7 @@ class RobotItemImpl implements RobotItem {
         this.direction = 0;
         this.startDirection = 0;
         this.isFollow = false;
-        this.scroller = new StageScroller();
+        this.scroller = new StageScroller(worldModel.getZoom());
         this.offsetPosition = new TwoDPosition();
 
         this.startCenter.x = position.x + this.width / 2
@@ -67,7 +67,7 @@ class RobotItemImpl implements RobotItem {
         this.hideHandles();
     }
 
-    setStartPosition(position: TwoDPosition, direction: number): void {
+    public setStartPosition(position: TwoDPosition, direction: number): void {
         this.startPosition = position;
         this.direction = direction;
         this.offsetPosition.x = 0;
@@ -81,38 +81,38 @@ class RobotItemImpl implements RobotItem {
         this.marker.setCenter(new TwoDPosition(this.startCenter.x, this.startCenter.y));
     }
 
-    hideHandles(): void {
+    public hideHandles(): void {
         this.rotationHandle.hide();
     }
 
-    showHandles(): void {
+    public showHandles(): void {
         this.rotationHandle.toFront();
         this.rotationHandle.show();
     }
 
-    getWidth(): number {
+    public getWidth(): number {
         return this.width;
     }
 
-    getHeight(): number {
+    public getHeight(): number {
         return this.height;
     }
 
-    getStartPosition(): TwoDPosition {
+    public getStartPosition(): TwoDPosition {
         return this.startPosition;
     }
 
-    getDirection(): number {
+    public getDirection(): number {
         return this.direction;
     }
 
-    getCenter(): TwoDPosition {
+    public getCenter(): TwoDPosition {
         var centerX = this.image.matrix.x(this.startCenter.x, this.startCenter.y);
         var centerY = this.image.matrix.y(this.startCenter.x, this.startCenter.y);
         return new TwoDPosition(centerX, centerY);
     }
 
-    removeSensorItem(portName: string): void {
+    public removeSensorItem(portName: string): void {
         var sensor = this.sensors[portName];
         if (sensor) {
             sensor.remove();
@@ -120,7 +120,7 @@ class RobotItemImpl implements RobotItem {
         }
     }
 
-    addSensorItem(portName: string, sensorType: DeviceInfo, pathToImage: string, isInteractive: boolean,
+    public addSensorItem(portName: string, sensorType: DeviceInfo, pathToImage: string, isInteractive: boolean,
                   position?: TwoDPosition, direction?: number): void {
         var sensor: SensorItem;
         if (sensorType.isA(RangeSensor)) {
@@ -136,14 +136,14 @@ class RobotItemImpl implements RobotItem {
         this.sensors[portName] = sensor;
     }
 
-    moveSensors(deltaX: number, deltaY: number): void {
+    public moveSensors(deltaX: number, deltaY: number): void {
         for (var portName in this.sensors) {
             var sensor: SensorItem = this.sensors[portName];
             sensor.move(deltaX, deltaY);
         }
     }
 
-    clearCurrentPosition(): void {
+    public clearCurrentPosition(): void {
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
             this.timeoutId = undefined;
@@ -156,15 +156,15 @@ class RobotItemImpl implements RobotItem {
         this.counter = 0;
     }
 
-    setOffsetX(offsetX: number): void {
+    public setOffsetX(offsetX: number): void {
         this.offsetX = offsetX;
     }
 
-    setOffsetY(offsetY: number): void {
+    public setOffsetY(offsetY: number): void {
         this.offsetY = offsetY;
     }
 
-    moveToPoint(x: number, y: number, rotation: number): void {
+    public moveToPoint(x: number, y: number, rotation: number): void {
         var newX = x + this.offsetX;
         var newY = y + this.offsetY;
 
@@ -177,7 +177,7 @@ class RobotItemImpl implements RobotItem {
         this.updateMarkerState();
     }
 
-    move(deltaX: number, deltaY: number, direction: number): void {
+    public move(deltaX: number, deltaY: number, direction: number): void {
         this.offsetPosition.x += deltaX;
         this.offsetPosition.y += deltaY;
         this.direction = direction;
@@ -186,28 +186,51 @@ class RobotItemImpl implements RobotItem {
         this.updateMarkerState();
     }
 
-    setMarkerDown(down: boolean): void {
+    public setMarkerDown(down: boolean): void {
         this.marker.setDown(down);
     }
 
-    setMarkerColor(color: string): void {
+    public setMarkerColor(color: string): void {
         this.marker.setColor(color);
     }
 
-    hide(): void {
+    public hide(): void {
         this.image.hide();
     }
 
-    show(): void {
+    public show(): void {
         this.image.show();
     }
 
-    follow(value: boolean): void {
+    public follow(value: boolean): void {
         this.isFollow = value;
     }
 
-    returnToStart(): void {
+    public returnToStart(): void {
         this.scroller.scrollToPoint(this.startPosition.x, this.startPosition.y);
+    }
+
+    private updateSensorsTransformation(): void {
+        for (var portName in this.sensors) {
+            var sensor = this.sensors[portName];
+            sensor.updateTransformation();
+        }
+    }
+
+    private clearSensorsPosition(): void {
+        for (var portName in this.sensors) {
+            var sensor = this.sensors[portName];
+            sensor.setStartPosition();
+        }
+    }
+
+    private updateTransformation(): void {
+        this.image.transform(this.getTransformation());
+        this.rotationHandle.transform(this.getTransformation());
+        var center: TwoDPosition = this.getCenter();
+        if (this.isFollow) {
+            this.scroller.scrollToPoint(center.x, center.y);
+        }
     }
 
     private initDragAndDrop(): void {
@@ -299,30 +322,6 @@ class RobotItemImpl implements RobotItem {
 
         this.rotationHandle = paper.circle(position.x + this.width + 20,
             position.y + this.height / 2, handleRadius).attr(handleAttrs);
-    }
-
-    private updateSensorsTransformation(): void {
-        for (var portName in this.sensors) {
-            var sensor = this.sensors[portName];
-            sensor.updateTransformation();
-        }
-    }
-
-    private clearSensorsPosition(): void {
-        for (var portName in this.sensors) {
-            var sensor = this.sensors[portName];
-            sensor.setStartPosition();
-            sensor.restoreStartDirection();
-        }
-    }
-
-    private updateTransformation(): void {
-        this.image.transform(this.getTransformation());
-        this.rotationHandle.transform(this.getTransformation());
-        var center: TwoDPosition = this.getCenter();
-        if (this.isFollow) {
-            this.scroller.scrollToPoint(center.x, center.y);
-        }
     }
 
     private getTransformation(): string {

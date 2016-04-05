@@ -34,6 +34,11 @@ class RobotsTwoDModelEngineFacade extends TwoDModelEngineFacadeImpl {
             var timeline = this.model.getTimeline();
             $scope.$emit("emitInterpret", timeline);
         }
+        $scope.resetPosition = () => { this.resetPosition(); };
+        
+        $scope.stop = () => {
+            $scope.$emit("emitStop");
+        }
 
         $scope.openDiagramEditor = () => { this.openDiagramEditor(); };
     }
@@ -41,6 +46,11 @@ class RobotsTwoDModelEngineFacade extends TwoDModelEngineFacadeImpl {
     public openDiagramEditor(): void {
         $("#twoDModelContent").hide();
         $("#diagramContent").show();
+    }
+
+    public resetPosition(): void {
+        var robotModel = this.model.getRobotModels()[0];
+        robotModel.clearCurrentPosition();
     }
 
 }

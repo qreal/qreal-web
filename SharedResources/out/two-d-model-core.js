@@ -352,15 +352,15 @@ var Runner = (function () {
     return Runner;
 })();
 var StageScroller = (function () {
-    function StageScroller() {
-        this.ZOOM = 2 / 3;
+    function StageScroller(zoom) {
         this.stage = $("#twoDModel_stage");
+        this.zoom = zoom;
     }
     StageScroller.prototype.scrollToPoint = function (x, y) {
         var width = this.stage.width();
         var height = this.stage.height();
-        var offsetX = x * this.ZOOM - width / 2;
-        var offsetY = y * this.ZOOM - height / 2;
+        var offsetX = x * this.zoom - width / 2;
+        var offsetY = y * this.zoom - height / 2;
         this.stage.scrollLeft(offsetX);
         this.stage.scrollTop(offsetY);
     };
@@ -1967,18 +1967,12 @@ var SensorItem = (function () {
         this.rotate(direction);
     };
     SensorItem.prototype.setStartPosition = function () {
-        this.direction = 0;
-        this.offsetPosition.x = 0;
-        this.offsetPosition.y = 0;
         this.robotOffsetPosition.x = 0;
         this.robotOffsetPosition.y = 0;
         this.image.attr({ x: this.startPosition.x, y: this.startPosition.y });
         this.startCenter = new TwoDPosition(this.startPosition.x + this.width / 2, this.startPosition.y + this.height / 2);
         this.rotationHandle.attr({ "cx": +this.startPosition.x + this.width + 20, "cy": this.startPosition.y + this.height / 2 });
         this.updateTransformation();
-    };
-    SensorItem.prototype.restoreStartDirection = function () {
-        this.rotate(this.startDirection);
     };
     SensorItem.prototype.getStartPosition = function (position) {
         var startX = this.robotItem.getStartPosition().x;
@@ -2159,22 +2153,7 @@ var SonarSensorItem = (function (_super) {
     }
     SonarSensorItem.prototype.setStartPosition = function () {
         _super.prototype.setStartPosition.call(this);
-        this.regionTranslation = "T0,0";
-        this.regionRotation = "r0";
-        var regAngle = 20;
-        var halfRegAngleInRad = regAngle / 2 * (Math.PI / 180);
-        var rangeInPixels = this.sonarRange * Constants.pixelsInCm;
-        var regionTopX = this.regionStartX + Math.cos(halfRegAngleInRad) * rangeInPixels;
-        var regionTopY = this.regionStartY - Math.sin(halfRegAngleInRad) * rangeInPixels;
-        var regionBottomX = regionTopX;
-        var regionBottomY = this.regionStartY + Math.sin(halfRegAngleInRad) * rangeInPixels;
-        this.scanningRegion.attr({
-            path: "M" + this.regionStartX + "," + this.regionStartY +
-                "L" + regionTopX + "," + regionTopY +
-                "Q" + (this.regionStartX + rangeInPixels) + "," + this.regionStartY + " " + regionBottomX + "," + regionBottomY +
-                "Z"
-        });
-        this.scanningRegion.transform("");
+        this.updateRegionTransformation();
     };
     SonarSensorItem.prototype.move = function (deltaX, deltaY) {
         _super.prototype.move.call(this, deltaX, deltaY);
@@ -2277,7 +2256,7 @@ var RobotItemImpl = (function () {
         this.direction = 0;
         this.startDirection = 0;
         this.isFollow = false;
-        this.scroller = new StageScroller();
+        this.scroller = new StageScroller(worldModel.getZoom());
         this.offsetPosition = new TwoDPosition();
         this.startCenter.x = position.x + this.width / 2;
         this.startCenter.y = position.y + this.height / 2;
@@ -2406,6 +2385,26 @@ var RobotItemImpl = (function () {
     RobotItemImpl.prototype.returnToStart = function () {
         this.scroller.scrollToPoint(this.startPosition.x, this.startPosition.y);
     };
+    RobotItemImpl.prototype.updateSensorsTransformation = function () {
+        for (var portName in this.sensors) {
+            var sensor = this.sensors[portName];
+            sensor.updateTransformation();
+        }
+    };
+    RobotItemImpl.prototype.clearSensorsPosition = function () {
+        for (var portName in this.sensors) {
+            var sensor = this.sensors[portName];
+            sensor.setStartPosition();
+        }
+    };
+    RobotItemImpl.prototype.updateTransformation = function () {
+        this.image.transform(this.getTransformation());
+        this.rotationHandle.transform(this.getTransformation());
+        var center = this.getCenter();
+        if (this.isFollow) {
+            this.scroller.scrollToPoint(center.x, center.y);
+        }
+    };
     RobotItemImpl.prototype.initDragAndDrop = function () {
         var robotItem = this;
         var startHandle = function () {
@@ -2478,27 +2477,6 @@ var RobotItemImpl = (function () {
             stroke: "black"
         };
         this.rotationHandle = paper.circle(position.x + this.width + 20, position.y + this.height / 2, handleRadius).attr(handleAttrs);
-    };
-    RobotItemImpl.prototype.updateSensorsTransformation = function () {
-        for (var portName in this.sensors) {
-            var sensor = this.sensors[portName];
-            sensor.updateTransformation();
-        }
-    };
-    RobotItemImpl.prototype.clearSensorsPosition = function () {
-        for (var portName in this.sensors) {
-            var sensor = this.sensors[portName];
-            sensor.setStartPosition();
-            sensor.restoreStartDirection();
-        }
-    };
-    RobotItemImpl.prototype.updateTransformation = function () {
-        this.image.transform(this.getTransformation());
-        this.rotationHandle.transform(this.getTransformation());
-        var center = this.getCenter();
-        if (this.isFollow) {
-            this.scroller.scrollToPoint(center.x, center.y);
-        }
     };
     RobotItemImpl.prototype.getTransformation = function () {
         var cx = this.startCenter.x + this.offsetPosition.x;
@@ -2688,6 +2666,9 @@ var RobotModelImpl = (function () {
     };
     RobotModelImpl.prototype.clearState = function () {
         this.deviceConfiguration.clearState();
+    };
+    RobotModelImpl.prototype.clearCurrentPosition = function () {
+        this.robotItem.clearCurrentPosition();
     };
     return RobotModelImpl;
 })();

@@ -10,6 +10,9 @@ var RootDiagramController = (function () {
         $scope.$on("emitInterpret", function (event, timeline) {
             $scope.$broadcast("interpret", timeline);
         });
+        $scope.$on("emitStop", function (event) {
+            $scope.$broadcast("stop");
+        });
     }
     return RootDiagramController;
 })();

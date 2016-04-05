@@ -42,6 +42,10 @@ class RobotsDiagramEditorController extends DiagramEditorController {
             this.diagramInterpreter.interpret(this.getGraph(), this.getNodesMap(), this.getLinksMap(), timeline);
         });
 
+        $scope.$on("stop", (event) => {
+            this.diagramInterpreter.stop();
+        });
+
         this.elementsTypeLoader.load((elementTypes: ElementTypes): void => {
             this.handleLoadedTypes(elementTypes);
         });

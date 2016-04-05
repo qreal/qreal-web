@@ -24,6 +24,9 @@ class Interpreter {
     private variablesMap: Map<any>;
     private blockFactory: BlockFactory;
     private delay: number;
+    private delayTimeoutId: number;
+    private stopFlag: boolean;
+    private timeline: Timeline;
 
     constructor() {
         this.blockFactory = new BlockFactory();
@@ -32,9 +35,10 @@ class Interpreter {
     public interpret(graph: joint.dia.Graph, nodesMap: Map<DiagramNode>, linksMap: Map<Link>, 
                      timeline: Timeline): void {
         this.clearState();
+        this.timeline = timeline;
         try {
             timeline.start();
-            this.run(this.findInitialNodeId(nodesMap), graph, nodesMap, linksMap, timeline);
+            this.run(this.findInitialNodeId(nodesMap), graph, nodesMap, linksMap);
         } catch (error) {
             timeline.stop();
             alert(error.message);
@@ -60,23 +64,33 @@ class Interpreter {
         this.delay = delay;
     }
 
-    private run(nodeId: string, graph: joint.dia.Graph, nodesMap: Map<DiagramNode>, linksMap: Map<Link>,
-                timeline: Timeline): void {
+    private run(nodeId: string, graph: joint.dia.Graph, nodesMap: Map<DiagramNode>, linksMap: Map<Link>): void {
+        if (this.stopFlag) {
+            return;
+        }
         var block: AbstractBlock = this.blockFactory.createBlock(nodesMap[nodeId],
-            this.getOutboundLinks(graph, nodesMap[nodeId], linksMap), this, timeline.getRobotModels());
+            this.getOutboundLinks(graph, nodesMap[nodeId], linksMap), this, this.timeline.getRobotModels());
         block.run();
         var nextNodeId: string = block.getNextNodeId();
         if (nextNodeId) {
             if (this.delay) {
-                setTimeout(() => {
+                this.delayTimeoutId = setTimeout(() => {
                     this.delay = 0;
-                    this.run(block.getNextNodeId(), graph, nodesMap, linksMap, timeline);
+                    this.run(block.getNextNodeId(), graph, nodesMap, linksMap);
                 }, this.delay);
             } else {
-                this.run(block.getNextNodeId(), graph, nodesMap, linksMap, timeline);
+                this.run(block.getNextNodeId(), graph, nodesMap, linksMap);
             }
         } else {
-            timeline.stop();
+            this.timeline.stop();
+        }
+    }
+    
+    public stop(): void {
+        this.stopFlag = true;
+        clearTimeout(this.delayTimeoutId);
+        if (this.timeline) {
+            this.timeline.stop();
         }
     }
     
@@ -103,6 +117,9 @@ class Interpreter {
     private clearState(): void {
         this.variablesMap = {};
         this.delay = 0;
+        this.stopFlag = false;
+        this.delayTimeoutId = null;
+        this.timeline = null;
     }
 
 }

@@ -27,8 +27,12 @@ class RootDiagramController {
             $scope.$broadcast("2dModelLoad", fieldXML);
         });
 
-        $scope.$on("emitInterpret", function(event, timeline) {
+        $scope.$on("emitInterpret", (event, timeline) => {
             $scope.$broadcast("interpret", timeline);
+        });
+        
+        $scope.$on("emitStop", (event) => {
+            $scope.$broadcast("stop"); 
         });
     }
 }

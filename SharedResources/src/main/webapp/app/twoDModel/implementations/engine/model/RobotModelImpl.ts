@@ -162,5 +162,9 @@ class RobotModelImpl implements RobotModel {
     clearState(): void {
         this.deviceConfiguration.clearState();
     }
+    
+    clearCurrentPosition(): void {
+        this.robotItem.clearCurrentPosition();
+    }
 
 }
