@@ -54,7 +54,7 @@ class Interpreter {
     }
     
     public getVariable(name: string): any {
-        if (!this.variablesMap[name]) {
+        if (this.variablesMap[name] === undefined || this.variablesMap[name] === null) {
             throw new Error("No such variable:" + name);
         }
         return this.variablesMap[name];

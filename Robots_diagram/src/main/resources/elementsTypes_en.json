@@ -94,6 +94,23 @@
             }
         },
 
+        "SwitchBlock": {
+            "name": "Switch",
+            "image": {
+                "src": "images/switchBlock.svg"
+            },
+            "properties": [
+
+                {
+                    "key": "Expression",
+                    "name": "Expression",
+                    "type": "string",
+                    "value": "x"
+                }
+
+            ]
+        },
+
         "Loop": {
             "name": "Loop",
             "image": {

@@ -53,5 +53,9 @@ class IfBlock extends ConditionBlock {
         } 
         throw new Error("Error: wrong link Guard options connected to " + this.node.getName());
     }
+
+    protected getCondition(node: DiagramNode): string {
+        return node.getChangeableProperties()["Condition"].value;
+    }
     
 }

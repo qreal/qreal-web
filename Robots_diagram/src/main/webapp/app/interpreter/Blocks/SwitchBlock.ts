@@ -29,10 +29,10 @@ class SwitchBlock extends ConditionBlock {
     public run(): void {
         var output = this.node.getName(); + "\n";
         this.checkRangeNumberOfOutboundLinks(this.MIN_NUMBER_OF_OUTBOUND_LINKS, this.MAX_NUMBER_OF_OUTBOUND_LINKS);
-        
-        var condition: string = this.getCondition(this.node);
+
+        var expression: string = this.node.getChangeableProperties()["Expression"].value;
         var parser = new Parser();
-        this.parsedResult = parser.parseExpression(condition, this.interpreter).toString();
+        this.parsedResult = parser.parseExpression(expression, this.interpreter).toString();
         console.log(output);
     }
 

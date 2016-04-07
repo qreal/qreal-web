@@ -1,5 +1,5 @@
 /*
- * Copyright Vladimir Zakharov 
+ * Copyright Vladimir Zakharov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,22 @@
  * limitations under the License.
  */
 
-abstract class ConditionBlock extends AbstractBlock {
+class EndIfBlock extends AbstractBlock {
 
-    protected getGuard(link : Link): string {
-        return link.getChangeableProperties()["Guard"].value;
+    private EXPECTED_NUMBER_OF_OUTBOUND_LINKS = 1;
+
+    constructor(node: DiagramNode, outboundLinks: Link[]) {
+        super(node, outboundLinks);
     }
-    
+
+    public run(): void {
+        var output = this.node.getName(); + "\n";
+        this.checkExpectedNumberOfOutboundLinks(this.EXPECTED_NUMBER_OF_OUTBOUND_LINKS);
+        console.log(output);
+    }
+
+    public getNextNodeId(): string {
+        return this.outboundLinks[0].getJointObject().get('target').id;
+    }
+
 }

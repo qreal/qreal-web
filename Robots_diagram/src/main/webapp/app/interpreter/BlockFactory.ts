@@ -54,7 +54,7 @@ class BlockFactory {
                 return new MotorsStopBlock(node, outboundLinks, robotModels);
             case "Timer":
                 return new TimerBlock(node, outboundLinks, interpreter);
-            case "Switch":
+            case "SwitchBlock":
                 return new SwitchBlock(node, outboundLinks, interpreter);
             case "MarkerUp":
                 return new MarkerUpBlock(node, outboundLinks, robotModels);
@@ -63,7 +63,9 @@ class BlockFactory {
             case "VariableInit":
                 return new VariableInitBlock(node, outboundLinks, interpreter);
             case "Randomizer":
-                return new RandomInitBlock(node, outboundLinks, interpreter)
+                return new RandomInitBlock(node, outboundLinks, interpreter);
+            case "FiBlock":
+                return new EndIfBlock(node, outboundLinks);
             default:
                 throw new Error("Block is not supported");
         }

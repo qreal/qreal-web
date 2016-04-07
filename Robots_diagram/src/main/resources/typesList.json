@@ -17,7 +17,7 @@
                 "Function",
                 "IfBlock",
                 "FiBlock",
-                "Loop",
+                "SwitchBlock",
                 "Fork",
                 "VariableInit",
                 "Randomizer"
@@ -26,25 +26,14 @@
             "Actions": [
                 "TrikV6EnginesForward",
                 "TrikV6EnginesBackward",
-                "TrikV6EnginesStop",
-                "TrikV62ClearEncoder",
-                "TrikSay",
-                "TrikLed"
+                "TrikV6EnginesStop"
             ],
 
             "Wait": [
-                "Timer",
-                "TrikV62WaitForEncoder"
+                "Timer"
             ],
 
             "Drawing": [
-                "TrikSetPainterColor",
-                "TrikSetPainterWidth",
-                "TrikDrawEllipse",
-                "TrikDrawArc",
-                "TrikSmile",
-                "TrikSadSmile",
-                "ClearScreen",
                 "MarkerDown",
                 "MarkerUp"
             ]
