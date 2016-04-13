@@ -76,6 +76,7 @@ class PaperController {
 
         this.initDeleteListener();
         this.initCustomContextMenu();
+        this.initPropertyEditorListener();
 
         DiagramElementListener.makeAndExecuteCreateLinkCommand = (linkObject: Link): void => {
             this.makeAndExecuteCreateLinkCommand(linkObject);
@@ -209,10 +210,12 @@ class PaperController {
     }
 
     public changeCurrentElement(element: DiagramElement): void {
-        var changeCurrentElementCommand: Command = this.paperCommandFactory.makeChangeCurrentElementCommand(element,
-            this.currentElement);
-        this.undoRedoController.addCommand(changeCurrentElementCommand);
-        changeCurrentElementCommand.execute();
+        if (element !== this.currentElement) {
+            var changeCurrentElementCommand: Command = this.paperCommandFactory.makeChangeCurrentElementCommand(element,
+                this.currentElement);
+            this.undoRedoController.addCommand(changeCurrentElementCommand);
+            changeCurrentElementCommand.execute();
+        }
     }
 
     public makeAndExecuteCreateLinkCommand(link: Link): void {
@@ -232,7 +235,6 @@ class PaperController {
         } else {
             this.diagramEditorController.clearNodeProperties();
         }
-
     }
 
     public addNode(node: DiagramNode): void {
@@ -303,7 +305,7 @@ class PaperController {
             var node: DiagramNode = this.paper.getNodeById(cellView.model.id);
             if (node) {
                 var command: Command = this.paperCommandFactory.makeMoveCommand(node, this.lastCellMouseDownPosition.x,
-                    this.lastCellMouseDownPosition.y, node.getX(), node.getY());
+                    this.lastCellMouseDownPosition.y, node.getX(), node.getY(), this.paper.getZoom());
                 this.undoRedoController.addCommand(command);
             }
         }
@@ -342,6 +344,7 @@ class PaperController {
     }
 
     private unselectElement(jointObject): void {
+        $('input:text').blur();
         var jQueryEl = this.paper.findViewByModel(jointObject).$el;
         var removedClass = jQueryEl.attr('class').replace(new RegExp('(\\s|^)selected(\\s|$)', 'g'), '$2');
         jQueryEl.attr('class', removedClass);
@@ -390,6 +393,13 @@ class PaperController {
         var multiCommand: Command = new MultiCommand(removeCommands);
         this.undoRedoController.addCommand(multiCommand);
         multiCommand.execute();
+    }
+
+    private initPropertyEditorListener(): void {
+        var controller = this;
+        $(document).on('focus', ".property-edit-element input", function() {
+            controller.changeCurrentElement(controller.paper.getNodeById($(this).data("id")));
+        });
     }
 
 }

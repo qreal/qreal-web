@@ -36,8 +36,8 @@ class DiagramEditor {
     }
 
     public clear(): void {
-        this.graph.clear();
         this.paper.clear();
+        this.graph.clear();
     }
 
 }

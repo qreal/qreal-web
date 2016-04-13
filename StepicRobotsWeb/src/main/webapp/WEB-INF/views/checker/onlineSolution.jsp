@@ -48,8 +48,10 @@
                 <ul id="paper_context_menu" class='custom-menu'>
                     <li data-action="delete">Delete</li>
                 </ul>
-                <div id="diagram_paper" zoom="0.8">
-                    <div id="diagramSpinner" class="centerSpinner">
+                <div class="paper-wrapper">
+                    <div id="diagram_paper" zoom="0.8">
+                        <div id="diagramSpinner" class="centerSpinner">
+                        </div>
                     </div>
                 </div>
                 <button id="submit_button" class="btn btn-success btn-lg" type="button" ng-click="submit($scope)">

@@ -95,11 +95,17 @@ body{
     height: 100%;
 }
 
-#diagram_paper {
+.paper-wrapper {
     position: relative;
-    border: 1px solid gray;
     height: 100%;
     overflow: scroll;
+    border: 1px solid gray;
+}
+
+#diagram_paper {
+    position: relative;
+    width: 2000px;
+    height: 2000px;
 }
 
 #diagram_paper svg {

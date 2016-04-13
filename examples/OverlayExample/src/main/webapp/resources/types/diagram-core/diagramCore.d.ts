@@ -58,6 +58,8 @@ declare interface DiagramNode extends DiagramElement {
     getY(): number;
     getImagePath(): string;
     setPosition(x: number, y: number): void;
+    getChangeableProperties(): Map<Property>;
+    initPropertyEditElements(zoom: number): void;
 
 }
 
@@ -97,7 +99,8 @@ declare class DefaultDiagramNode implements DiagramNode {
     getX(): number;
     getY(): number;
     setPosition(x: number, y: number): void;
-
+    getChangeableProperties(): Map<Property>;
+    initPropertyEditElements(zoom: number): void;
 }
 
 declare interface Map<T> {

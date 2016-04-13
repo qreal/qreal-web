@@ -25,14 +25,14 @@ class StringPropertyView extends HtmlView {
         '   <td class="vert-align">{0}</td>' +
         '   <td class="vert-align">' +
         '       <div class="input-group">' +
-        '           <input id="{1}" type="text" data-type="{2}"class="form-control" value="{3}">' +
+        '           <input class="{1} property-edit-input" type="text" data-type="{2}" value="{3}">' +
         '       </div>' +
         '   </td>' +
         '</tr>';
 
-    constructor(propertyKey: string, property: Property) {
+    constructor(nodeId: string, propertyKey: string, property: Property) {
         super();
-        this.content = StringUtils.format(this.template, property.name, propertyKey + "Property",
+        this.content = StringUtils.format(this.template, property.name, propertyKey + "-" + nodeId,
             propertyKey, property.value);
     }
 

@@ -57,7 +57,9 @@
                     </div>
                 </div>
                 <div class="col-md-9 content-col">
-                    <div id="diagram_paper">
+                    <div class="paper-wrapper">
+                        <div id="diagram_paper">
+                        </div>
                     </div>
                 </div>
             </div>

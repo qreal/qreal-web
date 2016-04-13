@@ -130,6 +130,9 @@ class DiagramPaper extends joint.dia.Paper {
         });
 
         node.getJointObject().remove();
+        if (node.getPropertyEditElement()) {
+            node.getPropertyEditElement().getHtmlElement().remove();
+        }
         delete this.nodesMap[nodeId];
     }
     
@@ -148,7 +151,9 @@ class DiagramPaper extends joint.dia.Paper {
     }
 
     public clear(): void {
-        this.nodesMap = {};
+        for (var node in this.nodesMap) {
+            this.removeNode(node);
+        }
         this.linksMap = {};
     }
 
@@ -162,6 +167,10 @@ class DiagramPaper extends joint.dia.Paper {
     public addNode(node: DiagramNode): void {
         this.nodesMap[node.getJointObject().id] = node;
         this.graph.addCell(node.getJointObject());
+        node.initPropertyEditElements(this.zoom);
+        if (node.getPropertyEditElement()) {
+            node.getPropertyEditElement().getHtmlElement().insertBefore("#" + this.getId());
+        }
     }
 
     private addLink(link: Link): void {

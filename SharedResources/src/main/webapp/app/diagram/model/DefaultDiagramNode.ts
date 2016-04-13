@@ -22,6 +22,7 @@
 /// <reference path="PropertiesPack.ts" />
 /// <reference path="Map.ts" />
 /// <reference path="Property.ts" />
+/// <reference path="PropertyEditElement.ts" />
 /// <reference path="../../vendor.d.ts" />
 
 class DefaultDiagramNode implements DiagramNode {
@@ -33,6 +34,7 @@ class DefaultDiagramNode implements DiagramNode {
     private constPropertiesPack: PropertiesPack;
     private changeableProperties: Map<Property>;
     private imagePath: string;
+    private propertyEditElement: PropertyEditElement;
 
     constructor(name: string, type: string, x: number, y: number, properties: Map<Property>, imagePath: string,
                 id?: string, notDefaultConstProperties?: PropertiesPack) {
@@ -65,6 +67,28 @@ class DefaultDiagramNode implements DiagramNode {
         this.imagePath = imagePath;
     }
 
+    initPropertyEditElements(zoom: number): void {
+        var parentPosition = this.getJointObjectPagePosition(zoom);
+        var propertyKey: string;
+        for (propertyKey in this.changeableProperties) {
+            if (this.changeableProperties[propertyKey].type === "string") {
+                this.propertyEditElement = new PropertyEditElement(this.logicalId, this.jointObject.id, propertyKey,
+                    this.changeableProperties[propertyKey]);
+                this.propertyEditElement.setPosition(parentPosition.x, parentPosition.y);
+                this.jointObject.on('change:position', () => {
+                    var position = this.getJointObjectPagePosition(zoom);
+                    this.propertyEditElement.setPosition(position.x, position.y);
+                });
+                break;
+            }
+        }
+
+    }
+    
+    getPropertyEditElement(): PropertyEditElement {
+        return this.propertyEditElement;
+    }
+
     getLogicalId(): string {
         return this.logicalId;
     }
@@ -85,8 +109,10 @@ class DefaultDiagramNode implements DiagramNode {
         return (this.jointObject.get("position"))['y'];
     }
 
-    setPosition(x: number, y: number): void {
+    setPosition(x: number, y: number, zoom: number): void {
         this.jointObject.position(x, y);
+        var position = this.getJointObjectPagePosition(zoom);
+        this.propertyEditElement.setPosition(position.x, position.y);
     }
 
     getImagePath(): string {
@@ -103,6 +129,14 @@ class DefaultDiagramNode implements DiagramNode {
 
     setProperty(key: string, property: Property): void {
         this.changeableProperties[key] = property;
+        var propertyChangedEvent = new CustomEvent('property-changed', {
+            detail: {
+                nodeId: this.getLogicalId(),
+                key: key,
+                value: property.value
+            }
+        });
+        document.dispatchEvent(propertyChangedEvent);
     }
 
     getChangeableProperties(): Map<Property> {
@@ -135,4 +169,12 @@ class DefaultDiagramNode implements DiagramNode {
         graphical["from"] = new Property("from", "qReal::Id", "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
         return graphical;
     }
+
+    private getJointObjectPagePosition(zoom: number): {x: number, y: number} {
+        return {
+            x: this.jointObject.get("position")['x'] * zoom,
+            y: this.jointObject.get("position")['y'] * zoom
+        };
+    }
+
 }

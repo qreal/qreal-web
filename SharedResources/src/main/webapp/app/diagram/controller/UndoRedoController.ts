@@ -30,8 +30,10 @@ class UndoRedoController {
         this.keyDownHandler = (event) => {
             if ($("#diagramContent").is(":visible")) {
                 if (event.keyCode == zKey && event.ctrlKey && event.shiftKey) {
+                    event.preventDefault();
                     this.redo();
                 } else if (event.keyCode == zKey && event.ctrlKey) {
+                    event.preventDefault();
                     this.undo();
                 }
             }

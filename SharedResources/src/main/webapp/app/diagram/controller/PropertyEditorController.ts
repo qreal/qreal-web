@@ -37,13 +37,21 @@ class PropertyEditorController {
         this.initCheckboxListener();
         this.initDropdownListener();
         this.initSpinnerListener();
+
+        document.addEventListener('property-changed', function(e: any) {
+            $("." + e.detail.key + "-" + e.detail.nodeId).each(function(index) {
+                if ($(this).val() !== e.detail.value) {
+                    $(this).val(e.detail.value);
+                }
+            })
+        }, false);
     }
 
     public setNodeProperties(element: DiagramElement): void {
         $('#property_table tbody').empty();
         var properties: Map<Property> = element.getChangeableProperties();
         for (var property in properties) {
-            var propertyView: HtmlView = this.propertyViewFactory.createView(element.getType(),
+            var propertyView: HtmlView = this.propertyViewFactory.createView(element.getLogicalId(), element.getType(),
                 property, properties[property]);
             var htmlElement = $(propertyView.getContent());
             $('#property_table tbody').append(htmlElement);
@@ -76,8 +84,7 @@ class PropertyEditorController {
             select: function (event, ui) {
                 var key = $(this).data('type');
                 var value = ui.item.value;
-                controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(
-                    controller, $(this).attr("id")));
+                controller.addChangePropertyCommand(key, value, () => {});
                 controller.setProperty(key, value);
             }
         }).focus(function() {
@@ -87,11 +94,10 @@ class PropertyEditorController {
 
     private initInputStringListener(): void {
         var controller: PropertyEditorController = this;
-        $(document).on('input', '.form-control', function () {
+        $(document).on('input', '.property-edit-input', function () {
             var key = $(this).data('type');
             var value = $(this).val();
-            controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(
-                controller, $(this).attr("id")));
+            controller.addChangePropertyCommand(key, value, () => {});
             controller.setProperty(key, value);
         });
     }

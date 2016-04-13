@@ -53,8 +53,8 @@ class SubprogramNode extends DefaultDiagramNode {
         return this.textObject;
     }
 
-    setPosition(x: number, y: number): void {
-        super.setPosition(x, y);
+    setPosition(x: number, y: number, zoom: number): void {
+        super.setPosition(x, y, zoom);
         this.textObject.position(x - 10, y - 20);
     }
 

@@ -78,6 +78,14 @@ class Link implements DiagramElement {
         if (key === "Guard") {
             this.changeLabel(property.value);
         }
+        var propertyChangedEvent = new CustomEvent('property-changed', {
+            detail: {
+                nodeId: this.getLogicalId(),
+                key: key,
+                value: property.value
+            }
+        });
+        document.dispatchEvent(propertyChangedEvent);
     }
 
     private changeLabel(value: string): void {

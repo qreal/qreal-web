@@ -50,11 +50,17 @@
     position: relative;
 }
 
-#diagram_paper {
+.paper-wrapper {
     position: relative;
     height: 450px;
-    border: 1px solid gray;
     overflow: scroll;
+    border: 1px solid gray;
+}
+
+#diagram_paper {
+    position: relative;
+    width: 2000px;
+    height: 2000px;
 }
 
 .centerSpinner {

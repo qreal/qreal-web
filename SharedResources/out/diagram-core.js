@@ -55,6 +55,14 @@ var Link = (function () {
         if (key === "Guard") {
             this.changeLabel(property.value);
         }
+        var propertyChangedEvent = new CustomEvent('property-changed', {
+            detail: {
+                nodeId: this.getLogicalId(),
+                key: key,
+                value: property.value
+            }
+        });
+        document.dispatchEvent(propertyChangedEvent);
     };
     Link.prototype.changeLabel = function (value) {
         this.jointObject.label(0, {
@@ -248,6 +256,9 @@ var DiagramPaper = (function (_super) {
             delete _this.linksMap[link.id];
         });
         node.getJointObject().remove();
+        if (node.getPropertyEditElement()) {
+            node.getPropertyEditElement().getHtmlElement().remove();
+        }
         delete this.nodesMap[nodeId];
     };
     DiagramPaper.prototype.getConnectedLinkObjects = function (node) {
@@ -263,7 +274,9 @@ var DiagramPaper = (function (_super) {
         delete this.linksMap[linkId];
     };
     DiagramPaper.prototype.clear = function () {
-        this.nodesMap = {};
+        for (var node in this.nodesMap) {
+            this.removeNode(node);
+        }
         this.linksMap = {};
     };
     DiagramPaper.prototype.addSubprogramNode = function (node) {
@@ -275,6 +288,10 @@ var DiagramPaper = (function (_super) {
     DiagramPaper.prototype.addNode = function (node) {
         this.nodesMap[node.getJointObject().id] = node;
         this.graph.addCell(node.getJointObject());
+        node.initPropertyEditElements(this.zoom);
+        if (node.getPropertyEditElement()) {
+            node.getPropertyEditElement().getHtmlElement().insertBefore("#" + this.getId());
+        }
     };
     DiagramPaper.prototype.addLink = function (link) {
         this.graph.addCell(link.getJointObject());
@@ -309,6 +326,39 @@ var PaletteTypes = (function () {
     }
     return PaletteTypes;
 })();
+var PropertyEditElement = (function () {
+    function PropertyEditElement(logicalId, jointObjectId, propertyKey, property) {
+        this.htmlElement = $(StringUtils.format(PropertyEditElement.template, propertyKey + "-" + logicalId, jointObjectId, propertyKey, property.name, property.value, property.value.length.toString()));
+        this.initInputAutosize();
+    }
+    PropertyEditElement.prototype.getHtmlElement = function () {
+        return this.htmlElement;
+    };
+    PropertyEditElement.prototype.setPosition = function (x, y) {
+        this.htmlElement.css({ left: x - 25, top: y + 55 });
+    };
+    PropertyEditElement.prototype.initInputAutosize = function () {
+        this.htmlElement.find('input').keypress(function (e) {
+            if ($(this).val().length > 0) {
+                $(this).attr({ size: $(this).val().length });
+            }
+        });
+        this.htmlElement.find('input').keydown(function (e) {
+            if (e.keyCode === 8 || e.keyCode === 46) {
+                if ($(this).val().length > 1) {
+                    $(this).attr({ size: $(this).val().length - 1 });
+                }
+            }
+        });
+    };
+    PropertyEditElement.template = "" +
+        "<div class='property-edit-element' style='position: absolute; z-index: 1;'>" +
+        "   <span>{3}:</span>" +
+        "   <input class='{0} property-edit-input' data-id='{1}' data-type='{2}' width='auto' size='{5}' " +
+        "style='border: dashed 1px;' value='{4}'>" +
+        "</div>";
+    return PropertyEditElement;
+})();
 var DefaultDiagramNode = (function () {
     function DefaultDiagramNode(name, type, x, y, properties, imagePath, id, notDefaultConstProperties) {
         this.logicalId = UIDGenerator.generate();
@@ -337,6 +387,25 @@ var DefaultDiagramNode = (function () {
         this.changeableProperties = properties;
         this.imagePath = imagePath;
     }
+    DefaultDiagramNode.prototype.initPropertyEditElements = function (zoom) {
+        var _this = this;
+        var parentPosition = this.getJointObjectPagePosition(zoom);
+        var propertyKey;
+        for (propertyKey in this.changeableProperties) {
+            if (this.changeableProperties[propertyKey].type === "string") {
+                this.propertyEditElement = new PropertyEditElement(this.logicalId, this.jointObject.id, propertyKey, this.changeableProperties[propertyKey]);
+                this.propertyEditElement.setPosition(parentPosition.x, parentPosition.y);
+                this.jointObject.on('change:position', function () {
+                    var position = _this.getJointObjectPagePosition(zoom);
+                    _this.propertyEditElement.setPosition(position.x, position.y);
+                });
+                break;
+            }
+        }
+    };
+    DefaultDiagramNode.prototype.getPropertyEditElement = function () {
+        return this.propertyEditElement;
+    };
     DefaultDiagramNode.prototype.getLogicalId = function () {
         return this.logicalId;
     };
@@ -352,8 +421,10 @@ var DefaultDiagramNode = (function () {
     DefaultDiagramNode.prototype.getY = function () {
         return (this.jointObject.get("position"))['y'];
     };
-    DefaultDiagramNode.prototype.setPosition = function (x, y) {
+    DefaultDiagramNode.prototype.setPosition = function (x, y, zoom) {
         this.jointObject.position(x, y);
+        var position = this.getJointObjectPagePosition(zoom);
+        this.propertyEditElement.setPosition(position.x, position.y);
     };
     DefaultDiagramNode.prototype.getImagePath = function () {
         return this.imagePath;
@@ -366,6 +437,14 @@ var DefaultDiagramNode = (function () {
     };
     DefaultDiagramNode.prototype.setProperty = function (key, property) {
         this.changeableProperties[key] = property;
+        var propertyChangedEvent = new CustomEvent('property-changed', {
+            detail: {
+                nodeId: this.getLogicalId(),
+                key: key,
+                value: property.value
+            }
+        });
+        document.dispatchEvent(propertyChangedEvent);
     };
     DefaultDiagramNode.prototype.getChangeableProperties = function () {
         return this.changeableProperties;
@@ -394,6 +473,12 @@ var DefaultDiagramNode = (function () {
         graphical["from"] = new Property("from", "qReal::Id", "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
         return graphical;
     };
+    DefaultDiagramNode.prototype.getJointObjectPagePosition = function (zoom) {
+        return {
+            x: this.jointObject.get("position")['x'] * zoom,
+            y: this.jointObject.get("position")['y'] * zoom
+        };
+    };
     return DefaultDiagramNode;
 })();
 var PaperCommandFactory = (function () {
@@ -415,8 +500,8 @@ var PaperCommandFactory = (function () {
     PaperCommandFactory.prototype.makeRemoveLinkCommand = function (link) {
         return new RemoveElementCommand(link, this.paperController.removeElement.bind(this.paperController), this.paperController.addLink.bind(this.paperController));
     };
-    PaperCommandFactory.prototype.makeMoveCommand = function (node, oldX, oldY, newX, newY) {
-        return new MoveCommand(oldX, oldY, newX, newY, node.setPosition.bind(node));
+    PaperCommandFactory.prototype.makeMoveCommand = function (node, oldX, oldY, newX, newY, zoom) {
+        return new MoveCommand(oldX, oldY, newX, newY, zoom, node.setPosition.bind(node));
     };
     return PaperCommandFactory;
 })();
@@ -456,6 +541,7 @@ var PaperController = (function () {
         this.initDropPaletteElementListener();
         this.initDeleteListener();
         this.initCustomContextMenu();
+        this.initPropertyEditorListener();
         DiagramElementListener.makeAndExecuteCreateLinkCommand = function (linkObject) {
             _this.makeAndExecuteCreateLinkCommand(linkObject);
         };
@@ -567,9 +653,11 @@ var PaperController = (function () {
         }
     };
     PaperController.prototype.changeCurrentElement = function (element) {
-        var changeCurrentElementCommand = this.paperCommandFactory.makeChangeCurrentElementCommand(element, this.currentElement);
-        this.undoRedoController.addCommand(changeCurrentElementCommand);
-        changeCurrentElementCommand.execute();
+        if (element !== this.currentElement) {
+            var changeCurrentElementCommand = this.paperCommandFactory.makeChangeCurrentElementCommand(element, this.currentElement);
+            this.undoRedoController.addCommand(changeCurrentElementCommand);
+            changeCurrentElementCommand.execute();
+        }
     };
     PaperController.prototype.makeAndExecuteCreateLinkCommand = function (link) {
         var createLinkCommand = this.paperCommandFactory.makeCreateLinkCommand(link);
@@ -649,7 +737,7 @@ var PaperController = (function () {
         else if (event.button !== 2) {
             var node = this.paper.getNodeById(cellView.model.id);
             if (node) {
-                var command = this.paperCommandFactory.makeMoveCommand(node, this.lastCellMouseDownPosition.x, this.lastCellMouseDownPosition.y, node.getX(), node.getY());
+                var command = this.paperCommandFactory.makeMoveCommand(node, this.lastCellMouseDownPosition.x, this.lastCellMouseDownPosition.y, node.getX(), node.getY(), this.paper.getZoom());
                 this.undoRedoController.addCommand(command);
             }
         }
@@ -680,6 +768,7 @@ var PaperController = (function () {
         jQueryEl.attr('class', oldClasses + ' selected');
     };
     PaperController.prototype.unselectElement = function (jointObject) {
+        $('input:text').blur();
         var jQueryEl = this.paper.findViewByModel(jointObject).$el;
         var removedClass = jQueryEl.attr('class').replace(new RegExp('(\\s|^)selected(\\s|$)', 'g'), '$2');
         jQueryEl.attr('class', removedClass);
@@ -726,6 +815,12 @@ var PaperController = (function () {
         this.undoRedoController.addCommand(multiCommand);
         multiCommand.execute();
     };
+    PaperController.prototype.initPropertyEditorListener = function () {
+        var controller = this;
+        $(document).on('focus', ".property-edit-element input", function () {
+            controller.changeCurrentElement(controller.paper.getNodeById($(this).data("id")));
+        });
+    };
     return PaperController;
 })();
 var HtmlView = (function () {
@@ -753,18 +848,18 @@ var StringUtils = (function () {
 })();
 var StringPropertyView = (function (_super) {
     __extends(StringPropertyView, _super);
-    function StringPropertyView(propertyKey, property) {
+    function StringPropertyView(nodeId, propertyKey, property) {
         _super.call(this);
         this.template = '' +
             '<tr class="property">' +
             '   <td class="vert-align">{0}</td>' +
             '   <td class="vert-align">' +
             '       <div class="input-group">' +
-            '           <input id="{1}" type="text" data-type="{2}"class="form-control" value="{3}">' +
+            '           <input class="{1} property-edit-input" type="text" data-type="{2}" value="{3}">' +
             '       </div>' +
             '   </td>' +
             '</tr>';
-        this.content = StringUtils.format(this.template, property.name, propertyKey + "Property", propertyKey, property.value);
+        this.content = StringUtils.format(this.template, property.name, propertyKey + "-" + nodeId, propertyKey, property.value);
     }
     return StringPropertyView;
 })(HtmlView);
@@ -880,11 +975,11 @@ var SpinnerPropertyView = (function (_super) {
 var PropertyViewFactory = (function () {
     function PropertyViewFactory() {
     }
-    PropertyViewFactory.prototype.createView = function (typeName, propertyKey, property) {
+    PropertyViewFactory.prototype.createView = function (nodeId, typeName, propertyKey, property) {
         switch (property.type) {
             case "string":
             case "combobox":
-                return new StringPropertyView(propertyKey, property);
+                return new StringPropertyView(nodeId, propertyKey, property);
             case "checkbox":
                 return new CheckboxPropertyView(typeName, propertyKey, property);
             case "dropdown":
@@ -904,12 +999,19 @@ var PropertyEditorController = (function () {
         this.initCheckboxListener();
         this.initDropdownListener();
         this.initSpinnerListener();
+        document.addEventListener('property-changed', function (e) {
+            $("." + e.detail.key + "-" + e.detail.nodeId).each(function (index) {
+                if ($(this).val() !== e.detail.value) {
+                    $(this).val(e.detail.value);
+                }
+            });
+        }, false);
     }
     PropertyEditorController.prototype.setNodeProperties = function (element) {
         $('#property_table tbody').empty();
         var properties = element.getChangeableProperties();
         for (var property in properties) {
-            var propertyView = this.propertyViewFactory.createView(element.getType(), property, properties[property]);
+            var propertyView = this.propertyViewFactory.createView(element.getLogicalId(), element.getType(), property, properties[property]);
             var htmlElement = $(propertyView.getContent());
             $('#property_table tbody').append(htmlElement);
             if (properties[property].type === "combobox") {
@@ -935,7 +1037,7 @@ var PropertyEditorController = (function () {
             select: function (event, ui) {
                 var key = $(this).data('type');
                 var value = ui.item.value;
-                controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(controller, $(this).attr("id")));
+                controller.addChangePropertyCommand(key, value, function () { });
                 controller.setProperty(key, value);
             }
         }).focus(function () {
@@ -944,10 +1046,10 @@ var PropertyEditorController = (function () {
     };
     PropertyEditorController.prototype.initInputStringListener = function () {
         var controller = this;
-        $(document).on('input', '.form-control', function () {
+        $(document).on('input', '.property-edit-input', function () {
             var key = $(this).data('type');
             var value = $(this).val();
-            controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(controller, $(this).attr("id")));
+            controller.addChangePropertyCommand(key, value, function () { });
             controller.setProperty(key, value);
         });
     };
@@ -1790,8 +1892,8 @@ var DiagramEditor = (function () {
         return this.paper;
     };
     DiagramEditor.prototype.clear = function () {
-        this.graph.clear();
         this.paper.clear();
+        this.graph.clear();
     };
     return DiagramEditor;
 })();
@@ -1875,9 +1977,11 @@ var UndoRedoController = (function () {
         this.keyDownHandler = function (event) {
             if ($("#diagramContent").is(":visible")) {
                 if (event.keyCode == zKey && event.ctrlKey && event.shiftKey) {
+                    event.preventDefault();
                     _this.redo();
                 }
                 else if (event.keyCode == zKey && event.ctrlKey) {
+                    event.preventDefault();
                     _this.undo();
                 }
             }
@@ -2263,8 +2367,8 @@ var SubprogramNode = (function (_super) {
     SubprogramNode.prototype.getTextObject = function () {
         return this.textObject;
     };
-    SubprogramNode.prototype.setPosition = function (x, y) {
-        _super.prototype.setPosition.call(this, x, y);
+    SubprogramNode.prototype.setPosition = function (x, y, zoom) {
+        _super.prototype.setPosition.call(this, x, y, zoom);
         this.textObject.position(x - 10, y - 20);
     };
     return SubprogramNode;
@@ -2325,18 +2429,19 @@ var CreateElementCommand = (function () {
     return CreateElementCommand;
 })();
 var MoveCommand = (function () {
-    function MoveCommand(oldX, oldY, newX, newY, executionFunction) {
+    function MoveCommand(oldX, oldY, newX, newY, zoom, executionFunction) {
         this.oldX = oldX;
         this.oldY = oldY;
         this.newX = newX;
         this.newY = newY;
+        this.zoom = zoom;
         this.executionFunction = executionFunction;
     }
     MoveCommand.prototype.execute = function () {
-        this.executionFunction(this.newX, this.newY);
+        this.executionFunction(this.newX, this.newY, this.zoom);
     };
     MoveCommand.prototype.revert = function () {
-        this.executionFunction(this.oldX, this.oldY);
+        this.executionFunction(this.oldX, this.oldY, this.zoom);
     };
     MoveCommand.prototype.isRevertible = function () {
         return !(this.newX === this.oldX && this.newY === this.oldY);

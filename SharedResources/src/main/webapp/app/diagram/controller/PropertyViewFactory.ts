@@ -24,11 +24,11 @@
 
 class PropertyViewFactory {
 
-    public createView(typeName: string, propertyKey: string, property: Property): HtmlView {
+    public createView(nodeId: string, typeName: string, propertyKey: string, property: Property): HtmlView {
         switch (property.type) {
             case "string":
             case "combobox":
-                return new StringPropertyView(propertyKey, property);
+                return new StringPropertyView(nodeId, propertyKey, property);
             case "checkbox":
                 return new CheckboxPropertyView(typeName, propertyKey, property);
             case "dropdown":

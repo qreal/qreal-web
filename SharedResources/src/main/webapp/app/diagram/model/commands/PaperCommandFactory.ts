@@ -47,8 +47,9 @@ class PaperCommandFactory {
             this.paperController.addLink.bind(this.paperController));
     }
 
-    public makeMoveCommand(node: DiagramNode, oldX: number, oldY: number, newX: number, newY: number): Command {
-        return new MoveCommand(oldX, oldY, newX, newY, node.setPosition.bind(node));
+    public makeMoveCommand(node: DiagramNode, oldX: number, oldY: number, newX: number, newY: number,
+                           zoom: number): Command {
+        return new MoveCommand(oldX, oldY, newX, newY, zoom, node.setPosition.bind(node));
     }
 
 }
