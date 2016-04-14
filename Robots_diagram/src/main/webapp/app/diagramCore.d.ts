@@ -57,7 +57,7 @@ declare interface DiagramNode extends DiagramElement {
     getX(): number;
     getY(): number;
     getImagePath(): string;
-    setPosition(x: number, y: number): void;
+    setPosition(x: number, y: number, zoom: number): void;
     getChangeableProperties(): Map<Property>;
     initPropertyEditElements(zoom: number): void;
 
