@@ -48,6 +48,7 @@ class TimelineImpl implements Timeline {
         this.setActive(true);
         var timeline = this;
         this.cyclesCount = 0;
+        this.robotModels[0].getDisplayWidget().displayToFront();
         this.intervalId = setInterval(function() { timeline.onTimer(timeline); }, this.defaultFrameLength);
     }
 
@@ -56,6 +57,8 @@ class TimelineImpl implements Timeline {
      */
     stop(): void {
         this.setActive(false);
+        this.robotModels[0].getDisplayWidget().displayToBack();
+        this.robotModels[0].getDisplayWidget().reset();
         clearInterval(this.intervalId);
         this.robotModels.forEach((model) => { model.clearState(); });
     }

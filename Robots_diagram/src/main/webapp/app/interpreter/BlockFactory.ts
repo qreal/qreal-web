@@ -66,6 +66,10 @@ class BlockFactory {
                 return new RandomInitBlock(node, outboundLinks, interpreter);
             case "FiBlock":
                 return new EndIfBlock(node, outboundLinks);
+            case "TrikSadSmile":
+                return new TrikSadSmileBlock(node, outboundLinks, robotModels);
+            case "TrikSmile":
+                return new TrikSmileBlock(node, outboundLinks, robotModels);
             default:
                 throw new Error("Block is not supported");
         }

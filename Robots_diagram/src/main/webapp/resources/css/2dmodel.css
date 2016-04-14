@@ -196,4 +196,12 @@ ul.nav.nav-tabs li a {
     right: 35px;
 }
 
+#sayAlert {
+    display: none;
+    z-index: 1000;
+    position: fixed;
+    left: 290px;
+    top: 75px;
+    opacity: 0.9;
+}
 

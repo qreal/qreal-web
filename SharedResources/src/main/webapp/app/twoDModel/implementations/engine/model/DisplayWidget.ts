@@ -95,7 +95,7 @@ class DisplayWidget {
         this.context.stroke();
     }
 
-    drawLine(x1: number, y1: number, x2: number, y2: number, color: string, thickness: number) {
+    drawLine(x1: number, y1: number, x2: number, y2: number, color: string, thickness: number): void {
         this.context.beginPath();
         this.context.moveTo(x1, y1);
         this.context.lineTo(x2, y2);
@@ -104,12 +104,12 @@ class DisplayWidget {
         this.context.stroke();
     }
 
-    drawPoint(x: number, y: number, color: string, thickness: number) {
+    drawPoint(x: number, y: number, color: string, thickness: number): void {
         this.context.fillStyle = color;
         this.context.fillRect(x - thickness / 2, y - thickness / 2, thickness, thickness);
     }
 
-    drawText(x: number, y: number, text: string, color: string) {
+    drawText(x: number, y: number, text: string, color: string): void {
         this.context.fillStyle = color;
         this.context.font = "12px Arial";
         this.context.fillText(text, x, y);
@@ -168,4 +168,13 @@ class DisplayWidget {
         this.ledWidget.hide();
         $("#menu_button").show();
     }
+    
+    displayToFront(): void {
+        $("#display").css("z-index", 100);
+    }
+    
+    displayToBack(): void {
+        $("#display").css("z-index", -1);
+    }
+    
 }

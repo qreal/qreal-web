@@ -26,6 +26,7 @@
 /// <reference path="../../../types/TwoDPosition.ts" />
 
 class RobotModelImpl implements RobotModel {
+    
     private robotItem: RobotItem;
     private twoDRobotModel: TwoDRobotModel;
     private sensorsConfiguration: SensorsConfiguration;
@@ -166,5 +167,10 @@ class RobotModelImpl implements RobotModel {
     clearCurrentPosition(): void {
         this.robotItem.clearCurrentPosition();
     }
+    
+    getDisplayWidget(): DisplayWidget {
+        return this.displayWidget;    
+    }
+    
 
 }

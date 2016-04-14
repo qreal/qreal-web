@@ -24,7 +24,7 @@ class Runner {
 
     run(robotItem: RobotItem, displayWidget: DisplayWidget, result: any): void {
         this.parseReport(result.report);
-        $("#display").css("z-index", 100);
+        displayWidget.displayToFront();
         var trajectory = JSON.parse(result.trace);
         var runner: Runner = this;
         var counter: number = 0;
@@ -40,14 +40,14 @@ class Runner {
                     runner.timeoutId = setTimeout(nextPoint, delay);
                 }
             } else {
-                $("#display").css("z-index", -1);
+                displayWidget.displayToBack();
                 displayWidget.reset();
             }
         }, 0);
     }
 
     stop(robotItem: RobotItem, displayWidget: DisplayWidget) {
-        $("#display").css("z-index", -1);
+        displayWidget.displayToBack();
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
             this.timeoutId = undefined;

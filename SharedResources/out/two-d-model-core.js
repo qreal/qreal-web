@@ -175,6 +175,12 @@ var DisplayWidget = (function () {
         this.ledWidget.hide();
         $("#menu_button").show();
     };
+    DisplayWidget.prototype.displayToFront = function () {
+        $("#display").css("z-index", 100);
+    };
+    DisplayWidget.prototype.displayToBack = function () {
+        $("#display").css("z-index", -1);
+    };
     return DisplayWidget;
 })();
 var TwoDPosition = (function () {
@@ -190,7 +196,7 @@ var Runner = (function () {
     }
     Runner.prototype.run = function (robotItem, displayWidget, result) {
         this.parseReport(result.report);
-        $("#display").css("z-index", 100);
+        displayWidget.displayToFront();
         var trajectory = JSON.parse(result.trace);
         var runner = this;
         var counter = 0;
@@ -208,13 +214,13 @@ var Runner = (function () {
                 }
             }
             else {
-                $("#display").css("z-index", -1);
+                displayWidget.displayToBack();
                 displayWidget.reset();
             }
         }, 0);
     };
     Runner.prototype.stop = function (robotItem, displayWidget) {
-        $("#display").css("z-index", -1);
+        displayWidget.displayToBack();
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
             this.timeoutId = undefined;
@@ -2670,6 +2676,9 @@ var RobotModelImpl = (function () {
     RobotModelImpl.prototype.clearCurrentPosition = function () {
         this.robotItem.clearCurrentPosition();
     };
+    RobotModelImpl.prototype.getDisplayWidget = function () {
+        return this.displayWidget;
+    };
     return RobotModelImpl;
 })();
 var TimelineImpl = (function () {
@@ -2691,10 +2700,12 @@ var TimelineImpl = (function () {
         this.setActive(true);
         var timeline = this;
         this.cyclesCount = 0;
+        this.robotModels[0].getDisplayWidget().displayToFront();
         this.intervalId = setInterval(function () { timeline.onTimer(timeline); }, this.defaultFrameLength);
     };
     TimelineImpl.prototype.stop = function () {
         this.setActive(false);
+        this.robotModels[0].getDisplayWidget().displayToBack();
         clearInterval(this.intervalId);
         this.robotModels.forEach(function (model) { model.clearState(); });
     };

@@ -18,7 +18,6 @@
                 "IfBlock",
                 "FiBlock",
                 "SwitchBlock",
-                "Fork",
                 "VariableInit",
                 "Randomizer"
             ],
@@ -34,6 +33,8 @@
             ],
 
             "Drawing": [
+                "TrikSmile",
+                "TrikSadSmile",
                 "MarkerDown",
                 "MarkerUp"
             ]

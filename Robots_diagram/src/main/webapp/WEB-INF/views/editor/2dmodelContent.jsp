@@ -211,6 +211,8 @@
         </div>
 
         <div id="twoDModel_stage">
+            <div id="sayAlert" class="alert alert-info fade in">
+            </div>
         </div>
 
         <div id="twoDModel_right-menu">

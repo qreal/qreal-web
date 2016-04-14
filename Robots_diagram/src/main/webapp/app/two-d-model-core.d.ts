@@ -94,6 +94,29 @@ declare class Motor extends DeviceImpl {
 
 }
 
+declare class DisplayWidget {
+    setBackground(color: string): void;
+    drawSmile(): void;
+    drawSadSmile(): void;
+    drawEllipse(x: number, y: number, a: number, b: number, color: string, thickness: number): void;
+    drawArc(x: number, y: number, a: number, b: number, startAngle: number, sweepLength: number,
+            color: string, thickness: number): void;
+    drawRectangle(x: number, y: number, a: number, b: number, color: string, thickness: number): void;
+    drawLine(x1: number, y1: number, x2: number, y2: number, color: string, thickness: number): void;
+    drawPoint(x: number, y: number, color: string, thickness: number): void;
+    drawText(x: number, y: number, text: string, color: string): void;
+    clearSmile(): void;
+    clearSadSmile(): void;
+    setLedColor(color: string): void;
+    reset(): void;
+    redraw(): void;
+    clearScreen(): void;
+    show(): void;
+    hide(): void;
+    displayToFront(): void;
+    displayToBack(): void;
+}
+
 declare interface RobotModel {
     info(): TwoDRobotModel;
     removeSensorItem(portName: string): void;
@@ -113,6 +136,7 @@ declare interface RobotModel {
     setMarkerColor(color: string): void;
     clearState(): void;
     clearCurrentPosition(): void;
+    getDisplayWidget(): DisplayWidget;
 }
 
 declare class DevicesConfigurationProvider {

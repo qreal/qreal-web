@@ -38,4 +38,5 @@ interface RobotModel {
     setMarkerColor(color: string): void;
     clearState(): void;
     clearCurrentPosition(): void;
+    getDisplayWidget(): DisplayWidget;
 }
