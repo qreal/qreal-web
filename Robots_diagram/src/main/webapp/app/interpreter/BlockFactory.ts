@@ -70,8 +70,16 @@ class BlockFactory {
                 return new TrikSadSmileBlock(node, outboundLinks, robotModels);
             case "TrikSmile":
                 return new TrikSmileBlock(node, outboundLinks, robotModels);
+            case "TrikSetPainterColor":
+                return new TrikSetPainterColorBlock(node, outboundLinks, interpreter);
+            case "TrikSetPainterWidth":
+                return new TrikSetPainterWidthBlock(node, outboundLinks, interpreter);
+            case "TrikDrawEllipse":
+                return new TrikDrawEllipseBlock(node, outboundLinks, interpreter, robotModels);
+            case "ClearScreen":
+                return new ClearScreenBlock(node, outboundLinks, robotModels);
             default:
-                throw new Error("Block is not supported");
+                throw new Error("Block " + node.getType() + " is not supported");
         }
     }
 

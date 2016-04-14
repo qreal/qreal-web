@@ -34,7 +34,7 @@ class VariableInitBlock extends AbstractBlock {
         var variableValue = properties["value"].value;
 
         var parser: Parser = new Parser();
-        this.interpreter.addOrChangeVariable(variableName, parser.parseExpression(variableValue, this.interpreter));
+        this.interpreter.addOrChangeUserVariable(variableName, parser.parseExpression(variableValue, this.interpreter));
 
         console.log(output);
     }

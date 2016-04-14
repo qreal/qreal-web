@@ -21,7 +21,8 @@
 
 class Interpreter {
 
-    private variablesMap: Map<any>;
+    private userVariablesMap: Map<any>;
+    private environmentVariablesMap: Map<any>;
     private blockFactory: BlockFactory;
     private delay: number;
     private delayTimeoutId: number;
@@ -45,19 +46,34 @@ class Interpreter {
         }
     }
     
-    public addOrChangeVariable(name: string, value: any): void {
-        this.variablesMap[name] = value;
+    public addOrChangeUserVariable(name: string, value: any): void {
+        this.userVariablesMap[name] = value;
     }
 
-    public addOrChangeVariableMap(variablesMap: Map<any>): void {
-        $.extend(this.variablesMap, variablesMap);
+    public addOrChangeUserVariablesMap(variablesMap: Map<any>): void {
+        $.extend(this.userVariablesMap, variablesMap);
     }
-    
-    public getVariable(name: string): any {
-        if (this.variablesMap[name] === undefined || this.variablesMap[name] === null) {
-            throw new Error("No such variable:" + name);
+
+    public addOrChangeEnvironmentVariable(name: string, value: any): void {
+        this.environmentVariablesMap[name] = value;
+    }
+
+    public addOrChangeEnvironmentVariablesMap(variablesMap: Map<any>): void {
+        $.extend(this.environmentVariablesMap, variablesMap);
+    }
+
+    public getUserVariable(name: string): any {
+        if (this.userVariablesMap[name] === undefined || this.userVariablesMap[name] === null) {
+            throw new Error("No such user variable:" + name);
         }
-        return this.variablesMap[name];
+        return this.userVariablesMap[name];
+    }
+
+    public getEnvironmentVariable(name: string): any {
+        if (this.environmentVariablesMap[name] === undefined || this.environmentVariablesMap[name] === null) {
+            throw new Error("No such environment variable:" + name);
+        }
+        return this.environmentVariablesMap[name];
     }
     
     public setDelay(delay: number): void {
@@ -115,11 +131,18 @@ class Interpreter {
     }
 
     private clearState(): void {
-        this.variablesMap = {};
+        this.userVariablesMap = {};
+        this.initEnvironmentVariables();
         this.delay = 0;
         this.stopFlag = false;
         this.delayTimeoutId = null;
         this.timeline = null;
+    }
+
+    private initEnvironmentVariables(): void {
+        this.environmentVariablesMap = {};
+        this.environmentVariablesMap["painterColor"] = "black";
+        this.environmentVariablesMap["painterWidth"] = 1;
     }
 
 }

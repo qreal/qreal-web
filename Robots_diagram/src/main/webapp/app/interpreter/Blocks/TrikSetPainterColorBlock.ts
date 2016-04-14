@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-class FunctionBlock extends AbstractBlock {
+class TrikSetPainterColorBlock extends AbstractBlock {
 
     private interpreter: Interpreter;
     private EXPECTED_NUMBER_OF_OUTBOUND_LINKS = 1;
@@ -23,21 +23,19 @@ class FunctionBlock extends AbstractBlock {
         super(node, outboundLinks);
         this.interpreter = interpreter;
     }
-    
-    public run(): void {
-        var output = this.node.getName(); + " \n";
-        this.checkExpectedNumberOfOutboundLinks(this.EXPECTED_NUMBER_OF_OUTBOUND_LINKS);
-        var properties = this.node.getChangeableProperties();
-        var body = properties["Body"].value;
-        output += body + "\n";
 
-        var parser = new Parser();
-        this.interpreter.addOrChangeUserVariablesMap(parser.parseFunction(body, this.interpreter));
+    public run(): void {
+        var output = this.node.getName(); + "\n";
+        this.checkExpectedNumberOfOutboundLinks(this.EXPECTED_NUMBER_OF_OUTBOUND_LINKS);
+        
+        var color: string = this.node.getChangeableProperties()["Color"].value;
+        this.interpreter.addOrChangeEnvironmentVariable("painterColor", color);
+        
         console.log(output);
     }
-    
+
     public getNextNodeId(): string {
         return this.outboundLinks[0].getJointObject().get('target').id;
     }
-    
+        
 }

@@ -63,7 +63,7 @@ class Parser {
         }
 
         if (node.type === "Identifier") {
-            return interpreter.getVariable(node.name);
+            return interpreter.getUserVariable(node.name);
         }
 
         if (node.type === "NumericLiteral") {

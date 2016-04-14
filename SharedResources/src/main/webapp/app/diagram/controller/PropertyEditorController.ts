@@ -112,6 +112,7 @@ class PropertyEditorController {
             var newValue = controller.changeCheckboxValue(currentValue);
             controller.addChangePropertyCommand(key, newValue, controller.changeCheckboxHtml.bind(
                 controller, $(this).attr("id")));
+            controller.changeCheckboxHtml($(this).attr("id"), newValue);
             controller.setProperty(key, newValue);
         });
     }
