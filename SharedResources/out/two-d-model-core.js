@@ -518,7 +518,8 @@ var LineItemImpl = (function () {
         worldModel.insertBeforeRobots(this.path);
         var handleRadius = 10;
         var handleAttrs = {
-            fill: "transparent",
+            fill: "white",
+            "fill-opacity": 0,
             cursor: "pointer",
             "stroke-width": 1,
             stroke: "black"
@@ -637,20 +638,15 @@ var WallItemImpl = (function () {
         this.pathArray = this.path.attr("path");
         worldModel.insertBeforeRobots(this.path);
         var handleRadius = 10;
-        this.handleStart = paper.circle(xStart, yStart, handleRadius).attr({
+        var handleAttrs = {
+            fill: "white",
+            "fill-opacity": 0,
             cursor: "pointer",
             "stroke-width": 1,
             stroke: "black"
-        });
-        $(this.handleStart.node).attr("class", "handleStart");
-        $(".handleStart").attr("fill", "url(#wall_pattern)");
-        this.handleEnd = paper.circle(xEnd, yEnd, handleRadius).attr({
-            cursor: "pointer",
-            "stroke-width": 1,
-            stroke: "black"
-        });
-        $(this.handleEnd.node).attr("class", "handleEnd");
-        $(".handleEnd").attr("fill", "url(#wall_pattern)");
+        };
+        this.handleStart = paper.circle(xStart, yStart, handleRadius).attr(handleAttrs);
+        this.handleEnd = paper.circle(xEnd, yEnd, handleRadius).attr(handleAttrs);
         if (isInteractive) {
             this.setDraggable(worldModel.getZoom());
         }
@@ -814,13 +810,15 @@ var EllipseItemImpl = (function () {
         this.worldModel = worldModel;
         this.ellipse = paper.ellipse(xStart, yStart, 0, 0);
         this.ellipse.attr({
-            fill: "transparent",
+            fill: "white",
+            "fill-opacity": 0,
             "stroke": color,
             "stroke-width": width
         });
         worldModel.insertBeforeRobots(this.ellipse);
         var handleAttrs = {
-            fill: "transparent",
+            fill: "white",
+            "fill-opacity": 0,
             cursor: "pointer",
             "stroke-width": 1,
             stroke: "black"
@@ -1957,7 +1955,8 @@ var SensorItem = (function () {
         this.startCenter = new TwoDPosition(this.startPosition.x + this.width / 2, this.startPosition.y + this.height / 2);
         var handleRadius = 10;
         var handleAttrs = {
-            fill: "transparent",
+            fill: "white",
+            "fill-opacity": 0,
             cursor: "pointer",
             "stroke-width": 1,
             stroke: "black"
@@ -2477,7 +2476,8 @@ var RobotItemImpl = (function () {
         this.marker = new Marker(paper, new TwoDPosition(this.startCenter.x, this.startCenter.y));
         var handleRadius = 10;
         var handleAttrs = {
-            fill: "transparent",
+            fill: "white",
+            "fill-opacity": 0,
             cursor: "pointer",
             "stroke-width": 1,
             stroke: "black"
@@ -2706,6 +2706,7 @@ var TimelineImpl = (function () {
     TimelineImpl.prototype.stop = function () {
         this.setActive(false);
         this.robotModels[0].getDisplayWidget().displayToBack();
+        this.robotModels[0].getDisplayWidget().reset();
         clearInterval(this.intervalId);
         this.robotModels.forEach(function (model) { model.clearState(); });
     };

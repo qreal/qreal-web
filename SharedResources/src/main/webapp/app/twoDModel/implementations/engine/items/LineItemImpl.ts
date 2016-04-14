@@ -42,7 +42,8 @@ class LineItemImpl implements LineItem {
         var handleRadius: number = 10;
 
         var handleAttrs = {
-            fill: "transparent",
+            fill: "white",
+            "fill-opacity": 0,
             cursor: "pointer",
             "stroke-width": 1,
             stroke: "black"

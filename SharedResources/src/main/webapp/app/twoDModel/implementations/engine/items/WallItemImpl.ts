@@ -42,21 +42,16 @@ class WallItemImpl implements WallItem {
 
         var handleRadius: number = 10;
 
-        this.handleStart = paper.circle(xStart, yStart, handleRadius).attr({
+        var handleAttrs = {
+            fill: "white",
+            "fill-opacity": 0,
             cursor: "pointer",
             "stroke-width": 1,
             stroke: "black"
-        });
-        $(this.handleStart.node).attr("class", "handleStart");
-        $(".handleStart").attr("fill", "url(#wall_pattern)");
+        };
 
-        this.handleEnd = paper.circle(xEnd, yEnd, handleRadius).attr({
-            cursor: "pointer",
-            "stroke-width": 1,
-            stroke: "black"
-        });
-        $(this.handleEnd.node).attr("class", "handleEnd");
-        $(".handleEnd").attr("fill", "url(#wall_pattern)");
+        this.handleStart = paper.circle(xStart, yStart, handleRadius).attr(handleAttrs);
+        this.handleEnd = paper.circle(xEnd, yEnd, handleRadius).attr(handleAttrs);
 
         if (isInteractive) {
             this.setDraggable(worldModel.getZoom());

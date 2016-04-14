@@ -33,14 +33,16 @@ class EllipseItemImpl implements EllipseItem {
         this.worldModel = worldModel;
         this.ellipse = paper.ellipse(xStart, yStart, 0, 0);
         this.ellipse.attr({
-            fill: "transparent",
+            fill: "white",
+            "fill-opacity": 0,
             "stroke": color,
             "stroke-width": width
         });
         worldModel.insertBeforeRobots(this.ellipse);
 
         var handleAttrs = {
-            fill: "transparent",
+            fill: "white",
+            "fill-opacity": 0,
             cursor: "pointer",
             "stroke-width": 1,
             stroke: "black"
