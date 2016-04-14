@@ -84,6 +84,14 @@ declare class RobotsDiagramNode {
 
 }
 
+declare class PropertyEditElement {
+
+    constructor(logicalId: string, jointObjectId: string, propertyKey: string, property: Property);
+    public getHtmlElement();
+    public setPosition(x: number, y: number): void;
+
+}
+
 declare class DefaultDiagramNode implements DiagramNode {
 
     constructor(name: string, type: string, x: number, y: number, properties: Map<Property>, imagePath: string,
@@ -101,6 +109,7 @@ declare class DefaultDiagramNode implements DiagramNode {
     setPosition(x: number, y: number): void;
     getChangeableProperties(): Map<Property>;
     initPropertyEditElements(zoom: number): void;
+    getPropertyEditElement(): PropertyEditElement
 }
 
 declare interface Map<T> {
