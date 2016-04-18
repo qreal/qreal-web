@@ -35,9 +35,14 @@
             "Drawing": [
                 "TrikSetPainterColor",
                 "TrikSetPainterWidth",
+                "TrikDrawPixel",
+                "TrikDrawLine",
+                "TrikDrawRect",
                 "TrikDrawEllipse",
                 "TrikSmile",
                 "TrikSadSmile",
+                "TrikSetBackground",
+                "PrintText",
                 "ClearScreen",
                 "MarkerDown",
                 "MarkerUp"

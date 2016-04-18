@@ -559,6 +559,106 @@
             ]
         },
 
+        "TrikDrawPixel": {
+            "name": "Draw Pixel",
+            "image": {
+                "src": "images/drawPixelBlock.svg"
+            },
+            "properties": [
+
+                {
+                    "key": "XCoordinatePix",
+                    "name": "X",
+                    "type": "string",
+                    "value": "5"
+                },
+
+                {
+                    "key": "YCoordinatePix",
+                    "name": "Y",
+                    "type": "string",
+                    "value": "5"
+                }
+
+            ]
+        },
+
+        "TrikDrawLine": {
+            "name": "Draw Line",
+            "image": {
+                "src": "images/drawLineBlock.svg"
+            },
+            "properties": [
+
+                {
+                    "key": "X1CoordinateLine",
+                    "name": "X1",
+                    "type": "string",
+                    "value": "0"
+                },
+
+                {
+                    "key": "X2CoordinateLine",
+                    "name": "X2",
+                    "type": "string",
+                    "value": "10"
+                },
+
+                {
+                    "key": "Y1CoordinateLine",
+                    "name": "Y1",
+                    "type": "string",
+                    "value": "0"
+                },
+
+                {
+                    "key": "Y2CoordinateLine",
+                    "name": "Y2",
+                    "type": "string",
+                    "value": "10"
+                }
+
+            ]
+        },
+
+        "TrikDrawRect": {
+            "name": "Draw Rectangle",
+            "image": {
+                "src": "images/drawRectBlock.svg"
+            },
+            "properties": [
+
+                {
+                    "key": "HeightRect",
+                    "name": "Height",
+                    "type": "string",
+                    "value": "5"
+                },
+
+                {
+                    "key": "WidthRect",
+                    "name": "Width",
+                    "type": "string",
+                    "value": "5"
+                },
+
+                {
+                    "key": "XCoordinateRect",
+                    "name": "X",
+                    "type": "string",
+                    "value": "0"
+                },
+
+                {
+                    "key": "YCoordinateRect",
+                    "name": "Y",
+                    "type": "string",
+                    "value": "0"
+                }
+
+            ]
+        },
+
         "TrikDrawEllipse": {
             "name": "Draw Ellipse",
             "image": {
@@ -571,26 +671,6 @@
                     "name": "Height",
                     "type": "string",
                     "value": "5"
-                },
-
-                {
-                    "key": "Redraw",
-                    "name": "Redraw",
-                    "type": "checkbox",
-                    "selected": {
-                        "key": "true",
-                        "value": "true"
-                    },
-                    "variants": [
-                        {
-                            "key": "false",
-                            "value": "false"
-                        },
-                        {
-                            "key": "true",
-                            "value": "true"
-                        }
-                    ]
                 },
 
                 {
@@ -629,26 +709,6 @@
                     "name": "Height",
                     "type": "string",
                     "value": "5"
-                },
-
-                {
-                    "key": "Redraw",
-                    "name": "Redraw",
-                    "type": "checkbox",
-                    "selected": {
-                        "key": "true",
-                        "value": "true"
-                    },
-                    "variants": [
-                        {
-                            "key": "false",
-                            "value": "false"
-                        },
-                        {
-                            "key": "true",
-                            "value": "true"
-                        }
-                    ]
                 },
 
                 {
@@ -701,6 +761,146 @@
             "image": {
                 "src": "images/sadSmileBlock.svg"
             }
+        },
+
+        "TrikSetBackground": {
+            "name": "Background Color",
+            "image": {
+                "src": "images/setBackgroundBlock.svg"
+            },
+            "properties": [
+
+                {
+                    "key": "Color",
+                    "name": "Color",
+                    "type": "dropdown",
+                    "selected": {
+                        "key": "white",
+                        "value": "white"
+                    },
+                    "variants": [
+
+                        {
+                            "key": "black",
+                            "value": "black"
+                        },
+
+                        {
+                            "key": "blue",
+                            "value": "blue"
+                        },
+
+                        {
+                            "key": "cyan",
+                            "value": "cyan"
+                        },
+
+                        {
+                            "key": "darkBlue",
+                            "value": "dark blue"
+                        },
+
+                        {
+                            "key": "darkCyan",
+                            "value": "dark cyan"
+                        },
+
+                        {
+                            "key": "darkGray",
+                            "value": "dark gray"
+                        },
+
+                        {
+                            "key": "darkGreen",
+                            "value": "dark green"
+                        },
+
+                        {
+                            "key": "darkMagenta",
+                            "value": "dark magenta"
+                        },
+
+                        {
+                            "key": "darkRed",
+                            "value": "dark red"
+                        },
+
+                        {
+                            "key": "darkYellow",
+                            "value": "dark yellow"
+                        },
+
+                        {
+                            "key": "gray",
+                            "value": "gray"
+                        },
+
+                        {
+                            "key": "green",
+                            "value": "green"
+                        },
+
+                        {
+                            "key": "lightGray",
+                            "value": "light gray"
+                        },
+
+                        {
+                            "key": "magenta",
+                            "value": "magenta"
+                        },
+
+                        {
+                            "key": "red",
+                            "value": "red"
+                        },
+
+                        {
+                            "key": "white",
+                            "value": "white"
+                        },
+
+                        {
+                            "key": "yellow",
+                            "value": "yellow"
+                        }
+
+                    ]
+                }
+
+            ]
+        },
+
+        "PrintText": {
+            "name": "Print Text",
+            "image": {
+                "src": "images/printTextBlock.svg"
+            },
+            "properties": [
+
+                {
+                    "key": "PrintText",
+                    "name": "Text",
+                    "type": "string",
+                    "value": "Enter some text here"
+                },
+
+                {
+                    "key": "XCoordinateText",
+                    "name": "X",
+                    "type": "string",
+                    "value": "1"
+                },
+
+                {
+                    "key": "YCoordinateText",
+                    "name": "Y",
+                    "type": "string",
+                    "value": "1"
+                }
+
+            ]
+
         },
 
         "ClearScreen": {
@@ -759,7 +959,7 @@
 
                         {
                             "key": "darkGreen",
-                            "value": "darkgreen"
+                            "value": "dark green"
                         },
 
                         {

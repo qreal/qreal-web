@@ -78,6 +78,16 @@ class BlockFactory {
                 return new TrikDrawEllipseBlock(node, outboundLinks, interpreter, robotModels);
             case "ClearScreen":
                 return new ClearScreenBlock(node, outboundLinks, robotModels);
+            case "TrikDrawPixel":
+                return new TrikDrawPixelBlock(node, outboundLinks, interpreter, robotModels);
+            case "TrikDrawLine":
+                return new TrikDrawLineBlock(node, outboundLinks, interpreter, robotModels);
+            case "TrikDrawRect":
+                return new TrikDrawRectBlock(node, outboundLinks, interpreter, robotModels);
+            case "TrikSetBackground":
+                return new TrikSetBackgroundBlock(node, outboundLinks, robotModels);
+            case "PrintText":
+                return new PrintTextBlock(node, outboundLinks, interpreter, robotModels);
             default:
                 throw new Error("Block " + node.getType() + " is not supported");
         }
