@@ -30,6 +30,7 @@
 /// <reference path="Blocks/MarkerUpBlock.ts" />
 /// <reference path="Blocks/MarkerDownBlock.ts" />
 /// <reference path="Blocks/VariableInitBlock.ts" />
+/// <reference path="Blocks/RandomInitBlock.ts" />
 /// <reference path="Blocks/EndIfBlock.ts" />
 /// <reference path="Blocks/TrikSadSmileBlock.ts" />
 /// <reference path="Blocks/TrikSmileBlock.ts" />
