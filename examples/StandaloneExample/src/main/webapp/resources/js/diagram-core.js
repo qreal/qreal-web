@@ -327,8 +327,17 @@ var PaletteTypes = (function () {
     return PaletteTypes;
 })();
 var PropertyEditElement = (function () {
-    function PropertyEditElement(logicalId, jointObjectId, propertyKey, property) {
-        this.htmlElement = $(StringUtils.format(PropertyEditElement.template, propertyKey + "-" + logicalId, jointObjectId, propertyKey, property.name, property.value, property.value.length.toString()));
+    function PropertyEditElement(logicalId, jointObjectId, properties) {
+        var propertiesHtml = "";
+        for (var propertyKey in properties) {
+            var property = properties[propertyKey];
+            if (property.type === "string") {
+                propertiesHtml += StringUtils.format(PropertyEditElement.propertyTemplate, propertyKey + "-" + logicalId, jointObjectId, propertyKey, property.name, property.value);
+                break;
+            }
+        }
+        this.htmlElement = $(StringUtils.format(PropertyEditElement.template, propertiesHtml));
+        this.initInputSize();
         this.initInputAutosize();
     }
     PropertyEditElement.prototype.getHtmlElement = function () {
@@ -337,25 +346,24 @@ var PropertyEditElement = (function () {
     PropertyEditElement.prototype.setPosition = function (x, y) {
         this.htmlElement.css({ left: x - 25, top: y + 55 });
     };
-    PropertyEditElement.prototype.initInputAutosize = function () {
-        this.htmlElement.find('input').keypress(function (e) {
-            if ($(this).val().length > 0) {
-                $(this).attr({ size: $(this).val().length });
-            }
-        });
-        this.htmlElement.find('input').keydown(function (e) {
-            if (e.keyCode === 8 || e.keyCode === 46) {
-                if ($(this).val().length > 1) {
-                    $(this).attr({ size: $(this).val().length - 1 });
-                }
-            }
+    PropertyEditElement.prototype.initInputSize = function () {
+        this.htmlElement.find('input').each(function (index) {
+            $(this).css("width", StringUtils.getInputStringSize(this));
         });
     };
+    PropertyEditElement.prototype.initInputAutosize = function () {
+        this.htmlElement.find('input').on('input', function (event) {
+            $(this).css("width", StringUtils.getInputStringSize(this));
+        });
+    };
+    PropertyEditElement.propertyTemplate = "" +
+        "<span>{3}:</span> " +
+        "<input class='{0} property-edit-input' data-id='{1}' data-type='{2}' " +
+        "style='border: dashed 1px; padding-left: 2px; margin-bottom: 1px' value='{4}'>" +
+        "<br>";
     PropertyEditElement.template = "" +
-        "<div class='property-edit-element' style='position: absolute; z-index: 1;'>" +
-        "   <span>{3}:</span>" +
-        "   <input class='{0} property-edit-input' data-id='{1}' data-type='{2}' width='auto' size='{5}' " +
-        "style='border: dashed 1px;' value='{4}'>" +
+        "<div class='property-edit-element' style='position: absolute; text-align: left; z-index: 1;'>" +
+        "   {0}" +
         "</div>";
     return PropertyEditElement;
 })();
@@ -390,18 +398,12 @@ var DefaultDiagramNode = (function () {
     DefaultDiagramNode.prototype.initPropertyEditElements = function (zoom) {
         var _this = this;
         var parentPosition = this.getJointObjectPagePosition(zoom);
-        var propertyKey;
-        for (propertyKey in this.changeableProperties) {
-            if (this.changeableProperties[propertyKey].type === "string") {
-                this.propertyEditElement = new PropertyEditElement(this.logicalId, this.jointObject.id, propertyKey, this.changeableProperties[propertyKey]);
-                this.propertyEditElement.setPosition(parentPosition.x, parentPosition.y);
-                this.jointObject.on('change:position', function () {
-                    var position = _this.getJointObjectPagePosition(zoom);
-                    _this.propertyEditElement.setPosition(position.x, position.y);
-                });
-                break;
-            }
-        }
+        this.propertyEditElement = new PropertyEditElement(this.logicalId, this.jointObject.id, this.changeableProperties);
+        this.propertyEditElement.setPosition(parentPosition.x, parentPosition.y);
+        this.jointObject.on('change:position', function () {
+            var position = _this.getJointObjectPagePosition(zoom);
+            _this.propertyEditElement.setPosition(position.x, position.y);
+        });
     };
     DefaultDiagramNode.prototype.getPropertyEditElement = function () {
         return this.propertyEditElement;
@@ -844,6 +846,22 @@ var StringUtils = (function () {
             return typeof args[number] != 'undefined' ? args[number] : match;
         });
     };
+    StringUtils.getInputStringSize = function (input) {
+        var minWidth = 6;
+        var $body = $('body');
+        var $this = $(input);
+        var $text = $this.text();
+        if ($text == '')
+            $text = $this.val();
+        var calc = '<div style="clear:both;display:block;visibility:hidden;">' +
+            '<span style="width;inherit;margin:0;font-family:' + $this.css('font-family') + ';font-size:' +
+            $this.css('font-size') + ';font-weight:' + $this.css('font-weight') + '">' + $text + '</span>' +
+            '</div>';
+        $body.append(calc);
+        var width = $('body').find('span:last').width();
+        $body.find('span:last').parent().remove();
+        return width + minWidth;
+    };
     return StringUtils;
 })();
 var StringPropertyView = (function (_super) {
@@ -1003,6 +1021,7 @@ var PropertyEditorController = (function () {
             $("." + e.detail.key + "-" + e.detail.nodeId).each(function (index) {
                 if ($(this).val() !== e.detail.value) {
                     $(this).val(e.detail.value);
+                    $(this).trigger('input');
                 }
             });
         }, false);

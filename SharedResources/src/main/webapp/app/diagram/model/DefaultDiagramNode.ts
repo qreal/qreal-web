@@ -69,20 +69,13 @@ class DefaultDiagramNode implements DiagramNode {
 
     initPropertyEditElements(zoom: number): void {
         var parentPosition = this.getJointObjectPagePosition(zoom);
-        var propertyKey: string;
-        for (propertyKey in this.changeableProperties) {
-            if (this.changeableProperties[propertyKey].type === "string") {
-                this.propertyEditElement = new PropertyEditElement(this.logicalId, this.jointObject.id, propertyKey,
-                    this.changeableProperties[propertyKey]);
-                this.propertyEditElement.setPosition(parentPosition.x, parentPosition.y);
-                this.jointObject.on('change:position', () => {
-                    var position = this.getJointObjectPagePosition(zoom);
-                    this.propertyEditElement.setPosition(position.x, position.y);
-                });
-                break;
-            }
-        }
-
+        this.propertyEditElement = new PropertyEditElement(this.logicalId, this.jointObject.id,
+            this.changeableProperties);
+        this.propertyEditElement.setPosition(parentPosition.x, parentPosition.y);
+        this.jointObject.on('change:position', () => {
+            var position = this.getJointObjectPagePosition(zoom);
+            this.propertyEditElement.setPosition(position.x, position.y);
+        });
     }
     
     getPropertyEditElement(): PropertyEditElement {

@@ -20,18 +20,33 @@
 
 class PropertyEditElement {
 
+    private static propertyTemplate = "" +
+        "<span>{3}:</span> " +
+        "<input class='{0} property-edit-input' data-id='{1}' data-type='{2}' " +
+        "style='border: dashed 1px; padding-left: 2px; margin-bottom: 1px' value='{4}'>" +
+        "<br>";
+
     private static template: string = "" +
-        "<div class='property-edit-element' style='position: absolute; z-index: 1;'>" +
-        "   <span>{3}:</span>" +
-        "   <input class='{0} property-edit-input' data-id='{1}' data-type='{2}' width='auto' size='{5}' " +
-        "style='border: dashed 1px;' value='{4}'>" +
+        "<div class='property-edit-element' style='position: absolute; text-align: left; z-index: 1;'>" +
+        "   {0}" +
         "</div>";
 
     private htmlElement;
 
-    constructor(logicalId: string, jointObjectId: string, propertyKey: string, property: Property) {
-        this.htmlElement = $(StringUtils.format(PropertyEditElement.template, propertyKey + "-" + logicalId,
-            jointObjectId, propertyKey, property.name, property.value, property.value.length.toString()));
+    constructor(logicalId: string, jointObjectId: string, properties: Map<Property>) {
+        var propertiesHtml: string = "";
+
+        for (var propertyKey in properties) {
+            var property: Property = properties[propertyKey];
+            if (property.type === "string") {
+                propertiesHtml += StringUtils.format(PropertyEditElement.propertyTemplate,
+                    propertyKey + "-" + logicalId, jointObjectId, propertyKey, property.name, property.value);
+                break;
+            }
+        }
+
+        this.htmlElement = $(StringUtils.format(PropertyEditElement.template, propertiesHtml));
+        this.initInputSize();
         this.initInputAutosize();
     }
 
@@ -43,18 +58,17 @@ class PropertyEditElement {
         this.htmlElement.css({ left: x - 25, top: y + 55 });
     }
 
+    private initInputSize(): void {
+        this.htmlElement.find('input').each(function(index) {
+                $(this).css("width", StringUtils.getInputStringSize(this));
+            }
+        );
+
+    }
+
     private initInputAutosize(): void {
-        this.htmlElement.find('input').keypress(function(e) {
-            if ($(this).val().length > 0) {
-                $(this).attr({size: $(this).val().length});
-            }
-        });
-        this.htmlElement.find('input').keydown(function(e) {
-            if(e.keyCode === 8 || e.keyCode === 46) {
-                if ($(this).val().length > 1) {
-                    $(this).attr({size: $(this).val().length - 1});
-                }
-            }
+        this.htmlElement.find('input').on('input', function(event) {
+            $(this).css("width", StringUtils.getInputStringSize(this));
         });
     }
 

@@ -42,6 +42,7 @@ class PropertyEditorController {
             $("." + e.detail.key + "-" + e.detail.nodeId).each(function(index) {
                 if ($(this).val() !== e.detail.value) {
                     $(this).val(e.detail.value);
+                    $(this).trigger('input');
                 }
             })
         }, false);
