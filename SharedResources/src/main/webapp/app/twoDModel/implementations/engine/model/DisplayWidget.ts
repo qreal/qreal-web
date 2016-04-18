@@ -130,7 +130,7 @@ class DisplayWidget {
     }
 
     reset(): void {
-        this.background = "#a0a0a4"
+        this.setBackground("#a0a0a4");
         this.isSmiles = false;
         this.isSadSmiles = false;
         this.clearScreen();
