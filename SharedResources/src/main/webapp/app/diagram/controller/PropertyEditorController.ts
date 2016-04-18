@@ -74,6 +74,30 @@ class PropertyEditorController {
         $(".property").remove();
     }
 
+    public setProperty(key: string, value: string): void {
+        var currentElement: DiagramElement = this.paperController.getCurrentElement();
+        var property: Property = currentElement.getChangeableProperties()[key];
+        property.value = value;
+        currentElement.setProperty(key, property);
+    }
+
+    public changeHtmlElementValue(id: string, value: string): void {
+        $("#" + id).val(value);
+    }
+
+    public changeCheckboxHtml(id: string, value: string): void {
+        var tr = $("#" + id).closest('tr');
+        var label = $("#" + id).find('label');
+        var checkBoxInput = $("#" + id).find('input');
+        if (value === "true") {
+            label.contents().last()[0].textContent = $("#" + id).data("true");
+            checkBoxInput.prop('checked', true);
+        } else {
+            label.contents().last()[0].textContent =  $("#" + id).data("false");
+            checkBoxInput.prop('checked', false);
+        }
+    }
+
     private initCombobox(typeName: string, propertyKey: string, element) {
         var variantsList = VariantListMapper.getVariantList(typeName, propertyKey);
         var controller: PropertyEditorController = this;
@@ -117,23 +141,6 @@ class PropertyEditorController {
         });
     }
 
-    private changeCheckboxValue(value: string): string {
-        return (value === "true") ? "false" : "true";
-    }
-
-    private changeCheckboxHtml(id: string, value: string): void {
-        var tr = $("#" + id).closest('tr');
-        var label = $("#" + id).find('label');
-        var checkBoxInput = $("#" + id).find('input');
-        if (value === "true") {
-            label.contents().last()[0].textContent = $("#" + id).data("true");
-            checkBoxInput.prop('checked', true);
-        } else {
-            label.contents().last()[0].textContent =  $("#" + id).data("false");
-            checkBoxInput.prop('checked', false);
-        }
-    }
-
     private initDropdownListener(): void {
         var controller: PropertyEditorController = this;
         $(document).on('change', '.mydropdown', function () {
@@ -158,14 +165,8 @@ class PropertyEditorController {
         });
     }
 
-    private setProperty(key: string, value: string): void {
-        var currentElement: DiagramElement = this.paperController.getCurrentElement();
-        var property: Property = currentElement.getChangeableProperties()[key];
-        property.value = value;
-        currentElement.setProperty(key, property);
+    private changeCheckboxValue(value: string): string {
+        return (value === "true") ? "false" : "true";
     }
 
-    private changeHtmlElementValue(id: string, value: string): void {
-        $("#" + id).val(value);
-    }
 }

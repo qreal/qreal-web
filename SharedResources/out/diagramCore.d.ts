@@ -315,6 +315,9 @@ declare class PropertyEditorController {
     constructor(paperController: PaperController, undoRedoController: UndoRedoController);
     public setNodeProperties(element: DiagramElement): void;
     public clearState(): void;
+    public setProperty(key: string, value: string): void;
+    public changeHtmlElementValue(id: string, value: string): void;
+    public changeCheckboxHtml(id: string, value: string): void;
 
 }
 

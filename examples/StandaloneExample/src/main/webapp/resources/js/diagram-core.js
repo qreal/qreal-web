@@ -855,7 +855,7 @@ var StringPropertyView = (function (_super) {
             '   <td class="vert-align">{0}</td>' +
             '   <td class="vert-align">' +
             '       <div class="input-group">' +
-            '           <input class="{1} property-edit-input" type="text" data-type="{2}" value="{3}">' +
+            '           <input class="{1} property-edit-input form-control" type="text" data-type="{2}" value="{3}">' +
             '       </div>' +
             '   </td>' +
             '</tr>';
@@ -1028,6 +1028,28 @@ var PropertyEditorController = (function () {
     PropertyEditorController.prototype.clearState = function () {
         $(".property").remove();
     };
+    PropertyEditorController.prototype.setProperty = function (key, value) {
+        var currentElement = this.paperController.getCurrentElement();
+        var property = currentElement.getChangeableProperties()[key];
+        property.value = value;
+        currentElement.setProperty(key, property);
+    };
+    PropertyEditorController.prototype.changeHtmlElementValue = function (id, value) {
+        $("#" + id).val(value);
+    };
+    PropertyEditorController.prototype.changeCheckboxHtml = function (id, value) {
+        var tr = $("#" + id).closest('tr');
+        var label = $("#" + id).find('label');
+        var checkBoxInput = $("#" + id).find('input');
+        if (value === "true") {
+            label.contents().last()[0].textContent = $("#" + id).data("true");
+            checkBoxInput.prop('checked', true);
+        }
+        else {
+            label.contents().last()[0].textContent = $("#" + id).data("false");
+            checkBoxInput.prop('checked', false);
+        }
+    };
     PropertyEditorController.prototype.initCombobox = function (typeName, propertyKey, element) {
         var variantsList = VariantListMapper.getVariantList(typeName, propertyKey);
         var controller = this;
@@ -1062,24 +1084,9 @@ var PropertyEditorController = (function () {
             var currentValue = property.value;
             var newValue = controller.changeCheckboxValue(currentValue);
             controller.addChangePropertyCommand(key, newValue, controller.changeCheckboxHtml.bind(controller, $(this).attr("id")));
+            controller.changeCheckboxHtml($(this).attr("id"), newValue);
             controller.setProperty(key, newValue);
         });
-    };
-    PropertyEditorController.prototype.changeCheckboxValue = function (value) {
-        return (value === "true") ? "false" : "true";
-    };
-    PropertyEditorController.prototype.changeCheckboxHtml = function (id, value) {
-        var tr = $("#" + id).closest('tr');
-        var label = $("#" + id).find('label');
-        var checkBoxInput = $("#" + id).find('input');
-        if (value === "true") {
-            label.contents().last()[0].textContent = $("#" + id).data("true");
-            checkBoxInput.prop('checked', true);
-        }
-        else {
-            label.contents().last()[0].textContent = $("#" + id).data("false");
-            checkBoxInput.prop('checked', false);
-        }
     };
     PropertyEditorController.prototype.initDropdownListener = function () {
         var controller = this;
@@ -1101,14 +1108,8 @@ var PropertyEditorController = (function () {
             }
         });
     };
-    PropertyEditorController.prototype.setProperty = function (key, value) {
-        var currentElement = this.paperController.getCurrentElement();
-        var property = currentElement.getChangeableProperties()[key];
-        property.value = value;
-        currentElement.setProperty(key, property);
-    };
-    PropertyEditorController.prototype.changeHtmlElementValue = function (id, value) {
-        $("#" + id).val(value);
+    PropertyEditorController.prototype.changeCheckboxValue = function (value) {
+        return (value === "true") ? "false" : "true";
     };
     return PropertyEditorController;
 })();
