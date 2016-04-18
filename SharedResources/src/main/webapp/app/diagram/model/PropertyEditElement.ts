@@ -68,6 +68,10 @@ class PropertyEditElement {
 
     private initInputAutosize(): void {
         this.htmlElement.find('input').on('input', function(event) {
+            $(this).trigger('autosize');
+        });
+
+        this.htmlElement.find('input').on('autosize', function(event) {
             $(this).css("width", StringUtils.getInputStringSize(this));
         });
     }

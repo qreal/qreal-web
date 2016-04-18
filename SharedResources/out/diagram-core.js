@@ -353,6 +353,9 @@ var PropertyEditElement = (function () {
     };
     PropertyEditElement.prototype.initInputAutosize = function () {
         this.htmlElement.find('input').on('input', function (event) {
+            $(this).trigger('autosize');
+        });
+        this.htmlElement.find('input').on('autosize', function (event) {
             $(this).css("width", StringUtils.getInputStringSize(this));
         });
     };
@@ -1021,7 +1024,7 @@ var PropertyEditorController = (function () {
             $("." + e.detail.key + "-" + e.detail.nodeId).each(function (index) {
                 if ($(this).val() !== e.detail.value) {
                     $(this).val(e.detail.value);
-                    $(this).trigger('input');
+                    $(this).trigger('autosize');
                 }
             });
         }, false);
