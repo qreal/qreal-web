@@ -46,6 +46,16 @@
                             <img src="images/2dmodel/2d-model.svg" style="width: 18px; height: 18px; cursor: pointer"/>
                         </p>
                     </li>
+                    <li>
+                        <p class="navbar-text" ng-click="undo()">
+                            <span class="glyphicon glyphicon-chevron-left" style="vertical-align: middle; cursor: pointer"></span>
+                        </p>
+                    </li>
+                    <li>
+                        <p class="navbar-text" ng-click="redo()">
+                            <span class="glyphicon glyphicon-chevron-right" style="vertical-align: middle; cursor: pointer"></span>
+                        </p>
+                    </li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">

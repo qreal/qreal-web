@@ -33,11 +33,12 @@ abstract class DiagramEditorController {
     protected propertyEditorController: PropertyEditorController;
     protected elementsTypeLoader: ElementsTypeLoader;
     protected paletteController: PaletteController;
-
     protected nodeTypesMap: Map<NodeType>;
+    protected undoRedoController: UndoRedoController;
 
     constructor($scope, $attrs) {
         this.scope = $scope;
+        this.undoRedoController = new UndoRedoController();
         this.nodeTypesMap = {};
         this.paletteController = new PaletteController();
         DiagramElementListener.getNodeProperties = (type: string): Map<Property> => {
@@ -46,6 +47,14 @@ abstract class DiagramEditorController {
         this.diagramEditor = new DiagramEditor();
         this.paperController = new PaperController(this, this.diagramEditor.getPaper());
         this.elementsTypeLoader = new ElementsTypeLoader();
+
+        $scope.undo = () => {
+            this.undoRedoController.undo();
+        };
+
+        $scope.redo = () => {
+            this.undoRedoController.redo();
+        };
     }
 
     public getGraph(): joint.dia.Graph {
@@ -78,10 +87,15 @@ abstract class DiagramEditorController {
         return this.nodeTypesMap[type].getPropertiesMap();
     }
 
+    public getUndoRedoController(): UndoRedoController {
+        return this.undoRedoController;
+    }
+
     public clearState(): void {
         this.propertyEditorController.clearState();
         this.paperController.clearState();
         this.diagramEditor.clear();
+        this.undoRedoController.clearStack();
     }
 
 }

@@ -238,7 +238,7 @@
 
         <div id="twoDModel_right-menu">
             <button id="menu_button" type="button" class="btn btn-default" ng-click="vm.showDisplay()">
-                <span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
             </button>
 
             <img id="controller" src="<c:url value='/images/2dmodel/trikKit/controller.png' />" />

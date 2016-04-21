@@ -182,6 +182,23 @@ declare class DiagramEditor {
 
 }
 
+declare interface Command {
+
+    execute(): void;
+    revert(): void;
+    isRevertible(): boolean;
+
+}
+
+declare class UndoRedoController {
+
+    public addCommand(command: Command);
+    public undo(): void;
+    public redo(): void;
+    public clearStack(): void;
+
+}
+
 declare class Gesture {
 
     name: string;
@@ -245,6 +262,7 @@ declare abstract class DiagramEditorController {
     protected elementsTypeLoader: ElementsTypeLoader;
     protected paletteController: PaletteController;
     protected nodeTypesMap: Map<NodeType>;
+    protected undoRedoController: UndoRedoController;
 
     constructor($scope, $attrs);
 
@@ -273,7 +291,7 @@ declare class PaperController {
 
 declare class PropertyEditorController {
 
-    constructor(paperController: PaperController);
+    constructor(paperController: PaperController, undoRedoController: UndoRedoController);
     public setNodeProperties(element: DiagramElement): void;
     public clearState(): void;
 

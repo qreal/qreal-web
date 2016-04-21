@@ -25,8 +25,8 @@ class CheckboxPropertyView extends HtmlView {
         '<tr class="property">' +
         '   <td class="vert-align">{0}</td>' +
         '   <td class="vert-align">' +
-        '       <div class="checkbox" data-type="{1}" data-true="{2}" data-false="{3}">' +
-        '           <label class="active"><input type="checkbox" {4}>{5}</label>' +
+        '       <div id="{1}" class="checkbox" data-type="{2}" data-true="{3}" data-false="{4}">' +
+        '           <label class="active"><input type="checkbox" {5}>{6}</label>' +
         '       </div>' +
         '   </td>' +
         '</tr>';
@@ -56,8 +56,8 @@ class CheckboxPropertyView extends HtmlView {
             state = "checked";
         }
 
-        this.content = StringUtils.format(this.template, property.name, propertyKey, dataTrue, dataFalse,
-            state, visibleValue);
+        this.content = StringUtils.format(this.template, property.name, propertyKey + "Property",
+            propertyKey, dataTrue, dataFalse, state, visibleValue);
     }
 
 }
