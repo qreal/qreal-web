@@ -104,7 +104,8 @@
                                         </button>
                                     </td>
                                     <td>
-                                        <button class="twoDModel_button palette_button_right" ng-click="setDrawWallMode()">
+                                        <button id="wall-button" class="twoDModel_button palette_button_right"
+                                                ng-click="setDrawWallMode()">
                                             <img src="images/2dmodel/2d_wall.png"
                                                  style="width: 20px; height: 20px; vertical-align: middle"/>
                                         </button>

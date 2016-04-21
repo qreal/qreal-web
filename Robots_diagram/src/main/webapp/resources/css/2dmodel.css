@@ -132,7 +132,7 @@ ul.nav.nav-tabs li a {
 #menu_button {
     position: absolute;
     top: 5px;
-    right: 25px;
+    right: 15px;
 }
 
 #controller {
@@ -204,5 +204,10 @@ ul.nav.nav-tabs li a {
     left: 290px;
     top: 75px;
     opacity: 0.9;
+}
+
+#wall-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 

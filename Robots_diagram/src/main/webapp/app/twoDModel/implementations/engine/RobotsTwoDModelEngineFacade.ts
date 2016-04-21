@@ -41,6 +41,9 @@ class RobotsTwoDModelEngineFacade extends TwoDModelEngineFacadeImpl {
         }
 
         $scope.openDiagramEditor = () => { this.openDiagramEditor(); };
+
+        // wall-button is disabled while there is no collision detection
+        $("#wall-button").prop('disabled', true);
     }
 
     public openDiagramEditor(): void {
