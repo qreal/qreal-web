@@ -1236,6 +1236,9 @@ var PaletteController = (function () {
             persist: "location"
         });
     };
+    PaletteController.prototype.clearBlocksPalette = function () {
+        $("#blocks-navigation").empty();
+    };
     return PaletteController;
 })();
 var RobotsDiagramNode = (function () {
