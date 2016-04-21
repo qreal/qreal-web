@@ -976,6 +976,7 @@ var EllipseItemImpl = (function () {
 })();
 var WorldModelImpl = (function () {
     function WorldModelImpl(zoom, isInteractive) {
+        var _this = this;
         this.drawMode = 0;
         this.currentElement = null;
         this.colorFields = [];
@@ -1004,113 +1005,8 @@ var WorldModelImpl = (function () {
             this.initCustomContextMenu();
             this.initDeleteListener();
         }
-        var worldModel = this;
         $(document).ready(function () {
-            var shape;
-            var isDrawing = false;
-            var startDrawPoint;
-            $("#twoDModel_stage").mousedown(function (e) {
-                switch (worldModel.drawMode) {
-                    case 0:
-                        if (e.target.nodeName === "svg") {
-                            if (worldModel.currentElement) {
-                                worldModel.currentElement.hideHandles();
-                                worldModel.currentElement = null;
-                            }
-                        }
-                        break;
-                    case 1:
-                        var position = worldModel.getMousePosition(e);
-                        var x = position.x;
-                        var y = position.y;
-                        var width = $("#pen_width_spinner").val();
-                        var color = $("#pen_color_dropdown").val();
-                        shape = new LineItemImpl(worldModel, x, y, x, y, width, new RGBAColor(1, color), isInteractive);
-                        worldModel.colorFields.push(shape);
-                        worldModel.setCurrentElement(shape);
-                        isDrawing = true;
-                        break;
-                    case 2:
-                        var position = worldModel.getMousePosition(e);
-                        var x = position.x;
-                        var y = position.y;
-                        shape = new WallItemImpl(worldModel, x, y, x, y, isInteractive);
-                        worldModel.wallItems.push(shape);
-                        worldModel.setCurrentElement(shape);
-                        isDrawing = true;
-                        break;
-                    case 3:
-                        var position = worldModel.getMousePosition(e);
-                        var x = position.x;
-                        var y = position.y;
-                        var width = $("#pen_width_spinner").val();
-                        var color = $("#pen_color_dropdown").val();
-                        shape = new PencilItemImpl(worldModel, x, y, width, color, isInteractive);
-                        worldModel.colorFields.push(shape);
-                        worldModel.setCurrentElement(shape);
-                        isDrawing = true;
-                        break;
-                    case 4:
-                        var position = worldModel.getMousePosition(e);
-                        var x = position.x;
-                        var y = position.y;
-                        var width = $("#pen_width_spinner").val();
-                        var color = $("#pen_color_dropdown").val();
-                        startDrawPoint = {
-                            "x": x,
-                            "y": y
-                        };
-                        shape = new EllipseItemImpl(worldModel, x, y, width, color, isInteractive);
-                        worldModel.colorFields.push(shape);
-                        worldModel.setCurrentElement(shape);
-                        isDrawing = true;
-                        break;
-                    default:
-                }
-            });
-            $("#twoDModel_stage").mousemove(function (e) {
-                if (isInteractive && isDrawing) {
-                    switch (worldModel.drawMode) {
-                        case 1:
-                        case 2:
-                            var position = worldModel.getMousePosition(e);
-                            var x = position.x;
-                            var y = position.y;
-                            shape.updateEnd(x, y);
-                            break;
-                        case 3:
-                            var position = worldModel.getMousePosition(e);
-                            var x = position.x;
-                            var y = position.y;
-                            shape.updatePath(x, y);
-                            break;
-                        case 4:
-                            var position = worldModel.getMousePosition(e);
-                            var x = position.x;
-                            var y = position.y;
-                            shape.updateCorner(startDrawPoint.x, startDrawPoint.y, x, y);
-                            break;
-                        default:
-                    }
-                }
-            });
-            $("#twoDModel_stage").mouseup(function (event) {
-                isDrawing = false;
-                if (worldModel.isInteractive) {
-                    if (event.target.nodeName !== "svg" && !(worldModel.currentElement instanceof RobotItemImpl
-                        || worldModel.currentElement instanceof SensorItem)) {
-                        if (worldModel.drawMode === 0) {
-                            if (event.button === 2) {
-                                $("#" + worldModel.contextMenuId).finish().toggle(100).
-                                    css({
-                                    left: event.pageX - $(document).scrollLeft() + "px",
-                                    top: event.pageY - $(document).scrollTop() + "px"
-                                });
-                            }
-                        }
-                    }
-                }
-            });
+            _this.initMouseListeners();
         });
     }
     WorldModelImpl.prototype.getZoom = function () {
@@ -1324,6 +1220,114 @@ var WorldModelImpl = (function () {
         var x = parseFloat(splittedStr[0]);
         var y = parseFloat(splittedStr[1]);
         return new TwoDPosition(x, y);
+    };
+    WorldModelImpl.prototype.initMouseListeners = function () {
+        var worldModel = this;
+        var shape;
+        var isDrawing = false;
+        var startDrawPoint;
+        $("#twoDModel_stage").mousedown(function (e) {
+            switch (worldModel.drawMode) {
+                case 0:
+                    if (e.target.nodeName === "svg") {
+                        if (worldModel.currentElement) {
+                            worldModel.currentElement.hideHandles();
+                            worldModel.currentElement = null;
+                        }
+                    }
+                    break;
+                case 1:
+                    var position = worldModel.getMousePosition(e);
+                    var x = position.x;
+                    var y = position.y;
+                    var width = $("#pen_width_spinner").val();
+                    var color = $("#pen_color_dropdown").val();
+                    shape = new LineItemImpl(worldModel, x, y, x, y, width, new RGBAColor(1, color), worldModel.isInteractive);
+                    worldModel.colorFields.push(shape);
+                    worldModel.setCurrentElement(shape);
+                    isDrawing = true;
+                    break;
+                case 2:
+                    var position = worldModel.getMousePosition(e);
+                    var x = position.x;
+                    var y = position.y;
+                    shape = new WallItemImpl(worldModel, x, y, x, y, worldModel.isInteractive);
+                    worldModel.wallItems.push(shape);
+                    worldModel.setCurrentElement(shape);
+                    isDrawing = true;
+                    break;
+                case 3:
+                    var position = worldModel.getMousePosition(e);
+                    var x = position.x;
+                    var y = position.y;
+                    var width = $("#pen_width_spinner").val();
+                    var color = $("#pen_color_dropdown").val();
+                    shape = new PencilItemImpl(worldModel, x, y, width, color, worldModel.isInteractive);
+                    worldModel.colorFields.push(shape);
+                    worldModel.setCurrentElement(shape);
+                    isDrawing = true;
+                    break;
+                case 4:
+                    var position = worldModel.getMousePosition(e);
+                    var x = position.x;
+                    var y = position.y;
+                    var width = $("#pen_width_spinner").val();
+                    var color = $("#pen_color_dropdown").val();
+                    startDrawPoint = {
+                        "x": x,
+                        "y": y
+                    };
+                    shape = new EllipseItemImpl(worldModel, x, y, width, color, worldModel.isInteractive);
+                    worldModel.colorFields.push(shape);
+                    worldModel.setCurrentElement(shape);
+                    isDrawing = true;
+                    break;
+                default:
+            }
+        });
+        $("#twoDModel_stage").mousemove(function (e) {
+            if (worldModel.isInteractive && isDrawing) {
+                switch (worldModel.drawMode) {
+                    case 1:
+                    case 2:
+                        var position = worldModel.getMousePosition(e);
+                        var x = position.x;
+                        var y = position.y;
+                        shape.updateEnd(x, y);
+                        break;
+                    case 3:
+                        var position = worldModel.getMousePosition(e);
+                        var x = position.x;
+                        var y = position.y;
+                        shape.updatePath(x, y);
+                        break;
+                    case 4:
+                        var position = worldModel.getMousePosition(e);
+                        var x = position.x;
+                        var y = position.y;
+                        shape.updateCorner(startDrawPoint.x, startDrawPoint.y, x, y);
+                        break;
+                    default:
+                }
+            }
+        });
+        $("#twoDModel_stage").mouseup(function (event) {
+            isDrawing = false;
+            if (worldModel.isInteractive) {
+                if (event.target.nodeName !== "svg" && !(worldModel.currentElement instanceof RobotItemImpl
+                    || worldModel.currentElement instanceof SensorItem)) {
+                    if (worldModel.drawMode === 0) {
+                        if (event.button === 2) {
+                            $("#" + worldModel.contextMenuId).finish().toggle(100).
+                                css({
+                                left: event.pageX - $(document).scrollLeft() + "px",
+                                top: event.pageY - $(document).scrollTop() + "px"
+                            });
+                        }
+                    }
+                }
+            }
+        });
     };
     WorldModelImpl.prototype.initCustomContextMenu = function () {
         var controller = this;
