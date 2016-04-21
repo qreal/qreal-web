@@ -1,0 +1,81 @@
+{
+  "elements": {
+    "ControlFlow": {
+      "name": "Link",
+      "properties": [
+        {
+          "key": "Guard",
+          "name": "Guard",
+          "type": "combobox",
+          "value": "",
+          "variants": [
+            {
+              "key": "false",
+              "value": "false"
+            },
+            {
+              "key": "iteration",
+              "value": "iteration"
+            },
+            {
+              "key": "true",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "blocks": {
+    "palette": {
+      "Base": {
+        "Entity": {
+          "name": "Entity",
+          "image": {
+            "src": "images/entityBlock.svg"
+          },
+          "properties": [
+            {
+              "key": "name",
+              "name": "name",
+              "type": "string",
+              "value": "entity"
+            },
+            {
+              "key": "image",
+              "name": "image",
+              "type": "string",
+              "value": ""
+            }
+          ]
+        },
+        "Property": {
+          "name": "Property",
+          "image": {
+            "src": "images/propertyBlock.svg"
+          },
+          "properties": [
+            {
+              "key": "name",
+              "name": "name",
+              "type": "string",
+              "value": "property"
+            },
+            {
+              "key": "type",
+              "name": "type",
+              "type": "string",
+              "value": "string"
+            },
+            {
+              "key": "value",
+              "name": "value",
+              "type": "string",
+              "value": ""
+            }
+          ]
+        }
+      }
+    }
+  }
+}

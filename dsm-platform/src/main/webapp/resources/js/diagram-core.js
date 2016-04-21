@@ -55,14 +55,6 @@ var Link = (function () {
         if (key === "Guard") {
             this.changeLabel(property.value);
         }
-        var propertyChangedEvent = new CustomEvent('property-changed', {
-            detail: {
-                nodeId: this.getLogicalId(),
-                key: key,
-                value: property.value
-            }
-        });
-        document.dispatchEvent(propertyChangedEvent);
     };
     Link.prototype.changeLabel = function (value) {
         this.jointObject.label(0, {
@@ -143,7 +135,7 @@ var DiagramElementListener = (function () {
                 nodeProperties[property] = new Property(typeProperties[property].name, typeProperties[property].type, typeProperties[property].value);
             }
             var linkObject = new Link(link, nodeProperties);
-            DiagramElementListener.makeAndExecuteCreateLinkCommand(linkObject);
+            DiagramElementListener.addLinkToMap(linkObject);
             this.paper.model.addCell(link);
             this._linkView = this.paper.findViewByModel(link);
             this._linkView.startArrowheadMove('target');
@@ -158,8 +150,8 @@ var DiagramElementListener = (function () {
         console.error("DiagramElementListener getNodeProperties method is empty");
         return null;
     };
-    DiagramElementListener.makeAndExecuteCreateLinkCommand = function (linkObject) {
-        console.error("DiagramElementListener makeAndExecuteCreateLinkCommand method is empty");
+    DiagramElementListener.addLinkToMap = function (linkObject) {
+        console.error("DiagramElementListener addLink method is empty");
     };
     return DiagramElementListener;
 })();
@@ -170,16 +162,15 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var DiagramPaper = (function (_super) {
     __extends(DiagramPaper, _super);
-    function DiagramPaper(id, graph) {
-        this.htmlId = id;
+    function DiagramPaper(graph) {
         this.graph = graph;
         this.nodesMap = {};
         this.linksMap = {};
         this.gridSize = 25;
-        var zoomAttr = parseFloat($("#" + this.htmlId).attr("zoom"));
+        var zoomAttr = parseFloat($('#diagram_paper').attr("zoom"));
         this.zoom = (zoomAttr) ? zoomAttr : 1;
         _super.call(this, {
-            el: $('#' + this.htmlId),
+            el: $('#diagram_paper'),
             width: 2000,
             height: 2000,
             model: graph,
@@ -201,9 +192,6 @@ var DiagramPaper = (function (_super) {
         });
         this.scale(this.zoom, this.zoom);
     }
-    DiagramPaper.prototype.getId = function () {
-        return this.htmlId;
-    };
     DiagramPaper.prototype.getGridSize = function () {
         return this.gridSize;
     };
@@ -256,17 +244,7 @@ var DiagramPaper = (function (_super) {
             delete _this.linksMap[link.id];
         });
         node.getJointObject().remove();
-        if (node.getPropertyEditElement()) {
-            node.getPropertyEditElement().getHtmlElement().remove();
-        }
         delete this.nodesMap[nodeId];
-    };
-    DiagramPaper.prototype.getConnectedLinkObjects = function (node) {
-        var _this = this;
-        var links = this.graph.getConnectedLinks(node.getJointObject(), { inbound: true, outbound: true });
-        var linkObjects = [];
-        links.forEach(function (link) { return linkObjects.push(_this.linksMap[link.id]); });
-        return linkObjects;
     };
     DiagramPaper.prototype.removeLink = function (linkId) {
         var link = this.linksMap[linkId];
@@ -274,10 +252,20 @@ var DiagramPaper = (function (_super) {
         delete this.linksMap[linkId];
     };
     DiagramPaper.prototype.clear = function () {
-        for (var node in this.nodesMap) {
-            this.removeNode(node);
-        }
+        this.nodesMap = {};
         this.linksMap = {};
+    };
+    DiagramPaper.prototype.createDefaultNode = function (name, type, x, y, properties, imagePath, id) {
+        var node = new DefaultDiagramNode(name, type, x, y, properties, imagePath, id);
+        this.nodesMap[node.getJointObject().id] = node;
+        this.addNode(node);
+        return node;
+    };
+    DiagramPaper.prototype.createSubprogramNode = function (name, type, x, y, properties, imagePath, subprogramDiagramId, id) {
+        var node = new SubprogramNode(name, type, x, y, properties, imagePath, subprogramDiagramId, id);
+        this.nodesMap[node.getJointObject().id] = node;
+        this.addSubprogramNode(node);
+        return node;
     };
     DiagramPaper.prototype.addSubprogramNode = function (node) {
         var textObject = node.getTextObject();
@@ -286,17 +274,16 @@ var DiagramPaper = (function (_super) {
         this.addNode(node);
     };
     DiagramPaper.prototype.addNode = function (node) {
-        this.nodesMap[node.getJointObject().id] = node;
         this.graph.addCell(node.getJointObject());
-        node.initPropertyEditElements(this.zoom);
-        if (node.getPropertyEditElement()) {
-            node.getPropertyEditElement().getHtmlElement().insertBefore("#" + this.getId());
-        }
     };
     DiagramPaper.prototype.addLink = function (link) {
         this.graph.addCell(link.getJointObject());
     };
     DiagramPaper.prototype.getDiagramElementView = function () {
+        var _this = this;
+        DiagramElementListener.addLinkToMap = function (linkObject) {
+            _this.addLinkToMap(linkObject);
+        };
         return jQuery.extend(joint.shapes.basic.PortsViewInterface, {
             pointerdown: DiagramElementListener.pointerdown
         });
@@ -326,50 +313,6 @@ var PaletteTypes = (function () {
     }
     return PaletteTypes;
 })();
-var PropertyEditElement = (function () {
-    function PropertyEditElement(logicalId, jointObjectId, properties) {
-        var propertiesHtml = "";
-        for (var propertyKey in properties) {
-            var property = properties[propertyKey];
-            if (property.type === "string") {
-                propertiesHtml += StringUtils.format(PropertyEditElement.propertyTemplate, propertyKey + "-" + logicalId, jointObjectId, propertyKey, property.name, property.value);
-                break;
-            }
-        }
-        this.htmlElement = $(StringUtils.format(PropertyEditElement.template, propertiesHtml));
-        this.initInputSize();
-        this.initInputAutosize();
-    }
-    PropertyEditElement.prototype.getHtmlElement = function () {
-        return this.htmlElement;
-    };
-    PropertyEditElement.prototype.setPosition = function (x, y) {
-        this.htmlElement.css({ left: x - 25, top: y + 55 });
-    };
-    PropertyEditElement.prototype.initInputSize = function () {
-        this.htmlElement.find('input').each(function (index) {
-            $(this).css("width", StringUtils.getInputStringSize(this));
-        });
-    };
-    PropertyEditElement.prototype.initInputAutosize = function () {
-        this.htmlElement.find('input').on('input', function (event) {
-            $(this).trigger('autosize');
-        });
-        this.htmlElement.find('input').on('autosize', function (event) {
-            $(this).css("width", StringUtils.getInputStringSize(this));
-        });
-    };
-    PropertyEditElement.propertyTemplate = "" +
-        "<span>{3}:</span> " +
-        "<input class='{0} property-edit-input' data-id='{1}' data-type='{2}' " +
-        "style='border: dashed 1px; padding-left: 2px; margin-bottom: 1px' value='{4}'>" +
-        "<br>";
-    PropertyEditElement.template = "" +
-        "<div class='property-edit-element' style='position: absolute; text-align: left; z-index: 1;'>" +
-        "   {0}" +
-        "</div>";
-    return PropertyEditElement;
-})();
 var DefaultDiagramNode = (function () {
     function DefaultDiagramNode(name, type, x, y, properties, imagePath, id, notDefaultConstProperties) {
         this.logicalId = UIDGenerator.generate();
@@ -398,19 +341,6 @@ var DefaultDiagramNode = (function () {
         this.changeableProperties = properties;
         this.imagePath = imagePath;
     }
-    DefaultDiagramNode.prototype.initPropertyEditElements = function (zoom) {
-        var _this = this;
-        var parentPosition = this.getJointObjectPagePosition(zoom);
-        this.propertyEditElement = new PropertyEditElement(this.logicalId, this.jointObject.id, this.changeableProperties);
-        this.propertyEditElement.setPosition(parentPosition.x, parentPosition.y);
-        this.jointObject.on('change:position', function () {
-            var position = _this.getJointObjectPagePosition(zoom);
-            _this.propertyEditElement.setPosition(position.x, position.y);
-        });
-    };
-    DefaultDiagramNode.prototype.getPropertyEditElement = function () {
-        return this.propertyEditElement;
-    };
     DefaultDiagramNode.prototype.getLogicalId = function () {
         return this.logicalId;
     };
@@ -426,11 +356,6 @@ var DefaultDiagramNode = (function () {
     DefaultDiagramNode.prototype.getY = function () {
         return (this.jointObject.get("position"))['y'];
     };
-    DefaultDiagramNode.prototype.setPosition = function (x, y, zoom) {
-        this.jointObject.position(x, y);
-        var position = this.getJointObjectPagePosition(zoom);
-        this.propertyEditElement.setPosition(position.x, position.y);
-    };
     DefaultDiagramNode.prototype.getImagePath = function () {
         return this.imagePath;
     };
@@ -442,14 +367,6 @@ var DefaultDiagramNode = (function () {
     };
     DefaultDiagramNode.prototype.setProperty = function (key, property) {
         this.changeableProperties[key] = property;
-        var propertyChangedEvent = new CustomEvent('property-changed', {
-            detail: {
-                nodeId: this.getLogicalId(),
-                key: key,
-                value: property.value
-            }
-        });
-        document.dispatchEvent(propertyChangedEvent);
     };
     DefaultDiagramNode.prototype.getChangeableProperties = function () {
         return this.changeableProperties;
@@ -478,50 +395,16 @@ var DefaultDiagramNode = (function () {
         graphical["from"] = new Property("from", "qReal::Id", "qrm:/ROOT_ID/ROOT_ID/ROOT_ID/ROOT_ID");
         return graphical;
     };
-    DefaultDiagramNode.prototype.getJointObjectPagePosition = function (zoom) {
-        return {
-            x: this.jointObject.get("position")['x'] * zoom,
-            y: this.jointObject.get("position")['y'] * zoom
-        };
-    };
     return DefaultDiagramNode;
-})();
-var PaperCommandFactory = (function () {
-    function PaperCommandFactory(paperController) {
-        this.paperController = paperController;
-    }
-    PaperCommandFactory.prototype.makeChangeCurrentElementCommand = function (newElement, oldElement) {
-        return new ChangeCurrentElementCommand(newElement, oldElement, this.paperController.setCurrentElement.bind(this.paperController));
-    };
-    PaperCommandFactory.prototype.makeCreateNodeCommand = function (node) {
-        return new CreateElementCommand(node, this.paperController.addNode.bind(this.paperController), this.paperController.removeElement.bind(this.paperController));
-    };
-    PaperCommandFactory.prototype.makeCreateLinkCommand = function (link) {
-        return new CreateElementCommand(link, this.paperController.addLink.bind(this.paperController), this.paperController.removeElement.bind(this.paperController));
-    };
-    PaperCommandFactory.prototype.makeRemoveNodeCommand = function (node) {
-        return new RemoveElementCommand(node, this.paperController.removeElement.bind(this.paperController), this.paperController.addNode.bind(this.paperController));
-    };
-    PaperCommandFactory.prototype.makeRemoveLinkCommand = function (link) {
-        return new RemoveElementCommand(link, this.paperController.removeElement.bind(this.paperController), this.paperController.addLink.bind(this.paperController));
-    };
-    PaperCommandFactory.prototype.makeMoveCommand = function (node, oldX, oldY, newX, newY, zoom) {
-        return new MoveCommand(oldX, oldY, newX, newY, zoom, node.setPosition.bind(node));
-    };
-    return PaperCommandFactory;
 })();
 var PaperController = (function () {
     function PaperController(diagramEditorController, paper) {
         var _this = this;
-        this.contextMenuId = "paper_context_menu";
         this.diagramEditorController = diagramEditorController;
-        this.undoRedoController = diagramEditorController.getUndoRedoController();
         this.paper = paper;
-        this.paperCommandFactory = new PaperCommandFactory(this);
         this.clickFlag = false;
         this.rightClickFlag = false;
-        this.gesturesController = new GesturesController(this, paper);
-        this.lastCellMouseDownPosition = { x: 0, y: 0 };
+        this.gesturesController = new GesturesController(this);
         this.paper.on('cell:pointerdown', function (cellView, event, x, y) {
             _this.cellPointerdownListener(cellView, event, x, y);
         });
@@ -542,23 +425,16 @@ var PaperController = (function () {
         });
         document.addEventListener('mousedown', function (event) { _this.gesturesController.onMouseDown(event); });
         document.addEventListener('mouseup', function (event) { _this.gesturesController.onMouseUp(event); });
-        $("#" + this.paper.getId()).mousemove(function (event) { _this.gesturesController.onMouseMove(event); });
+        $("#diagram_paper").mousemove(function (event) { _this.gesturesController.onMouseMove(event); });
         this.initDropPaletteElementListener();
         this.initDeleteListener();
         this.initCustomContextMenu();
-        this.initPropertyEditorListener();
-        DiagramElementListener.makeAndExecuteCreateLinkCommand = function (linkObject) {
-            _this.makeAndExecuteCreateLinkCommand(linkObject);
-        };
     }
     PaperController.prototype.getCurrentElement = function () {
         return this.currentElement;
     };
     PaperController.prototype.clearState = function () {
-        this.currentElement = null;
-        this.clickFlag = false;
-        this.rightClickFlag = false;
-        this.lastCellMouseDownPosition = { x: 0, y: 0 };
+        this.clearCurrentElement();
     };
     PaperController.prototype.createLink = function (sourceId, targetId) {
         var link = new joint.dia.Link({
@@ -575,34 +451,27 @@ var PaperController = (function () {
             linkProperties[property] = new Property(typeProperties[property].name, typeProperties[property].type, typeProperties[property].value);
         }
         var linkObject = new Link(link, linkProperties);
-        this.makeAndExecuteCreateLinkCommand(linkObject);
+        this.paper.addLinkToPaper(linkObject);
     };
-    PaperController.prototype.createNode = function (type, x, y, subprogramId, subprogramName) {
-        var image = this.diagramEditorController.getNodeType(type).getImage();
-        var name = this.diagramEditorController.getNodeType(type).getName();
-        var typeProperties = this.diagramEditorController.getNodeType(type).getPropertiesMap();
+    PaperController.prototype.createNode = function (type, x, y) {
+        var controller = this;
+        var image = controller.diagramEditorController.getNodeType(type).getImage();
+        var name = controller.diagramEditorController.getNodeType(type).getName();
+        var typeProperties = controller.diagramEditorController.getNodeType(type).getPropertiesMap();
         var nodeProperties = {};
         for (var property in typeProperties) {
             nodeProperties[property] = new Property(typeProperties[property].name, typeProperties[property].type, typeProperties[property].value);
         }
-        var node;
-        if (subprogramId) {
-            node = new SubprogramNode(subprogramName, type, x, y, nodeProperties, image, subprogramId);
-        }
-        else {
-            node = new DefaultDiagramNode(name, type, x, y, nodeProperties, image);
-        }
-        var command = new MultiCommand([this.paperCommandFactory.makeCreateNodeCommand(node),
-            this.paperCommandFactory.makeChangeCurrentElementCommand(node, this.currentElement)]);
-        this.undoRedoController.addCommand(command);
-        command.execute();
+        var node = this.paper.createDefaultNode(name, type, x, y, nodeProperties, image);
+        controller.setCurrentElement(node);
+        controller.diagramEditorController.setNodeProperties(node);
     };
     PaperController.prototype.createNodeInEventPositionFromNames = function (names, event) {
         var _this = this;
-        var offsetX = (event.pageX - $("#" + this.paper.getId()).offset().left +
-            $("#" + this.paper.getId()).scrollLeft()) / this.paper.getZoom();
-        var offsetY = (event.pageY - $("#" + this.paper.getId()).offset().top +
-            $("#" + this.paper.getId()).scrollTop()) / this.paper.getZoom();
+        var offsetX = (event.pageX - $("#diagram_paper").offset().left + $("#diagram_paper").scrollLeft()) /
+            this.paper.getZoom();
+        var offsetY = (event.pageY - $("#diagram_paper").offset().top + $("#diagram_paper").scrollTop()) /
+            this.paper.getZoom();
         var gridSize = this.paper.getGridSize();
         offsetX -= offsetX % gridSize;
         offsetY -= offsetY % gridSize;
@@ -634,7 +503,7 @@ var PaperController = (function () {
     };
     PaperController.prototype.createLinkBetweenCurrentAndEventTargetElements = function (event) {
         var _this = this;
-        var diagramPaper = document.getElementById(this.paper.getId());
+        var diagramPaper = document.getElementById('diagram_paper');
         var elementBelow = this.diagramEditorController.getGraph().get('cells').find(function (cell) {
             if (cell instanceof joint.dia.Link)
                 return false;
@@ -657,94 +526,54 @@ var PaperController = (function () {
             this.createLink(this.currentElement.getJointObject().id, elementBelow.id);
         }
     };
-    PaperController.prototype.changeCurrentElement = function (element) {
-        if (element !== this.currentElement) {
-            var changeCurrentElementCommand = this.paperCommandFactory.makeChangeCurrentElementCommand(element, this.currentElement);
-            this.undoRedoController.addCommand(changeCurrentElementCommand);
-            changeCurrentElementCommand.execute();
-        }
-    };
-    PaperController.prototype.makeAndExecuteCreateLinkCommand = function (link) {
-        var createLinkCommand = this.paperCommandFactory.makeCreateLinkCommand(link);
-        this.undoRedoController.addCommand(createLinkCommand);
-        createLinkCommand.execute();
-    };
-    PaperController.prototype.setCurrentElement = function (element) {
-        if (this.currentElement) {
-            this.unselectElement(this.currentElement.getJointObject());
-        }
-        this.currentElement = element;
-        if (element) {
-            this.selectElement(this.currentElement.getJointObject());
-            this.diagramEditorController.setNodeProperties(element);
-        }
-        else {
-            this.diagramEditorController.clearNodeProperties();
-        }
-    };
-    PaperController.prototype.addNode = function (node) {
-        if (node instanceof SubprogramNode) {
-            this.paper.addSubprogramNode(node);
-        }
-        else {
-            this.paper.addNode(node);
-        }
-    };
-    PaperController.prototype.removeElement = function (element) {
-        if (element) {
-            if (element instanceof DefaultDiagramNode) {
-                this.paper.removeNode(element.getJointObject().id);
-            }
-            else {
-                this.paper.removeLink(element.getJointObject().id);
-            }
-            if (this.currentElement && element === this.currentElement) {
-                this.diagramEditorController.clearNodeProperties();
-                this.currentElement = null;
-            }
-        }
-    };
-    PaperController.prototype.addLink = function (link) {
-        this.paper.addLinkToPaper(link);
-    };
     PaperController.prototype.blankPoinerdownListener = function (event, x, y) {
+        if (!($(event.target).parents(".custom-menu").length > 0)) {
+            $(".custom-menu").hide(100);
+        }
         if (event.button == 2) {
             this.gesturesController.startDrawing();
         }
-        this.changeCurrentElement(null);
+        this.diagramEditorController.clearNodeProperties();
+        if (this.currentElement) {
+            this.clearCurrentElement();
+        }
     };
     PaperController.prototype.cellPointerdownListener = function (cellView, event, x, y) {
+        if (!($(event.target).parents(".custom-menu").length > 0)) {
+            $(".custom-menu").hide(100);
+        }
         this.clickFlag = true;
         this.rightClickFlag = false;
-        var element = this.paper.getNodeById(cellView.model.id) ||
-            this.paper.getLinkById(cellView.model.id);
-        this.changeCurrentElement(element);
-        if (this.paper.getNodeById(cellView.model.id)) {
+        var node = this.paper.getNodeById(cellView.model.id);
+        if (node) {
+            this.setCurrentElement(node);
+            this.diagramEditorController.setNodeProperties(node);
             if (event.button == 2) {
                 this.rightClickFlag = true;
                 this.gesturesController.startDrawing();
             }
+        }
+        else {
+            var link = this.paper.getLinkById(cellView.model.id);
+            if (link) {
+                this.setCurrentElement(link);
+                this.diagramEditorController.setNodeProperties(link);
+            }
             else {
-                var node = this.paper.getNodeById(cellView.model.id);
-                this.lastCellMouseDownPosition.x = node.getX();
-                this.lastCellMouseDownPosition.y = node.getY();
+                this.clearCurrentElement();
             }
         }
     };
     PaperController.prototype.cellPointerupListener = function (cellView, event, x, y) {
-        if ((this.clickFlag) && (event.button == 2)) {
-            $("#" + this.contextMenuId).finish().toggle(100).
-                css({
-                left: event.pageX - $(document).scrollLeft() + "px",
-                top: event.pageY - $(document).scrollTop() + "px"
-            });
+        if (!($(event.target).parents(".custom-menu").length > 0)) {
+            $(".custom-menu").hide(100);
         }
-        else if (event.button !== 2) {
-            var node = this.paper.getNodeById(cellView.model.id);
-            if (node) {
-                var command = this.paperCommandFactory.makeMoveCommand(node, this.lastCellMouseDownPosition.x, this.lastCellMouseDownPosition.y, node.getX(), node.getY(), this.paper.getZoom());
-                this.undoRedoController.addCommand(command);
-            }
+        if ((this.clickFlag) && (event.button == 2)) {
+            $(".custom-menu").finish().toggle(100).
+                css({
+                top: event.pageY + "px",
+                left: event.pageX + "px"
+            });
         }
     };
     PaperController.prototype.cellPointermoveListener = function (cellView, event, x, y) {
@@ -753,7 +582,7 @@ var PaperController = (function () {
     PaperController.prototype.initDropPaletteElementListener = function () {
         var controller = this;
         var paper = this.paper;
-        $("#" + this.paper.getId()).droppable({
+        $("#diagram_paper").droppable({
             drop: function (event, ui) {
                 var topElementPos = (ui.offset.top - $(this).offset().top + $(this).scrollTop()) /
                     paper.getZoom();
@@ -763,9 +592,33 @@ var PaperController = (function () {
                 topElementPos -= topElementPos % gridSize;
                 leftElementPos -= leftElementPos % gridSize;
                 var type = $(ui.draggable.context).data("type");
-                controller.createNode(type, leftElementPos, topElementPos, $(ui.draggable.context).data("id"), $(ui.draggable.context).data("name"));
+                var image = controller.diagramEditorController.getNodeType(type).getImage();
+                var name = controller.diagramEditorController.getNodeType(type).getName();
+                var typeProperties = controller.diagramEditorController.getNodeType(type).getPropertiesMap();
+                var nodeProperties = {};
+                for (var property in typeProperties) {
+                    nodeProperties[property] = new Property(typeProperties[property].name, typeProperties[property].type, typeProperties[property].value);
+                }
+                var node;
+                var dataId = $(ui.draggable.context).data("id");
+                if (dataId) {
+                    name = $(ui.draggable.context).data("name");
+                    node = paper.createSubprogramNode(name, type, leftElementPos, topElementPos, nodeProperties, image, dataId);
+                }
+                else {
+                    node = paper.createDefaultNode(name, type, leftElementPos, topElementPos, nodeProperties, image);
+                }
+                controller.setCurrentElement(node);
+                controller.diagramEditorController.setNodeProperties(node);
             }
         });
+    };
+    PaperController.prototype.setCurrentElement = function (element) {
+        if (this.currentElement) {
+            this.unselectElement(this.currentElement.getJointObject());
+        }
+        this.currentElement = element;
+        this.selectElement(this.currentElement.getJointObject());
     };
     PaperController.prototype.selectElement = function (jointObject) {
         var jQueryEl = this.paper.findViewByModel(jointObject).$el;
@@ -773,23 +626,28 @@ var PaperController = (function () {
         jQueryEl.attr('class', oldClasses + ' selected');
     };
     PaperController.prototype.unselectElement = function (jointObject) {
-        $('input:text').blur();
         var jQueryEl = this.paper.findViewByModel(jointObject).$el;
         var removedClass = jQueryEl.attr('class').replace(new RegExp('(\\s|^)selected(\\s|$)', 'g'), '$2');
         jQueryEl.attr('class', removedClass);
+    };
+    PaperController.prototype.clearCurrentElement = function () {
+        if (this.currentElement) {
+            this.unselectElement(this.currentElement.getJointObject());
+            this.currentElement = undefined;
+        }
     };
     PaperController.prototype.initCustomContextMenu = function () {
         var controller = this;
         $("#diagramContent").bind("contextmenu", function (event) {
             event.preventDefault();
         });
-        $("#" + controller.contextMenuId + " li").click(function () {
+        $(".custom-menu li").click(function () {
             switch ($(this).attr("data-action")) {
                 case "delete":
                     controller.removeCurrentElement();
                     break;
             }
-            $("#" + controller.contextMenuId).hide(100);
+            $(".custom-menu").hide(100);
         });
     };
     PaperController.prototype.initDeleteListener = function () {
@@ -797,34 +655,23 @@ var PaperController = (function () {
         var deleteKey = 46;
         $('html').keyup(function (event) {
             if (event.keyCode == deleteKey) {
-                if ($("#" + _this.paper.getId()).is(":visible") && !(document.activeElement.tagName === "INPUT")) {
+                if (!(document.activeElement.tagName === "INPUT")) {
                     _this.removeCurrentElement();
                 }
             }
         });
     };
     PaperController.prototype.removeCurrentElement = function () {
-        var _this = this;
-        var removeCommands = [];
-        removeCommands.push(this.paperCommandFactory.makeChangeCurrentElementCommand(null, this.currentElement));
-        if (this.currentElement instanceof DefaultDiagramNode) {
-            var node = this.currentElement;
-            var connectedLinks = this.paper.getConnectedLinkObjects(node);
-            connectedLinks.forEach(function (link) { return removeCommands.push(_this.paperCommandFactory.makeRemoveLinkCommand(link)); });
-            removeCommands.push(this.paperCommandFactory.makeRemoveNodeCommand(node));
+        if (this.currentElement) {
+            if (this.currentElement instanceof DefaultDiagramNode) {
+                this.paper.removeNode(this.currentElement.getJointObject().id);
+            }
+            else {
+                this.paper.removeLink(this.currentElement.getJointObject().id);
+            }
+            this.diagramEditorController.clearNodeProperties();
+            this.currentElement = undefined;
         }
-        else if (this.currentElement instanceof Link) {
-            removeCommands.push(this.paperCommandFactory.makeRemoveLinkCommand(this.currentElement));
-        }
-        var multiCommand = new MultiCommand(removeCommands);
-        this.undoRedoController.addCommand(multiCommand);
-        multiCommand.execute();
-    };
-    PaperController.prototype.initPropertyEditorListener = function () {
-        var controller = this;
-        $(document).on('focus', ".property-edit-element input", function () {
-            controller.changeCurrentElement(controller.paper.getNodeById($(this).data("id")));
-        });
     };
     return PaperController;
 })();
@@ -849,38 +696,22 @@ var StringUtils = (function () {
             return typeof args[number] != 'undefined' ? args[number] : match;
         });
     };
-    StringUtils.getInputStringSize = function (input) {
-        var minWidth = 6;
-        var $body = $('body');
-        var $this = $(input);
-        var $text = $this.text();
-        if ($text == '')
-            $text = $this.val();
-        var calc = '<div style="clear:both;display:block;visibility:hidden;">' +
-            '<span style="width;inherit;margin:0;font-family:' + $this.css('font-family') + ';font-size:' +
-            $this.css('font-size') + ';font-weight:' + $this.css('font-weight') + '">' + $text + '</span>' +
-            '</div>';
-        $body.append(calc);
-        var width = $('body').find('span:last').width();
-        $body.find('span:last').parent().remove();
-        return width + minWidth;
-    };
     return StringUtils;
 })();
 var StringPropertyView = (function (_super) {
     __extends(StringPropertyView, _super);
-    function StringPropertyView(nodeId, propertyKey, property) {
+    function StringPropertyView(propertyKey, property) {
         _super.call(this);
         this.template = '' +
             '<tr class="property">' +
             '   <td class="vert-align">{0}</td>' +
             '   <td class="vert-align">' +
             '       <div class="input-group">' +
-            '           <input class="{1} property-edit-input form-control" type="text" data-type="{2}" value="{3}">' +
+            '           <input type="text" data-type="{1}"class="form-control" value="{2}">' +
             '       </div>' +
             '   </td>' +
             '</tr>';
-        this.content = StringUtils.format(this.template, property.name, propertyKey + "-" + nodeId, propertyKey, property.value);
+        this.content = StringUtils.format(this.template, property.name, propertyKey, property.value);
     }
     return StringPropertyView;
 })(HtmlView);
@@ -920,8 +751,8 @@ var CheckboxPropertyView = (function (_super) {
             '<tr class="property">' +
             '   <td class="vert-align">{0}</td>' +
             '   <td class="vert-align">' +
-            '       <div id="{1}" class="checkbox" data-type="{2}" data-true="{3}" data-false="{4}">' +
-            '           <label class="active"><input type="checkbox" {5}>{6}</label>' +
+            '       <div class="checkbox" data-type="{1}" data-true="{2}" data-false="{3}">' +
+            '           <label class="active"><input type="checkbox" {4}>{5}</label>' +
             '       </div>' +
             '   </td>' +
             '</tr>';
@@ -947,7 +778,7 @@ var CheckboxPropertyView = (function (_super) {
         if (property.value === "true") {
             state = "checked";
         }
-        this.content = StringUtils.format(this.template, property.name, propertyKey + "Property", propertyKey, dataTrue, dataFalse, state, visibleValue);
+        this.content = StringUtils.format(this.template, property.name, propertyKey, dataTrue, dataFalse, state, visibleValue);
     }
     return CheckboxPropertyView;
 })(HtmlView);
@@ -959,8 +790,8 @@ var DropdownPropertyView = (function (_super) {
             '<tr class="property">' +
             '   <td class="vert-align">{0}</td>' +
             '   <td class="vert-align">' +
-            '       <select id="{1}" class="mydropdown" data-type="{2}">' +
-            '           {3}' +
+            '       <select class="mydropdown" data-type="{1}">' +
+            '           {2}' +
             '       </select>' +
             '   </td>' +
             '</tr>';
@@ -974,7 +805,7 @@ var DropdownPropertyView = (function (_super) {
             }
             options += '<option ' + selected + 'value="' + variant.getKey() + '">' + variant.getValue() + '</option>';
         }
-        this.content = StringUtils.format(this.template, property.name, propertyKey + "Property", propertyKey, options);
+        this.content = StringUtils.format(this.template, property.name, propertyKey, options);
     }
     return DropdownPropertyView;
 })(HtmlView);
@@ -986,21 +817,21 @@ var SpinnerPropertyView = (function (_super) {
             '<tr class="property">' +
             '   <td class="vert-align">{0}</td>' +
             '   <td class="vert-align">' +
-            '       <input id="{1}" type="number" data-type="{2}" class="spinner" value="{3}">' +
+            '       <input type="number" data-type="{1}" class="spinner" value="{2}">' +
             '   </td>' +
             '</tr>';
-        this.content = StringUtils.format(this.template, property.name, propertyKey + "Property", propertyKey, property.value);
+        this.content = StringUtils.format(this.template, property.name, propertyKey, property.value);
     }
     return SpinnerPropertyView;
 })(HtmlView);
 var PropertyViewFactory = (function () {
     function PropertyViewFactory() {
     }
-    PropertyViewFactory.prototype.createView = function (nodeId, typeName, propertyKey, property) {
+    PropertyViewFactory.prototype.createView = function (typeName, propertyKey, property) {
         switch (property.type) {
             case "string":
             case "combobox":
-                return new StringPropertyView(nodeId, propertyKey, property);
+                return new StringPropertyView(propertyKey, property);
             case "checkbox":
                 return new CheckboxPropertyView(typeName, propertyKey, property);
             case "dropdown":
@@ -1012,28 +843,19 @@ var PropertyViewFactory = (function () {
     return PropertyViewFactory;
 })();
 var PropertyEditorController = (function () {
-    function PropertyEditorController(paperController, undoRedoController) {
+    function PropertyEditorController(paperController) {
         this.propertyViewFactory = new PropertyViewFactory();
         this.paperController = paperController;
-        this.undoRedoController = undoRedoController;
         this.initInputStringListener();
         this.initCheckboxListener();
         this.initDropdownListener();
         this.initSpinnerListener();
-        document.addEventListener('property-changed', function (e) {
-            $("." + e.detail.key + "-" + e.detail.nodeId).each(function (index) {
-                if ($(this).val() !== e.detail.value) {
-                    $(this).val(e.detail.value);
-                    $(this).trigger('autosize');
-                }
-            });
-        }, false);
     }
     PropertyEditorController.prototype.setNodeProperties = function (element) {
         $('#property_table tbody').empty();
         var properties = element.getChangeableProperties();
         for (var property in properties) {
-            var propertyView = this.propertyViewFactory.createView(element.getLogicalId(), element.getType(), property, properties[property]);
+            var propertyView = this.propertyViewFactory.createView(element.getType(), property, properties[property]);
             var htmlElement = $(propertyView.getContent());
             $('#property_table tbody').append(htmlElement);
             if (properties[property].type === "combobox") {
@@ -1041,36 +863,8 @@ var PropertyEditorController = (function () {
             }
         }
     };
-    PropertyEditorController.prototype.addChangePropertyCommand = function (key, value, changeHtmlFunction) {
-        var currentElement = this.paperController.getCurrentElement();
-        var property = currentElement.getChangeableProperties()[key];
-        var changePropertyCommand = new ChangePropertyCommand(key, value, property.value, this.setProperty.bind(this), changeHtmlFunction);
-        this.undoRedoController.addCommand(changePropertyCommand);
-    };
     PropertyEditorController.prototype.clearState = function () {
         $(".property").remove();
-    };
-    PropertyEditorController.prototype.setProperty = function (key, value) {
-        var currentElement = this.paperController.getCurrentElement();
-        var property = currentElement.getChangeableProperties()[key];
-        property.value = value;
-        currentElement.setProperty(key, property);
-    };
-    PropertyEditorController.prototype.changeHtmlElementValue = function (id, value) {
-        $("#" + id).val(value);
-    };
-    PropertyEditorController.prototype.changeCheckboxHtml = function (id, value) {
-        var tr = $("#" + id).closest('tr');
-        var label = $("#" + id).find('label');
-        var checkBoxInput = $("#" + id).find('input');
-        if (value === "true") {
-            label.contents().last()[0].textContent = $("#" + id).data("true");
-            checkBoxInput.prop('checked', true);
-        }
-        else {
-            label.contents().last()[0].textContent = $("#" + id).data("false");
-            checkBoxInput.prop('checked', false);
-        }
     };
     PropertyEditorController.prototype.initCombobox = function (typeName, propertyKey, element) {
         var variantsList = VariantListMapper.getVariantList(typeName, propertyKey);
@@ -1079,10 +873,12 @@ var PropertyEditorController = (function () {
             source: variantsList,
             minLength: 0,
             select: function (event, ui) {
+                var currentElement = controller.paperController.getCurrentElement();
                 var key = $(this).data('type');
                 var value = ui.item.value;
-                controller.addChangePropertyCommand(key, value, function () { });
-                controller.setProperty(key, value);
+                var property = currentElement.getChangeableProperties()[key];
+                property.value = value;
+                currentElement.setProperty(key, property);
             }
         }).focus(function () {
             $(this).autocomplete("search", $(this).val());
@@ -1090,11 +886,13 @@ var PropertyEditorController = (function () {
     };
     PropertyEditorController.prototype.initInputStringListener = function () {
         var controller = this;
-        $(document).on('input', '.property-edit-input', function () {
+        $(document).on('input', '.form-control', function () {
+            var currentElement = controller.paperController.getCurrentElement();
             var key = $(this).data('type');
             var value = $(this).val();
-            controller.addChangePropertyCommand(key, value, function () { });
-            controller.setProperty(key, value);
+            var property = currentElement.getChangeableProperties()[key];
+            property.value = value;
+            currentElement.setProperty(key, property);
         });
     };
     PropertyEditorController.prototype.initCheckboxListener = function () {
@@ -1104,34 +902,43 @@ var PropertyEditorController = (function () {
             var key = $(this).data('type');
             var property = currentElement.getChangeableProperties()[key];
             var currentValue = property.value;
-            var newValue = controller.changeCheckboxValue(currentValue);
-            controller.addChangePropertyCommand(key, newValue, controller.changeCheckboxHtml.bind(controller, $(this).attr("id")));
-            controller.changeCheckboxHtml($(this).attr("id"), newValue);
-            controller.setProperty(key, newValue);
+            var tr = $(this).closest('tr');
+            var label = tr.find('label');
+            if (currentValue === "true") {
+                currentValue = "false";
+                label.contents().last()[0].textContent = $(this).data("false");
+            }
+            else {
+                currentValue = "true";
+                label.contents().last()[0].textContent = $(this).data("true");
+            }
+            property.value = currentValue;
+            currentElement.setProperty(key, property);
         });
     };
     PropertyEditorController.prototype.initDropdownListener = function () {
         var controller = this;
         $(document).on('change', '.mydropdown', function () {
+            var currentElement = controller.paperController.getCurrentElement();
             var key = $(this).data('type');
             var value = $(this).val();
-            controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(controller, $(this).attr("id")));
-            controller.setProperty(key, value);
+            var property = currentElement.getChangeableProperties()[key];
+            property.value = value;
+            currentElement.setProperty(key, property);
         });
     };
     PropertyEditorController.prototype.initSpinnerListener = function () {
         var controller = this;
         $(document).on('change', '.spinner', function () {
+            var currentElement = controller.paperController.getCurrentElement();
             var key = $(this).data('type');
             var value = $(this).val();
             if (value !== "" && !isNaN(value)) {
-                controller.addChangePropertyCommand(key, value, controller.changeHtmlElementValue.bind(controller, $(this).attr("id")));
-                controller.setProperty(key, value);
+                var property = currentElement.getChangeableProperties()[key];
+                property.value = value;
+                currentElement.setProperty(key, property);
             }
         });
-    };
-    PropertyEditorController.prototype.changeCheckboxValue = function (value) {
-        return (value === "true") ? "false" : "true";
     };
     return PropertyEditorController;
 })();
@@ -1591,7 +1398,6 @@ var DiagramJsonParser = (function () {
                 y = positionNums.y + offsetY;
             }
             else {
-                var property = new Property(graphicalPropertiesObject[j].name, graphicalPropertiesObject[j].type, graphicalPropertiesObject[j].value);
                 constGraphicalProperties[propertyName] = property;
             }
         }
@@ -1909,7 +1715,7 @@ var DiagramExporter = (function () {
 var DiagramEditor = (function () {
     function DiagramEditor() {
         this.graph = new joint.dia.Graph;
-        this.paper = new DiagramPaper("diagram_paper", this.graph);
+        this.paper = new DiagramPaper(this.graph);
     }
     DiagramEditor.prototype.getGraph = function () {
         return this.graph;
@@ -1918,8 +1724,8 @@ var DiagramEditor = (function () {
         return this.paper;
     };
     DiagramEditor.prototype.clear = function () {
-        this.paper.clear();
         this.graph.clear();
+        this.paper.clear();
     };
     return DiagramEditor;
 })();
@@ -1927,7 +1733,6 @@ var DiagramEditorController = (function () {
     function DiagramEditorController($scope, $attrs) {
         var _this = this;
         this.scope = $scope;
-        this.undoRedoController = new UndoRedoController();
         this.nodeTypesMap = {};
         this.paletteController = new PaletteController();
         DiagramElementListener.getNodeProperties = function (type) {
@@ -1936,17 +1741,6 @@ var DiagramEditorController = (function () {
         this.diagramEditor = new DiagramEditor();
         this.paperController = new PaperController(this, this.diagramEditor.getPaper());
         this.elementsTypeLoader = new ElementsTypeLoader();
-        $scope.undo = function () {
-            _this.undoRedoController.undo();
-        };
-        $scope.redo = function () {
-            _this.undoRedoController.redo();
-        };
-        $(document).bind("mousedown", function (e) {
-            if (!($(e.target).parents(".custom-menu").length > 0)) {
-                $(".custom-menu").hide(100);
-            }
-        });
     }
     DiagramEditorController.prototype.getGraph = function () {
         return this.diagramEditor.getGraph();
@@ -1971,14 +1765,10 @@ var DiagramEditorController = (function () {
     DiagramEditorController.prototype.getNodeProperties = function (type) {
         return this.nodeTypesMap[type].getPropertiesMap();
     };
-    DiagramEditorController.prototype.getUndoRedoController = function () {
-        return this.undoRedoController;
-    };
     DiagramEditorController.prototype.clearState = function () {
         this.propertyEditorController.clearState();
         this.paperController.clearState();
         this.diagramEditor.clear();
-        this.undoRedoController.clearStack();
     };
     return DiagramEditorController;
 })();
@@ -1992,73 +1782,6 @@ var UIDGenerator = (function () {
         });
     };
     return UIDGenerator;
-})();
-var UndoRedoController = (function () {
-    function UndoRedoController() {
-        var _this = this;
-        this.maxSize = 10000;
-        this.stack = [];
-        this.pointer = -1;
-        var zKey = 90;
-        this.keyDownHandler = function (event) {
-            if ($("#diagramContent").is(":visible")) {
-                if (event.keyCode == zKey && event.ctrlKey && event.shiftKey) {
-                    event.preventDefault();
-                    _this.redo();
-                }
-                else if (event.keyCode == zKey && event.ctrlKey) {
-                    event.preventDefault();
-                    _this.undo();
-                }
-            }
-        };
-        this.bindKeyboardHandler();
-    }
-    UndoRedoController.prototype.addCommand = function (command) {
-        if (command.isRevertible()) {
-            if (this.pointer < this.stack.length - 1) {
-                this.popNCommands(this.stack.length - 1 - this.pointer);
-            }
-            this.stack.push(command);
-            if (this.stack.length > this.maxSize) {
-                this.stack.shift();
-            }
-            else {
-                this.pointer++;
-            }
-        }
-    };
-    UndoRedoController.prototype.undo = function () {
-        if (this.pointer > -1) {
-            this.stack[this.pointer].revert();
-            this.pointer--;
-        }
-    };
-    UndoRedoController.prototype.redo = function () {
-        if (this.pointer < this.stack.length - 1) {
-            this.pointer++;
-            this.stack[this.pointer].execute();
-        }
-    };
-    UndoRedoController.prototype.clearStack = function () {
-        this.stack.splice(0, this.stack.length);
-        this.pointer = -1;
-    };
-    UndoRedoController.prototype.bindKeyboardHandler = function () {
-        var _this = this;
-        $(document).ready(function () {
-            $(document).keydown(_this.keyDownHandler);
-        });
-    };
-    UndoRedoController.prototype.unbindKeyboardHandler = function () {
-        $(document).unbind('keydown', this.keyDownHandler);
-    };
-    UndoRedoController.prototype.popNCommands = function (n) {
-        while (n && this.stack.pop()) {
-            n--;
-        }
-    };
-    return UndoRedoController;
 })();
 var Gesture = (function () {
     function Gesture(name, key, factor) {
@@ -2093,9 +1816,8 @@ var XmlHttpFactory = (function () {
     return XmlHttpFactory;
 })();
 var GesturesController = (function () {
-    function GesturesController(paperController, paper) {
+    function GesturesController(paperController) {
         this.paperController = paperController;
-        this.paper = paper;
         this.date = new Date();
         this.flagDraw = false;
         this.rightButtonDown = false;
@@ -2116,10 +1838,8 @@ var GesturesController = (function () {
         if (this.flagDraw === false) {
             return;
         }
-        var offsetX = (event.pageX - $("#" + this.paper.getId()).offset().left +
-            $("#" + this.paper.getId()).scrollLeft());
-        var offsetY = (event.pageY - $("#" + this.paper.getId()).offset().top +
-            $("#" + this.paper.getId()).scrollTop());
+        var offsetX = (event.pageX - $("#diagram_paper").offset().left + $("#diagram_paper").scrollLeft());
+        var offsetY = (event.pageY - $("#diagram_paper").offset().top + $("#diagram_paper").scrollTop());
         var pair = new GesturesUtils.Pair(offsetX, offsetY);
         if (this.flagAdd) {
             var currentPair = this.pointList[this.pointList.length - 1];
@@ -2127,7 +1847,7 @@ var GesturesController = (function () {
             var diff = n - this.currentTime;
             this.currentTime = n;
             pair = this.smoothing(currentPair, new GesturesUtils.Pair(offsetX, offsetY), diff);
-            $("#" + this.paper.getId()).line(currentPair.first, currentPair.second, pair.first, pair.second);
+            $('#diagram_paper').line(currentPair.first, currentPair.second, pair.first, pair.second);
         }
         this.flagAdd = true;
         this.pointList.push(pair);
@@ -2393,121 +2113,6 @@ var SubprogramNode = (function (_super) {
     SubprogramNode.prototype.getTextObject = function () {
         return this.textObject;
     };
-    SubprogramNode.prototype.setPosition = function (x, y, zoom) {
-        _super.prototype.setPosition.call(this, x, y, zoom);
-        this.textObject.position(x - 10, y - 20);
-    };
     return SubprogramNode;
 })(DefaultDiagramNode);
-var ChangeCurrentElementCommand = (function () {
-    function ChangeCurrentElementCommand(element, oldElement, executionFunction) {
-        this.element = element;
-        this.oldElement = oldElement;
-        this.executionFunction = executionFunction;
-    }
-    ChangeCurrentElementCommand.prototype.execute = function () {
-        this.executionFunction(this.element);
-    };
-    ChangeCurrentElementCommand.prototype.revert = function () {
-        this.executionFunction(this.oldElement);
-    };
-    ChangeCurrentElementCommand.prototype.isRevertible = function () {
-        return (this.oldElement !== this.element);
-    };
-    return ChangeCurrentElementCommand;
-})();
-var ChangePropertyCommand = (function () {
-    function ChangePropertyCommand(key, value, oldValue, executionFunction, changeHtmlFunction) {
-        this.key = key;
-        this.value = value;
-        this.oldValue = oldValue;
-        this.executionFunction = executionFunction;
-        this.changeHtmlFunction = changeHtmlFunction;
-    }
-    ChangePropertyCommand.prototype.execute = function () {
-        this.executionFunction(this.key, this.value);
-        this.changeHtmlFunction(this.value);
-    };
-    ChangePropertyCommand.prototype.revert = function () {
-        this.executionFunction(this.key, this.oldValue);
-        this.changeHtmlFunction(this.oldValue);
-    };
-    ChangePropertyCommand.prototype.isRevertible = function () {
-        return this.oldValue !== this.value;
-    };
-    return ChangePropertyCommand;
-})();
-var CreateElementCommand = (function () {
-    function CreateElementCommand(element, executionFunction, revertFunction) {
-        this.element = element;
-        this.executionFunction = executionFunction;
-        this.revertFunction = revertFunction;
-    }
-    CreateElementCommand.prototype.execute = function () {
-        this.executionFunction(this.element);
-    };
-    CreateElementCommand.prototype.revert = function () {
-        this.revertFunction(this.element);
-    };
-    CreateElementCommand.prototype.isRevertible = function () {
-        return true;
-    };
-    return CreateElementCommand;
-})();
-var MoveCommand = (function () {
-    function MoveCommand(oldX, oldY, newX, newY, zoom, executionFunction) {
-        this.oldX = oldX;
-        this.oldY = oldY;
-        this.newX = newX;
-        this.newY = newY;
-        this.zoom = zoom;
-        this.executionFunction = executionFunction;
-    }
-    MoveCommand.prototype.execute = function () {
-        this.executionFunction(this.newX, this.newY, this.zoom);
-    };
-    MoveCommand.prototype.revert = function () {
-        this.executionFunction(this.oldX, this.oldY, this.zoom);
-    };
-    MoveCommand.prototype.isRevertible = function () {
-        return !(this.newX === this.oldX && this.newY === this.oldY);
-    };
-    return MoveCommand;
-})();
-var MultiCommand = (function () {
-    function MultiCommand(commands) {
-        this.commands = commands;
-    }
-    MultiCommand.prototype.execute = function () {
-        this.commands.forEach(function (command) { return command.execute(); });
-    };
-    MultiCommand.prototype.revert = function () {
-        for (var i = this.commands.length - 1; i >= 0; i--) {
-            this.commands[i].revert();
-        }
-    };
-    MultiCommand.prototype.isRevertible = function () {
-        return this.commands.reduce(function (previousValue, command) {
-            return previousValue && command.isRevertible();
-        }, true);
-    };
-    return MultiCommand;
-})();
-var RemoveElementCommand = (function () {
-    function RemoveElementCommand(element, executionFunction, revertFunction) {
-        this.element = element;
-        this.executionFunction = executionFunction;
-        this.revertFunction = revertFunction;
-    }
-    RemoveElementCommand.prototype.execute = function () {
-        this.executionFunction(this.element);
-    };
-    RemoveElementCommand.prototype.revert = function () {
-        this.revertFunction(this.element);
-    };
-    RemoveElementCommand.prototype.isRevertible = function () {
-        return true;
-    };
-    return RemoveElementCommand;
-})();
 //# sourceMappingURL=diagram-core.js.map

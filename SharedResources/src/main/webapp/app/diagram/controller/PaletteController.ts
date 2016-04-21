@@ -61,4 +61,7 @@ class PaletteController {
         });
     }
 
+    public clearBlocksPalette(): void {
+        $("#blocks-navigation").empty();
+    }
 }
