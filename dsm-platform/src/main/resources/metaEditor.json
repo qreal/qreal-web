@@ -32,7 +32,7 @@
         "Entity": {
           "name": "Entity",
           "image": {
-            "src": "images/entity.svg"
+            "src": "images/entityBlock.svg"
           },
           "properties": [
             {
@@ -52,7 +52,7 @@
         "Property": {
           "name": "Property",
           "image": {
-            "src": "images/printTextBlock.svg"
+            "src": "images/propertyBlock.svg"
           },
           "properties": [
             {
