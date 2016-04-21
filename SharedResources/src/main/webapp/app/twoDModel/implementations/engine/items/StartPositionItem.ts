@@ -34,4 +34,5 @@ class StartPositionItem {
     remove(): void {
         this.image.remove();
     }
+    
 }

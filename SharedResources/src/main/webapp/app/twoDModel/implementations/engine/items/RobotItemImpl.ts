@@ -27,6 +27,7 @@
 /// <reference path="../../../../vendor.d.ts" />
 
 class RobotItemImpl implements RobotItem {
+
     private worldModel: WorldModel;
     private marker: Marker;
     private startPosition: TwoDPosition;
@@ -192,6 +193,14 @@ class RobotItemImpl implements RobotItem {
 
     public setMarkerColor(color: string): void {
         this.marker.setColor(color);
+    }
+
+    public remove(): void {
+        this.rotationHandle.remove();
+        this.image.remove();
+        for (var portName in this.sensors) {
+            this.removeSensorItem(portName);
+        }
     }
 
     public hide(): void {

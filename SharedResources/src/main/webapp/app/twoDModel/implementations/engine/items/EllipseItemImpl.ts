@@ -213,4 +213,5 @@ class EllipseItemImpl implements EllipseItem {
         this.handleBottomRight.remove();
         this.ellipse.remove();
     }
+    
 }

@@ -78,10 +78,12 @@ class PencilItemImpl implements PencilItem {
 
     hideHandles(): void {
     }
+    
     showHandles(): void {
     }
 
     remove(): void {
         this.path.remove();
     }
+    
 }

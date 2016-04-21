@@ -983,6 +983,7 @@ var WorldModelImpl = (function () {
         this.regions = [];
         this.width = 3000;
         this.height = 3000;
+        this.contextMenuId = "twoDModel_stage_context_menu";
         this.zoom = (zoom) ? zoom : 1;
         this.isInteractive = isInteractive;
         this.paper = Raphael("twoDModel_stage", this.width, this.height);
@@ -999,6 +1000,10 @@ var WorldModelImpl = (function () {
         $("body").append('<svg id="dummy" style="display:none"><defs>' + wall_pattern + '</defs></svg>');
         $("#twoDModel_paper defs").append($("#dummy pattern"));
         $("#dummy").remove();
+        if (this.isInteractive) {
+            this.initCustomContextMenu();
+            this.initDeleteListener();
+        }
         var worldModel = this;
         $(document).ready(function () {
             var shape;
@@ -1089,9 +1094,21 @@ var WorldModelImpl = (function () {
                     }
                 }
             });
-            $("#twoDModel_stage").mouseup(function (e) {
-                if (isDrawing) {
-                    isDrawing = false;
+            $("#twoDModel_stage").mouseup(function (event) {
+                isDrawing = false;
+                if (worldModel.isInteractive) {
+                    if (event.target.nodeName !== "svg" && !(worldModel.currentElement instanceof RobotItemImpl
+                        || worldModel.currentElement instanceof SensorItem)) {
+                        if (worldModel.drawMode === 0) {
+                            if (event.button === 2) {
+                                $("#" + worldModel.contextMenuId).finish().toggle(100).
+                                    css({
+                                    left: event.pageX - $(document).scrollLeft() + "px",
+                                    top: event.pageY - $(document).scrollTop() + "px"
+                                });
+                            }
+                        }
+                    }
                 }
             });
         });
@@ -1226,6 +1243,11 @@ var WorldModelImpl = (function () {
             this.deserializeStartPosition(startPosition, offsetX, offsetY);
         }
     };
+    WorldModelImpl.prototype.removeCurrentElement = function () {
+        if (this.currentElement) {
+            this.currentElement.remove();
+        }
+    };
     WorldModelImpl.prototype.deserializeRegions = function (regions, offsetX, offsetY) {
         for (var i = 0; i < regions.length; i++) {
             var type = regions[i].getAttribute("type");
@@ -1302,6 +1324,33 @@ var WorldModelImpl = (function () {
         var x = parseFloat(splittedStr[0]);
         var y = parseFloat(splittedStr[1]);
         return new TwoDPosition(x, y);
+    };
+    WorldModelImpl.prototype.initCustomContextMenu = function () {
+        var controller = this;
+        $("#twoDModelContent").bind("contextmenu", function (event) {
+            event.preventDefault();
+        });
+        $("#" + controller.contextMenuId + " li").click(function () {
+            switch ($(this).attr("data-action")) {
+                case "delete":
+                    controller.removeCurrentElement();
+                    break;
+            }
+            $("#" + controller.contextMenuId).hide(100);
+        });
+    };
+    WorldModelImpl.prototype.initDeleteListener = function () {
+        var _this = this;
+        var deleteKey = 46;
+        $('html').keyup(function (event) {
+            if (event.keyCode == deleteKey) {
+                if ($("#twoDModel_stage").is(":visible") && !(document.activeElement.tagName === "INPUT")) {
+                    if (!(_this.currentElement instanceof RobotItemImpl || _this.currentElement instanceof SensorItem)) {
+                        _this.removeCurrentElement();
+                    }
+                }
+            }
+        });
     };
     return WorldModelImpl;
 })();
@@ -2377,6 +2426,13 @@ var RobotItemImpl = (function () {
     };
     RobotItemImpl.prototype.setMarkerColor = function (color) {
         this.marker.setColor(color);
+    };
+    RobotItemImpl.prototype.remove = function () {
+        this.rotationHandle.remove();
+        this.image.remove();
+        for (var portName in this.sensors) {
+            this.removeSensorItem(portName);
+        }
     };
     RobotItemImpl.prototype.hide = function () {
         this.image.hide();

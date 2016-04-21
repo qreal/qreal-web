@@ -170,4 +170,5 @@ class LineItemImpl implements LineItem {
         this.handleEnd.remove();
         this.path.remove();
     }
+    
 }

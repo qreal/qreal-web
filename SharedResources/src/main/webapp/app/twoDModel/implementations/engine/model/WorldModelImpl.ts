@@ -41,6 +41,7 @@ class WorldModelImpl implements WorldModel {
     private width: number = 3000;
     private height: number = 3000;
     private isInteractive: boolean;
+    private contextMenuId = "twoDModel_stage_context_menu";
 
     constructor(zoom: number, isInteractive: boolean) {
         this.zoom = (zoom) ? zoom : 1;
@@ -62,6 +63,11 @@ class WorldModelImpl implements WorldModel {
         $("body").append('<svg id="dummy" style="display:none"><defs>' + wall_pattern + '</defs></svg>');
         $("#twoDModel_paper defs").append($("#dummy pattern"));
         $("#dummy").remove();
+
+        if (this.isInteractive) {
+            this.initCustomContextMenu();
+            this.initDeleteListener();
+        }
 
         var worldModel = this;
         $(document).ready(function(){
@@ -157,9 +163,21 @@ class WorldModelImpl implements WorldModel {
                 }
             });
 
-            $("#twoDModel_stage").mouseup(function(e) {
-                if (isDrawing) {
-                    isDrawing = false;
+            $("#twoDModel_stage").mouseup(function(event) {
+                isDrawing = false;
+                if (worldModel.isInteractive) {
+                    if (event.target.nodeName !== "svg" && !(worldModel.currentElement instanceof RobotItemImpl
+                        || worldModel.currentElement instanceof SensorItem)) {
+                        if (worldModel.drawMode === 0) {
+                            if (event.button === 2) {
+                                $("#" + worldModel.contextMenuId).finish().toggle(100).
+                                css({
+                                    left: event.pageX - $(document).scrollLeft() + "px",
+                                    top: event.pageY - $(document).scrollTop() + "px"
+                                });
+                            }
+                        }
+                    }
                 }
             });
         });
@@ -329,6 +347,12 @@ class WorldModelImpl implements WorldModel {
         }
     }
 
+    private removeCurrentElement(): void {
+        if (this.currentElement) {
+            this.currentElement.remove();
+        }
+    }
+
     private deserializeRegions(regions, offsetX: number, offsetY: number): void {
         for (var i = 0; i < regions.length; i++) {
             var type = regions[i].getAttribute("type");
@@ -419,6 +443,36 @@ class WorldModelImpl implements WorldModel {
         var x = parseFloat(splittedStr[0]);
         var y = parseFloat(splittedStr[1]);
         return new TwoDPosition(x, y);
+    }
+
+    private initCustomContextMenu(): void {
+        var controller = this;
+        $("#twoDModelContent").bind("contextmenu", function (event) {
+            event.preventDefault();
+        });
+
+        $("#" + controller.contextMenuId + " li").click(function(){
+            switch($(this).attr("data-action")) {
+                case "delete":
+                    controller.removeCurrentElement();
+                    break;
+            }
+
+            $("#" + controller.contextMenuId).hide(100);
+        });
+    }
+
+    private initDeleteListener(): void {
+        var deleteKey: number = 46;
+        $('html').keyup((event) => {
+            if(event.keyCode == deleteKey) {
+                if($("#twoDModel_stage").is(":visible") && !(document.activeElement.tagName === "INPUT")) {
+                    if (!(this.currentElement instanceof RobotItemImpl || this.currentElement instanceof SensorItem)) {
+                        this.removeCurrentElement();
+                    }
+                }
+            }
+        });
     }
 
 }

@@ -15,6 +15,9 @@
   --%>
 
 <div id="twoDModelContent" class="unselectable" ng-controller="RobotsTwoDModelEngineFacade" style="display: none">
+    <ul id="twoDModel_stage_context_menu" class='custom-menu'>
+        <li data-action="delete">Delete</li>
+    </ul>
     <div class="navbar navbar-inverse navbar-static-top">
         <div class="container-fluid">
             <div class="navbar-header">

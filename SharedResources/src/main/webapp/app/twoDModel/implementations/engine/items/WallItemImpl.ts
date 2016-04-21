@@ -175,4 +175,5 @@ class WallItemImpl implements WallItem {
         this.handleEnd.remove();
         this.path.remove();
     }
+    
 }

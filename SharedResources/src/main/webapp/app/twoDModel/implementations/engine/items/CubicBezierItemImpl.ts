@@ -65,4 +65,5 @@ class CubicBezierItemImpl implements CubicBezierItem {
 
     hideHandles(): void {
     }
+    
 }
