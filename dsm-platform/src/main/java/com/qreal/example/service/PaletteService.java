@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Created by LChernigovskaya on 18.03.2016.
  */
@@ -21,6 +23,11 @@ public class PaletteService {
 
     @Transactional
     public Palette getPalette(String namePalette) {
-        return(paletteDAO.getPalette(namePalette));
+        return paletteDAO.getPalette(namePalette);
+    }
+
+    @Transactional
+    public List<String> showPaletteNames() {
+        return paletteDAO.showPaletteNames();
     }
 }

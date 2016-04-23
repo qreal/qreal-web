@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,5 +31,18 @@ public class PaletteDAO {
                 .list();
 
         return palettes.get(0);
+    }
+
+    public List<String> showPaletteNames() {
+        Session session = sessionFactory.getCurrentSession();
+        List<String> paletteNames = new ArrayList<>();
+
+        List<Palette> palettes = session.createQuery("from Palette").list();
+
+        for(int i = 0; i < palettes.size(); i++) {
+            paletteNames.add(i, palettes.get(i).getPaletteName());
+        }
+
+        return paletteNames;
     }
 }

@@ -29,6 +29,7 @@ class PaletteDiagramEditorController extends DiagramEditorController {
         $scope.loadMetaEditor = () => { this.loadMetaEditor(); };
         $scope.choosePalette = (paletteName: string) => { this.choosePalette(paletteName) };
         $scope.createPalette = () => { this.createPalette($scope, $compile); };
+        $scope.showPaletteNames = () => { this.showPaletteNames($compile, $scope); };
     }
 
     public loadMetaEditor() {
@@ -60,22 +61,41 @@ class PaletteDiagramEditorController extends DiagramEditorController {
     }
 
     public createPalette($scope, $compile) {
-        var name = $('#namePalette').val();
-        var controller = this;
-        var newPalette = '<li><a href="" role="menuitem" tabindex="-1" ng-click="choosePalette(' + "'" + name + "'" + ')">' + name + '</a></li>';
-        $("#palettes").append($compile(newPalette) ($scope));
-        var paletteJson = this.exporter.exportPaletteToJson(controller.getNodesMap(), controller.getLinksMap(), name);
+        var name: string = prompt("input palette name");
+        if (name !== null && name !== "") {
+            var controller = this;
+            var paletteJson = this.exporter.exportPaletteToJson(controller.getNodesMap(), controller.getLinksMap(), name);
+            $.ajax({
+                type: 'POST',
+                url: 'createPalette',
+                contentType: 'application/json',
+                data: JSON.stringify(paletteJson),
+                success: function ():any {
+                    controller.changePalette(controller.parser.parse(paletteJson));
+                    controller.addLinks();
+                    console.log('ok');
+                },
+                error: function (response, status, error):any {
+                    console.log("error: " + status + " " + error);
+                }
+            });
+        }
+    }
+
+    public showPaletteNames($compile, $scope): void {
+        $("#palettes").empty();
+        var meta = '<li><a href="" role="menuitem" tabindex="-1" ng-click="loadMetaEditor()">Meta Editor</a></li>';
+        $("#palettes").append($compile(meta)($scope));
         $.ajax({
             type: 'POST',
-            url: 'createPalette',
-            contentType: 'application/json',
-            data: JSON.stringify(paletteJson),
-            success: function (): any {
-                controller.changePalette(controller.parser.parse(paletteJson));
-                controller.addLinks();
-                console.log('ok');
+            url: 'showPaletteNames',
+            success: function (response):any {
+                for (var i in response) {
+                    var newPalette = '<li><a href="" role="menuitem" tabindex="-1" ng-click="choosePalette(' + "'" + response[i] + "'" + ')">' + response[i] + '</a></li>';
+                    $("#palettes").append($compile(newPalette)($scope));
+                }
             },
-            error: function (response, status, error): any {
+            error: function (response, status, error):any {
                 console.log("error: " + status + " " + error);
             }
         });

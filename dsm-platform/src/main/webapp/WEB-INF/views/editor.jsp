@@ -38,6 +38,20 @@
         <li data-action="delete">Delete</li>
     </ul>
 
+    <div class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="" ng-click="createPalette()">Create</a></li>
+                    <li class="dropdown">
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown" tabindex="-1" ng-click="showPaletteNames()">Palette</a>
+                        <ul class="dropdown-menu" id="palettes">
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div id="content-row" class="row unselectable">
         <div class="col-md-10 content-col">
             <div class="row sub-row">
@@ -67,16 +81,6 @@
 
         <div class="col-md-2 content-col">
             <div id="diagram_right-menu">
-                <div class="dropdown">
-                    <button class="dropbtn">Palette</button>
-                    <div class="dropdown-content" id="palettes">
-                        <a href="" ng-click="loadMetaEditor()">Meta Editor</a>
-                    </div>
-                </div>
-                <div>
-                    <input type="text" id="namePalette">
-                    <button ng-click="createPalette()">Create</button>
-                </div>
                 <legend style="height: 40px; padding: 10px">Palette</legend>
                 <div id="elements_tree">
                     <ul id="palette-tabs" class="nav nav-tabs">
@@ -93,7 +97,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 </body>
