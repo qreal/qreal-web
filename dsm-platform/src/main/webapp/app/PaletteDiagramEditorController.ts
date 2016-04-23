@@ -82,7 +82,7 @@ class PaletteDiagramEditorController extends DiagramEditorController {
     }
 
     private handleLoadedTypes(elementTypes: ElementTypes): void {
-        this.propertyEditorController = new PropertyEditorController(this.paperController);
+        this.propertyEditorController = new PropertyEditorController(this.paperController, this.undoRedoController);
 
         var categories: Map<Map<NodeType>> = elementTypes.paletteTypes.categories;
         for (var category in categories) {

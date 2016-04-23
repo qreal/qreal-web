@@ -57,7 +57,9 @@
                     </div>
                 </div>
                 <div class="col-md-9 content-col">
-                    <div id="diagram_paper">
+                    <div class="paper-wrapper">
+                        <div id="diagram_paper">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -65,12 +67,12 @@
 
         <div class="col-md-2 content-col">
             <div id="diagram_right-menu">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Palette<b class="caret"></b></a>
-                    <ul class="dropdown-menu" id="palettes">
-                        <li><a href="" role="menuitem" tabindex="-1" ng-click="loadMetaEditor()">Meta Editor</a></li>
-                    </ul>
-                </li>
+                <div class="dropdown">
+                    <button class="dropbtn">Palette</button>
+                    <div class="dropdown-content" id="palettes">
+                        <a href="" ng-click="loadMetaEditor()">Meta Editor</a>
+                    </div>
+                </div>
                 <div>
                     <input type="text" id="namePalette">
                     <button ng-click="createPalette()">Create</button>

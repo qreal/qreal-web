@@ -16,7 +16,7 @@ class PaletteExporter {
             if (node.getName() === "Entity") {
                 var nodeJSON = {
                     'name': node.getChangeableProperties()['name'].value,
-                    'image': node.getChangeableProperties()['image'].value,
+                    'image': "/dsmPlatform/images/" + node.getChangeableProperties()['image'].value + ".svg",
                     'properties': []
                 };
                 nodeJSON.properties = this.getProperties(nodesMap, linksMap, node);

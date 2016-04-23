@@ -57,6 +57,9 @@ declare interface DiagramNode extends DiagramElement {
     getX(): number;
     getY(): number;
     getImagePath(): string;
+    setPosition(x: number, y: number, zoom: number): void;
+    getChangeableProperties(): Map<Property>;
+    initPropertyEditElements(zoom: number): void;
 
 }
 
@@ -81,6 +84,14 @@ declare class RobotsDiagramNode {
 
 }
 
+declare class PropertyEditElement {
+
+    constructor(logicalId: string, jointObjectId: string, propertyKey: string, property: Property);
+    public getHtmlElement();
+    public setPosition(x: number, y: number): void;
+
+}
+
 declare class DefaultDiagramNode implements DiagramNode {
 
     constructor(name: string, type: string, x: number, y: number, properties: Map<Property>, imagePath: string,
@@ -95,7 +106,10 @@ declare class DefaultDiagramNode implements DiagramNode {
     getImagePath(): string;
     getX(): number;
     getY(): number;
-
+    setPosition(x: number, y: number): void;
+    getChangeableProperties(): Map<Property>;
+    initPropertyEditElements(zoom: number): void;
+    getPropertyEditElement(): PropertyEditElement
 }
 
 declare interface Map<T> {
@@ -182,13 +196,32 @@ declare class DiagramEditor {
 
 }
 
+declare interface Command {
+
+    execute(): void;
+    revert(): void;
+    isRevertible(): boolean;
+
+}
+
+declare class UndoRedoController {
+
+    public addCommand(command: Command);
+    public undo(): void;
+    public redo(): void;
+    public clearStack(): void;
+    public bindKeyboardHandler();
+    public unbindKeyboardHandler();
+
+}
+
 declare class Gesture {
 
     name: string;
     key: string[];
     factor: number;
 
-    constructor(name : string, key : string[], factor: number);
+    constructor(name : string, key : string[], factor: number)
 
 }
 
@@ -245,6 +278,7 @@ declare abstract class DiagramEditorController {
     protected elementsTypeLoader: ElementsTypeLoader;
     protected paletteController: PaletteController;
     protected nodeTypesMap: Map<NodeType>;
+    protected undoRedoController: UndoRedoController;
 
     constructor($scope, $attrs);
 
@@ -265,17 +299,25 @@ declare class PaperController {
     public getCurrentElement(): DiagramElement;
     public clearState(): void;
     public createLink(sourceId: string, targetId: string): void;
-    public createNode(type: string, x: number, y: number): void;
+    public createNode(type: string, x: number, y: number, subprogramId?: string, subprogramName?: string): void;
     public createNodeInEventPositionFromNames(names: string[], event): void;
     public createLinkBetweenCurrentAndEventTargetElements(event): void;
+    public setCurrentElement(element: DiagramElement): void;
+    public addNode(node: DiagramNode):void;
+    public removeElement(element: DiagramElement): void;
+    public addLink(link: Link): void;
+    public changeCurrentElement(element: DiagramElement): void;
 
 }
 
 declare class PropertyEditorController {
 
-    constructor(paperController: PaperController);
+    constructor(paperController: PaperController, undoRedoController: UndoRedoController);
     public setNodeProperties(element: DiagramElement): void;
     public clearState(): void;
+    public setProperty(key: string, value: string): void;
+    public changeHtmlElementValue(id: string, value: string): void;
+    public changeCheckboxHtml(id: string, value: string): void;
 
 }
 
@@ -297,7 +339,7 @@ declare class PaletteController {
     public appendSubprogramsPalette(subprogramDiagramNodes: SubprogramDiagramNode[],
                                     nodeTypesMap: Map<NodeType>): void;
     public appendBlocksPalette(paletteTypes: PaletteTypes): void;
-    public clearBlocksPalette(): void;
+    public clearBlocksPalette(): void
 
 }
 
@@ -363,7 +405,7 @@ declare class GesturesController {
 
 declare class GesturesMatcher {
 
-    constructor(gestures: Gesture[]);
+    constructor(gestures: Gesture[])
     public getMatches(pointList: GesturesUtils.Pair[]): string[];
 
 }
