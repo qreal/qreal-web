@@ -3,44 +3,50 @@
     <world>
         <walls/>
         <colorFields>
-            <line fill-style="none" fill="#ff000000" stroke="#ff000000" begin="156:212" stroke-style="solid" end="3:212" stroke-width="14" id="line2"/>
-            <line fill-style="none" fill="#ff000000" stroke="#ff000000" begin="0:-33" stroke-style="solid" end="104:-33" stroke-width="14" id="line0"/>
-            <cubicBezier fill-style="none" fill="#ff000000" stroke="#ff000000" begin="112:-33" cp2="300:212" stroke-style="solid" end="165:212" stroke-width="14" id="line1" cp1="329:-34"/>
-            <cubicBezier fill-style="none" fill="#ff000000" stroke="#ff000000" begin="-4:212" cp2="-379:108" stroke-style="solid" end="-152:-132" stroke-width="14" id="line3" cp1="-95:214"/>
+            <line end="3:212" begin="156:212" stroke-width="14" stroke="#ff000000" fill-style="none" stroke-style="solid" fill="#ff000000" id="line2"/>
+            <line end="104:-33" begin="0:-33" stroke-width="14" stroke="#ff000000" fill-style="none" stroke-style="solid" fill="#ff000000" id="line0"/>
+            <cubicBezier end="165:212" begin="112:-33" stroke-width="14" cp1="329:-34" stroke="#ff000000" fill-style="none" cp2="300:212" stroke-style="solid" fill="#ff000000" id="line1"/>
+            <cubicBezier end="-152:-132" begin="-4:212" stroke-width="14" cp1="-95:214" stroke="#ff000000" fill-style="none" cp2="-379:108" stroke-style="solid" fill="#ff000000" id="line3"/>
         </colorFields>
         <regions>
-            <region visible="false" x="-55" color="#87cefa" filled="true" y="-50" width="25" type="rectangle" height="25" id="start_zone"/>
-            <region visible="false" x="-150" color="#ff0000" filled="true" y="-150" width="25" type="rectangle" height="25" id="finish_zone"/>
-            <region visible="false" stroke="13" x="0" color="#87cefa" filled="true" y="0" width="174" type="bound" boundItem="line0" height="70" id="line0_region"/>
-            <region visible="false" stroke="26" x="0" color="#87cefa" filled="true" y="0" width="327" type="bound" boundItem="line1" height="356" id="line1_region"/>
-            <region visible="false" stroke="13" x="0" color="#87cefa" filled="true" y="0" width="223" type="bound" boundItem="line2" height="70" id="line2_region"/>
-            <region visible="false" stroke="26" x="0" color="#87cefa" filled="true" y="0" width="485" type="bound" boundItem="line3" height="456" id="line3_region"/>
+            <region y="-49" type="rectangle" color="#87cefa" height="25" width="25" visible="false" x="-41" id="start_zone" filled="true"/>
+            <region y="-150" type="rectangle" color="#ff0000" height="25" width="25" visible="false" x="-150" id="finish_zone" filled="true"/>
+            <region y="0" boundItem="line0" type="bound" color="#87cefa" height="70" stroke="13" width="174" visible="false" x="0" id="line0_region" filled="true"/>
+            <region y="0" boundItem="line1" type="bound" color="#87cefa" height="356" stroke="26" width="327" visible="false" x="0" id="line1_region" filled="true"/>
+            <region y="0" boundItem="line2" type="bound" color="#87cefa" height="70" stroke="13" width="223" visible="false" x="0" id="line2_region" filled="true"/>
+            <region y="0" boundItem="line3" type="bound" color="#87cefa" height="456" stroke="26" width="485" visible="false" x="0" id="line3_region" filled="true"/>
         </regions>
     </world>
+    
     <robots>
-        <robot position="-68:-63" direction="0" id="trikKitRobot">
+        <robot direction="0" id="trikKitRobot" position="-53:-61">
             <sensors>
-                <sensor port="M4###output######" position="75:25" direction="0" type="kitBase::robotModel::robotParts::Motor"/>
-                <sensor port="A1###input######sensorA1" position="75:25" direction="0" type="kitBase::robotModel::robotParts::LightSensor"/>
-                <sensor port="M3###output######" position="75:25" direction="0" type="kitBase::robotModel::robotParts::Motor"/>
+                <sensor port="A1###input######sensorA1" type="kitBase::robotModel::robotParts::LightSensor" direction="0" position="50:25"/>
+                <sensor port="M4###output######" type="kitBase::robotModel::robotParts::Motor" direction="0" position="75:25"/>
+                <sensor port="M3###output######" type="kitBase::robotModel::robotParts::Motor" direction="0" position="75:25"/>
             </sensors>
-            <startPosition x="-43" y="-38" direction="0"/>
+            <startPosition y="-36" direction="0" x="-28"/>
             <wheels right="M4###output###М4###" left="M3###output###М3###"/>
         </robot>
     </robots>
+
     <constraints>
+    
         <timelimit value="300000"/>
-        <constraint failMessage="Робот должен находиться в начальной точке перед запуском!" checkOnce="true">
-            <inside regionId="start_zone" objectId="robot1"/>
+        
+        <constraint checkOnce="true" failMessage="Робот должен находиться в начальной точке перед запуском!">
+            <inside objectId="robot1" regionId="start_zone"/>
         </constraint>
+        
         <constraint failMessage="Робот должен ехать по линии!">
             <conditions glue="or">
-                <inside regionId="line0_region" objectId="robot1.A1"/>
-                <inside regionId="line1_region" objectId="robot1.A1"/>
-                <inside regionId="line2_region" objectId="robot1.A1"/>
-                <inside regionId="line3_region" objectId="robot1.A1"/>
+                <inside objectId="robot1.A1" regionId="line0_region"/>
+                <inside objectId="robot1.A1" regionId="line1_region"/>
+                <inside objectId="robot1.A1" regionId="line2_region"/>
+                <inside objectId="robot1.A1" regionId="line3_region"/>
             </conditions>
         </constraint>
+        
         <!-- Событие, которое говорит о том, что робот вообще поехал и стартует цепочку проверки -->
         <event settedUpInitially="true" id="We are alive, first move">
             <condition>
@@ -53,6 +59,7 @@
                 <setUp id="Finish"/>
             </triggers>
         </event>
+        
         <!-- Событие, которое выдает ошибку, если робот не тронулся с места в первую секунду -->
         <event settedUpInitially="true" id="Waiting for going forward too long">
             <conditions glue="and">
@@ -63,11 +70,12 @@
                 <fail message="Робот так и не поехал в первую секунду"/>
             </trigger>
         </event>
+        
         <!-- Событие, которое говорит, что задание выполнено, когда робот приезжает на линию финиша-->
         <event id="Finish">
             <conditions glue="and">
                 <timer timeout="50" forceDropOnTimeout="false"/>
-                <inside regionId="finish_zone" objectId="robot1.A1"/>
+                <inside objectId="robot1.A1" regionId="finish_zone"/>
             </conditions>
             <trigger>
                 <success/>

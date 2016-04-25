@@ -138,10 +138,18 @@
             </trigger>
         </event>
 
-        <!-- Событие, которое выводит ошибку, если через 100мс после начала у робота включен светодиод -->
+        <!-- Событие, которое выводит ошибку, если у робота включен светодиод, когда он не на цветном пятне -->
         <event id="Led off">
             <conditions glue="and">
-                <timer timeout="100"/>
+                <timer timeout="150" forceDropOnTimeout="false"/>
+                <greater>
+                    <objectState object="robot1.A3.value"/>
+                    <int value="90"/>
+                </greater>
+                <equals>
+                    <objectState object="robot1.A4.value"/>
+                    <objectState object="robot1.A3.value"/>
+                </equals>
                 <not>
                     <equals>
                         <objectState object="robot1.led.color"/>
@@ -155,7 +163,7 @@
         </event>
 
         <!-- Событие, которое взводит ожидание красного светодиода -->
-        <event id="Red area">
+        <event id="Red area" dropsOnFire="false">
             <conditions glue="and">
                 <less>
                     <objectState object="robot1.A3.value"/>
@@ -167,6 +175,7 @@
                 </equals>
             </conditions>
             <triggers>
+                <drop id="Led off"/>
                 <setUp id="Wait for red led"/>
 				<setUp id="Fail red led"/>
             </triggers>
@@ -180,9 +189,15 @@
                     <string value="red"/>
 				</equals>
 			</condition>
-			<trigger>
+			<triggers>
 				<drop id="Fail red led"/>
-			</trigger>
+                <setter name="flashingCounter">
+                    <int value="1"/>
+                </setter>
+                <setUp id="Check red flashing"/>
+                <setUp id="Led off while red flashing"/>
+                <setUp id="Fail red flashing"/>
+			</triggers>
 		</event>
 
         <!-- Событие, сообщающее об ошибке, если за 1000 мс не включился красный светодиод -->
@@ -195,8 +210,66 @@
             </trigger>
         </event>
 
+        <!-- Событие, сообщающее об ошибке, если красный светодиод просто был включен или мигал с неправильной частотой -->
+        <event id="Fail red flashing">
+            <condition>
+                <timer timeout="7000"/>
+            </condition>
+            <triggers>
+                <fail message="Робот просто включил красный светодиод или мигал им с неправильной частотой"/>
+            </triggers>
+        </event>
+
+        <!-- Событие для проверки частоты мигания красного свтодиода -->
+        <event id="Check red flashing">
+            <condition>
+                <equals>
+                    <variableValue name="flashingCounter"/>
+                    <int value="4"/>
+                </equals>
+            </condition>
+            <triggers>
+                <drop id="Fail red flashing"/>
+                <drop id="Led off while red flashing"/>
+                <drop id="Led red while red flashing"/>
+                <setUp id="Led off"/>
+            </triggers>
+        </event>
+
+        <!-- Событие, возникающее, когда светодиод выключен во время проверки частоты мигания красного светодиода -->
+        <event id="Led off while red flashing">
+            <condition>
+                <equals>
+                    <objectState object="robot1.led.color"/>
+                    <string value="#a0a0a4"/>
+                </equals>
+            </condition>
+            <trigger>
+                <setUp id="Led red while red flashing"/>
+            </trigger>
+        </event>
+
+        <!-- Событие, возникающее, когда включен красный светодиод во вермя проверки частоты мигания красного светодиода -->
+        <event id="Led red while red flashing">
+            <condition>
+                <equals>
+                    <objectState object="robot1.led.color"/>
+                    <string value="red"/>
+                </equals>
+            </condition>
+            <triggers>
+                <setter name="flashingCounter">
+                    <sum>
+                        <variableValue name="flashingCounter"/>
+                        <int value="1"/>
+                    </sum>
+                </setter>
+                <setUp id="Led off while red flashing"/>
+            </triggers>
+        </event>
+
         <!-- Событие, которое взводит ожидание зеленого светодиода -->
-        <event id="Green area">
+        <event id="Green area" dropsOnFire="false">
             <conditions glue="and">
                 <less>
                     <objectState object="robot1.A3.value"/>
@@ -212,6 +285,7 @@
                 </equals>
             </conditions>
             <triggers>
+                <drop id="Led off"/>
                 <setUp id="Wait for green led"/>
 				<setUp id="Fail green led"/>
             </triggers>
@@ -225,12 +299,18 @@
                 	<string value="green"/>
             	</equals>
             </condition>
-            <trigger>
+            <triggers>
                 <drop id="Fail green led"/>
-            </trigger>
+                <setter name="flashingCounter">
+                    <int value="1"/>
+                </setter>
+                <setUp id="Check green flashing"/>
+                <setUp id="Led off while green flashing"/>
+                <setUp id="Fail green flashing"/>
+            </triggers>
         </event>
 
-		<!-- Событие, сообщающее об ошибке, если за 500 мс не включился красный светодиод -->
+		<!-- Событие, сообщающее об ошибке, если за 500 мс не включился зеленый светодиод -->
 		<event id="Fail green led">
 			<condition>
 				<timer timeout="500"/>
@@ -239,6 +319,64 @@
 				<fail message="Робот должен помигать зеленым светодиодом на зеленом пятне"/>
 			</trigger>
 		</event>
+
+        <!-- Событие, сообщающее об ошибке, если зеленый светодиод просто был включен или мигал с неправильной частотой -->
+        <event id="Fail green flashing">
+            <condition>
+                <timer timeout="7000"/>
+            </condition>
+            <triggers>
+                <fail message="Робот просто включил зеленый светодиод или мигал им с неправильной частотой"/>
+            </triggers>
+        </event>
+
+        <!-- Событие для проверки частоты мигания зеленого светодиода -->
+        <event id="Check green flashing">
+            <condition>
+                <equals>
+                    <variableValue name="flashingCounter"/>
+                    <int value="8"/>
+                </equals>
+            </condition>
+            <triggers>
+                <drop id="Fail green flashing"/>
+                <drop id="Led off while green flashing"/>
+                <drop id="Led green while green flashing"/>
+                <setUp id="Led off"/>
+            </triggers>
+        </event>
+
+        <!-- Событие, возникающее, когда светодиод выключен во время проверки частоты мигания зеленого светодиода -->
+        <event id="Led off while green flashing">
+            <condition>
+                <equals>
+                    <objectState object="robot1.led.color"/>
+                    <string value="#a0a0a4"/>
+                </equals>
+            </condition>
+            <trigger>
+                <setUp id="Led green while green flashing"/>
+            </trigger>
+        </event>
+
+        <!-- Событие, возникающее, когда включен зеленый светодиод во время проверки частоты мигания зеленого светодиода -->
+        <event id="Led green while green flashing">
+            <condition>
+                <equals>
+                    <objectState object="robot1.led.color"/>
+                    <string value="green"/>
+                </equals>
+            </condition>
+            <triggers>
+                <setter name="flashingCounter">
+                    <sum>
+                        <variableValue name="flashingCounter"/>
+                        <int value="1"/>
+                    </sum>
+                </setter>
+                <setUp id="Led off while green flashing"/>
+            </triggers>
+        </event>
 
         <!-- событие, возникающее, когда робот проезжает первый чекпоинт -->
         <event id="Checkpoint0">
