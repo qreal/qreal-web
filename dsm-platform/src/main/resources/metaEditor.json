@@ -368,12 +368,39 @@
             {
               "key": "type",
               "name": "type",
-              "type": "string",
-              "value": "string"
+              "type": "dropdown",
+              "selected": {
+                "key": "",
+                "value": ""
+              },
+              "variants": [
+                {
+                  "type": "string",
+                  "value": "string"
+                },
+                {
+                  "type": "dropdown",
+                  "value": "dropdown"
+                }
+              ]
             },
             {
               "key": "value",
               "name": "value",
+              "type": "string",
+              "value": ""
+            }
+          ]
+        },
+        "Dropdown": {
+          "name": "Dropdown",
+          "image": {
+            "src": "images/initialBlock.svg"
+          },
+          "properties": [
+            {
+              "key": "variant",
+              "name": "variant",
               "type": "string",
               "value": ""
             }

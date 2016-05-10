@@ -33,15 +33,36 @@ class PaletteExporter {
             var jointObject = link.getJointObject();
             if (nodesMap[jointObject.get('target').id] === node) {
                 var property = nodesMap[jointObject.get('source').id];
+                var type = property.getChangeableProperties()['type'].value;
+                var value = property.getChangeableProperties()['value'].value;
                 var propertyJSON = {
                     'name': property.getChangeableProperties()['name'].value,
+                    'type': property.getChangeableProperties()['type'].value,
                     'value': property.getChangeableProperties()['value'].value,
-                    'type': property.getChangeableProperties()['type'].value
+                    'variants': []
                 };
+                if (type = "dropdown") {
+                    propertyJSON.variants = this.getVariants(nodesMap, linksMap, property);
+                }
                 json.push(propertyJSON);
             }
         }
         return json;
     }
 
+    private getVariants(nodesMap: Map<DiagramNode>, linksMap: Map<Link>, property: DiagramNode) {
+        var json = [];
+        for (var id in linksMap) {
+            var link = linksMap[id];
+            var jointObject = link.getJointObject();
+            if (nodesMap[jointObject.get('target').id] === property) {
+                var variant = nodesMap[jointObject.get('source').id];
+                var variantJSON = {
+                    'name': variant.getChangeableProperties()['variant'].value
+                }
+            }
+            json.push(variantJSON)
+        }
+        return json;
+    }
 }

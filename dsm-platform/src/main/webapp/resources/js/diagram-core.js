@@ -333,6 +333,7 @@ var PropertyEditElement = (function () {
             var property = properties[propertyKey];
             if (property.type === "string") {
                 propertiesHtml += StringUtils.format(PropertyEditElement.propertyTemplate, propertyKey + "-" + logicalId, jointObjectId, propertyKey, property.name, property.value);
+            break;
             }
         }
         this.htmlElement = $(StringUtils.format(PropertyEditElement.template, propertiesHtml));

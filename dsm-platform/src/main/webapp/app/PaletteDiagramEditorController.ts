@@ -28,7 +28,7 @@ class PaletteDiagramEditorController extends DiagramEditorController {
         this.loadMetaEditor();
         $scope.loadMetaEditor = () => { this.loadMetaEditor(); };
         $scope.choosePalette = (paletteName: string) => { this.choosePalette(paletteName) };
-        $scope.createPalette = () => { this.createPalette($scope, $compile); };
+        $scope.createPalette = () => { this.createPalette(); };
         $scope.showPaletteNames = () => { this.showPaletteNames($compile, $scope); };
     }
 
@@ -60,7 +60,7 @@ class PaletteDiagramEditorController extends DiagramEditorController {
         })
     }
 
-    public createPalette($scope, $compile) {
+    public createPalette() {
         var name: string = prompt("input palette name");
         if (name !== null && name !== "") {
             var controller = this;

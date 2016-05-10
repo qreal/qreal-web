@@ -24,9 +24,17 @@ CREATE TABLE nodes (
 CREATE TABLE node_properties (
   property_id  BIGINT      NOT NULL AUTO_INCREMENT,
   name         VARCHAR(50) NOT NULL,
-  value       VARCHAR(50) NOT NULL,
-  type        VARCHAR(50) NOT NULL,
-  node_id     VARCHAR(50),
+  value        VARCHAR(50) NOT NULL,
+  type         VARCHAR(50) NOT NULL,
+  node_id      BIGINT,
   PRIMARY KEY (property_id),
   FOREIGN KEY (node_id) REFERENCES nodes (node_id)
 )
+
+CREATE TABLE property_variants (
+  variant_id BIGINT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50)  NOT NULL,
+  property_id       BIGINT,
+  PRIMARY KEY (variant_id),
+  FOREIGN KEY (property_id) REFERENCES node_properties (property_id)
+  )
