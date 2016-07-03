@@ -1,5 +1,3 @@
-/// <reference path="vendor.d.ts" />
-
 class PaletteParser {
     private controller: PaletteDiagramEditorController;
 
@@ -19,10 +17,6 @@ class PaletteParser {
             var properties = nodes[i].properties;
             for (var j = 0; j < properties.length; j++) {
                 var propertyName = properties[j].name;
-                var propertyType = properties[j].type;
-                if (propertyType === "dropdown") {
-                    console.log("dropdown");
-                }
                 var property: Property = new Property(propertyName, properties[j].type, properties[j].value);
                 nodeProperties[propertyName] = property;
             }
@@ -34,13 +28,4 @@ class PaletteParser {
         newPalette.categories[name] = basePalette;
         return(newPalette);
     }
-/*
-    private addVariantList(typeName: string, propertyKey: string, variantsArrayNode: any): void {
-        var variants: Variant[] = [];
-        for (var i in variantsArrayNode) {
-            var variant = variantsArrayNode[i];
-            variants.push(new Variant(variant.key, variant.value));
-        }
-        VariantListMapper.addVariantList(typeName, propertyKey, variants);
-    }*/
 }

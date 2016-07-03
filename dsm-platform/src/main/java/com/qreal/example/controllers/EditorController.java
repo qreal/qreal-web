@@ -1,6 +1,5 @@
 package com.qreal.example.controllers;
 
-import com.qreal.example.model.Node;
 import com.qreal.example.model.OpenRequest;
 import com.qreal.example.model.Palette;
 import com.qreal.example.service.PaletteService;
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -23,15 +21,7 @@ public class EditorController {
     @ResponseBody
     @RequestMapping(value = "/createPalette", method = RequestMethod.POST)
     public void createPalette(@RequestBody Palette palette) {
-        System.out.println(palette.getPaletteName());
-        System.out.println(palette.getPaletteId());
-        Iterator<Node> iter = palette.getNodes().iterator();
-        while (iter.hasNext()) {
-            System.out.println(iter.next().getName());
-            System.out.println(iter.next().getNodeId());
-        }
-        //paletteService.createPalette(palette);
-
+        paletteService.createPalette(palette);
     }
 
     @ResponseBody

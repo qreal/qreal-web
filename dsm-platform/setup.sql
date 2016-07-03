@@ -13,10 +13,10 @@ CREATE TABLE palettes (
 );
 
 CREATE TABLE nodes (
-  node_id    BIGINT       NOT NULL AUTO_INCREMENT,
-  name       VARCHAR(50)  NOT NULL,
-  image      VARCHAR(50)  NOT NULL,
-  palette_id BIGINT,
+  node_id     BIGINT       NOT NULL AUTO_INCREMENT,
+  name        VARCHAR(50)  NOT NULL,
+  image       VARCHAR(50)  NOT NULL,
+  palette_id  BIGINT,
   PRIMARY KEY (node_id),
   FOREIGN KEY (palette_id) REFERENCES palettes (palette_id)
 );
@@ -26,15 +26,7 @@ CREATE TABLE node_properties (
   name         VARCHAR(50) NOT NULL,
   value        VARCHAR(50) NOT NULL,
   type         VARCHAR(50) NOT NULL,
-  node_id      BIGINT,
+  node_id      VARCHAR(50),
   PRIMARY KEY (property_id),
   FOREIGN KEY (node_id) REFERENCES nodes (node_id)
 )
-
-CREATE TABLE property_variants (
-  variant_id BIGINT NOT NULL AUTO_INCREMENT,
-  name VARCHAR(50)  NOT NULL,
-  property_id       BIGINT,
-  PRIMARY KEY (variant_id),
-  FOREIGN KEY (property_id) REFERENCES node_properties (property_id)
-  )
